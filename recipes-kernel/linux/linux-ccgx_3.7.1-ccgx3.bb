@@ -5,6 +5,7 @@ require linux-ccgx.inc
 #DEFAULT_PREFERENCE = "-1"
 #DEFAULT_PREFERENCE_mcx = "1"
 
+RDEPENDS_${PN} = "linux-backports"
 BB_FETCH_PREMIRRORONLY = "0"
 PREMIRRORS = ""
 
@@ -15,7 +16,7 @@ SRC_URI[sha256sum] = "7d259679af18a08371196673f0f36762919e7ba460b9136a9bc82557b1
 # This was introduced to remove uImage from /boot and save 3MB
 KERNEL_DROPIMAGE = ""
 
-PR = "r0"
+PR = "r1"
 
 S = "${WORKDIR}/linux-${PV}"
 
