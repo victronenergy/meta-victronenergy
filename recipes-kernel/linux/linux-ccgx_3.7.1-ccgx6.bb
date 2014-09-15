@@ -1,17 +1,13 @@
 # fix behavior of base do_install_prepend - its overwrite ready to use uImage by uncompresses Image
 require linux-ccgx.inc
 
-# Mark archs/machines that this kernel supports
-#DEFAULT_PREFERENCE = "-1"
-#DEFAULT_PREFERENCE_mcx = "1"
-
 RDEPENDS_${PN} = "linux-backports"
 BB_FETCH_PREMIRRORONLY = "0"
 PREMIRRORS = ""
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-SRC_URI[md5sum] = "17e61dc4f451da9c7d8b9c96bbe6b3b4"
-SRC_URI[sha256sum] = "f2fbc7ee2693269d0dae8933e7f1284085544caaf62d13fa832aa59d6b04178b"
+SRC_URI[md5sum] = "3b91760922601f7a38dbf75697eb7dfb"
+SRC_URI[sha256sum] = "b67117774d15e16d7362c7c01fc6d10b14e29863ce8dd66471ad1d90f2242a1c"
 
 # This was introduced to remove uImage from /boot and save 3MB
 KERNEL_DROPIMAGE = ""
