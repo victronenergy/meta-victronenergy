@@ -6,8 +6,8 @@ BB_FETCH_PREMIRRORONLY = "0"
 PREMIRRORS = ""
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-SRC_URI[md5sum] = "3b91760922601f7a38dbf75697eb7dfb"
-SRC_URI[sha256sum] = "b67117774d15e16d7362c7c01fc6d10b14e29863ce8dd66471ad1d90f2242a1c"
+SRC_URI[md5sum] = "490f7224a4240feea234be10bc4e6d9c"
+SRC_URI[sha256sum] = "f7444a24d19291edc40c630bf6e12b8724898f47f77e128ba256cf1b907b3884"
 
 # This was introduced to remove uImage from /boot and save 3MB
 KERNEL_DROPIMAGE = ""
