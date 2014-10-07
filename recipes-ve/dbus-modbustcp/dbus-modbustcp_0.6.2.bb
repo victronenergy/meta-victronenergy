@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3
 
 inherit qt4e
 
-PR = "r0"
+PR = "r1"
 
 BB_FETCH_PREMIRRORONLY = "0"
 PREMIRRORS = ""

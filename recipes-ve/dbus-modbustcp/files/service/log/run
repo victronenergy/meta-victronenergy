@@ -1,3 +1,3 @@
 #!/bin/sh
 exec 2>&1
-exec multilog s99999 n8 /log/modbustcp
+exec multilog s99999 n8 /log/dbus-modbustcp
