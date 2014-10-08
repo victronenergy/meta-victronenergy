@@ -15,6 +15,8 @@ DEPENDS = "\
 	gdb \
 	git \
 	tcpdump \
+	tmux \
+	vim \
 "
 
 RDEPENDS_${PN} = "\
