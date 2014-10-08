@@ -1,6 +1,6 @@
 DESCRIPTION = "additional system packages"
 
-PR = "r0"
+PR = "r1"
 
 inherit packagegroup
 
@@ -35,6 +35,7 @@ RDEPENDS_${PN} = "\
 	linux-firmware-rtl8192cu \
 	miniupnpc \
 	mtd-utils \
+	mtd-utils-ubifs \
 	nano \
 	ntp-utils \
 	ntpdate \
@@ -45,7 +46,6 @@ RDEPENDS_${PN} = "\
 	rsync \
 	screen \
 	strace \
-	swupdate \
 	tzdata \
 	tzdata-africa \
 	tzdata-americas \
