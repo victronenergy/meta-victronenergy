@@ -58,6 +58,7 @@ RDEPENDS_${PN} = "\
 	tzdata-australia \
 	tzdata-europe \
 	tzdata-pacific \
+	u-boot-env-tools \
 	watchdog \
 	zip \
 "
