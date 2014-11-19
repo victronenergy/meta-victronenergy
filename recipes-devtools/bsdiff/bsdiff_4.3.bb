@@ -3,6 +3,7 @@ HOMEPAGE = "http://www.daemonology.net/bsdiff/"
 
 PR = "0"
 
+DEPENDS = "bzip2"
 RDEPENDS = "bzip2"
 
 SRC_URI = "http://www.daemonology.net/bsdiff/bsdiff-4.3.tar.gz \
