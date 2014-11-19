@@ -1,0 +1,61 @@
+# based on original device_table.txt file
+# changed according ccgx specifics
+
+#<path>		<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
+#/dev/mem   	c      640      0	0	1	1	0	 0	 -
+#
+#type can be one of:
+#    f	A regular file
+#    d	Directory
+#    c	Character special device file
+#    b	Block special device file
+#    p	Fifo (named pipe)
+
+/dev		d	755	0	0	-	-	-	-	-
+/dev/console    c 	640	0	0	5	1	-	-	-
+#/dev/initctl	p	600	0	0	-	-	-	-	-
+/dev/fb0	c	600	0	0	29	0	-	-	-
+/dev/kmem	c	640	0	15	1	2	-	-	-
+/dev/mem	c	640	0	15	1	1	-	-	-
+/dev/null	c	666	0	0	1	3	-	-	-
+/dev/ram	b	640	0	0	1	0	0	1	4
+/dev/ram	 b	640	0	0	1	1	-	-	-
+/dev/tty	c	662	0	5	5	0	-	-	-
+/dev/tty	c	666	0	5	4	0	0	1	9
+#/dev/ttyS	c	640	0	5	4	64	0	1	3
+/dev/ttyO	c	640	0	5	253	0	0	1	2
+/dev/zero	c	644	0	0	1	5	-	-	-
+/dev/mtd	c	660	0	6	90	0	0	2	10
+/dev/mtdblock	b	640	0	0	31	0	0	1	10
+/dev/ubi0	c	660	0	6	251	0	-	-	-
+/dev/ubi0_	c	660	0	6	251	1	0	1	10
+/dev/ubi1	c	660	0	6	252	0	-	-	-
+/dev/ubi1_	c	660	0	6	252	1	0	1	10
+/dev/ubi_ctrl	c	660	0	6	10	60	-	-	-
+/dev/console	c	662	0	5	5	1	-	-	-
+/dev/rtc0	c	644	0	5	254	0	-	-	-
+/dev/random	c	644	0	0	1	8	-	-	-
+/dev/urandom	c	644	0	0	1	9	-	-	-
+# from rootfs_tab ...
+/dev/rtc	c	640	0	0	10	135     -	-	-
+/dev/ptyp	c	640	0	0	2	0	0	1	10
+/dev/ptypa      c	640	0	0	2	10      -	-	-
+/dev/ptypb      c	640	0	0	2	11      -	-	-
+/dev/ptypc      c	640	0	0	2	12      -	-	-
+/dev/ptypd      c	640	0	0	2	13      -	-	-
+/dev/ptype      c	640	0	0	2	14      -	-	-
+/dev/ptypf      c	640	0	0	2	15      -	-	-
+/dev/ttyS	c	640	0	0	4	64      0	1	8
+/dev/ttyp	c	640	0	0	3	0	0	1	10
+/dev/ttyO	c	640	0	0	253	0	0	1	8
+/dev/ttypa      c	640	0	0	3	10      -	-	-
+/dev/ttypb      c	640	0	0	3	11      -	-	-
+/dev/ttypc      c	640	0	0	3	12      -	-	-
+/dev/ttypd     	c	640	0	0	3	13      -	-	-
+/dev/ttype    	c	640	0	0	3	14      -	-	-
+/dev/ttypf     	c	640 	0	0	3	15      -	-	-
+
+/dev/mmcblk0	b	660	0	25	179	-	-	-	-
+/dev/mmcblk0p	b	660	0	25	179	1	1	1	7
+/dev/sda	b	660	0	25	8	0	-	-	-
+/dev/sda	b	660	0	25	8	1	1	1	7
