@@ -62,3 +62,7 @@ RDEPENDS_${PN} = "\
 	watchdog \
 	zip \
 "
+
+RDEPENDS_${PN} += "\
+	application \
+"
