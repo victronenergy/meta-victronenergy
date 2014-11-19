@@ -43,14 +43,17 @@ IMAGE_CMD_live.img () {
 	BOOTIMG=${WORKDIR}/boot.img
 	LIVE_IMAGE=${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.live.img
 
+	# create live image with two partition, first to boot, second the rootfs itself
 	dd if=/dev/zero of=${LIVE_IMAGE} count=1024 bs=1M
 	parted ${LIVE_IMAGE} mktable msdos
 	parted ${LIVE_IMAGE} mkpart p fat32 1 100
 	parted ${LIVE_IMAGE} mkpart p ext3 100 1024
 
+	# format a seperate partion as FAT
 	BOOT_BLOCKS=$(parted -s ${LIVE_IMAGE} unit b print | awk '/ 1 / { print substr($4, 1, length($4 -1)) / 1024 }')
 	mkfs.vfat -n BOOT -S 512 -C ${BOOTIMG} $BOOT_BLOCKS
 
+	# and store the files need on it
 	mcopy -i ${BOOTIMG} -s ${DEPLOY_DIR_IMAGE}/uImage ::/uImage
 	mcopy -i ${BOOTIMG} -s ${DEPLOY_DIR_IMAGE}/live.scr ::/boot.scr
 
