@@ -1,14 +1,10 @@
 DESCRIPTION = "DBus to modbus"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3b58 \
-                    file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
+LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 inherit qt4e
 
 PR = "r1"
-
-BB_FETCH_PREMIRRORONLY = "0"
-PREMIRRORS = ""
 
 SRC_URI = " \
 	https://github.com/victronenergy/dbus_modbustcp/archive/v${PV}.tar.gz \
