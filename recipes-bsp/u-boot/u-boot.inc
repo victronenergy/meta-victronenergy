@@ -4,14 +4,14 @@ SECTION = "bootloaders"
 
 PROVIDES = "virtual/bootloader"
 DEPENDS = "mtd-utils"
-LICENSE = "GPLv2+"
-LIC_FILES_CHKSUM = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 EXTRA_OEMAKE = "CROSS_COMPILE=${TARGET_PREFIX}"
 UBOOT_MACHINE ?= "${MACHINE}_config"
 UBOOT_IMAGE ?= "u-boot.img"
 UBOOT_MAKE_TARGET ?= "all"
+
+require u-boot.src.inc
 
 do_configure () {
 	oe_runmake ${UBOOT_MACHINE}

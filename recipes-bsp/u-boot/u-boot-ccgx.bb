@@ -2,17 +2,12 @@ require u-boot.inc
 
 PR = "r3"
 
-SRC_URI = " \
-		https://github.com/victronenergy/u-boot/archive/v2013.01.01-ccgx-v3.tar.gz \
+SRC_URI += " \
 		file://live.cmds \
 		file://production.cmds \
 		file://recover.cmds \
 		file://splash.bgra \
 	"
-
-SRC_URI[sha256sum] = "ee3d73d6f05879426a0d60df56562b5500f8df475921af185a3301abb44f505b"
-SRC_URI[md5sum] = "730e07ad5b5122fdf1d8f99588c2e9cc"
-S = "${WORKDIR}/u-boot-2013.01.01-ccgx-v3"
 
 do_compile_append () {
 	mkimage -A arm -T script -C none -n 'Live Script' -d ${WORKDIR}/live.cmds ${WORKDIR}/live.scr
