@@ -1,0 +1,5 @@
+#! /bin/sh
+
+# no application
+
+exit 0
