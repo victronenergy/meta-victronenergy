@@ -1,6 +1,6 @@
 DESCRIPTION = "additional system packages"
 
-PR = "r1"
+PR = "r2"
 
 inherit packagegroup
 
@@ -39,8 +39,6 @@ RDEPENDS_${PN} = "\
 	mtd-utils \
 	mtd-utils-ubifs \
 	nano \
-	ntp-utils \
-	ntpdate \
 	openssh \
 	openssh-sftp-server \
 	opkg \
