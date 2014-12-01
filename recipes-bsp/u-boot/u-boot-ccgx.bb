@@ -1,6 +1,6 @@
 require u-boot.inc
 
-PR = "r3"
+PR = "r4"
 
 SRC_URI += " \
 		file://live.cmds \
@@ -25,15 +25,15 @@ pkg_postinst_${PN} () {
             exit 1;
         fi
 
-        if [ -f /boot/${UBOOT_IMAGE} ] && [ -n $UBOOT_DEV ]; then
+        if [ -f /boot/${MACHINE}-${UBOOT_IMAGE} ] && [ -n $UBOOT_DEV ]; then
             echo "INFO: Erasing $UBOOT_DEV"
             flash_erase  /dev/$UBOOT_DEV 0 0
             echo "INFO: Write U-boot > $UBOOT_DEV"
-            nandwrite -p /dev/$UBOOT_DEV /boot/${UBOOT_IMAGE}
-            rm /boot/${UBOOT_IMAGE}
+            nandwrite -p /dev/$UBOOT_DEV /boot/${MACHINE}-${UBOOT_IMAGE}
+            rm /boot/${MACHINE}-${UBOOT_IMAGE}
             echo "Update finished!"
         else
-            echo "ERROR: No u-boot /boot/${UBOOT_IMAGE} image found!"
+            echo "ERROR: No u-boot /boot/${MACHINE}-${UBOOT_IMAGE} image found!"
         fi
 
         # u-boot up to and including v2013.01.01-ccgx-v2 did not disable the

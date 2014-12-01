@@ -26,7 +26,7 @@ do_compile () {
 
 do_install () {
 	install -d ${D}/boot
-	install ${S}/${UBOOT_IMAGE} ${D}/boot/${UBOOT_IMAGE}
+	install ${S}/${UBOOT_IMAGE} ${D}/boot/${MACHINE}-${UBOOT_IMAGE}
 }
 
 inherit deploy
