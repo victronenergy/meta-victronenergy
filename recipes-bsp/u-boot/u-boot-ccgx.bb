@@ -9,6 +9,8 @@ SRC_URI += " \
 		file://splash.bgra \
 	"
 
+RDEPENDS_${PN} += "u-boot-env-tools"
+
 do_compile_append () {
 	mkimage -A arm -T script -C none -n 'Live Script' -d ${WORKDIR}/live.cmds ${WORKDIR}/live.scr
 	mkimage -A arm -T script -C none -n 'Production Script' -d ${WORKDIR}/production.cmds ${WORKDIR}/production.scr

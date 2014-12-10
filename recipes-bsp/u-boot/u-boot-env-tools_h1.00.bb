@@ -22,6 +22,7 @@ do_install () {
 	install ${S}/tools/env/fw_printenv ${D}/${bindir}
 	ln -sf ${bindir}/fw_printenv ${D}${bindir}/fw_setenv
 
-	install ${WORKDIR}/fw_env.config ${D}${sysconfdir}
+	# FIXME, opkg fails to replace this, since base-files used to install it.
+	#install ${WORKDIR}/fw_env.config ${D}${sysconfdir}
 }
 
