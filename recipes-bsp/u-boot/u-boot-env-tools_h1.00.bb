@@ -1,6 +1,9 @@
 SUMMARY = "U-Boot environment tools"
 DESCRIPTION = "install fw_setenv and fw_printenv"
 
+# note, the fancy version number is needed to be newer than
+# the git+hash version number from earlier version.
+
 require u-boot.src.inc
 PR = "r0"
 
