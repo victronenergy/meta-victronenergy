@@ -11,8 +11,8 @@ SRC_URI = " \
 	file://service \
 	"
 
-SRC_URI[md5sum] = "e02ac43d329ca372d42b82950e6e8626"
-SRC_URI[sha256sum] = "fab618b483a9b408738cb62e087a6f1c196af8ea4197deffe61cf6f0e2dc41e5"
+SRC_URI[md5sum] = "7f76e02afe7a7e8055fb7d73fa33f595"
+SRC_URI[sha256sum] = "2f3b43a7f72865b030c86ca7207e1fb1282767329146f81913bc93a39dc24526"
 
 S = "${WORKDIR}/dbus_modbustcp-${PV}"
 
