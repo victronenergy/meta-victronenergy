@@ -35,6 +35,7 @@ pkg_postinst_kernel-base_append() {
 			echo "Update finished!"
 		else
 			echo "ERROR: No kernel (/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_VERSION}) image found!"
+			exit 1
 		fi
 	else
 		# Exit 1 is used to set the status of the package on unpacked in rootfs image
