@@ -11,7 +11,7 @@ PACKAGES = "\
          "
 
 # build but not installed in the image
-DEPENDS = "\
+DEPENDS += "\
 	gdb \
 	git \
 	tcpdump \
@@ -19,7 +19,7 @@ DEPENDS = "\
 	vim \
 "
 
-RDEPENDS_${PN} = "\
+RDEPENDS_${PN} += "\
 	bash \
 	bsdiff \
 	bzip2 \
