@@ -1,6 +1,6 @@
 DAEMON_PN ?= "${PN}"
 
-DAEMONTOOLS = ""
+DAEMONTOOLS = "daemontools"
 DAEMONTOOLS_virtclass-cross = ""
 DAEMONTOOLS_virtclass-native = ""
 DAEMONTOOLS_virtclass-nativesdk = ""
@@ -92,6 +92,7 @@ do_install_append() {
 	echo "#!/bin/sh" > ${SERVICE}/log/run
 	echo "exec 2>&1" >> ${SERVICE}/log/run
 	echo "exec multilog t s99999 n8 /log/${PN}" >> ${SERVICE}/log/run
+	chmod 755 ${SERVICE}/log/run
 
 	if [ "x${DAEMONTOOLS_DOWN}" != "x" ]; then
 		touch ${SERVICE}/down
