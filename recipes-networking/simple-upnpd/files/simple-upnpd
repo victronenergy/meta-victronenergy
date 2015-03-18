@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# FIXME: how about not running as root?
+# FIXME: make it a daemon?
+
+case "$1" in
+  start)
+      /bin/simple-upnpd --xml /etc/simple-upnpd.xml &
+    ;;
+  stop)
+      killall simple-upnpd
+    ;;
+  restart)
+	  killall simple-upnpd
+      sleep 1
+      /bin/simple-upnpd --xml /etc/simple-upnpd.xml &
+    ;;
+  *)
+      echo "Usage: /etc/init.d/simple-upnpd {start|stop}"
+      exit 1
+    ;;
+esac
+
+exit 0
