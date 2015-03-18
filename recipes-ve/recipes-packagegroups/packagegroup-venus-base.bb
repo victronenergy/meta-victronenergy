@@ -1,6 +1,6 @@
 DESCRIPTION = "additional system packages"
 
-PR = "r2"
+PR = "r4"
 
 inherit packagegroup
 
@@ -45,6 +45,7 @@ RDEPENDS_${PN} += "\
 	opkg-collateral \
 	rsync \
 	screen \
+	simple-upnpd \
 	strace \
 	tzdata \
 	tzdata-africa \
