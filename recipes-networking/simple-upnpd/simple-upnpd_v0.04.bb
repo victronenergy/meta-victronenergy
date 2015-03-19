@@ -2,7 +2,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 DESCRIPTION = "Daemon which only announces the device its presence over upnp"
-PR = "r9"
+PR = "r1"
 
 DEPENDS += "gupnp"
 RDEPENDS_${PN} = "glib-2.0 gupnp"
@@ -11,7 +11,11 @@ S = "${WORKDIR}/git"
 
 INITSCRIPT_NAME = "simple-upnpd"
 INITSCRIPT_PARAMS = "start 99 5 2 . stop 10 0 1 6 ."
-inherit update-rc.d
+inherit update-rc.d useradd
+
+USERADD_PACKAGES = "${PN}"
+GROUPADD_PARAM_${PN} = "simple-upnpd"
+USERADD_PARAM_${PN} = "--no-create-home --shell /bin/false -g simple-upnpd simple-upnpd"
 
 SRC_URI = " \
 	git://github.com/victronenergy/simple-upnpd.git;protocol=https;tag=${PV} \

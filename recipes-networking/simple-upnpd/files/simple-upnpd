@@ -1,24 +1,35 @@
 #!/bin/sh
 
-# FIXME: how about not running as root?
-# FIXME: make it a daemon?
+USER=simple-upnpd
+PROGRAM=/bin/simple-upnpd
+PARAMS="--xml /etc/simple-upnpd.xml"
+
+start_it()
+{
+	start-stop-daemon --start --quiet --user $USER --chuid $USER --exec $PROGRAM -- $PARAMS
+}
+
+stop_it()
+{
+	start-stop-daemon --stop  --quiet --user $USER
+}
 
 case "$1" in
-  start)
-      /bin/simple-upnpd --xml /etc/simple-upnpd.xml &
+	start)
+		start_it
+	;;
+	stop)
+		stop_it
     ;;
-  stop)
-      killall simple-upnpd
-    ;;
-  restart)
-	  killall simple-upnpd
-      sleep 1
-      /bin/simple-upnpd --xml /etc/simple-upnpd.xml &
-    ;;
-  *)
-      echo "Usage: /etc/init.d/simple-upnpd {start|stop}"
-      exit 1
-    ;;
+	restart)
+		stop_it
+		sleep 1
+		start_it
+	;;
+	*)
+		echo "Usage: /etc/init.d/simple-upnpd {start|stop}"
+		exit 1
+	;;
 esac
 
 exit 0
