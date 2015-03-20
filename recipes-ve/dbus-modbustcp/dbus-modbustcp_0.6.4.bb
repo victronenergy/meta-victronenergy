@@ -4,17 +4,14 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 
 inherit qt4e
 
-PR = "r1"
+PR = "r0"
 
 SRC_URI = " \
-	https://github.com/victronenergy/dbus_modbustcp/archive/v${PV}.tar.gz \
+	git://github.com/victronenergy/dbus_modbustcp.git;tag=v${PV};protocol=https \
 	file://service \
 	"
 
-SRC_URI[md5sum] = "7f76e02afe7a7e8055fb7d73fa33f595"
-SRC_URI[sha256sum] = "2f3b43a7f72865b030c86ca7207e1fb1282767329146f81913bc93a39dc24526"
-
-S = "${WORKDIR}/dbus_modbustcp-${PV}"
+S = "${WORKDIR}/git"
 
 EXTRA_QMAKEVARS_POST += "DEFINES+=TARGET_ccgx"
 
