@@ -2,7 +2,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 DESCRIPTION = "Daemon which only announces the device its presence over upnp"
-PR = "r1"
+PR = "r2"
 
 DEPENDS += "gupnp"
 RDEPENDS_${PN} = "glib-2.0 gupnp"
