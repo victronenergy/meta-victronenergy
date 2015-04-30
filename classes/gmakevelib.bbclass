@@ -1,10 +1,8 @@
 inherit siteinfo
 
 # run ./configure && make && make install
-# set DESTDIR / bindir to point to the correct location
 
-bindir := "${@base_conditional('VELIB_DEFAULT_DIRS', '1', '${bindir}', '/opt/victronenergy/${PN}', d)}"
-bindir_bpp3 := '${@base_conditional("VELIB_DEFAULT_DIRS", "1", "${bindir}", "/opt/color-control/${PN}", d)}'
+inherit ve_package
 
 oe_runconf () {
 	cfgscript="${S}/configure"
