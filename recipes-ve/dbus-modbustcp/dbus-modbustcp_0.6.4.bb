@@ -3,34 +3,25 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 inherit qt4e
+inherit ve_package
+inherit daemontools
 
-PR = "r0"
-
-SRC_URI = " \
-	git://github.com/victronenergy/dbus_modbustcp.git;tag=v${PV};protocol=https \
-	file://service \
-	"
-
+PR = "r20"
+SRC_URI = "git://github.com/victronenergy/dbus_modbustcp.git;tag=v${PV};protocol=https"
 S = "${WORKDIR}/git"
+DEST_DIR = "${D}${bindir}"
+DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
+DAEMONTOOLS_RUN = "softlimit -d 2000000 -s 1000000 -a 100000000 ${bindir}/${PN}"
+DAEMONTOOLS_DOWN = "1"
 
+# why?
 EXTRA_QMAKEVARS_POST += "DEFINES+=TARGET_ccgx"
-
-BASE_DIR = "/opt/color-control/dbus-modbustcp"
-DEST_DIR = "${D}${BASE_DIR}"
 
 do_install() {
 	install -d ${DEST_DIR}
 	install -m 0755 ${S}/dbus_modbustcp ${DEST_DIR}/dbus-modbustcp
 	install -m 0644 ${S}/attributes.csv ${DEST_DIR}
 	install -m 0644 ${S}/unitid2di.csv ${DEST_DIR}
-
-	# add service for daemontools
-	cp -r ${WORKDIR}/service ${DEST_DIR}
-	install -d ${D}/service
-	ln -s ${BASE_DIR}/service ${D}/service/dbus-modbustcp
 }
 
-FILES_${PN} += "${BASE_DIR}"
-FILES_${PN} += "/service"
-FILES_${PN}-dbg += "${BASE_DIR}/.debug"
 
