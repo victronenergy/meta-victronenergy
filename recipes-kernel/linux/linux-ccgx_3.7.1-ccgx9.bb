@@ -1,7 +1,9 @@
 # fix behavior of base do_install_prepend - its overwrite ready to use uImage by uncompresses Image
 require linux-ccgx.inc
 
-RDEPENDS_${PN} = "linux-backports"
+# Mind it, this recipe is not installed itself but provides kernel-image etc.
+# Hence RPEDEND on that one....
+RDEPENDS_kernel-image = "linux-backports"
 BB_FETCH_PREMIRRORONLY = "0"
 PREMIRRORS = ""
 
@@ -12,7 +14,7 @@ SRC_URI[sha256sum] = "becf6c16240fa2ec17dbd1b60666e1f7e361037ce7cd66e1a382b0d21b
 # This was introduced to remove uImage from /boot and save 3MB
 KERNEL_DROPIMAGE = ""
 
-PR = "r1"
+PR = "r10"
 
 S = "${WORKDIR}/linux-${PV}"
 
