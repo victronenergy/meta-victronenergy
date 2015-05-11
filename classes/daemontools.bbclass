@@ -9,9 +9,18 @@ RDEPENDS_${DAEMON_PN}_append = " ${DAEMONTOOLS}"
 
 SERVICES_DIR = "/service"
 
+DAEMONTOOLS_preinst() {
+	if test "x$D" = "x"; then
+		echo "Stopping ${PN}"
+		svc -d ${SERVICES_DIR}/${PN}
+		svc -d ${SERVICES_DIR}/${PN}/log
+	fi
+}
+
 DAEMONTOOLS_postinst() {
 	if test "x$D" = "x"; then
-		if [ "x${DAEMONTOOLS_DOWN}" != "x" ]; then
+		if [ "x${DAEMONTOOLS_DOWN}" = "x" ]; then
+			echo "Starting ${PN}"
 			svc -u ${SERVICES_DIR}/${PN}/log
 			svc -u ${SERVICES_DIR}/${PN}
 		fi
@@ -20,6 +29,7 @@ DAEMONTOOLS_postinst() {
 
 DAEMONTOOLS_prerm() {
 	if test "x$D" = "x"; then
+		echo "Stopping ${PN}"
 		svc -d ${SERVICES_DIR}/${PN}
 		svc -d ${SERVICES_DIR}/${PN}/log
 	fi
@@ -50,6 +60,12 @@ python populate_packages_prepend () {
         execute on the target. Not doing so may cause update_rc.d postinst invoked
         twice to cause unwanted warnings.
         """ 
+        preinst = localdata.getVar('pkg_preinst', True)
+        if not preinst:
+            preinst = '#!/bin/sh\n'
+        preinst += localdata.getVar('DAEMONTOOLS_preinst', True)
+        d.setVar('pkg_preinst_%s' % pkg, preinst)
+
         postinst = localdata.getVar('pkg_postinst', True)
         if not postinst:
             postinst = '#!/bin/sh\n'
