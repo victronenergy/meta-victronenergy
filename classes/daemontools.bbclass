@@ -11,9 +11,11 @@ SERVICES_DIR = "/service"
 
 DAEMONTOOLS_preinst() {
 	if test "x$D" = "x"; then
-		echo "Stopping ${PN}"
-		svc -d ${SERVICES_DIR}/${PN}
-		svc -d ${SERVICES_DIR}/${PN}/log
+		if [ -d ${SERVICES_DIR}/${PN} ]; then
+			echo "Stopping ${PN}"
+			svc -d ${SERVICES_DIR}/${PN}
+			svc -d ${SERVICES_DIR}/${PN}/log
+		fi
 	fi
 }
 
