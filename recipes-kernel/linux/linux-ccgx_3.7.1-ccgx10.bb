@@ -4,17 +4,15 @@ require linux-ccgx.inc
 # Mind it, this recipe is not installed itself but provides kernel-image etc.
 # Hence RPEDEND on that one....
 RDEPENDS_kernel-image = "linux-backports"
-BB_FETCH_PREMIRRORONLY = "0"
-PREMIRRORS = ""
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-SRC_URI[md5sum] = "a5470a58ffdee1fb029b5f443185a215"
-SRC_URI[sha256sum] = "becf6c16240fa2ec17dbd1b60666e1f7e361037ce7cd66e1a382b0d21b880c10"
+SRC_URI[md5sum] = "92cba9bc9c95e3d534056962563f6ced"
+SRC_URI[sha256sum] = "7d19a4dfa0c949edce39102d7d676decdea94f5636db7823bf53928dfb2c0dad"
 
 # This was introduced to remove uImage from /boot and save 3MB
 KERNEL_DROPIMAGE = ""
 
-PR = "r10"
+PR = "r0"
 
 S = "${WORKDIR}/linux-${PV}"
 
