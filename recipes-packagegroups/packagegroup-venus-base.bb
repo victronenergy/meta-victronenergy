@@ -1,6 +1,6 @@
 DESCRIPTION = "additional system packages"
 
-PR = "r4"
+PR = "r5"
 
 inherit packagegroup
 
@@ -29,7 +29,6 @@ RDEPENDS_${PN} += "\
 	e2fsprogs \
 	iproute2 \
 	iw \
-	kernel-modules \
 	ldd \
 	less \
 	linux-firmware-rt2800 \
