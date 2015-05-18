@@ -1,6 +1,6 @@
 DESCRIPTION = "dbus services which provide measurements / data on the dbus"
 
-PR = "r0"
+PR = "r1"
 PACKAGES = "packagegroup-ve-dbus-data-producers"
 LICENSE = "MIT"
 
@@ -13,6 +13,7 @@ RRECOMMENDS_${PN} += " \
 	dbus-motordrive \
 	dbus-systemcalc-py \
 	dbus-valence \
+	dbus-vebus-to-pvinverter \
 	gps-dbus \
 	vecan-dbus \
 	vedirect-interface \
