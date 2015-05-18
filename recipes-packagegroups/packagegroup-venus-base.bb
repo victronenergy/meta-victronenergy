@@ -1,9 +1,8 @@
 DESCRIPTION = "additional system packages"
 
-PR = "r5"
+PR = "r8"
 
 inherit packagegroup
-
 LICENSE = "MIT"
 
 PACKAGES = "\
@@ -23,6 +22,7 @@ RDEPENDS_${PN} += "\
 	bash \
 	bsdiff \
 	bzip2 \
+	connman \
 	cronie \
 	curl \
 	dbus \
@@ -57,6 +57,7 @@ RDEPENDS_${PN} += "\
 	tzdata-europe \
 	tzdata-pacific \
 	u-boot-env-tools \
+	venus-version \
 	watchdog \
 	zip \
 "
