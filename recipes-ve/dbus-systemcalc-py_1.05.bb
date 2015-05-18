@@ -6,9 +6,15 @@ inherit ve_package
 inherit daemontools
 
 SRC_URI = "gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV}"
-PR = "r21"
+PR = "r25"
 S = "${WORKDIR}/git"
-RDEPENDS = "python-dbus"
+
+RDEPENDS_${PN} = " \
+	localsettings \
+	python-dbus \
+	python-pprint \
+	python-pygobject \
+"
 
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "softlimit -d 2000000 -s 1000000 -a 100000000 ${bindir}/dbus_systemcalc.py"
