@@ -7,16 +7,22 @@ inherit ve_package
 inherit daemontools
 
 RDEPENDS_${PN} = " \
+	localsettings \
 	packagegroup-ve-dbus-data-producers \
 	python-argparse \
+	python-dbus \
+	python-fcntl \
+	python-pprint \
+	python-pygobject \
 	python-io \
 	python-json \
 	python-multiprocessing \
+	python-requests \
 	python-shell \
 	python-sqlite3 \
 	"
 
-PR = "r25"
+PR = "r32"
 SRC_URI = "gitsm://git.victronenergy.com/ccgx/dbus_vrm.git;protocol=ssh;user=git;tag=vrmlogger-${PV}"
 S = "${WORKDIR}/git"
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
