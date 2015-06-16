@@ -22,7 +22,7 @@ RDEPENDS_${PN} = " \
 	python-sqlite3 \
 	"
 
-PR = "r32"
+PR = "r0"
 SRC_URI = "gitsm://git.victronenergy.com/ccgx/dbus_vrm.git;protocol=ssh;user=git;tag=vrmlogger-${PV}"
 S = "${WORKDIR}/git"
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
