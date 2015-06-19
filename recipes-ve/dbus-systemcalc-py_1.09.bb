@@ -6,7 +6,7 @@ inherit ve_package
 inherit daemontools
 
 SRC_URI = "gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV}"
-PR = "r25"
+PR = "r0"
 S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \
@@ -23,4 +23,3 @@ do_install () {
 	install -d ${D}${bindir}
 	cp -r ${S}/* ${D}${bindir}
 }
-
