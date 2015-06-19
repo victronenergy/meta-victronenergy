@@ -3,7 +3,11 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 inherit ve_package
-SRC_URI = "file://reboot-after-opkg-done.sh"
+SRC_URI = " \
+	file://reboot-after-opkg-done.sh \
+	file://postupgrade.sh \
+	\
+"
 
 do_install () {
 	echo -e "${DISTRO_VERSION}\n${DISTRO_NAME}\n${BUILDNAME}" > version
@@ -12,10 +16,15 @@ do_install () {
 
 	install -d ${D}${vedir}/opkg-scripts
 	install -m 755 ${WORKDIR}/reboot-after-opkg-done.sh ${D}${vedir}/opkg-scripts
+
+	install -d ${D}/${sysconfdir}/init.d
+	install -m 0755 ${WORKDIR}/postupgrade.sh ${D}/${sysconfdir}/init.d
 }
 
 pkg_postinst_${PN}() {
 	if [ "x$D" == "x" ]; then
+		ln -s ${sysconfdir}/init.d/postupgrade.sh ${sysconfdir}/rc5.d/S25postupgrade
+
 		echo Starting reboot workaround
 		${vedir}/opkg-scripts/reboot-after-opkg-done.sh &
 	fi
