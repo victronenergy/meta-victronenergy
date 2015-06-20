@@ -6,13 +6,13 @@ require linux-ccgx.inc
 RDEPENDS_kernel-image = "linux-backports"
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-SRC_URI[md5sum] = "92cba9bc9c95e3d534056962563f6ced"
-SRC_URI[sha256sum] = "7d19a4dfa0c949edce39102d7d676decdea94f5636db7823bf53928dfb2c0dad"
+SRC_URI[md5sum] = "08b5aa1413f9578defbb04dbcaa66815"
+SRC_URI[sha256sum] = "9fdb5714b82848ce4018ced9eb9adc2b96a7aaaac209ed360e7b5d16aa60bcba"
 
 # This was introduced to remove uImage from /boot and save 3MB
 KERNEL_DROPIMAGE = ""
 
-PR = "r0"
+PR = "r2"
 
 S = "${WORKDIR}/linux-${PV}"
 
@@ -37,6 +37,12 @@ pkg_postinst_kernel-base_append() {
 			echo "ERROR: No kernel (/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_VERSION}) image found!"
 			exit 1
 		fi
+
+		# erase the stored bootparams and use the default kernel ones
+		MTD_DEV=`grep bootparms /proc/mtd`
+		PARAMS_DEV=${MTD_DEV:0:4}
+		echo "INFO: Erasing bootparms $PARAMS_DEV"
+		flash_erase /dev/${PARAMS_DEV} 0 0
 	else
 		# Exit 1 is used to set the status of the package on unpacked in rootfs image
 		# The result is that the package will be installed on first boot
