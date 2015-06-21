@@ -1,6 +1,6 @@
 DESCRIPTION = "additional system packages"
 
-PR = "r8"
+PR = "r9"
 
 inherit packagegroup
 LICENSE = "MIT"
@@ -62,6 +62,6 @@ RDEPENDS_${PN} += "\
 	zip \
 "
 
-RDEPENDS_${PN} += "\
+RDEPENDS_${PN}_ccgx += "\
 	application \
 "
