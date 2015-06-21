@@ -6,11 +6,13 @@ PARAMS="--xml /etc/simple-upnpd.xml"
 
 start_it()
 {
+	echo "Starting simple-upnpd"
 	start-stop-daemon --start --quiet --user $USER --chuid $USER --exec $PROGRAM -- $PARAMS
 }
 
 stop_it()
 {
+	echo "Stopping simple-upnpd"
 	start-stop-daemon --stop  --quiet --user $USER
 }
 
