@@ -13,6 +13,7 @@ PACKAGES = "\
 DEPENDS += "\
 	gdb \
 	git \
+	s6 \
 	tcpdump \
 	tmux \
 	vim \
