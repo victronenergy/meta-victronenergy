@@ -1,6 +1,6 @@
 DESCRIPTION = "additional system packages"
 
-PR = "r9"
+PR = "r10"
 
 inherit packagegroup
 LICENSE = "MIT"
@@ -28,6 +28,7 @@ RDEPENDS_${PN} += "\
 	curl \
 	dbus \
 	e2fsprogs \
+	eglibc-utils \
 	iproute2 \
 	iw \
 	ldd \
@@ -35,10 +36,12 @@ RDEPENDS_${PN} += "\
 	linux-firmware-rt2800 \
 	linux-firmware-rt73 \
 	linux-firmware-rtl8192cu \
+	localedef \
 	miniupnpc \
 	mtd-utils \
 	mtd-utils-ubifs \
 	nano \
+	ncurses-tools \
 	openssh \
 	openssh-sftp-server \
 	opkg \
@@ -58,6 +61,7 @@ RDEPENDS_${PN} += "\
 	tzdata-europe \
 	tzdata-pacific \
 	u-boot-env-tools \
+	usbutils \
 	venus-version \
 	watchdog \
 	zip \
