@@ -6,7 +6,7 @@ inherit qt4e
 inherit ve_package
 inherit daemontools
 
-PR = "r20"
+PR = "r0"
 SRC_URI = "git://github.com/victronenergy/dbus_modbustcp.git;tag=v${PV};protocol=https"
 S = "${WORKDIR}/git"
 DEST_DIR = "${D}${bindir}"
