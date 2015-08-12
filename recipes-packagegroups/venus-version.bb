@@ -8,6 +8,8 @@ SRC_URI = " \
 	file://postupgrade.sh \
 	\
 "
+RREPLACES_${PN}_bpp3 = "color-control"
+RCONFLICTS_${PN}_bpp3 = "color-control"
 
 do_install () {
 	echo -e "${DISTRO_VERSION}\n${DISTRO_NAME}\n${BUILDNAME}" > version
