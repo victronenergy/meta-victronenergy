@@ -3,6 +3,7 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=ac6c26e52aea428ee7f56dc2c56424c6"
 
 inherit autotools
+BBCLASSEXTEND = "native nativesdk"
 
 PR = "r0"
 SRC_URI = "http://github.com/downloads/rvoicilas/inotify-tools/inotify-tools-3.14.tar.gz"
