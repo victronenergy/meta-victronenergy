@@ -1,6 +1,6 @@
 DESCRIPTION = "additional system packages"
 
-PR = "r10"
+PR = "r13"
 
 inherit packagegroup
 LICENSE = "MIT"
