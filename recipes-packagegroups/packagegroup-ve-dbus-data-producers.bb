@@ -1,6 +1,6 @@
 DESCRIPTION = "dbus services which provide measurements / data on the dbus"
 
-PR = "r2"
+PR = "r3"
 PACKAGES = "packagegroup-ve-dbus-data-producers"
 LICENSE = "MIT"
 
@@ -12,6 +12,7 @@ RRECOMMENDS_${PN} += " \
 	dbus-cgwacs \
 	dbus-fronius \
 	dbus-motordrive \
+	dbus-redflow \
 	dbus-systemcalc-py \
 	dbus-valence \
 	dbus-vebus-to-pvinverter \
