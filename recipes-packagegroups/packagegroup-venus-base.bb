@@ -1,6 +1,6 @@
 DESCRIPTION = "additional system packages"
 
-PR = "r13"
+PR = "r14"
 
 inherit packagegroup
 LICENSE = "MIT"
@@ -23,6 +23,7 @@ RDEPENDS_${PN} += "\
 	bash \
 	bsdiff \
 	bzip2 \
+	canutils \
 	connman \
 	cronie \
 	curl \
