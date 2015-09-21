@@ -1,6 +1,6 @@
 DESCRIPTION = "dbus services which provide measurements / data on the dbus"
 
-PR = "r3"
+PR = "r4"
 PACKAGES = "packagegroup-ve-dbus-data-producers"
 LICENSE = "MIT"
 
@@ -17,6 +17,7 @@ RRECOMMENDS_${PN} += " \
 	dbus-valence \
 	dbus-vebus-to-pvinverter \
 	gps-dbus \
+	lg-resu-interface \
 	vecan-dbus \
 	vedirect-interface \
 "
