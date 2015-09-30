@@ -1,6 +1,6 @@
 DESCRIPTION = "additional system packages"
 
-PR = "r15"
+PR = "r16"
 
 inherit packagegroup
 LICENSE = "MIT"
@@ -66,6 +66,7 @@ RDEPENDS_${PN} += "\
 	usbutils \
 	venus-version \
 	watchdog \
+	websockify-c \
 	zip \
 "
 
