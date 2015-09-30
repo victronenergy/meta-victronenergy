@@ -1,6 +1,6 @@
 DESCRIPTION = "additional system packages"
 
-PR = "r14"
+PR = "r15"
 
 inherit packagegroup
 LICENSE = "MIT"
@@ -32,6 +32,7 @@ RDEPENDS_${PN} += "\
 	eglibc-utils \
 	iproute2 \
 	iw \
+	javascript-vnc-client \
 	ldd \
 	less \
 	linux-firmware-rt2800 \
