@@ -9,10 +9,10 @@ inherit allarch
 
 RDEPENDS_${PN} = "hiawatha"
 
-PR = "r0"
+PR = "r1"
 SRC_URI = " \
 	file://javascript-vnc-client.conf \
-	gitsm://github.com/mpvader/javascript-vnc-client.git;protocol=https;tag=${PV} \
+	gitsm://github.com/victronenergy/javascript-vnc-client.git;protocol=https;tag=${PV} \
 "
 
 S = "${WORKDIR}/git"
