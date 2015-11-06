@@ -1,11 +1,13 @@
 DESCRIPTION = "Websockify - C implementation"
 LICENSE = "LGPLv3"
 LIC_FILES_CHKSUM = "file://../docs/LICENSE.LGPL-3;md5=e6a600fd5e1d9cbde2d983680233ad02"
+DEPENDS += "openssl"
+RDEPENDS_${PN} += "openssl"
 
 inherit ve_package
 inherit daemontools
 
-PR = "r0"
+PR = "r1"
 SRC_URI = " \
 	git://github.com/kanaka/websockify.git;protocol=https;tag=${PV} \
 "
