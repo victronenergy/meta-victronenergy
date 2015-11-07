@@ -7,6 +7,8 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 
 inherit allarch
 
+# base-passwd is needed for www user
+DEPENDS = "base-passwd"
 RDEPENDS_${PN} = "hiawatha"
 
 PR = "r0"
