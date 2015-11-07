@@ -31,7 +31,7 @@ python __anonymous () {
 }
 
 do_configure_prepend() {
-        yes '' | oe_runmake am3517_ccgx_defconfig
+        yes '' | oe_runmake -C ${S} O=${B} am3517_ccgx_defconfig
 }
 
 do_install_prepend() {
