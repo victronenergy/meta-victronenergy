@@ -4,6 +4,8 @@ inherit siteinfo
 
 inherit ve_package
 
+CFLAGS += "${TARGET_CC_ARCH} --sysroot=${STAGING_DIR_TARGET}"
+
 oe_runconf () {
 	cfgscript="${S}/configure"
 	if [ -x "$cfgscript" ] ; then
