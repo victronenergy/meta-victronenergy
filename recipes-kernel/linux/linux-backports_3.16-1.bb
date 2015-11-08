@@ -3,7 +3,8 @@ SECTION = "kernel"
 LICENSE = "GPLv2"
 
 inherit module
-
+KERNEL_MODULES_META_PACKAGE = "linux-backports-modules"
+KERNEL_MODULE_PATTERN = "linux-backport-module-%s"
 BACKPORTS_CONFIG = "ccgx.config"
 
 SRC_URI = "http://www.kernel.org/pub/linux/kernel/projects/backports/stable/v3.16/backports-3.16-1.tar.xz \
