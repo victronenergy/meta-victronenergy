@@ -12,8 +12,8 @@ inherit autotools
 SRC_URI += "file://fw_env.config"
 
 do_compile () {
-	oe_runmake bpp3_config
-	oe_runmake HOSTCC="${CC}" HOSTSTRIP="echo" env
+	oe_runmake -C ${S} bpp3_config
+	oe_runmake -C ${S} HOSTCC="${CC}" HOSTSTRIP="echo" env
 }
 
 do_install () {
