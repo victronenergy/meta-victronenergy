@@ -6,7 +6,8 @@ PROVIDES = "virtual/bootloader"
 DEPENDS = "mtd-utils"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-EXTRA_OEMAKE = 'CROSS_COMPILE=${TARGET_PREFIX} CC="${TARGET_PREFIX}gcc ${TOOLCHAIN_OPTIONS}"'
+# gcc 4.9.2 has a BUG cause false array out bound warnings.. (which is in fido)
+EXTRA_OEMAKE = 'CROSS_COMPILE=${TARGET_PREFIX} CC="${TARGET_PREFIX}gcc ${TOOLCHAIN_OPTIONS} -Wno-error=array-bounds"'
 UBOOT_MACHINE ?= "${MACHINE}_config"
 UBOOT_IMAGE ?= "u-boot.img"
 UBOOT_MAKE_TARGET ?= "all"
