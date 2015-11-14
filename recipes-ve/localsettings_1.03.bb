@@ -6,7 +6,7 @@ inherit allarch
 inherit ve_package
 inherit daemontools
 
-PR = "r14"
+PR = "r15"
 SRC_URI = " \
 	gitsm://github.com/victronenergy/localsettings.git;protocol=https;tag=v${PV} \
 	file://set_setting.sh \
@@ -37,6 +37,13 @@ do_install () {
 # remember the version updated from ...
 pkg_preinst_${PN} () {
 	if [ "x$D" = "x" ]; then
+
+		# this is a separate partition on a ccgx, so only create if when non existing
+		if [ ! -e /conf ]; then
+			mkdir /conf
+			touch /conf/settings.xml
+		fi
+
 		if [ -f ${bindir}/../version ]; then
 			cp ${bindir}/../version ${bindir}/previous_version
 		fi
@@ -54,4 +61,3 @@ pkg_postinst_${PN} () {
 		fi
 	fi
 }
-
