@@ -5,9 +5,12 @@ DAEMONTOOLS_virtclass-cross = ""
 DAEMONTOOLS_virtclass-native = ""
 DAEMONTOOLS_virtclass-nativesdk = ""
 
-RDEPENDS_${DAEMON_PN}_append = " ${DAEMONTOOLS}"
-
 SERVICES_DIR = "/service"
+
+python () {
+    pkg = d.getVar('DAEMON_PN', True)
+    d.appendVar('RDEPENDS_' + pkg, ' ${DAEMONTOOLS}')
+}
 
 DAEMONTOOLS_preinst() {
 	if test "x$D" = "x"; then
