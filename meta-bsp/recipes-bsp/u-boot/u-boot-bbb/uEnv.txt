@@ -1,0 +1,17 @@
+# You can hardcode your fdtfile or use some sort of test
+# If you do not provide an uEnv.txt, then am335x-boneblack.dtb
+# will be the default. (Hard coded in u-boot).
+bootpart=0:2
+bootdir=/boot
+bootfile=zImage
+console=ttyO0,115200n8
+fdtaddr=0x88000000
+fdtfile=bbb-venus.dtb
+loadaddr=0x82000000
+mmcroot=/dev/mmcblk0p2 ro
+mmcrootfstype=ext4 rootwait
+optargs=consoleblank=0
+mmcargs=setenv bootargs console=${console} ${optargs} root=${mmcroot} rootfstype=${mmcrootfstype}
+loadfdt=load mmc ${bootpart} ${fdtaddr} ${bootdir}/${fdtfile}
+loadimage=load mmc ${bootpart} ${loadaddr} ${bootdir}/${bootfile}
+uenvcmd=if run loadfdt; then echo Loaded ${fdtfile}; if run loadimage; then run mmcargs; bootz ${loadaddr} - ${fdtaddr}; fi; fi;
