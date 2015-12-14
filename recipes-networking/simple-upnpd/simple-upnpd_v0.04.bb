@@ -2,7 +2,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 DESCRIPTION = "Daemon which only announces the device its presence over upnp"
-PR = "r3"
+PR = "r4"
 
 DEPENDS += "gupnp"
 RDEPENDS_${PN} = "glib-2.0 gupnp"
@@ -35,5 +35,7 @@ pkg_postinst_${PN}() {
 	if [ "x$D" == "x" ]; then
 		hwaddr=`ifconfig | grep "eth0.*HWaddr" | awk '{print $(NF)}'`
 		cat ${sysconfdir}/simple-upnpd.skeleton.xml | sed "s/:::MAC:::/${hwaddr}/g" > ${sysconfdir}/simple-upnpd.xml
+	else
+		exit 1
 	fi
 }
