@@ -1,4 +1,4 @@
-inherit qt4e
+inherit qt-provider
 inherit ve_package
 
 qmakeve_do_install() {
