@@ -32,13 +32,13 @@ do_install () {
 
 # remember the version updated from ...
 pkg_preinst_${PN} () {
-	if [ "x$D" == "x" ]; then
+	if [ "x$D" = "x" ]; then
 		cp ${bindir}/../version ${bindir}/previous_version
 	fi
 }
 
 pkg_postinst_${PN} () {
-	if [ "x$D" == "x" ]; then
+	if [ "x$D" = "x" ]; then
 		# version upto v1.15 would set access level to user, but did not
 		# enforce any policy. Since v1.16 users are locked in a user level
 		# so make sure the default is changed to to User & Installer when
