@@ -33,7 +33,9 @@ do_install () {
 # remember the version updated from ...
 pkg_preinst_${PN} () {
 	if [ "x$D" = "x" ]; then
-		cp ${bindir}/../version ${bindir}/previous_version
+		if [ -f ${bindir}/../version ]; then
+			cp ${bindir}/../version ${bindir}/previous_version
+		fi
 	fi
 }
 
@@ -43,7 +45,9 @@ pkg_postinst_${PN} () {
 		# enforce any policy. Since v1.16 users are locked in a user level
 		# so make sure the default is changed to to User & Installer when
 		# updating from an older version.
-		${bindir}/set_setting.sh AccessLevel 1 115
+		if [ -f ${bindir}/previous_version ]; then
+			${bindir}/set_setting.sh AccessLevel 1 115
+		fi
 	fi
 }
 
