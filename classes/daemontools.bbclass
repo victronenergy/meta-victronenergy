@@ -5,7 +5,7 @@ DAEMONTOOLS_virtclass-cross = ""
 DAEMONTOOLS_virtclass-native = ""
 DAEMONTOOLS_virtclass-nativesdk = ""
 
-SERVICES_DIR = "/service"
+DAEMONTOOLS_SERVICES_DIR ?= "/service"
 
 python () {
     pkg = d.getVar('DAEMON_PN', True)
@@ -14,10 +14,10 @@ python () {
 
 DAEMONTOOLS_preinst() {
 	if test "x$D" = "x"; then
-		if [ -d ${SERVICES_DIR}/${PN} ]; then
+		if [ -d ${DAEMONTOOLS_SERVICES_DIR}/${PN} ]; then
 			echo "Stopping ${PN}"
-			svc -d ${SERVICES_DIR}/${PN}
-			svc -d ${SERVICES_DIR}/${PN}/log
+			svc -d ${DAEMONTOOLS_SERVICES_DIR}/${PN}
+			svc -d ${DAEMONTOOLS_SERVICES_DIR}/${PN}/log
 		fi
 	fi
 }
@@ -26,8 +26,8 @@ DAEMONTOOLS_postinst() {
 	if test "x$D" = "x"; then
 		if [ "x${DAEMONTOOLS_DOWN}" = "x" ]; then
 			echo "Starting ${PN}"
-			svc -u ${SERVICES_DIR}/${PN}/log
-			svc -u ${SERVICES_DIR}/${PN}
+			svc -u ${DAEMONTOOLS_SERVICES_DIR}/${PN}/log
+			svc -u ${DAEMONTOOLS_SERVICES_DIR}/${PN}
 		fi
 	fi
 }
@@ -35,15 +35,15 @@ DAEMONTOOLS_postinst() {
 DAEMONTOOLS_prerm() {
 	if test "x$D" = "x"; then
 		echo "Stopping ${PN}"
-		svc -d ${SERVICES_DIR}/${PN}
-		svc -d ${SERVICES_DIR}/${PN}/log
+		svc -d ${DAEMONTOOLS_SERVICES_DIR}/${PN}
+		svc -d ${DAEMONTOOLS_SERVICES_DIR}/${PN}/log
 	fi
 }
 
 # opkg forgets to remove symlinks, dpkg doesn't so check if still there
 DAEMONTOOLS_postrm() {
-	if [ -d ${SERVICES_DIR}/${PN} ]; then
-		rm ${SERVICES_DIR}/${PN}
+	if [ -d ${DAEMONTOOLS_SERVICES_DIR}/${PN} ]; then
+		rm ${DAEMONTOOLS_SERVICES_DIR}/${PN}
 	fi
 }
 
@@ -129,9 +129,9 @@ do_install_append() {
 		touch ${SERVICE}/log/down
 	fi
 
-	install -d ${D}${SERVICES_DIR}
-	ln -s ${DAEMONTOOLS_SERVICE_DIR} ${D}${SERVICES_DIR}/${PN}
+	install -d ${D}${DAEMONTOOLS_SERVICES_DIR}
+	ln -s ${DAEMONTOOLS_SERVICE_DIR} ${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}
 }
 
-FILES_${PN} += "${SERVICES_DIR}"
+FILES_${PN} += "${DAEMONTOOLS_SERVICES_DIR}"
 
