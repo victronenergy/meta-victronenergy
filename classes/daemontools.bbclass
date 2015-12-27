@@ -40,8 +40,11 @@ DAEMONTOOLS_prerm() {
 	fi
 }
 
+# opkg forgets to remove symlinks, dpkg doesn't so check if still there
 DAEMONTOOLS_postrm() {
-	rm ${SERVICES_DIR}/${PN}
+	if [ -d ${SERVICES_DIR}/${PN} ]; then
+		rm ${SERVICES_DIR}/${PN}
+	fi
 }
 
 def daemontools_after_parse(d):
