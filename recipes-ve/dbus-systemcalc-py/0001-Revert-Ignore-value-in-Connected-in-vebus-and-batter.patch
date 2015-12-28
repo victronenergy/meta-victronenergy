@@ -1,0 +1,311 @@
+From c9e69496ae03320fcc549ac7bf4821639f37095d Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Mon, 28 Dec 2015 13:08:32 +0100
+Subject: [PATCH] Revert "Ignore value in '/Connected' in vebus and battery
+ services"
+
+This reverts commit ae88606750aafc603d4a0300a04a5e71cfaf72e5.
+---
+ dbus_systemcalc.py       | 74 ++++++++++++++++++++++++++++++++----------------
+ test/systemcalc_test.py  | 50 ++++++++++++++++++++++++++++++--
+ test/test_batterydata.py | 14 +++++++++
+ 3 files changed, 111 insertions(+), 27 deletions(-)
+
+diff --git a/dbus_systemcalc.py b/dbus_systemcalc.py
+index 9a48e0f..ffe62d2 100755
+--- a/dbus_systemcalc.py
++++ b/dbus_systemcalc.py
+@@ -69,19 +69,23 @@ class SystemCalc:
+ 				'/Ac/Out/L1/P': dummy,
+ 				'/Ac/Out/L2/P': dummy,
+ 				'/Ac/Out/L3/P': dummy,
++				'/Connected': dummy,
+ 				'/Hub4/AcPowerSetpoint': dummy,
+ 				'/ProductName': dummy,
+ 				'/Mgmt/Connection': dummy,
++				'/State': dummy,
+ 				'/Dc/0/Voltage': dummy,
+ 				'/Dc/0/Current': dummy,
+ 				'/Dc/0/Power': dummy,
+ 				'/Soc': dummy},
+ 			'com.victronenergy.charger': {
++				'/Connected': dummy,
+ 				'/ProductName': dummy,
+ 				'/Mgmt/Connection': dummy,
+ 				'/Dc/0/Voltage': dummy,
+ 				'/Dc/0/Current': dummy},
+ 			'com.victronenergy.grid' : {
++				'/Connected': dummy,
+ 				'/ProductName': dummy,
+ 				'/Mgmt/Connection': dummy,
+ 				'/ProductId' : dummy,
+@@ -90,6 +94,7 @@ class SystemCalc:
+ 				'/Ac/L2/Power': dummy,
+ 				'/Ac/L3/Power': dummy},
+ 			'com.victronenergy.genset' : {
++				'/Connected': dummy,
+ 				'/ProductName': dummy,
+ 				'/Mgmt/Connection': dummy,
+ 				'/ProductId' : dummy,
+@@ -254,8 +259,7 @@ class SystemCalc:
+ 			self._dbusservice['/AutoSelectedBatteryService'] = None
+ 
+ 			s = self._settings['batteryservice'].split('/')
+-			if len(s) != 2:
+-				logger.error("The battery setting (%s) is invalid!" % self._settings['batteryservice'])
++			logger.error("The battery setting (%s) is invalid!" % self._settings['batteryservice'])
+ 			serviceclass = s[0]
+ 			instance = int(s[1]) if len(s) == 2 else None
+ 			services = self._dbusmonitor.get_service_list(classfilter=serviceclass)
+@@ -282,23 +286,25 @@ class SystemCalc:
+ 
+ 	def _autoselect_battery_service(self):
+ 		# Default setting business logic:
+-		# first try to use a battery service (BMV or Lynx Shunt VE.Can). If there is more than one battery
+-		# service, use the first one (sort alphabetical). If no battery service is available, check if there
+-		# are not Solar chargers and no normal chargers. If they are not there, assume this is a hub-2,
+-		# hub-3 or hub-4 system and use VE.Bus SOC.
+-		battery_service = self._get_first_service('com.victronenergy.battery')
+-		if battery_service is not None:
+-			return battery_service
+-
+-		if len(self._dbusmonitor.get_service_list('com.victronenergy.solarcharger')) > 0:
+-			return None
++		# first try to use a battery service (BMV or Lynx Shunt VE.Can). If there
++		# is more than one battery service, just use a random one. If no battery service is
++		# available, check if there are not Solar chargers and no normal chargers. If they are not
++		# there, assume this is a hub-2, hub-3 or hub-4 system and use VE.Bus SOC.
++		batteries = self._get_connected_service_list('com.victronenergy.battery')
++
++		if len(batteries) > 0:
++			return sorted(batteries)[0]  # Pick a random battery service
+ 
+-		if len(self._dbusmonitor.get_service_list('com.victronenergy.charger')) > 0:
++		if self._get_first_connected_service('com.victronenergy.solarcharger') is not None:
+ 			return None
+ 
+-		vebus_service = self._get_first_service('com.victronenergy.vebus')
++		if self._get_first_connected_service('com.victronenergy.charger') is not None:
++			return None
+ 
+-		return vebus_service  # will be None when no vebus service found
++		vebus_services = self._get_first_connected_service('com.victronenergy.vebus')
++		if vebus_services is None:
++			return None
++		return vebus_services[0]
+ 
+ 	# Called on a one second timer
+ 	def _handletimertick(self):
+@@ -461,8 +467,10 @@ class SystemCalc:
+ 
+ 		# ==== Vebus ====
+ 		# Assume there's only 1 multi service present on the D-Bus
+-		multi_path = self._get_first_service('com.victronenergy.vebus')
+-		if multi_path is not None:
++		multi = self._get_first_connected_service('com.victronenergy.vebus')
++		multi_path = None
++		if multi is not None:
++			multi_path = multi[0]
+ 			dc_current = self._dbusmonitor.get_value(multi_path, '/Dc/0/Current')
+ 			newvalues['/Dc/Vebus/Current'] = dc_current
+ 			dc_power = self._dbusmonitor.get_value(multi_path, '/Dc/0/Power')
+@@ -505,7 +513,8 @@ class SystemCalc:
+ 		consumption = { "L1" : None, "L2" : None, "L3" : None }
+ 		for device_type in ['Grid', 'Genset']:
+ 			servicename = 'com.victronenergy.%s' % device_type.lower()
+-			em_service = self._get_first_service(servicename)
++			energy_meter = self._get_first_connected_service(servicename)
++			em_service = None if energy_meter is None else energy_meter[0]
+ 			uses_active_input = False
+ 			if multi_path is not None:
+ 				# If a grid meter is present we use values from it. If not, we look at the multi. If it has
+@@ -568,8 +577,8 @@ class SystemCalc:
+ 		# servicename, ie 'com.victronenergy.vebus.ttyO1' is not used, since the last part of that is not
+ 		# fixed. dbus-serviceclass name and the device instance are already fixed, so best to use those.
+ 
+-		services = self._dbusmonitor.get_service_list('com.victronenergy.vebus')
+-		services.update(self._dbusmonitor.get_service_list('com.victronenergy.battery'))
++		services = self._get_connected_service_list('com.victronenergy.vebus')
++		services.update(self._get_connected_service_list('com.victronenergy.battery'))
+ 
+ 		ul = {self.BATSERVICE_DEFAULT: 'Automatic', self.BATSERVICE_NOBATTERY: 'No battery monitor'}
+ 		for servicename, instance in services.items():
+@@ -600,12 +609,24 @@ class SystemCalc:
+ 		sn = self._get_instance_service_name(service, instance).replace('.', '_').replace('/', '_')
+ 		return '/ServiceMapping/%s' % sn
+ 
++	def _remove_unconnected_services(self, services):
++		# Workaround: because com.victronenergy.vebus is available even when there is no vebus product
++		# connected. Remove any that is not connected. For this, we use /State since mandatory path
++		# /Connected is not implemented in mk2dbus.
++		for servicename in services.keys():
++			if ((servicename.split('.')[2] == 'vebus' and self._dbusmonitor.get_value(servicename, '/State') is None)
++				or self._dbusmonitor.get_value(servicename, '/Connected') != 1
++				or self._dbusmonitor.get_value(servicename, '/ProductName') is None
++				or self._dbusmonitor.get_value(servicename, '/Mgmt/Connection') is None):
++				del services[servicename]
++
+ 	def _dbus_value_changed(self, dbusServiceName, dbusPath, dict, changes, deviceInstance):
+ 		self._changed = True
+ 
+ 		# Workaround because com.victronenergy.vebus is available even when there is no vebus product
+ 		# connected.
+-		if dbusPath in ['/ProductName', '/Mgmt/Connection']:
++		if (dbusPath in ['/Connected', '/ProductName', '/Mgmt/Connection'] or
++			(dbusPath == '/State' and dbusServiceName.split('.')[0:3] == ['com', 'victronenergy', 'vebus'])):
+ 			self._handleservicechange()
+ 
+ 	def _device_added(self, service, instance, do_service_change=True):
+@@ -645,12 +666,16 @@ class SystemCalc:
+ 		newvalues[path + '/Total/Power'] = total_power
+ 		newvalues[path + '/NumberOfPhases'] = number_of_phases
+ 
+-	def _get_first_service(self, classfilter=None):
++	def _get_connected_service_list(self, classfilter=None):
+ 		services = self._dbusmonitor.get_service_list(classfilter=classfilter)
++		self._remove_unconnected_services(services)
++		return services
++
++	def _get_first_connected_service(self, classfilter=None):
++		services = self._get_connected_service_list(classfilter=classfilter)
+ 		if len(services) == 0:
+ 			return None
+-		return sorted(services.keys())[0]
+-
++		return services.items()[0]
+ 
+ def _safeadd(*values):
+ 	'''Adds all parameters passed to this function. Parameters which are None are ignored. If all parameters
+@@ -664,7 +689,6 @@ def _safeadd(*values):
+ 				r += v
+ 	return r
+ 
+-
+ if __name__ == "__main__":
+ 	# Argument parsing
+ 	parser = argparse.ArgumentParser(
+diff --git a/test/systemcalc_test.py b/test/systemcalc_test.py
+index 3029656..0dd96a3 100755
+--- a/test/systemcalc_test.py
++++ b/test/systemcalc_test.py
+@@ -38,6 +38,7 @@ class TestSystemCalcBase(unittest.TestCase):
+ 		self._system_calc._updatevalues()
+ 
+ 	def _add_device(self, service, values, connected=True, product_name='dummy', connection='dummy'):
++		self._monitor.set_value(service, '/Connected', 1 if connected else 0)
+ 		self._monitor.set_value(service, '/ProductName', product_name)
+ 		self._monitor.set_value(service, '/Mgmt/Connection', connection)
+ 		for k, v in values.items():
+@@ -79,7 +80,8 @@ class TestSystemCalc(TestSystemCalcBase):
+ 				'/Dc/0/Voltage': 12.25,
+ 				'/Dc/0/Current': -8,
+ 				'/DeviceInstance': 0,
+-				'/Soc': 53.2
++				'/Soc': 53.2,
++				'/State': 3
+ 			})
+ 		self._add_device('com.victronenergy.settings',
+ 			values={
+@@ -544,6 +546,7 @@ class TestSystemCalc(TestSystemCalcBase):
+ 		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Dc/0/Voltage', None)
+ 		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Dc/0/Current', None)
+ 		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Soc', None)
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/State', None)
+ 		self._add_device('com.victronenergy.pvinverter.fronius_122_2312', {
+ 			'/Ac/L1/Power': None,
+ 			'/Position': None
+@@ -589,7 +592,8 @@ class TestSystemCalc(TestSystemCalcBase):
+ 				'/Dc/0/Voltage': None,
+ 				'/Dc/0/Current': None,
+ 				'/DeviceInstance': None,
+-				'/Soc': None
++				'/Soc': None,
++				'/State': 3
+ 			})
+ 
+ 		self._update_values()
+@@ -598,7 +602,48 @@ class TestSystemCalc(TestSystemCalcBase):
+ 			'/Ac/Consumption/Total/Power': 100
+ 		})
+ 
++	def test_multiple_vebus_systems_2(self):
++		self._add_device('com.victronenergy.vebus.ttyO2',
++			product_name='Multi2',
++			connected=True,
++			values={
++				'/Ac/ActiveIn/L1/P': 127,
++				'/Ac/ActiveIn/ActiveInput': 0,
++				'/Ac/Out/L1/P': 87,
++				'/Dc/0/Voltage': 12.25,
++				'/Dc/0/Current': -8,
++				'/DeviceInstance': 1,
++				'/Soc': 53.2,
++				'/State': 3
++			})
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Connected', 0)
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Ac/ActiveIn/L1/P', None)
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Ac/ActiveIn/L2/P', None)
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Ac/ActiveIn/L3/P', None)
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Ac/Out/L1/P', None)
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Ac/Out/L2/P', None)
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Ac/Out/L3/P', None)
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Ac/ActiveIn/ActiveInput', None)
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Dc/0/Voltage', None)
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Dc/0/Current', None)
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Soc', None)
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/State', None)
++
++		self._update_values()
++		self._check_values({
++			'/Ac/Grid/Total/Power': 127,
++			'/Ac/Consumption/Total/Power': 87
++		})
++
++	def test_disconnected_vebus_is_ignored_in_auto_mode(self):
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Connected', 0)
++		self._update_values()
++		self._check_values({
++			'/Dc/Battery/Soc': None,
++			'/Dc/Battery/Voltage': 12.25})
++
+ 	def test_connected_vebus_is_auto_selected(self):
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/State', 0)
+ 		self._update_values()
+ 		self._check_values({
+ 			'/Dc/Battery/Soc': 53.2,
+@@ -625,6 +670,7 @@ class TestSystemCalc(TestSystemCalcBase):
+ 			'/AutoSelectedBatteryService': 'battery on dummy'})
+ 
+ 	def test_batteryandvebus_defaultsetting(self):
++		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/State', 0)
+ 		self._update_values()
+ 		self._check_values({
+ 			'/Dc/Battery/Soc': 53.2,
+diff --git a/test/test_batterydata.py b/test/test_batterydata.py
+index cbe6ce7..6921fd0 100755
+--- a/test/test_batterydata.py
++++ b/test/test_batterydata.py
+@@ -68,6 +68,20 @@ class TestBatteryData(unittest.TestCase):
+ 		self.assertEqual("'No battery monitor found'\n", check_output(
+ 			['dbus', 'com.victronenergy.system', '/AutoSelectedBatteryService', 'GetValue']))
+ 
++	def test_02_disconnected_vebus_is_ignored_in_auto_mode(self):
++		vebus = startinbackground(['./dummyvebus.py'])
++
++		# SOC is ignored, since vebus /State == INVALID
++		self.assertEqual('[]\n', check_output(
++			['dbus', 'com.victronenergy.system', '/Dc/Battery/Soc', 'GetValue']))
++
++		# But voltage is used when available
++		self.assertEqual('11\n', check_output(
++			['dbus', 'com.victronenergy.system', '/Dc/Battery/Voltage', 'GetValue']))
++
++		vebus.kill()
++		vebus.wait()
++
+ 	def test_03_connected_vebus_is_auto_selected(self):
+ 		vebus = startinbackground(['./dummyvebus.py'])
+ 
+-- 
+1.9.1
+
