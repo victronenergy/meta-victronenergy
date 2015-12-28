@@ -1,11 +1,13 @@
 DAEMON_PN ?= "${PN}"
 
-DAEMONTOOLS = "daemontools"
+DAEMONTOOLS ?= "daemontools"
 DAEMONTOOLS_virtclass-cross = ""
 DAEMONTOOLS_virtclass-native = ""
 DAEMONTOOLS_virtclass-nativesdk = ""
 
 DAEMONTOOLS_SERVICES_DIR ?= "/service"
+DAEMONTOOLS_LOG_DIR_PREFIX = "${localstatedir}/log"
+DAEMONTOOLS_LOG_DIR_PREFIX_bpp3 = "/log"
 
 python () {
     pkg = d.getVar('DAEMON_PN', True)
@@ -119,7 +121,7 @@ do_install_append() {
 	echo "#!/bin/sh" > ${SERVICE}/log/run
 	echo "exec 2>&1" >> ${SERVICE}/log/run
 	if [ "x${DAEMONTOOLS_LOG_DIR}" = "x" ]; then
-		DAEMONTOOLS_LOG_DIR="/log/${PN}"
+		DAEMONTOOLS_LOG_DIR="${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}"
 	fi
 	echo "exec multilog t s99999 n8 ${DAEMONTOOLS_LOG_DIR}" >> ${SERVICE}/log/run
 	chmod 755 ${SERVICE}/log/run
