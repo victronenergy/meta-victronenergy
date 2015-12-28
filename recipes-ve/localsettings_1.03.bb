@@ -6,11 +6,12 @@ inherit allarch
 inherit ve_package
 inherit daemontools
 
-PR = "r12"
+PR = "r13"
 SRC_URI = " \
 	gitsm://github.com/victronenergy/localsettings.git;protocol=https;tag=v${PV} \
 	file://set_setting.sh \
-	"
+	file://com.victronenergy.settings.conf \
+"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
@@ -28,6 +29,9 @@ do_install () {
 
 	install -d ${D}${bindir}/ext/velib_python
 	install -m 644 ${S}/ext/velib_python/tracing.py ${D}${bindir}/ext/velib_python
+
+	install -d ${D}/${sysconfdir}/dbus-1/system.d
+	install -m 644 ${WORKDIR}/com.victronenergy.settings.conf ${D}/${sysconfdir}/dbus-1/system.d
 }
 
 # remember the version updated from ...
