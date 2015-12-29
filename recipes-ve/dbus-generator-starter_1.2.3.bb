@@ -7,8 +7,11 @@ inherit daemontools
 # ccgx only, hardcoded gpio pins!
 inherit velib_target
 
-SRC_URI = "gitsm://github.com/victronenergy/dbus_generator.git;protocol=https;tag=v${PV}"
-PR = "r0"
+SRC_URI = " \
+	gitsm://github.com/victronenergy/dbus_generator.git;protocol=https;tag=v${PV} \
+	file://com.victronenergy.generator-starter.conf \
+"
+PR = "r1"
 S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \
@@ -27,4 +30,7 @@ DAEMONTOOLS_DOWN = "1"
 do_install () {
 	install -d ${D}${bindir}
 	cp -r ${S}/* ${D}${bindir}
+
+	install -d ${D}/${sysconfdir}/dbus-1/system.d
+	install -m 644 ${WORKDIR}/com.victronenergy.generator-starter.conf ${D}/${sysconfdir}/dbus-1/system.d
 }
