@@ -10,8 +10,9 @@ inherit daemontools
 SRC_URI = " \
 	gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
 	file://0001-Revert-Ignore-value-in-Connected-in-vebus-and-batter.patch \
+	file://com.victronenergy.system.conf \
 "
-PR = "r0"
+PR = "r1"
 S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \
@@ -27,4 +28,7 @@ DAEMONTOOLS_RUN = "softlimit -d 2000000 -s 1000000 -a 100000000 ${bindir}/dbus_s
 do_install () {
 	install -d ${D}${bindir}
 	cp -r ${S}/* ${D}${bindir}
+
+	install -d ${D}/${sysconfdir}/dbus-1/system.d
+	install -m 644 ${WORKDIR}/com.victronenergy.system.conf ${D}/${sysconfdir}/dbus-1/system.d
 }
