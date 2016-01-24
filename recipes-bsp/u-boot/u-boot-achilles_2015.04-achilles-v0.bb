@@ -1,5 +1,6 @@
 require u-boot.inc
 
+LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=c7383a594871c03da76b3707929d2919"
 SRC_URI = "https://github.com/jhofstee/u-boot/archive/v${PV}.tar.gz"
 SRC_URI[md5sum] = "6deb47d577757f00a9a220e4a4eb38f0"

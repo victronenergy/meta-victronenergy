@@ -12,8 +12,6 @@ UBOOT_MACHINE ?= "${MACHINE}_config"
 UBOOT_IMAGE ?= "u-boot.img"
 UBOOT_MAKE_TARGET ?= "all"
 
-require u-boot.src.inc
-
 do_configure () {
 	oe_runmake ${UBOOT_MACHINE}
 }

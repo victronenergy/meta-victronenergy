@@ -1,13 +1,14 @@
 require u-boot.inc
+require u-boot-ccgx.src.inc
 
 PR = "r4"
 
 SRC_URI += " \
-		file://live.cmds \
-		file://production.cmds \
-		file://recover.cmds \
-		file://splash.bgra \
-	"
+	file://live.cmds \
+	file://production.cmds \
+	file://recover.cmds \
+	file://splash.bgra \
+"
 
 RDEPENDS_${PN} += "u-boot-env-tools"
 
