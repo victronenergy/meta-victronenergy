@@ -3,7 +3,9 @@ require linux-ccgx.inc
 
 # Mind it, this recipe is not installed itself but provides kernel-image etc.
 # Hence RPEDEND on that one....
-RDEPENDS_kernel-image = "linux-backports"
+RDEPENDS_kernel-image += "linux-backports"
+RDEPENDS_kernel-image += "kernel-modules"
+RDEPENDS_kernel-image += "mtd-utils"
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
 SRC_URI[md5sum] = "08b5aa1413f9578defbb04dbcaa66815"
@@ -17,12 +19,16 @@ PR = "r2"
 S = "${WORKDIR}/linux-${PV}"
 
 pkg_postinst_kernel-base_append() {
-	if [ "x$D" == "x" ]; then
+	if [ "x$D" = "x" ]; then
 		if [ -e /proc/mtd ]; then
-			MTD_DEV=`grep kernel /proc/mtd`
-			LINUX_DEV=${MTD_DEV:0:4}
+			LINUX_DEV=`grep \"kernel\" /proc/mtd | awk -F: '{print $1}'`
 		else
-			echo "ERROR: No MTD device"
+			echo "ERROR: No MTD in proc"
+			exit 1;
+		fi
+
+		if [ "x$LINUX_DEV" = "x" ]; then
+			echo "ERROR: MTD device not found"
 			exit 1;
 		fi
 	
