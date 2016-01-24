@@ -5,10 +5,6 @@ PR = "r16"
 inherit packagegroup
 LICENSE = "MIT"
 
-PACKAGES = "\
-         packagegroup-venus-base \
-         "
-
 # build but not installed in the image
 DEPENDS += "\
 	gdb \
