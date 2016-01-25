@@ -66,7 +66,7 @@ RDEPENDS_${PN} += "\
 	zip \
 "
 
-RDEPENDS_${PN}_ccgx += "\
+RDEPENDS_${PN}_append_ccgx += "\
 	application \
 	swupdate \
 "
