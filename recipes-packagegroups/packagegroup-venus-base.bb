@@ -68,4 +68,5 @@ RDEPENDS_${PN} += "\
 
 RDEPENDS_${PN}_ccgx += "\
 	application \
+	swupdate \
 "
