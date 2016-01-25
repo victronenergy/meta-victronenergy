@@ -45,7 +45,7 @@ software =
 		copy1: {
 			images: (
 				{
-					filename = "ve-image-ccgx.ubifs";
+					filename = "venus-image-ccgx.ubifs";
 					type = "ubivol";
 					volume = "rootfs1"
 					installed-directly = true;
@@ -78,7 +78,7 @@ software =
 		copy2: {
 			images: (
 				{
-					filename = "ve-image-ccgx.ubifs";
+					filename = "venus-image-ccgx.ubifs";
 					type = "ubivol";
 					volume = "rootfs2"
 					installed-directly = true;
