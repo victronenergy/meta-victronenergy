@@ -26,11 +26,23 @@ IMAGE_ROOTFS_SIZE = "32000"
 
 inherit image
 
+python __anonymous() {
+	d.delVarFlag('do_unpack', 'noexec')
+}
+
+addtask unpack before do_rootfs
+
+SRC_URI = "file://swupdate"
+
 remove_locale_data_files() {
 	printf "Post processing local %s\n" ${IMAGE_ROOTFS}${libdir}/locale
 	rm -rf ${IMAGE_ROOTFS}${libdir}/locale
 }
 
+add_program_instructions() {
+	cp ${WORKDIR}/swupdate ${IMAGE_ROOTFS}${sysconfdir}/init.d
+}
+
 # remove unneeded pkg informations
-ROOTFS_POSTPROCESS_COMMAND += "remove_packaging_data_files ; "
+ROOTFS_POSTPROCESS_COMMAND += "remove_packaging_data_files ; add_program_instructions ;"
 ROOTFS_POSTPROCESS_COMMAND += "remove_locale_data_files ; "
