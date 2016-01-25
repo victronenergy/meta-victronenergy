@@ -21,7 +21,7 @@ PR="r1"
 
 IMAGE_CLASSES += " image_types_uboot"
 IMAGE_FSTYPES = "ext2.gz.u-boot"
-IMAGE_DEVICE_TABLES = "conf/machine/ccgx/device_table.txt"
+IMAGE_DEVICE_TABLES = "conf/machine/${MACHINE}/device_table.txt"
 IMAGE_ROOTFS_SIZE = "32000"
 
 inherit image
