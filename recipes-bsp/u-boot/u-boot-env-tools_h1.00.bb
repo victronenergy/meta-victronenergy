@@ -33,7 +33,7 @@ do_install () {
 	install -m 644 ${S}/tools/env/libubootenv.a ${D}${libdir}
 }
 
-do_install_bpp3 () {
+do_install_append_bpp3 () {
 	# FIXME, opkg fails to replace this, since base-files used to install it.
 	rm ${D}${sysconfdir}/fw_env.config
 }
