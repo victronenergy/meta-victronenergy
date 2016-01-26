@@ -67,10 +67,10 @@ software =
 				},
 				{
 					name = "miscargs"
-					value = "console=ttyO0,115200 root=ubi0:rootfs1 rootfstype=ubifs ubi.mtd=12 $mtdparts omapdss.def_disp=lcd omapfb.vram=0:2M vram=2M"
+					value = "console=ttyO0,115200 root=ubi0:rootfs1 rootfstype=ubifs ubi.mtd=12 omapdss.def_disp=lcd omapfb.vram=0:2M vram=2M"
 				},
 				{
-					name = "bootcmd"
+					name = "nandboot"
 					value = "setenv bootargs $miscargs $mtdparts && nand read ${loadaddr} kernel1 && bootm ${loadaddr}"
 				}
 			);
@@ -100,10 +100,10 @@ software =
 				},
 				{
 					name = "miscargs"
-					value = "console=ttyO0,115200 root=ubi0:rootfs2 rootfstype=ubifs ubi.mtd=12 $mtdparts omapdss.def_disp=lcd omapfb.vram=0:2M vram=2M"
+					value = "console=ttyO0,115200 root=ubi0:rootfs2 rootfstype=ubifs ubi.mtd=12 omapdss.def_disp=lcd omapfb.vram=0:2M vram=2M"
 				},
 				{
-					name = "bootcmd"
+					name = "nandboot"
 					value = "setenv bootargs $miscargs $mtdparts && nand read ${loadaddr} kernel2 && bootm ${loadaddr}"
 				}
 			);
