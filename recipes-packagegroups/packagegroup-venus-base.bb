@@ -19,6 +19,7 @@ RDEPENDS_${PN} += "\
 	bash \
 	bsdiff \
 	bzip2 \
+	ca-certificates \
 	canutils \
 	connman \
 	cronie \
