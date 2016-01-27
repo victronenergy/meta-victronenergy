@@ -21,7 +21,7 @@ EXTRA_OEMAKE = "KLIB_BUILD=${KBUILD_OUTPUT}"
 
 do_configure() {
 	cp ${WORKDIR}/${BACKPORTS_CONFIG} ${S}/.config
-	oe_runmake CC=cc oldconfig
+	oe_runmake CC=cc -C ${S} oldconfig
 }
 
 do_install() {
