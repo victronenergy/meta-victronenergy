@@ -1,6 +1,6 @@
 DAEMON_PN ?= "${PN}"
 
-DAEMONTOOLS ?= "daemontools"
+DAEMONTOOLS ?= "daemontools-run"
 DAEMONTOOLS_virtclass-cross = ""
 DAEMONTOOLS_virtclass-native = ""
 DAEMONTOOLS_virtclass-nativesdk = ""
