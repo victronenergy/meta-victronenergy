@@ -1,0 +1,26 @@
+From fc8131ed8acac9e646cf419634cc2e7186d03b5a Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Mon, 9 Nov 2015 20:33:30 +0100
+Subject: [PATCH 1/6] enable CONFIG_DEVTMPFS for newer udev
+
+---
+ arch/arm/configs/am3517_ccgx_defconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/configs/am3517_ccgx_defconfig b/arch/arm/configs/am3517_ccgx_defconfig
+index 96bebb5..6b2e346 100644
+--- a/arch/arm/configs/am3517_ccgx_defconfig
++++ b/arch/arm/configs/am3517_ccgx_defconfig
+@@ -852,7 +852,8 @@ CONFIG_HAVE_BPF_JIT=y
+ # Generic Driver Options
+ #
+ CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-# CONFIG_DEVTMPFS is not set
++CONFIG_DEVTMPFS=y
++# CONFIG_DEVTMPFS_MOUNT is not set
+ CONFIG_STANDALONE=y
+ CONFIG_PREVENT_FIRMWARE_BUILD=y
+ CONFIG_FW_LOADER=y
+-- 
+1.9.1
+

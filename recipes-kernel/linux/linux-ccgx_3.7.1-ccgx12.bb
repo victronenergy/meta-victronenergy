@@ -11,6 +11,14 @@ SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
 SRC_URI[md5sum] = "08b5aa1413f9578defbb04dbcaa66815"
 SRC_URI[sha256sum] = "9fdb5714b82848ce4018ced9eb9adc2b96a7aaaac209ed360e7b5d16aa60bcba"
 
+SRC_URI += " \
+	file://0001-enable-CONFIG_DEVTMPFS-for-newer-udev.patch \
+	file://0002-ARM-7668-1-fix-memset-related-crashes-caused-by-rece.patch \
+	file://0003-ARM-7670-1-fix-the-memset-fix.patch \
+	file://0004-import-compiler-gcc5.h-from-v4.1-it-gets-merge-there.patch \
+	file://0005-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch \
+"
+
 # This was introduced to remove uImage from /boot and save 3MB
 KERNEL_DROPIMAGE = ""
 
