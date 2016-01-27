@@ -3,9 +3,6 @@ HOMEPAGE = "http://skarnet.org/software/skalibs"
 LICENSE = "ISC"
 LIC_FILES_CHKSUM = "file://COPYING;md5=1500f33d86c4956999052c0e137cd652"
 
-# not really -> just for configure && make && make install
-inherit autotools
-
 SRC_URI = " \
 	http://skarnet.org/software/skalibs/skalibs-2.3.5.1.tar.gz \
 	file://sysdeps.cfg \
@@ -20,3 +17,6 @@ do_configure() {
 	./configure --with-sysdeps=${WORKDIR}/sysdeps.cfg --libdir=${libdir} --dynlibdir=${libdir}
 }
 
+do_install () {
+	oe_runmake 'DESTDIR=${D}' install
+}
