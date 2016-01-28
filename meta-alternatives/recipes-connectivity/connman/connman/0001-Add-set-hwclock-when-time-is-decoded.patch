@@ -1,0 +1,26 @@
+From 88863a824aca9f9356b5ba8be040e31abd538cab Mon Sep 17 00:00:00 2001
+From: Marcel Mulder <mmulder@victronenergy.com>
+Date: Tue, 18 Mar 2014 16:43:19 +0100
+Subject: [PATCH] Add set hwclock when time is decoded
+
+---
+ src/ntp.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/ntp.c b/src/ntp.c
+index 5e6e77c..42e826f 100644
+--- a/src/ntp.c
++++ b/src/ntp.c
+@@ -351,6 +351,9 @@ static void decode_msg(void *base, size_t len, struct timeval *tv,
+ 			connman_error("Failed to set time");
+ 			return;
+ 		}
++		if(system("hwclock --utc --systohc")) {
++			connman_error("Failed to set hwclock");
++		}
+ 
+ 		DBG("%lu seconds, %lu msecs", cur.tv_sec, cur.tv_usec);
+ 	}
+-- 
+1.8.3.2
+

@@ -1,0 +1,26 @@
+From 060331635283b238c9cb40f59671e59ee0aecff1 Mon Sep 17 00:00:00 2001
+From: mpvader <mvader@victronenergy.com>
+Date: Mon, 5 Oct 2015 06:57:16 +0000
+Subject: [PATCH 4/5] qws vncserver: bind to localhost instead of all
+ interfaces
+
+---
+ src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp b/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp
+index 6d09429..30eadba 100644
+--- a/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp
++++ b/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp
+@@ -597,7 +597,7 @@ void QVNCServer::init(uint port)
+     connect(timer, SIGNAL(timeout()), this, SLOT(checkUpdate()));
+ 
+     serverSocket = new QTcpServer(this);
+-    if (!serverSocket->listen(QHostAddress::Any, port))
++    if (!serverSocket->listen(QHostAddress::LocalHost, port))
+         qDebug() << "QVNCServer could not connect:" << serverSocket->errorString();
+     else
+         qDebug("QVNCServer created on port %d", port);
+-- 
+1.9.1
+

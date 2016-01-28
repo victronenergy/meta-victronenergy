@@ -1,0 +1,67 @@
+#!/bin/sh
+
+DAEMON=/usr/sbin/connmand
+PIDFILE=/var/run/connmand.pid
+DESC="Connection Manager"
+
+if [ -f /etc/default/connman ] ; then
+	. /etc/default/connman
+fi
+
+set -e
+
+nfsroot=0
+
+exec 9<&0 < /proc/mounts
+while read dev mtpt fstype rest; do
+	if test $mtpt = "/" ; then
+		case $fstype in
+		    nfs | nfs4)
+			nfsroot=1
+			break
+			;;
+		    *)
+			;;
+		esac
+	fi
+done
+
+do_start() {
+	EXTRA_PARAM=""
+	# note: the connmand-watch script restarts the process if if crashes
+	if test $nfsroot -eq 0 ; then
+		/usr/sbin/connmand-watch.sh $EXTRA_PARAM
+	fi
+}
+
+do_stop() {
+        # kill the script monitoring execution
+        if [ "X${pid=$(pidof -x /usr/sbin/connmand-watch.sh)}" != "X" ]; then
+                kill $pid
+        fi
+
+	start-stop-daemon --stop --name connmand --quiet
+}
+
+case "$1" in
+  start)
+	echo "Starting $DESC"
+	do_start
+	;;
+  stop)
+	echo "Stopping $DESC"
+	do_stop
+	;;
+  restart|force-reload)
+	echo "Restarting $DESC"
+	do_stop
+	sleep 1
+	do_start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

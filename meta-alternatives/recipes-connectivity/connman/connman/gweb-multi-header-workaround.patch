@@ -1,0 +1,21 @@
+---
+ gweb/gweb.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/gweb/gweb.c b/gweb/gweb.c
+index f6828cf..7771190 100644
+--- a/gweb/gweb.c
++++ b/gweb/gweb.c
+@@ -806,6 +806,9 @@ static void handle_multi_line(struct web_session *session)
+ 		g_string_insert_c(session->current_header, 0, ' ');
+ 	}
+ 
++	if (!session->result.last_key)
++		return;
++
+ 	value = g_hash_table_lookup(session->result.headers,
+ 					session->result.last_key);
+ 	if (value) {
+-- 
+1.8.3.2
+ 

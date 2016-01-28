@@ -1,0 +1,334 @@
+diff --git a/Makefile.plugins b/Makefile.plugins
+index e90ad19..e475161 100644
+--- a/Makefile.plugins
++++ b/Makefile.plugins
+@@ -173,6 +173,11 @@ builtin_modules += pacrunner
+ builtin_sources += plugins/pacrunner.c
+ endif
+ 
++if ARFAILURE
++builtin_modules += arfailure
++builtin_sources += plugins/arfailure.c
++endif
++
+ if POLKIT
+ builtin_modules += polkit
+ builtin_sources += plugins/polkit.c
+diff --git a/configure.ac b/configure.ac
+index b1ebfc2..c28e01d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -258,6 +258,11 @@ AC_ARG_ENABLE(nmcompat, AC_HELP_STRING([--enable-nmcompat],
+ 			[enable_nmcompat=${enableval}], [enable_nmcompat="no"])
+ AM_CONDITIONAL(NMCOMPAT, test "${enable_nmcompat}" != "no")
+ 
++AC_ARG_ENABLE(arfailure, AC_HELP_STRING([--enable-arfailure],
++				[enable auto reset failure plugin]),
++				[enable_arfailure=${enableval}], [enable_arfailure="no"])
++AM_CONDITIONAL(ARFAILURE, test "${enable_arfailure}" != "no")
++
+ AC_ARG_ENABLE(polkit, AC_HELP_STRING([--enable-polkit],
+ 				[enable PolicyKit support]),
+ 			[enable_polkit=${enableval}], [enable_polkit="no"])
+diff --git a/doc/connman.conf.5 b/doc/connman.conf.5
+index 626edfd..bf2a1f7 100644
+--- a/doc/connman.conf.5
++++ b/doc/connman.conf.5
+@@ -126,5 +126,10 @@ really know what you are doing.
+ Restore earlier tethering status when returning from offline mode,
+ re-enabling a technology, and after restarts and reboots.
+ Default value is false.
++.TP
++.B IgnoreInvalidKey=\fPtrue|false\fP
++When set to true, connman ignores previously stored invalid-key errors
++when connecting to a wifi service. 
++Default value is false.
+ .SH "SEE ALSO"
+ .BR Connman (8)
+diff --git a/include/setting.h b/include/setting.h
+index a882021..6829c6f 100644
+--- a/include/setting.h
++++ b/include/setting.h
+@@ -34,6 +34,7 @@ unsigned int *connman_setting_get_uint_list(const char *key);
+ 
+ unsigned int connman_timeout_input_request(void);
+ unsigned int connman_timeout_browser_launch(void);
++int connman_auto_reset_failure_timeout(void);
+ 
+ #ifdef __cplusplus
+ }
+diff --git a/plugins/arfailure.c b/plugins/arfailure.c
+new file mode 100644
+index 0000000..b5c8e41
+--- /dev/null
++++ b/plugins/arfailure.c
+@@ -0,0 +1,136 @@
++/*
++ *
++ *  Connection Manager
++ *
++ *  Copyright (C) 2007-2012  Intel Corporation. All rights reserved.
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License version 2 as
++ *  published by the Free Software Foundation.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
++ *
++ */
++
++#ifdef HAVE_CONFIG_H
++#include <config.h>
++#endif
++
++#define CONNMAN_API_SUBJECT_TO_CHANGE
++#include <connman/plugin.h>
++#include <connman/log.h>
++#include <connman/notifier.h>
++#include <connman/service.h>
++
++#include <glib.h>
++
++static int timeout = -1;
++static GHashTable* queued_services;
++
++static gboolean timer_callback (gpointer user_data) {
++	struct connman_service *service = user_data;
++
++	DBG("service %p", service);
++
++	/*
++	 * Use steal so unqueue_service is not called,
++	 * as unqueueing is already done when this function returns FALSE.
++	 */
++	g_hash_table_steal(queued_services, service);
++
++	__connman_service_clear_error(service);
++
++	__connman_service_auto_connect(CONNMAN_SERVICE_CONNECT_REASON_AUTO);
++
++	return FALSE;
++}
++
++static void queue_service (struct connman_service *service) {
++	guint tag;
++
++	tag = g_timeout_add_seconds(timeout, &timer_callback, service);
++	g_hash_table_insert (queued_services, service, GUINT_TO_POINTER(tag));
++
++	DBG("service %p tag %u", service, tag);
++}
++
++static void unqueue_service(gpointer data) {
++	guint tag = GPOINTER_TO_UINT(data);
++
++	DBG("tag %u", tag);
++
++	g_source_remove (tag);
++}
++
++static void service_state_changed(struct connman_service *service,
++					enum connman_service_state state)
++{
++	DBG("service %p state %d", service, state);
++
++	if (state == CONNMAN_SERVICE_STATE_FAILURE &&
++			__connman_service_get_favorite(service)) {
++		queue_service(service);
++	}
++}
++
++static void service_remove(struct connman_service *service)
++{
++	DBG("service %p", service);
++
++	g_hash_table_remove(queued_services, service);
++
++}
++
++static struct connman_notifier notifier = {
++	.name				= "arfailure",
++	.priority			= CONNMAN_NOTIFIER_PRIORITY_LOW,
++	.service_state_changed	= service_state_changed,
++	.service_remove 	= service_remove,
++};
++
++static int arfailure_init(void)
++{
++	timeout = connman_auto_reset_failure_timeout();
++	DBG("timeout %d", timeout);
++
++	if (timeout < 0) {
++		return 0;
++	}
++
++	queued_services = g_hash_table_new_full(&g_direct_hash, &g_direct_equal,
++													NULL, &unqueue_service);
++	if (!queued_services)
++		return -1;
++
++	if (connman_notifier_register(&notifier)) {
++		g_hash_table_destroy(queued_services);
++		return -1;
++	}
++
++	return 0;
++}
++
++static void arfailure_exit(void)
++{
++	DBG("");
++
++	if (timeout < 0)
++		return;
++
++	connman_notifier_unregister(&notifier);
++
++	g_hash_table_remove_all(queued_services);
++
++	g_hash_table_destroy(queued_services);
++}
++
++CONNMAN_PLUGIN_DEFINE(arfailure, "Auto failure reset",
++			VERSION, CONNMAN_PLUGIN_PRIORITY_LOW,
++			arfailure_init, arfailure_exit)
+diff --git a/src/connman.h b/src/connman.h
+index db6461f..5620b6f 100644
+--- a/src/connman.h
++++ b/src/connman.h
+@@ -685,6 +685,7 @@ struct connman_network *__connman_service_get_network(struct connman_service *se
+ enum connman_service_security __connman_service_get_security(struct connman_service *service);
+ const char *__connman_service_get_phase2(struct connman_service *service);
+ bool __connman_service_wps_enabled(struct connman_service *service);
++bool __connman_service_get_favorite(struct connman_service *service);
+ int __connman_service_set_favorite(struct connman_service *service,
+ 						bool favorite);
+ int __connman_service_set_favorite_delayed(struct connman_service *service,
+diff --git a/src/main.c b/src/main.c
+index 7cf6c9a..ed04c58 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -41,6 +41,7 @@
+ 
+ #define DEFAULT_INPUT_REQUEST_TIMEOUT (120 * 1000)
+ #define DEFAULT_BROWSER_LAUNCH_TIMEOUT (300 * 1000)
++#define DEFAULT_AUTO_RESET_FAILURE_TIMEOUT (-1)
+ 
+ #define MAINFILE "main.conf"
+ #define CONFIGMAINFILE CONFIGDIR "/" MAINFILE
+@@ -73,6 +74,8 @@ static struct {
+ 	bool single_tech;
+ 	char **tethering_technologies;
+ 	bool persistent_tethering_mode;
++	bool ignore_invalid_key;
++	int auto_reset_failure_timeout;
+ } connman_settings  = {
+ 	.bg_scan = true,
+ 	.pref_timeservers = NULL,
+@@ -86,6 +89,8 @@ static struct {
+ 	.single_tech = false,
+ 	.tethering_technologies = NULL,
+ 	.persistent_tethering_mode = false,
++	.ignore_invalid_key = false,
++	.auto_reset_failure_timeout = DEFAULT_AUTO_RESET_FAILURE_TIMEOUT,
+ };
+ 
+ #define CONF_BG_SCAN                    "BackgroundScanning"
+@@ -98,8 +103,10 @@ static struct {
+ #define CONF_BLACKLISTED_INTERFACES     "NetworkInterfaceBlacklist"
+ #define CONF_ALLOW_HOSTNAME_UPDATES     "AllowHostnameUpdates"
+ #define CONF_SINGLE_TECH                "SingleConnectedTechnology"
+-#define CONF_TETHERING_TECHNOLOGIES      "TetheringTechnologies"
++#define CONF_TETHERING_TECHNOLOGIES     "TetheringTechnologies"
+ #define CONF_PERSISTENT_TETHERING_MODE  "PersistentTetheringMode"
++#define CONF_IGNORE_INVALID_KEY         "IgnoreInvalidKey"
++#define CONF_AUTO_RESET_FAILURE_TIMEOUT "AutoResetFailureTimeout"
+ 
+ static const char *supported_options[] = {
+ 	CONF_BG_SCAN,
+@@ -114,6 +121,8 @@ static const char *supported_options[] = {
+ 	CONF_SINGLE_TECH,
+ 	CONF_TETHERING_TECHNOLOGIES,
+ 	CONF_PERSISTENT_TETHERING_MODE,
++	CONF_IGNORE_INVALID_KEY,
++	CONF_AUTO_RESET_FAILURE_TIMEOUT,
+ 	NULL
+ };
+ 
+@@ -354,6 +363,20 @@ static void parse_config(GKeyFile *config)
+ 		connman_settings.persistent_tethering_mode = boolean;
+ 
+ 	g_clear_error(&error);
++
++	boolean = __connman_config_get_bool(config, "General",
++			CONF_IGNORE_INVALID_KEY, &error);
++	if (!error)
++		connman_settings.ignore_invalid_key = boolean;
++
++	g_clear_error(&error);
++
++	timeout = g_key_file_get_integer(config, "General",
++			CONF_AUTO_RESET_FAILURE_TIMEOUT, &error);
++	if (!error && timeout >= -1)
++		connman_settings.auto_reset_failure_timeout = timeout;
++
++	g_clear_error(&error);
+ }
+ 
+ static int config_init(const char *file)
+@@ -528,6 +551,9 @@ bool connman_setting_get_bool(const char *key)
+ 	if (g_str_equal(key, CONF_PERSISTENT_TETHERING_MODE))
+ 		return connman_settings.persistent_tethering_mode;
+ 
++	if (g_str_equal(key, CONF_IGNORE_INVALID_KEY))
++		return connman_settings.ignore_invalid_key;
++
+ 	return false;
+ }
+ 
+@@ -569,6 +595,11 @@ unsigned int connman_timeout_browser_launch(void)
+ 	return connman_settings.timeout_browserlaunch;
+ }
+ 
++int connman_auto_reset_failure_timeout(void)
++{
++	return connman_settings.auto_reset_failure_timeout;
++}
++
+ int main(int argc, char *argv[])
+ {
+ 	GOptionContext *context;
+diff --git a/src/service.c b/src/service.c
+index 895387d..7308abe 100644
+--- a/src/service.c
++++ b/src/service.c
+@@ -5842,8 +5842,8 @@ static int service_connect(struct connman_service *service)
+ 				if (!service->wps ||
+ 					!connman_network_get_bool(service->network, "WiFi.UseWPS"))
+ 					return -ENOKEY;
+-			} else if (service->error ==
+-					CONNMAN_SERVICE_ERROR_INVALID_KEY)
++			} else if (service->error == CONNMAN_SERVICE_ERROR_INVALID_KEY &&
++					!connman_setting_get_bool("IgnoreInvalidKey"))
+ 				return -ENOKEY;
+ 			break;
+ 		case CONNMAN_SERVICE_SECURITY_8021X:
+@@ -6503,6 +6503,11 @@ enum connman_service_state __connman_service_get_state(struct connman_service *s
+ 	return service->state;
+ }
+ 
++bool __connman_service_get_favorite(struct connman_service *service)
++{
++	return service->favorite;
++}
++
+ unsigned int __connman_service_get_order(struct connman_service *service)
+ {
+ 	unsigned int order = 0;

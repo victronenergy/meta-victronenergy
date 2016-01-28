@@ -1,0 +1,29 @@
+diff --git a/libbb/printable_string.c b/libbb/printable_string.c
+index a316f60..2387b56 100644
+--- a/libbb/printable_string.c
++++ b/libbb/printable_string.c
+@@ -31,8 +31,10 @@ const char* FAST_FUNC printable_string(uni_stat_t *stats, const char *str)
+ 		}
+ 		if (c < ' ')
+ 			break;
++#if CHAR_7BIT_ONLY
+ 		if (c >= 0x7f)
+ 			break;
++#endif
+ 		s++;
+ 	}
+ 
+@@ -45,8 +47,12 @@ const char* FAST_FUNC printable_string(uni_stat_t *stats, const char *str)
+ 			unsigned char c = *d;
+ 			if (c == '\0')
+ 				break;
+-			if (c < ' ' || c >= 0x7f)
++			if (c < ' ')
++				*d = '?';
++#if CHAR_7BIT_ONLY
++			if (c >= 0x7f)
+ 				*d = '?';
++#endif
+ 			d++;
+ 		}
+ 		if (stats) {

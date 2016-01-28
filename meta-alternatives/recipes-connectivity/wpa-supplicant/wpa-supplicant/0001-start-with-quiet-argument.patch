@@ -1,0 +1,23 @@
+From 1602f595ba8df50b1cda507156cb7ee021c49487 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 28 Aug 2014 14:33:36 +0200
+Subject: [PATCH] start with quiet argument
+
+---
+ wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in b/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
+index d97ff39..c4f9dce 100644
+--- a/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
++++ b/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
+@@ -1,5 +1,5 @@
+ [D-BUS Service]
+ Name=fi.w1.wpa_supplicant1
+-Exec=@BINDIR@/wpa_supplicant -u
++Exec=@BINDIR@/wpa_supplicant -q -u
+ User=root
+ SystemdService=wpa_supplicant.service
+-- 
+2.1.0
+

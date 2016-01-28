@@ -1,0 +1,25 @@
+From 8cf97cac2f030287862c5ceb27d6c03acd2cecf1 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 26 Jun 2014 15:03:01 +0200
+Subject: [PATCH] workaround dlopen not correctly polled
+
+---
+ configure.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.in b/configure.in
+index 0bacef5..0c3dc24 100644
+--- a/configure.in
++++ b/configure.in
+@@ -454,7 +454,7 @@ PHP_CHECK_FUNC(gethostbyaddr, nsl)
+ PHP_CHECK_FUNC(yp_get_default_domain, nsl)
+ 
+ PHP_CHECK_FUNC(dlopen, dl)
+-if test "$ac_cv_func_dlopen" = "yes"; then
++if test "$ac_cv_func_dlopen" = "yes" || test "$ac_cv_lib_dl_dlopen" = "yes"; then
+   AC_DEFINE(HAVE_LIBDL, 1, [ ])
+ fi
+ AC_CHECK_LIB(m, sin)
+-- 
+1.8.3.2
+

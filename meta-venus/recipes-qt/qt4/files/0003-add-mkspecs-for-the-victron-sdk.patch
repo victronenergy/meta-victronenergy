@@ -1,0 +1,90 @@
+From 1b5906b40ebfb049875fe6c3980d6d7e3a3dd1fb Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 1 Oct 2015 10:51:22 +0200
+Subject: [PATCH 3/5] add mkspecs for the victron sdk
+
+---
+ mkspecs/qws/linux-arm-ve-gnueabi-g++/qmake.conf    | 21 +++++++++++
+ .../qws/linux-arm-ve-gnueabi-g++/qplatformdefs.h   | 42 ++++++++++++++++++++++
+ 2 files changed, 63 insertions(+)
+ create mode 100644 mkspecs/qws/linux-arm-ve-gnueabi-g++/qmake.conf
+ create mode 100644 mkspecs/qws/linux-arm-ve-gnueabi-g++/qplatformdefs.h
+
+diff --git a/mkspecs/qws/linux-arm-ve-gnueabi-g++/qmake.conf b/mkspecs/qws/linux-arm-ve-gnueabi-g++/qmake.conf
+new file mode 100644
+index 0000000..d606166
+--- /dev/null
++++ b/mkspecs/qws/linux-arm-ve-gnueabi-g++/qmake.conf
+@@ -0,0 +1,21 @@
++#
++# qmake configuration for building with arm-linux-gnueabi-g++
++#
++
++include(../../common/linux.conf)
++include(../../common/gcc-base-unix.conf)
++include(../../common/g++-unix.conf)
++include(../../common/qws.conf)
++
++# modifications to g++.conf
++QMAKE_CC                = arm-ve-linux-gnueabi-gcc
++QMAKE_CXX               = arm-ve-linux-gnueabi-g++
++QMAKE_LINK              = arm-ve-linux-gnueabi-g++
++QMAKE_LINK_SHLIB        = arm-ve-linux-gnueabi-g++
++
++# modifications to linux.conf
++QMAKE_AR                = arm-ve-linux-gnueabi-ar cqs
++QMAKE_OBJCOPY           = arm-ve-linux-gnueabi-objcopy
++QMAKE_STRIP             = arm-ve-linux-gnueabi-strip
++
++load(qt_config)
+diff --git a/mkspecs/qws/linux-arm-ve-gnueabi-g++/qplatformdefs.h b/mkspecs/qws/linux-arm-ve-gnueabi-g++/qplatformdefs.h
+new file mode 100644
+index 0000000..9e6b0f5
+--- /dev/null
++++ b/mkspecs/qws/linux-arm-ve-gnueabi-g++/qplatformdefs.h
+@@ -0,0 +1,42 @@
++/****************************************************************************
++**
++** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
++** Contact: http://www.qt-project.org/
++**
++** This file is part of the qmake spec of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** GNU Lesser General Public License Usage
++** This file may be used under the terms of the GNU Lesser General Public
++** License version 2.1 as published by the Free Software Foundation and
++** appearing in the file LICENSE.LGPL included in the packaging of this
++** file. Please review the following information to ensure the GNU Lesser
++** General Public License version 2.1 requirements will be met:
++** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
++**
++** In addition, as a special exception, Nokia gives you certain additional
++** rights. These rights are described in the Nokia Qt LGPL Exception
++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU General
++** Public License version 3.0 as published by the Free Software Foundation
++** and appearing in the file LICENSE.GPL included in the packaging of this
++** file. Please review the following information to ensure the GNU General
++** Public License version 3.0 requirements will be met:
++** http://www.gnu.org/copyleft/gpl.html.
++**
++** Other Usage
++** Alternatively, this file may be used in accordance with the terms and
++** conditions contained in a signed written agreement between you and Nokia.
++**
++**
++**
++**
++**
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "../../linux-g++/qplatformdefs.h"
+-- 
+1.9.1
+

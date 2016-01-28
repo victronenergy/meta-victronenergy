@@ -1,0 +1,69 @@
+#
+# Automatically generated file; DO NOT EDIT.
+# Swupdate Configuration
+#
+CONFIG_HAVE_DOT_CONFIG=y
+
+#
+# Swupdate Settings
+#
+
+#
+# General Configuration
+#
+CONFIG_SCRIPTS=y
+# CONFIG_HW_COMPATIBILITY is not set
+CONFIG_MTD=y
+CONFIG_LUA=y
+# CONFIG_FEATURE_SYSLOG is not set
+
+#
+# Build Options
+#
+# CONFIG_STATIC is not set
+CONFIG_CROSS_COMPILE=""
+CONFIG_SYSROOT=""
+CONFIG_EXTRA_CFLAGS=""
+CONFIG_EXTRA_LDFLAGS=""
+CONFIG_EXTRA_LDLIBS=""
+
+#
+# Debugging Options
+#
+# CONFIG_DEBUG is not set
+# CONFIG_WERROR is not set
+# CONFIG_NOCLEANUP is not set
+CONFIG_DOWNLOAD=y
+# CONFIG_WEBSERVER is not set
+
+#
+# Archival Features
+#
+CONFIG_CPIO=y
+CONFIG_GUNZIP=y
+
+#
+# Parser Features
+#
+CONFIG_LIBCONFIG=y
+CONFIG_LIBCONFIGROOT=""
+# CONFIG_JSON is not set
+# CONFIG_LUAEXTERNAL is not set
+# CONFIG_SETSWDESCRIPTION is not set
+
+#
+# Image Handlers
+#
+CONFIG_UBIVOL=y
+CONFIG_UBIBLACKLIST=""
+CONFIG_UBIVIDOFFSET=0
+CONFIG_CFI=y
+CONFIG_CFIHAMMING1=y
+CONFIG_RAW=y
+CONFIG_LUASCRIPTHANDLER=y
+CONFIG_SHELLSCRIPTHANDLER=y
+CONFIG_HANDLER_IN_LUA=y
+CONFIG_ARCHIVE=y
+CONFIG_UBOOT=y
+CONFIG_UBOOT_FWENV="/etc/fw_env.config"
+CONFIG_UBOOT_LIBRARY=y

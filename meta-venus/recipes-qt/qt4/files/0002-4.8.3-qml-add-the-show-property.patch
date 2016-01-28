@@ -1,0 +1,376 @@
+From d3b53ff71a99e0e7c80f7cdbe860db4f511b812d Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Mon, 23 Sep 2013 18:17:45 +0200
+Subject: [PATCH 2/5] qml: add the show property
+
+Hidding elements with the visible property does
+not work as expected, since the page stack will
+alter these values for its navigation. Therefore
+add a seperate show property for Items which should
+never be displayed.
+---
+ src/declarative/graphicsitems/qdeclarativeitem.cpp |  61 ++++++++++
+ src/declarative/graphicsitems/qdeclarativeitem.h   |   7 ++
+ src/declarative/graphicsitems/qdeclarativeitem_p.h |   8 +-
+ .../graphicsitems/qdeclarativelistview.cpp         | 125 ++++++++++++++++-----
+ .../graphicsitems/qdeclarativelistview_p.h         |   1 +
+ 5 files changed, 176 insertions(+), 26 deletions(-)
+
+diff --git a/src/declarative/graphicsitems/qdeclarativeitem.cpp b/src/declarative/graphicsitems/qdeclarativeitem.cpp
+index bc7bb12..8d0a849 100644
+--- a/src/declarative/graphicsitems/qdeclarativeitem.cpp
++++ b/src/declarative/graphicsitems/qdeclarativeitem.cpp
+@@ -3759,6 +3759,67 @@ qint64 QDeclarativeItemPrivate::restart(QElapsedTimer &t)
+         return ((QElapsedTimerConsistentTimeHack*)&t)->restart();
+ }
+ 
++/**
++ * The show property is intended to hide parts of the ui
++ * which are not applicable.
++ *
++ * The property is almost exactly equal to the visable
++ * property but differs in the fact that it should not be
++ * used for navigation / modified by common code. The qml
++ * page stack / popup do use the visible property to hide
++ * pages etc. Since this property is set to all its children,
++ * hiding an Item by binding visible to something gets
++ * unbinded and visible again by the navigation code, which
++ * is not the intention. It also leads to many completely
++ * unnecesarry relayout when a page is shown again, which
++ * can also have unwanted side effects.
++ *
++ * When show is set to false, visible is set to false and
++ * all attempts to change the visibily are ignored. When
++ * set to true, visible is set to true, and visible can be
++ * updated again. The default value is true.
++ */
++bool QDeclarativeItemPrivate::isShown() const
++{
++    return mShow;
++}
++
++void QDeclarativeItemPrivate::setShow(bool show)
++{
++    Q_Q(QDeclarativeItem);
++
++    if (mShow == show)
++        return;
++
++    mShow = true;
++    q->setVisible(show);
++
++    mShow = show;
++    emit q->showChanged(mShow);
++}
++
++bool QDeclarativeItem::isShown() const
++{
++    Q_D(const QDeclarativeItem);
++    return d->isShown();
++}
++
++void QDeclarativeItem::setShow(bool show)
++{
++    Q_D(QDeclarativeItem);
++    d->setShow(show);
++}
++
++void QDeclarativeItem::setVisible(bool visible)
++{
++    Q_D(QDeclarativeItem);
++
++    if (!d->isShown())
++        return;
++
++    QGraphicsObject::setVisible(visible);
++}
++
+ QT_END_NAMESPACE
+ 
+ #include <moc_qdeclarativeitem.cpp>
+diff --git a/src/declarative/graphicsitems/qdeclarativeitem.h b/src/declarative/graphicsitems/qdeclarativeitem.h
+index 90e6eed..4c96154 100644
+--- a/src/declarative/graphicsitems/qdeclarativeitem.h
++++ b/src/declarative/graphicsitems/qdeclarativeitem.h
+@@ -94,6 +94,7 @@ class Q_DECLARATIVE_EXPORT QDeclarativeItem : public QGraphicsObject, public QDe
+     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
+     Q_PROPERTY(qreal implicitWidth READ implicitWidth WRITE setImplicitWidth NOTIFY implicitWidthChanged REVISION 1)
+     Q_PROPERTY(qreal implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged REVISION 1)
++    Q_PROPERTY(bool show READ isShown WRITE setShow NOTIFY showChanged)
+ 
+     Q_ENUMS(TransformOrigin)
+     Q_CLASSINFO("DefaultProperty", "data")
+@@ -139,6 +140,11 @@ public:
+     bool smooth() const;
+     void setSmooth(bool);
+ 
++    bool isShown() const;
++    void setShow(bool);
++
++    void setVisible(bool visible);
++
+     QRectF boundingRect() const;
+     virtual void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
+ 
+@@ -166,6 +172,7 @@ Q_SIGNALS:
+     void clipChanged(bool);
+     Q_REVISION(1) void implicitWidthChanged();
+     Q_REVISION(1) void implicitHeightChanged();
++    void showChanged(bool);
+ 
+ protected:
+     bool isComponentComplete() const;
+diff --git a/src/declarative/graphicsitems/qdeclarativeitem_p.h b/src/declarative/graphicsitems/qdeclarativeitem_p.h
+index ff40649..c0dd0fd 100644
+--- a/src/declarative/graphicsitems/qdeclarativeitem_p.h
++++ b/src/declarative/graphicsitems/qdeclarativeitem_p.h
+@@ -128,7 +128,7 @@ public:
+       componentComplete(true), keepMouse(false),
+       smooth(false), transformOriginDirty(true), doneEventPreHandler(false),
+       inheritedLayoutMirror(false), effectiveLayoutMirror(false), isMirrorImplicit(true),
+-      inheritMirrorFromParent(false), inheritMirrorFromItem(false), keyHandler(0),
++      inheritMirrorFromParent(false), inheritMirrorFromItem(false), mShow(true), keyHandler(0),
+       mWidth(0), mHeight(0), mImplicitWidth(0), mImplicitHeight(0), attachedLayoutDirection(0), hadSubFocusItem(false)
+     {
+         QGraphicsItemPrivate::acceptedMouseButtons = 0;
+@@ -183,6 +183,11 @@ public:
+     QString state() const;
+     void setState(const QString &);
+ 
++    bool isShown() const;
++    void setShow(bool);
++
++    void setVisible(bool);
++
+     QDeclarativeAnchorLine left() const;
+     QDeclarativeAnchorLine right() const;
+     QDeclarativeAnchorLine horizontalCenter() const;
+@@ -289,6 +294,7 @@ public:
+     bool isMirrorImplicit:1;
+     bool inheritMirrorFromParent:1;
+     bool inheritMirrorFromItem:1;
++    bool mShow:1;
+ 
+     QDeclarativeItemKeyFilter *keyHandler;
+ 
+diff --git a/src/declarative/graphicsitems/qdeclarativelistview.cpp b/src/declarative/graphicsitems/qdeclarativelistview.cpp
+index 9d1238c..4290290 100644
+--- a/src/declarative/graphicsitems/qdeclarativelistview.cpp
++++ b/src/declarative/graphicsitems/qdeclarativelistview.cpp
+@@ -102,8 +102,11 @@ public:
+         attached = static_cast<QDeclarativeListViewAttached*>(qmlAttachedPropertiesObject<QDeclarativeListView>(item));
+         if (attached)
+             attached->setView(view);
++
++        // assuming the view destroys the items, this will disconnect automatically
++        item->connect(item, SIGNAL(showChanged(bool)), view, SLOT(showChanged()));
+     }
+-    ~FxListItem() {}
++
+     qreal position() const {
+         if (section) {
+             if (view->orientation() == QDeclarativeListView::Vertical)
+@@ -115,20 +118,32 @@ public:
+         }
+     }
+ 
++    qreal height() const {
++        if (!item->isShown())
++            return 0;
++        return item->height();
++    }
++
++    qreal width() const {
++        if (!item->isShown())
++            return 0;
++        return item->width();
++    }
++
+     qreal itemPosition() const {
+         if (view->orientation() == QDeclarativeListView::Vertical)
+             return item->y();
+         else
+-            return (view->effectiveLayoutDirection() == Qt::RightToLeft ? -item->width()-item->x() : item->x());
++            return (view->effectiveLayoutDirection() == Qt::RightToLeft ? -width()-item->x() : item->x());
+     }
+     qreal size() const {
+         if (section)
+-            return (view->orientation() == QDeclarativeListView::Vertical ? item->height()+section->height() : item->width()+section->width());
++            return (view->orientation() == QDeclarativeListView::Vertical ? height()+section->height() : width()+section->width());
+         else
+-            return (view->orientation() == QDeclarativeListView::Vertical ? item->height() : item->width());
++            return (view->orientation() == QDeclarativeListView::Vertical ? height() : width());
+     }
+     qreal itemSize() const {
+-        return (view->orientation() == QDeclarativeListView::Vertical ? item->height() : item->width());
++        return (view->orientation() == QDeclarativeListView::Vertical ? height() : width());
+     }
+     qreal sectionSize() const {
+         if (section)
+@@ -137,11 +152,11 @@ public:
+     }
+     qreal endPosition() const {
+         if (view->orientation() == QDeclarativeListView::Vertical) {
+-            return item->y() + (item->height() >= 1.0 ? item->height() : 1) - 1;
++            return item->y() + (height() >= 1.0 ? height() : 1) - 1;
+         } else {
+             return (view->effectiveLayoutDirection() == Qt::RightToLeft
+-                    ? -item->width()-item->x() + (item->width() >= 1.0 ? item->width() : 1)
+-                    : item->x() + (item->width() >= 1.0 ? item->width() : 1)) - 1;
++                    ? -width()-item->x() + (width() >= 1.0 ? width() : 1)
++                    : item->x() + (width() >= 1.0 ? width() : 1)) - 1;
+         }
+     }
+     void setPosition(qreal pos) {
+@@ -157,7 +172,7 @@ public:
+                     section->setX(-section->width()-pos);
+                     pos += section->width();
+                 }
+-                item->setX(-item->width()-pos);
++                item->setX(-width()-pos);
+             } else {
+                 if (section) {
+                     section->setX(pos);
+@@ -174,8 +189,12 @@ public:
+             item->setWidth(size);
+     }
+     bool contains(qreal x, qreal y) const {
+-        return (x >= item->x() && x < item->x() + item->width() &&
+-                y >= item->y() && y < item->y() + item->height());
++        return (x >= item->x() && x < item->x() + width() &&
++                y >= item->y() && y < item->y() + height());
++    }
++
++    bool isShown() const {
++        return item->isShown();
+     }
+ 
+     QDeclarativeItem *item;
+@@ -1198,12 +1217,16 @@ void QDeclarativeListViewPrivate::updateCurrent(int modelIndex)
+ 
+ void QDeclarativeListViewPrivate::updateAverage()
+ {
+-    if (!visibleItems.count())
+-        return;
+     qreal sum = 0.0;
+-    for (int i = 0; i < visibleItems.count(); ++i)
+-        sum += visibleItems.at(i)->size();
+-    averageSize = qRound(sum / visibleItems.count());
++    int count = 0;
++
++    for (int i = 0; i < visibleItems.count(); ++i) {
++        if (visibleItems.at(i)->isShown()) {
++            sum += visibleItems.at(i)->size();
++            count++;
++        }
++    }
++    averageSize = (count ? qRound(sum / count) : 0);
+ }
+ 
+ void QDeclarativeListViewPrivate::updateFooter()
+@@ -2877,10 +2900,28 @@ void QDeclarativeListView::incrementCurrentIndex()
+ {
+     Q_D(QDeclarativeListView);
+     int count = d->model ? d->model->count() : 0;
+-    if (count && (currentIndex() < count - 1 || d->wrap)) {
+-        d->moveReason = QDeclarativeListViewPrivate::SetIndex;
+-        int index = currentIndex()+1;
+-        setCurrentIndex((index >= 0 && index < count) ? index : 0);
++    int index = currentIndex();
++
++    while (++index < count) {
++        bool visible;
++
++        /* Skip the invisible items */
++        FxListItem *item = d->visibleItem(index);
++        if (item) {
++            visible = item->isShown();
++        } else {
++            item = d->createItem(index);
++            if (item == 0)
++                return;
++            visible = item->isShown();
++            delete item;
++        }
++
++        if (visible) {
++            d->moveReason = QDeclarativeListViewPrivate::SetIndex;
++            setCurrentIndex(index);
++            return;
++        }
+     }
+ }
+ 
+@@ -2896,11 +2937,29 @@ void QDeclarativeListView::incrementCurrentIndex()
+ void QDeclarativeListView::decrementCurrentIndex()
+ {
+     Q_D(QDeclarativeListView);
+-    int count = d->model ? d->model->count() : 0;
+-    if (count && (currentIndex() > 0 || d->wrap)) {
+-        d->moveReason = QDeclarativeListViewPrivate::SetIndex;
+-        int index = currentIndex()-1;
+-        setCurrentIndex((index >= 0 && index < count) ? index : count-1);
++
++    int index = currentIndex();
++
++    while (--index >= 0) {
++        bool visible;
++
++        /* Skip the invisible items */
++        FxListItem *item = d->visibleItem(index);
++        if (item) {
++            visible = item->isShown();
++        } else {
++            item = d->createItem(index);
++            if (item == 0)
++                return;
++            visible = item->isShown();
++            delete item;
++        }
++
++        if (visible) {
++            d->moveReason = QDeclarativeListViewPrivate::SetIndex;
++            setCurrentIndex(index);
++            return;
++        }
+     }
+ }
+ 
+@@ -3125,6 +3184,22 @@ void QDeclarativeListView::updateSections()
+     }
+ }
+ 
++void QDeclarativeListView::showChanged()
++{
++    Q_D(QDeclarativeListView);
++
++    if (!d->isValid() || !isComponentComplete())
++        return;
++
++    if (d->currentItem != 0) {
++        d->positionViewAtIndex(d->currentIndex, QDeclarativeListView::Contain);
++        d->updateCurrent(d->currentIndex);
++    }
++
++    d->updateSections();
++    d->layout();
++}
++
+ void QDeclarativeListView::refill()
+ {
+     Q_D(QDeclarativeListView);
+diff --git a/src/declarative/graphicsitems/qdeclarativelistview_p.h b/src/declarative/graphicsitems/qdeclarativelistview_p.h
+index f16231f..de12834 100644
+--- a/src/declarative/graphicsitems/qdeclarativelistview_p.h
++++ b/src/declarative/graphicsitems/qdeclarativelistview_p.h
+@@ -272,6 +272,7 @@ private Q_SLOTS:
+     void createdItem(int index, QDeclarativeItem *item);
+     void destroyingItem(QDeclarativeItem *item);
+     void animStopped();
++    void showChanged();
+ };
+ 
+ class QDeclarativeListViewAttached : public QObject
+-- 
+1.9.1
+

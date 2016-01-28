@@ -1,0 +1,93 @@
+From 106b732bd0eacfca19fe8480b719ea1dafd63a02 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 26 Jun 2014 17:24:09 +0200
+Subject: [PATCH] AC_TRY_RUN won't work when cross compiling
+
+---
+ ext/opcache/config.m4 | 70 ++-------------------------------------------------
+ 1 file changed, 2 insertions(+), 68 deletions(-)
+
+diff --git a/ext/opcache/config.m4 b/ext/opcache/config.m4
+index 81a35eb..7eff138 100644
+--- a/ext/opcache/config.m4
++++ b/ext/opcache/config.m4
+@@ -12,74 +12,8 @@ if test "$PHP_OPCACHE" != "no"; then
+   ])
+ 
+   AC_MSG_CHECKING(for sysvipc shared memory support)
+-  AC_TRY_RUN([
+-#include <sys/types.h>
+-#include <sys/wait.h>
+-#include <sys/ipc.h>
+-#include <sys/shm.h>
+-#include <unistd.h>
+-#include <string.h>
+-
+-int main() {
+-  pid_t pid;
+-  int status;
+-  int ipc_id;
+-  char *shm;
+-  struct shmid_ds shmbuf;
+-
+-  ipc_id = shmget(IPC_PRIVATE, 4096, (IPC_CREAT | SHM_R | SHM_W));
+-  if (ipc_id == -1) {
+-    return 1;
+-  }
+-
+-  shm = shmat(ipc_id, NULL, 0);
+-  if (shm == (void *)-1) {
+-    shmctl(ipc_id, IPC_RMID, NULL);
+-    return 2;
+-  }
+-
+-  if (shmctl(ipc_id, IPC_STAT, &shmbuf) != 0) {
+-    shmdt(shm);
+-    shmctl(ipc_id, IPC_RMID, NULL);
+-    return 3;
+-  }
+-
+-  shmbuf.shm_perm.uid = getuid();
+-  shmbuf.shm_perm.gid = getgid();
+-  shmbuf.shm_perm.mode = 0600;
+-
+-  if (shmctl(ipc_id, IPC_SET, &shmbuf) != 0) {
+-    shmdt(shm);
+-    shmctl(ipc_id, IPC_RMID, NULL);
+-    return 4;
+-  }
+-
+-  shmctl(ipc_id, IPC_RMID, NULL);
+-
+-  strcpy(shm, "hello");
+-
+-  pid = fork();
+-  if (pid < 0) {
+-    return 5;
+-  } else if (pid == 0) {
+-    strcpy(shm, "bye");
+-    return 6;
+-  }
+-  if (wait(&status) != pid) {
+-    return 7;
+-  }
+-  if (!WIFEXITED(status) || WEXITSTATUS(status) != 6) {
+-    return 8;
+-  }
+-  if (strcmp(shm, "bye") != 0) {
+-    return 9;
+-  }
+-  return 0;
+-}
+-],dnl
+-    AC_DEFINE(HAVE_SHM_IPC, 1, [Define if you have SysV IPC SHM support])
+-    msg=yes,msg=no,msg=no)
+-  AC_MSG_RESULT([$msg])
++  AC_DEFINE(HAVE_SHM_IPC, 1, [Define if you have SysV IPC SHM support])
++  AC_MSG_RESULT("is assumed")
+ 
+   AC_MSG_CHECKING(for mmap() using MAP_ANON shared memory support)
+   AC_TRY_RUN([
+-- 
+1.8.3.2
+

@@ -1,0 +1,57 @@
+From 10ff1693e2c818e33c8d8e7310b21f9e869cc430 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Mon, 30 Nov 2015 11:22:32 +0100
+Subject: [PATCH] allow disabling access logs
+
+---
+ src/libfs.c        | 4 ++++
+ src/log.c          | 2 ++
+ src/serverconfig.c | 4 ++++
+ 3 files changed, 10 insertions(+)
+
+diff --git a/src/libfs.c b/src/libfs.c
+index 0f7c119..da4d961 100644
+--- a/src/libfs.c
++++ b/src/libfs.c
+@@ -240,6 +240,10 @@ void touch_logfile(char *logfile, mode_t mode, uid_t uid, gid_t gid) {
+ 		return;
+ 	}
+ 
++	if (strncmp(logfile, "/dev/", 5) == 0) {
++		return;
++	}
++
+ 	if ((fd = open(logfile, O_RDONLY)) != -1) {
+ 		close(fd);
+ 		return;
+diff --git a/src/log.c b/src/log.c
+index 724713e..193888f 100644
+--- a/src/log.c
++++ b/src/log.c
+@@ -191,6 +191,8 @@ void log_request(t_session *session) {
+ 	time_t t;
+ 	struct tm *s;
+ 
++	if (session->host->access_logfile == NULL)
++		return;
+ 	if (ip_allowed(&(session->ip_address), session->config->logfile_mask) == deny) {
+ 		return;
+ 	}
+diff --git a/src/serverconfig.c b/src/serverconfig.c
+index 10f1a67..6f3d275 100644
+--- a/src/serverconfig.c
++++ b/src/serverconfig.c
+@@ -1169,6 +1169,10 @@ static bool host_setting(char *key, char *value, t_host *host) {
+ #endif
+ 
+ 	if (strcmp(key, "accesslogfile") == 0) {
++		if (strcasecmp(value, "none") == 0) {
++			host->access_logfile = NULL;
++			return true;
++		}
+ 		if (*value == '/') {
+ 			if ((host->access_logfile = strdup(value)) != NULL) {
+ 				return true;
+-- 
+1.9.1
+

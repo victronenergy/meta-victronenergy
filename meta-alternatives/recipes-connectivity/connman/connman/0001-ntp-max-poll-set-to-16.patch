@@ -1,0 +1,27 @@
+From 594d7006a9b49f1f9fa0d10dc637631aec31c994 Mon Sep 17 00:00:00 2001
+From: Marcel Mulder <mmulder@victronenergy.com>
+Date: Tue, 18 Mar 2014 15:52:22 +0100
+Subject: [PATCH] ntp max poll set to 16
+
+---
+ src/ntp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/ntp.c b/src/ntp.c
+index 6701f9f..5e6e77c 100644
+--- a/src/ntp.c
++++ b/src/ntp.c
+@@ -164,8 +164,8 @@ static void send_packet(int fd, const char *server, uint32_t timeout)
+ 	memset(&msg, 0, sizeof(msg));
+ 	msg.flags = NTP_FLAGS_ENCODE(NTP_FLAG_LI_NOTINSYNC, NTP_FLAG_VN_VER4,
+ 	    NTP_FLAG_MD_CLIENT);
+-	msg.poll = 4;	// min
+-	msg.poll = 10;	// max
++	msg.poll = 6;	// min
++	msg.poll = 16;	// max
+ 	msg.precision = NTP_PRECISION_S;
+ 
+ 	memset(&addr, 0, sizeof(addr));
+-- 
+1.8.3.2
+

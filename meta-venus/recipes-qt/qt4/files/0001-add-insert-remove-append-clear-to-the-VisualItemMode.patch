@@ -1,0 +1,125 @@
+From e2903121c112e596dbe5b2757d856cfaef4d1e1e Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Mon, 16 Sep 2013 17:05:12 +0200
+Subject: [PATCH 1/5] add insert/remove/append/clear to the VisualItemModel
+
+---
+ .../graphicsitems/qdeclarativevisualitemmodel.cpp  | 74 ++++++++++++++++++++++
+ .../graphicsitems/qdeclarativevisualitemmodel_p.h  |  5 ++
+ 2 files changed, 79 insertions(+)
+
+diff --git a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
+index 9760088..b78642e 100644
+--- a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
++++ b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
+@@ -93,10 +93,57 @@ public:
+ 
+     void itemAppended() {
+         Q_Q(QDeclarativeVisualItemModel);
++
+         QDeclarativeVisualItemModelAttached *attached = QDeclarativeVisualItemModelAttached::properties(children.last().item);
+         attached->setIndex(children.count()-1);
+         emit q->itemsInserted(children.count()-1, 1);
+         emit q->countChanged();
++        emit q->childrenChanged();
++    }
++
++    void updateIndices()
++    {
++        QList<Item>::iterator i;
++        int n;
++
++        for (i = children.begin(); i != children.end(); ++i) {
++            QDeclarativeVisualItemModelAttached *attached = QDeclarativeVisualItemModelAttached::properties((*i).item);
++            attached->setIndex(n++);
++        }
++    }
++
++    void insert(int i, QDeclarativeItem *item)
++    {
++        Q_Q(QDeclarativeVisualItemModel);
++
++        if (i < 0 || i > children.count())
++            return;
++
++        children.insert(i, Item(item));
++        updateIndices();
++
++        emit q->itemsInserted(i, 1);
++        emit q->countChanged();
++        emit q->childrenChanged();
++    }
++
++    void remove(int i)
++    {
++        Q_Q(QDeclarativeVisualItemModel);
++
++        if (i < 0 || i >= children.count())
++            return;
++
++        Item item = children[i];
++        children.removeAt(i);
++        updateIndices();
++
++        emit q->countChanged();
++        emit q->itemsRemoved(i, 1);
++        emit q->childrenChanged();
++        emit q->destroyingItem(item.item);
++
++        delete item.item;
+     }
+ 
+     void emitChildrenChanged() {
+@@ -249,6 +296,33 @@ QDeclarativeVisualItemModelAttached *QDeclarativeVisualItemModel::qmlAttachedPro
+     return QDeclarativeVisualItemModelAttached::properties(obj);
+ }
+ 
++void QDeclarativeVisualItemModel::append(QDeclarativeItem *item)
++{
++    QDeclarativeListProperty<QDeclarativeItem> childs(children());
++    QDeclarativeVisualItemModelPrivate::children_append(&childs, item);
++}
++
++void QDeclarativeVisualItemModel::insert(int i, QDeclarativeItem *item)
++{
++    Q_D(QDeclarativeVisualItemModel);
++    d->insert(i, item);
++}
++
++void QDeclarativeVisualItemModel::clear()
++{
++    int n = count();
++
++    while (--n >= 0)
++        remove(n);
++
++}
++
++void QDeclarativeVisualItemModel::remove(int i)
++{
++    Q_D(QDeclarativeVisualItemModel);
++    d->remove(i);
++}
++
+ //============================================================================
+ 
+ class VDMDelegateDataType : public QDeclarativeOpenMetaObjectType
+diff --git a/src/declarative/graphicsitems/qdeclarativevisualitemmodel_p.h b/src/declarative/graphicsitems/qdeclarativevisualitemmodel_p.h
+index 73a7cb4..8b5d843 100644
+--- a/src/declarative/graphicsitems/qdeclarativevisualitemmodel_p.h
++++ b/src/declarative/graphicsitems/qdeclarativevisualitemmodel_p.h
+@@ -130,6 +130,11 @@ public:
+ 
+     static QDeclarativeVisualItemModelAttached *qmlAttachedProperties(QObject *obj);
+ 
++    Q_INVOKABLE void append(QDeclarativeItem *item);
++    Q_INVOKABLE void clear(void);
++    Q_INVOKABLE void insert(int i, QDeclarativeItem *item);
++    Q_INVOKABLE void remove(int i);
++
+ Q_SIGNALS:
+     void childrenChanged();
+ 
+-- 
+1.9.1
+
