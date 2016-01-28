@@ -7,6 +7,8 @@ INITSCRIPT_NAME = "application"
 INITSCRIPT_PARAMS = "start 21 5 2 . stop 80 0 1 6 ."
 inherit update-rc.d
 
+S = "${WORKDIR}"
+
 SRC_URI = "file://application"
 
 do_install() {
