@@ -30,6 +30,9 @@ pkg_postinst_${PN} () {
 		fw_setenv upd-misc 'setenv miscargs root=/dev/ram rw console=ttyO0,115200 $mtdparts omapdss.def_disp=lcd omapfb.vram=0:2M vram=2M ramdisk_size=32768'
 		fw_setenv upd-boot "setenv nandboot 'setenv bootargs \$miscargs \$mtdparts && nand read 82000000 kernel1 && nand read 83000000 kernel2 && bootm 82000000 83000000' && setenv upd_mode 1 && saveenv && reset"
 
+		# a bit paranoid, set mtdparts as well, so updating works with the default env as well
+		fw_setenv mtdparts 'mtdparts=omap2-nand.0:512k(MLO),1m(u-boot),256k(env1),256k(env2),1m(u-boot2),256k(bootparms),768k(splash),6m(kernel),200m(data),-(rootfs)'
+
 		# load u-boot instead of falcon mode
 		fw_setenv upd_mode 1
 
