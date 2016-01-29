@@ -5,8 +5,8 @@ for some packages this is not a trivial split, so this is a new attempt to
 to keep some structure in the recipes. This retires [1].
 
 NOTE: this is a flat repro, it should be possible to build for danny..yethro,
-and Debian jessie / wheezy with the help of [2]. Only the danny is actually
-tested / officially released at the moment!
+and Debian jessie / wheezy with the help of [2]. Only danny is actually tested /
+officially released at the moment!
 
 meta-alternatives
 -----------------
@@ -29,7 +29,7 @@ if the same version is available.
 
 meta-bsp
 --------
-Provides the recipes to boot machine manufactured / shipped by victronenergy.
+Provides the recipes to boot machines manufactured / shipped by victronenergy.
 Typically bootloader + kernel. It shouldn't contain any "configuration", iow
 another distro should be able to reuse it.
 
@@ -50,7 +50,7 @@ meta-ve-software
 Recipes for software provided by Victron Energy. It should not contain bbappends.
 The intention is that this layer can be added to an existing oe setup.
 
-NOTE: don't but recipes in this meta for projects which source code is not
+NOTE: don't put recipes in this meta for projects which source code is not
 (fully) publicly available, since it will cause build failures for people not
 having access to them!
 
