@@ -37,13 +37,6 @@ do_install () {
 # remember the version updated from ...
 pkg_preinst_${PN} () {
 	if [ "x$D" = "x" ]; then
-
-		# this is a separate partition on a ccgx, so only create if when non existing
-		if [ ! -e /conf ]; then
-			mkdir /conf
-			touch /conf/settings.xml
-		fi
-
 		if [ -f ${bindir}/../version ]; then
 			cp ${bindir}/../version ${bindir}/previous_version
 		fi
@@ -52,6 +45,12 @@ pkg_preinst_${PN} () {
 
 pkg_postinst_${PN} () {
 	if [ "x$D" = "x" ]; then
+		# this is a separate partition on a ccgx, so only create if when non existing
+		if [ ! -e /conf ]; then
+			mkdir /conf
+			touch /conf/settings.xml
+		fi
+
 		# version upto v1.15 would set access level to user, but did not
 		# enforce any policy. Since v1.16 users are locked in a user level
 		# so make sure the default is changed to to User & Installer when
@@ -59,5 +58,7 @@ pkg_postinst_${PN} () {
 		if [ -f ${bindir}/previous_version ]; then
 			${bindir}/set_setting.sh AccessLevel 1 115
 		fi
+	else
+		exit 1
 	fi
 }
