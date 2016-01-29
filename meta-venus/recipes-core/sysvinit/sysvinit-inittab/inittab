@@ -9,7 +9,7 @@ id:5:initdefault:
 si::sysinit:/etc/init.d/rcS
 
 # What to do in single-user mode.
-~~:S:wait:/sbin/sulogin
+~~:S:wait:/sbin/sh
 
 # /etc/init.d executes the S and K scripts upon change
 # of runlevel.
