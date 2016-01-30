@@ -25,6 +25,7 @@ RDEPENDS_${PN} += "\
 	cronie \
 	curl \
 	dbus \
+	dbus-tools \
 	e2fsprogs \
 	eglibc-utils \
 	iproute2 \
