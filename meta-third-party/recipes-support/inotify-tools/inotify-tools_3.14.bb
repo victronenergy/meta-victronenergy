@@ -3,6 +3,7 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=ac6c26e52aea428ee7f56dc2c56424c6"
 
 inherit autotools
+B = "${S}"
 BBCLASSEXTEND = "native nativesdk"
 
 PR = "r0"
