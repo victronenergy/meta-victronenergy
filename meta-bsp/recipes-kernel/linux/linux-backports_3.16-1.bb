@@ -7,8 +7,11 @@ KERNEL_MODULES_META_PACKAGE = "linux-backports-modules"
 KERNEL_MODULE_PATTERN = "linux-backport-module-%s"
 BACKPORTS_CONFIG = "ccgx.config"
 
-SRC_URI = "http://www.kernel.org/pub/linux/kernel/projects/backports/stable/v3.16/backports-3.16-1.tar.xz \
-           file://${BACKPORTS_CONFIG}"
+SRC_URI = " \
+	http://www.kernel.org/pub/linux/kernel/projects/backports/stable/v3.16/backports-3.16-1.tar.xz \
+	file://${BACKPORTS_CONFIG} \
+	file://0001-hardcode-kernel-version-since-the-command-to-get-it-.patch \
+"
 
 SRC_URI[md5sum] = "212c07f28b622d21f41e7a969434c6b0"
 SRC_URI[sha256sum] = "acda012f244e7f2c6c383f998d06554c524a0896ab83dd7b1301ef9d284dfd80"
