@@ -1,26 +1,27 @@
-From c9e69496ae03320fcc549ac7bf4821639f37095d Mon Sep 17 00:00:00 2001
-From: Jeroen Hofstee <jhofstee@victronenergy.com>
-Date: Mon, 28 Dec 2015 13:08:32 +0100
-Subject: [PATCH] Revert "Ignore value in '/Connected' in vebus and battery
+From dbcb3117fd2dcdef1d0d21927d238a5899fbbf77 Mon Sep 17 00:00:00 2001
+From: Ernst de Vries <edevries@victronenergy.com>
+Date: Tue, 2 Feb 2016 15:32:31 +0100
+Subject: [PATCH 1/2] Revert "Ignore value in '/Connected' in vebus and battery
  services"
 
 This reverts commit ae88606750aafc603d4a0300a04a5e71cfaf72e5.
 ---
- dbus_systemcalc.py       | 74 ++++++++++++++++++++++++++++++++----------------
- test/systemcalc_test.py  | 50 ++++++++++++++++++++++++++++++--
- test/test_batterydata.py | 14 +++++++++
- 3 files changed, 111 insertions(+), 27 deletions(-)
+ dbus_systemcalc.py       | 73 ++++++++++++++++++++++++++++++++----------------
+ test/systemcalc_test.py  | 50 +++++++++++++++++++++++++++++++--
+ test/test_batterydata.py | 14 ++++++++++
+ 3 files changed, 111 insertions(+), 26 deletions(-)
 
 diff --git a/dbus_systemcalc.py b/dbus_systemcalc.py
-index 9a48e0f..ffe62d2 100755
+index a57d550..3182864 100755
 --- a/dbus_systemcalc.py
 +++ b/dbus_systemcalc.py
-@@ -69,19 +69,23 @@ class SystemCalc:
+@@ -70,20 +70,24 @@ class SystemCalc:
  				'/Ac/Out/L1/P': dummy,
  				'/Ac/Out/L2/P': dummy,
  				'/Ac/Out/L3/P': dummy,
 +				'/Connected': dummy,
  				'/Hub4/AcPowerSetpoint': dummy,
+ 				'/ProductId': dummy,
  				'/ProductName': dummy,
  				'/Mgmt/Connection': dummy,
 +				'/State': dummy,
@@ -39,7 +40,7 @@ index 9a48e0f..ffe62d2 100755
  				'/ProductName': dummy,
  				'/Mgmt/Connection': dummy,
  				'/ProductId' : dummy,
-@@ -90,6 +94,7 @@ class SystemCalc:
+@@ -92,6 +96,7 @@ class SystemCalc:
  				'/Ac/L2/Power': dummy,
  				'/Ac/L3/Power': dummy},
  			'com.victronenergy.genset' : {
@@ -47,7 +48,7 @@ index 9a48e0f..ffe62d2 100755
  				'/ProductName': dummy,
  				'/Mgmt/Connection': dummy,
  				'/ProductId' : dummy,
-@@ -254,8 +259,7 @@ class SystemCalc:
+@@ -258,8 +263,7 @@ class SystemCalc:
  			self._dbusservice['/AutoSelectedBatteryService'] = None
  
  			s = self._settings['batteryservice'].split('/')
@@ -57,7 +58,7 @@ index 9a48e0f..ffe62d2 100755
  			serviceclass = s[0]
  			instance = int(s[1]) if len(s) == 2 else None
  			services = self._dbusmonitor.get_service_list(classfilter=serviceclass)
-@@ -282,23 +286,25 @@ class SystemCalc:
+@@ -286,23 +290,25 @@ class SystemCalc:
  
  	def _autoselect_battery_service(self):
  		# Default setting business logic:
@@ -96,7 +97,7 @@ index 9a48e0f..ffe62d2 100755
  
  	# Called on a one second timer
  	def _handletimertick(self):
-@@ -461,8 +467,10 @@ class SystemCalc:
+@@ -476,8 +482,10 @@ class SystemCalc:
  
  		# ==== Vebus ====
  		# Assume there's only 1 multi service present on the D-Bus
@@ -109,7 +110,7 @@ index 9a48e0f..ffe62d2 100755
  			dc_current = self._dbusmonitor.get_value(multi_path, '/Dc/0/Current')
  			newvalues['/Dc/Vebus/Current'] = dc_current
  			dc_power = self._dbusmonitor.get_value(multi_path, '/Dc/0/Power')
-@@ -505,7 +513,8 @@ class SystemCalc:
+@@ -520,7 +528,8 @@ class SystemCalc:
  		consumption = { "L1" : None, "L2" : None, "L3" : None }
  		for device_type in ['Grid', 'Genset']:
  			servicename = 'com.victronenergy.%s' % device_type.lower()
@@ -119,7 +120,7 @@ index 9a48e0f..ffe62d2 100755
  			uses_active_input = False
  			if multi_path is not None:
  				# If a grid meter is present we use values from it. If not, we look at the multi. If it has
-@@ -568,8 +577,8 @@ class SystemCalc:
+@@ -585,8 +594,8 @@ class SystemCalc:
  		# servicename, ie 'com.victronenergy.vebus.ttyO1' is not used, since the last part of that is not
  		# fixed. dbus-serviceclass name and the device instance are already fixed, so best to use those.
  
@@ -130,7 +131,7 @@ index 9a48e0f..ffe62d2 100755
  
  		ul = {self.BATSERVICE_DEFAULT: 'Automatic', self.BATSERVICE_NOBATTERY: 'No battery monitor'}
  		for servicename, instance in services.items():
-@@ -600,12 +609,24 @@ class SystemCalc:
+@@ -618,12 +627,24 @@ class SystemCalc:
  		sn = self._get_instance_service_name(service, instance).replace('.', '_').replace('/', '_')
  		return '/ServiceMapping/%s' % sn
  
@@ -156,7 +157,7 @@ index 9a48e0f..ffe62d2 100755
  			self._handleservicechange()
  
  	def _device_added(self, service, instance, do_service_change=True):
-@@ -645,12 +666,16 @@ class SystemCalc:
+@@ -663,12 +684,16 @@ class SystemCalc:
  		newvalues[path + '/Total/Power'] = total_power
  		newvalues[path + '/NumberOfPhases'] = number_of_phases
  
@@ -176,16 +177,8 @@ index 9a48e0f..ffe62d2 100755
  
  def _safeadd(*values):
  	'''Adds all parameters passed to this function. Parameters which are None are ignored. If all parameters
-@@ -664,7 +689,6 @@ def _safeadd(*values):
- 				r += v
- 	return r
- 
--
- if __name__ == "__main__":
- 	# Argument parsing
- 	parser = argparse.ArgumentParser(
 diff --git a/test/systemcalc_test.py b/test/systemcalc_test.py
-index 3029656..0dd96a3 100755
+index 82e7a10..121f32e 100755
 --- a/test/systemcalc_test.py
 +++ b/test/systemcalc_test.py
 @@ -38,6 +38,7 @@ class TestSystemCalcBase(unittest.TestCase):
@@ -206,7 +199,7 @@ index 3029656..0dd96a3 100755
  			})
  		self._add_device('com.victronenergy.settings',
  			values={
-@@ -544,6 +546,7 @@ class TestSystemCalc(TestSystemCalcBase):
+@@ -555,6 +557,7 @@ class TestSystemCalc(TestSystemCalcBase):
  		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Dc/0/Voltage', None)
  		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Dc/0/Current', None)
  		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Soc', None)
@@ -214,7 +207,7 @@ index 3029656..0dd96a3 100755
  		self._add_device('com.victronenergy.pvinverter.fronius_122_2312', {
  			'/Ac/L1/Power': None,
  			'/Position': None
-@@ -589,7 +592,8 @@ class TestSystemCalc(TestSystemCalcBase):
+@@ -600,7 +603,8 @@ class TestSystemCalc(TestSystemCalcBase):
  				'/Dc/0/Voltage': None,
  				'/Dc/0/Current': None,
  				'/DeviceInstance': None,
@@ -224,7 +217,7 @@ index 3029656..0dd96a3 100755
  			})
  
  		self._update_values()
-@@ -598,7 +602,48 @@ class TestSystemCalc(TestSystemCalcBase):
+@@ -609,7 +613,48 @@ class TestSystemCalc(TestSystemCalcBase):
  			'/Ac/Consumption/Total/Power': 100
  		})
  
@@ -273,7 +266,7 @@ index 3029656..0dd96a3 100755
  		self._update_values()
  		self._check_values({
  			'/Dc/Battery/Soc': 53.2,
-@@ -625,6 +670,7 @@ class TestSystemCalc(TestSystemCalcBase):
+@@ -636,6 +681,7 @@ class TestSystemCalc(TestSystemCalcBase):
  			'/AutoSelectedBatteryService': 'battery on dummy'})
  
  	def test_batteryandvebus_defaultsetting(self):
@@ -307,5 +300,32 @@ index cbe6ce7..6921fd0 100755
  		vebus = startinbackground(['./dummyvebus.py'])
  
 -- 
-1.9.1
+2.5.0
+
+
+From c139ef0c8694138917399356d0597020e581ce76 Mon Sep 17 00:00:00 2001
+From: Ernst de Vries <edevries@victronenergy.com>
+Date: Tue, 2 Feb 2016 15:37:56 +0100
+Subject: [PATCH 2/2] rereverted invalid log message
+
+---
+ dbus_systemcalc.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/dbus_systemcalc.py b/dbus_systemcalc.py
+index 3182864..85c6f64 100755
+--- a/dbus_systemcalc.py
++++ b/dbus_systemcalc.py
+@@ -263,7 +263,8 @@ class SystemCalc:
+ 			self._dbusservice['/AutoSelectedBatteryService'] = None
+ 
+ 			s = self._settings['batteryservice'].split('/')
+-			logger.error("The battery setting (%s) is invalid!" % self._settings['batteryservice'])
++			if len(batteries) > 0:
++				logger.error("The battery setting (%s) is invalid!" % self._settings['batteryservice'])
+ 			serviceclass = s[0]
+ 			instance = int(s[1]) if len(s) == 2 else None
+ 			services = self._dbusmonitor.get_service_list(classfilter=serviceclass)
+-- 
+2.5.0
 

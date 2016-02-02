@@ -12,7 +12,7 @@ SRC_URI = " \
 	file://0001-Revert-Ignore-value-in-Connected-in-vebus-and-batter.patch \
 	file://com.victronenergy.system.conf \
 "
-PR = "r1"
+PR = "r0"
 S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \
