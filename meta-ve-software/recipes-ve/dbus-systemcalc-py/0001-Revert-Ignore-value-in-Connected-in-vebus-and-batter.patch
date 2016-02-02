@@ -303,7 +303,7 @@ index cbe6ce7..6921fd0 100755
 2.5.0
 
 
-From c139ef0c8694138917399356d0597020e581ce76 Mon Sep 17 00:00:00 2001
+From 1b70df44dffa516f55f5954e41caef81a1a5a92c Mon Sep 17 00:00:00 2001
 From: Ernst de Vries <edevries@victronenergy.com>
 Date: Tue, 2 Feb 2016 15:37:56 +0100
 Subject: [PATCH 2/2] rereverted invalid log message
@@ -313,7 +313,7 @@ Subject: [PATCH 2/2] rereverted invalid log message
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/dbus_systemcalc.py b/dbus_systemcalc.py
-index 3182864..85c6f64 100755
+index 3182864..dffde00 100755
 --- a/dbus_systemcalc.py
 +++ b/dbus_systemcalc.py
 @@ -263,7 +263,8 @@ class SystemCalc:
@@ -321,7 +321,7 @@ index 3182864..85c6f64 100755
  
  			s = self._settings['batteryservice'].split('/')
 -			logger.error("The battery setting (%s) is invalid!" % self._settings['batteryservice'])
-+			if len(batteries) > 0:
++			if len(s) > 0:
 +				logger.error("The battery setting (%s) is invalid!" % self._settings['batteryservice'])
  			serviceclass = s[0]
  			instance = int(s[1]) if len(s) == 2 else None
