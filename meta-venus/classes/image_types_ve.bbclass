@@ -50,6 +50,7 @@ IMAGE_CMD_live.img () {
 	parted ${LIVE_IMAGE} mkpart p ext3 100 1024
 
 	# format a seperate partion as FAT
+	if [ -f ${BOOTIMG} ]; then rm ${BOOTIMG}; fi
 	BOOT_BLOCKS=$(parted -s ${LIVE_IMAGE} unit b print | awk '/ 1 / { print substr($4, 1, length($4 -1)) / 1024 }')
 	mkfs.vfat -n BOOT -S 512 -C ${BOOTIMG} $BOOT_BLOCKS
 
