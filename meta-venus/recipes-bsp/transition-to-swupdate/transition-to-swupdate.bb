@@ -6,6 +6,8 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 S = "${WORKDIR}"
 
+RDEPENDS_${PN} += "u-boot-env-tools"
+
 SRC_URI += "https://updates.victronenergy.com/feeds/ccgx2/venus-netinstall-initramfs-ccgx.ext2.gz.u-boot"
 SRC_URI[md5sum] = "01d2370ff0ad7f06d7af083ffb4f390c"
 SRC_URI[sha256sum] = "bf191d5fa3d11c3d8e440a29aa439ae438c6d2725439a99316365fa2228eaa0f"
@@ -17,6 +19,8 @@ do_install () {
 
 pkg_postinst_${PN} () {
     if [ "x$D" = "x" ]; then
+		set -e
+
 		# first load the netinstall from the old mtd layout
 		fw_setenv load-netinstall 'ubi part rootfs && ubifsmount rootfs && ubifsload 83000000 venus-netinstall-initramfs-ccgx.ext2.gz.u-boot'
 
