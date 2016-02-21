@@ -8,8 +8,6 @@ inherit daemontools
 PR = "r1"
 SRC_URI = " \
 	git://github.com/victronenergy/dbus_modbustcp.git;tag=v${PV};protocol=https \
-	file://0001-Project-file-add-more-generic-install-path.patch \
-	file://0002-s-dbus_modbustcp-dbus-modbustcp.patch \
 	file://0001-remove-absolute-path-from-version.h.patch \
 "
 S = "${WORKDIR}/git"
