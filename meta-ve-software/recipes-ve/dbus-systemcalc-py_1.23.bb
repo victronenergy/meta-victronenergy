@@ -9,7 +9,6 @@ inherit daemontools
 # but we do want a newer version because of dbus bus selection
 SRC_URI = " \
 	gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
-	file://0001-Revert-Ignore-value-in-Connected-in-vebus-and-batter.patch \
 	file://com.victronenergy.system.conf \
 "
 PR = "r1"
