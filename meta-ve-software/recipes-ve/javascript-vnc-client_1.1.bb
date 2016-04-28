@@ -33,5 +33,7 @@ do_install () {
 }
 
 pkg_postinst_${PN}() {
-	/etc/init.d/hiawatha restart
+	if [ "x$D" = "x" ]; then
+		/etc/init.d/hiawatha restart
+	fi
 }
