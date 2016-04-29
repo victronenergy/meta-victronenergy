@@ -50,7 +50,7 @@ DAEMONTOOLS_postrm() {
 }
 
 def daemontools_after_parse(d):
-    if d.getVar('DAEMONTOOLS_SERVICE_DIR') == None:
+    if d.getVar('DAEMONTOOLS_SERVICE_DIR', None) == None:
         raise bb.build.FuncFailed, "%s inherits daemontools but doesn't set DAEMONTOOLS_SERVICE_DIR" % d.getVar('FILE')
 
 python __anonymous() {
