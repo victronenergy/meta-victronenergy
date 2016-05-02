@@ -8,7 +8,6 @@ inherit daemontools
 PR = "r1"
 SRC_URI = " \
 	git://github.com/victronenergy/dbus_modbustcp.git;tag=v${PV};protocol=https \
-	file://0001-remove-absolute-path-from-version.h.patch \
 "
 S = "${WORKDIR}/git"
 DEST_DIR = "${D}${bindir}"
