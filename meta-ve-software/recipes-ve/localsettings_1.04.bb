@@ -6,7 +6,7 @@ inherit allarch
 inherit ve_package
 inherit daemontools
 
-PR = "r15"
+PR = "r16"
 SRC_URI = " \
 	gitsm://github.com/victronenergy/localsettings.git;protocol=https;tag=v${PV} \
 	file://set_setting.sh \
@@ -46,9 +46,9 @@ pkg_preinst_${PN} () {
 pkg_postinst_${PN} () {
 	if [ "x$D" = "x" ]; then
 		# this is a separate partition on a ccgx, so only create if when non existing
-		if [ ! -e /conf ]; then
-			mkdir /conf
-			touch /conf/settings.xml
+		if [ ! -e /data/conf ]; then
+			mkdir -p /data/conf
+			touch /data/conf/settings.xml
 		fi
 
 		# version upto v1.15 would set access level to user, but did not

@@ -25,7 +25,7 @@ fi
 setting=$1
 value=$2
 
-settings_file=/conf/settings.xml
+settings_file=/data/conf/settings.xml
 version_file=/opt/color-control/localsettings/previous_version
 
 if [ $# -eq 3 ]; then
