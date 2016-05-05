@@ -29,6 +29,7 @@ RDEPENDS_${PN} += "\
 	ca-certificates \
 	canutils \
 	connman \
+	connman-tools \
 	cronie \
 	curl \
 	dbus \
