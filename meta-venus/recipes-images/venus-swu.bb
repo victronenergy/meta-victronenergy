@@ -1,6 +1,7 @@
 SRC_URI = "file://sw-description"
 
-inherit swupdate
+INHERIT_bpp3 += "swupdate"
+INHERIT_ccgx += "swupdate"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
