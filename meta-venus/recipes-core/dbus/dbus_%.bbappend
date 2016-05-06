@@ -9,12 +9,12 @@ SRC_URI += " \
 	file://system.conf \
  "
 
-RDEPENDS_${PN} = "inotify-tools"
+RDEPENDS_${PN}_venus = "inotify-tools"
 
-do_install_append() {
+# For our own images, allow access to the system dbus and guard the dbus process.
+# The guard is there since the OOM-killer likes to kill the dbus process itself,
+# instead of the processes causing the queues in it.
+do_install_append_venus() {
     install ${WORKDIR}/dbus-daemon-watch.sh ${D}${bindir}/dbus-daemon-watch.sh
-}
-
-do_install_append_bpp3() {
     install -m 0644 ${WORKDIR}/system.conf ${D}${sysconfdir}/dbus-1/system.conf
 }
