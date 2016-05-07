@@ -1,6 +1,5 @@
 DAEMON_PN ?= "${PN}"
 
-DAEMONTOOLS ?= "daemontools-run"
 DAEMONTOOLS_virtclass-cross = ""
 DAEMONTOOLS_virtclass-native = ""
 DAEMONTOOLS_virtclass-nativesdk = ""
@@ -9,10 +8,8 @@ DAEMONTOOLS_SERVICES_DIR ?= "/service"
 DAEMONTOOLS_LOG_DIR_PREFIX = "${localstatedir}/log"
 DAEMONTOOLS_LOG_DIR_PREFIX_bpp3 = "/log"
 
-python () {
-    pkg = d.getVar('DAEMON_PN', True)
-    d.appendVar('RDEPENDS_' + pkg, ' ${DAEMONTOOLS}')
-}
+RDEPENDS_${DAEMON_PN}_append += "daemontools-run"
+RDEPENDS_${DAEMON_PN}_append_bpp3 += "initscripts"
 
 DAEMONTOOLS_preinst() {
 	if test "x$D" = "x"; then
