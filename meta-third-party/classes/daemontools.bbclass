@@ -1,5 +1,12 @@
 DAEMON_PN ?= "${PN}"
 
+# make machine more specific then distro, so bpp3 get initscripts,
+# venus daemontools-run-venus and all other distro's daemontools-run
+OVERRIDES = "${TARGET_OS}:${TRANSLATED_TARGET_ARCH}:build-${BUILD_OS}:pn-${PN}:${DISTROOVERRIDES}:${MACHINEOVERRIDES}:${CLASSOVERRIDE}:forcevariable"
+DAEMONTOOLS = "daemontools-run"
+DAEMONTOOLS_bpp3 += "initscripts"
+DAEMONTOOLS_venus = "daemontools-run-venus"
+
 DAEMONTOOLS_virtclass-cross = ""
 DAEMONTOOLS_virtclass-native = ""
 DAEMONTOOLS_virtclass-nativesdk = ""
@@ -8,8 +15,10 @@ DAEMONTOOLS_SERVICES_DIR ?= "/service"
 DAEMONTOOLS_LOG_DIR_PREFIX = "${localstatedir}/log"
 DAEMONTOOLS_LOG_DIR_PREFIX_bpp3 = "/log"
 
-RDEPENDS_${DAEMON_PN}_append += "daemontools-run"
-RDEPENDS_${DAEMON_PN}_append_bpp3 += "initscripts"
+python () {
+	pkg = d.getVar('DAEMON_PN', True)
+	d.appendVar('RDEPENDS_' + pkg, ' ${DAEMONTOOLS}')
+}
 
 DAEMONTOOLS_preinst() {
 	if test "x$D" = "x"; then
