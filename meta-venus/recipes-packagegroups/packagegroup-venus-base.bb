@@ -15,6 +15,11 @@ DEPENDS += "\
 	vim \
 "
 
+DEPENDS_append_bpp3 += "\
+	qtbase \
+	qtserialport \
+"
+
 RDEPENDS_${PN} += "\
 	bash \
 	bsdiff \
