@@ -1,0 +1,19 @@
+[Paths]
+Prefix = /usr
+Headers = /usr/include/qt5
+Libraries = /usr/lib
+ArchData = /usr/lib/qt5
+Data = /usr/share/qt5
+Binaries = /usr/bin/qt5
+LibraryExecutables = /usr/lib/qt5/libexec
+Plugins = /usr/lib/qt5/plugins
+Imports = /usr/lib/qt5/imports
+Qml2Imports = /usr/lib/qt5/qml
+Translations = /usr/share/qt5/translations
+Documentation = /usr/share/doc/qt5
+Settings = /etc/qt5
+Examples = /usr/share/qt5/examples
+Tests = /usr/share/qt5/tests
+HostPrefix = ../../..
+HostBinaries = usr/bin/qt5
+HostLibraries = usr/lib
