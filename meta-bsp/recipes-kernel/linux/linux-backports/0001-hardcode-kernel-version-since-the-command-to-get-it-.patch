@@ -17,7 +17,7 @@ index ea3982b..09597e0 100644
  		) > Kconfig.kernel							;\
 -		kver=$$($(MAKE) --no-print-directory -C $(KLIB_BUILD) kernelversion |	\
 -			sed 's/^\(\(3\|2\.6\)\.[0-9]\+\).*/\1/;t;d')			;\
-+		kver=3.7.1			;\
++		kver=3.7			;\
  		test "$$kver" != "" || echo "Kernel version parse failed!"		;\
  		test "$$kver" != ""							;\
  		kvers="$$(seq 14 39 | sed 's/^/2.6./')"					;\
