@@ -66,7 +66,6 @@ RDEPENDS_${PN} += "\
 	tzdata-australia \
 	tzdata-europe \
 	tzdata-pacific \
-	u-boot-env-tools \
 	usbutils \
 	venus-version \
 	watchdog \
