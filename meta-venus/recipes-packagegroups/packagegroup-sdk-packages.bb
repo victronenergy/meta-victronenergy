@@ -5,6 +5,7 @@ PR = "r1"
 
 inherit packagegroup
 
+# note: these end up in the target sysroot of the SDK!
 RDEPENDS_packagegroup-sdk-packages += " \
 	boost-staticdev \
 	lua-staticdev \
@@ -15,8 +16,3 @@ RDEPENDS_packagegroup-sdk-packages += " \
 	u-boot-env-tools-staticdev \
 "
 
-# qtcreator loads python files to gdb needing these..
-RDEPENDS_packagegroup-sdk-packages += " \
-	python-importlib \
-	python-json \
-"
