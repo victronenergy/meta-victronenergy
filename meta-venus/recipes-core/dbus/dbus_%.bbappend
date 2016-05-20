@@ -2,7 +2,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 # note: PRINC is needed in danny/ccgx
 PRINC ?= "666000"
-PRINC := "${@int(PRINC) + 3}"
+PRINC := "${@int(PRINC) + 4}"
 
 SRC_URI += " \
 	file://dbus-daemon-watch.sh \
