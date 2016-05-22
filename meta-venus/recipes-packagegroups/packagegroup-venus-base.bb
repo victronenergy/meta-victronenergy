@@ -9,6 +9,7 @@ LICENSE = "MIT"
 DEPENDS += "\
 	gdb \
 	git \
+	mosquitto \
 	s6 \
 	tcpdump \
 	tmux \
