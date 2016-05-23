@@ -4,7 +4,7 @@ SRC_URI += "file://hiawatha.conf \
            "
 RDEPENDS_${PN} += "php-fpm"
 
-PR = "r6"
+PR = "r7"
 
 SRC_URI += "file://0001-allow-disabling-access-logs.patch"
 
