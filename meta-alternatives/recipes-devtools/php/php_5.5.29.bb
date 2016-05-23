@@ -2,7 +2,7 @@ require php.inc
 
 LIC_FILES_CHKSUM = "file://LICENSE;md5=464ca70af214d2407f6b7d4458158afd"
 
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 
 SRC_URI += " \
 		file://acinclude-xml2-config.patch \
