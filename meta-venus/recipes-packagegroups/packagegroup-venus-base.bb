@@ -46,8 +46,6 @@ RDEPENDS_${PN} += "\
 	linux-firmware-rtl8192cu \
 	localedef \
 	miniupnpc \
-	mtd-utils \
-	mtd-utils-ubifs \
 	nano \
 	ncurses-tools \
 	openssh \
@@ -76,6 +74,13 @@ RDEPENDS_${PN} += "\
 "
 
 RDEPENDS_${PN}_append_ccgx += "\
+	mtd-utils \
+	mtd-utils-ubifs \
 	application \
 	swupdate \
+"
+
+RDEPENDS_${PN}_append_bpp3 += "\
+	mtd-utils \
+	mtd-utils-ubifs \
 "
