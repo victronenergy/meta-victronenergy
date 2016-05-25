@@ -17,7 +17,6 @@ DEPENDS += "\
 "
 
 DEPENDS_append_bpp3 += "\
-	ffmpeg \
 	qtbase \
 	qtserialport \
 "
