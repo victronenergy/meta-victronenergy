@@ -13,8 +13,6 @@ SRC_URI = " \
 
 S = "${WORKDIR}/git"
 
-EXTRA_QMAKEVARS_POST += "DEFINES+=TARGET_ccgx"
-
 DEST_DIR = "${D}${BASE_DIR}"
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "softlimit -d 2000000 -s 1000000 -a 100000000 ${bindir}/${PN}"
