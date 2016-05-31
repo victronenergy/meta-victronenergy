@@ -37,4 +37,11 @@ python do_install () {
         f = open(path + "vedirect_and_console_port", "w")
         f.write(vedirect_and_console_port + "\n")
         f.close()
+
+    # gpio pins with a relay connected
+    relays = d.getVar("VE_RELAYS", True)
+    if relays:
+        f = open(path + "relays", "w")
+        f.write(relays)
+        f.close()
 }
