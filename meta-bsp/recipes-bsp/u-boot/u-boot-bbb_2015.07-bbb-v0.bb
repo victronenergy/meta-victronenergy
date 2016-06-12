@@ -11,6 +11,7 @@ S = "${WORKDIR}/u-boot-2015.07"
 SRC_URI = " \
 	ftp://ftp.denx.de/pub/u-boot/u-boot-2015.07.tar.bz2 \
 	file://0001-Remove-SPL_OS_BOOT-config-option.patch \
+	file://0002-u-boot-am335x-enable-i2c2.patch \
 	file://uEnv.txt \
 "
 SRC_URI[md5sum] = "3dac9a0b46fed77fc768ad3bd2d68c05"
