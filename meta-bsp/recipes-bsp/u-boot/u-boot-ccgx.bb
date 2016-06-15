@@ -8,6 +8,7 @@ SRC_URI += " \
 	file://live.cmds \
 	file://production.cmds \
 	file://recover.cmds \
+	file://upgrade.cmds \
 	file://splash.bgra \
 "
 
@@ -18,6 +19,7 @@ do_compile_append () {
 	mkimage -A arm -T script -C none -n 'Live Script' -d ${WORKDIR}/live.cmds ${WORKDIR}/live.scr
 	mkimage -A arm -T script -C none -n 'Production Script' -d ${WORKDIR}/production.cmds ${WORKDIR}/production.scr
 	mkimage -A arm -T script -C none -n 'Recover Script' -d ${WORKDIR}/recover.cmds ${WORKDIR}/recover.scr
+	mkimage -A arm -T script -C none -n 'Upgrade Script' -d ${WORKDIR}/upgrade.cmds ${WORKDIR}/upgrade.scr
 }
 
 pkg_postinst_${PN}_bpp3 () {
@@ -57,5 +59,6 @@ do_deploy_append () {
 	install ${WORKDIR}/live.scr ${DEPLOY_DIR_IMAGE}
 	install ${WORKDIR}/production.scr ${DEPLOY_DIR_IMAGE}
 	install ${WORKDIR}/recover.scr ${DEPLOY_DIR_IMAGE}
+	install ${WORKDIR}/upgrade.scr ${DEPLOY_DIR_IMAGE}
 	install ${WORKDIR}/splash.bgra ${DEPLOY_DIR_IMAGE}
 }
