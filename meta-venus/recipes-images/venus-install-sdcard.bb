@@ -9,8 +9,8 @@ SDCARD = "${WORKDIR}/sdcard"
 do_install[depends] += " \
 	virtual/bootloader:do_deploy \
 	virtual/kernel:do_deploy \
-	venus-install-initramfs:do_populate_sysroot \
-	venus-swu:do_populate_sysroot \
+	venus-install-initramfs:do_rootfs \
+	venus-swu:do_install \
 "
 
 do_install () {
