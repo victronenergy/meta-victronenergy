@@ -10,6 +10,7 @@ inherit daemontools
 PR = "r1"
 SRC_URI = " \
 	git://github.com/kanaka/websockify.git;protocol=https;tag=${PV} \
+	file://fix-buffer-overflow.patch \
 "
 
 S = "${WORKDIR}/git/other"
