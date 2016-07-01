@@ -12,6 +12,10 @@ python do_install () {
 
     open(path + "files.created.by.machine-conf-runtime", "w")
 
+    f = open(path + "machine", "w")
+    f.write(d.getVar("MACHINE", True) + "\n")
+    f.close()
+
     # headless vs heafull device. Used by gui
     if "headless" in machine_features:
         open(path + "headless", "w")
