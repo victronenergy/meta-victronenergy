@@ -2,6 +2,7 @@ DESCRIPTION = "VE system calculations"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=9b0a9609befce3122afcc444da0fe825"
 
+inherit allarch
 inherit ve_package
 inherit daemontools
 
@@ -10,8 +11,10 @@ inherit daemontools
 SRC_URI = " \
 	gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
 	file://com.victronenergy.system.conf \
+	file://0001-Makefile-add-clean-as-a-target.-Fixes-error-building.patch \
 "
-PR = "r1"
+
+PR = "r2"
 S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \

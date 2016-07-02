@@ -1,0 +1,40 @@
+From 7212b36e777ca9374075612aa23e9b94f384c96f Mon Sep 17 00:00:00 2001
+From: mpvader <mvader@victronenergy.com>
+Date: Sat, 2 Jul 2016 06:26:44 +0000
+Subject: [PATCH] Makefile: add clean as a target. Fixes error building venus
+
+When building venus for multiple machines one after another this error
+comes up:
+NOTE: recipe dbus-systemcalc-py-1.27-r1: task do_configure: Started
+ERROR: oe_runmake failed
+ERROR: Function failed: do_configure (log file is located at /media/ram/builds/a9bbdc1a/0/mvader/venus/build/tmp-glibc/work/cortexa8hf-vfp-neon-ve-linux-gnueabi/dbus-systemcalc-py/1.27-r1/temp/log.do_configure.6729)
+ERROR: Logfile of failure stored in: /media/ram/builds/a9bbdc1a/0/mvader/venus/build/tmp-glibc/work/cortexa8hf-vfp-neon-ve-linux-gnueabi/dbus-systemcalc-py/1.27-r1/temp/log.do_configure.6729
+Log data follows:
+| DEBUG: Executing python function sysroot_cleansstate
+| DEBUG: Python function sysroot_cleansstate finished
+| DEBUG: Executing shell function do_configure
+| NOTE: make -e MAKEFLAGS= clean
+| make: *** No rule to make target 'clean'.  Stop.
+| ERROR: oe_runmake failed
+| ERROR: Function failed: do_configure (log file is located at /media/ram/builds/a9bbdc1a/0/mvader/venus/build/tmp-glibc/work/cortexa8hf-vfp-neon-ve-linux-gnueabi/dbus-systemcalc-py/1.27-r1/temp/log.do_configure.6729)
+NOTE: recipe dbus-systemcalc-py-1.27-r1: task do_configure: Failed
+---
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index a2970d4..857c06a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -17,6 +17,8 @@ VEDLIB_FILES = \
+ 	$(VEDLIBDIR)/settingsdevice.py \
+ 	$(VEDLIBDIR)/dbusmonitor.py
+ 
++clean: ;
++
+ help :
+ 	@ echo "The following make targets are available"
+ 	@ echo " help - print this message"
+-- 
+2.0.2
+
