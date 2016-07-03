@@ -13,6 +13,8 @@ RDEPENDS_packagegroup-sdk-packages += " \
 	packagegroup-core-standalone-sdk-target \
 	packagegroup-venus-base-dev \
 	qt4-embedded-mkspecs \
-	u-boot-env-tools-staticdev \
 "
 
+# swu related builds with NAND env
+RDEPENDS_packagegroup-sdk-packages_append_bpp3 += "u-boot-env-tools-staticdev"
+RDEPENDS_packagegroup-sdk-packages_append_ccgx += "u-boot-env-tools-staticdev"
