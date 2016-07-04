@@ -1,6 +1,6 @@
 DESCRIPTION = "additional system packages"
 
-PR = "r16"
+PR = "r17"
 
 inherit packagegroup
 LICENSE = "MIT"
@@ -56,6 +56,7 @@ RDEPENDS_${PN} += "\
 	screen \
 	simple-upnpd \
 	strace \
+	sysctl-conf \
 	tzdata \
 	tzdata-africa \
 	tzdata-americas \
