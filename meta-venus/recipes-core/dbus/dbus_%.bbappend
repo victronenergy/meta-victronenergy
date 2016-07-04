@@ -2,7 +2,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 # note: PRINC is needed in danny/ccgx
 PRINC ?= "666000"
-PRINC := "${@int(PRINC) + 4}"
+PRINC := "${@int(PRINC) + 5}"
 
 SRC_URI += " \
 	file://dbus-daemon-watch.sh \
@@ -17,4 +17,7 @@ RDEPENDS_${PN}_venus = "inotify-tools"
 do_install_append_venus() {
     install ${WORKDIR}/dbus-daemon-watch.sh ${D}${bindir}/dbus-daemon-watch.sh
     install -m 0644 ${WORKDIR}/system.conf ${D}${sysconfdir}/dbus-1/system.conf
+
+    # note: libexecdir differs between danny and yethro, hence sed it..
+    sed -i -e "s:@libexecdir@:${libexecdir}:" ${D}${sysconfdir}/dbus-1/system.conf
 }
