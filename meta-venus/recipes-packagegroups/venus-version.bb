@@ -24,6 +24,8 @@ do_install () {
 	install -m 0755 ${WORKDIR}/postupgrade.sh ${D}/${sysconfdir}/init.d
 }
 
+do_install[vardeps] += "DATETIME"
+do_install[nostamp] = "1"
 do_install[vardepsexclude] = "BUILDNAME"
 
 pkg_postinst_${PN}_venus () {
