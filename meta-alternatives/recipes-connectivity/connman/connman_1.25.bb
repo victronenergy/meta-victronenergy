@@ -13,7 +13,11 @@ SRC_URI  = "https://www.kernel.org/pub/linux/network/connman/connman-${PV}.tar.x
 SRC_URI[md5sum] = "a449d2e49871494506e48765747e6624"
 SRC_URI[sha256sum] = "c1d266d6be18d2f66231f3537a7ed17b57637ca43c27328bc13c508cbeacce6e"
 
-PR = "${INC_PR}.1"
+PR = "${INC_PR}.2"
+
+do_configure_append() {
+	sed -i -e 's:\$(localstatedir)/lib:/data:' ${S}/Makefile
+}
 
 do_install_append() {
 	install -d ${D}${sysconfdir}/connman
@@ -26,6 +30,11 @@ pkg_postinst_${PN}() {
 		echo "Removing ntpdate-sync cronjob"
 		croncmd="/usr/bin/ntpdate-sync"
 		( crontab -l | grep -v "$croncmd" ) | crontab -
+
+		# migrate settings
+		if [ -d /var/lib/connman -a ! -d /data/connman ]; then
+			mv /var/lib/connman /data
+		fi
 	fi
 }
 
