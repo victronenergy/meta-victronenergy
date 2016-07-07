@@ -13,10 +13,10 @@ SRC_URI  = "https://www.kernel.org/pub/linux/network/connman/connman-${PV}.tar.x
 SRC_URI[md5sum] = "a449d2e49871494506e48765747e6624"
 SRC_URI[sha256sum] = "c1d266d6be18d2f66231f3537a7ed17b57637ca43c27328bc13c508cbeacce6e"
 
-PR = "${INC_PR}.2"
+PR = "${INC_PR}.3"
 
 do_configure_append() {
-	sed -i -e 's:\$(localstatedir)/lib:/data:' ${S}/Makefile
+	sed -i -e 's:\$(localstatedir)/lib:/data:' ${B}/Makefile
 }
 
 do_install_append() {
