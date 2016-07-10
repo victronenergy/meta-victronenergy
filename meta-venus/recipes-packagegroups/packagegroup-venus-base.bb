@@ -1,6 +1,6 @@
 DESCRIPTION = "additional system packages"
 
-PR = "r17"
+PR = "r18"
 
 inherit packagegroup
 LICENSE = "MIT"
@@ -45,7 +45,6 @@ RDEPENDS_${PN} += "\
 	linux-firmware-rt73 \
 	linux-firmware-rtl8192cu \
 	localedef \
-	miniupnpc \
 	nano \
 	ncurses-tools \
 	openssh \
