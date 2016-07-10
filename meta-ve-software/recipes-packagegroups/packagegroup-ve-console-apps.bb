@@ -11,7 +11,6 @@ RDEPENDS_${PN} += " \
 	dbus-vebus-to-pvinverter \
 	javascript-vnc-client \
 	localsettings \
-	simple-upnpd \
 "
 
 

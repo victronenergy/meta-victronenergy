@@ -17,11 +17,6 @@ DEPENDS += "\
 	vim \
 "
 
-DEPENDS_append_bpp3 += "\
-	qtbase \
-	qtserialport \
-"
-
 RDEPENDS_${PN} += "\
 	bash \
 	bsdiff \
@@ -53,7 +48,6 @@ RDEPENDS_${PN} += "\
 	opkg-collateral \
 	rsync \
 	screen \
-	simple-upnpd \
 	strace \
 	sysctl-conf \
 	tzdata \
@@ -71,16 +65,4 @@ RDEPENDS_${PN} += "\
 	watchdog \
 	websockify-c \
 	zip \
-"
-
-RDEPENDS_${PN}_append_ccgx += "\
-	mtd-utils \
-	mtd-utils-ubifs \
-	application \
-	swupdate \
-"
-
-RDEPENDS_${PN}_append_bpp3 += "\
-	mtd-utils \
-	mtd-utils-ubifs \
 "
