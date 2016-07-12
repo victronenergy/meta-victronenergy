@@ -31,6 +31,7 @@ RDEPENDS_${PN} += "\
 	dbus-tools \
 	e2fsprogs \
 	eglibc-utils \
+	gdbserver \
 	iproute2 \
 	iw \
 	javascript-vnc-client \
@@ -48,6 +49,7 @@ RDEPENDS_${PN} += "\
 	opkg-collateral \
 	rsync \
 	screen \
+	socat \
 	strace \
 	sysctl-conf \
 	tzdata \
