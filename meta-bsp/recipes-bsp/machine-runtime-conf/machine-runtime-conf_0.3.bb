@@ -3,49 +3,26 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+PR = "r3"
 
-python do_install () {
-    machine_features = set(d.getVar("MACHINE_FEATURES", True).split())
+do_install_append() {
+	conf=${D}${sysconfdir}/venus
+	mkdir -p $conf
 
-    path = d.getVar("D", True) + d.getVar("sysconfdir", True) + "/venus/"
-    os.makedirs(path)
+	echo ${MACHINE} > $conf/machine
 
-    open(path + "files.created.by.machine-conf-runtime", "w")
+	if [ -n "${@bb.utils.contains("MACHINE_FEATURES", "headless", "1", "", d)}" ]; then touch $conf/headless; fi
 
-    f = open(path + "machine", "w")
-    f.write(d.getVar("MACHINE", True) + "\n")
-    f.close()
+	# mk2/mk3 port. Used by vecan-dbus aka mk2-dbus, as well as mk2vsc and some more
+	if [ -n "${VE_MKX_PORT}" ]; then echo ${VE_MKX_PORT} > $conf/mkx_port; fi
 
-    # headless vs heafull device. Used by gui
-    if "headless" in machine_features:
-        open(path + "headless", "w")
+	# vedirect ports. Used by serialstarter script
+	if [ -n "${VE_VEDIRECT_PORTS}" ]; then echo ${VE_VEDIRECT_PORTS} > $conf/vedirect_ports; fi
 
-    # mk2/mk3 port. Used by vecan-dbus aka mk2-dbus, as well as mk2vsc and some more
-    mkx_port = d.getVar("VE_MKX_PORT", True)
-    if mkx_port:
-        f = open(path + "mkx_port", "w")
-        f.write(mkx_port + "\n")
-        f.close()
+	# vedirect port which is also used as console port. Like on ccgx/bbp3. Used
+	# by the serial starter script.
+	if [ -n "${VE_VEDIRECT_AND_CONSOLE_PORT}" ]; then echo ${VE_VEDIRECT_AND_CONSOLE_PORT} >  $conf/vedirect_and_console_port; fi
 
-    # vedirect ports. Used by serialstarter script
-    vedirect_ports = d.getVar("VE_VEDIRECT_PORTS", True)
-    if vedirect_ports:
-        f = open(path + "vedirect_ports", "w")
-        f.write(vedirect_ports + "\n")
-        f.close()
-
-    # vedirect port which is also used as console port. Like on ccgx/bbp3. Used
-    # by the serial starter script.
-    vedirect_and_console_port = d.getVar("VE_VEDIRECT_AND_CONSOLE_PORT", True)
-    if vedirect_and_console_port:
-        f = open(path + "vedirect_and_console_port", "w")
-        f.write(vedirect_and_console_port + "\n")
-        f.close()
-
-    # gpio pins with a relay connected
-    relays = d.getVar("VE_RELAYS", True)
-    if relays:
-        f = open(path + "relays", "w")
-        f.write(relays)
-        f.close()
+	# gpio pins with a relay connected
+	if [ -n "${VE_RELAYS}" ]; then echo ${VE_RELAYS} > $conf/relays; fi
 }
