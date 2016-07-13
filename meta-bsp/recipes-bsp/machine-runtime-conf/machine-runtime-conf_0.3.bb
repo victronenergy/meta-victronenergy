@@ -3,7 +3,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-PR = "r3"
+PR = "r4"
 
 do_install_append() {
 	conf=${D}${sysconfdir}/venus
@@ -25,4 +25,6 @@ do_install_append() {
 
 	# gpio pins with a relay connected
 	if [ -n "${VE_RELAYS}" ]; then echo ${VE_RELAYS} > $conf/relays; fi
+
+	if [ -n "${VE_BUZZER}" ]; then echo ${VE_BUZZER} > $conf/buzzer; fi
 }
