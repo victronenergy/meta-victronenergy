@@ -1,6 +1,7 @@
 require connman.inc
 
-VELIB_DEFAULT_DIRS = "1" # do no adjust dirs, only import them
+# do no adjust dirs, only import them
+VELIB_DEFAULT_DIRS = "1"
 inherit ve_package
 
 SRC_URI  = "https://www.kernel.org/pub/linux/network/connman/connman-${PV}.tar.xz \
