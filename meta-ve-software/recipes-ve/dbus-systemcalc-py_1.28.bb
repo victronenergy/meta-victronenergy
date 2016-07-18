@@ -11,10 +11,8 @@ inherit daemontools
 SRC_URI = " \
 	gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
 	file://com.victronenergy.system.conf \
-	file://0001-Makefile-add-clean-as-a-target.-Fixes-error-building.patch \
 "
 
-PR = "r2"
 S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \
