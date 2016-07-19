@@ -13,6 +13,8 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 # it will be ensured they are built before creating swupdate image
 IMAGE_DEPENDS = "venus-image"
 
+IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}"
+
 # SWUPDATE_IMAGES: list of images that will be part of the compound image
 # the list can have any binaries - images must be in the DEPLOY directory
 SWUPDATE_IMAGES = "venus-image uImage u-boot.img MLO splash.bgra"
