@@ -63,6 +63,7 @@ RDEPENDS_${PN} += "\
 	tzdata-europe \
 	tzdata-pacific \
 	usbutils \
+	venus-feed-configs \
 	venus-version \
 	watchdog \
 	websockify-c \
