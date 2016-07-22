@@ -9,7 +9,6 @@ LICENSE = "MIT"
 DEPENDS += "\
 	gdb \
 	git \
-	mosquitto \
 	packagegroup-core-buildessential \
 	s6 \
 	tcpdump \
