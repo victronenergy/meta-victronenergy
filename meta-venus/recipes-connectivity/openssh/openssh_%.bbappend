@@ -2,10 +2,11 @@ FILESEXTRAPATHS_prepend := "${THISDIR}:"
 
 # note: PRINC is needed in danny/ccgx
 PRINC ?= "666000"
-PRINC := "${@int(PRINC) + 21}"
+PRINC := "${@int(PRINC) + 22}"
 
 inherit daemontools
 
+DAEMON_PN = "${PN}-sshd"
 DAEMONTOOLS_SERVICE_DIR = "/etc/ssh/service"
 DAEMONTOOLS_RUN = "${bindir}/start-sshd.sh"
 DAEMONTOOLS_DOWN = "1"
