@@ -18,6 +18,7 @@ DAEMONTOOLS_LOG_DIR_PREFIX_bpp3 = "/log"
 python () {
 	pkg = d.getVar('DAEMON_PN', True)
 	d.appendVar('RDEPENDS_' + pkg, ' ${DAEMONTOOLS}')
+	d.appendVar('FILES_' + pkg, ' ${DAEMONTOOLS_SERVICES_DIR} ${DAEMONTOOLS_SERVICE_DIR}')
 }
 
 DAEMONTOOLS_preinst() {
@@ -141,5 +142,4 @@ do_install_append() {
 	ln -s ${DAEMONTOOLS_SERVICE_DIR} ${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}
 }
 
-FILES_${PN} += "${DAEMONTOOLS_SERVICES_DIR}"
 
