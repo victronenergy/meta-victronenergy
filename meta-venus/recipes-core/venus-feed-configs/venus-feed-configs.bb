@@ -12,12 +12,10 @@ DISTRO_FEED_DIR = "venus/${COREVERSION}/develop"
 DISTRO_FEED_URI ?= "https://updates.victronenergy.com/feeds/${DISTRO_FEED_DIR}"
 DISTRO_FEED_ARCHS ?= "all ${PACKAGE_EXTRA_ARCHS} ${MACHINE_ARCH}"
 
-SRC_URI += "file://set-feed.sh"
-
 do_compile() {
 	echo -n > ${S}/opkg.conf
 	for feed in ${DISTRO_FEED_ARCHS}; do
-		echo "src/gz ${DISTRO_FEED_URI}/${feed}" >> ${S}/opkg.conf
+		echo "src/gz ${feed} ${DISTRO_FEED_URI}/${feed}" >> ${S}/opkg.conf
 	done
 }
 
