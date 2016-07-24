@@ -20,7 +20,7 @@ do_compile_append () {
 	mkimage -A arm -T script -C none -n 'Recover Script' -d ${WORKDIR}/recover.cmds ${WORKDIR}/recover.scr
 }
 
-pkg_postinst_${PN} () {
+pkg_postinst_${PN}_bpp3 () {
     if [ "x$D" == "x" ]; then
         if [ -e /proc/mtd ]; then
             MTD_DEV=`grep u-boot /proc/mtd`
