@@ -2,5 +2,6 @@
 # because such projects must be compiled again for each MACHINE.
 VELIB_TARGET ??= "${MACHINE}"
 VELIB_TARGET_bpp3 = "ccgx"
+VELIB_TARGET_ccgxhf = "ccgx"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 EXTRA_OEMAKE += "TARGET=${VELIB_TARGET}"
