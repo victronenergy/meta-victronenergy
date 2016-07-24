@@ -6,11 +6,14 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 SDCARD = "${WORKDIR}/sdcard"
 
+SWU = "venus-swu"
+SWU_ccgx = "bpp3-rootfs-swu"
+
 do_install[depends] += " \
 	virtual/bootloader:do_deploy \
 	virtual/kernel:do_deploy \
 	venus-install-initramfs:do_rootfs \
-	venus-swu:do_install \
+	${SWU}:do_install \
 "
 
 do_install () {
@@ -24,7 +27,7 @@ do_install () {
 	cp ${DEPLOY_DIR_IMAGE}/u-boot.img ${SDCARD}
 	cp ${DEPLOY_DIR_IMAGE}/${INITRD_IMAGE} ${SDCARD}/initramfs
 	cp ${DEPLOY_DIR_IMAGE}/fatload-initramfs.scr ${SDCARD}/boot.scr
-	cp ${DEPLOY_DIR_IMAGE}/venus-swu-${MACHINE}.swu ${SDCARD}/venus.swu
+	cp ${DEPLOY_DIR_IMAGE}/${SWU}-${MACHINE}.swu ${SDCARD}/venus.swu
 
 	zip -rj ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
 	if [ -e ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.zip ]; then
