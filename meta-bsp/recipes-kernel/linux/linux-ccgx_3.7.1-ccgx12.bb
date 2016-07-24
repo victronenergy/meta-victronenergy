@@ -29,7 +29,7 @@ PR = "r2"
 
 S = "${WORKDIR}/linux-${PV}"
 
-pkg_postinst_kernel-base_append() {
+pkg_postinst_kernel-base_append_bpp3() {
 	if [ "x$D" = "x" ]; then
 		if [ -e /proc/mtd ]; then
 			LINUX_DEV=`grep \"kernel\" /proc/mtd | awk -F: '{print $1}'`
