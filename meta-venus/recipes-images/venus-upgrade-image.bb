@@ -6,7 +6,7 @@ DESCRIPTION = " \
 	not completely reflash the device. Settings / logs etc are kept. Furthermore \
 	it should survive power cuts / card removal etc (or at least be able to resume). \
 	\
-	On a color control it should not modify the bootloader (at least not with
+	On a color control it should not modify the bootloader (at least not with \
 	extreme care) since booting the upgrade image depends on the bootloader in NAND! \
 "
 INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.ext2.gz.u-boot"
