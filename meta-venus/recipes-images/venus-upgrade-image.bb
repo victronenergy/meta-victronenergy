@@ -9,7 +9,7 @@ DESCRIPTION = " \
 	On a color control it should not modify the bootloader (at least not with \
 	extreme care) since booting the upgrade image depends on the bootloader in NAND! \
 "
-INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.ext2.gz.u-boot"
+INITRD_IMAGE = "venus-upgrade-initramfs-${MACHINE}.ext2.gz.u-boot"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 SDCARD = "${WORKDIR}/sdcard"
