@@ -42,7 +42,7 @@ remove_locale_data_files() {
 }
 
 add_program_instructions() {
-	if [ "${SWUPDATE_INIT}" = "tiny"]; then
+	if [ "${SWUPDATE_INIT}" = "tiny" ]; then
 		install ${WORKDIR}/swupdate ${IMAGE_ROOTFS}/${base_sbindir}/init
 	else
 		cp ${WORKDIR}/swupdate ${IMAGE_ROOTFS}${sysconfdir}/init.d
