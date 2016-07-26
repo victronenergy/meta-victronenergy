@@ -61,7 +61,7 @@ if ubiattach -m 13 -d 1; then
     ubidetach -m 13
 fi
 
-# NOTE: this formats above data parition as well...
+# NOTE: this formats above data partition as well...
 # XXX: should this always be done, or only when converting?
 if ! ubiattach -m 12; then
     msg "Formatting UBI partition..."
@@ -72,27 +72,6 @@ if ! ubiattach -m 12; then
     ubimkvol /dev/ubi0 -N data -s 32MiB
 fi
 
-# NOTE: while the mtd partitions number differ for the bpp3/ccgx, their location
-# is the same. There is no valid reason this should fail.
-case $(fw_printenv -n mtdparts 2>&1) in
-    *Bad\ CRC*)  uboot=none ;;  # invalid environment
-    *data*)      uboot=old  ;;  # pre-swupdate software
-esac
-
-if [ "$uboot" = none ]; then
-    msg "The boot loader seems corrupt, please contact victronenergy..."
-    pause
-fi
-
-if fw_printenv upd_mode >/dev/null 2>&1; then
-    uboot=old                   # pre-swupdate u-boot with new software
-fi
-
-# XXX: why?
-#msg "Erasing u-boot environment..."
-#flash_erase /dev/mtd5 0 0
-#flash_erase /dev/mtd6 0 0
-
 # -b '0..!12..13' tells swupdate ubi volume is on mtd 12 (all others are blacklisted)
 set -- -b "0 1 2 3 4 5 6 7 8 9 10 11 13" -i ${SWU}
 
@@ -102,14 +81,8 @@ swupdate "$@" -e "stable,copy1"
 msg "Installing rootfs2..."
 swupdate "$@" -e "stable,copy2"
 
-if [ "$uboot" = old ]; then
-    preboot=$(fw_printenv -n preboot)
-    # CHECKME: there are more preboot script for ve-direct iirc
-    fw_setenv -s - <<-EOF
-	preboot nand read 8fe00000 splash 7f800; $preboot
-	upd_mode 1
-	EOF
-fi
+msg "updating boot instructions..."
+fw_setenv -s /usr/share/u-boot/u-boot.env
 
 if [ -e ${DATA} ]; then
     msg "Restoring data partition..."
@@ -118,7 +91,8 @@ if [ -e ${DATA} ]; then
     umount /data
     rm -f ${DATA}
 
-    #XXX, program ml02,3,4
+    msg "installing redundant primary loaders..."
+    swupdate "$@" -e "stable,backup-mlo"
 fi
 
 ubidetach -m 12
