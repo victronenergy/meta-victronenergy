@@ -21,7 +21,7 @@ do_compile() {
 
 do_install () {
 	install -d ${D}${sysconfdir}/opkg
-	install -m 0644 ${S}/opkg.conf ${D}${sysconfdir}/opkg/
+	install -m 0644 ${S}/opkg.conf ${D}${sysconfdir}/opkg/venus.conf
 }
 
 do_deploy () {
