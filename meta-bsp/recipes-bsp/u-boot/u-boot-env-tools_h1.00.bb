@@ -10,6 +10,7 @@ PR = "r0"
 inherit autotools
 
 SRC_URI += "file://fw_env.config"
+SRC_URI_append_ccgx += "file://u-boot.env"
 
 # name as used by OE
 PROVIDES += "u-boot-fw-utils"
@@ -33,7 +34,14 @@ do_install () {
 	install -m 644 ${S}/tools/env/libubootenv.a ${D}${libdir}
 }
 
+do_install_append_ccgx() {
+	mkdir -p ${D}${datadir}/u-boot
+	install ${WORKDIR}/u-boot.env ${D}${datadir}/u-boot
+}
+
 do_install_append_bpp3 () {
 	# FIXME, opkg fails to replace this, since base-files used to install it.
 	rm ${D}${sysconfdir}/fw_env.config
 }
+
+FILES_${PN} += "${datadir}"

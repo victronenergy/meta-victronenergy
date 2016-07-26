@@ -12,6 +12,7 @@ SRC_URI += " \
 	file://splash.bgra \
 "
 
+# NOTE: the swu version set the u-boot env, see u-boot-env-tools!
 RDEPENDS_${PN} += "u-boot-env-tools"
 
 do_compile_append () {
