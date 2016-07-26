@@ -28,5 +28,5 @@ do_deploy () {
 	echo ${DISTRO_FEED_DIR} > ${DEPLOY_DIR}/upload-ipk
 }
 
-CONFFILES_${PN} += "${sysconfdir}/opkg/opkg.conf"
+CONFFILES_${PN} += "${sysconfdir}/opkg/venus.conf"
 
