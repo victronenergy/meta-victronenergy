@@ -21,7 +21,7 @@ do_install[depends] += " \
 	virtual/bootloader:do_deploy \
 	virtual/kernel:do_deploy \
 	venus-upgrade-initramfs:do_rootfs \
-	${SWU}:do_install \
+	${SWU}:do_createlink \
 "
 
 do_install () {
