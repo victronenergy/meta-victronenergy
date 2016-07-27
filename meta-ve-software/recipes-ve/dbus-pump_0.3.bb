@@ -4,9 +4,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=9b0a9609befce3122afcc444da0fe825"
 inherit ve_package
 inherit daemontools
 
-# ccgx only, hardcoded gpio pins!
-inherit velib_target
-
 SRC_URI = " \
 	gitsm://github.com/victronenergy/dbus_pump.git;protocol=https;tag=v${PV} \
 	file://com.victronenergy.pump.conf \
@@ -26,7 +23,7 @@ RDEPENDS_${PN} = " \
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "softlimit -d 2000000 -s 1000000 -a 100000000 ${bindir}/dbus_pump.py"
 DAEMONTOOLS_DOWN = "1"
- 
+
 do_install () {
 	install -d ${D}${bindir}
 	cp -r ${S}/* ${D}${bindir}
