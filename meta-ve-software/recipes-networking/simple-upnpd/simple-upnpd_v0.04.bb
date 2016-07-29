@@ -2,10 +2,11 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 DESCRIPTION = "Daemon which only announces the device its presence over upnp"
-PR = "r4"
+PR = "r5"
 
 DEPENDS += "gupnp"
 RDEPENDS_${PN} = "glib-2.0 gupnp"
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 S = "${WORKDIR}/git"
 
@@ -28,6 +29,7 @@ do_install() {
 
 	install -m 0755 ${S}/simple-upnpd ${D}/${base_bindir}
 	install -m 0755 ${WORKDIR}/simple-upnpd.skeleton.xml ${D}/${sysconfdir}
+	sed -i "s/:::MACHINE:::/${MACHINE}/g" ${D}${sysconfdir}/simple-upnpd.skeleton.xml
 	install -m 0755 ${WORKDIR}/simple-upnpd ${D}${sysconfdir}/init.d
 }
 
