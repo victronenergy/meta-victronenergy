@@ -24,6 +24,8 @@ do_install () {
 	install -m 0755 ${WORKDIR}/postupgrade.sh ${D}/${sysconfdir}/init.d
 }
 
+do_install[vardepsexclude] = "BUILDNAME"
+
 pkg_postinst_${PN}_venus () {
 	if [ "x$D" = "x" ]; then
 		ln -s ${sysconfdir}/init.d/postupgrade.sh ${sysconfdir}/rc5.d/S25postupgrade
