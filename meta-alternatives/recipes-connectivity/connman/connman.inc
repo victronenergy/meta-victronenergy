@@ -15,9 +15,9 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=12f884d2ae1ff87c09e5b7ccc2c4ca7e \
 
 # we need to define the depends here, the dynamic stuff is too late
 DEPENDS  = "dbus glib-2.0 ppp iptables gnutls \
-            ${@base_contains('DISTRO_FEATURES', 'bluetooth','bluez4', '', d)} \
-            ${@base_contains('DISTRO_FEATURES', 'wifi','wpa-supplicant', '', d)} \
-            ${@base_contains('DISTRO_FEATURES', '3g','ofono', '', d)} \
+            ${@bb.utils.contains('DISTRO_FEATURES', 'bluetooth','bluez4', '', d)} \
+            ${@bb.utils.contains('DISTRO_FEATURES', 'wifi','wpa-supplicant', '', d)} \
+            ${@bb.utils.contains('DISTRO_FEATURES', '3g','ofono', '', d)} \
             "
 
 INC_PR = "r2"
@@ -31,9 +31,9 @@ EXTRA_OECONF += "\
     --enable-debug \
     --enable-loopback \
     --enable-ethernet \
-    ${@base_contains('DISTRO_FEATURES', 'wifi','--enable-wifi ${TIST}', '--disable-wifi', d)} \
-    ${@base_contains('DISTRO_FEATURES', 'bluetooth','--enable-bluetooth ${TIST}', '--disable-bluetooth', d)} \
-    ${@base_contains('DISTRO_FEATURES', '3g', '', '--disable-ofono', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'wifi','--enable-wifi ${TIST}', '--disable-wifi', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'bluetooth','--enable-bluetooth ${TIST}', '--disable-bluetooth', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', '3g', '', '--disable-ofono', d)} \
     --enable-tools \
     --enable-test \
     --enable-client \
@@ -84,16 +84,16 @@ do_install_append() {
 RPROVIDES_${PN} = "\
 	connman-plugin-loopback \
 	connman-plugin-ethernet \
-	${@base_contains('DISTRO_FEATURES', 'bluetooth','connman-plugin-bluetooth', '', d)} \
-	${@base_contains('DISTRO_FEATURES', 'wifi','connman-plugin-wifi', '', d)} \
-	${@base_contains('DISTRO_FEATURES', '3g','connman-plugin-ofono', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'bluetooth','connman-plugin-bluetooth', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'wifi','connman-plugin-wifi', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', '3g','connman-plugin-ofono', '', d)} \
 	"
 
 RDEPENDS_${PN} = "\
 	dbus \
-	${@base_contains('DISTRO_FEATURES', 'bluetooth', 'bluez4', '', d)} \
-	${@base_contains('DISTRO_FEATURES', 'wifi','wpa-supplicant', '', d)} \
-	${@base_contains('DISTRO_FEATURES', '3g','ofono', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'bluetooth', 'bluez4', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'wifi','wpa-supplicant', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', '3g','ofono', '', d)} \
 	"
 
 PACKAGES_DYNAMIC = "${PN}-plugin-*"
