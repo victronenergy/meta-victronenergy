@@ -10,7 +10,10 @@ inherit daemontools
 
 RDEPENDS_${PN} = "mosquitto"
 
-SRC_URI = " gitsm://github.com/victronenergy/dbus-mqtt.git;protocol=https;tag=v${PV}"
+SRC_URI = " \
+	gitsm://github.com/victronenergy/dbus-mqtt.git;protocol=https;tag=v${PV} \
+	file://0001-add-dummy-distclean.patch \
+"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
