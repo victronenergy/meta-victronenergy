@@ -35,7 +35,7 @@ do_install() {
 
 pkg_postinst_${PN}() {
 	if [ "x$D" = "x" ]; then
-		hwaddr=`ifconfig | grep "eth0.*HWaddr" | awk '{print $(NF)}'`
+		hwaddr=`ifconfig -a | grep "eth0.*HWaddr" | awk '{print $(NF)}'`
 		cat ${sysconfdir}/simple-upnpd.skeleton.xml | sed "s/:::MAC:::/${hwaddr}/g" > ${sysconfdir}/simple-upnpd.xml
 	else
 		exit 1
