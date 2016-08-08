@@ -23,23 +23,15 @@
 # link the file defined as /var/test will actually be created as /tmp/testfile.
 d root root 1777 /run/lock none
 
-# Create file structure on VE data partition
-d root root 1777 /data/conf none
-d root root 1777 /data/db none
-d root root 1777 /data/log none
-
-# keep /data/log and /log as long as not all recipes have been changed.
-l root root 1777 /log /data/log
-
-# Used by hiawatha and perhaps other programs
+# Venus: for use of hiawatha and other programs whose logs need not to be stored
 d root root 0755 /var/volatile/log none
-
-# Used by all applications, including VE ones. They log to /var/log, which is
-# then saved on the data partition
-l root root 0755 /var/log /data/log
-
 d root root 1777 /var/volatile/tmp none
 l root root 1777 /var/lock /run/lock
+
+# Venus: use /data/log to store the logs. Services should use the /var/log link,
+# and not write to /data/log directly!
+d root root 0755 /data/log none
+l root root 0755 /var/log /data/log
 l root root 0755 /var/run /run
 l root root 1777 /var/tmp /var/volatile/tmp
 l root root 1777 /tmp /var/tmp

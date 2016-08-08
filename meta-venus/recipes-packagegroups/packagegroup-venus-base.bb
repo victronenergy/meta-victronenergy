@@ -46,6 +46,7 @@ RDEPENDS_${PN} += "\
 	openssh-sftp-server \
 	opkg \
 	opkg-collateral \
+	permanent-storage \
 	rsync \
 	screen \
 	socat \
