@@ -6,7 +6,6 @@ inherit allarch
 inherit ve_package
 inherit daemontools
 
-PR = "r16"
 SRC_URI = " \
 	gitsm://github.com/victronenergy/localsettings.git;protocol=https;tag=v${PV} \
 	file://set_setting.sh \
