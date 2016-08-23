@@ -11,7 +11,6 @@ inherit allarch
 DEPENDS = "base-passwd"
 RDEPENDS_${PN} = "hiawatha"
 
-PR = "r1"
 SRC_URI = " \
 	file://javascript-vnc-client.conf \
 	gitsm://github.com/victronenergy/javascript-vnc-client.git;protocol=https;tag=${PV} \
