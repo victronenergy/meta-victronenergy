@@ -8,6 +8,9 @@ SDCARD = "${WORKDIR}/sdcard"
 
 DTB_beaglebone = "${KERNEL_IMAGETYPE}-bbb-venus.dtb"
 
+SCR = "fatload-initramfs.scr"
+SCR_beaglebone = "install-${MACHINE}.scr"
+
 SWU = "venus-swu"
 SWU_ccgx = "bpp3-rootfs-swu"
 
@@ -28,7 +31,7 @@ do_install () {
 	cp ${DEPLOY_DIR_IMAGE}/MLO ${SDCARD}
 	cp ${DEPLOY_DIR_IMAGE}/u-boot.img ${SDCARD}
 	cp ${DEPLOY_DIR_IMAGE}/${INITRD_IMAGE} ${SDCARD}/initramfs
-	cp ${DEPLOY_DIR_IMAGE}/fatload-initramfs.scr ${SDCARD}/boot.scr
+	cp ${DEPLOY_DIR_IMAGE}/${SCR} ${SDCARD}/boot.scr
 	cp ${DEPLOY_DIR_IMAGE}/${SWU}-${MACHINE}.swu ${SDCARD}/venus.swu
 	if [ -n "${DTB}" ]; then
 		cp ${DEPLOY_DIR_IMAGE}/${DTB} ${SDCARD}
