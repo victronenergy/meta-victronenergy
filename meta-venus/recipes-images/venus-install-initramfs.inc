@@ -1,5 +1,7 @@
 SUMMARY = "rootfs to flash an image"
 
+SWUPDATE_INIT ?= "tiny"
+
 IMAGE_INSTALL = " \
 	base-files \
 	base-passwd \

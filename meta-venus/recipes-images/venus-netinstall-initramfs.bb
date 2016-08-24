@@ -1,5 +1,7 @@
 require venus-install-initramfs.inc
 
+SWUPDATE_INIT = "sysvinit"
+
 SRC_URI += "file://interfaces"
 
 IMAGE_INSTALL += " \
