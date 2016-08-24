@@ -6,10 +6,10 @@
 # NOTE: YOU ARE NOT ALLOWED TO USE THIS NAME UNTILL THIS FEATURE IS ALSO
 # IMPLEMENTED ON OTHER PLATFORMS. (Ask Matthijs :).
 
-# Relay 1   P8.10 / GPIO 2_4
-68  out relay_1
-# Relay 2   P8.8 / GPIO 2_3
-67  out relay_2
+# Relay 1   P8.8 / GPIO 2_3
+67  out relay_1
+# Relay 2   P8.10 / GPIO 2_4
+68  out relay_2
 
 # Pulse Counter 0   P8.16 / GPIO 1_14
 46  out pulse_ctr_0
