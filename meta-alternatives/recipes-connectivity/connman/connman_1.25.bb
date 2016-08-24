@@ -1,6 +1,6 @@
 require connman.inc
 
-# do no adjust dirs, only import them
+# do not adjust dirs, only import them
 VELIB_DEFAULT_DIRS = "1"
 inherit ve_package
 
@@ -17,7 +17,7 @@ SRC_URI  = "https://www.kernel.org/pub/linux/network/connman/connman-${PV}.tar.x
 SRC_URI[md5sum] = "a449d2e49871494506e48765747e6624"
 SRC_URI[sha256sum] = "c1d266d6be18d2f66231f3537a7ed17b57637ca43c27328bc13c508cbeacce6e"
 
-PR = "${INC_PR}.4"
+PR = "${INC_PR}.8"
 
 do_configure_append() {
 	sed -i -e 's:\$(localstatedir)/lib:${permanentlocalstatedir}/lib:' ${B}/Makefile
