@@ -1,0 +1,47 @@
+From f96245c3d764efcae5d7c7ffd9f041c39d8a4e4d Mon Sep 17 00:00:00 2001
+From: Stefano Babic <sbabic@denx.de>
+Date: Fri, 30 Oct 2015 14:57:04 +0100
+Subject: [PATCH] Allow fw env tools to be available as library
+
+Sometimes it can be useful to link the fw_ tools instead
+of having the fw_setenv/fw_printenv installed.
+Patch exports the tool as library and allowes to link it
+with own programs.
+
+Signed-off-by: Stefano Babic <sbabic@denx.de>
+CC: Tom Rini <trini@konsulko.com>
+Reviewed-by: Tom Rini <trini@konsulko.com>
+---
+ tools/env/Makefile | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/tools/env/Makefile b/tools/env/Makefile
+index 40164f7a35fa..95b28c0b3a3c 100644
+--- a/tools/env/Makefile
++++ b/tools/env/Makefile
+@@ -8,7 +8,7 @@
+ # fw_printenv is supposed to run on the target system, which means it should be
+ # built with cross tools. Although it may look weird, we only replace "HOSTCC"
+ # with "CC" here for the maximum code reuse of scripts/Makefile.host.
+-HOSTCC = $(CC)
++override HOSTCC = $(CC)
+ 
+ # Compile for a hosted environment on the target
+ HOST_EXTRACFLAGS  = $(patsubst -I%,-idirafter%, $(filter -I%, $(UBOOTINCLUDE))) \
+@@ -23,10 +23,12 @@ endif
+ always := fw_printenv
+ hostprogs-y := fw_printenv
+ 
+-fw_printenv-objs := fw_env.o fw_env_main.o \
++lib-y += fw_env.o \
+ 	crc32.o ctype.o linux_string.o \
+ 	env_attr.o env_flags.o aes.o
+ 
++fw_printenv-objs := fw_env_main.o $(lib-y)
++
+ quiet_cmd_crosstools_strip = STRIP   $^
+       cmd_crosstools_strip = $(STRIP) $^; touch $@
+ 
+-- 
+2.9.2
+
