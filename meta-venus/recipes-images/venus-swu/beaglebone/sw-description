@@ -1,0 +1,48 @@
+software =
+{
+	version = "0";
+
+	stable: {
+		bootloader: {
+			images: (
+				{
+					filename = "venus-boot-image-beaglebone.vfat.gz";
+					device = "/dev/mmcblk1p1";
+					compressed = true;
+				}
+			);
+		};
+		copy1: {
+			images: (
+				{
+					filename = "venus-image-beaglebone.ext4.gz";
+					device = "/dev/mmcblk1p2";
+					compressed = true;
+					installed-directly = true;
+				}
+			);
+			uboot: (
+				{
+					name = "version";
+					value = "1";
+				}
+			);
+		};
+		copy2: {
+			images: (
+				{
+					filename = "venus-image-beaglebone.ext4.gz";
+					device = "/dev/mmcblk1p3";
+					compressed = true;
+					installed-directly = true;
+				}
+			);
+			uboot: (
+				{
+					name = "version";
+					value = "2";
+				}
+			);
+		};
+	};
+}

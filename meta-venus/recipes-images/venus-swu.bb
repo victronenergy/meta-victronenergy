@@ -1,6 +1,7 @@
 SRC_URI = "file://sw-description"
 
 SWUPDATE = "base"
+SWUPDATE_beaglebone += "swupdate"
 SWUPDATE_bpp3 += "swupdate"
 SWUPDATE_ccgx += "swupdate"
 
@@ -12,14 +13,23 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 # IMAGE_DEPENDS: list of images that contains a root filesystem
 # it will be ensured they are built before creating swupdate image
 IMAGE_DEPENDS = "venus-image"
+IMAGE_DEPENDS_append_beaglebone = " venus-boot-image"
+
+ROOT_FSTYPE = "ubifs"
+ROOT_FSTYPE_beaglebone = "ext4.gz"
+
+BOOT_FSTYPE = "vfat.gz"
 
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}"
 
 # SWUPDATE_IMAGES: list of images that will be part of the compound image
 # the list can have any binaries - images must be in the DEPLOY directory
-SWUPDATE_IMAGES = "venus-image uImage u-boot.img MLO splash.bgra"
+SWUPDATE_IMAGES = "${IMAGE_DEPENDS}"
+SWUPDATE_IMAGES_append_bpp3 = " uImage u-boot.img MLO splash.bgra"
+SWUPDATE_IMAGES_append_ccgx = " uImage u-boot.img MLO splash.bgra"
 
-SWUPDATE_IMAGES_FSTYPES[venus-image] = ".ubifs"
+SWUPDATE_IMAGES_FSTYPES[venus-image] = ".${ROOT_FSTYPE}"
+SWUPDATE_IMAGES_FSTYPES[venus-boot-image] = ".${BOOT_FSTYPE}"
 
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[uImage] = "1"
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[u-boot.img] = "1"
