@@ -8,15 +8,13 @@ IMAGE_INSTALL = " \
 	busybox \
 	busybox-mdev \
 	curl \
-	mtd-utils-ubifs \
 	swupdate \
-	tinylogin \
 	u-boot-env-tools \
-	${@bb.utils.contains('SWUPDATE_INIT', 'tiny', '', 'initscripts sysvinit', d)} \
+	${@bb.utils.contains('SWUPDATE_INIT', 'tiny', '', 'initscripts sysvinit tinylogin', d)} \
 "
 
-
-IMAGE_INSTALL_append_ccgx = "kernel-module-fbcon"
+IMAGE_INSTALL_append_beaglebone = "e2fsprogs-mke2fs util-linux-sfdisk"
+IMAGE_INSTALL_append_ccgx = "kernel-module-fbcon mtd-utils-ubifs"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"

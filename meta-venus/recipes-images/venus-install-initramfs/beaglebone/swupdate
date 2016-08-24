@@ -1,0 +1,63 @@
+#!/bin/sh
+
+set -e
+
+CARD=/mnt
+DEV=mmcblk0p1
+SWU=${CARD}/venus.swu
+
+pause() {
+    while :; do sleep 10; done
+}
+
+error() {
+    test -n "$*" && echo "$*"
+    echo "Error installing software"
+    pause
+}
+
+trap error EXIT
+
+mount -t proc none /proc
+mount -t sysfs none /sys
+
+echo "Searching for image..."
+
+mount /dev/${DEV} ${CARD}
+
+if [ -f "${SWU}" ]; then
+    echo "Image found on ${DEV}"
+else
+    umount ${CARD}
+    error "Image not found"
+fi
+
+echo "Creating partitions..."
+sfdisk /dev/mmcblk1 <<EOF
+	2048, 16384, c, *
+	, 524288, L
+	, 524288, L
+	,, E
+	, 262144, L
+EOF
+
+# unlock u-boot environment
+echo 0 >/sys/block/mmcblk1boot1/force_ro
+
+echo "Formatting data partition.."
+mkfs.ext4 /dev/mmcblk1p5
+
+echo "Installing rootfs1..."
+swupdate -i ${SWU} -e "stable,copy1"
+
+echo "Installing rootfs2..."
+swupdate -i ${SWU} -e "stable,copy2"
+
+echo "Installing boot loader..."
+swupdate -i ${SWU} -e "stable,bootloader"
+
+umount ${CARD}
+
+echo "Installation complete"
+echo "Remove SD card and reset system"
+pause
