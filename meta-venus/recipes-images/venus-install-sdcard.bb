@@ -6,6 +6,8 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 SDCARD = "${WORKDIR}/sdcard"
 
+DTB_beaglebone = "${KERNEL_IMAGETYPE}-bbb-venus.dtb"
+
 SWU = "venus-swu"
 SWU_ccgx = "bpp3-rootfs-swu"
 
@@ -28,6 +30,9 @@ do_install () {
 	cp ${DEPLOY_DIR_IMAGE}/${INITRD_IMAGE} ${SDCARD}/initramfs
 	cp ${DEPLOY_DIR_IMAGE}/fatload-initramfs.scr ${SDCARD}/boot.scr
 	cp ${DEPLOY_DIR_IMAGE}/${SWU}-${MACHINE}.swu ${SDCARD}/venus.swu
+	if [ -n "${DTB}" ]; then
+		cp ${DEPLOY_DIR_IMAGE}/${DTB} ${SDCARD}
+	fi
 
 	zip -rj ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
 	if [ -e ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.zip ]; then
