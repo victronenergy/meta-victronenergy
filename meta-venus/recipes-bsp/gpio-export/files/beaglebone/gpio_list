@@ -1,0 +1,29 @@
+# This is a list of gpio pins, set by the script /etc/rcS.d/S90gpio_pins.sh
+# They are documented at: https://github.com/victronenergy/venus/wiki/bbb-gpio
+# Format: <pin_number> <direction: in/out> <name>
+#
+# The <name> part is used to create an symlink in /dev/gpio.
+# NOTE: YOU ARE NOT ALLOWED TO USE THIS NAME UNTILL THIS FEATURE IS ALSO
+# IMPLEMENTED ON OTHER PLATFORMS. (Ask Matthijs :).
+
+# Relay 1   P8.10 / GPIO 2_4
+68  out relay_1
+# Relay 2   P8.8 / GPIO 2_3
+67  out relay_2
+
+# Pulse Counter 0   P8.16 / GPIO 1_14
+46  out pulse_ctr_0
+# Pulse Counter 1   P8.22 / GPIO 1_5
+37  out pulse_ctr_1
+# Pulse Counter 2   P8.24 / GPIO 1_1
+33  out pulse_ctr_2
+# Pulse Counter 3   P8.18 / GPIO 2_1
+65  out pulse_ctr_3
+# Pulse Counter 4   P8.20 / GPIO 1_31
+63  out pulse_ctr_4
+
+# MK3_RST   P8.39 / GPIO 2_12
+76  out mk3_rst
+
+# VE.Bus Standby   P8.43 / GPIO 2_8
+72  out vebus_standy
