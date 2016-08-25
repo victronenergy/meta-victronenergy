@@ -16,3 +16,13 @@ IMAGE_DEPENDS = "venus-image"
 # SWUPDATE_IMAGES: list of images that will be part of the compound image
 # the list can have any binaries - images must be in the DEPLOY directory
 SWUPDATE_IMAGES = "venus-image-${MACHINE}.ubifs uImage u-boot.img MLO splash.bgra"
+
+do_version() {
+    sed -e "s/version = .*;/version = \"${BUILDNAME} ${DISTRO_VERSION}\";/" \
+        -i ${WORKDIR}/sw-description
+}
+
+addtask do_version after do_unpack before do_swuimage
+
+do_version[vardeps] += "DATETIME"
+do_version[nostamp] = "1"
