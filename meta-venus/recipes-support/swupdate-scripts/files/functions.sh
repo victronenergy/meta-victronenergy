@@ -1,12 +1,9 @@
+. $(dirname $0)/machine.sh
+
 # print the version and timestamp as one line
 # optional argument overrides version file
 get_version() {
     sed -n -e '1h3{Gs/\n/ /p}' "${1:-/opt/color-control/version}"
-}
-
-# print the number of the current rootfs
-get_rootfs() {
-    sed -n 's!^ubi.*:rootfs\([0-9]\) / .*!\1!p' /proc/mounts
 }
 
 # print the number of the backup rootfs

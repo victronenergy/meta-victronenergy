@@ -143,8 +143,7 @@ swu_status 2 "$swu_version"
 # backup rootfs is about to be replaced, remove its version entry
 get_version >/var/run/versions
 
-if swupdate -b "0 1 2 3 4 5 6 7 8 9 10 11" -d "$SWU" -e "stable,copy$altroot" \
-            -t 30 -r 3; then
+if do_swupdate -d "$SWU" -e "stable,copy$altroot" -t 30 -r 3; then
     reboot
 else
     swu_status -2 "$swu_version"
