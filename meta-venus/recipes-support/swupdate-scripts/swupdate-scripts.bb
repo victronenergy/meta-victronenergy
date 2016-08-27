@@ -13,6 +13,7 @@ SRC_URI = " \
 	file://machine.sh \
 	file://scan-versions.init \
 	file://scan-versions.sh \
+	file://set-feed.sh \
 	file://set-version.sh \
 "
 
@@ -27,6 +28,7 @@ do_install () {
     install -m 0644 ${WORKDIR}/functions.sh     ${DEST}/functions.sh
     install -m 0644 ${WORKDIR}/machine.sh       ${DEST}/machine.sh
     install -m 0755 ${WORKDIR}/scan-versions.sh ${DEST}/scan-versions.sh
+    install -m 0755 ${WORKDIR}/set-feed.sh      ${DEST}/set-feed.sh
     install -m 0755 ${WORKDIR}/set-version.sh   ${DEST}/set-version.sh
 
     DEST=${D}${sysconfdir}/init.d
