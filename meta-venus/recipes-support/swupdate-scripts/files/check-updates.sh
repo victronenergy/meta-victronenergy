@@ -1,4 +1,20 @@
 #!/bin/bash
+#
+# check-updates.sh: wrapper script around swupdate
+#
+# Arguments:
+# -auto    script will check automatic update setting in localsettings.
+#          use this when calling from cron or after boot.
+# -delay   sleep for a random delay before starting the download of
+#          new image (to prevent thousands of units starting the
+#          download at the same time).
+#          use this when calling from cron or after boot.
+# -check   (only) check if there is a new version available.
+# -update  check and, when necessary, update.
+# -force   force downloading and installing the new image, even if its
+#          version is older or same as already installed version.
+#
+# Behaviour when called without any arguments is same as -update
 
 . $(dirname $0)/functions.sh
 
@@ -43,7 +59,8 @@ tee <$named_pipe /dev/fd/3 | multilog t s99999 n8 /log/swupdate &
 # redirect stderr and stdout to named_pipe
 exec 1>$named_pipe 2>&1
 
-echo "Checking for updates"
+echo "*** Checking for updates ***"
+echo "arguments: $@"
 
 for arg; do
     case $arg in
@@ -61,12 +78,12 @@ done
 if [ "${update:-auto}" = auto ]; then
     update=$(get_setting AutoUpdate)
     case $update in
-        0) echo "Auto-update disabled"
+        0) echo "Auto-update disabled, exit."
            exit
            ;;
         1) ;;
         2) ;;
-        *) echo "Invalid AutoUpdate value $update"
+        *) echo "Invalid AutoUpdate value $update, exit."
            exit 1
            ;;
     esac
@@ -85,7 +102,7 @@ case $feed in
     1) feed=candidate ;;
     2) feed=testing   ;;
     3) feed=develop   ;;
-    *) echo "Invalid release type"
+    *) echo "Invalid release type, exit."
        exit 1
        ;;
 esac
@@ -95,14 +112,14 @@ machine=$(cat /etc/venus/machine)
 URL_BASE=https://updates.victronenergy.com/feeds/venus/swu/${feed}
 SWU=${URL_BASE}/venus-swu-${machine}.swu
 
-echo "Retrieving latest version"
+echo "Retrieving latest version..."
 swu_status 1
 
 cur_version=$(get_version)
 swu_version=$(get_swu_version "$SWU")
 
 if [ -z "$swu_version" ]; then
-    echo "Unable to retrieve latest software version"
+    echo "Unable to retrieve latest software version, exit."
     swu_status -1
     exit 1
 fi
@@ -112,9 +129,11 @@ swu_build=${swu_version%% *}
 
 SWU=${URL_BASE}/venus-swu-${machine}-${swu_build}.swu
 
-echo "installed: $cur_version, available: $swu_version"
+echo "installed: $cur_version"
+echo "available: $swu_version"
 
 if [ "$force" != y -a "${swu_build}" -le "${cur_build}" ]; then
+    echo "No newer version available, exit."
     swu_status 0
     exit
 fi
@@ -127,25 +146,28 @@ fi
 altroot=$(get_altrootfs)
 
 if [ -z "$altroot" ]; then
-    echo "Unable to determine rootfs"
+    echo "Unable to determine rootfs. Exit."
     swu_status -2 "$swu_version"
     exit 1
 fi
 
 if ! lock; then
+    echo "Can't get lock, other process already running? Exit."
     swu_status 0 "$swu_version"
     exit
 fi
 
-echo "Installing version $swu_version"
+echo "Starting swupdate to install version $swu_version ..."
 swu_status 2 "$swu_version"
 
 # backup rootfs is about to be replaced, remove its version entry
 get_version >/var/run/versions
 
 if do_swupdate -d "$SWU" -e "stable,copy$altroot" -t 30 -r 3; then
+    echo "do_swupdate completed OK. Rebooting"
     reboot
 else
+    echo "Error, do_swupdate stopped with exitcode $?, unlock and exit."
     swu_status -2 "$swu_version"
 fi
 
