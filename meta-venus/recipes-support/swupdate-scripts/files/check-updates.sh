@@ -15,6 +15,40 @@
 #          version is older or same as already installed version.
 #
 # Behaviour when called without any arguments is same as -update
+#
+#
+# RESUME DOWNLOAD DETAILS
+# swupdate can retry and resume a broken download. See -t and -r arguments
+# in do_swupdate call at end of this file.
+#
+# Implementation in swupdate:
+# https://github.com/sbabic/swupdate/blob/master/corelib/downloader.c
+#
+# Note that it only resumes the download when kept running: after the
+# swupdate process has stopped, for example because of a reboot, it will
+# restart. Improving this, without adding an intermediate scratchpad on disk,
+# is not straightforward: the download is streamed straight into ubifs on the
+# CCGX, and re-opening an unfinished ubifs volume is not a good idea.
+#
+# Resuming while online file has changed:
+# When a new version is made available, the venus-swu-[machine].swu file on
+# the webserver is replaced with the newer one. Devices busy starting a
+# resume after that should not accidentally resume the download with the new
+# file. A waste of bandwidth and possible leads to installing and booting
+# into a corrupt rootfs. (What type of CRC or hash does swupdate on the swu
+# file after download?)
+#
+# This is prevented this by dowloading the file that contains its version
+# in the name. Therefore the webserver should always have the latest file
+# available under two names:
+# venus-swu-[machine].swu
+# venus-swu-[machine]-[build-date-time].swu
+#
+# Best sequence of installing the files on the webserver is:
+# 1. venus-swu-[machine]-[build-date-time].swu
+# 2. venus-swu-[machine].swu
+# 3. rename or remove the old build-date-time file: force the running
+#    downloads to cancel.
 
 . $(dirname $0)/functions.sh
 
@@ -127,6 +161,7 @@ fi
 cur_build=${cur_version%% *}
 swu_build=${swu_version%% *}
 
+# change SWU url into the full name
 SWU=${URL_BASE}/venus-swu-${machine}-${swu_build}.swu
 
 echo "installed: $cur_version"
