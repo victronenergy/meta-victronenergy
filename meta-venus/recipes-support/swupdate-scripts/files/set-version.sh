@@ -18,6 +18,7 @@ if [ -z "$version" ]; then
 fi
 
 lock || exit
+unlock_env
 fw_setenv version $version
 reboot
 unlock

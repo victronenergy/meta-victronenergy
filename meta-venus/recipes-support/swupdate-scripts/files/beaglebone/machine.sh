@@ -15,6 +15,10 @@ get_rootdev() {
 }
 
 do_swupdate() {
-    echo 0 >/sys/block/mmcblk1boot1/force_ro
+    unlock_env
     swupdate "$@"
+}
+
+unlock_env() {
+    echo 0 >/sys/block/mmcblk1boot1/force_ro
 }
