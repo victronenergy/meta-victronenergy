@@ -39,6 +39,7 @@ sfdisk /dev/mmcblk1 <<EOF
 	, 524288, L
 	,, E
 	, 262144, L
+	,, L
 EOF
 
 # unlock u-boot environment
@@ -46,6 +47,9 @@ echo 0 >/sys/block/mmcblk1boot1/force_ro
 
 echo "Formatting data partition.."
 mkfs.ext4 /dev/mmcblk1p5
+
+echo "Formatting scratch partition.."
+mkfs.ext4 /dev/mmcblk1p6
 
 echo "Installing rootfs1..."
 swupdate -i ${SWU} -e "stable,copy1"
