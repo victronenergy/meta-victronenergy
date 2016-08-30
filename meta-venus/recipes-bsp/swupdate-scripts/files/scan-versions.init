@@ -1,0 +1,13 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:           scan-versions
+# Required-Start:     volatile
+# Required-Stop:
+# Default-Start:      S
+# Default-Stop:
+# Short-Description:  Check available software versions
+### END INIT INFO
+
+echo "Checking available software versions..."
+
+/opt/victronenergy/swupdate-scripts/scan-versions.sh

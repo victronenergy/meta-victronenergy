@@ -1,0 +1,15 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:           check-updates
+# Required-Start:     volatile
+# Required-Stop:
+# Default-Start:      S
+# Default-Stop:
+# Short-Description:  Check for software updates
+### END INIT INFO
+
+{
+    exec </dev/null >/dev/null 2>&1
+    sleep 300
+    /opt/victronenergy/swupdate-scripts/check-updates.sh -auto
+} &
