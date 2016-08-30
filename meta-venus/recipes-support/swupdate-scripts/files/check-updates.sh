@@ -146,7 +146,7 @@ machine=$(cat /etc/venus/machine)
 URL_BASE=https://updates.victronenergy.com/feeds/venus/swu/${feed}
 SWU=${URL_BASE}/venus-swu-${machine}.swu
 
-echo "Retrieving latest version..."
+echo "Retrieving latest version (feed=$feed)..."
 swu_status 1
 
 cur_version=$(get_version)
