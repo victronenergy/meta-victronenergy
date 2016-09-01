@@ -16,10 +16,24 @@ error() {
     pause
 }
 
+LED_0=heartbeat
+LED_1=mmc0
+LED_2=usr2
+LED_3=usr3
+
+setleds() {
+    while [ $# -ge 2 ]; do
+        eval echo $2 \>/sys/class/leds/beaglebone:green:\$LED_$1/trigger
+        shift 2
+    done
+}
+
 trap error EXIT
 
 mount -t proc none /proc
 mount -t sysfs none /sys
+
+setleds 0 none 1 none 2 none 3 none
 
 echo "Searching for image..."
 
@@ -31,6 +45,8 @@ else
     umount ${CARD}
     error "Image not found"
 fi
+
+setleds 0 timer
 
 echo "Creating partitions..."
 sfdisk /dev/mmcblk1 <<EOF
@@ -52,15 +68,20 @@ echo "Formatting scratch partition.."
 mkfs.ext4 /dev/mmcblk1p6
 
 echo "Installing rootfs1..."
+setleds 0 default-on 1 timer
 swupdate -i ${SWU} -e "stable,copy1"
 
 echo "Installing rootfs2..."
+setleds 1 default-on 2 timer
 swupdate -i ${SWU} -e "stable,copy2"
 
 echo "Installing boot loader..."
+setleds 2 default-on 3 timer
 swupdate -i ${SWU} -e "stable,bootloader"
 
 umount ${CARD}
+
+setleds 3 default-on
 
 echo "Installation complete"
 echo "Remove SD card and reset system"
