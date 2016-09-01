@@ -63,7 +63,7 @@ get_setting() {
 get_swu_version() {
     curl -s -r 0-999 -m 30 --retry 3 "$1" |
         cpio --quiet -i --to-stdout sw-description 2>/dev/null |
-        sed -n '/version/ {
+        sed -n '/venus-version/ {
             s/.*"\(.*\)".*/\1/
             p
             q

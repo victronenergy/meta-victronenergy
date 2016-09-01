@@ -37,7 +37,7 @@ SWUPDATE_IMAGES_NOAPPEND_MACHINE[MLO] = "1"
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[splash.bgra] = "1"
 
 do_version() {
-    sed -e "s/version = .*;/version = \"${BUILDNAME} ${DISTRO_VERSION}\";/" \
+    sed -e "s/venus-version = .*;/venus-version = \"${BUILDNAME} ${DISTRO_VERSION}\";/" \
         -i ${WORKDIR}/sw-description
 }
 

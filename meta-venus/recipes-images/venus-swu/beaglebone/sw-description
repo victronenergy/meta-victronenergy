@@ -1,6 +1,8 @@
 software =
 {
-	version = "0";
+	venus-version = "0";
+
+	version = "0.1.0";
 
 	stable: {
 		bootloader: {
