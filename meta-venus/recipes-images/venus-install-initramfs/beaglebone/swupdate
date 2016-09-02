@@ -84,5 +84,5 @@ umount ${CARD}
 setleds 3 default-on
 
 echo "Installation complete"
-echo "Remove SD card and reset system"
+echo "Remove SD card and power cycle system"
 pause
