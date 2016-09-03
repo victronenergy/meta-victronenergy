@@ -44,10 +44,7 @@ do_install () {
 	fi
 
 	zip -rj ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
-	if [ -e ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.zip ]; then
-		rm ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.zip
-	fi
-	ln -s ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.sdcard.zip ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.zip
+	ln -sf ${IMAGE_NAME}.sdcard.zip ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.sdcard.zip
 
         # size of card contents in MB
         SIZE=$(du -sm ${SDCARD} | sed 's/[^0-9].*//')
