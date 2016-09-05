@@ -51,8 +51,8 @@ setleds 0 timer
 echo "Creating partitions..."
 sfdisk /dev/mmcblk1 <<EOF
 	2048, 16384, c, *
-	, 524288, L
-	, 524288, L
+	, 655360, L
+	, 655360, L
 	,, E
 	, 262144, L
 	,, L
