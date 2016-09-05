@@ -13,6 +13,7 @@
 # -update  check and, when necessary, update.
 # -force   force downloading and installing the new image, even if its
 #          version is older or same as already installed version.
+# -offline search for updates on removable storage devices
 #
 # Behaviour when called without any arguments is same as -update
 #
@@ -61,7 +62,15 @@ get_setting() {
 }
 
 get_swu_version() {
-    curl -s -r 0-999 -m 30 --retry 3 "$1" |
+    if [ -f "$1" ]; then
+        # local file
+        cmd="head -n 10"
+    else
+        # url, probably
+        cmd="curl -s -r 0-999 -m 30 --retry 3"
+    fi
+
+    $cmd "$1" |
         cpio --quiet -i --to-stdout sw-description 2>/dev/null |
         sed -n '/venus-version/ {
             s/.*"\(.*\)".*/\1/
@@ -74,6 +83,13 @@ swu_status() {
     printf '%s\n%s\n' "$1" "$2" >$status_file
 }
 
+cleanup() {
+    if [ "$need_umount" = y ]; then
+        umount $dev
+    fi
+    rm -f "$named_pipe"
+}
+
 status_file=/var/run/swupdate-status
 
 # location of named pipe
@@ -84,7 +100,7 @@ named_pipe=/var/tmp/check-updates
 mkfifo $named_pipe || exit
 
 # remove pipe on the exit signal
-trap "rm -f $named_pipe" EXIT
+trap cleanup EXIT
 
 # start multilog process in background with stdin coming from named pipe
 exec 3>&1
@@ -103,6 +119,7 @@ for arg; do
         -update) update=1    ;;
         -delay)  delay=y     ;;
         -force)  force=y     ;;
+        -offline)offline=y   ;;
         *)       echo "Invalid option $arg"
                  exit 1
                  ;;
@@ -146,6 +163,31 @@ machine=$(cat /etc/venus/machine)
 URL_BASE=https://updates.victronenergy.com/feeds/venus/swu/${feed}
 SWU=${URL_BASE}/venus-swu-${machine}.swu
 
+if [ "$offline" = y ]; then
+    echo "Searching for update on SD/USB..."
+
+    for dev in /dev/mmcblk0p1 /dev/sd[a-z]1; do
+        test -b $dev || continue
+        if mount $dev /mnt 2>/dev/null; then
+            # reverse order gives preference to an unversioned file
+            # followed by that with the most recent timestamp if
+            # multiple files exist
+            SWU=$(ls -r /mnt/venus-swu-${machine}*.swu 2>/dev/null | head -n1)
+            test -f "$SWU" && break
+            umount $dev
+        fi
+    done
+
+    if [ -f "$SWU" ]; then
+        echo "Update found on $dev"
+        need_umount=y
+    else
+        echo "Update not found. Exit."
+        swu_status -1
+        exit 1
+    fi
+fi
+
 echo "Retrieving latest version (feed=$feed)..."
 swu_status 1
 
@@ -161,8 +203,10 @@ fi
 cur_build=${cur_version%% *}
 swu_build=${swu_version%% *}
 
-# change SWU url into the full name
-SWU=${URL_BASE}/venus-swu-${machine}-${swu_build}.swu
+if [ "$offline" != y ]; then
+    # change SWU url into the full name
+    SWU=${URL_BASE}/venus-swu-${machine}-${swu_build}.swu
+fi
 
 echo "installed: $cur_version"
 echo "available: $swu_version"
@@ -198,7 +242,13 @@ swu_status 2 "$swu_version"
 # backup rootfs is about to be replaced, remove its version entry
 get_version >/var/run/versions
 
-if do_swupdate -d "$SWU" -e "stable,copy$altroot" -t 30 -r 3; then
+if [ -f "$SWU" ]; then
+    swupdate_flags="-i"
+else
+    swupdate_flags="-t 30 -r 3 -d"
+fi
+
+if do_swupdate $swupdate_flags "$SWU" -e "stable,copy$altroot"; then
     echo "do_swupdate completed OK. Rebooting"
     swu_status 3 "$swu_version"
     reboot
