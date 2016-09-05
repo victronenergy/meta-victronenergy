@@ -200,6 +200,7 @@ get_version >/var/run/versions
 
 if do_swupdate -d "$SWU" -e "stable,copy$altroot" -t 30 -r 3; then
     echo "do_swupdate completed OK. Rebooting"
+    swu_status 3 "$swu_version"
     reboot
 else
     echo "Error, do_swupdate stopped with exitcode $?, unlock and exit."
