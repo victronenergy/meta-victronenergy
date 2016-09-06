@@ -80,7 +80,7 @@ get_swu_version() {
 }
 
 swu_status() {
-    printf '%s\n%s\n' "$1" "$2" >$status_file
+    printf '%s\n' "$1" ${offline:+""} "$2" >$status_file
 }
 
 cleanup() {
@@ -183,7 +183,7 @@ if [ "$offline" = y ]; then
         need_umount=y
     else
         echo "Update not found. Exit."
-        swu_status -1
+        swu_status -3
         exit 1
     fi
 fi
