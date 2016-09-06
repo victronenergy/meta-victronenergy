@@ -87,6 +87,7 @@ RDEPENDS_${PN} += "\
 	tzdata-europe \
 	tzdata-pacific \
 	usbutils \
+	udev-extraconf \
 	venus-version \
 	watchdog \
 	websockify-c \
