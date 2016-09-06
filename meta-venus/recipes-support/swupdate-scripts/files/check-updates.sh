@@ -84,9 +84,6 @@ swu_status() {
 }
 
 cleanup() {
-    if [ "$need_umount" = y ]; then
-        umount $dev
-    fi
     rm -f "$named_pipe"
 }
 
@@ -166,21 +163,16 @@ SWU=${URL_BASE}/venus-swu-${machine}.swu
 if [ "$offline" = y ]; then
     echo "Searching for update on SD/USB..."
 
-    for dev in /dev/mmcblk0p1 /dev/sd[a-z]1; do
-        test -b $dev || continue
-        if mount $dev /mnt 2>/dev/null; then
-            # reverse order gives preference to an unversioned file
-            # followed by that with the most recent timestamp if
-            # multiple files exist
-            SWU=$(ls -r /mnt/venus-swu-${machine}*.swu 2>/dev/null | head -n1)
-            test -f "$SWU" && break
-            umount $dev
-        fi
+    for dev in /media/*; do
+        # reverse order gives preference to an unversioned file
+        # followed by that with the most recent timestamp if
+        # multiple files exist
+        SWU=$(ls -r $dev/venus-swu-${machine}*.swu 2>/dev/null | head -n1)
+        test -f "$SWU" && break
     done
 
     if [ -f "$SWU" ]; then
         echo "Update found on $dev"
-        need_umount=y
     else
         echo "Update not found. Exit."
         swu_status -3
