@@ -27,10 +27,16 @@ iface eth0 inet dhcp
 # Bluetooth networking
 #iface bnep0 inet dhcp
 
-# auto can0
-# outcomment can0, since when enabled it generates some error at startup
-# see https://github.com/victronenergy/venus/issues/24
+# The VE.Can port
+auto can1
+iface can1 inet manual
+        pre-up ip link set $IFACE type can bitrate 250000 restart-ms 100
+        up /sbin/ifconfig $IFACE up
+        down /sbin/ifconfig $IFACE down
+
+# The generic canbus port
+#auto can0
 #iface can0 inet manual
-#       pre-up ip link set $IFACE type can bitrate 250000 restart-ms 100
-#       up /sbin/ifconfig $IFACE up
-#       down /sbin/ifconfig $IFACE down
+#        pre-up ip link set $IFACE type can bitrate 250000 restart-ms 100
+#        up /sbin/ifconfig $IFACE up
+#        down /sbin/ifconfig $IFACE down
