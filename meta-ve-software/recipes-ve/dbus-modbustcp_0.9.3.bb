@@ -5,7 +5,6 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 inherit qmakeve
 inherit daemontools
 
-PR = "r1"
 SRC_URI = " \
 	git://github.com/victronenergy/dbus_modbustcp.git;tag=v${PV};protocol=https \
 "
