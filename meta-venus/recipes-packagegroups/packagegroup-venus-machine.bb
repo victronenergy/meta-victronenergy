@@ -1,4 +1,5 @@
-DESCRIPTION = "common machine specific packages"
+SUMMARY = "common machine specific venus base packages"
+DESCRIPTION = "see packagegroup-venus-base, this contain the per MACHINE base adjustments."
 
 PR = "r0"
 
