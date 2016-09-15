@@ -1,0 +1,27 @@
+From 7a5690cf2628286bac025267fc888bac00f84236 Mon Sep 17 00:00:00 2001
+From: mpvader <mvader@victronenergy.com>
+Date: Fri, 16 Sep 2016 00:33:03 +0200
+Subject: [PATCH] TMP fix makefile for openembedded
+
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 3eca391..aecddb4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -253,8 +253,8 @@ EXTRA_CFLAGS += -DCONFIG_P2P_IPS
+ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/ | sed -e s/armv.l/arm/)
+ ARCH ?= $(SUBARCH)
+ CROSS_COMPILE ?=
+-KVER  := $(shell uname -r)
+-KSRC := /lib/modules/$(KVER)/build
++KVER  := $(KERNEL_VERSION)
++KSRC := $(KERNEL_PATH)
+ MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
+ INSTALL_PREFIX :=
+ endif
+-- 
+2.0.2
+
