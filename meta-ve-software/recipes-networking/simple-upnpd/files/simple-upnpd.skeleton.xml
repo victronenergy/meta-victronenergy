@@ -13,7 +13,7 @@
       <modelName>:::MACHINE:::</modelName>
       <modelNumber>1.0</modelNumber>
       <modelURL>http://www.victronenergy.com/live/ccgx:start</modelURL>
-	  <presentationURL>http://www.victronenergy.com/live/ccgx:start</presentationURL>
+      <presentationURL>/</presentationURL>
       <UDN>uuid:com.victronenergy.ccgx.:::MAC:::</UDN>
-    </device>
+  </device>
 </root>

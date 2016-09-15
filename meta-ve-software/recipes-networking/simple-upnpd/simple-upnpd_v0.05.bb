@@ -2,13 +2,13 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 DESCRIPTION = "Daemon which only announces the device its presence over upnp"
-PR = "r5"
 
-DEPENDS += "gupnp"
+DEPENDS += "gupnp libsoup-2.4"
 RDEPENDS_${PN} = "glib-2.0 gupnp"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 S = "${WORKDIR}/git"
+PR = "r1"
 
 INITSCRIPT_NAME = "simple-upnpd"
 INITSCRIPT_PARAMS = "start 99 5 2 . stop 10 0 1 6 ."
@@ -35,8 +35,9 @@ do_install() {
 
 pkg_postinst_${PN}() {
 	if [ "x$D" = "x" ]; then
-		hwaddr=`ifconfig -a | grep "eth0.*HWaddr" | awk '{print $(NF)}'`
-		cat ${sysconfdir}/simple-upnpd.skeleton.xml | sed "s/:::MAC:::/${hwaddr}/g" > ${sysconfdir}/simple-upnpd.xml
+		hwaddr=$(ifconfig -a | grep "eth0.*HWaddr" | awk '{print $(NF)}')
+		hwaddr_small=$(echo ${hwaddr} | sed "s/://g" |  tr '[:upper:]' '[:lower:]' )
+		cat ${sysconfdir}/simple-upnpd.skeleton.xml | sed -e "s/:::MAC:::/${hwaddr}/g" -e "s/:::mac_small:::/${hwaddr_small}/g"  > ${sysconfdir}/simple-upnpd.xml
 	else
 		exit 1
 	fi

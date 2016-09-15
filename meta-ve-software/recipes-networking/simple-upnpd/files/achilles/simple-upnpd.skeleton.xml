@@ -7,7 +7,7 @@
 
   <device>
     <deviceType>urn:schemas-upnp-org:device:Basic:1</deviceType>
-      <friendlyName>Achilles (:::MAC:::)</friendlyName>
+      <friendlyName>Achilles (:::mac_small:::)</friendlyName>
       <manufacturer>Victron Energy</manufacturer>
       <manufacturerURL>http://www.victronenergy.com</manufacturerURL>
       <modelName>CCGX</modelName>
