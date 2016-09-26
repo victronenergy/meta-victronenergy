@@ -11,6 +11,7 @@ KERNEL_CONFIG_COMMAND = "make -C ${S} O=${B} ARCH=arm bbb_defconfig"
 KERNEL_DEVICETREE = " \
     am335x-boneblack.dtb \
     bbb-venus.dtb \
+    bbe-venus.dtb \
 "
 
 LINUX_VERSION = "4.1"
