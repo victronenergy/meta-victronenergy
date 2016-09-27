@@ -25,8 +25,8 @@
 # MK3_RST   P8.39 / GPIO 2_12
 76  out mk3_rst
 
-# VE.Bus Standby   P8.43 / GPIO 2_8
-72  out vebus_standy
+# VE.Bus Standby   P8.41 / GPIO 2_10
+74  out vebus_standy
 
 # S2 User Button   P8.43 / SYS_BOOT/LCDDATA2
 72  in  s2_button
