@@ -39,6 +39,6 @@ do_install () {
 	if [ -e ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.zip ]; then
 		rm ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.zip
 	fi
-	ln -s ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.sdcard.zip ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.zip
+	ln -s ${IMAGE_NAME}.sdcard.zip ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.zip
 }
 
