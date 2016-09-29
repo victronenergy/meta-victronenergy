@@ -12,7 +12,7 @@ DEPENDS += "\
 	parted-native \
 "
 
-DTB_beaglebone = "${KERNEL_IMAGETYPE}-bbb-venus.dtb"
+DTB_beaglebone = "${KERNEL_IMAGETYPE}-bbb-venus.dtb ${KERNEL_IMAGETYPE}-bbe-venus.dtb"
 
 SCR = "fatload-initramfs.scr"
 SCR_beaglebone = "install-${MACHINE}.scr"
@@ -42,7 +42,9 @@ do_install () {
 	cp ${DEPLOY_DIR_IMAGE}/${SCR} ${SDCARD}/boot.scr
 	cp ${DEPLOY_DIR_IMAGE}/${SWU}-${MACHINE}.swu ${SDCARD}/venus.swu
 	if [ -n "${DTB}" ]; then
-		cp ${DEPLOY_DIR_IMAGE}/${DTB} ${SDCARD}
+		for file in ${DTB}; do
+			cp ${DEPLOY_DIR_IMAGE}/${file} ${SDCARD}
+		done
 	fi
 
 	zip -rj ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
