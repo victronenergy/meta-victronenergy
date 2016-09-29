@@ -4,6 +4,7 @@ SWUPDATE = "base"
 SWUPDATE_beaglebone += "swupdate"
 SWUPDATE_bpp3 += "swupdate"
 SWUPDATE_ccgx += "swupdate"
+SWUPDATE_ccgxhf += "swupdate"
 
 inherit ${SWUPDATE}
 
