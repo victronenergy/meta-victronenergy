@@ -5,19 +5,20 @@ VELIB_DEFAULT_DIRS = "1"
 inherit ve_package
 
 SRC_URI  = "https://www.kernel.org/pub/linux/network/connman/connman-${PV}.tar.xz \
-            file://0001-ntp-max-poll-set-to-16.patch \
-            file://0001-Add-set-hwclock-when-time-is-decoded.patch \
-            file://gweb-multi-header-workaround.patch \
+            file://0001-Set-hwclock-when-time-is-decoded.patch \
+            file://0002-Increase-NTP-poll-interval.patch \
+            file://0003-gweb-Do-not-lookup-for-a-NULL-key-in-a-hash-table.patch \
+            file://0004-Add-IgnoreInvalidKey-setting.patch \
+            file://0005-Add-auto-reset-failure-plugin.patch \
             file://main.conf \
             file://connman \
             file://connmand-watch.sh \
-            file://connman_IgnoreInvalidKey_Arfailure.patch \
            "
 
-SRC_URI[md5sum] = "a449d2e49871494506e48765747e6624"
-SRC_URI[sha256sum] = "c1d266d6be18d2f66231f3537a7ed17b57637ca43c27328bc13c508cbeacce6e"
+SRC_URI[md5sum] = "c51903fd3e7a6a371d12ac5d72a1fa01"
+SRC_URI[sha256sum] = "bc8946036fa70124d663136f9f6b6238d897ca482782df907b07a428b09df5a0"
 
-PR = "${INC_PR}.8"
+PR = "${INC_PR}.0"
 
 do_configure_append() {
 	sed -i -e 's:\$(localstatedir)/lib:${permanentlocalstatedir}/lib:' ${B}/Makefile

@@ -1,8 +1,33 @@
+From acb54953c992a2d4f999d284d673c7f3f022647b Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Thu, 15 Sep 2016 12:27:42 +0100
+Subject: [PATCH 5/5] Add auto reset failure plugin
+
+This adds a plugin called "arfailure", which can reset a failure on a
+service after a certain amount of time. Normally, when a service has a
+failure (like when connman thinks the Wifi password is wrong) it will
+not automatically try to reconnect to that service. When enabled, this
+plugin will reset the failure after a configurable number of seconds and
+starts an auto connect (but only when in the past there has been a
+succesfull connection attempt).
+
+Based on a patch by Thiemo van Engelen
+---
+ Makefile.plugins    |   5 ++
+ configure.ac        |   5 ++
+ include/setting.h   |   1 +
+ plugins/arfailure.c | 136 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ src/connman.h       |   1 +
+ src/main.c          |  17 +++++++
+ src/service.c       |   5 ++
+ 7 files changed, 170 insertions(+)
+ create mode 100644 plugins/arfailure.c
+
 diff --git a/Makefile.plugins b/Makefile.plugins
-index e90ad19..e475161 100644
+index b01fd808d481..230351284873 100644
 --- a/Makefile.plugins
 +++ b/Makefile.plugins
-@@ -173,6 +173,11 @@ builtin_modules += pacrunner
+@@ -171,6 +171,11 @@ builtin_modules += pacrunner
  builtin_sources += plugins/pacrunner.c
  endif
  
@@ -15,10 +40,10 @@ index e90ad19..e475161 100644
  builtin_modules += polkit
  builtin_sources += plugins/polkit.c
 diff --git a/configure.ac b/configure.ac
-index b1ebfc2..c28e01d 100644
+index 6e66ab3d74f0..5a58d19bccc1 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -258,6 +258,11 @@ AC_ARG_ENABLE(nmcompat, AC_HELP_STRING([--enable-nmcompat],
+@@ -279,6 +279,11 @@ AC_ARG_ENABLE(nmcompat, AC_HELP_STRING([--enable-nmcompat],
  			[enable_nmcompat=${enableval}], [enable_nmcompat="no"])
  AM_CONDITIONAL(NMCOMPAT, test "${enable_nmcompat}" != "no")
  
@@ -30,23 +55,8 @@ index b1ebfc2..c28e01d 100644
  AC_ARG_ENABLE(polkit, AC_HELP_STRING([--enable-polkit],
  				[enable PolicyKit support]),
  			[enable_polkit=${enableval}], [enable_polkit="no"])
-diff --git a/doc/connman.conf.5 b/doc/connman.conf.5
-index 626edfd..bf2a1f7 100644
---- a/doc/connman.conf.5
-+++ b/doc/connman.conf.5
-@@ -126,5 +126,10 @@ really know what you are doing.
- Restore earlier tethering status when returning from offline mode,
- re-enabling a technology, and after restarts and reboots.
- Default value is false.
-+.TP
-+.B IgnoreInvalidKey=\fPtrue|false\fP
-+When set to true, connman ignores previously stored invalid-key errors
-+when connecting to a wifi service. 
-+Default value is false.
- .SH "SEE ALSO"
- .BR Connman (8)
 diff --git a/include/setting.h b/include/setting.h
-index a882021..6829c6f 100644
+index a88202176f5e..6829c6fd4ce0 100644
 --- a/include/setting.h
 +++ b/include/setting.h
 @@ -34,6 +34,7 @@ unsigned int *connman_setting_get_uint_list(const char *key);
@@ -59,7 +69,7 @@ index a882021..6829c6f 100644
  }
 diff --git a/plugins/arfailure.c b/plugins/arfailure.c
 new file mode 100644
-index 0000000..b5c8e41
+index 000000000000..b5c8e417f43b
 --- /dev/null
 +++ b/plugins/arfailure.c
 @@ -0,0 +1,136 @@
@@ -200,10 +210,10 @@ index 0000000..b5c8e41
 +			VERSION, CONNMAN_PLUGIN_PRIORITY_LOW,
 +			arfailure_init, arfailure_exit)
 diff --git a/src/connman.h b/src/connman.h
-index db6461f..5620b6f 100644
+index e849ed86eb0d..d47dc48a23c8 100644
 --- a/src/connman.h
 +++ b/src/connman.h
-@@ -685,6 +685,7 @@ struct connman_network *__connman_service_get_network(struct connman_service *se
+@@ -688,6 +688,7 @@ struct connman_network *__connman_service_get_network(struct connman_service *se
  enum connman_service_security __connman_service_get_security(struct connman_service *service);
  const char *__connman_service_get_phase2(struct connman_service *service);
  bool __connman_service_wps_enabled(struct connman_service *service);
@@ -212,7 +222,7 @@ index db6461f..5620b6f 100644
  						bool favorite);
  int __connman_service_set_favorite_delayed(struct connman_service *service,
 diff --git a/src/main.c b/src/main.c
-index 7cf6c9a..ed04c58 100644
+index 7acc2b594eb1..d3b6828a18d9 100644
 --- a/src/main.c
 +++ b/src/main.c
 @@ -41,6 +41,7 @@
@@ -223,56 +233,42 @@ index 7cf6c9a..ed04c58 100644
  
  #define MAINFILE "main.conf"
  #define CONFIGMAINFILE CONFIGDIR "/" MAINFILE
-@@ -73,6 +74,8 @@ static struct {
- 	bool single_tech;
- 	char **tethering_technologies;
+@@ -77,6 +78,7 @@ static struct {
  	bool persistent_tethering_mode;
-+	bool ignore_invalid_key;
+ 	bool enable_6to4;
+ 	bool ignore_invalid_key;
 +	int auto_reset_failure_timeout;
  } connman_settings  = {
  	.bg_scan = true,
  	.pref_timeservers = NULL,
-@@ -86,6 +89,8 @@ static struct {
- 	.single_tech = false,
- 	.tethering_technologies = NULL,
+@@ -92,6 +94,7 @@ static struct {
  	.persistent_tethering_mode = false,
-+	.ignore_invalid_key = false,
+ 	.enable_6to4 = false,
+ 	.ignore_invalid_key = false,
 +	.auto_reset_failure_timeout = DEFAULT_AUTO_RESET_FAILURE_TIMEOUT,
  };
  
  #define CONF_BG_SCAN                    "BackgroundScanning"
-@@ -98,8 +103,10 @@ static struct {
- #define CONF_BLACKLISTED_INTERFACES     "NetworkInterfaceBlacklist"
- #define CONF_ALLOW_HOSTNAME_UPDATES     "AllowHostnameUpdates"
- #define CONF_SINGLE_TECH                "SingleConnectedTechnology"
--#define CONF_TETHERING_TECHNOLOGIES      "TetheringTechnologies"
-+#define CONF_TETHERING_TECHNOLOGIES     "TetheringTechnologies"
+@@ -108,6 +111,7 @@ static struct {
  #define CONF_PERSISTENT_TETHERING_MODE  "PersistentTetheringMode"
-+#define CONF_IGNORE_INVALID_KEY         "IgnoreInvalidKey"
+ #define CONF_ENABLE_6TO4                "Enable6to4"
+ #define CONF_IGNORE_INVALID_KEY         "IgnoreInvalidKey"
 +#define CONF_AUTO_RESET_FAILURE_TIMEOUT "AutoResetFailureTimeout"
  
  static const char *supported_options[] = {
  	CONF_BG_SCAN,
-@@ -114,6 +121,8 @@ static const char *supported_options[] = {
- 	CONF_SINGLE_TECH,
- 	CONF_TETHERING_TECHNOLOGIES,
+@@ -124,6 +128,7 @@ static const char *supported_options[] = {
  	CONF_PERSISTENT_TETHERING_MODE,
-+	CONF_IGNORE_INVALID_KEY,
+ 	CONF_ENABLE_6TO4,
+ 	CONF_IGNORE_INVALID_KEY,
 +	CONF_AUTO_RESET_FAILURE_TIMEOUT,
  	NULL
  };
  
-@@ -354,6 +363,20 @@ static void parse_config(GKeyFile *config)
- 		connman_settings.persistent_tethering_mode = boolean;
+@@ -378,6 +383,13 @@ static void parse_config(GKeyFile *config)
+ 		connman_settings.ignore_invalid_key = boolean;
  
  	g_clear_error(&error);
-+
-+	boolean = __connman_config_get_bool(config, "General",
-+			CONF_IGNORE_INVALID_KEY, &error);
-+	if (!error)
-+		connman_settings.ignore_invalid_key = boolean;
-+
-+	g_clear_error(&error);
 +
 +	timeout = g_key_file_get_integer(config, "General",
 +			CONF_AUTO_RESET_FAILURE_TIMEOUT, &error);
@@ -283,17 +279,7 @@ index 7cf6c9a..ed04c58 100644
  }
  
  static int config_init(const char *file)
-@@ -528,6 +551,9 @@ bool connman_setting_get_bool(const char *key)
- 	if (g_str_equal(key, CONF_PERSISTENT_TETHERING_MODE))
- 		return connman_settings.persistent_tethering_mode;
- 
-+	if (g_str_equal(key, CONF_IGNORE_INVALID_KEY))
-+		return connman_settings.ignore_invalid_key;
-+
- 	return false;
- }
- 
-@@ -569,6 +595,11 @@ unsigned int connman_timeout_browser_launch(void)
+@@ -599,6 +611,11 @@ unsigned int connman_timeout_browser_launch(void)
  	return connman_settings.timeout_browserlaunch;
  }
  
@@ -306,21 +292,10 @@ index 7cf6c9a..ed04c58 100644
  {
  	GOptionContext *context;
 diff --git a/src/service.c b/src/service.c
-index 895387d..7308abe 100644
+index dfa3edf3b033..66b402b69c85 100644
 --- a/src/service.c
 +++ b/src/service.c
-@@ -5842,8 +5842,8 @@ static int service_connect(struct connman_service *service)
- 				if (!service->wps ||
- 					!connman_network_get_bool(service->network, "WiFi.UseWPS"))
- 					return -ENOKEY;
--			} else if (service->error ==
--					CONNMAN_SERVICE_ERROR_INVALID_KEY)
-+			} else if (service->error == CONNMAN_SERVICE_ERROR_INVALID_KEY &&
-+					!connman_setting_get_bool("IgnoreInvalidKey"))
- 				return -ENOKEY;
- 			break;
- 		case CONNMAN_SERVICE_SECURITY_8021X:
-@@ -6503,6 +6503,11 @@ enum connman_service_state __connman_service_get_state(struct connman_service *s
+@@ -6597,6 +6597,11 @@ enum connman_service_state __connman_service_get_state(struct connman_service *s
  	return service->state;
  }
  
@@ -332,3 +307,6 @@ index 895387d..7308abe 100644
  unsigned int __connman_service_get_order(struct connman_service *service)
  {
  	unsigned int order = 0;
+-- 
+2.10.0
+

@@ -1,0 +1,27 @@
+From 047116750839523fd10bad963dc7a3414957f2d0 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Wed, 28 Sep 2016 14:08:03 +0100
+Subject: [PATCH 2/5] Increase NTP poll interval
+
+This reduces NTP network traffic to a bare minimum.
+---
+ src/ntp.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/src/ntp.c b/src/ntp.c
+index 01f5dc605a22..b4725384d939 100644
+--- a/src/ntp.c
++++ b/src/ntp.c
+@@ -167,8 +167,7 @@ static void send_packet(int fd, struct sockaddr *server, uint32_t timeout)
+ 	memset(&msg, 0, sizeof(msg));
+ 	msg.flags = NTP_FLAGS_ENCODE(NTP_FLAG_LI_NOTINSYNC, NTP_FLAG_VN_VER4,
+ 	    NTP_FLAG_MD_CLIENT);
+-	msg.poll = 4;	// min
+-	msg.poll = 10;	// max
++	msg.poll = 16; /* minimum value is 4 */
+ 	msg.precision = NTP_PRECISION_S;
+ 
+ 	if (server->sa_family == AF_INET) {
+-- 
+2.10.0
+

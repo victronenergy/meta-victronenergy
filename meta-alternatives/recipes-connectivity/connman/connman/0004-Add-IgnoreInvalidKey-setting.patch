@@ -1,0 +1,122 @@
+From 828e72fc44e3dfb207a63a47ca3e0474a4ae01c0 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Thu, 15 Sep 2016 12:26:24 +0100
+Subject: [PATCH 4/5] Add IgnoreInvalidKey setting
+
+Setting up a Wifi connection consists of a number of phases. When
+wpa_supplicant makes a certain state transition
+(G_SUPPLICANT_STATE_4WAY_HANDSHAKE -> G_SUPPLICANT_STATE_DISCONNECTED),
+connman draws the conclusion that the wifi password was wrong. This is a
+correct conclusion when Wifi reception is good, but this can also occur
+on marginal wifi reception. Stock connman will not try to reconnect once
+it thinks that the password has changed.
+
+This adds a setting IgnoreInvalidKey. Normally, when a service has the
+CONNMAN_SERVICE_ERROR_INVALID_KEY error set, a call to service_connect
+will not try to connect and return with an error. When IgnoreInvalidKey
+is set, it will ignore this error and still try to connect.
+
+The effect can be observed by temporarily changing the psk of an access
+point after the connection has been established, thus causing it to drop.
+With IgnoreInvalidKey set, the connection is re-established once the
+original psk is restored.
+
+Based on a patch by Thiemo van Engelen
+---
+ doc/connman.conf.5.in |  5 +++++
+ src/main.c            | 14 ++++++++++++++
+ src/service.c         |  3 ++-
+ 3 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/doc/connman.conf.5.in b/doc/connman.conf.5.in
+index ff97b7c4010c..c9e72610fea3 100644
+--- a/doc/connman.conf.5.in
++++ b/doc/connman.conf.5.in
+@@ -134,5 +134,10 @@ ethernet tethering.
+ AllowHostnameUpdates = false
+ TetheringTechnologies = ethernet,wifi,bluetooth,gadget
+ .fi
++.TP
++.B IgnoreInvalidKey=\fPtrue|false\fP
++When set to true, connman ignores previously stored invalid-key errors
++when connecting to a wifi service.
++Default value is false.
+ .SH "SEE ALSO"
+ .BR connman (8)
+diff --git a/src/main.c b/src/main.c
+index f44a2ed60e38..7acc2b594eb1 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -76,6 +76,7 @@ static struct {
+ 	char **tethering_technologies;
+ 	bool persistent_tethering_mode;
+ 	bool enable_6to4;
++	bool ignore_invalid_key;
+ } connman_settings  = {
+ 	.bg_scan = true,
+ 	.pref_timeservers = NULL,
+@@ -90,6 +91,7 @@ static struct {
+ 	.tethering_technologies = NULL,
+ 	.persistent_tethering_mode = false,
+ 	.enable_6to4 = false,
++	.ignore_invalid_key = false,
+ };
+ 
+ #define CONF_BG_SCAN                    "BackgroundScanning"
+@@ -105,6 +107,7 @@ static struct {
+ #define CONF_TETHERING_TECHNOLOGIES      "TetheringTechnologies"
+ #define CONF_PERSISTENT_TETHERING_MODE  "PersistentTetheringMode"
+ #define CONF_ENABLE_6TO4                "Enable6to4"
++#define CONF_IGNORE_INVALID_KEY         "IgnoreInvalidKey"
+ 
+ static const char *supported_options[] = {
+ 	CONF_BG_SCAN,
+@@ -120,6 +123,7 @@ static const char *supported_options[] = {
+ 	CONF_TETHERING_TECHNOLOGIES,
+ 	CONF_PERSISTENT_TETHERING_MODE,
+ 	CONF_ENABLE_6TO4,
++	CONF_IGNORE_INVALID_KEY,
+ 	NULL
+ };
+ 
+@@ -367,6 +371,13 @@ static void parse_config(GKeyFile *config)
+ 		connman_settings.enable_6to4 = boolean;
+ 
+ 	g_clear_error(&error);
++
++	boolean = __connman_config_get_bool(config, "General",
++			CONF_IGNORE_INVALID_KEY, &error);
++	if (!error)
++		connman_settings.ignore_invalid_key = boolean;
++
++	g_clear_error(&error);
+ }
+ 
+ static int config_init(const char *file)
+@@ -544,6 +555,9 @@ bool connman_setting_get_bool(const char *key)
+ 	if (g_str_equal(key, CONF_ENABLE_6TO4))
+ 		return connman_settings.enable_6to4;
+ 
++	if (g_str_equal(key, CONF_IGNORE_INVALID_KEY))
++		return connman_settings.ignore_invalid_key;
++
+ 	return false;
+ }
+ 
+diff --git a/src/service.c b/src/service.c
+index 768426b1c185..dfa3edf3b033 100644
+--- a/src/service.c
++++ b/src/service.c
+@@ -5931,7 +5931,8 @@ static int service_connect(struct connman_service *service)
+ 		case CONNMAN_SERVICE_SECURITY_PSK:
+ 		case CONNMAN_SERVICE_SECURITY_WPA:
+ 		case CONNMAN_SERVICE_SECURITY_RSN:
+-			if (service->error == CONNMAN_SERVICE_ERROR_INVALID_KEY)
++			if (service->error == CONNMAN_SERVICE_ERROR_INVALID_KEY &&
++				!connman_setting_get_bool("IgnoreInvalidKey"))
+ 				return -ENOKEY;
+ 
+ 			if (!service->passphrase) {
+-- 
+2.10.0
+

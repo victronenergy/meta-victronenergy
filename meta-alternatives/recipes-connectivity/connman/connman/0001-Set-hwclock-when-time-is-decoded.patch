@@ -1,0 +1,28 @@
+From 8a0552c27fbbc42bbabc0db6f4220df635d86846 Mon Sep 17 00:00:00 2001
+From: Marcel Mulder <mmulder@victronenergy.com>
+Date: Tue, 18 Mar 2014 16:43:19 +0100
+Subject: [PATCH 1/5] Set hwclock when time is decoded
+
+Update the RTC whenever the system time is adjusted in case an
+uncontrolled reset prevents the normal shutdown scripts doing this.
+---
+ src/ntp.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/ntp.c b/src/ntp.c
+index dd246eb9cba9..01f5dc605a22 100644
+--- a/src/ntp.c
++++ b/src/ntp.c
+@@ -367,6 +367,9 @@ static void decode_msg(void *base, size_t len, struct timeval *tv,
+ 			connman_error("Failed to set time");
+ 			return;
+ 		}
++		if(system("hwclock --utc --systohc")) {
++			connman_error("Failed to set hwclock");
++		}
+ 
+ 	}
+ }
+-- 
+2.10.0
+
