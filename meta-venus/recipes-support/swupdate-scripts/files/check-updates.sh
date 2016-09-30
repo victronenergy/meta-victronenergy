@@ -157,7 +157,7 @@ esac
 
 machine=$(cat /etc/venus/machine)
 
-URL_BASE=https://updates.victronenergy.com/feeds/venus/${feed}/images/${machine)
+URL_BASE=https://updates.victronenergy.com/feeds/venus/${feed}/images/${machine}
 SWU=${URL_BASE}/venus-swu-${machine}.swu
 
 if [ "$offline" = y ]; then
