@@ -14,6 +14,8 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 SDCARD = "${WORKDIR}/sdcard"
 
+IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}-${DISTRO_VERSION}"
+
 SWU = "venus-swu"
 SWU_ccgx = "bpp3-rootfs-swu"
 

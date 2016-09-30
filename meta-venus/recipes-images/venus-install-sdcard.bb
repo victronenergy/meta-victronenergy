@@ -20,6 +20,8 @@ SCR_beaglebone = "install-${MACHINE}.scr"
 SWU = "venus-swu"
 SWU_ccgx = "bpp3-rootfs-swu"
 
+IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}-${DISTRO_VERSION}"
+
 do_install[depends] += " \
 	virtual/bootloader:do_deploy \
 	virtual/kernel:do_deploy \

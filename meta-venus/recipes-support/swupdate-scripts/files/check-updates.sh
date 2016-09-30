@@ -197,7 +197,7 @@ swu_build=${swu_version%% *}
 
 if [ "$offline" != y ]; then
     # change SWU url into the full name
-    SWU=${URL_BASE}/venus-swu-${machine}-${swu_build}.swu
+    SWU=${URL_BASE}/venus-swu-${machine}-${swu_version// /-}.swu
 fi
 
 echo "installed: $cur_version"
