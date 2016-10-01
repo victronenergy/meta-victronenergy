@@ -14,6 +14,7 @@ DAEMONTOOLS_virtclass-nativesdk = ""
 DAEMONTOOLS_SERVICES_DIR ?= "/service"
 DAEMONTOOLS_LOG_DIR_PREFIX = "${localstatedir}/log"
 DAEMONTOOLS_LOG_DIR_PREFIX_bpp3 = "/log"
+DAEMONTOOLS_LOG_DIR_PREFIX_ccgx ="/log"
 
 python () {
 	pkg = d.getVar('DAEMON_PN', True)
