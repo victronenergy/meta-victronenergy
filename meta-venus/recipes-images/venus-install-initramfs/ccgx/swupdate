@@ -4,7 +4,6 @@ set -e
 
 CARD=/mnt/card
 SWU=${CARD}/venus.swu
-DATA=${CARD}/data.tar
 
 msg() {
     echo "$@"
@@ -29,7 +28,7 @@ mount -t sysfs none /sys
 
 modprobe fbcon
 
-msg "Searching for update image..."
+msg "Searching for installer image..."
 
 for d in sda1 mmcblk0p1; do
     if mount /dev/$d ${CARD}; then
@@ -42,9 +41,9 @@ for d in sda1 mmcblk0p1; do
 done
 
 if [ -n "${DEV}" ]; then
-    msg "Update image found on ${DEV}"
+    msg "Installer image found on ${DEV}"
 else
-    error "Update image not found"
+    error "Installer image not found"
 fi
 
 
