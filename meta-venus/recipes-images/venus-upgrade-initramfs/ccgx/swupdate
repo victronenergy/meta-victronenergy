@@ -70,6 +70,13 @@ if ! ubiattach -m 12; then
     ubimkvol /dev/ubi0 -N rootfs1 -s 200MiB
     ubimkvol /dev/ubi0 -N rootfs2 -s 200MiB
     ubimkvol /dev/ubi0 -N data -s 32MiB
+
+    msg "Creating /data/venus/upgrader-version..."
+    mkdir -p /data
+    mount -t ubifs ubi0:data /data
+    mkdir -p /data/venus
+    cp /opt/color-control/version /data/venus/upgrader-version
+    umount /data
 fi
 
 # -b '0..!12..13' tells swupdate ubi volume is on mtd 12 (all others are blacklisted)
