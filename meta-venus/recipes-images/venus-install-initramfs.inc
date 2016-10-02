@@ -10,6 +10,7 @@ IMAGE_INSTALL = " \
 	curl \
 	swupdate \
 	u-boot-env-tools \
+	venus-version \
 	${@bb.utils.contains('SWUPDATE_INIT', 'tiny', '', 'initscripts sysvinit tinylogin', d)} \
 "
 

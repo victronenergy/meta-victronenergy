@@ -61,8 +61,15 @@ EOF
 # unlock u-boot environment
 echo 0 >/sys/block/mmcblk1boot1/force_ro
 
-echo "Formatting data partition.."
+echo "Formatting data partition..."
 mkfs.ext4 /dev/mmcblk1p5
+
+echo "Creating /data/venus/installer-version..."
+mkdir -p /data
+mount -t ext4 /dev/mmcblk1p5 /data
+mkdir -p /data/venus
+cp /opt/color-control/version /data/venus/installer-version
+umount /data
 
 echo "Formatting scratch partition.."
 mkfs.ext4 /dev/mmcblk1p6
