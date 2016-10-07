@@ -7,6 +7,14 @@ PARAMS="--xml /etc/simple-upnpd.xml"
 start_it()
 {
 	echo "Starting simple-upnpd"
+
+	if [[ ! -e /etc/simple-upnpd.xml ]]
+	then
+		hwaddr=$(ifconfig -a | grep "eth0.*HWaddr" | awk '{print $(NF)}')
+		hwaddr_small=$(echo ${hwaddr} | sed "s/://g" |  tr '[:upper:]' '[:lower:]' )
+		cat /etc/simple-upnpd.skeleton.xml | sed -e "s/:::MAC:::/${hwaddr}/g" -e "s/:::mac_small:::/${hwaddr_small}/g"  > /etc/simple-upnpd.xml
+	fi
+
 	start-stop-daemon --start --quiet --user $USER --chuid $USER --exec $PROGRAM -- $PARAMS
 }
 

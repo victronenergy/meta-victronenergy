@@ -32,13 +32,3 @@ do_install() {
 	sed -i "s/:::MACHINE:::/${MACHINE}/g" ${D}${sysconfdir}/simple-upnpd.skeleton.xml
 	install -m 0755 ${WORKDIR}/simple-upnpd ${D}${sysconfdir}/init.d
 }
-
-pkg_postinst_${PN}() {
-	if [ "x$D" = "x" ]; then
-		hwaddr=$(ifconfig -a | grep "eth0.*HWaddr" | awk '{print $(NF)}')
-		hwaddr_small=$(echo ${hwaddr} | sed "s/://g" |  tr '[:upper:]' '[:lower:]' )
-		cat ${sysconfdir}/simple-upnpd.skeleton.xml | sed -e "s/:::MAC:::/${hwaddr}/g" -e "s/:::mac_small:::/${hwaddr_small}/g"  > ${sysconfdir}/simple-upnpd.xml
-	else
-		exit 1
-	fi
-}
