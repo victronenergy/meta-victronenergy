@@ -69,13 +69,15 @@ fi
 
 
 if [ "$ACTION" = "remove" ] || [ "$ACTION" = "change" ] && [ -x "$UMOUNT" ] && [ -n "$DEVNAME" ]; then
+	dirty=0
 	for mnt in `cat /proc/mounts | grep "$DEVNAME" | cut -f 2 -d " " `
 	do
-		$UMOUNT $mnt
+		dirty=1
+		$UMOUNT -l $mnt
 	done
-	
+
 	# Remove empty directories from auto-mounter
 	name="`basename "$DEVNAME"`"
 	test -e "/tmp/.automount-$name" && rm_dir "/media/$name"
-	dbus-send --system --type=signal / com.victronenergy.udev.umount string:$DEVNAME string:"/media/$name"
+	dbus-send --system --type=signal / com.victronenergy.udev.umount string:$DEVNAME string:"/media/$name" "uint16:$dirty"
 fi
