@@ -143,18 +143,6 @@ if [ "$delay" = y ]; then
     sleep $DELAY
 fi
 
-feed=$(get_setting ReleaseType)
-
-case $feed in
-    0) feed=release   ;;
-    1) feed=candidate ;;
-    2) feed=testing   ;;
-    3) feed=develop   ;;
-    *) echo "Invalid release type, exit."
-       exit 1
-       ;;
-esac
-
 machine=$(cat /etc/venus/machine)
 
 URL_BASE=https://updates.victronenergy.com/feeds/venus/${feed}/images/${machine}
@@ -173,11 +161,26 @@ if [ "$offline" = y ]; then
 
     if [ -f "$SWU" ]; then
         echo "Update found on $dev"
+        feed="$dev"
     else
         echo "Update not found. Exit."
         swu_status -3
         exit 1
     fi
+
+
+else
+        feed=$(get_setting ReleaseType)
+
+        case $feed in
+            0) feed=release   ;;
+            1) feed=candidate ;;
+            2) feed=testing   ;;
+            3) feed=develop   ;;
+            *) echo "Invalid release type, exit."
+               exit 1
+               ;;
+        esac
 fi
 
 echo "Retrieving latest version (feed=$feed)..."
