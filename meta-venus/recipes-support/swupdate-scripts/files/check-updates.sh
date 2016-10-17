@@ -167,20 +167,18 @@ if [ "$offline" = y ]; then
         swu_status -3
         exit 1
     fi
-
-
 else
-        feed=$(get_setting ReleaseType)
+    feed=$(get_setting ReleaseType)
 
-        case $feed in
-            0) feed=release   ;;
-            1) feed=candidate ;;
-            2) feed=testing   ;;
-            3) feed=develop   ;;
-            *) echo "Invalid release type, exit."
-               exit 1
-               ;;
-        esac
+    case $feed in
+        0) feed=release   ;;
+        1) feed=candidate ;;
+        2) feed=testing   ;;
+        3) feed=develop   ;;
+        *) echo "Invalid release type, exit."
+           exit 1
+           ;;
+    esac
 fi
 
 echo "Retrieving latest version (feed=$feed)..."
