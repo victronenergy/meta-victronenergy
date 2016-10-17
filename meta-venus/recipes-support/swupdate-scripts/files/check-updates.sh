@@ -145,9 +145,6 @@ fi
 
 machine=$(cat /etc/venus/machine)
 
-URL_BASE=https://updates.victronenergy.com/feeds/venus/${feed}/images/${machine}
-SWU=${URL_BASE}/venus-swu-${machine}.swu
-
 if [ "$offline" = y ]; then
     echo "Searching for update on SD/USB..."
 
@@ -179,6 +176,9 @@ else
            exit 1
            ;;
     esac
+
+    URL_BASE=https://updates.victronenergy.com/feeds/venus/${feed}/images/${machine}
+    SWU=${URL_BASE}/venus-swu-${machine}.swu
 fi
 
 echo "Retrieving latest version (feed=$feed)..."
