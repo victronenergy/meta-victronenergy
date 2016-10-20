@@ -20,6 +20,7 @@ done
 automount() {
 	name="`basename "$DEVNAME"`"
 
+	test -L /media && mkdir -p $(readlink /media)
 	! test -d "/media/$name" && mkdir -p "/media/$name"
 	# Silent util-linux's version of mounting auto
 	if [ "x`readlink $MOUNT`" = "x/bin/mount.util-linux" ] ;
@@ -33,7 +34,8 @@ automount() {
 		rm_dir "/media/$name"
 	else
 		logger "mount.sh/automount" "Auto-mount of [/media/$name] successful"
-		touch "/tmp/.automount-$name"
+		mkdir -p /run/automount
+		touch "/run/automount/$name"
 		dbus-send --system --type=signal / com.victronenergy.udev.mount string:$DEVNAME string:"/media/$name"
 	fi
 }
@@ -78,6 +80,6 @@ if [ "$ACTION" = "remove" ] || [ "$ACTION" = "change" ] && [ -x "$UMOUNT" ] && [
 
 	# Remove empty directories from auto-mounter
 	name="`basename "$DEVNAME"`"
-	test -e "/tmp/.automount-$name" && rm_dir "/media/$name"
+	test -e "/run/automount/$name" && rm_dir "/media/$name"
 	dbus-send --system --type=signal / com.victronenergy.udev.umount string:$DEVNAME string:"/media/$name" "uint16:$dirty"
 fi
