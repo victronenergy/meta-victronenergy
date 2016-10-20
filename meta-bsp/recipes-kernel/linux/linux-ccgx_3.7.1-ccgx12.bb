@@ -20,6 +20,8 @@ SRC_URI += " \
 	file://0006-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch \
 	file://0007-compiler-gcc.h-Add-gcc-recommended-GCC_VERSION-macro.patch \
 	file://0008-kbuild-remove-deprecated-use-of-defined-in-timeconst.patch \
+	file://0009-OMAPDSS-gracefully-disable-overlay-at-error.patch \
+	file://0010-am3517-hwmod-drop-idle-and-no-reset-state-for-dss.patch \
 "
 
 # This was introduced to remove uImage from /boot and save 3MB

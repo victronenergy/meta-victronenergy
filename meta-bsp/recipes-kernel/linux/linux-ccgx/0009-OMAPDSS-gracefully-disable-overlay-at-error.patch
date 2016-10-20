@@ -1,0 +1,33 @@
+From 3a6cf53a64eb229f9f40015b8cf411d3bbeb19a9 Mon Sep 17 00:00:00 2001
+From: Sergey Kibrik <sergiikibrik@ti.com>
+Date: Thu, 25 Apr 2013 11:28:15 +0300
+Subject: [PATCH 09/10] OMAPDSS: gracefully disable overlay at error
+
+Disable overlay via ovl->disable() interface, which will
+properly set flags in cache and GO bits for managers.
+This allows overlay user to re-enable it on next frame,
+thus recovering from FIFO underflows.
+
+Signed-off-by: Sergey Kibrik <sergiikibrik@ti.com>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+---
+ drivers/video/omap2/dss/dispc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/video/omap2/dss/dispc.c b/drivers/video/omap2/dss/dispc.c
+index b43477a5fae8..3c76d2592264 100644
+--- a/drivers/video/omap2/dss/dispc.c
++++ b/drivers/video/omap2/dss/dispc.c
+@@ -3807,8 +3807,7 @@ static void dispc_error_worker(struct work_struct *work)
+ 		if (bit & errors) {
+ 			DSSERR("FIFO UNDERFLOW on %s, disabling the overlay\n",
+ 					ovl->name);
+-			dispc_ovl_enable(ovl->id, false);
+-			dispc_mgr_go(ovl->manager->id);
++			ovl->disable(ovl);
+ 			msleep(50);
+ 		}
+ 	}
+-- 
+2.10.1
+
