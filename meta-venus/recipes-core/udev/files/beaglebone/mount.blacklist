@@ -1,0 +1,6 @@
+/dev/loop
+/dev/ram
+/dev/mtdblock
+/dev/md
+/dev/dm-*
+/dev/mmcblk1
