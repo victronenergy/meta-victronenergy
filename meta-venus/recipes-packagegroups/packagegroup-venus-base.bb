@@ -69,7 +69,6 @@ RDEPENDS_${PN} += "\
 	openssh \
 	openssh-sftp-server \
 	opkg \
-	opkg-collateral \
 	permanent-storage \
 	rsync \
 	screen \
@@ -88,6 +87,7 @@ RDEPENDS_${PN} += "\
 	tzdata-pacific \
 	usbutils \
 	udev-extraconf \
+	venus-feed-configs \
 	venus-version \
 	watchdog \
 	websockify-c \
