@@ -25,8 +25,9 @@ RDEPENDS_${PN} += "\
 RDEPENDS_${PN}_append_ccgx += "\
 	mtd-utils \
 	mtd-utils-ubifs \
-	application \
+	prodtest \
 	swupdate \
+	swupdate-scripts \
 "
 
 RDEPENDS_${PN}_append_bpp3 += "\
