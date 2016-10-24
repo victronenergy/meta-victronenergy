@@ -1,12 +1,6 @@
 SRC_URI = "file://sw-description"
 
-SWUPDATE = "base"
-SWUPDATE_beaglebone += "swupdate"
-SWUPDATE_bpp3 += "swupdate"
-SWUPDATE_ccgx += "swupdate"
-SWUPDATE_ccgxhf += "swupdate"
-
-inherit ${SWUPDATE}
+inherit swupdate
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
@@ -44,5 +38,6 @@ do_version() {
 
 addtask do_version after do_unpack before do_swuimage
 
+do_version[depends] += "venus-image:do_rootfs"
 do_version[vardeps] += "DATETIME"
 do_version[nostamp] = "1"
