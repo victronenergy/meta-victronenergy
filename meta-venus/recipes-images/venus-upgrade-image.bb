@@ -17,7 +17,6 @@ SDCARD = "${WORKDIR}/sdcard"
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}-${DISTRO_VERSION}"
 
 SWU = "venus-swu"
-SWU_ccgx = "bpp3-rootfs-swu"
 
 do_install[depends] += " \
 	virtual/bootloader:do_deploy \
