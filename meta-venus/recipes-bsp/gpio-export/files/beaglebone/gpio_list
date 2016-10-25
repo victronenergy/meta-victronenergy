@@ -12,15 +12,15 @@
 68  out relay_2
 
 # Pulse Counter 0   P8.16 / GPIO 1_14
-46  out pulse_ctr_0
+46  in pulse_ctr_0
 # Pulse Counter 1   P8.22 / GPIO 1_5
-37  out pulse_ctr_1
+37  in pulse_ctr_1
 # Pulse Counter 2   P8.24 / GPIO 1_1
-33  out pulse_ctr_2
+33  in pulse_ctr_2
 # Pulse Counter 3   P8.18 / GPIO 2_1
-65  out pulse_ctr_3
+65  in pulse_ctr_3
 # Pulse Counter 4   P8.20 / GPIO 1_31
-63  out pulse_ctr_4
+63  in pulse_ctr_4
 
 # MK3_RST   P8.39 / GPIO 2_12
 76  out mk3_rst
