@@ -38,6 +38,7 @@ RDEPENDS_${PN}_append_bpp3 += "\
 RDEPENDS_${PN}_append_beaglebone += "\
 	gpio-export \
 	i2c-tools \
+	prodtest \
 	swupdate \
 	swupdate-scripts \
 "
