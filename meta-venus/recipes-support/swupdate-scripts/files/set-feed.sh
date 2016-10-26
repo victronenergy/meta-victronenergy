@@ -24,3 +24,6 @@ case $1 in
 		echo "Not a valid parameter"
 		;;
 esac
+
+# switch package feed as well
+ln -sf /usr/share/venus-feed-configs/opkg-$1.conf /etc/opkg/venus.conf
