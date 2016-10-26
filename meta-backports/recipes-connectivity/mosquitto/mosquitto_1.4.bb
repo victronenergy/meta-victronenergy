@@ -23,7 +23,7 @@ SRC_URI[sha256sum] = "591f3adcb6ed92c01f7ace1c878af728b797fe836892535620aa6106f4
 
 inherit useradd
 USERADD_PACKAGES = "mosquitto"
-USERADD_PARAM_mosquitto = "-u 678 -d /nonexistant -r -s /bin/false mosquitto"
+USERADD_PARAM_mosquitto = "-u 98 -d /nonexistant -r -s /bin/false mosquitto"
 
 do_compile() {
     oe_runmake PREFIX=/usr
