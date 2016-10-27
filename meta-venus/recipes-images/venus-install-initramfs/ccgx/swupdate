@@ -48,7 +48,7 @@ fi
 
 
 msg "Formatting UBI partition..."
-ubiformat /dev/mtd12
+ubiformat --yes /dev/mtd12
 ubiattach -m 12
 ubimkvol /dev/ubi0 -N rootfs1 -s 200MiB
 ubimkvol /dev/ubi0 -N rootfs2 -s 200MiB
