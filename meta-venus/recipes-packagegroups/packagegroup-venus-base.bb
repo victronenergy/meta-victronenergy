@@ -36,6 +36,7 @@ DEPENDS += "\
 	packagegroup-core-buildessential \
 	s6 \
 	tcpdump \
+	tinymembench \
 	tmux \
 	vim \
 "
