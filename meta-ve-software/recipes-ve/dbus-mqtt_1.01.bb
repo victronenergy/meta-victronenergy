@@ -17,5 +17,5 @@ SRC_URI = " \
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
-DAEMONTOOLS_RUN = "softlimit -d 2000000 -s 1000000 -a 100000000 ${bindir}/dbus_mqtt.py --init-broker"
+DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_mqtt.py --init-broker"
 DAEMONTOOLS_DOWN = "1"

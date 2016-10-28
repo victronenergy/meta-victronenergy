@@ -64,7 +64,7 @@ FILES_${PN}-staticdev += "${libdir}/libmosquitto.a"
 FILES_${PN}-python = "/usr/lib/python2.7/site-packages"
 
 DAEMONTOOLS_SERVICE_DIR = "${sysconfdir}/mosquitto/service"
-DAEMONTOOLS_SCRIPT = "mkdir -p ${MOSQUITTO_D} && exec softlimit -d 2000000 -s 1000000 -a 100000000 ${sbindir}/mosquitto -c ${sysconfdir}/mosquitto/mosquitto.conf"
+DAEMONTOOLS_SCRIPT = "mkdir -p ${MOSQUITTO_D} && exec softlimit -d 100000000 -s 1000000 -a 100000000 ${sbindir}/mosquitto -c ${sysconfdir}/mosquitto/mosquitto.conf"
 DAEMONTOOLS_DOWN = "1"
 
 #inherit systemd

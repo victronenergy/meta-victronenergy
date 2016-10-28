@@ -21,7 +21,7 @@ RDEPENDS_${PN} = " \
 "
 
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
-DAEMONTOOLS_RUN = "softlimit -d 2000000 -s 1000000 -a 100000000 ${bindir}/dbus_pump.py"
+DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_pump.py"
 DAEMONTOOLS_DOWN = "1"
 
 do_install () {
