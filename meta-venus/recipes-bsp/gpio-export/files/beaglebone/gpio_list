@@ -11,16 +11,16 @@
 # Relay 2   P8.10 / GPIO 2_4
 68  out relay_2
 
-# Pulse Counter 0   P8.16 / GPIO 1_14
-46  in pulse_ctr_0
-# Pulse Counter 1   P8.22 / GPIO 1_5
-37  in pulse_ctr_1
-# Pulse Counter 2   P8.24 / GPIO 1_1
-33  in pulse_ctr_2
-# Pulse Counter 3   P8.18 / GPIO 2_1
-65  in pulse_ctr_3
-# Pulse Counter 4   P8.20 / GPIO 1_31
-63  in pulse_ctr_4
+# Digital input 1   P8.16 / GPIO 1_14
+46  in digital_input_1
+# Digital input 2   P8.14 / GPIO 0_26
+26  in digital_input_2
+# Digital input 3   P8.26 / GPIO 1_29
+61  in digital_input_3
+# Digital input 4   P8.18 / GPIO 2_1
+65  in digital_input_4
+# Digital input 5   P8.12 / GPIO 1_12
+44  in digital_input_5
 
 # MK3_RST   P8.39 / GPIO 2_12
 76  out mk3_rst
