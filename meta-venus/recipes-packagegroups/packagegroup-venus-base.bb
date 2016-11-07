@@ -31,6 +31,7 @@ LICENSE = "MIT"
 # build but not installed in the image (perhaps this should be made optional / moved
 # to somewhere else, compiling the compiler again takes time e.g.)
 DEPENDS += "\
+	devmem2 \
 	gdb \
 	git \
 	packagegroup-core-buildessential \
