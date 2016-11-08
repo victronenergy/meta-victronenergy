@@ -5,13 +5,14 @@ auto lo
 iface lo inet loopback
 
 # Wireless interfaces
-iface wlan0 inet dhcp
-	wireless_mode managed
-	wireless_essid any
-	wpa-driver wext
-	wpa-conf /etc/wpa_supplicant.conf
+# Disable all, is managed by connman
+# iface wlan0 inet dhcp
+#	wireless_mode managed
+#	wireless_essid any
+#	wpa-driver wext
+#	wpa-conf /etc/wpa_supplicant.conf
 
-iface atml0 inet dhcp
+# iface atml0 inet dhcp
 
 # Wired or wireless interfaces
 auto eth0
