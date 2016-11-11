@@ -31,7 +31,7 @@ modprobe fbcon
 
 msg "Searching for update image..."
 
-for d in sda1 mmcblk0p1; do
+for d in sda1 mmcblk0p1 sda mmcblk0; do
     if mount /dev/$d ${CARD}; then
         if [ -f ${SWU} ]; then
             DEV=$d
