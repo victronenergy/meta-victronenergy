@@ -5,7 +5,6 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 inherit allarch
 
 RDEPENDS_${PN} = "python-dbus"
-PR = "r0"
 
 SRC_URI = " \
 	git://github.com/victronenergy/dbus-recorder.git;protocol=https;tag=${PV} \
