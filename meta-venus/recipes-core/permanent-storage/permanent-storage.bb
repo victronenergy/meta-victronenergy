@@ -23,6 +23,7 @@ pkg_postinst_${PN}() {
 		[ -d /log ] || ln -sf /data/log /log
 
 		mkdir -p /data/home/root
+		mkdir -p /data/home/vnctunnel
 		mkdir -p /data/var/lib
 		: exit 0
 	else
