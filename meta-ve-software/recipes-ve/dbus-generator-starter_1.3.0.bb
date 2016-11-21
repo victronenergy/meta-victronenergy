@@ -8,12 +8,12 @@ SRC_URI = " \
 	gitsm://github.com/victronenergy/dbus_generator.git;protocol=https;tag=v${PV} \
 	file://com.victronenergy.generator-starter.conf \
 "
-PR = "r1"
 S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \
 	localsettings \
 	python-argparse \
+	python-ctypes \
 	python-datetime \
 	python-dbus \
 	python-json \
