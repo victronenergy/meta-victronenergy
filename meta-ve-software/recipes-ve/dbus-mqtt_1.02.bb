@@ -1,8 +1,6 @@
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=9b0a9609befce3122afcc444da0fe825"
 
-PR = "r2"
-
 PACKAGE_ARCH = "all"
 
 inherit gmakevelib
