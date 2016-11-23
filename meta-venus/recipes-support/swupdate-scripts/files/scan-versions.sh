@@ -5,7 +5,9 @@
 version=/opt/color-control/version
 altroot=/mnt
 
-get_version $version >/var/run/versions
+echo "Active rootfs:" $(get_rootfs)
+
+get_version $version | tee /var/run/versions | sed 's/^/Active version: /'
 
 other=$(get_altrootfs)
 
@@ -17,7 +19,8 @@ fi
 lock || exit
 
 if mount -r -t $rootfstype $(get_rootdev $other) $altroot; then
-    get_version $altroot/$version >>/var/run/versions
+    get_version $altroot/$version | tee -a /var/run/versions |
+        sed 's/^/Backup version: /'
     umount $altroot
 fi
 
