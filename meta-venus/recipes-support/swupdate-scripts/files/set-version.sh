@@ -2,6 +2,8 @@
 
 . $(dirname $0)/functions.sh
 
+start_log
+
 case $1 in
     1) exit # no change
        ;;
@@ -18,6 +20,10 @@ if [ -z "$version" ]; then
 fi
 
 lock || exit
+
+echo "switching to rootfs $version"
+sed '1s/^/current version: /;2s/^/new version: /' /var/run/versions
+
 unlock_env
 fw_setenv version $version
 reboot
