@@ -60,20 +60,16 @@ software =
 			);
 			uboot: (
 				{
-					name = "upd_mode";
+					name = "version";
 					value = "1";
 				},
 				{
-					name = "mtdparts"
-					value = "mtdparts=omap2-nand.0:128k(spl1),128k(spl2),128k(spl3),128k(spl4),1m(u-boot),256k(env1),256k(env2),1m(u-boot2),256k(bootparms),768k(splash),6m(kernel1),6m(kernel2),-(ubisystem)"
-				},
-				{
 					name = "miscargs"
-					value = "console=ttyO0,115200 root=ubi0:rootfs1 rootfstype=ubifs ubi.mtd=12 omapdss.def_disp=lcd omapfb.vram=0:2M vram=2M"
+					value = "omapdss.def_disp=lcd omapfb.vram=0:2M vram=2M fbskip"
 				},
 				{
 					name = "nandboot"
-					value = "setenv bootargs $miscargs $mtdparts && nand read ${loadaddr} kernel1 && bootm ${loadaddr}"
+					value = "nand read ${loadaddr} ${kernel} && bootm ${loadaddr}"
 				}
 			);
 		};
@@ -93,20 +89,16 @@ software =
 			);
 			uboot: (
 				{
-					name = "upd_mode";
-					value = "1";
-				},
-				{
-					name = "mtdparts"
-					value = "mtdparts=omap2-nand.0:128k(spl1),128k(spl2),128k(spl3),128k(spl4),1m(u-boot),256k(env1),256k(env2),1m(u-boot2),256k(bootparms),768k(splash),6m(kernel1),6m(kernel2),-(ubisystem)"
+					name = "version";
+					value = "2";
 				},
 				{
 					name = "miscargs"
-					value = "console=ttyO0,115200 root=ubi0:rootfs2 rootfstype=ubifs ubi.mtd=12 omapdss.def_disp=lcd omapfb.vram=0:2M vram=2M"
+					value = "omapdss.def_disp=lcd omapfb.vram=0:2M vram=2M fbskip"
 				},
 				{
 					name = "nandboot"
-					value = "setenv bootargs $miscargs $mtdparts && nand read ${loadaddr} kernel2 && bootm ${loadaddr}"
+					value = "nand read ${loadaddr} ${kernel} && bootm ${loadaddr}"
 				}
 			);
 		};
