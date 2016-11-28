@@ -83,28 +83,9 @@ swu_status() {
     printf '%s\n' "$1" ${offline:+""} "$2" >$status_file
 }
 
-cleanup() {
-    rm -f "$named_pipe"
-}
-
 status_file=/var/run/swupdate-status
 
-# location of named pipe
-named_pipe=/var/tmp/check-updates
-
-# create named pipe
-# if it exists, an update is already in progress
-mkfifo $named_pipe || exit
-
-# remove pipe on the exit signal
-trap cleanup EXIT
-
-# start multilog process in background with stdin coming from named pipe
-exec 3>&1
-tee <$named_pipe /dev/fd/3 | multilog t s99999 n8 /log/swupdate &
-
-# redirect stderr and stdout to named_pipe
-exec 1>$named_pipe 2>&1
+start_log
 
 echo "*** Checking for updates ***"
 echo "arguments: $@"
