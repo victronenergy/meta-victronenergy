@@ -98,6 +98,7 @@ for arg; do
         -delay)  delay=y     ;;
         -force)  force=y     ;;
         -offline)offline=y   ;;
+        -no-reboot) reboot=n  ;;
         *)       echo "Invalid option $arg"
                  exit 1
                  ;;
@@ -223,9 +224,14 @@ else
 fi
 
 if do_swupdate -v $swupdate_flags "$SWU" -e "stable,copy$altroot"; then
-    echo "do_swupdate completed OK. Rebooting"
-    swu_status 3 "$swu_version"
-    reboot
+    echo "do_swupdate completed OK."
+    if [ ${reboot:-y} = y ]; then
+        echo "Rebooting"
+        swu_status 3 "$swu_version"
+        reboot
+    else
+        swu_status 0
+    fi
 else
     echo "Error, do_swupdate stopped with exitcode $?, unlock and exit."
     swu_status -2 "$swu_version"
