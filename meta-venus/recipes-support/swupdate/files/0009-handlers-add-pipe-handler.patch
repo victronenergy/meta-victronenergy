@@ -1,0 +1,127 @@
+From 6e169f7760b4f5e5bde9abe70dc86e812a332602 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Thu, 1 Dec 2016 17:54:36 +0000
+Subject: [PATCH] handlers: add pipe handler
+
+---
+ handlers/Config.in      |  6 ++++
+ handlers/Makefile       |  1 +
+ handlers/pipe_handler.c | 77 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 84 insertions(+)
+ create mode 100644 handlers/pipe_handler.c
+
+diff --git a/handlers/Config.in b/handlers/Config.in
+index a05c1fc1ef9a..2a7e02cd24f4 100644
+--- a/handlers/Config.in
++++ b/handlers/Config.in
+@@ -76,6 +76,12 @@ config RAW
+ 	  This is a simple handler that simply copies
+ 	  into the destination.
+ 
++config PIPE
++	bool "pipe"
++	default n
++	help
++	  Handler that pipes the image to an external command.
++
+ config LUASCRIPTHANDLER
+ 	bool "luascript"
+ 	depends on LUA
+diff --git a/handlers/Makefile b/handlers/Makefile
+index 3ffc7705db73..4d2da1d523c0 100644
+--- a/handlers/Makefile
++++ b/handlers/Makefile
+@@ -6,6 +6,7 @@
+ obj-$(CONFIG_ARCHIVE) += archive_handler.o
+ obj-$(CONFIG_CFI)	+= flash_handler.o
+ obj-$(CONFIG_RAW)	+= raw_handler.o
++obj-$(CONFIG_PIPE)	+= pipe_handler.o
+ obj-$(CONFIG_UBIVOL)	+= ubivol_handler.o
+ obj-$(CONFIG_LUASCRIPTHANDLER) += lua_scripthandler.o
+ obj-$(CONFIG_SHELLSCRIPTHANDLER) += shell_scripthandler.o
+diff --git a/handlers/pipe_handler.c b/handlers/pipe_handler.c
+new file mode 100644
+index 000000000000..49172dfbd0e6
+--- /dev/null
++++ b/handlers/pipe_handler.c
+@@ -0,0 +1,77 @@
++/*
++ * (C) Copyright 2016 Mans Rullgard <mans@mansr.com>
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License as
++ * published by the Free Software Foundation; either version 2 of
++ * the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
++ * MA 02111-1307 USA
++ */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <errno.h>
++#include <sys/wait.h>
++
++#include "swupdate.h"
++#include "handler.h"
++#include "util.h"
++
++void pipe_handler(void);
++
++static int install_pipe_image(struct img_type *img,
++	void __attribute__ ((__unused__)) *data)
++{
++	char cmd[256];
++	FILE *p;
++	int stat;
++	int ret;
++	int fd;
++
++	if (!strlen(img->type_data)) {
++		ERROR("No command specified");
++		return -1;
++	}
++
++	snprintf(cmd, sizeof(cmd), "%s '%s'", img->type_data, img->device);
++
++	p = popen(cmd, "w");
++	if (!p) {
++		ERROR("Error running command: %s", strerror(errno));
++		return -1;
++	}
++
++	fd = fileno(p);
++	ret = copyimage(&fd, img, NULL);
++	stat = pclose(p);
++
++	if (stat == -1) {
++		ERROR("pclose: %s", strerror(errno));
++		ret = stat;
++	} else {
++		stat = WEXITSTATUS(stat);
++		if (stat) {
++			ERROR("pipe returned %d", stat);
++			ret = stat;
++		}
++	}
++
++	return ret;
++}
++
++__attribute__((constructor))
++void pipe_handler(void)
++{
++	register_handler("pipe", install_pipe_image, NULL);
++}
+-- 
+2.22.0
+
