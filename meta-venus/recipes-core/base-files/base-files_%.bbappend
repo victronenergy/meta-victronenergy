@@ -14,4 +14,7 @@ do_install_append() {
 		rmdir ${D}/home/root
 		ln -s ${permanentdir}/home/root ${D}/home/root
 	fi
+
+	rmdir ${D}/media
+	ln -s /run/media ${D}/media
 }
