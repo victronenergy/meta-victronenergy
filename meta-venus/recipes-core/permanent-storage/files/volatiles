@@ -1,0 +1,7 @@
+d root root 0755 /data/conf none
+d www-data root 0755 /data/db none
+d root root 0755 /data/home/root none
+d root root 0755 /data/home/vnctunnel none
+d root root 0755 /data/log none
+d www-data root 0755 /data/themes/overlay none
+d root root 0755 /data/var/lib none
