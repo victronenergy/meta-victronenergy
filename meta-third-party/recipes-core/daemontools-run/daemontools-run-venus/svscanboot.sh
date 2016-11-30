@@ -2,6 +2,8 @@
 
 case "$1" in
 'start')
+	cp -Lr /service /run/
+	mount --bind /run/service /service
 	svscanboot &
 	;;
 'stop')
