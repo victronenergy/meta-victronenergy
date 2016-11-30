@@ -24,4 +24,7 @@ do_install_append() {
 	# it will point to the active one in that case!
 	mkdir -p ${D}/opt
 	ln -s victronenergy ${D}/opt/color-control
+
+	rmdir ${D}/media
+	ln -s /run/media ${D}/media
 }
