@@ -57,7 +57,5 @@ pkg_postinst_${PN} () {
 		if [ -f ${bindir}/previous_version ]; then
 			${bindir}/set_setting.sh AccessLevel 1 115
 		fi
-	else
-		exit 1
 	fi
 }
