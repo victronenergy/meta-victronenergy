@@ -10,6 +10,7 @@ IMAGE_INSTALL = "\
 "
 IMAGE_INSTALL += "packagegroup-ve-console-apps"
 IMAGE_FEATURES += "package-management ssh-server-openssh"
+IMAGE_FEATURES += "read-only-rootfs"
 
 IMAGE_LINGUAS = "en-us"
 
