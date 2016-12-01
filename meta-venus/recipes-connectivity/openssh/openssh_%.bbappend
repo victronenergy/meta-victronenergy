@@ -27,7 +27,5 @@ INITSCRIPT_PACKAGES = ""
 pkg_postinst_${PN}-sshd_append() {
 	if [ "x$D" == "x" ]; then
 		update-rc.d -f sshd remove
-	else
-		exit 1
 	fi
 }
