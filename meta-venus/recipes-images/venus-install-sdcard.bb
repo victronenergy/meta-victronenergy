@@ -49,30 +49,30 @@ do_install () {
 	zip -rj ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
 	ln -sf ${IMAGE_NAME}.sdcard.zip ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.sdcard.zip
 
-        # size of card contents in MB
-        SIZE=$(du -sm ${SDCARD} | sed 's/[^0-9].*//')
+	# size of card contents in MB
+	SIZE=$(du -sm ${SDCARD} | sed 's/[^0-9].*//')
 
         # create vfat image
-        FSIMAGE=${WORKDIR}/image.vfat
-        FSSIZE=$(expr ${SIZE} + 4)
-        rm -f ${FSIMAGE}
-        mkfs.vfat -S 512 -C ${FSIMAGE} $(expr ${FSSIZE} \* 1024)
-        mcopy -i ${FSIMAGE} ${SDCARD}/* ::/
+	FSIMAGE=${WORKDIR}/image.vfat
+	FSSIZE=$(expr ${SIZE} + 4)
+	rm -f ${FSIMAGE}
+	mkfs.vfat -S 512 -C ${FSIMAGE} $(expr ${FSSIZE} \* 1024)
+	mcopy -i ${FSIMAGE} ${SDCARD}/* ::/
 
         # create partitioned image
-        IMAGE=${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.img
-        IMAGE_SIZE=$(expr ${FSSIZE} + 1)
-        dd if=/dev/null of=${IMAGE} bs=1M seek=${IMAGE_SIZE}
-        parted ${IMAGE} -- \
-               mklabel msdos \
-               mkpart p fat32 1MiB -1s \
-               set 1 boot on
+	IMAGE=${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.img
+	IMAGE_SIZE=$(expr ${FSSIZE} + 1)
+	dd if=/dev/null of=${IMAGE} bs=1M seek=${IMAGE_SIZE}
+	parted ${IMAGE} -- \
+		mklabel msdos \
+		mkpart p fat32 1MiB -1s \
+		set 1 boot on
 
         # copy vfat image into partition
         dd if=${FSIMAGE} of=${IMAGE} bs=1M seek=1
 
-        zip -j ${IMAGE}.zip ${IMAGE}
-        rm ${IMAGE}
-        ln -sf ${IMAGE_NAME}.img.zip ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.img.zip
+	zip -j ${IMAGE}.zip ${IMAGE}
+	rm ${IMAGE}
+	ln -sf ${IMAGE_NAME}.img.zip ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.img.zip
 }
 
