@@ -85,6 +85,8 @@ swu_status() {
 
 status_file=/var/run/swupdate-status
 
+PATH=$(dirname $0):${PATH}
+
 start_log
 
 echo "*** Checking for updates ***"
@@ -178,11 +180,6 @@ fi
 cur_build=${cur_version%% *}
 swu_build=${swu_version%% *}
 
-if [ "$offline" != y ]; then
-    # change SWU url into the full name
-    SWU=${URL_BASE}/venus-swu-${machine}-${swu_version// /-}.swu
-fi
-
 echo "installed: $cur_version"
 echo "available: $swu_version"
 
@@ -195,6 +192,18 @@ fi
 if [ "$update" != 1 ]; then
     swu_status 0 "$swu_version"
     exit
+fi
+
+if [ "$offline" != y ]; then
+    # check for a delta image
+    SWU=${URL_BASE}/venus-swu-${machine}-${cur_version// /-}-${swu_version// /-}.swu
+
+    if [ "$(get_swu_version "$SWU")" = "${swu_version}" ]; then
+        echo "Delta image found"
+    else
+        # use full update
+        SWU=${URL_BASE}/venus-swu-${machine}-${swu_version// /-}.swu
+    fi
 fi
 
 altroot=$(get_altrootfs)

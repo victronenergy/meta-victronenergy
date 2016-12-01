@@ -4,9 +4,10 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 
 inherit allarch
 
-RDEPENDS_${PN} = "bash swupdate"
+RDEPENDS_${PN} = "bash swupdate xdelta3"
 
 SRC_URI = " \
+	file://apply-delta.sh \
 	file://check-updates.init \
 	file://check-updates.sh \
 	file://functions.sh \
@@ -24,6 +25,7 @@ SCRIPTDIR = "/opt/victronenergy/swupdate-scripts"
 do_install () {
     DEST=${D}${SCRIPTDIR}
     install -d ${DEST}
+    install -m 0755 ${WORKDIR}/apply-delta.sh   ${DEST}/apply-delta.sh
     install -m 0755 ${WORKDIR}/check-updates.sh ${DEST}/check-updates.sh
     install -m 0644 ${WORKDIR}/functions.sh     ${DEST}/functions.sh
     install -m 0644 ${WORKDIR}/machine.sh       ${DEST}/machine.sh
