@@ -5,6 +5,25 @@ software =
 	version = "0.1.0";
 
 	stable: {
+		backup-mlo: {
+			images: (
+				{
+					filename = "MLO";
+					type = "flash-hamming1";
+					device = "/dev/mtd1";
+				},
+				{
+					filename = "MLO";
+					type = "flash-hamming1";
+					device = "/dev/mtd2";
+				},
+				{
+					filename = "MLO";
+					type = "flash-hamming1";
+					device = "/dev/mtd3";
+				}
+			)
+		};
 		bootloader: {
 			images: (
 				{
