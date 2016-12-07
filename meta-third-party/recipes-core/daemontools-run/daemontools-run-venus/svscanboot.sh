@@ -11,6 +11,10 @@ case "$1" in
 	svscanboot &
 	;;
 'stop')
+        svc -d /service/*
+        svc -d /service/*/log
+        killall svscan
+        killall supervise
 	;;
 *)
 	echo "Usage: $0 { start | stop }"
