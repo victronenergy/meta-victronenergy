@@ -1,0 +1,59 @@
+From 938343740a673346e5fad4bf632b6db18d60969e Mon Sep 17 00:00:00 2001
+From: Patrik Flykt <Patrik.Flykt@linux.intel.com>
+Date: Thu, 8 Dec 2016 10:53:07 +0200
+Subject: [PATCH] service: Update nameservers and timeservers with changes in
+ IP
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When the IP address changes, nameservers need to be removed and
+re-added in order for them to pick up the changed IP address. The
+same applies to timeservers, restart the query for those as well.
+
+Reported by Måns Rullgård.
+---
+ src/service.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
+
+diff --git a/src/service.c b/src/service.c
+index 66b402b69c85..a8ab0fc40e1a 100644
+--- a/src/service.c
++++ b/src/service.c
+@@ -1906,19 +1906,26 @@ static void settings_changed(struct connman_service *service,
+ {
+ 	enum connman_ipconfig_type type;
+ 
+-	if (!allow_property_changed(service))
+-		return;
+-
+ 	type = __connman_ipconfig_get_config_type(ipconfig);
+ 
+-	if (type == CONNMAN_IPCONFIG_TYPE_IPV4)
+-		connman_dbus_property_changed_dict(service->path,
++	if (allow_property_changed(service)) {
++		if (type == CONNMAN_IPCONFIG_TYPE_IPV4)
++			connman_dbus_property_changed_dict(service->path,
+ 					CONNMAN_SERVICE_INTERFACE, "IPv4",
+ 					append_ipv4, service);
+-	else if (type == CONNMAN_IPCONFIG_TYPE_IPV6)
+-		connman_dbus_property_changed_dict(service->path,
++		else if (type == CONNMAN_IPCONFIG_TYPE_IPV6)
++			connman_dbus_property_changed_dict(service->path,
+ 					CONNMAN_SERVICE_INTERFACE, "IPv6",
+ 					append_ipv6, service);
++	}
++
++	if (is_connected_state(service, service->state) &&
++			service == __connman_service_get_default()) {
++		nameserver_remove_all(service, type);
++		nameserver_add_all(service, type);
++
++		__connman_timeserver_sync(service);
++	}
+ 
+ 	__connman_notifier_ipconfig_changed(service, ipconfig);
+ }
+-- 
+2.11.0
+
