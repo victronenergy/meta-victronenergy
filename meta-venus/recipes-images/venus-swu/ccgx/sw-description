@@ -68,7 +68,7 @@ software =
 				{
 					filename = "venus-image-ccgx.ubifs";
 					type = "ubivol";
-					volume = "rootfs1"
+					volume = "rootfs1";
 					installed-directly = true;
 				},
 				{
@@ -83,12 +83,12 @@ software =
 					value = "1";
 				},
 				{
-					name = "miscargs"
-					value = "omapdss.def_disp=lcd omapfb.vram=0:2M vram=2M fbskip"
+					name = "miscargs";
+					value = "omapdss.def_disp=lcd omapfb.vram=0:2M vram=2M fbskip";
 				},
 				{
-					name = "nandboot"
-					value = "nand read ${loadaddr} ${kernel} && bootm ${loadaddr}"
+					name = "nandboot";
+					value = "nand read ${loadaddr} ${kernel} && bootm ${loadaddr}";
 				}
 			);
 		};
@@ -97,7 +97,7 @@ software =
 				{
 					filename = "venus-image-ccgx.ubifs";
 					type = "ubivol";
-					volume = "rootfs2"
+					volume = "rootfs2";
 					installed-directly = true;
 				},
 				{
@@ -112,12 +112,12 @@ software =
 					value = "2";
 				},
 				{
-					name = "miscargs"
-					value = "omapdss.def_disp=lcd omapfb.vram=0:2M vram=2M fbskip"
+					name = "miscargs";
+					value = "omapdss.def_disp=lcd omapfb.vram=0:2M vram=2M fbskip";
 				},
 				{
-					name = "nandboot"
-					value = "nand read ${loadaddr} ${kernel} && bootm ${loadaddr}"
+					name = "nandboot";
+					value = "nand read ${loadaddr} ${kernel} && bootm ${loadaddr}";
 				}
 			);
 		};
