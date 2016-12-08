@@ -12,6 +12,9 @@ re-added in order for them to pick up the changed IP address. The
 same applies to timeservers, restart the query for those as well.
 
 Reported by Måns Rullgård.
+
+venus: https://github.com/victronenergy/venus/issues/100
+upstream: https://lists.01.org/pipermail/connman/2016-December/021307.html
 ---
  src/service.c | 21 ++++++++++++++-------
  1 file changed, 14 insertions(+), 7 deletions(-)
