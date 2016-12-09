@@ -8,11 +8,10 @@ PROVIDES = ""
 
 SRC_URI = " \
 	https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz \
-	file://0001-Allow-fw-env-tools-to-be-available-as-library.patch \
 	file://fw_env.config \
 "
-SRC_URI[md5sum] = "58c92bf2c46dc82f1b57817f09ca8bd8"
-SRC_URI[sha256sum] = "37f7ffc75ec3c38ea3125350cc606d3ceac071ab68811c9fb0cfc25d70592e22"
+SRC_URI[md5sum] = "e5ee3a9c5c1338a8d5f685f74234fc51"
+SRC_URI[sha256sum] = "ff43e6c4b6fdc6bf1054dff627fad7b8cb39de9fe7489a0df08fcc250c97835a"
 
 do_compile () {
 	oe_runmake ${UBOOT_MACHINE}
