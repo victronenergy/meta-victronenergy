@@ -1,3 +1,4 @@
+VELIB_DEFAULT_DIRS = "1"
 inherit ve_package
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
