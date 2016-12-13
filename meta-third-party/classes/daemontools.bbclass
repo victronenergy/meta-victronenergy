@@ -1,10 +1,7 @@
 DAEMON_PN ?= "${PN}"
 
-# make machine more specific then distro, so bpp3 get initscripts,
-# venus daemontools-run-venus and all other distro's daemontools-run
-OVERRIDES = "${TARGET_OS}:${TRANSLATED_TARGET_ARCH}:build-${BUILD_OS}:pn-${PN}:${DISTROOVERRIDES}:${MACHINEOVERRIDES}:${CLASSOVERRIDE}:forcevariable"
+# venus gets daemontools-run-venus and all other distro's daemontools-run
 DAEMONTOOLS = "daemontools-run"
-DAEMONTOOLS_bpp3 += "initscripts"
 DAEMONTOOLS_venus = "daemontools-run-venus"
 
 DAEMONTOOLS_virtclass-cross = ""
@@ -13,7 +10,6 @@ DAEMONTOOLS_virtclass-nativesdk = ""
 
 DAEMONTOOLS_SERVICES_DIR ?= "/service"
 DAEMONTOOLS_LOG_DIR_PREFIX = "${localstatedir}/log"
-DAEMONTOOLS_LOG_DIR_PREFIX_bpp3 = "/log"
 DAEMONTOOLS_LOG_DIR_PREFIX_ccgx ="/log"
 
 python () {

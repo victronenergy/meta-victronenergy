@@ -20,7 +20,6 @@ IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}-${DISTRO_VERSION}"
 # SWUPDATE_IMAGES: list of images that will be part of the compound image
 # the list can have any binaries - images must be in the DEPLOY directory
 SWUPDATE_IMAGES = "${IMAGE_DEPENDS}"
-SWUPDATE_IMAGES_append_bpp3 = " uImage u-boot.img MLO splash.bgra"
 SWUPDATE_IMAGES_append_ccgx = " uImage u-boot.img MLO splash.bgra"
 
 SWUPDATE_IMAGES_FSTYPES[venus-image] = ".${ROOT_FSTYPE}"
