@@ -23,37 +23,6 @@ do_compile_append () {
 	mkimage -A arm -T script -C none -n 'Upgrade Script' -d ${WORKDIR}/upgrade.cmds ${WORKDIR}/upgrade.scr
 }
 
-pkg_postinst_${PN}_bpp3 () {
-    if [ "x$D" == "x" ]; then
-        if [ -e /proc/mtd ]; then
-            MTD_DEV=`grep u-boot /proc/mtd`
-            UBOOT_DEV=${MTD_DEV:0:4}
-        else
-            echo "ERROR: No MTD device"
-            exit 1;
-        fi
-
-        if [ -f /boot/${MACHINE}-${UBOOT_IMAGE} ] && [ -n $UBOOT_DEV ]; then
-            echo "INFO: Erasing $UBOOT_DEV"
-            flash_erase  /dev/$UBOOT_DEV 0 0
-            echo "INFO: Write U-boot > $UBOOT_DEV"
-            nandwrite -p /dev/$UBOOT_DEV /boot/${MACHINE}-${UBOOT_IMAGE}
-            rm /boot/${MACHINE}-${UBOOT_IMAGE}
-            echo "Update finished!"
-        else
-            echo "ERROR: No u-boot /boot/${MACHINE}-${UBOOT_IMAGE} image found!"
-        fi
-
-        # u-boot up to and including v2013.01.01-ccgx-v2 did not disable the
-        # autoboot interrupt, so it added after the update.
-        fw_setenv preboot "if gpio input 26; then setenv bootdelay -1; else setenv bootdelay 0; fi"
-    else
-        # Exit 1 is used to set the status of the package on unpacked in rootfs image
-        # The result is that the package will be installed on first boot
-        exit 1
-    fi
-}
-
 do_deploy_append () {
 	install -d ${DEPLOY_DIR_IMAGE}
 	install ${WORKDIR}/fatload-initramfs.scr ${DEPLOY_DIR_IMAGE}
