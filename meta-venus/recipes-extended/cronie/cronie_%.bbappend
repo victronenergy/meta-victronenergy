@@ -1,9 +1,5 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/cronie:"
 
-# note: PRINC is needed in danny/ccgx
-PRINC ?= "666000"
-PRINC := "${@int(PRINC) + 3}"
-
 SRC_URI += "file://crontab"
 
 do_install_append () {
