@@ -15,4 +15,8 @@ do_install_append() {
 		rmdir ${D}/home/root
 		ln -s ${permanentdir}/home/root ${D}/home/root
 	fi
+
+	# FIXME: compatible with the ccgx locations for now
+	mkdir -p ${D}/opt
+	ln -s ${vedir} ${D}/opt/color-control
 }
