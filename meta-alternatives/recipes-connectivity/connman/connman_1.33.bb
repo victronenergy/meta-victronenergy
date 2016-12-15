@@ -29,19 +29,3 @@ do_install_append() {
 	install -d ${D}${sysconfdir}/connman
 	install -m 0644 ${WORKDIR}/main.conf ${D}${sysconfdir}/connman/main.conf
 }
-
-pkg_postinst_${PN}() {
-	if test "x$D" == "x"; then
-		# Remove ntp cronjob
-		echo "Removing ntpdate-sync cronjob"
-		croncmd="/usr/bin/ntpdate-sync"
-		( crontab -l | grep -v "$croncmd" ) | crontab -
-
-		# migrate settings
-		if [ -d ${localstatedir}/lib/connman -a ! -d ${permanentlocalstatedir}/lib/connman ]; then
-			mkdir -p ${permanentlocalstatedir}/lib
-			mv ${localstatedir}/lib/connman ${permanentlocalstatedir}/lib
-		fi
-	fi
-}
-
