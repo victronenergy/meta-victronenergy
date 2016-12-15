@@ -3,9 +3,6 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 SRC_URI += "file://hiawatha.conf \ 
            "
 RDEPENDS_${PN} += "php-fpm"
-
-PR = "r7"
-
 SRC_URI += "file://0001-allow-disabling-access-logs.patch"
 
 EXTRA_OECMAKE = " -DENABLE_IPV6=OFF \

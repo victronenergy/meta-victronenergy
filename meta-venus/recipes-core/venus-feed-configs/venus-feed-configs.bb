@@ -6,8 +6,6 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 DISTRO_FEED_ARCHS = "all ${TUNE_PKGARCH} ${MACHINE_ARCH}"
 FEEDS = "develop testing candidate release"
 
-PR = "r1"
-
 do_compile() {
 	for feed in ${FEEDS}; do
 		echo -n > ${S}/opkg-$feed.conf

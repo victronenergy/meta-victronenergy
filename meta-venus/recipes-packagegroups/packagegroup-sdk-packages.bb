@@ -1,8 +1,6 @@
 DESCRIPTION = "packages for the SDK"
 LICENSE = "MIT"
 
-PR = "r1"
-
 inherit packagegroup
 
 # note: these end up in the target sysroot of the SDK!

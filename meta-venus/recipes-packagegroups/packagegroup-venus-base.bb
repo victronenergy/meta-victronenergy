@@ -24,7 +24,6 @@ DESCRIPTION = " \
 	packagegroup-venus-machine and depend on a MACHINE feature. \
 "
 
-PR = "r18"
 inherit packagegroup
 LICENSE = "MIT"
 

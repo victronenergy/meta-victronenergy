@@ -1,4 +1,3 @@
-PR = "r0"
 LICENSE = "MIT"
 
 DESCRIPTION = " \
