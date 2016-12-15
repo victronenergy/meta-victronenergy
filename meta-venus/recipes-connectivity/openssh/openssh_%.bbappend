@@ -1,9 +1,5 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}:"
 
-# note: PRINC is needed in danny/ccgx
-PRINC ?= "666000"
-PRINC := "${@int(PRINC) + 22}"
-
 inherit daemontools
 
 DAEMON_PN = "${PN}-sshd"
@@ -23,11 +19,3 @@ do_install_append() {
 
 # disable the update-rc.d
 INITSCRIPT_PACKAGES = ""
-
-pkg_postinst_${PN}-sshd_append() {
-	if [ "x$D" == "x" ]; then
-		update-rc.d -f sshd remove
-	else
-		exit 1
-	fi
-}
