@@ -1,0 +1,56 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          watchdog
+# Required-Start:    $syslog
+# Required-Stop:     $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: watchdog
+# Description:       watchdog
+### END INIT INFO
+
+conf=/etc/watchdog.conf
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/sbin/watchdog
+NAME=watchdog
+DESC="watchdog"
+OPTS="-c $conf"
+
+case "$1" in
+  start)
+        echo "Starting $DESC"
+	# if the watchdog service rebooted the device the error code is stored
+	if [ -e /data/watchdog.reset ]; then
+		code=$(head -n1 /data/watchdog.reset)
+		(( code += 30000 ))
+		echo $code > /tmp/last_boot_type
+		rm /data/watchdog.reset
+	else
+                # save reboot reason, since it can't be read after the dev is in use.
+                get_boot_type > /tmp/last_boot_type
+	fi
+	# the value will be changed after it is uploaded, so keep the original value
+	cp /tmp/last_boot_type /tmp/last_boot_type.orig
+        start-stop-daemon --start -x "$DAEMON" -- $OPTS
+        ;;
+  stop)
+        echo "Stopping $DESC"
+        start-stop-daemon --stop -x "$DAEMON"
+        ;;
+  restart|force-reload)
+        echo -n "Restarting $DESC: "
+        start-stop-daemon --retry 10 --stop -x "$DAEMON"
+        sleep 1
+        start-stop-daemon --start -x "$DAEMON" -- $OPTS
+        echo "$NAME."
+        ;;
+  *)
+        N=/etc/init.d/$NAME
+        echo "Usage: $N {start|stop|restart|force-reload}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0

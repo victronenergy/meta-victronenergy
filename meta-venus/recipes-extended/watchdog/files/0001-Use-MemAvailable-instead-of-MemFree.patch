@@ -1,0 +1,35 @@
+From dfd5635e9aa6103194e9211501b5ff84d4006b14 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Fri, 9 Dec 2016 14:36:06 +0100
+Subject: [PATCH] Use MemAvailable instead of MemFree
+
+MemFree does not include cached pages and hence underestimates the
+amount of memory that _could_ be freed when needed. MemFree + Cached
+is a better estimate, but it's not quite right either since Cached
+includes things that can't be freed.  For this reason, kernels since 3.14
+include a MemAvailable field which provides a more accurate approximation.
+See https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=34e431b0ae398fc54ea69ff85ec700722c9da773
+
+Note: This patch blindly assumes MemAvailable is present!!!
+Completely unsuitable for general use, since the device ends up in a
+reboot loop in such a case...
+---
+ src/memory.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/memory.c b/src/memory.c
+index 4893ea9..298bc9d 100644
+--- a/src/memory.c
++++ b/src/memory.c
+@@ -16,7 +16,7 @@
+ #include <syslog.h>
+ #endif
+ 
+-#define FREEMEM		"MemFree:"
++#define FREEMEM		"MemAvailable:"
+ #define FREESWAP	"SwapFree:"
+ 
+ int check_memory(void)
+-- 
+2.7.4
+
