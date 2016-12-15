@@ -33,31 +33,3 @@ do_install () {
 	install -m 644 ${WORKDIR}/com.victronenergy.settings.conf ${D}/${sysconfdir}/dbus-1/system.d
 }
 
-# remember the version updated from ...
-pkg_preinst_${PN} () {
-	if [ "x$D" = "x" ]; then
-		if [ -f ${bindir}/../version ]; then
-			cp ${bindir}/../version ${bindir}/previous_version
-		fi
-	fi
-}
-
-pkg_postinst_${PN} () {
-	if [ "x$D" = "x" ]; then
-		# this is a separate partition on a ccgx, so only create if when non existing
-		if [ ! -e /data/conf ]; then
-			mkdir -p /data/conf
-			touch /data/conf/settings.xml
-		fi
-
-		# version upto v1.15 would set access level to user, but did not
-		# enforce any policy. Since v1.16 users are locked in a user level
-		# so make sure the default is changed to to User & Installer when
-		# updating from an older version.
-		if [ -f ${bindir}/previous_version ]; then
-			${bindir}/set_setting.sh AccessLevel 1 115
-		fi
-	else
-		exit 1
-	fi
-}
