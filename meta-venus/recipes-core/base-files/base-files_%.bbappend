@@ -16,7 +16,9 @@ do_install_append() {
 		ln -s ${permanentdir}/home/root ${D}/home/root
 	fi
 
-	# FIXME: compatible with the ccgx locations for now
+	# FIXME: be compatible with the ccgx locations for now
+	# Mind it, don't make it an absolute link. When mounting the backup partition
+	# it will point to the active one in that case!
 	mkdir -p ${D}/opt
-	ln -s ${vedir} ${D}/opt/color-control
+	ln -s victronenergy ${D}/opt/color-control
 }
