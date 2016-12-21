@@ -12,9 +12,6 @@ SRC_URI += " \
 	file://splash.bgra \
 "
 
-# NOTE: the swu version set the u-boot env, see u-boot-env-tools!
-RDEPENDS_${PN} += "u-boot-env-tools"
-
 do_compile_append () {
 	mkimage -A arm -T script -C none -n 'Fatload with initramfs' -d ${WORKDIR}/fatload-initramfs.cmds ${WORKDIR}/fatload-initramfs.scr
 	mkimage -A arm -T script -C none -n 'Live Script' -d ${WORKDIR}/live.cmds ${WORKDIR}/live.scr

@@ -9,7 +9,7 @@ IMAGE_INSTALL = " \
 	busybox-mdev \
 	curl \
 	swupdate \
-	u-boot-env-tools \
+	u-boot-fw-utils \
 	venus-version \
 	${@bb.utils.contains('SWUPDATE_INIT', 'tiny', '', 'initscripts sysvinit tinylogin', d)} \
 "
@@ -19,8 +19,6 @@ IMAGE_INSTALL_append_ccgx = "kernel-module-fbcon mtd-utils-ubifs"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
-
-PR="r1"
 
 IMAGE_CLASSES += " image_types_uboot"
 IMAGE_FSTYPES = "ext2.gz.u-boot"

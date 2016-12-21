@@ -10,6 +10,7 @@ VE_BUZZER = "/sys/class/gpio/gpio35"
 
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-ccgx"
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot-ccgx"
+PREFERRED_VERSION_u-boot-fw-utils = "2013.01.01-ccgx-v3"
 
 # config of u-boot to be used
 UBOOT_MACHINE = "bpp3_config"

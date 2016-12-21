@@ -5,16 +5,13 @@ DESCRIPTION = "install fw_setenv and fw_printenv"
 # the git+hash version number from earlier version.
 
 require u-boot-ccgx.src.inc
-PR = "r0"
 
 inherit autotools
 
-SRC_URI += "file://fw_env.config"
-SRC_URI_append_ccgx += "file://u-boot.env"
-
-# name as used by OE
-PROVIDES += "u-boot-fw-utils"
-RPROVIDES_${PN} += "u-boot-fw-utils"
+SRC_URI += " \
+	file://fw_env.config \
+	file://u-boot.env \
+"
 
 do_compile () {
 	oe_runmake -C ${S} ${UBOOT_MACHINE}
@@ -32,9 +29,7 @@ do_install () {
 	# swupdate needs this to modify the u-boot env
 	install -d ${D}${libdir}
 	install -m 644 ${S}/tools/env/libubootenv.a ${D}${libdir}
-}
 
-do_install_append_ccgx() {
 	mkdir -p ${D}${datadir}/u-boot
 	install ${WORKDIR}/u-boot.env ${D}${datadir}/u-boot
 }
