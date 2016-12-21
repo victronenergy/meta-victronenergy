@@ -10,7 +10,7 @@ SRC_URI = " \
 "
 
 do_install () {
-	echo -e "${DISTRO_VERSION}\n${DISTRO_NAME}\n${BUILDNAME}" > version
+	printf "${DISTRO_VERSION}\n${DISTRO_NAME}\n${BUILDNAME}" > version
 	install -d ${D}${vedir}
 	install -m 644 version ${D}${vedir}
 
