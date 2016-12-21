@@ -1,7 +1,11 @@
 require u-boot.inc
-require u-boot-ccgx.src.inc
 
-PR = "r4"
+LICENSE = "GPLv2+"
+LIC_FILES_CHKSUM = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
+SRC_URI += "https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz"
+SRC_URI[md5sum] = "e47178a8ba8fcd12502df3cb8b3f8dee"
+SRC_URI[sha256sum] = "b133ce45ec10679199b46c3b82f6e3b57b57dd613dba5683010cfb3352b7cd43"
+S = "${WORKDIR}/u-boot-${PV}"
 
 SRC_URI += " \
 	file://fatload-initramfs.cmds \

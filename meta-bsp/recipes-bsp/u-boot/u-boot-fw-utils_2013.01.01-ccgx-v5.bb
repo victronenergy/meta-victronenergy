@@ -1,10 +1,12 @@
 SUMMARY = "U-Boot environment tools"
 DESCRIPTION = "install fw_setenv and fw_printenv"
+LICENSE = "GPLv2+"
+LIC_FILES_CHKSUM = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
 
-# note, the fancy version number is needed to be newer than
-# the git+hash version number from earlier version.
-
-require u-boot-ccgx.src.inc
+SRC_URI += "https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz"
+SRC_URI[md5sum] = "e47178a8ba8fcd12502df3cb8b3f8dee"
+SRC_URI[sha256sum] = "b133ce45ec10679199b46c3b82f6e3b57b57dd613dba5683010cfb3352b7cd43"
+S = "${WORKDIR}/u-boot-${PV}"
 
 inherit autotools
 
