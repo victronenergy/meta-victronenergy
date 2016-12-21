@@ -16,6 +16,7 @@ IMAGE_INSTALL = " \
 
 IMAGE_INSTALL_append_beaglebone = "e2fsprogs-mke2fs util-linux-sfdisk"
 IMAGE_INSTALL_append_ccgx = "kernel-module-fbcon mtd-utils-ubifs"
+IMAGE_INSTALL_append_ccgxhf = "kernel-module-fbcon mtd-utils-ubifs"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"

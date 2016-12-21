@@ -11,11 +11,24 @@ DEPENDS_append_ccgx += "\
 	qtserialport \
 "
 
+DEPENDS_append_ccgxhf += "\
+	qtbase \
+	qtserialport \
+"
+
 RDEPENDS_${PN} += "\
 	simple-upnpd \
 "
 
 RDEPENDS_${PN}_append_ccgx += "\
+	mtd-utils \
+	mtd-utils-ubifs \
+	prodtest \
+	swupdate \
+	swupdate-scripts \
+"
+
+RDEPENDS_${PN}_append_ccgxhf += "\
 	mtd-utils \
 	mtd-utils-ubifs \
 	prodtest \
