@@ -1,0 +1,110 @@
+software =
+{
+	venus-version = "0";
+
+	version = "0.1.0";
+
+	stable: {
+		backup-mlo: {
+			images: (
+				{
+					filename = "MLO";
+					type = "flash-hamming1";
+					device = "/dev/mtd1";
+				},
+				{
+					filename = "MLO";
+					type = "flash-hamming1";
+					device = "/dev/mtd2";
+				},
+				{
+					filename = "MLO";
+					type = "flash-hamming1";
+					device = "/dev/mtd3";
+				}
+			)
+		};
+		bootloader: {
+			images: (
+				{
+					filename = "u-boot.img";
+					type = "flash";
+					device = "/dev/mtd4";
+				},
+				{
+					filename = "u-boot.img";
+					type = "flash";
+					device = "/dev/mtd7";
+				},
+				{
+					filename = "splash.bgra";
+					type = "flash";
+					device = "/dev/mtd9";
+				},
+				{
+					filename = "MLO";
+					type = "flash-hamming1";
+					device = "/dev/mtd0";
+				},
+				{
+					filename = "MLO";
+					type = "flash-hamming1";
+					device = "/dev/mtd1";
+				},
+				{
+					filename = "MLO";
+					type = "flash-hamming1";
+					device = "/dev/mtd2";
+				},
+				{
+					filename = "MLO";
+					type = "flash-hamming1";
+					device = "/dev/mtd3";
+				}
+			);
+		};
+		copy1: {
+			images: (
+				{
+					filename = "venus-image-ccgxhf.ubifs";
+					type = "ubivol";
+					volume = "rootfs1";
+					installed-directly = true;
+				},
+				{
+					filename = "uImage";
+					type = "flash";
+					device = "/dev/mtd10";
+				}
+			);
+			uboot: (
+				{
+					name = "version";
+					value = "1";
+				}
+			);
+		};
+		copy2: {
+			images: (
+				{
+					filename = "venus-image-ccgxhf.ubifs";
+					type = "ubivol";
+					volume = "rootfs2";
+					installed-directly = true;
+				},
+				{
+					filename = "uImage";
+					type = "flash";
+					device = "/dev/mtd11";
+				}
+			);
+			uboot: (
+				{
+					name = "version";
+					value = "2";
+				}
+			);
+		};
+	};
+}
+
