@@ -78,6 +78,11 @@ swupdate "$@" -e "stable,bootloader"
 msg "updating boot instructions..."
 fw_setenv -s /usr/share/u-boot/u-boot.env
 
+if [ -f ${CARD}/testmode ]; then
+	msg "enabling test mode..."
+	fw_setenv runlevel 4
+fi
+
 ubidetach -m 12
 umount ${CARD}
 
