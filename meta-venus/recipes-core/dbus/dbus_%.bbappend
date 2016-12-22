@@ -6,6 +6,7 @@ SRC_URI += " \
  "
 
 RDEPENDS_${PN}_venus = "inotify-tools"
+INITSCRIPT_PARAMS = "start 02 5 4 3 2 . stop 20 0 1 6 ."
 
 # For our own images, allow access to the system dbus and guard the dbus process.
 # The guard is there since the OOM-killer likes to kill the dbus process itself,
