@@ -3,7 +3,16 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-PR = "r5"
+
+SRC_URI += "file://get-unique-id"
+SRC_URI_ccgx += "file://get-unique-id.c"
+SRC_URI_ccgxhf += "file://get-unique-id.c"
+
+do_compile () {
+	if [ -f ${WORKDIR}/get-unique-id.c ]; then
+		${CC} ${WORKDIR}/get-unique-id.c -o ${WORKDIR}/get-unique-id
+	fi
+}
 
 do_install_append() {
 	conf=${D}${sysconfdir}/venus
@@ -27,4 +36,18 @@ do_install_append() {
 	if [ -n "${VE_RELAYS}" ]; then echo ${VE_RELAYS} > $conf/relays; fi
 
 	if [ -n "${VE_BUZZER}" ]; then echo ${VE_BUZZER} > $conf/buzzer; fi
+
+	install -d ${D}/${base_sbindir}
+	install -m 755 ${WORKDIR}/get-unique-id ${D}/${base_sbindir}
+}
+
+pkg_postinst_${PN}() {
+	if [ "x$D" = "x" ]; then
+		if [ ! -f /data/venus/unique_id ]; then
+			mkdir -p /data/venus
+			${base_sbindir}/get-unique-id > /data/venus/unique-id
+		fi
+	else
+		false
+	fi
 }
