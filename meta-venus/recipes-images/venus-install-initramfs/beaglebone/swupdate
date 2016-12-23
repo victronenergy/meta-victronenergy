@@ -68,7 +68,7 @@ echo "Creating /data/venus/installer-version..."
 mkdir -p /data
 mount -t ext4 /dev/mmcblk1p5 /data
 mkdir -p /data/venus
-cp /opt/color-control/version /data/venus/installer-version
+cp /opt/victronenergy/version /data/venus/installer-version
 umount /data
 
 echo "Formatting scratch partition.."
@@ -85,6 +85,11 @@ swupdate -i ${SWU} -e "stable,copy2"
 echo "Installing boot loader..."
 setleds 2 default-on 3 timer
 swupdate -i ${SWU} -e "stable,bootloader"
+
+if [ -f ${CARD}/testmode ]; then
+	msg "enabling test mode..."
+	fw_setenv runlevel 4
+fi
 
 umount ${CARD}
 
