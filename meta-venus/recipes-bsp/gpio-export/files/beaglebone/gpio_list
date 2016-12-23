@@ -8,8 +8,8 @@
 
 # Relay 1   P8.8 / GPIO 2_3
 67  out relay_1
-# Relay 2   P8.10 / GPIO 2_4
-68  out relay_2
+# Relay 2   P8.9 / GPIO 2_5
+69  out relay_2
 
 # Digital input 1   P8.16 / GPIO 1_14
 46  in digital_input_1
