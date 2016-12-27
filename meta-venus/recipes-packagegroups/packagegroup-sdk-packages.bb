@@ -14,4 +14,4 @@ RDEPENDS_packagegroup-sdk-packages += " \
 "
 
 # swu related builds with NAND env
-RDEPENDS_packagegroup-sdk-packages_append_ccgx += "u-boot-env-tools-staticdev"
+RDEPENDS_packagegroup-sdk-packages_append_ccgx += "u-boot-fw-utils-staticdev"
