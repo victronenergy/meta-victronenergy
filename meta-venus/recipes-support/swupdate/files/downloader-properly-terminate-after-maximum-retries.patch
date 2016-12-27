@@ -1,0 +1,48 @@
+From 4944ad31cfede2abb75a396609dc0c65bedda802 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Wed, 13 Jul 2016 18:07:40 +0100
+Subject: [PATCH] downloader: properly terminate after maximum retries
+
+If the download fails to complete after the maximum number of retries,
+the installer thread will be stuck for ever waiting for data.  This
+causes ipc_wait_for_complete() to never return, and the swupdate
+process never finishes.
+
+Fix this by calling ipc_wait_for_complete() only if the download
+was successful, otherwise simply terminating the process with
+ipc_end().
+
+Signed-off-by: Mans Rullgard <mans@mansr.com>
+---
+ corelib/downloader.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/corelib/downloader.c b/corelib/downloader.c
+index ac3c2b5..e5bf422 100644
+--- a/corelib/downloader.c
++++ b/corelib/downloader.c
+@@ -252,18 +252,18 @@ RECOVERY_STATUS download_from_url(char *image_url, int retries,
+ 
+ 	}
+ 
++	curl_easy_cleanup(curl_handle);
++	curl_global_cleanup();
++
+ 	if (res == CURLE_OK) {
+ 		INFO("Success : %llu bytes", dwlbytes);
++		result = ipc_wait_for_complete(NULL);
+ 	} else {
+ 		INFO("Error : %s", curl_easy_strerror(res));
++		result = FAILURE;
+ 	}
+ 
+-	curl_easy_cleanup(curl_handle);
+-	curl_global_cleanup();
+-
+-	result = ipc_wait_for_complete(NULL);
+-
+-	close(fd);
++	ipc_end(fd);
+ 
+ 	return result;
+ }
