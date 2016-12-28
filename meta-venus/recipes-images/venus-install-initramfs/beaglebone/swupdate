@@ -32,6 +32,7 @@ trap error EXIT
 
 mount -t proc none /proc
 mount -t sysfs none /sys
+mkdir -p /run/lock
 
 setleds 0 none 1 none 2 none 3 none
 
@@ -87,7 +88,7 @@ setleds 2 default-on 3 timer
 swupdate -i ${SWU} -e "stable,bootloader"
 
 if [ -f ${CARD}/testmode ]; then
-	msg "enabling test mode..."
+	echo "enabling test mode..."
 	fw_setenv runlevel 4
 fi
 
