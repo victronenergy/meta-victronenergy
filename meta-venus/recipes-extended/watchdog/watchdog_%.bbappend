@@ -10,8 +10,7 @@ SRC_URI += "\
 	file://0001-Use-MemAvailable-instead-of-MemFree.patch \
 "
 
-# note runlevels 0, 1 stop/disable the watchdog
-#INITSCRIPT_PACKAGES = "${PN} ${PN}-norearm"
+INITSCRIPT_PACKAGES = "${PN}"
 INITSCRIPT_NAME_${PN} = "watchdog"
 INITSCRIPT_PARAMS_${PN} = "start 80 S . stop 20 0 1 6 ."
 
