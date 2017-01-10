@@ -21,6 +21,7 @@ RDEPENDS_${PN} += "\
 "
 
 RDEPENDS_${PN}_append_ccgx += "\
+	gpio-export \
 	mtd-utils \
 	mtd-utils-ubifs \
 	prodtest \
@@ -29,6 +30,7 @@ RDEPENDS_${PN}_append_ccgx += "\
 "
 
 RDEPENDS_${PN}_append_ccgxhf += "\
+	gpio-export \
 	mtd-utils \
 	mtd-utils-ubifs \
 	prodtest \
