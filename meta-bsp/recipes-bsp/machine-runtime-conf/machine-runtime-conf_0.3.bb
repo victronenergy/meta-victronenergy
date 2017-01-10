@@ -4,9 +4,9 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-SRC_URI += "file://get-unique-id"
-SRC_URI_ccgx += "file://get-unique-id.c"
-SRC_URI_ccgxhf += "file://get-unique-id.c"
+SRC_URI += "file://get-unique-id file://hw-revision"
+SRC_URI_append_ccgx += "file://get-unique-id.c"
+SRC_URI_append_ccgxhf += "file://get-unique-id.c"
 
 do_compile () {
 	if [ -f ${WORKDIR}/get-unique-id.c ]; then
@@ -39,6 +39,9 @@ do_install_append() {
 
 	install -d ${D}/${base_sbindir}
 	install -m 755 ${WORKDIR}/get-unique-id ${D}/${base_sbindir}
+
+	install -d ${D}/${bindir}
+	install -m 755 ${WORKDIR}/hw-revision ${D}/${bindir}
 }
 
 pkg_postinst_${PN}() {
