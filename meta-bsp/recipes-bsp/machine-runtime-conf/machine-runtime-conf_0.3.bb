@@ -42,6 +42,10 @@ do_install_append() {
 
 	install -d ${D}/${bindir}
 	install -m 755 ${WORKDIR}/hw-revision ${D}/${bindir}
+
+	install -d ${D}/var/www/javascript-vnc-client/venus
+	ln -s /data/venus/unique-id ${D}/var/www/javascript-vnc-client/venus
+	ln -s /opt/victronenergy/version ${D}/var/www/javascript-vnc-client/venus
 }
 
 pkg_postinst_${PN}() {
