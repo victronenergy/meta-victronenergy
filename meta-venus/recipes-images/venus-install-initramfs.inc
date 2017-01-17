@@ -15,6 +15,8 @@ IMAGE_INSTALL = " \
 IMAGE_INSTALL_append_beaglebone = "e2fsprogs-mke2fs util-linux-sfdisk"
 IMAGE_INSTALL_append_ccgx = "kernel-module-fbcon mtd-utils-ubifs"
 
+IMAGE_LINGUAS = " "
+
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
@@ -32,11 +34,6 @@ addtask unpack before do_rootfs
 
 SRC_URI = "file://swupdate"
 
-remove_locale_data_files() {
-	printf "Post processing local %s\n" ${IMAGE_ROOTFS}${libdir}/locale
-	rm -rf ${IMAGE_ROOTFS}${libdir}/locale
-}
-
 add_program_instructions() {
 	if [ "${SWUPDATE_INIT}" = "tiny" ]; then
 		install ${WORKDIR}/swupdate ${IMAGE_ROOTFS}/${base_sbindir}/init
@@ -47,4 +44,3 @@ add_program_instructions() {
 
 # remove unneeded pkg informations
 ROOTFS_POSTPROCESS_COMMAND += "add_program_instructions ;"
-ROOTFS_POSTPROCESS_COMMAND += "remove_locale_data_files ; "
