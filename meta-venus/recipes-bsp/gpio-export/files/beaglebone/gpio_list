@@ -31,8 +31,3 @@
 # S2 User Button   P8.43 / SYS_BOOT/LCDDATA2
 72  in  s2_button
 
-# Led green        P9.23 / GPIO 1_17
-49  out status_led_green
-
-# Led red          P9.27 / GPIO 3_19
-115  out status_led_red
