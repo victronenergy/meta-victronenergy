@@ -37,6 +37,8 @@ do_install_append() {
 
 	if [ -n "${VE_BUZZER}" ]; then echo ${VE_BUZZER} > $conf/buzzer; fi
 
+	if [ -n "${VE_PWM_BUZZER}" ]; then echo ${VE_PWM_BUZZER} > $conf/pwm_buzzer; fi
+
 	install -d ${D}/${base_sbindir}
 	install -m 755 ${WORKDIR}/get-unique-id ${D}/${base_sbindir}
 
