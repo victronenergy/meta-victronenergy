@@ -1,0 +1,49 @@
+From 19ef3023dfb9d5c683f976bc41796b4c606b234a Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Thu, 26 Jan 2017 20:01:30 +0000
+Subject: [PATCH 3/3] bbb_defconfig: enable bluetooth
+
+---
+ arch/arm/configs/bbb_defconfig | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/configs/bbb_defconfig b/arch/arm/configs/bbb_defconfig
+index 476587b81086..28b0c7792b28 100644
+--- a/arch/arm/configs/bbb_defconfig
++++ b/arch/arm/configs/bbb_defconfig
+@@ -763,7 +763,31 @@ CONFIG_CAN_8DEV_USB=m
+ # CONFIG_CAN_SOFTING is not set
+ # CONFIG_CAN_DEBUG_DEVICES is not set
+ # CONFIG_IRDA is not set
+-# CONFIG_BT is not set
++CONFIG_BT=m
++CONFIG_BT_BREDR=y
++CONFIG_BT_RFCOMM=m
++# CONFIG_BT_RFCOMM_TTY is not set
++# CONFIG_BT_BNEP is not set
++# CONFIG_BT_HIDP is not set
++CONFIG_BT_LE=y
++# CONFIG_BT_SELFTEST is not set
++CONFIG_BT_DEBUGFS=y
++
++#
++# Bluetooth device drivers
++#
++CONFIG_BT_INTEL=m
++CONFIG_BT_HCIBTUSB=m
++# CONFIG_BT_HCIBTUSB_BCM is not set
++# CONFIG_BT_HCIBTSDIO is not set
++# CONFIG_BT_HCIUART is not set
++# CONFIG_BT_HCIBCM203X is not set
++# CONFIG_BT_HCIBPA10X is not set
++# CONFIG_BT_HCIBFUSB is not set
++# CONFIG_BT_HCIVHCI is not set
++# CONFIG_BT_MRVL is not set
++# CONFIG_BT_ATH3K is not set
++# CONFIG_BT_WILINK is not set
+ # CONFIG_AF_RXRPC is not set
+ CONFIG_WIRELESS=y
+ CONFIG_WIRELESS_EXT=y
+-- 
+2.13.1
+
