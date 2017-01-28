@@ -1,0 +1,151 @@
+From 1d4edd955d73d114fb46c2c462b0bb679399de17 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Thu, 15 Sep 2016 12:26:24 +0100
+Subject: [PATCH 4/7] wifi: make max connection retries configurable
+
+If when connecting to a wifi network, the authentication phase fails,
+connman draws the conclusion that the wifi password was wrong. This is a
+correct conclusion when wifi reception is good, but this can also occur
+on marginal wifi reception.
+
+This adds the setting FavoriteMaxRetries allowing the number of
+connection attempts to be changed from the default of 2.
+
+The effect can be observed by temporarily changing the psk of an access
+point after the connection has been established, thus causing it to drop.
+Restoring the original psk before the maximum retries have been reached
+lets the connection be reestablished.
+
+In a location with intermittent reception, allowing unlimited retries is
+useful to avoid connman permanently disabling the network.
+
+Signed-off-by: Mans Rullgard <mans@mansr.com>
+---
+ doc/connman.conf.5.in |  5 +++++
+ include/setting.h     |  1 +
+ plugins/wifi.c        |  4 ++--
+ src/main.c            | 17 +++++++++++++++++
+ 4 files changed, 25 insertions(+), 2 deletions(-)
+
+diff --git a/doc/connman.conf.5.in b/doc/connman.conf.5.in
+index ff97b7c4010c..2f69c4902e6b 100644
+--- a/doc/connman.conf.5.in
++++ b/doc/connman.conf.5.in
+@@ -134,5 +134,10 @@ ethernet tethering.
+ AllowHostnameUpdates = false
+ TetheringTechnologies = ethernet,wifi,bluetooth,gadget
+ .fi
++.TP
++.BI FavoriteMaxRetries=retries
++Maximum number of times to attempt connecting to a known wifi service in
++case of authentication failure. Set to negative to retry indefinitely.
++Default value is 2.
+ .SH "SEE ALSO"
+ .BR connman (8)
+diff --git a/include/setting.h b/include/setting.h
+index a88202176f5e..3cb06101394a 100644
+--- a/include/setting.h
++++ b/include/setting.h
+@@ -34,6 +34,7 @@ unsigned int *connman_setting_get_uint_list(const char *key);
+ 
+ unsigned int connman_timeout_input_request(void);
+ unsigned int connman_timeout_browser_launch(void);
++int connman_favorite_max_retries(void);
+ 
+ #ifdef __cplusplus
+ }
+diff --git a/plugins/wifi.c b/plugins/wifi.c
+index 9d566713267e..521ef9f6c4c4 100644
+--- a/plugins/wifi.c
++++ b/plugins/wifi.c
+@@ -61,7 +61,6 @@
+ 
+ #define CLEANUP_TIMEOUT   8	/* in seconds */
+ #define INACTIVE_TIMEOUT  12	/* in seconds */
+-#define FAVORITE_MAXIMUM_RETRIES 2
+ 
+ #define BGSCAN_DEFAULT "simple:30:-45:300"
+ #define AUTOSCAN_DEFAULT "exponential:3:300"
+@@ -2344,7 +2343,8 @@ static bool handle_4way_handshake_failure(GSupplicantInterface *interface,
+ 	wifi->retries++;
+ 
+ 	if (connman_service_get_favorite(service)) {
+-		if (wifi->retries < FAVORITE_MAXIMUM_RETRIES)
++		int max_retries = connman_favorite_max_retries();
++		if (max_retries < 0 || wifi->retries < max_retries)
+ 			return true;
+ 	}
+ 
+diff --git a/src/main.c b/src/main.c
+index f44a2ed60e38..6afcd1cc622e 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -76,6 +76,7 @@ static struct {
+ 	char **tethering_technologies;
+ 	bool persistent_tethering_mode;
+ 	bool enable_6to4;
++	int favorite_max_retries;
+ } connman_settings  = {
+ 	.bg_scan = true,
+ 	.pref_timeservers = NULL,
+@@ -90,6 +91,7 @@ static struct {
+ 	.tethering_technologies = NULL,
+ 	.persistent_tethering_mode = false,
+ 	.enable_6to4 = false,
++	.favorite_max_retries = 2,
+ };
+ 
+ #define CONF_BG_SCAN                    "BackgroundScanning"
+@@ -105,6 +107,7 @@ static struct {
+ #define CONF_TETHERING_TECHNOLOGIES      "TetheringTechnologies"
+ #define CONF_PERSISTENT_TETHERING_MODE  "PersistentTetheringMode"
+ #define CONF_ENABLE_6TO4                "Enable6to4"
++#define CONF_FAVORITE_MAX_RETRIES       "FavoriteMaxRetries"
+ 
+ static const char *supported_options[] = {
+ 	CONF_BG_SCAN,
+@@ -120,6 +123,7 @@ static const char *supported_options[] = {
+ 	CONF_TETHERING_TECHNOLOGIES,
+ 	CONF_PERSISTENT_TETHERING_MODE,
+ 	CONF_ENABLE_6TO4,
++	CONF_FAVORITE_MAX_RETRIES,
+ 	NULL
+ };
+ 
+@@ -244,6 +248,7 @@ static void parse_config(GKeyFile *config)
+ 	char **tethering;
+ 	gsize len;
+ 	int timeout;
++	int retries;
+ 
+ 	if (!config) {
+ 		connman_settings.auto_connect =
+@@ -367,6 +372,13 @@ static void parse_config(GKeyFile *config)
+ 		connman_settings.enable_6to4 = boolean;
+ 
+ 	g_clear_error(&error);
++
++	retries = g_key_file_get_integer(config, "General",
++			CONF_FAVORITE_MAX_RETRIES, &error);
++	if (!error)
++		connman_settings.favorite_max_retries = retries;
++
++	g_clear_error(&error);
+ }
+ 
+ static int config_init(const char *file)
+@@ -585,6 +597,11 @@ unsigned int connman_timeout_browser_launch(void)
+ 	return connman_settings.timeout_browserlaunch;
+ }
+ 
++int connman_favorite_max_retries(void)
++{
++	return connman_settings.favorite_max_retries;
++}
++
+ int main(int argc, char *argv[])
+ {
+ 	GOptionContext *context;
+-- 
+2.11.0
+

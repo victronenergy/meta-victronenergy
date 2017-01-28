@@ -8,8 +8,7 @@ SRC_URI  = "https://www.kernel.org/pub/linux/network/connman/connman-${PV}.tar.x
             file://0001-Set-hwclock-when-time-is-decoded.patch \
             file://0002-Increase-NTP-poll-interval.patch \
             file://0003-gweb-Do-not-lookup-for-a-NULL-key-in-a-hash-table.patch \
-            file://0004-Add-IgnoreInvalidKey-setting.patch \
-            file://0005-Add-auto-reset-failure-plugin.patch \
+            file://0004-wifi-make-max-connection-retries-configurable.patch \
             file://0001-service-Update-nameservers-and-timeservers-with-chan.patch \
             file://main.conf \
             file://connman \

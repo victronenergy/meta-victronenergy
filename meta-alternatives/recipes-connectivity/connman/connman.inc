@@ -39,7 +39,6 @@ EXTRA_OECONF += "\
     --enable-client \
     --disable-polkit \
     --disable-wispr \
-    --enable-arfailure \
 "
 
 INITSCRIPT_NAME = "connman"
