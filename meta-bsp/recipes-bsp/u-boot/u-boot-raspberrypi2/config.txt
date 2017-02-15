@@ -1,0 +1,13 @@
+device_tree_address=0x00000100
+
+[pi2]
+kernel=u-boot.bin
+device_tree=bcm2709-rpi-2-b.dtb
+
+[pi3]
+kernel=u-boot-rpi3.bin
+device_tree=bcm2710-rpi-3-b.dtb
+dtoverlay=pi3-disable-bt
+
+[all]
+dtparam=spi=on
