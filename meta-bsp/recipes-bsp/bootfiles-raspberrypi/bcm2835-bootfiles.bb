@@ -18,8 +18,6 @@ COMPATIBLE_MACHINE = "raspberrypi"
 
 S = "${RPIFW_S}/boot"
 
-PR = "r3"
-
 do_deploy() {
     install -d ${DEPLOYDIR}/${PN}
     cp ${S}/*.elf ${S}/*.dat ${S}/*.bin ${S}/LICENCE.broadcom ${DEPLOYDIR}/${PN}
