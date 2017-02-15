@@ -2,6 +2,7 @@ DESCRIPTION = "Boot partition image"
 LICENSE = "MIT"
 
 BOOT_IMAGE_SIZE = "8192"
+BOOT_IMAGE_SIZE_raspberrypi2 = "40960"
 
 DEPENDS = "\
 	dosfstools-native \
@@ -30,7 +31,7 @@ do_rootfs () {
     mkfs.vfat -S 512 -C ${BOOTIMG} ${BOOT_IMAGE_SIZE}
 
     for file in ${IMAGE_BOOT_FILES}; do
-	mcopy -i ${BOOTIMG} ${DEPLOY_DIR_IMAGE}/${file} ::/
+        mcopy -i ${BOOTIMG} -s ${DEPLOY_DIR_IMAGE}/${file} ::/
     done
 
     gzip ${BOOTIMG}

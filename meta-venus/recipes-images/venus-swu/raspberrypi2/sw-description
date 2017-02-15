@@ -1,0 +1,50 @@
+software =
+{
+	venus-version = "0";
+
+	version = "0.1.0";
+
+	stable: {
+		bootloader: {
+			images: (
+				{
+					filename = "venus-boot-image-raspberrypi-raspberrypi2.vfat.gz";
+					device = "/dev/mmcblk0p1";
+					compressed = true;
+				}
+			);
+		};
+		copy1: {
+			images: (
+				{
+					filename = "venus-image-raspberrypi2.ext4.gz";
+					device = "/dev/mmcblk0p2";
+					compressed = true;
+					installed-directly = true;
+				}
+			);
+			uboot: (
+				{
+					name = "version";
+					value = "1";
+				}
+			);
+		};
+		copy2: {
+			images: (
+				{
+					filename = "venus-image-raspberrypi2.ext4.gz";
+					device = "/dev/mmcblk0p3";
+					compressed = true;
+					installed-directly = true;
+				}
+			);
+			uboot: (
+				{
+					name = "version";
+					value = "2";
+				}
+			);
+		};
+	};
+}
