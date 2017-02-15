@@ -3,28 +3,81 @@
 #include <stdio.h>
 
 #include <linux/watchdog.h>
+#include <sys/ioctl.h>
 
-#ifdef MACH_beaglebone
-static const int status_map[] = {
-	[0]	= 3,
-	[1]	= 4,
-	[2]	= 5,
-	[16]	= 17,
+/*
+ * Note: the ioctrl WDIOC_GETBOOTSTATUS ought to return some of these flags
+ * below. These flags are capabilities and status combined so not all them
+ * makes sense to return as a status.
+ *
+ * WDIOF_OVERHEAT	Reset due to CPU overheat
+ * WDIOF_FANFAULT	Fan failed
+ * WDIOF_EXTERN1	External relay 1
+ * WDIOF_EXTERN2	External relay 2
+ * WDIOF_POWERUNDER	Power bad/power fault
+ * WDIOF_CARDRESET	Card previously reset the CPU (WD-reset)
+ * WDIOF_POWEROVER	Power over voltage
+ * WDIOF_SETTIMEOUT	Set timeout (in seconds)
+ * WDIOF_MAGICCLOSE	Supports magic close char
+ * WDIOF_PRETIMEOUT	Pretimeout (in seconds), get/set
+ * WDIOF_ALARMONLY	Watchdog triggers a management or
+ *			other external alarm not a reboot
+ * WDIOF_KEEPALIVEPING	Keep alive ping reply
+ *
+ * But it seldomly does and returns 0 most of the time. To figure
+ * out if a watchdog reset occured, typically the power/reset manager
+ * must be talked to, which knows many more reset causes. We typpically
+ * patch linux to do get the watchdog reset status and abused this ioctl
+ * to to report other reset reasons as well, and hence are _not_ in the
+ * format described above, but kernel specific. The returned values are
+ * translated here to a common value understood by VRM.
+ */
+
+enum vrm_boot_reason
+{
+	VRM_BOOT_REASON_UNKNOWN = 0, /* Old kernel, no boottype support etc */
+	VRM_BOOT_COLD_BOOT_OR_REBOOT = 1,
+	VRM_BOOT_UNREPRODUCABLE_RESET_ON_CCGX = 2,
+	VRM_BOOT_RESET_BUTTON = 3,
+	VRM_BOOT_COLD_BOOT = 4,
+	VRM_BOOT_REBOOT_CMD = 5,
+	VRM_BOOT_WATCHDOG_REBOOT = 17
 };
+
+#if defined(MACH_beaglebone)
+static int get_vrm_boot_reason(int linux_flags)
+{
+	switch (linux_flags) {
+	case 0:
+		return VRM_BOOT_RESET_BUTTON;
+	case 1:
+		return VRM_BOOT_COLD_BOOT;
+	case 2:
+		return VRM_BOOT_REBOOT_CMD;
+	case 16:
+		return VRM_BOOT_WATCHDOG_REBOOT;
+	default:
+		return VRM_BOOT_REASON_UNKNOWN;
+	}
+}
 #else
-#define status_map ((int *)0)
+static int get_vrm_boot_reason(int linux_flags)
+{
+	return linux_flags;
+}
 #endif
+
 
 int main(int argc, char **argv)
 {
 	int fd;
 	int bootstatus;
+	int vrmstatus;
 
 	fd = open("/dev/watchdog", O_RDONLY);
 	if (fd != -1 && ioctl(fd, WDIOC_GETBOOTSTATUS, &bootstatus) == 0) {
-		if (status_map)
-			bootstatus = status_map[bootstatus];
-		printf("%d\n", bootstatus);
+		vrmstatus = get_vrm_boot_reason(bootstatus);
+		printf("%d\n", vrmstatus);
 		exit(EXIT_SUCCESS);
 	}
 
