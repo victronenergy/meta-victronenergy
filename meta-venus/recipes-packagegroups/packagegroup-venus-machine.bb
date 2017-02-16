@@ -9,11 +9,13 @@ LICENSE = "MIT"
 DEPENDS_append_ccgx += "\
 	qtbase \
 	qtserialport \
+	technexion-serial \
 "
 
 DEPENDS_append_ccgxhf += "\
 	qtbase \
 	qtserialport \
+	technexion-serial \
 "
 
 RDEPENDS_${PN} += "\
