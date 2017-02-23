@@ -5,14 +5,23 @@ set -e
 CARD=/mnt
 DEV=mmcblk0p1
 SWU=${CARD}/venus.swu
+# production uses this and is connected to ttyO2
+TESTMODE=0
+
+msg() {
+    echo "$@"
+    if [ "$TESTMODE" -eq 1 ]; then
+        echo "$@" > /dev/ttyO2
+    fi
+}
 
 pause() {
     while :; do sleep 10; done
 }
 
 error() {
-    test -n "$*" && echo "$*"
-    echo "Error installing software"
+    test -n "$*" && msg "$*"
+    msg "Error installing software"
     pause
 }
 
@@ -49,7 +58,12 @@ fi
 
 setleds 0 timer
 
-echo "Creating partitions..."
+if [ -f ${CARD}/testmode ]; then
+    TESTMODE=1
+    stty -F /dev/ttyO2 115200
+fi
+
+msg "Creating partitions..."
 sfdisk /dev/mmcblk1 <<EOF
 	2048, 16384, c, *
 	, 655360, L
@@ -62,33 +76,33 @@ EOF
 # unlock u-boot environment
 echo 0 >/sys/block/mmcblk1boot1/force_ro
 
-echo "Formatting data partition..."
+msg "Formatting data partition..."
 mkfs.ext4 /dev/mmcblk1p5
 
-echo "Creating /data/venus/installer-version..."
+msg "Creating /data/venus/installer-version..."
 mkdir -p /data
 mount -t ext4 /dev/mmcblk1p5 /data
 mkdir -p /data/venus
 cp /opt/victronenergy/version /data/venus/installer-version
 umount /data
 
-echo "Formatting scratch partition.."
+msg "Formatting scratch partition.."
 mkfs.ext4 /dev/mmcblk1p6
 
-echo "Installing rootfs1..."
+msg "Installing rootfs1..."
 setleds 0 default-on 1 timer
 swupdate -i ${SWU} -e "stable,copy1"
 
-echo "Installing rootfs2..."
+msg "Installing rootfs2..."
 setleds 1 default-on 2 timer
 swupdate -i ${SWU} -e "stable,copy2"
 
-echo "Installing boot loader..."
+msg "Installing boot loader..."
 setleds 2 default-on 3 timer
 swupdate -i ${SWU} -e "stable,bootloader"
 
-if [ -f ${CARD}/testmode ]; then
-	echo "enabling test mode..."
+if [ "$TESTMODE" -eq 1 ]; then
+	msg "enabling test mode..."
 	fw_setenv runlevel 4
 fi
 
@@ -96,6 +110,7 @@ umount ${CARD}
 
 setleds 3 default-on
 
-echo "Installation complete"
-echo "Remove SD card and power cycle system"
+msg "Installation complete"
+msg "Remove SD card and power cycle system"
+
 pause
