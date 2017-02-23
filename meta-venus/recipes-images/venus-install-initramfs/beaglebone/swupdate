@@ -22,6 +22,7 @@ pause() {
 error() {
     test -n "$*" && msg "$*"
     msg "Error installing software"
+    capeled red default-on
     pause
 }
 
@@ -37,6 +38,16 @@ setleds() {
     done
 }
 
+capeled() {
+    if [ $1 = "green" ]; then
+        echo $2 > /sys/class/leds/vecape:green:ve0/trigger
+        echo none > /sys/class/leds/vecape:red:ve1/trigger
+    else
+        echo none > /sys/class/leds/vecape:green:ve0/trigger
+        echo $2 > /sys/class/leds/vecape:red:ve1/trigger
+    fi
+}
+
 trap error EXIT
 
 mount -t proc none /proc
@@ -44,6 +55,7 @@ mount -t sysfs none /sys
 mkdir -p /run/lock
 
 setleds 0 none 1 none 2 none 3 none
+capeled green none
 
 echo "Searching for image..."
 
@@ -57,6 +69,7 @@ else
 fi
 
 setleds 0 timer
+capeled red timer
 
 if [ -f ${CARD}/testmode ]; then
     TESTMODE=1
@@ -109,6 +122,7 @@ fi
 umount ${CARD}
 
 setleds 3 default-on
+capeled green default-on
 
 msg "Installation complete"
 msg "Remove SD card and power cycle system"
