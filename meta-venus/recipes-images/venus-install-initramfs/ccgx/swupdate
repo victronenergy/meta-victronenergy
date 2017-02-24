@@ -87,5 +87,5 @@ ubidetach -m 12
 umount ${CARD}
 
 msg "Installation complete"
-msg "Remove SD-card and reset system"
+msg "Remove SD card and power cycle system"
 pause
