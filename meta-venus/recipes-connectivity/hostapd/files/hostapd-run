@@ -1,0 +1,24 @@
+#! /bin/sh
+
+gen_config() {
+	test -e /run/hostapd.conf && return 0
+
+	serial=$(cat /data/venus/serial-number)
+	psk=$(cat /data/venus/wpa-psk)
+	vrm=$(sed 's/.*\(...\)$/\1/' /data/venus/unique-id)
+
+	test -n "$serial" -a -n "$psk" -a -n "$vrm" || return 1
+
+	echo "Creating /run/hostapd.conf"
+	cat /etc/hostapd.conf - <<-EOF >/run/hostapd.conf || return 1
+	ssid=venus-${serial}-${vrm}
+	wpa_passphrase=${psk}
+EOF
+}
+
+# make sure interface exists
+iw dev wlan1 info >/dev/null 2>&1 || exit 1
+
+gen_config || exit 1
+
+exec /usr/sbin/hostapd /run/hostapd.conf

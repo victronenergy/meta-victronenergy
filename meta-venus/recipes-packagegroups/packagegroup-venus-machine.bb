@@ -41,7 +41,9 @@ RDEPENDS_${PN}_append_ccgxhf += "\
 "
 
 RDEPENDS_${PN}_append_beaglebone += "\
+	dnsmasq \
 	gpio-export \
+	hostapd \
 	i2c-tools \
 	prodtest \
 	swupdate \

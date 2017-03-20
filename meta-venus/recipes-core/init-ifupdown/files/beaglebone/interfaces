@@ -12,6 +12,13 @@ iface lo inet loopback
 #       wpa-driver wext
 #       wpa-conf /etc/wpa_supplicant.conf
 
+# wlan1, access point
+auto wlan1
+iface wlan1 inet static
+    address 172.24.24.1
+    netmask 255.255.255.0
+    network 172.24.24.0
+
 # Wired or wireless interfaces
 auto eth0
 iface eth0 inet manual
