@@ -21,4 +21,5 @@ iw dev wlan1 info >/dev/null 2>&1 || exit 1
 
 gen_config || exit 1
 
+rfkill unblock wifi
 exec /usr/sbin/hostapd /run/hostapd.conf
