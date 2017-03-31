@@ -12,6 +12,7 @@ inherit module
 SRC_URI = " \
 	gitsm://github.com/lwfinger/rtl8723bu.git;protocol=https;rev=3ad44615955998368c1018f51719373275706cc6 \
 	file://0001-fix-makefile-for-openembedded.patch \
+	file://0001-disable-proc-debug.patch \
 "
 
 S = "${WORKDIR}/git"

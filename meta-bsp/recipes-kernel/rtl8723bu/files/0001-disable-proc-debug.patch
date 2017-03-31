@@ -1,0 +1,101 @@
+From 47da48e3e0c805feca063c269f99515d3f0ee43a Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Thu, 30 Mar 2017 16:04:49 +0100
+Subject: [PATCH] disable /proc debug
+
+---
+ core/rtw_cmd.c          |  2 ++
+ hal/rtl8723b_hal_init.c |  4 ++++
+ include/autoconf.h      |  2 +-
+ os_dep/rtw_proc.h       | 12 ++++++------
+ 4 files changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/core/rtw_cmd.c b/core/rtw_cmd.c
+index 321497a35ab8..d464c3f9cd42 100644
+--- a/core/rtw_cmd.c
++++ b/core/rtw_cmd.c
+@@ -2987,11 +2987,13 @@ static void rtw_chk_hi_queue_hdl(_adapter *padapter)
+ 
+ 	rtw_hal_get_hwreg(padapter, HW_VAR_CHK_HI_QUEUE_EMPTY, &empty);
+ 
++#ifdef CONFIG_PROC_DEBUG
+ 	while(_FALSE == empty && rtw_get_passing_time_ms(start) < g_wait_hiq_empty)
+ 	{
+ 		rtw_msleep_os(100);
+ 		rtw_hal_get_hwreg(padapter, HW_VAR_CHK_HI_QUEUE_EMPTY, &empty);
+ 	}
++#endif
+ 
+ 	if(psta_bmc->sleepq_len==0)
+ 	{
+diff --git a/hal/rtl8723b_hal_init.c b/hal/rtl8723b_hal_init.c
+index 2c0dbc6a06a6..541617fdc748 100644
+--- a/hal/rtl8723b_hal_init.c
++++ b/hal/rtl8723b_hal_init.c
+@@ -270,11 +270,13 @@ static s32 polling_fwdl_chksum(_adapter *adapter, u32 min_cnt, u32 timeout_ms)
+ 		goto exit;
+ 	}
+ 
++#ifdef CONFIG_PROC_DEBUG
+ 	if (g_fwdl_chksum_fail) {
+ 		DBG_871X("%s: fwdl test case: fwdl_chksum_fail\n", __func__);
+ 		g_fwdl_chksum_fail--;
+ 		goto exit;
+ 	}
++#endif
+ 
+ 	ret = _SUCCESS;
+ 
+@@ -313,11 +315,13 @@ static s32 _FWFreeToGo(_adapter *adapter, u32 min_cnt, u32 timeout_ms)
+ 		goto exit;
+ 	}
+ 
++#ifdef CONFIG_PROC_DEBUG
+ 	if (g_fwdl_wintint_rdy_fail) {
+ 		DBG_871X("%s: fwdl test case: wintint_rdy_fail\n", __func__);
+ 		g_fwdl_wintint_rdy_fail--;
+ 		goto exit;
+ 	}
++#endif
+ 
+ 	ret = _SUCCESS;
+ 
+diff --git a/include/autoconf.h b/include/autoconf.h
+index d5556afe1ce3..01596cc84879 100644
+--- a/include/autoconf.h
++++ b/include/autoconf.h
+@@ -290,7 +290,7 @@
+ #define DBG	0	// for ODM & BTCOEX debug
+ #endif // !CONFIG_DEBUG
+ 
+-#define CONFIG_PROC_DEBUG
++//#define CONFIG_PROC_DEBUG
+ 
+ //#define DBG_CONFIG_ERROR_DETECT
+ //#define DBG_CONFIG_ERROR_DETECT_INT
+diff --git a/os_dep/rtw_proc.h b/os_dep/rtw_proc.h
+index d45a28e2bb46..8b630fccc4f8 100644
+--- a/os_dep/rtw_proc.h
++++ b/os_dep/rtw_proc.h
+@@ -40,12 +40,12 @@ void rtw_adapter_proc_replace(struct net_device *dev);
+ 
+ #else //!CONFIG_PROC_DEBUG
+ 
+-struct proc_dir_entry *get_rtw_drv_proc(void) {return NULL;}
+-int rtw_drv_proc_init(void) {return 0;}
+-void rtw_drv_proc_deinit(void) {}
+-struct proc_dir_entry *rtw_adapter_proc_init(struct net_device *dev){return NULL;}
+-void rtw_adapter_proc_deinit(struct net_device *dev){}
+-void rtw_adapter_proc_replace(struct net_device *dev){}
++static inline struct proc_dir_entry *get_rtw_drv_proc(void) {return NULL;}
++static inline int rtw_drv_proc_init(void) {return 0;}
++static inline void rtw_drv_proc_deinit(void) {}
++static inline struct proc_dir_entry *rtw_adapter_proc_init(struct net_device *dev){return NULL;}
++static inline void rtw_adapter_proc_deinit(struct net_device *dev){}
++static inline void rtw_adapter_proc_replace(struct net_device *dev){}
+ 
+ #endif //!CONFIG_PROC_DEBUG
+ 
+-- 
+2.12.2
+
