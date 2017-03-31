@@ -1,0 +1,24 @@
+#! /bin/sh
+
+# The built-in wifi device provides two interfaces.  We want to use
+# one in normal station mode and the other as access point.  As there
+# is no way of differentiating them by udev attributes, whichever is
+# handled first becomes station and the other AP.  Since rules are run
+# in parallel, use a temporary symlink to synchronise the two processes.
+#
+# Additionally, if an external wifi adapter is attached, the built-in
+# one will not be used as station.  This condition is detected by
+# counting the number of wlan* interfaces present.  Since the AP may
+# or may not have been renamed before this check, also include this
+# name and look for a total greater than 2.
+
+if ln -s $INTERFACE /tmp/wifi0; then
+    if [ $(ls /sys/class/net | grep -Ec '^(wlan|ap0)') -gt 2 ]; then
+        echo disabled-wifi0
+    else
+        echo wifi0
+    fi
+else
+    rm /tmp/wifi0
+    echo ap0
+fi

@@ -1,0 +1,6 @@
+# built-in wifi
+ACTION=="add", ENV{DEVTYPE}=="wlan", ENV{ID_BUS}=="usb", KERNELS=="1-1.4", PROGRAM="wlan-rename", NAME="%c"
+
+# external wifi
+ACTION=="add", ENV{DEVTYPE}=="wlan", ENV{ID_BUS}=="usb", KERNELS=="1-1.[13]", RUN+="wlan-update"
+ACTION=="remove", ENV{DEVTYPE}=="wlan", RUN+="wlan-update"

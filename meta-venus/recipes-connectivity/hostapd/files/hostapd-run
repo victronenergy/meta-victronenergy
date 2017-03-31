@@ -17,7 +17,7 @@ EOF
 }
 
 # make sure interface exists
-iw dev wlan1 info >/dev/null 2>&1 || exit 1
+iw dev ap0 info >/dev/null 2>&1 || exit 1
 
 gen_config || exit 1
 
