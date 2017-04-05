@@ -38,6 +38,9 @@ do_install_append() {
 
 	if [ -n "${VE_PWM_BUZZER}" ]; then echo ${VE_PWM_BUZZER} > $conf/pwm_buzzer; fi
 
+	# device for controlling the backlight
+	if [ -n "${VE_BLANK_DISPLAY}" ]; then echo ${VE_BLANK_DISPLAY} > $conf/blank_display_device; fi
+
 	install -d ${D}/${base_sbindir}
 	install -m 755 ${WORKDIR}/get-unique-id ${D}/${base_sbindir}
 
