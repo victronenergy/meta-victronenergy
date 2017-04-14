@@ -1,0 +1,4 @@
+recipes-connectivity/mosquitto
+
+reason: lives in meta-intel-iot-middleware and only mosquitto is needed.
+
