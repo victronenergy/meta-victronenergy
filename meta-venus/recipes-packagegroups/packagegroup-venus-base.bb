@@ -33,6 +33,7 @@ DEPENDS += "\
 	devmem2 \
 	gdb \
 	git \
+	openjdk-8 \
 	packagegroup-core-buildessential \
 	s6 \
 	tcpdump \
