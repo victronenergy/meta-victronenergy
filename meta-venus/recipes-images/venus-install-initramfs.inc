@@ -49,5 +49,5 @@ add_program_instructions() {
 }
 
 # remove unneeded pkg informations
-ROOTFS_POSTPROCESS_COMMAND += "remove_packaging_data_files ; add_program_instructions ;"
+ROOTFS_POSTPROCESS_COMMAND += "add_program_instructions ;"
 ROOTFS_POSTPROCESS_COMMAND += "remove_locale_data_files ; "
