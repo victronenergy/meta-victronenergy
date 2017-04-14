@@ -12,26 +12,11 @@ DEPENDS_append_ccgx += "\
 	technexion-serial \
 "
 
-DEPENDS_append_ccgxhf += "\
-	qtbase \
-	qtserialport \
-	technexion-serial \
-"
-
 RDEPENDS_${PN} += "\
 	simple-upnpd \
 "
 
 RDEPENDS_${PN}_append_ccgx += "\
-	gpio-export \
-	mtd-utils \
-	mtd-utils-ubifs \
-	prodtest \
-	swupdate \
-	swupdate-scripts \
-"
-
-RDEPENDS_${PN}_append_ccgxhf += "\
 	gpio-export \
 	mtd-utils \
 	mtd-utils-ubifs \

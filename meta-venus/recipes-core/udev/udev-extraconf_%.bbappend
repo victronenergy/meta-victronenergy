@@ -35,8 +35,4 @@ do_install_append_ccgx() {
 	install -m 0644 ${WORKDIR}/rtl8192cu.rules ${D}${sysconfdir}/udev/rules.d
 }
 
-do_install_append_ccgxhf() {
-        install -m 0644 ${WORKDIR}/rtl8192cu.rules ${D}${sysconfdir}/udev/rules.d
-}
-
 FILES_${PN}_append_beaglebone += "${base_libdir}"

@@ -6,7 +6,6 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += "file://get-unique-id file://hw-revision"
 SRC_URI_append_ccgx += "file://get-unique-id.c"
-SRC_URI_append_ccgxhf += "file://get-unique-id.c"
 
 do_compile () {
 	if [ -f ${WORKDIR}/get-unique-id.c ]; then

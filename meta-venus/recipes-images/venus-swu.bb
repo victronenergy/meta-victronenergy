@@ -21,7 +21,6 @@ IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}-${DISTRO_VERSION}"
 # the list can have any binaries - images must be in the DEPLOY directory
 SWUPDATE_IMAGES = "${IMAGE_DEPENDS}"
 SWUPDATE_IMAGES_append_ccgx = " uImage u-boot.img MLO splash.bgra"
-SWUPDATE_IMAGES_append_ccgxhf = " uImage u-boot.img MLO splash.bgra"
 
 SWUPDATE_IMAGES_FSTYPES[venus-image] = ".${ROOT_FSTYPE}"
 SWUPDATE_IMAGES_FSTYPES[venus-boot-image] = ".${BOOT_FSTYPE}"
