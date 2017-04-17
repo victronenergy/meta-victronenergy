@@ -21,9 +21,9 @@ do_compile_append () {
 }
 
 do_deploy_append () {
-	install -d ${DEPLOY_DIR_IMAGE}
-	install ${WORKDIR}/fatload-initramfs.scr ${DEPLOY_DIR_IMAGE}
-	install ${WORKDIR}/live.scr ${DEPLOY_DIR_IMAGE}
-	install ${WORKDIR}/upgrade.scr ${DEPLOY_DIR_IMAGE}
-	install ${WORKDIR}/splash.bgra ${DEPLOY_DIR_IMAGE}
+	install -d ${DEPLOYDIR}
+	install ${WORKDIR}/fatload-initramfs.scr ${DEPLOYDIR}
+	install ${WORKDIR}/live.scr ${DEPLOYDIR}
+	install ${WORKDIR}/upgrade.scr ${DEPLOYDIR}
+	install ${WORKDIR}/splash.bgra ${DEPLOYDIR}
 }

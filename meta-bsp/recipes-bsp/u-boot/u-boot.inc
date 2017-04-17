@@ -33,10 +33,10 @@ inherit deploy
 addtask deploy before do_package after do_compile
 
 do_deploy () {
-	install -d ${DEPLOY_DIR_IMAGE}
-	install ${S}/${UBOOT_IMAGE} ${DEPLOY_DIR_IMAGE}/${UBOOT_IMAGE}
+	install -d ${DEPLOYDIR}
+	install ${S}/${UBOOT_IMAGE} ${DEPLOYDIR}/${UBOOT_IMAGE}
 	if [ -e ${S}/MLO ] ; then
-		install ${S}/MLO ${DEPLOY_DIR_IMAGE}/MLO
+		install ${S}/MLO ${DEPLOYDIR}/MLO
 	fi
 }
 
