@@ -13,10 +13,10 @@ SRC_URI += " \
 
 COMPATIBLE_MACHINE = "raspberrypi"
 
-# This revision corresponds to the tag "v2017.01"
+# This revision corresponds to the tag "v2017.03"
 # We use the revision in order to avoid having to fetch it from the
 # repo during parse
-SRCREV = "a705ebc81b7f91bbd0ef7c634284208342901149"
+SRCREV = "8537ddd769f460d7fb7a62a3dcc9669049702e51"
 
 # Install required file for Raspberry Pi bootloader, to indicate that it should
 # load u-boot.
