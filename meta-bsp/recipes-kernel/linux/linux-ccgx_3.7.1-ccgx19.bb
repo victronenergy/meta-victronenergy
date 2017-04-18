@@ -6,8 +6,8 @@ RDEPENDS_kernel-image += "linux-backports"
 RDEPENDS_kernel-image += "kernel-modules"
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-SRC_URI[md5sum] = "3f0c43ee027708c2995a533e0379519d"
-SRC_URI[sha256sum] = "2a12d128d78edecae0440bceb4bb528b8d008f567e3a86199426dac6c1a53f17"
+SRC_URI[md5sum] = "8fe90da914c4748cc6b389a15bf9623e"
+SRC_URI[sha256sum] = "74053acb928380c3677c6b704eb823db9338a042cd7a150056df9e7cde7838a6"
 
 # This was introduced to remove uImage from /boot and save 3MB
 KERNEL_DROPIMAGE = ""
