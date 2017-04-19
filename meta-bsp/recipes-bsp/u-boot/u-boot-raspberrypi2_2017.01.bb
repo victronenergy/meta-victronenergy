@@ -1,9 +1,6 @@
 require u-boot-rpi.inc
 
 DEPENDS += "dtc-native"
-# u-boot-raspberrypi3 is not a full loader, just an alternative build for the
-# rpi3. We depend on it because it is listed in config.txt.
-RDEPENDS_${PN} = "u-boot-raspberrypi3"
 do_deploy[depends] += "bcm2835-bootfiles:do_deploy"
 
 SRC_URI += " \
