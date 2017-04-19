@@ -52,13 +52,6 @@ IMAGE_DEPENDS_rpi-sdimg = " \
 # SD card image name
 SDIMG = "${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.rpi-sdimg"
 
-# Compression method to apply to SDIMG after it has been created. Supported
-# compression formats are "gzip", "bzip2" or "xz". The original .rpi-sdimg file
-# is kept and a new compressed file is created if one of these compression
-# formats is chosen. If SDIMG_COMPRESSION is set to any other value it is
-# silently ignored.
-#SDIMG_COMPRESSION ?= ""
-
 # Additional files and/or directories to be copied into the vfat partition from the IMAGE_ROOTFS.
 FATPAYLOAD ?= ""
 
@@ -103,6 +96,7 @@ IMAGE_CMD_rpi-sdimg () {
 	zcat ${DEPLOY_DIR_IMAGE}/venus-boot-image-raspberrypi2.vfat.gz | dd of=${SDIMG} conv=notrunc seek=1 bs=$(expr ${IMAGE_ROOTFS_ALIGNMENT} \* 1024)
 	zcat ${SDIMG_ROOTFS} | dd of=${SDIMG} conv=notrunc seek=1 bs=$(expr 1024 \* ${BOOT_SPACE_ALIGNED} + ${IMAGE_ROOTFS_ALIGNMENT} \* 1024)
 	dd if=${WORKDIR}/data.img of=${SDIMG} conv=notrunc seek=1 bs=$(expr 1024 \* ${BOOT_SPACE_ALIGNED} + ${IMAGE_ROOTFS_ALIGNMENT} \* 1024 + ${ROOT_SPACE_ALIGNED} \* 2048)
+	bzip2 -k9 "${SDIMG}"
 }
 
 ROOTFS_POSTPROCESS_COMMAND += " rpi_generate_sysctl_config ; "
