@@ -4,6 +4,7 @@ LINUX_VERSION ?= "4.4.50"
 
 SRCREV = "04c8e47067d4873c584395e5cb260b4f170a99ea"
 SRC_URI = "git://github.com/raspberrypi/linux.git;protocol=git;branch=rpi-4.4.y \
+    file://ftdi_sio.diff \
     file://logo.diff \
     file://logo.cfg \
     file://slcan.cfg \

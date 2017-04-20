@@ -1,0 +1,53 @@
+From c6dce2626606ef16434802989466636bc28c1419 Mon Sep 17 00:00:00 2001
+From: Johan Hovold <johan@kernel.org>
+Date: Wed, 25 Jan 2017 15:35:20 +0100
+Subject: USB: serial: ftdi_sio: fix extreme low-latency setting
+
+Since commit 557aaa7ffab6 ("ft232: support the ASYNC_LOW_LATENCY
+flag") the FTDI driver has been using a receive latency-timer value of
+1 ms instead of the device default of 16 ms.
+
+The latency timer is used to periodically empty a non-full receive
+buffer, but a status header is always sent when the timer expires
+including when the buffer is empty. This means that a two-byte bulk
+message is received every millisecond also for an otherwise idle port as
+long as it is open.
+
+Let's restore the pre-2009 behaviour which reduces the rate of the
+status messages to 1/16th (e.g. interrupt frequency drops from 1 kHz to
+62.5 Hz) by not setting ASYNC_LOW_LATENCY by default.
+
+Anyone willing to pay the price for the minimum-latency behaviour should
+set the flag explicitly instead using the TIOCSSERIAL ioctl or a tool
+such as setserial (e.g. setserial /dev/ttyUSB0 low_latency).
+
+Note that since commit 0cbd81a9f6ba ("USB: ftdi_sio: remove
+tty->low_latency") the ASYNC_LOW_LATENCY flag has no other effects but
+to set a minimal latency timer.
+
+Reported-by: Antoine Aubert <a.aubert@overkiz.com>
+Fixes: 557aaa7ffab6 ("ft232: support the ASYNC_LOW_LATENCY flag")
+Cc: stable@vger.kernel.org # v2.6.31: e3e574ad85a2
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/ftdi_sio.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+(limited to 'drivers/usb/serial/ftdi_sio.c')
+
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index b064fad..4bd556d 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1805,8 +1805,6 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
+ 
+ 	mutex_init(&priv->cfg_lock);
+ 
+-	priv->flags = ASYNC_LOW_LATENCY;
+-
+ 	if (quirk && quirk->port_probe)
+ 		quirk->port_probe(priv);
+ 
+-- 
+cgit v1.1
+
