@@ -44,6 +44,7 @@ IMAGE_DEPENDS_rpi-sdimg = " \
 	parted-native \
 	mtools-native \
 	dosfstools-native \
+	zip-native \
 	virtual/kernel:do_deploy \
 	venus-boot-image \
 	bcm2835-bootfiles \
@@ -96,7 +97,7 @@ IMAGE_CMD_rpi-sdimg () {
 	zcat ${DEPLOY_DIR_IMAGE}/venus-boot-image-raspberrypi2.vfat.gz | dd of=${SDIMG} conv=notrunc seek=1 bs=$(expr ${IMAGE_ROOTFS_ALIGNMENT} \* 1024)
 	zcat ${SDIMG_ROOTFS} | dd of=${SDIMG} conv=notrunc seek=1 bs=$(expr 1024 \* ${BOOT_SPACE_ALIGNED} + ${IMAGE_ROOTFS_ALIGNMENT} \* 1024)
 	dd if=${WORKDIR}/data.img of=${SDIMG} conv=notrunc seek=1 bs=$(expr 1024 \* ${BOOT_SPACE_ALIGNED} + ${IMAGE_ROOTFS_ALIGNMENT} \* 1024 + ${ROOT_SPACE_ALIGNED} \* 2048)
-	bzip2 -k9 "${SDIMG}"
+	zip ${SDIMG}.zip ${SDIMG}
 }
 
 ROOTFS_POSTPROCESS_COMMAND += " rpi_generate_sysctl_config ; "
