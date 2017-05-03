@@ -7,4 +7,5 @@ SRC_URI += " \
 	file://0003-add-mkspecs-for-the-victron-sdk.patch \
 	file://0004-qws-vncserver-bind-to-localhost-instead-of-all-inter.patch \
 	file://0005-qws-vncserver-add-vnc-authentication.patch \
+	file://0006-PATCH-QNativeSocketEngine-fix-SO_REUSEPORT-problems-.patch \
 "
