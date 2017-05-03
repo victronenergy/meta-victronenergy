@@ -1,33 +1,6 @@
 inherit image_types
 
-IMAGE_TYPES += "production.zip live.img.gz"
-
-PRODUCTION = "${WORKDIR}/production"
-
-IMAGE_DEPENDS_production.zip = " \
-	virtual/bootloader \
-	virtual/kernel:do_deploy \
-	zip-native:do_populate_sysroot \
-	"
-
-IMAGE_TYPEDEP_production.zip = "ubi"
-
-IMAGE_CMD_production.zip () {
-	if [ -d ${PRODUCTION} ]; then
-		rm -rf ${PRODUCTION}
-	fi
-
-	mkdir ${PRODUCTION}
-	cp ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}-${MACHINE}.bin ${PRODUCTION}/${KERNEL_IMAGETYPE}
-	cp ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.ubi ${PRODUCTION}/rootfs.ubi
-	cp ${DEPLOY_DIR_IMAGE}/MLO ${PRODUCTION}
-	cp ${DEPLOY_DIR_IMAGE}/production.scr ${PRODUCTION}/boot.scr
-	cp ${DEPLOY_DIR_IMAGE}/splash.bgra ${PRODUCTION}
-	cp ${DEPLOY_DIR_IMAGE}/u-boot.img ${PRODUCTION}
-
-	zip -rj ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.production.zip ${PRODUCTION}
-	rm -rf ${PRODUCTION}
-}
+IMAGE_TYPES += "live.img.gz"
 
 IMAGE_TYPEDEP_live.img = "ext3"
 
