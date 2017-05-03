@@ -2,12 +2,6 @@ DEPENDS = "freetype jpeg libpng zlib dbus tiff directfb"
 
 require qt4_ve_patches.inc
 
-# Ship patched version of the vnc plugin, but keep other PRs the same.
-# For unknown reason the revision of the package itself (PKGR_${PN}) is not
-# updated accordingly, so spell out that those are the same...
-PR_qt4-embedded-plugin-gfxdriver-gfxvnc = "${PR}.3"
-PKGR_qt4-embedded-plugin-gfxdriver-gfxvnc = "${PR_qt4-embedded-plugin-gfxdriver-gfxvnc}"
-
 # only build what is needed on the target (and a bit more I guess)
 QT_CONFIG_FLAGS = " \
 	-embedded $QT_ARCH \
