@@ -41,6 +41,8 @@ do_install_append() {
 	# device for controlling the backlight
 	if [ -n "${VE_BLANK_DISPLAY}" ]; then echo ${VE_BLANK_DISPLAY} > $conf/blank_display_device; fi
 
+	if [ -n "${VE_CAN_PORTS}" ]; then echo ${VE_CAN_PORTS} > $conf/canbus_ports; fi
+
 	install -d ${D}/${base_sbindir}
 	install -m 755 ${WORKDIR}/get-unique-id ${D}/${base_sbindir}
 
