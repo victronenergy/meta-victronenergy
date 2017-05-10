@@ -1,23 +1,5 @@
 #!/bin/bash
 #
-# check-updates.sh: wrapper script around swupdate
-#
-# Arguments:
-# -auto    script will check automatic update setting in localsettings.
-#          use this when calling from cron or after boot.
-# -delay   sleep for a random delay before starting the download of
-#          new image (to prevent thousands of units starting the
-#          download at the same time).
-#          use this when calling from cron or after boot.
-# -check   (only) check if there is a new version available.
-# -update  check and, when necessary, update.
-# -force   force downloading and installing the new image, even if its
-#          version is older or same as already installed version.
-# -offline search for updates on removable storage devices
-#
-# Behaviour when called without any arguments is same as -update
-#
-#
 # RESUME DOWNLOAD DETAILS
 # swupdate can retry and resume a broken download. See -t and -r arguments
 # in do_swupdate call at end of this file.
@@ -98,11 +80,33 @@ for arg; do
         -delay)  delay=y     ;;
         -force)  force=y     ;;
         -offline)offline=y   ;;
+        -help)   help=y      ;;
         *)       echo "Invalid option $arg"
                  exit 1
                  ;;
     esac
 done
+
+if [ "$help" = y ]; then
+    echo "check-updates.sh: wrapper script around swupdate"
+    echo
+    echo "Arguments:"
+    echo "-auto    script will check automatic update setting in localsettings."
+    echo "         use this when calling from cron or after boot."
+    echo "-delay   sleep for a random delay before starting the download of"
+    echo "         new image (to prevent thousands of units starting the"
+    echo "         download at the same time)."
+    echo "         use this when calling from cron or after boot."
+    echo "-check   (only) check if there is a new version available."
+    echo "-update  check and, when necessary, update."
+    echo "-force   force downloading and installing the new image, even if its"
+    echo "         version is older or same as already installed version."
+    echo "-offline search for updates on removable storage devices"
+    echo "-help    this help"
+    echo
+    echo "Behaviour when called without any arguments is same as -update"
+    exit
+fi
 
 if [ "${update:-auto}" = auto ]; then
     update=$(get_setting AutoUpdate)
