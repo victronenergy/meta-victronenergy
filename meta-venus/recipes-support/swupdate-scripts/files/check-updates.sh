@@ -72,19 +72,25 @@ start_log
 echo "*** Checking for updates ***"
 echo "arguments: $@"
 
-for arg; do
-    case $arg in
+while [[ $# -gt 0 ]]; do
+    case "$1" in
         -auto)   update=auto ;;
         -check)  update=2    ;;
         -update) update=1    ;;
         -delay)  delay=y     ;;
         -force)  force=y     ;;
+        -swu)
+                 shift
+                 force=y
+                 forceswu="$1"
+        ;;
         -offline)offline=y   ;;
         -help)   help=y      ;;
         *)       echo "Invalid option $arg"
                  exit 1
                  ;;
     esac
+    shift
 done
 
 if [ "$help" = y ]; then
@@ -101,6 +107,7 @@ if [ "$help" = y ]; then
     echo "-update  check and, when necessary, update."
     echo "-force   force downloading and installing the new image, even if its"
     echo "         version is older or same as already installed version."
+    echo "-swu url forcefully install the swu from given url"
     echo "-offline search for updates on removable storage devices"
     echo "-help    this help"
     echo
@@ -130,7 +137,10 @@ fi
 
 machine=$(cat /etc/venus/machine)
 
-if [ "$offline" = y ]; then
+if [[ $forceswu ]]; then
+    echo "Updating to $forceswu"
+    SWU="$forceswu"
+elif [ "$offline" = y ]; then
     echo "Searching for update on SD/USB..."
 
     for dev in /media/*; do
@@ -166,38 +176,40 @@ else
     SWU=${URL_BASE}/venus-swu-${machine}.swu
 fi
 
-echo "Retrieving latest version (feed=$feed)..."
-swu_status 1
+if [[ -z $forceswu ]]; then
+    echo "Retrieving latest version (feed=$feed)..."
+    swu_status 1
 
-cur_version=$(get_version)
-swu_version=$(get_swu_version "$SWU")
+    cur_version=$(get_version)
+    swu_version=$(get_swu_version "$SWU")
 
-if [ -z "$swu_version" ]; then
-    echo "Unable to retrieve latest software version, exit."
-    swu_status -1
-    exit 1
-fi
+    if [ -z "$swu_version" ]; then
+        echo "Unable to retrieve latest software version, exit."
+        swu_status -1
+        exit 1
+    fi
 
-cur_build=${cur_version%% *}
-swu_build=${swu_version%% *}
+    cur_build=${cur_version%% *}
+    swu_build=${swu_version%% *}
 
-if [ "$offline" != y ]; then
-    # change SWU url into the full name
-    SWU=${URL_BASE}/venus-swu-${machine}-${swu_version// /-}.swu
-fi
+    if [ "$offline" != y ]; then
+        # change SWU url into the full name
+        SWU=${URL_BASE}/venus-swu-${machine}-${swu_version// /-}.swu
+    fi
 
-echo "installed: $cur_version"
-echo "available: $swu_version"
+    echo "installed: $cur_version"
+    echo "available: $swu_version"
 
-if [ "$force" != y -a "${swu_build}" -le "${cur_build}" ]; then
-    echo "No newer version available, exit."
-    swu_status 0
-    exit
-fi
+    if [ "$force" != y -a "${swu_build}" -le "${cur_build}" ]; then
+        echo "No newer version available, exit."
+        swu_status 0
+        exit
+    fi
 
-if [ "$update" != 1 ]; then
-    swu_status 0 "$swu_version"
-    exit
+    if [ "$update" != 1 ]; then
+        swu_status 0 "$swu_version"
+        exit
+    fi
 fi
 
 altroot=$(get_altrootfs)
