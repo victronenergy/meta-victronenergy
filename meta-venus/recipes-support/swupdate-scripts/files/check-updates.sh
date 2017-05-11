@@ -76,7 +76,7 @@ start_log
 echo "*** Checking for updates ***"
 echo "arguments: $@"
 
-while [[ $# -gt 0 ]]; do
+while [ $# -gt 0 ]; do
     case "$1" in
         -auto)
                  update=auto
@@ -161,7 +161,7 @@ machine=$(cat /etc/venus/machine)
 swu_name=$(cat /etc/venus/swu-name)
 swu_base=${swu_name}-${machine}
 
-if [[ $forceswu ]]; then
+if [ -n "$forceswu" ]; then
     echo "Updating to $forceswu"
     SWU="$forceswu"
     # The version is not known, since the stream might not support seeking,
@@ -230,7 +230,7 @@ else
     SWU=${URL_BASE}/${swu_base}.swu
 fi
 
-if [[ -z $forceswu ]]; then
+if [ -z "$forceswu" ]; then
     echo "Retrieving latest version... (from $SWU)"
     swu_status 1
 
