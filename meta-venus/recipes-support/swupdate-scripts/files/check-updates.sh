@@ -83,6 +83,7 @@ while [[ $# -gt 0 ]]; do
                  shift
                  force=y
                  forceswu="$1"
+                 update="1"
         ;;
         -offline)offline=y   ;;
         -help)   help=y      ;;
@@ -140,6 +141,9 @@ machine=$(cat /etc/venus/machine)
 if [[ $forceswu ]]; then
     echo "Updating to $forceswu"
     SWU="$forceswu"
+    # The version is not known, since the stream might not support seeking,
+    # like stdin for example. So as a best effort, use the url instead.
+    swu_version="$forceswu"
 elif [ "$offline" = y ]; then
     echo "Searching for update on SD/USB..."
 
