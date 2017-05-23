@@ -22,9 +22,12 @@ error() {
 
 trap error EXIT
 
-mount -t devtmpfs none /dev
 mount -t proc none /proc
 mount -t sysfs none /sys
+# manually mount devtmpfs if not done by linux
+if ! grep -q devtmpfs /proc/filesystems; then
+	mount -t devtmpfs none /dev
+fi
 
 mkdir -p /run/lock
 
