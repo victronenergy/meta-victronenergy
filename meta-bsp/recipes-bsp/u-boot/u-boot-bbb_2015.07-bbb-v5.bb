@@ -22,6 +22,6 @@ do_compile_append () {
 }
 
 do_deploy_append () {
-	install -d ${DEPLOY_DIR_IMAGE}
-	install -m 0644 ${WORKDIR}/install.scr ${DEPLOY_DIR_IMAGE}/install-${MACHINE}.scr
+	install -d ${DEPLOYDIR}
+	install -m 0644 ${WORKDIR}/install.scr ${DEPLOYDIR}/install-${MACHINE}.scr
 }
