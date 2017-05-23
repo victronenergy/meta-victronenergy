@@ -22,7 +22,6 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 
 IMAGE_CLASSES += " image_types_uboot"
 IMAGE_FSTYPES = "ext2.gz.u-boot"
-IMAGE_DEVICE_TABLES = "conf/machine/${MACHINE}/device_table.txt"
 IMAGE_ROOTFS_SIZE = "32000"
 
 inherit image
