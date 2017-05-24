@@ -14,11 +14,7 @@ start() {
 }
 
 # Start services
-start gps.dat
-start vebus.dat
-start battery.dat
+start grid.dat
+start pvinverter_fronius.dat
 start solarcharger.dat
-start tank_bwater.dat
-start tank_fwater.dat
-start tank_fuel.dat
-start genset_fischerpanda.dat
+start vebus.dat
