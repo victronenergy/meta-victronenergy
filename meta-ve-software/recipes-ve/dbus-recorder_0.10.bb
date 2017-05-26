@@ -7,23 +7,17 @@ inherit ve_package
 
 RDEPENDS_${PN} = "python-dbus"
 
-SRC_URI = " \
-	git://github.com/victronenergy/dbus-recorder.git;protocol=https;tag=${PV} \
-	file://startdemo.sh \
-	file://stopdemo.sh \
-"
+SRC_URI = "git://github.com/victronenergy/dbus-recorder.git;protocol=https;tag=${PV}"
 S = "${WORKDIR}/git"
 
 do_install () {
 	install -d ${D}/${bindir}
 
-	install -m 0755 ${WORKDIR}/startdemo.sh ${D}/${bindir}
-	install -m 0755 ${WORKDIR}/stopdemo.sh ${D}/${bindir}
+	install -m 0755 ${S}/startdemo.sh ${D}/${bindir}
+	install -m 0755 ${S}/stopdemo.sh ${D}/${bindir}
 
 	# copy python scripts
 	install -m 755 -D ${S}/*.py ${D}/${bindir}
 	# copy data files
 	install -m 444 -D ${S}/*.dat ${D}/${bindir}
 }
-
-
