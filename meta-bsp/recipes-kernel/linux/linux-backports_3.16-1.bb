@@ -3,7 +3,7 @@ SECTION = "kernel"
 LICENSE = "GPLv2"
 
 inherit module
-KERNEL_MODULES_META_PACKAGE = "linux-backports-modules"
+KERNEL_MODULES_META_PACKAGE = "linux-backports"
 KERNEL_MODULE_PATTERN = "linux-backport-module-%s"
 BACKPORTS_CONFIG = "ccgx.config"
 
