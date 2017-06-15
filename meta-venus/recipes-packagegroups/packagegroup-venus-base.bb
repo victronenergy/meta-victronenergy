@@ -45,6 +45,8 @@ DEPENDS += "\
 
 RDEPENDS_${PN} += "\
 	bash \
+	bluez5 \
+	bluez5-noinst-tools \
 	bsdiff \
 	bzip2 \
 	ca-certificates \
