@@ -13,3 +13,7 @@ SRC_URI[sha256sum] = "74053acb928380c3677c6b704eb823db9338a042cd7a150056df9e7cde
 KERNEL_DROPIMAGE = "1"
 
 S = "${WORKDIR}/linux-${PV}"
+
+SRC_URI += " \
+	file://0001-ccgx-enable-bluetooth.patch \
+"
