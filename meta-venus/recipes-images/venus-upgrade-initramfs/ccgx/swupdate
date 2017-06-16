@@ -2,7 +2,7 @@
 
 set -e
 
-CARD=/mnt/card
+CARD=/mnt
 SWU=${CARD}/venus.swu
 DATA=${CARD}/data.tar
 
@@ -26,6 +26,8 @@ trap error EXIT
 mount -t devtmpfs none /dev
 mount -t proc none /proc
 mount -t sysfs none /sys
+
+mkdir -p /run/lock
 
 modprobe fbcon
 
