@@ -26,7 +26,7 @@ trap error EXIT
 mount -t proc none /proc
 mount -t sysfs none /sys
 # manually mount devtmpfs if not done by linux
-if ! grep -q devtmpfs /proc/filesystems; then
+if ! `mount | grep -q " on /dev "`; then
 	mount -t devtmpfs none /dev
 fi
 
