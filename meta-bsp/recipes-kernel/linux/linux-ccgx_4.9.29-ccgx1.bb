@@ -22,6 +22,8 @@ DISCRIPTION = "\
 	- Check which modules are not needed and which ones are.. \
 	- OE: gpio export now needs to be in userspace, see meta-venus/recipes-bsp/gpio-export \
 	- OE, gui: backlight name changed to /sys/class/backlight/backlight \
+	- for the upgrade image to work, either the ramdisk_size should be increased, or not \
+	-  all kernel-modules should be shipped \
 "
 
 # Unfortunately at the moment openembedded cannot compile two kernels at
