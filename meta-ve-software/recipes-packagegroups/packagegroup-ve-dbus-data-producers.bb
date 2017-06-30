@@ -19,6 +19,7 @@ inherit packagegroup
 # lines in order to function correctly.
 
 RRECOMMENDS_${PN} += " \
+	can-bus-bms \
 	dbus-cgwacs \
 	dbus-fronius \
 	dbus-motordrive \
@@ -28,7 +29,6 @@ RRECOMMENDS_${PN} += " \
 	dbus-valence \
 	dbus-vebus-to-pvinverter \
 	gps-dbus \
-	lg-resu-interface \
 	vecan-dbus \
 	vedirect-interface \
 "
