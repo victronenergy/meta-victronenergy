@@ -12,9 +12,6 @@ SRC_URI += "file://start-sshd.sh"
 
 do_install_append() {
 	install -m 755 ${WORKDIR}/start-sshd.sh ${D}${bindir}
-
-	# fixme
-	ln -sfn ${DAEMONTOOLS_SERVICE_DIR} ${D}${DAEMONTOOLS_SERVICES_DIR}/sshd
 }
 
 # disable the update-rc.d
