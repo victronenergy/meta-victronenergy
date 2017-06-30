@@ -11,6 +11,7 @@ DAEMONTOOLS_virtclass-nativesdk = ""
 DAEMONTOOLS_SERVICES_DIR ?= "/service"
 DAEMONTOOLS_LOG_DIR_PREFIX = "${localstatedir}/log"
 DAEMONTOOLS_LOG_DIR_PREFIX_ccgx ="/log"
+DAEMONTOOLS_SERVICE_SYMLINK ?= "1"
 
 python () {
 	pkg = d.getVar('DAEMON_PN', True)
@@ -135,8 +136,10 @@ do_install_append() {
 		touch ${SERVICE}/log/down
 	fi
 
-	install -d ${D}${DAEMONTOOLS_SERVICES_DIR}
-	ln -s ${DAEMONTOOLS_SERVICE_DIR} ${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}
+	if [ ${DAEMONTOOLS_SERVICE_SYMLINK} = "1" ]; then
+		install -d ${D}${DAEMONTOOLS_SERVICES_DIR}
+		ln -s ${DAEMONTOOLS_SERVICE_DIR} ${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}
+	fi
 }
 
 
