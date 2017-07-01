@@ -22,12 +22,6 @@ do_per_canbus_service() {
 		# patch run files for CAN-bus device
 		sed -i "s:DEV:$dev:" "$SERVICE/run"
 		sed -i "s:DEV:$dev:" "$SERVICE/log/run"
-
-		# FIXME: symlink the first service, as long as the profile selection
-		# in the gui does not support multiple CAN-busses, so things don't break.
-		if [ ! -L "${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}" ]; then
-			ln -s "${DAEMONTOOLS_SERVICES_DIR}/${PN}.$dev" "${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}"
-		fi
 	done
 }
 
