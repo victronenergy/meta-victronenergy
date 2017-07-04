@@ -40,6 +40,7 @@ DEPENDS += "\
 	tcpdump \
 	tinymembench \
 	tmux \
+	valgrind \
 	vim \
 "
 
