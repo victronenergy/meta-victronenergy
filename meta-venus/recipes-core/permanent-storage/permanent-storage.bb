@@ -10,6 +10,7 @@ pkg_postinst_${PN}() {
 		# Data should alway be mounted. Create data structure and symlinks
 		[ -d /data/conf ] || mkdir -p /data/conf
 		[ -d /data/db ] || mkdir -p /data/db; chown www-data /data/db
+		[ -d /data/themes/overlay ] || mkdir -p /data/themes/overlay; chown www-data /data/themes/overlay
 
 		# This is double with the initscripts bbappend (in Jethro), and left here
 		# for now for as long as we still use Danny.
