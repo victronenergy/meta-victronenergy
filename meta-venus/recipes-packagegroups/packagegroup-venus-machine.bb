@@ -37,6 +37,7 @@ RDEPENDS_${PN}_append_beaglebone += "\
 "
 
 RDEPENDS_${PN}_append_raspberrypi2 += "\
+	gpio-export \
 	swupdate \
 	swupdate-scripts \
 "
