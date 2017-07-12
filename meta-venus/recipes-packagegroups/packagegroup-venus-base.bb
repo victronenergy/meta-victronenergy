@@ -57,6 +57,7 @@ RDEPENDS_${PN} += "\
 	crda \
 	cronie \
 	curl \
+	custom-rc.d \
 	dbus \
 	dbus-tools \
 	e2fsprogs \
