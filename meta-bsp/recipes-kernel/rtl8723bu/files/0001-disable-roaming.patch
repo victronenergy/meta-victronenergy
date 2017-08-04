@@ -1,0 +1,27 @@
+From 8e554f91023af742bc491f0612f0c6a5315ea033 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 4 Aug 2017 19:33:58 +0100
+Subject: [PATCH] disable roaming
+
+---
+ include/autoconf.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/autoconf.h b/include/autoconf.h
+index 01596cc84879..ee257306f4c3 100644
+--- a/include/autoconf.h
++++ b/include/autoconf.h
+@@ -179,8 +179,8 @@
+ #define USB_INTERFERENCE_ISSUE // this should be checked in all usb interface
+ #define CONFIG_GLOBAL_UI_PID
+ 
+-#define CONFIG_LAYER2_ROAMING
+-#define CONFIG_LAYER2_ROAMING_RESUME
++//#define CONFIG_LAYER2_ROAMING
++//#define CONFIG_LAYER2_ROAMING_RESUME
+ //#define CONFIG_ADAPTOR_INFO_CACHING_FILE // now just applied on 8192cu only, should make it general...
+ //#define CONFIG_RESUME_IN_WORKQUEUE
+ //#define CONFIG_SET_SCAN_DENY_TIMER
+-- 
+2.13.4
+
