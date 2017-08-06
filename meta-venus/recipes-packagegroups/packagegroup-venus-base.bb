@@ -54,6 +54,7 @@ RDEPENDS_${PN} += "\
 	can-utils \
 	connman \
 	connman-tools \
+	crda \
 	cronie \
 	curl \
 	dbus \
@@ -102,5 +103,4 @@ RDEPENDS_${PN} += "\
 
 RDEPENDS_${PN}_append_raspberrypi2 += "\
 	linux-firmware-bcm43430 \
-	crda \
 "
