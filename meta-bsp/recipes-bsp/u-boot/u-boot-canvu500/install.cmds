@@ -1,0 +1,6 @@
+env default -a
+env save
+load usb 0 ${loadaddr} fitImage
+load usb 0 ${rdaddr} initramfs
+setenv bootargs console=ttymxc0,115200 ramdisk_size=32768 root=/dev/ram0 rw rootfstype=ext2 ${mtdparts}
+bootm ${loadaddr} ${rdaddr}
