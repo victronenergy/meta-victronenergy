@@ -1,5 +1,7 @@
 SRC_URI = "file://sw-description"
 
+SRC_URI_append_canvu500 += "file://imx-kobs-update.sh"
+
 inherit swupdate
 
 LICENSE = "MIT"
@@ -24,6 +26,7 @@ IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}-${DISTRO_VERSION}"
 # SWUPDATE_IMAGES: list of images that will be part of the compound image
 # the list can have any binaries - images must be in the DEPLOY directory
 SWUPDATE_IMAGES = "${IMAGE_DEPENDS}"
+SWUPDATE_IMAGES_append_canvu500 = " u-boot.imx"
 SWUPDATE_IMAGES_append_ccgx = " uImage u-boot.img MLO splash.bgra"
 
 SWUPDATE_IMAGES_FSTYPES[venus-image] = ".${ROOT_FSTYPE}"

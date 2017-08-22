@@ -1,0 +1,55 @@
+software =
+{
+	venus-version = "0";
+
+	version = "0.1.0";
+
+	stable: {
+		bootloader: {
+			files: (
+				{
+					filename = "u-boot.imx";
+					path = "/tmp/u-boot.swu.imx";
+				}
+			);
+			scripts: (
+				{
+					filename = "imx-kobs-update.sh";
+					type = "postinstall";
+				}
+			);
+		};
+		copy1: {
+			images: (
+				{
+					filename = "venus-image-canvu500.ubifs";
+					type = "ubivol";
+					volume = "rootfs1";
+					installed-directly = true;
+				}
+			);
+			uboot: (
+				{
+					name = "swversion";
+					value = "1";
+				}
+			);
+		};
+		copy2: {
+			images: (
+				{
+					filename = "venus-image-canvu500.ubifs";
+					type = "ubivol";
+					volume = "rootfs2";
+					installed-directly = true;
+				}
+			);
+			uboot: (
+				{
+					name = "swversion";
+					value = "2";
+				}
+			);
+		};
+	};
+}
