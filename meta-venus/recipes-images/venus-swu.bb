@@ -11,6 +11,8 @@ IMAGE_DEPENDS = "venus-image"
 IMAGE_DEPENDS_append_beaglebone = " venus-boot-image"
 IMAGE_DEPENDS_append_raspberrypi2 = " venus-boot-image"
 
+do_swuimage[depends] += "virtual/bootloader:do_deploy"
+
 ROOT_FSTYPE = "ubifs"
 ROOT_FSTYPE_beaglebone = "ext4.gz"
 ROOT_FSTYPE_raspberrypi2 = "ext4.gz"
