@@ -11,6 +11,7 @@ KERNEL_CONFIG_COMMAND = "make -C ${S} O=${B} ARCH=arm bbb_defconfig"
 KERNEL_DEVICETREE = " \
     am335x-boneblack.dtb \
     bbb-venus.dtb \
+    bbb-octo-venus.dtb \
     bbe-venus.dtb \
 "
 
@@ -31,4 +32,5 @@ SRC_URI += " \
 	file://0001-Bluetooth-btusb-fix-Realtek-suspend-resume.patch \
 	file://0002-Bluetooth-btusb-match-generic-class-code-in-interfac.patch \
 	file://0003-bbb_defconfig-enable-bluetooth.patch \
+	file://0004-add_gridless_octo_dts.patch \
 "
