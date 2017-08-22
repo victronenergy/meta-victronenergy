@@ -7,6 +7,8 @@ SRC_URI[md5sum] = "e47178a8ba8fcd12502df3cb8b3f8dee"
 SRC_URI[sha256sum] = "b133ce45ec10679199b46c3b82f6e3b57b57dd613dba5683010cfb3352b7cd43"
 S = "${WORKDIR}/u-boot-${PV}"
 
+COMPATIBLE_MACHINE = "ccgx"
+
 SRC_URI += " \
 	file://install.cmds \
 	file://live.cmds \
