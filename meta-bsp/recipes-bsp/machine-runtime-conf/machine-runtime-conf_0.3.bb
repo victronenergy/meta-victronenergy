@@ -40,6 +40,7 @@ do_install_append() {
 
 	# device for controlling the backlight
 	if [ -n "${VE_BLANK_DISPLAY}" ]; then echo ${VE_BLANK_DISPLAY} > $conf/blank_display_device; fi
+	if [ -n "${VE_BACKLIGHT}" ]; then echo ${VE_BACKLIGHT} > $conf/backlight_device; fi
 
 	if [ -n "${VE_CAN_PORTS}" ]; then echo ${VE_CAN_PORTS} > $conf/canbus_ports; fi
 
