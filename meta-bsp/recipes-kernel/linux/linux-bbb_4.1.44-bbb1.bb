@@ -24,11 +24,5 @@ S = "${WORKDIR}/linux-${PV}"
 B = "${WORKDIR}/linux-${PACKAGE_ARCH}-${LINUX_KERNEL_TYPE}-build"
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-SRC_URI[md5sum] = "02a6a13d4ce62da57d12d8b40b593e2f"
-SRC_URI[sha256sum] = "fce07c38f143ba4044716427f80e07f3de5ec681de65c4193a0f0f0e84f71404"
-
-SRC_URI += " \
-	file://0001-Bluetooth-btusb-fix-Realtek-suspend-resume.patch \
-	file://0002-Bluetooth-btusb-match-generic-class-code-in-interfac.patch \
-	file://0003-bbb_defconfig-enable-bluetooth.patch \
-"
+SRC_URI[md5sum] = "523b2b308974ee7cfe016b48b60ca217"
+SRC_URI[sha256sum] = "6701123a72e327275d0a8e3fcc4fdc18527ccf08074f3af1db2f34324496d486"
