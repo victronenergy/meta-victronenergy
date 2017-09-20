@@ -6,14 +6,10 @@ RDEPENDS_kernel-image += "linux-backports"
 RDEPENDS_kernel-image += "kernel-modules"
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-SRC_URI[md5sum] = "8fe90da914c4748cc6b389a15bf9623e"
-SRC_URI[sha256sum] = "74053acb928380c3677c6b704eb823db9338a042cd7a150056df9e7cde7838a6"
+SRC_URI[md5sum] = "868ad1c52f8aa34933bce5a7b81bb5e0"
+SRC_URI[sha256sum] = "cb2c0908a2af0f0e03c84a3058bb1fbbe6d1a260775765a448313b21ecbf5e6b"
 
 # This was introduced to remove uImage from /boot and save 3MB
 KERNEL_DROPIMAGE = "1"
 
 S = "${WORKDIR}/linux-${PV}"
-
-SRC_URI += " \
-	file://0001-ccgx-enable-bluetooth.patch \
-"
