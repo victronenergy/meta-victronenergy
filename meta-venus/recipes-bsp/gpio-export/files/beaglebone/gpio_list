@@ -9,7 +9,7 @@
 # Relay 1   P8.8 / GPIO 2_3
 67  out relay_1
 # Relay 2   P8.9 / GPIO 2_5
-69  out relay_2
+69  out relay_2 sancloud,am335x-boneenhanced
 
 # Digital input 1   P8.16 / GPIO 1_14
 46  in digital_input_1
@@ -18,9 +18,9 @@
 # Digital input 3   P8.26 / GPIO 1_29
 61  in digital_input_3
 # Digital input 4   P8.18 / GPIO 2_1
-65  in digital_input_4
+65  in digital_input_4 sancloud,am335x-boneenhanced
 # Digital input 5   P8.12 / GPIO 1_12
-44  in digital_input_5
+44  in digital_input_5 sancloud,am335x-boneenhanced
 
 # MK3_RST   P8.39 / GPIO 2_12
 76  out mk3_rst
