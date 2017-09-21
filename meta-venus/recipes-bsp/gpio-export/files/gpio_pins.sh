@@ -68,9 +68,9 @@ function create_link
 
 function set_pin
 {
-    PIN_NUM=$(echo "${1}"  | awk '{print $1}')
-    PIN_DIR=$(echo "${1}"  | awk '{print $2}')
-    PIN_NAME=$(echo "${1}" | awk '{print $3}')
+    PIN_NUM=$1
+    PIN_DIR=$2
+    PIN_NAME=$3
 
     #echo "Setting gpio pin #${PIN_NUM}/${PIN_NAME} to ${PIN_DIR}"
     export_pin "${PIN_NUM}"
@@ -80,16 +80,14 @@ function set_pin
 
 mkdir -p ${GPIO_DIR}
 
-while read line
+sed 's/#.*//' ${GPIO_FILE} | while read num dir name
 do
-    # ignore empty lines and lines where the first character is an '#'.
-    if [[ -z ${line} || ! -z $(echo ${line} | grep -o "^[[:space:]]*#") ]]
+    # ignore incomplete lines
+    if [ -z "$num" ] || [ -z "$dir" ] || [ -z "$name" ]
     then
         continue
     fi
 
-    #trim the spaces on the retrieved line.
-    PIN_LINE=$(echo "${line}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' )
-    set_pin "${PIN_LINE}"
-done < ${GPIO_FILE}
+    set_pin "$num" "$dir" "$name"
+done
 
