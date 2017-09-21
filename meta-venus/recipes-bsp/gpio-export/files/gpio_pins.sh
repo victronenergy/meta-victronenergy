@@ -78,14 +78,25 @@ function set_pin
     create_link "${PIN_NUM}" "${PIN_NAME}"
 }
 
+function check_compat
+{
+    cat /sys/firmware/devicetree/base/compatible | tr '\0' '\n' |
+        grep -Eqx -e "$1"
+}
+
 mkdir -p ${GPIO_DIR}
 
-sed 's/#.*//' ${GPIO_FILE} | while read num dir name
+sed 's/#.*//' ${GPIO_FILE} | while read num dir name compat
 do
     # ignore incomplete lines
     if [ -z "$num" ] || [ -z "$dir" ] || [ -z "$name" ]
     then
         continue
+    fi
+
+    if [ -n "$compat" ]
+    then
+        check_compat "$compat" || continue
     fi
 
     set_pin "$num" "$dir" "$name"
