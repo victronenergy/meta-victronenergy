@@ -22,6 +22,16 @@ SWU = "venus-swu"
 
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
 
+INSTALL_FILES = "\
+	${SPL_BINARY} \
+	u-boot.${UBOOT_SUFFIX} \
+	${SCR}:boot.scr \
+	${KERNEL_IMAGETYPE}-${MACHINE}.bin:${KERNEL_IMAGETYPE} \
+	${DTB} \
+	${INITRD_IMAGE}:initramfs \
+	${SWU}-${MACHINE}.swu:venus.swu \
+"
+
 do_install[depends] += " \
 	virtual/bootloader:do_deploy \
 	virtual/kernel:do_deploy \
@@ -35,19 +45,12 @@ do_install () {
 	fi
 
 	mkdir ${SDCARD}
-	cp ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}-${MACHINE}.bin ${SDCARD}/${KERNEL_IMAGETYPE}
-	if [ -n "${SPL_BINARY}" ]; then
-		cp ${DEPLOY_DIR_IMAGE}/${SPL_BINARY} ${SDCARD}
-	fi
-	cp ${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX} ${SDCARD}
-	cp ${DEPLOY_DIR_IMAGE}/${INITRD_IMAGE} ${SDCARD}/initramfs
-	cp ${DEPLOY_DIR_IMAGE}/${SCR} ${SDCARD}/boot.scr
-	cp ${DEPLOY_DIR_IMAGE}/${SWU}-${MACHINE}.swu ${SDCARD}/venus.swu
-	if [ -n "${DTB}" ]; then
-		for file in ${DTB}; do
-			cp ${DEPLOY_DIR_IMAGE}/${file} ${SDCARD}
-		done
-	fi
+
+	for file in ${INSTALL_FILES}; do
+		src=${file%:*}
+		dst=${file#*:}
+		cp ${DEPLOY_DIR_IMAGE}/${src} ${SDCARD}/${dst}
+	done
 
 	zip -rj ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
 	ln -sf ${IMAGE_NAME}.sdcard.zip ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.sdcard.zip
