@@ -34,8 +34,10 @@ do_install () {
 
 	mkdir ${SDCARD}
 	cp ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}-${MACHINE}.bin ${SDCARD}/${KERNEL_IMAGETYPE}
-	cp ${DEPLOY_DIR_IMAGE}/MLO ${SDCARD}
-	cp ${DEPLOY_DIR_IMAGE}/u-boot.img ${SDCARD}
+	if [ -n "${SPL_BINARY}" ]; then
+		cp ${DEPLOY_DIR_IMAGE}/${SPL_BINARY} ${SDCARD}
+	fi
+	cp ${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX} ${SDCARD}
 	cp ${DEPLOY_DIR_IMAGE}/${INITRD_IMAGE} ${SDCARD}/initramfs
 	cp ${DEPLOY_DIR_IMAGE}/${SCR} ${SDCARD}/boot.scr
 	cp ${DEPLOY_DIR_IMAGE}/${SWU}-${MACHINE}.swu ${SDCARD}/venus.swu
