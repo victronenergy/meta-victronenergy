@@ -1,0 +1,9 @@
+#!/bin/sh
+
+. /lib/venus/install.sh
+
+SWUDEV="sda1 sda"
+UBIPART=2
+TTYS="$TTYS tty0"
+
+do_install

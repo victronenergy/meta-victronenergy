@@ -13,6 +13,7 @@ IMAGE_INSTALL = " \
 "
 
 IMAGE_INSTALL_append_beaglebone = "e2fsprogs-mke2fs util-linux-sfdisk"
+IMAGE_INSTALL_append_canvu500 = "imx-kobs mtd-utils-ubifs"
 IMAGE_INSTALL_append_ccgx = "kernel-module-fbcon mtd-utils-ubifs"
 
 IMAGE_LINGUAS = " "
