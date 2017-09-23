@@ -8,21 +8,21 @@ SRC_URI[sha256sum] = "b133ce45ec10679199b46c3b82f6e3b57b57dd613dba5683010cfb3352
 S = "${WORKDIR}/u-boot-${PV}"
 
 SRC_URI += " \
-	file://fatload-initramfs.cmds \
+	file://install.cmds \
 	file://live.cmds \
 	file://upgrade.cmds \
 	file://splash.bgra \
 "
 
 do_compile_append () {
-	mkimage -A arm -T script -C none -n 'Fatload with initramfs' -d ${WORKDIR}/fatload-initramfs.cmds ${WORKDIR}/fatload-initramfs.scr
+	mkimage -A arm -T script -C none -n 'Install Script' -d ${WORKDIR}/install.cmds ${WORKDIR}/install.scr
 	mkimage -A arm -T script -C none -n 'Live Script' -d ${WORKDIR}/live.cmds ${WORKDIR}/live.scr
 	mkimage -A arm -T script -C none -n 'Upgrade Script' -d ${WORKDIR}/upgrade.cmds ${WORKDIR}/upgrade.scr
 }
 
 do_deploy_append () {
 	install -d ${DEPLOYDIR}
-	install ${WORKDIR}/fatload-initramfs.scr ${DEPLOYDIR}
+	install -m 0644 ${WORKDIR}/install.scr ${DEPLOYDIR}/install-${MACHINE}.scr
 	install ${WORKDIR}/live.scr ${DEPLOYDIR}
 	install ${WORKDIR}/upgrade.scr ${DEPLOYDIR}
 	install ${WORKDIR}/splash.bgra ${DEPLOYDIR}

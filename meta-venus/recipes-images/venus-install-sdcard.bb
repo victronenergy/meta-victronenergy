@@ -14,8 +14,7 @@ DEPENDS += "\
 
 DTB_beaglebone = "${KERNEL_IMAGETYPE}-bbb-venus.dtb ${KERNEL_IMAGETYPE}-bbe-venus.dtb"
 
-SCR = "fatload-initramfs.scr"
-SCR_beaglebone = "install-${MACHINE}.scr"
+SCR = "install-${MACHINE}.scr"
 
 SWU = "venus-swu"
 
