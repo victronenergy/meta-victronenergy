@@ -1,4 +1,5 @@
-========================= meta-victronenergy ================================
+meta-victronenergy
+==================
 This repository now contains several meta's, we tried to seperate the recipes
 we provide and the changes we make to other layers. It turns out though that
 for some packages this is not a trivial split, so this is a new attempt to
