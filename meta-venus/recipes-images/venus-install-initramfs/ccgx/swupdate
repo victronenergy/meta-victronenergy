@@ -1,94 +1,17 @@
 #!/bin/sh
 
-set -e
+. /lib/venus/install.sh
 
-CARD=/mnt
-SWU=${CARD}/venus.swu
+SWUDEV="mmcblk0p1 sda1 mmcblk0 sda"
+UBIPART=12
+MODULES="fbcon"
+TTYS="$TTYS tty0"
 
-msg() {
-    echo "$@"
-    echo "$@" >/dev/tty0
+postinst() {
+    msg "updating boot instructions..."
+    fw_setenv -s /usr/share/u-boot/u-boot.env
 }
 
-pause() {
-    while :; do sleep 10; done
-}
+HOOK_postinst=postinst
 
-error() {
-    test -n "$*" && msg "$*"
-    msg "Error installing software"
-    pause
-}
-
-trap error EXIT
-
-mount -t proc none /proc
-mount -t sysfs none /sys
-# manually mount devtmpfs if not done by linux
-if ! `mount | grep -q " on /dev "`; then
-	mount -t devtmpfs none /dev
-fi
-
-mkdir -p /run/lock
-
-modprobe fbcon
-
-msg "Searching for installer image..."
-
-for d in sda1 mmcblk0p1 sda mmcblk0; do
-    if mount /dev/$d ${CARD}; then
-        if [ -f ${SWU} ]; then
-            DEV=$d
-            break
-        fi
-        umount ${CARD}
-    fi
-done
-
-if [ -n "${DEV}" ]; then
-    msg "Installer image found on ${DEV}"
-else
-    error "Installer image not found"
-fi
-
-
-msg "Formatting UBI partition..."
-ubiformat --yes /dev/mtd12
-ubiattach -m 12
-ubimkvol /dev/ubi0 -N rootfs1 -s 200MiB
-ubimkvol /dev/ubi0 -N rootfs2 -s 200MiB
-ubimkvol /dev/ubi0 -N data -s 32MiB
-
-msg "Creating /data/venus/installer-version..."
-mkdir -p /data
-mount -t ubifs ubi0:data /data
-mkdir -p /data/venus
-cp /opt/color-control/version /data/venus/installer-version
-umount /data
-
-# -b '0..!12..13' tells swupdate ubi volume is on mtd 12 (all others are blacklisted)
-set -- -b "0 1 2 3 4 5 6 7 8 9 10 11 13" -i ${SWU}
-
-msg "Installing rootfs1..."
-swupdate "$@" -e "stable,copy1"
-
-msg "Installing rootfs2..."
-swupdate "$@" -e "stable,copy2"
-
-msg "Installing bootloader..."
-swupdate "$@" -e "stable,bootloader"
-
-msg "updating boot instructions..."
-fw_setenv -s /usr/share/u-boot/u-boot.env
-
-if [ -f ${CARD}/testmode ]; then
-	msg "enabling test mode..."
-	fw_setenv runlevel 4
-fi
-
-ubidetach -m 12
-umount ${CARD}
-
-msg "Installation complete"
-msg "Remove SD card and power cycle system"
-pause
+do_install

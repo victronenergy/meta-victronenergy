@@ -32,9 +32,15 @@ python __anonymous() {
 
 addtask unpack before do_rootfs
 
-SRC_URI = "file://swupdate"
+SRC_URI = "\
+	file://install.sh \
+	file://swupdate \
+"
 
 add_program_instructions() {
+	install -d ${IMAGE_ROOTFS}/${base_libdir}/venus
+	install ${WORKDIR}/install.sh ${IMAGE_ROOTFS}/${base_libdir}/venus
+
 	if [ "${SWUPDATE_INIT}" = "tiny" ]; then
 		install ${WORKDIR}/swupdate ${IMAGE_ROOTFS}/${base_sbindir}/init
 	else

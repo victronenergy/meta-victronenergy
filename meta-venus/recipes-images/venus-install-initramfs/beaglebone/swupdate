@@ -1,30 +1,9 @@
 #!/bin/sh
 
-set -e
+. /lib/venus/install.sh
 
-CARD=/mnt
-DEV=mmcblk0p1
-SWU=${CARD}/venus.swu
-# production uses this and is connected to ttyO2
-TESTMODE=0
-
-msg() {
-    echo "$@"
-    if [ "$TESTMODE" -eq 1 ]; then
-        echo "$@" > /dev/ttyO2
-    fi
-}
-
-pause() {
-    while :; do sleep 10; done
-}
-
-error() {
-    test -n "$*" && msg "$*"
-    msg "Error installing software"
-    capeled red default-on
-    pause
-}
+SWUDEV=mmcblk0p1
+MMCDEV=mmcblk1
 
 LED_0=heartbeat
 LED_1=mmc0
@@ -48,83 +27,25 @@ capeled() {
     fi
 }
 
-trap error EXIT
+testmode() {
+    stty -F /dev/ttyO2 115200
+    TTYS="$TTYS ttyO2"
+}
 
-mount -t proc none /proc
-mount -t sysfs none /sys
-mkdir -p /run/lock
+HOOK_error="capeled red default-on"
+HOOK_testmode="testmode"
+HOOK_format="setleds 0 timer; capeled red timer"
+HOOK_rootfs1="setleds 0 default-on 1 timer"
+HOOK_rootfs2="setleds 1 default-on 2 timer"
+HOOK_bootloader="setleds 2 default-on 3 timer"
+HOOK_cleanup="setleds 3 default-on; capeled green default-on"
+
+do_mounts
 
 setleds 0 none 1 none 2 none 3 none
 capeled green none
 
-echo "Searching for image..."
-
-mount /dev/${DEV} ${CARD}
-
-if [ -f "${SWU}" ]; then
-    echo "Image found on ${DEV}"
-else
-    umount ${CARD}
-    error "Image not found"
-fi
-
-setleds 0 timer
-capeled red timer
-
-if [ -f ${CARD}/testmode ]; then
-    TESTMODE=1
-    stty -F /dev/ttyO2 115200
-fi
-
-msg "Creating partitions..."
-sfdisk /dev/mmcblk1 <<EOF
-	2048, 16384, c, *
-	, 655360, L
-	, 655360, L
-	,, E
-	, 262144, L
-	,, L
-EOF
-
 # unlock u-boot environment
 echo 0 >/sys/block/mmcblk1boot1/force_ro
 
-msg "Formatting data partition..."
-mkfs.ext4 /dev/mmcblk1p5
-
-msg "Creating /data/venus/installer-version..."
-mkdir -p /data
-mount -t ext4 /dev/mmcblk1p5 /data
-mkdir -p /data/venus
-cp /opt/victronenergy/version /data/venus/installer-version
-umount /data
-
-msg "Formatting scratch partition.."
-mkfs.ext4 /dev/mmcblk1p6
-
-msg "Installing rootfs1..."
-setleds 0 default-on 1 timer
-swupdate -i ${SWU} -e "stable,copy1"
-
-msg "Installing rootfs2..."
-setleds 1 default-on 2 timer
-swupdate -i ${SWU} -e "stable,copy2"
-
-msg "Installing boot loader..."
-setleds 2 default-on 3 timer
-swupdate -i ${SWU} -e "stable,bootloader"
-
-if [ "$TESTMODE" -eq 1 ]; then
-	msg "enabling test mode..."
-	fw_setenv runlevel 4
-fi
-
-umount ${CARD}
-
-setleds 3 default-on
-capeled green default-on
-
-msg "Installation complete"
-msg "Remove SD card and power cycle system"
-
-pause
+do_install
