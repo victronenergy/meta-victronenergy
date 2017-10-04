@@ -8,4 +8,4 @@ SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 # m h dom mon dow user	command
-#5	2	*	*	*	root	/opt/victronenergy/swupdate-scripts/check-updates.sh -auto -delay
+5	2	*	*	*	root	/opt/victronenergy/swupdate-scripts/check-updates.sh -auto -delay
