@@ -31,7 +31,7 @@ IMAGE_TYPEDEP_rpi-sdimg = "${SDIMG_ROOTFS_TYPE}"
 BOOT_SPACE ?= "40960"
 
 # Data partition size [in KiB]
-DATA_SPACE ?= "155648"
+DATA_SPACE ?= "786432"
 
 # Set alignment to 4MB [in KiB]
 IMAGE_ROOTFS_ALIGNMENT = "4096"

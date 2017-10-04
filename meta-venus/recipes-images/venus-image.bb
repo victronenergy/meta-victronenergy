@@ -11,4 +11,4 @@ LICENSE = "MIT"
 inherit core-image
 
 IMAGE_ROOTFS_SIZE = "100000"
-
+IMAGE_ROOTFS_SIZE_raspberrypi2 = "512000"
