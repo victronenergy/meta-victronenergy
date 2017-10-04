@@ -12,7 +12,7 @@ DEPENDS += "\
 	parted-native \
 "
 
-DTB_beaglebone = "${KERNEL_IMAGETYPE}-bbb-venus.dtb ${KERNEL_IMAGETYPE}-bbe-venus.dtb"
+DTB_beaglebone = "${KERNEL_IMAGETYPE}-bbb-venus.dtb ${KERNEL_IMAGETYPE}-bbb-octo-venus.dtb ${KERNEL_IMAGETYPE}-bbe-venus.dtb"
 
 SCR = "fatload-initramfs.scr"
 SCR_beaglebone = "install-${MACHINE}.scr"
