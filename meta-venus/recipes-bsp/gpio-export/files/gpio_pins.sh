@@ -28,14 +28,14 @@ export_pin() {
 
 set_pin_dir() {
     PIN=${2}
-    FILE=$(echo /sys/class/gpio/gpio${PIN}/direction | tr -d '[[:space:]]')
+    FILE=/sys/class/gpio/gpio${PIN}/direction
 
     echo $1 > ${FILE}
 }
 
 create_link() {
     PIN=${1}
-    FILE=$(echo /sys/class/gpio/gpio${PIN}/value | tr -d '[[:space:]]')
+    FILE=/sys/class/gpio/gpio${PIN}/value
 
     ln -s ${FILE} ${GPIO_DIR}/$2
 }
