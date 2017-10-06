@@ -24,28 +24,11 @@ GPIO_FILE="/etc/venus/gpio_list"
 
 function export_pin
 {
-    if [ -z ${1} ]
-    then
-        echo "ERR: export_pin needs an argument" >2
-        exit 1
-    fi
-
     echo $1 > /sys/class/gpio/export
 }
 
 function set_pin_dir
 {
-    if [[ -z ${1}  && ( ${1} != "out" && ${1} != "in" ) ]]
-    then
-        echo "ERR: set_pin_dir needs either 'in' or 'out' as an argument." >2
-        exit 1
-    fi
-    if [ -z ${2} ]
-    then
-        echo "ERR: set_pin_dir needs an second argument" >2
-        exit 1
-    fi
-
     PIN=${2}
     FILE=$(echo /sys/class/gpio/gpio${PIN}/direction | tr -d '[[:space:]]')
 
@@ -54,12 +37,6 @@ function set_pin_dir
 
 function create_link
 {
-    if [[ -z ${1} || -z ${2} ]]
-    then
-        echo "ERR: create_link needs 2 arguments, an pin number and a name." >2
-        exit 1
-    fi
-
     PIN=${1}
     FILE=$(echo /sys/class/gpio/gpio${PIN}/value | tr -d '[[:space:]]')
 
