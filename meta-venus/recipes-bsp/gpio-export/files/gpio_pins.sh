@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          gpio_pins.sh
 # Required-Start:
@@ -22,29 +22,25 @@
 GPIO_DIR="/dev/gpio"
 GPIO_FILE="/etc/venus/gpio_list"
 
-function export_pin
-{
+export_pin() {
     echo $1 > /sys/class/gpio/export
 }
 
-function set_pin_dir
-{
+set_pin_dir() {
     PIN=${2}
     FILE=$(echo /sys/class/gpio/gpio${PIN}/direction | tr -d '[[:space:]]')
 
     echo $1 > ${FILE}
 }
 
-function create_link
-{
+create_link() {
     PIN=${1}
     FILE=$(echo /sys/class/gpio/gpio${PIN}/value | tr -d '[[:space:]]')
 
     ln -s ${FILE} ${GPIO_DIR}/$2
 }
 
-function set_pin
-{
+set_pin() {
     PIN_NUM=$1
     PIN_DIR=$2
     PIN_NAME=$3
@@ -55,24 +51,20 @@ function set_pin
     create_link "${PIN_NUM}" "${PIN_NAME}"
 }
 
-function check_compat
-{
+check_compat() {
     cat /sys/firmware/devicetree/base/compatible | tr '\0' '\n' |
         grep -Eqx -e "$1"
 }
 
 mkdir -p ${GPIO_DIR}
 
-sed 's/#.*//' ${GPIO_FILE} | while read num dir name compat
-do
+sed 's/#.*//' ${GPIO_FILE} | while read num dir name compat; do
     # ignore incomplete lines
-    if [ -z "$num" ] || [ -z "$dir" ] || [ -z "$name" ]
-    then
+    if [ -z "$num" ] || [ -z "$dir" ] || [ -z "$name" ]; then
         continue
     fi
 
-    if [ -n "$compat" ]
-    then
+    if [ -n "$compat" ]; then
         check_compat "$compat" || continue
     fi
 
