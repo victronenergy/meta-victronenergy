@@ -4,8 +4,13 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-SRC_URI += "file://get-unique-id file://hw-revision"
+SRC_URI += "file://get-unique-id file://hw-revision file://unique-id.sh"
 SRC_URI_append_ccgx += "file://get-unique-id.c"
+
+inherit update-rc.d
+
+INITSCRIPT_NAME = "unique-id.sh"
+INITSCRIPT_PARAMS = "start 90 S ."
 
 do_compile () {
 	if [ -f ${WORKDIR}/get-unique-id.c ]; then
@@ -53,15 +58,7 @@ do_install_append() {
 	install -d ${D}/var/www/javascript-vnc-client/venus
 	ln -s /data/venus/unique-id ${D}/var/www/javascript-vnc-client/venus
 	ln -s /opt/victronenergy/version ${D}/var/www/javascript-vnc-client/venus
-}
 
-pkg_postinst_${PN}() {
-	if [ "x$D" = "x" ]; then
-		if [ ! -f /data/venus/unique_id ]; then
-			mkdir -p /data/venus
-			${base_sbindir}/get-unique-id > /data/venus/unique-id
-		fi
-	else
-		false
-	fi
+	install -d ${D}${sysconfdir}/init.d
+	install -m 0755 ${WORKDIR}/unique-id.sh ${D}${sysconfdir}/init.d
 }
