@@ -75,8 +75,6 @@ do_install_append() {
 	# Automake 1.12 won't install empty directories, but we need the
 	# plugins directory to be present for ownership
 	mkdir -p ${D}${libdir}/connman/plugins
-
-	install -m 0755 ${WORKDIR}/connmand-watch.sh ${D}${sbindir}/connmand-watch.sh
 }
 
 # These used to be plugins, but now they are core
