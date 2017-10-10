@@ -1,4 +1,4 @@
-DEPENDS = "freetype jpeg libpng zlib dbus tiff directfb"
+DEPENDS = "freetype jpeg libpng zlib dbus tiff directfb tslib"
 
 require qt4_ve_patches.inc
 
