@@ -15,7 +15,8 @@ INITSCRIPT_NAME_${PN} = "watchdog"
 INITSCRIPT_PARAMS_${PN} = "start 80 S . stop 20 0 1 6 ."
 
 do_compile_append () {
-	${CC} -DMACH_${MACHINE} ${WORKDIR}/get_boot_type.c -o get_boot_type
+	${CC} ${CFLAGS} ${LDFLAGS} -DMACH_${MACHINE} \
+		${WORKDIR}/get_boot_type.c -o get_boot_type
 }
 
 do_install_append () {
