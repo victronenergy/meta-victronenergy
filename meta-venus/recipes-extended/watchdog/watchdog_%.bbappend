@@ -5,7 +5,6 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 SRC_URI += "\
 	file://get_boot_type.c \
 	file://init \
-	file://watchdog.conf \
 	file://store_watchdog_error.sh \
 	file://0001-Use-MemAvailable-instead-of-MemFree.patch \
 "
@@ -24,6 +23,5 @@ do_install_append () {
 	install -m 0755 ${WORKDIR}/init ${D}${sysconfdir}/init.d/watchdog
 	install -m 0755 ${B}/get_boot_type ${D}${sbindir}
 	install -m 0755 ${WORKDIR}/store_watchdog_error.sh ${D}${sbindir}
-	install -m 0644 ${WORKDIR}/watchdog.conf ${D}${sysconfdir}
 }
 
