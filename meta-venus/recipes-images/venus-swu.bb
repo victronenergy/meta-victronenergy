@@ -46,5 +46,7 @@ do_version() {
 addtask do_version after do_unpack before do_swuimage
 
 do_version[depends] += "venus-image:do_rootfs"
-do_version[vardeps] += "DATETIME"
 do_version[nostamp] = "1"
+do_version[vardepsexclude] += "BUILDNAME"
+
+do_swuimage[vardepsexclude] += "IMAGE_NAME"
