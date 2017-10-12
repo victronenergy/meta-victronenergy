@@ -8,7 +8,7 @@ SRC_URI += "\
 "
 
 do_compile () {
-	${CC} -DMACH_${MACHINE} ${WORKDIR}/main.c -o technexion-serial
+	${CC} ${CFLAGS} ${LDFLAGS} ${WORKDIR}/main.c -o technexion-serial
 }
 
 do_install () {
