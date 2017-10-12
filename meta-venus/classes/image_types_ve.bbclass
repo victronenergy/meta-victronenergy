@@ -32,7 +32,7 @@ IMAGE_CMD_live.img () {
 	mcopy -i ${BOOTIMG} -s ${DEPLOY_DIR_IMAGE}/live.scr ::/boot.scr
 
 	# copy partitions into the image
-	dd if=${BOOTIMG} of=${LIVE_IMAGE} conv=notrunc seek=1 bs=1M && sync
+	dd if=${BOOTIMG} of=${LIVE_IMAGE} conv=notrunc seek=1 bs=1M
 	dd if=${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.ext3 of=${LIVE_IMAGE} bs=512 seek=194560
 }
 
