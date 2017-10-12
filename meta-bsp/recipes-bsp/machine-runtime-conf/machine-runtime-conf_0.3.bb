@@ -14,7 +14,8 @@ INITSCRIPT_PARAMS = "start 90 S ."
 
 do_compile () {
 	if [ -f ${WORKDIR}/get-unique-id.c ]; then
-		${CC} ${WORKDIR}/get-unique-id.c -o ${WORKDIR}/get-unique-id
+		${CC} ${CFLAGS} ${LDFLAGS} \
+			${WORKDIR}/get-unique-id.c -o ${WORKDIR}/get-unique-id
 	fi
 }
 
