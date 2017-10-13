@@ -17,7 +17,6 @@ LINUX_VERSION = "4.9"
 LINUX_VERSION_EXTENSION = "-venus"
 
 inherit kernel
-require recipes-kernel/linux/linux-dtb.inc
 
 S = "${WORKDIR}/linux-${PV}"
 B = "${WORKDIR}/build"
