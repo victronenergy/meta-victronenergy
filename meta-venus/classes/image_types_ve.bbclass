@@ -4,13 +4,13 @@ IMAGE_TYPES += "live-img.gz"
 
 IMAGE_TYPEDEP_live-img = "ext3"
 
-IMAGE_DEPENDS_live-img = "\
+do_image_live_img[depends] += "\
 	dosfstools-native:do_populate_sysroot \
 	mtools-native:do_populate_sysroot \
 	parted-native:do_populate_sysroot \
-	virtual/bootloader \
+	virtual/bootloader:do_deploy \
 	virtual/kernel:do_deploy \
-	"
+"
 
 IMAGE_CMD_live-img () {
 	BOOTIMG=${WORKDIR}/boot.img
