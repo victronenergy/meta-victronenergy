@@ -20,6 +20,7 @@ inherit packagegroup
 
 RRECOMMENDS_${PN} += " \
 	can-bus-bms \
+	dbus-bornay-windplus \
 	dbus-cgwacs \
 	dbus-fronius \
 	dbus-motordrive \
