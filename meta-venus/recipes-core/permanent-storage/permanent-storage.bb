@@ -26,6 +26,11 @@ pkg_postinst_${PN}() {
 		mkdir -p /data/home/root
 		mkdir -p /data/home/vnctunnel
 		mkdir -p /data/var/lib
+
+		# Add www-data user into group shutdown. this is needed to perform a reboot 
+		# after upload of a new /data/themes/overlay, otherwise the gui will not show the replaced image.
+		sed -i -- 's/^shutdown:x:70:$/shutdown:x:70:www-data/g' /etc/group
+
 		: exit 0
 	else
 		# Exit 1 is used to set the status of the package on unpacked in rootfs image
