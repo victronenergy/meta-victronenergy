@@ -7,8 +7,6 @@ LICENSE = "MIT"
 
 
 DEPENDS_append_ccgx += "\
-	qtbase \
-	qtserialport \
 	technexion-serial \
 "
 
