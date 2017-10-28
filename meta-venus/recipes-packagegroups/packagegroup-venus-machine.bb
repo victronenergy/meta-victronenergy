@@ -44,6 +44,16 @@ RDEPENDS_${PN}_append_beaglebone += "\
 	swupdate-scripts \
 "
 
+RDEPENDS_${PN}_append_nanopi += "\
+	cpufrequtils \
+	gpio-export \
+	hostapd \
+	linux-firmware-rtl8723b \
+	rtl8723bu \
+	swupdate \
+	swupdate-scripts \
+"
+
 RDEPENDS_${PN}_append_raspberrypi2 += "\
 	gpio-export \
 	linux-firmware-bcm43430 \
