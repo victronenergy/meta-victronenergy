@@ -10,7 +10,7 @@ UBOOT_LOCALVERSION = "-venus"
 SRC_URI = "\
 	https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz \
 "
-SRC_URI[md5sum] = "adb5ac4d36038c00a98bd54df03808a7"
-SRC_URI[sha256sum] = "66261bc02c11e9f36f527fa807ab79858dccd10bd42ca15c4bfc8c26f2c64c89"
+SRC_URI[md5sum] = "33a9acc72dd3e24a038676b01b344ec3"
+SRC_URI[sha256sum] = "eac51dd2b36689643737c0541086fda9f5871074b791fb135bbf4fae6240fda2"
 
 S = "${WORKDIR}/u-boot-${PV}"
