@@ -15,6 +15,7 @@ RDEPENDS_${PN} += "\
 "
 
 RDEPENDS_${PN}_append_canvu500 += "\
+	cinematicexperience \
 	evtest \
 	eglinfo-fb \
 	imx-kobs \
@@ -22,6 +23,7 @@ RDEPENDS_${PN}_append_canvu500 += "\
 	mtd-utils \
 	mtd-utils-ubifs \
 	pointercal \
+	qt5-opengles2-test \
 	swupdate \
 	swupdate-scripts \
 "
