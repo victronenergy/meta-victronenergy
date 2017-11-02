@@ -7,7 +7,6 @@ DEPENDS += "\
 	gdb \
 	git \
 	nodejs \
-	openjdk-8 \
 	packagegroup-core-buildessential \
 	s6 \
 	tcpdump \
