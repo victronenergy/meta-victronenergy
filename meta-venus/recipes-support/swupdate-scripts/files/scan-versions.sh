@@ -2,7 +2,7 @@
 
 . $(dirname $0)/functions.sh
 
-version=/opt/color-control/version
+version=/opt/victronenergy/version
 altroot=/mnt
 
 echo "Active rootfs:" $(get_rootfs)
