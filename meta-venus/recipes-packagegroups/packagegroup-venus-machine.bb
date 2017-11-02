@@ -24,6 +24,7 @@ RDEPENDS_${PN}_append_canvu500 += "\
 	mtd-utils-ubifs \
 	pointercal \
 	qt5-opengles2-test \
+	qt-kms-config \
 	swupdate \
 	swupdate-scripts \
 "
