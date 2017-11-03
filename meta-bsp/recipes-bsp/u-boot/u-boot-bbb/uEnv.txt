@@ -11,7 +11,7 @@ loadaddr=0x82000000
 mmcroot=/dev/mmcblk1p2
 mmcrootfstype=ext4 rootwait
 optargs=consoleblank=0
-mmcargs=setenv bootargs console=${console} ${optargs} root=${mmcroot} rw rootfstype=${mmcrootfstype} ${runlevel} omap_wdt.early_enable=1
+mmcargs=setenv bootargs console=${console} ${optargs} root=${mmcroot} ro rootfstype=${mmcrootfstype} ${runlevel} omap_wdt.early_enable=1
 loadfdt=load mmc ${bootpart} ${fdtaddr} ${bootdir}/${fdtfile}
 loadimage=load mmc ${bootpart} ${loadaddr} ${bootdir}/${bootfile}
 setroot=if test ${version} = 2; then setenv bootpart 1:3; setenv mmcroot /dev/mmcblk1p3; fi
