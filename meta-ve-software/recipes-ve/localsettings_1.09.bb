@@ -10,7 +10,6 @@ SRC_URI = " \
 	gitsm://github.com/victronenergy/localsettings.git;protocol=https;tag=v${PV} \
 	file://set_setting.sh \
 	file://com.victronenergy.settings.conf \
-	file://convert_setting_canbus_profile.py \
 "
 S = "${WORKDIR}/git"
 
@@ -32,15 +31,4 @@ do_install () {
 
 	install -d ${D}/${sysconfdir}/dbus-1/system.d
 	install -m 644 ${WORKDIR}/com.victronenergy.settings.conf ${D}/${sysconfdir}/dbus-1/system.d
-
-	install -m 755 ${WORKDIR}/convert_setting_canbus_profile.py ${D}${bindir}
 }
-
-pkg_postinst_${PN}_prepend () {
-	if [ x"$D" = "x" ]; then
-		${bindir}/convert_setting_canbus_profile.py
-	else
-		exit 1
-	fi
-}
-
