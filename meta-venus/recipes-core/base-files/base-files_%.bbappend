@@ -25,6 +25,8 @@ do_install_append() {
 	mkdir -p ${D}/opt
 	ln -s victronenergy ${D}/opt/color-control
 
-	rmdir ${D}/media
-	ln -s /run/media ${D}/media
+	if [ -d ${D}/media ]; then
+		rmdir ${D}/media
+		ln -s /run/media ${D}/media
+	fi
 }
