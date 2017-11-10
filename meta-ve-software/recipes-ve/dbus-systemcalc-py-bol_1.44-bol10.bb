@@ -5,6 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=9b0a9609befce3122afcc444da0fe825"
 inherit allarch
 inherit ve_package
 inherit daemontools
+inherit python-compile
 
 # note: the connected patch is reverted only because it needs to be tested first..
 # but we do want a newer version because of dbus bus selection

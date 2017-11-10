@@ -5,6 +5,7 @@ PACKAGE_ARCH = "all"
 
 inherit gmakevelib
 inherit daemontools
+inherit python-compile
 
 RDEPENDS_${PN} = "mosquitto"
 

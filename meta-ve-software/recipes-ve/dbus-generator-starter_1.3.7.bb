@@ -3,6 +3,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=5788eada6cf655ecefcba0bcac5add84"
 
 inherit ve_package
 inherit daemontools
+inherit python-compile
 
 SRC_URI = " \
 	gitsm://github.com/victronenergy/dbus_generator.git;protocol=https;tag=v${PV} \
