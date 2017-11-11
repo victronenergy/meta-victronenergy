@@ -128,3 +128,21 @@ FILES_${PN}-dev = "${includedir}/php ${libdir}/build ${bindir}/phpize \
                 ${libdir}/php/.lock ${libdir}/php/test"
 FILES_${PN} = "${libdir}/php"
 FILES_${PN} += "${bindir}"
+
+do_install_append_class-native() {
+    create_wrapper ${D}${bindir}/php \
+        PHP_PEAR_SYSCONF_DIR=${sysconfdir}/
+}
+
+SSTATEPOSTINSTFUNCS_append_class-native = " php_sstate_postinst "
+
+php_sstate_postinst() {
+    if [ "${BB_CURRENTTASK}" = "populate_sysroot_setscene" ]
+    then
+        head -n1 ${sysconfdir}/pear.conf > ${sysconfdir}/pear.tmp.conf
+        for p in `tail -n1  ${sysconfdir}/pear.conf | sed -s 's/;/ /g'`; do
+            echo $p | awk -F: 'BEGIN {OFS = ":"; ORS = ";"}{if(NF==3){print $1, length($3)-2*match($3, /^"/), $3} else {print $0}}';
+        done >> ${sysconfdir}/pear.tmp.conf
+        mv -f ${sysconfdir}/pear.tmp.conf ${sysconfdir}/pear.conf
+    fi
+}
