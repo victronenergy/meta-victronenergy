@@ -15,6 +15,9 @@ S = "${WORKDIR}/php-${PV}"
 
 inherit autotools pkgconfig pythonnative gettext
 
+# phpize is not scanned for absolute paths by default (but php-config is).
+#
+SSTATE_SCAN_FILES += "phpize"
 SSTATE_SCAN_FILES += "build-defs.h"
 
 # Common EXTRA_OECONF
