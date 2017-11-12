@@ -8,7 +8,6 @@ inherit python-compile
 
 PR = "r0"
 SRC_URI = "gitsm://github.com/victronenergy/dbus_conversions.git;protocol=https;tag=${PV}"
-DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_vebus_to_pvinverter.py"
 S = "${WORKDIR}/git"
 RDEPENDS_${PN} = "python3-core python3-dbus python3-pygobject"

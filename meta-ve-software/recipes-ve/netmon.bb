@@ -14,7 +14,6 @@ SRC_URI = "\
     file://netmon \
 "
 
-DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "${bindir}/${PN}"
 DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}"
 

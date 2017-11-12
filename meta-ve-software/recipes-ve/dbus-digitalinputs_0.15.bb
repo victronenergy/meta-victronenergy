@@ -19,7 +19,6 @@ RDEPENDS_${PN} = " \
     python3-pygobject \
 "
 
-DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/start-digitalinputs.sh"
 
 do_install () {

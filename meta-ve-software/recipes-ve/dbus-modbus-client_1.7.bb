@@ -21,7 +21,6 @@ SRC_URI = " \
 "
 S = "${WORKDIR}/git"
 
-DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "${bindir}/${PN}.py"
 DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}"
 

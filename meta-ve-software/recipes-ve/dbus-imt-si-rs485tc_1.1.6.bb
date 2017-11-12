@@ -14,7 +14,6 @@ SRC_URI = " \
 
 S = "${WORKDIR}/git"
 
-DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/start.sh TTY"
 DAEMONTOOLS_DOWN = "1"
 DAEMONTOOLS_SERVICE_SYMLINK = "0"

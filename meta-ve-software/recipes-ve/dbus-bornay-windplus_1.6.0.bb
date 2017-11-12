@@ -16,7 +16,6 @@ inherit gmakevelib
 inherit daemontools
 inherit python-compile
 
-DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/${PN}.py --serial TTY"
 DAEMONTOOLS_DOWN = "1"
 DAEMONTOOLS_SERVICE_SYMLINK = "0"

@@ -18,7 +18,6 @@ SRC_URI = "\
 "
 S = "${WORKDIR}/git"
 
-DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "${bindir}/${PN} -D"
 
 do_install () {

@@ -22,5 +22,4 @@ RDEPENDS_${PN} = " \
     python3-evdev \
 "
 
-DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_characterdisplay.py"

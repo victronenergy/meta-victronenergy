@@ -10,6 +10,5 @@ RDEPENDS_${PN} = "machine-runtime-conf"
 inherit ve_package
 inherit daemontools
 
-DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "/sbin/getty -l /sbin/autologin -n 115200 \$(head /etc/venus/vedirect_and_console_port) linux"
 DAEMONTOOLS_DOWN = "1"
