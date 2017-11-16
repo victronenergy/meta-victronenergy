@@ -9,6 +9,6 @@
 ### END INIT INFO
 
 if [ $(hw-revision) -gt 2 ]; then
-	echo 1 > /sys/class/gpio/gpio155/active_low
-	echo 1 > /sys/class/gpio/gpio153/active_low
+	echo 1 > /dev/gpio/mkx_rst/active_low
+	echo 1 > /dev/gpio/vebus_standby/active_low
 fi

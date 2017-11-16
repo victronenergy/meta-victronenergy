@@ -1,0 +1,22 @@
+# This is a list of gpio pins, set by the script /etc/rcS.d/S90gpio_pins.sh
+# They are documented at: https://github.com/victronenergy/venus/wiki/bbb-gpio
+# Format: <pin_number> <direction: in/out> <name>
+#
+# The <name> part is used to create an symlink in /dev/gpio.
+
+# Relay 1          GPIO 5_22
+182 out relay_1
+
+# Buzzer           GPIO 2_3
+35  out buzzer
+
+# MK3_RST          GPIO 4_27
+155 out mkx_rst
+
+# VE.Bus Standby   GPIO 4_25
+153 out vebus_standby
+
+# HW rev
+96  in  hwrev_2
+98  in  hwrev_1
+94  in  hwrev_0
