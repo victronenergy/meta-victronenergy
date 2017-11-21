@@ -1,1 +1,0 @@
-PACKAGECONFIG="sqlite3"

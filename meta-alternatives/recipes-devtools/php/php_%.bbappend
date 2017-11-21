@@ -1,0 +1,3 @@
+FILESEXTRAPATHS_prepend := "${THISDIR}/php:"
+
+PACKAGECONFIG="sqlite3"
