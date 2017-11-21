@@ -1,13 +1,6 @@
 meta-victronenergy
 ==================
-This repository now contains several meta's, we tried to seperate the recipes
-we provide and the changes we make to other layers. It turns out though that
-for some packages this is not a trivial split, so this is a new attempt to
-to keep some structure in the recipes. This retires [1].
-
-NOTE: this is a flat repro, it should be possible to build for danny..yethro,
-and Debian jessie / wheezy with the help of [2]. Only danny is actually tested /
-officially released at the moment!
+This repository contains several meta's.
 
 meta-alternatives
 -----------------
@@ -54,6 +47,3 @@ The intention is that this layer can be added to an existing oe setup.
 NOTE: don't put recipes in this meta for projects which source code is not
 (fully) publicly available, since it will cause build failures for people not
 having access to them!
-
-[1] https://github.com/victronenergy/meta-victronenergy-overlay
-[2] https://github.com/jhofstee/meta-bin-deb
