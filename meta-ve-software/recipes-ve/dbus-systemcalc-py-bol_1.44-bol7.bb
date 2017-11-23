@@ -10,6 +10,7 @@ inherit daemontools
 # but we do want a newer version because of dbus bus selection
 SRC_URI = " \
 	gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;branch=bol;tag=${PV} \
+	file://0001-fix-makefile.patch \
 "
 
 S = "${WORKDIR}/git"
