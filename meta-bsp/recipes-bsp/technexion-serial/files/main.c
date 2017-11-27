@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 	FILE *fh;
 
 	/* opening file for reading */
-	fh = fopen("/sys/bus/i2c/devices/1-0050/eeprom" , "rb");
+	fh = fopen("/sys/bus/i2c/devices/0-0050/eeprom" , "rb");
 	if (!fh) {
 		perror("Error opening file");
 		return -1;
