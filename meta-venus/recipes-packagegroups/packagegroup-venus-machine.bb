@@ -5,11 +5,6 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 LICENSE = "MIT"
 
-
-DEPENDS_append_ccgx += "\
-	technexion-serial \
-"
-
 RDEPENDS_${PN} += "\
 	simple-upnpd \
 "
@@ -36,6 +31,7 @@ RDEPENDS_${PN}_append_ccgx += "\
 	prodtest \
 	swupdate \
 	swupdate-scripts \
+	technexion-serial \
 "
 
 RDEPENDS_${PN}_append_beaglebone += "\
