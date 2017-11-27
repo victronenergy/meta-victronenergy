@@ -88,7 +88,7 @@ software =
 				},
 				{
 					name = "nandboot";
-					value = "nand read ${loadaddr} ${kernel} && bootm ${loadaddr}";
+					value = "mii write 0 0 8000; nand read ${loadaddr} ${kernel} && bootm ${loadaddr}";
 				}
 			);
 		};
@@ -117,7 +117,7 @@ software =
 				},
 				{
 					name = "nandboot";
-					value = "nand read ${loadaddr} ${kernel} && bootm ${loadaddr}";
+					value = "mii write 0 0 8000; nand read ${loadaddr} ${kernel} && bootm ${loadaddr}";
 				}
 			);
 		};
