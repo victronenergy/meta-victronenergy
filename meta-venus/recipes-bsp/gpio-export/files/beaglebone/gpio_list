@@ -1,4 +1,6 @@
-# This is a list of gpio pins, set by the script /etc/rcS.d/S90gpio_pins.sh They are documented at: https://github.com/victronenergy/venus/wiki/bbb-gpio Format: <pin_number> <direction: in/out> <name>
+# This is a list of gpio pins, set by the script /etc/rcS.d/S90gpio_pins.sh
+# They are documented at: https://github.com/victronenergy/venus/wiki/bbb-gpio
+# Format: <pin_number> <direction: in/out> <name>
 #
 # The <name> part is used to create an symlink in /dev/gpio.
 
