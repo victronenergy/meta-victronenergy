@@ -18,6 +18,7 @@ do_swuimage[depends] += "virtual/bootloader:do_deploy"
 ROOT_FSTYPE = "ubifs"
 ROOT_FSTYPE_beaglebone = "ext4.gz"
 ROOT_FSTYPE_raspberrypi2 = "ext4.gz"
+ROOT_FSTYPE_nanopi = "ext4.gz"
 
 BOOT_FSTYPE = "vfat.gz"
 
@@ -28,6 +29,7 @@ IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}-${DISTRO_VERSION}"
 SWUPDATE_IMAGES = "${IMAGE_DEPENDS}"
 SWUPDATE_IMAGES_append_canvu500 = " u-boot.imx"
 SWUPDATE_IMAGES_append_ccgx = " uImage u-boot.img MLO splash.bgra"
+SWUPDATE_IMAGES_append_nanopi = " u-boot-sunxi-with-spl.bin"
 
 SWUPDATE_IMAGES_FSTYPES[venus-image] = ".${ROOT_FSTYPE}"
 SWUPDATE_IMAGES_FSTYPES[venus-boot-image] = ".${BOOT_FSTYPE}"
@@ -35,6 +37,7 @@ SWUPDATE_IMAGES_FSTYPES[venus-boot-image] = ".${BOOT_FSTYPE}"
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[uImage] = "1"
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[u-boot.img] = "1"
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[u-boot.imx] = "1"
+SWUPDATE_IMAGES_NOAPPEND_MACHINE[u-boot-sunxi-with-spl.bin] = "1"
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[MLO] = "1"
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[splash.bgra] = "1"
 
