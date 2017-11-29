@@ -35,7 +35,7 @@ set_pin_dir() {
 
 create_link() {
     PIN=${1}
-    FILE=/sys/class/gpio/gpio${PIN}/value
+    FILE=/sys/class/gpio/gpio${PIN}
 
     ln -s ${FILE} ${GPIO_DIR}/$2
 }
