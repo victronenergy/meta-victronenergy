@@ -2,9 +2,6 @@ DESCRIPTION = "Javascript VNC Client: website that hosts a javascript vnc client
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
-# Conflicts with vrmportal, since they both want to be the default website. For sure there is a solution
-# for that, but that is out of scope of this initial fast release. And vrmportal is not yet released.
-
 # base-passwd is needed for www user
 DEPENDS = "base-passwd"
 RDEPENDS_${PN} = "hiawatha"
@@ -18,9 +15,8 @@ S = "${WORKDIR}/git"
 BASE_DIR = "/var/www/javascript-vnc-client/"
 DEST_DIR = "${D}${BASE_DIR}"
 
-# Empty do compile, because otherwise bitbake will just do a make
-do_compile() {
-}
+do_configure[noexec] = "1"
+do_compile[noexec] = "1"
 
 do_install () {
 	install -d ${DEST_DIR}/
