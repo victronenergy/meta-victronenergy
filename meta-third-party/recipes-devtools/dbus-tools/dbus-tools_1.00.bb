@@ -2,8 +2,6 @@ DESCRIPTION = "Python Dbus-tool"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
-inherit allarch
-
 RDEPENDS_${PN} = "python-dbus"
 PR = "r1"
 SRC_URI = "git://github.com/victronenergy/dbus-tools.git;tag=${PV};name=dbus-tools;protocol=https"

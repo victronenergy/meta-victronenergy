@@ -2,7 +2,6 @@ DESCRIPTION = "VE system calculations"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=9b0a9609befce3122afcc444da0fe825"
 
-inherit allarch
 inherit ve_package
 inherit daemontools
 inherit python-compile
