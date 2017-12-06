@@ -1,0 +1,29 @@
+From bf3efd5b7aaf7338cf5c69e11bebde61a3e752e1 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Sat, 9 Dec 2017 12:46:33 +0000
+Subject: [PATCH 2/2] pppd: clear resolv.conf on link down
+
+When the link goes down and we're not doing dial on demand, the name
+servers are no longer valid, so remove them from resolv.conf.
+
+Signed-off-by: Mans Rullgard <mans@mansr.com>
+---
+ pppd/ipcp.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/pppd/ipcp.c b/pppd/ipcp.c
+index 303ef157a439..73a7fe576255 100644
+--- a/pppd/ipcp.c
++++ b/pppd/ipcp.c
+@@ -2029,6 +2029,8 @@ ipcp_down(f)
+ 	sifdown(f->unit);
+ 	ipcp_clear_addrs(f->unit, ipcp_gotoptions[f->unit].ouraddr,
+ 			 ipcp_hisoptions[f->unit].hisaddr, 0);
++	if (usepeerdns)
++	    create_resolv(0, 0);
+     }
+ 
+     /* Execute the ip-down script */
+-- 
+2.15.1
+

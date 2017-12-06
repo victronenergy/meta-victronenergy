@@ -1,0 +1,10 @@
+connect "/usr/sbin/chat -f /etc/chatscripts/gsm"
+/dev/modem
+115200
+noauth
+noipdefault
+persist
+maxfail 0
+defaultroute
+defaultroute-metric 2000
+usepeerdns
