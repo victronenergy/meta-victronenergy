@@ -4,6 +4,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 SRC_URI += " \
 	file://mount.sh \
 	file://rtl8192cu.rules \
+	file://simcom.rules \
 "
 
 SRC_URI_append_beaglebone += "\
@@ -25,6 +26,8 @@ do_install_append() {
 		install -m 0644 ${WORKDIR}/mount.blacklist.${MACHINE} \
 			${D}/${sysconfdir}/udev/mount.blacklist.d/${MACHINE}
 	fi
+
+	install -m 0644 ${WORKDIR}/simcom.rules ${D}/${sysconfdir}/udev/rules.d
 }
 
 do_install_append_beaglebone() {
