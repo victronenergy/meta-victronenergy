@@ -1,0 +1,41 @@
+#! /bin/sh
+
+DAEMON=/usr/sbin/resolv-watch
+NAME=resolv-watch
+DESC="resolv.conf manager"
+PIDFILE=/var/run/$NAME.pid
+
+case "$1" in
+    start)
+        echo -n "starting $DESC: $NAME... "
+        start-stop-daemon -S -p $PIDFILE -m -b -x $DAEMON
+        echo "done."
+        ;;
+    stop)
+        echo -n "stopping $DESC: $NAME... "
+        start-stop-daemon -K -p $PIDFILE -x $DAEMON
+        echo "done."
+        ;;
+    status)
+        echo -n "$NAME "
+        if start-stop-daemon -q -K -t -p $PIDFILE -x $DAEMON; then
+                PID=$(cat $PIDFILE)
+                echo "($PID) is running"
+        else
+                echo "is not running"
+                exit 1
+        fi
+        ;;
+    restart)
+        echo "restarting $DESC: $NAME... "
+        $0 stop
+        $0 start
+        echo "done."
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|status|restart}"
+        exit 1
+        ;;
+esac
+
+exit 0
