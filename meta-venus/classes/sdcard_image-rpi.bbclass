@@ -87,11 +87,15 @@ IMAGE_CMD_rpi-sdimg () {
 
 	parted ${SDIMG} print
 
-	# Create empty data partition
+	# Create venus informational tree for data partition
+	install -d ${WORKDIR}/data/venus
+	printf "${DISTRO_VERSION}\n${DISTRO_NAME}\n${BUILDNAME}\n" > ${WORKDIR}/data/venus/image-version
+
+	# Create empty data partition with only informational venus tree
 	DATA_BLOCKS=$(LC_ALL=C parted -s ${SDIMG} unit b print | awk '/ 4 / { print substr($4, 1, length($4 -1)) / 512 /2 }')
 	rm -f ${WORKDIR}/data.img
 	dd if=/dev/zero of=${WORKDIR}/data.img bs=512 count=0 seek=${DATA_BLOCKS}
-	mkfs.ext4 -F ${WORKDIR}/data.img
+	mkfs.ext4 -F ${WORKDIR}/data.img -d ${WORKDIR}/data
 
 	# Burn Partitions
 	zcat ${DEPLOY_DIR_IMAGE}/venus-boot-image-raspberrypi2.vfat.gz | dd of=${SDIMG} conv=notrunc seek=1 bs=$(expr ${IMAGE_ROOTFS_ALIGNMENT} \* 1024)
