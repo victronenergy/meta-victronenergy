@@ -61,6 +61,8 @@ RDEPENDS_${PN} += "\
 	openssh-sftp-server \
 	opkg \
 	permanent-storage \
+	python-pymodbus \
+	python-pyserial \
 	rsync \
 	screen \
 	socat \
