@@ -15,6 +15,7 @@ SRC_URI_append_beaglebone += "\
 "
 
 SRC_URI_append_nanopi += "\
+	file://mount.blacklist.nanopi \
 	file://slcan.rules \
 "
 
