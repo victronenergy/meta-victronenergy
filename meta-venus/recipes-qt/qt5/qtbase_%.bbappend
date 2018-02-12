@@ -1,1 +1,1 @@
-PACKAGECONFIG_DISTRO = "sql-sqlite openssl"
+PACKAGECONFIG_DISTRO = "accessibility openssl sql-sqlite widgets"
