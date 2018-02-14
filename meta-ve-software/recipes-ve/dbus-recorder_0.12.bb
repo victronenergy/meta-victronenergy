@@ -13,6 +13,7 @@ S = "${WORKDIR}/git"
 do_install () {
 	install -d ${D}/${bindir}
 
+	install -m 0755 ${S}/play.sh ${D}/${bindir}
 	install -m 0755 ${S}/startdemo.sh ${D}/${bindir}
 	install -m 0755 ${S}/stopdemo.sh ${D}/${bindir}
 
