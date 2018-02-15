@@ -13,6 +13,10 @@ SRC_URI_append_beaglebone += "\
 	file://wlan-update \
 "
 
+SRC_URI_append_raspberrypi2 += "\
+	file://mount.blacklist.raspberrypi2 \
+"
+
 do_install_append() {
 	install -m 0755 ${WORKDIR}/mount.sh ${D}${sysconfdir}/udev/scripts
 
