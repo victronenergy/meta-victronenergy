@@ -24,10 +24,9 @@ kernel_do_compile_append() {
 	mkimage -A arm -O linux -C none  -T kernel -a 80008000 -e 80008000 -n 'Linux-with-dtb' -d zImage-with-dtb ${KERNEL_OUTPUT}
 }
 
-S = "${WORKDIR}/git"
+S = "${WORKDIR}/linux-${PV}"
 B = "${WORKDIR}/build"
 
-SRC_URI = " \
-	git://github.com/victronenergy/linux;branch=ccgx-4.9 \
-"
-SRCREV = "2387bf5ce4c356f333dadcab2f3adceeba55dbd1"
+SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
+SRC_URI[md5sum] = "5da8f35fbcb555cef17571b59a56890a"
+SRC_URI[sha256sum] = "f53f46360369c7a270fb1eb39e8435c8cf75284ef89dfeb5096ade8f70785ac3"
