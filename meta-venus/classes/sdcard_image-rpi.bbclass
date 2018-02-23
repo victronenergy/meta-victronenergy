@@ -40,14 +40,14 @@ IMAGE_ROOTFS_ALIGNMENT = "4096"
 SDIMG_ROOTFS_TYPE ?= "ext4.gz"
 SDIMG_ROOTFS = "${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.${SDIMG_ROOTFS_TYPE}"
 
-IMAGE_DEPENDS_rpi-sdimg = " \
-	parted-native \
-	mtools-native \
-	dosfstools-native \
-	zip-native \
+do_image_rpi_sdimg[depends] = " \
+	parted-native:do_populate_sysroot \
+	mtools-native:do_populate_sysroot \
+	dosfstools-native:do_populate_sysroot \
+	zip-native:do_populate_sysroot \
 	virtual/kernel:do_deploy \
-	venus-boot-image \
-	bcm2835-bootfiles \
+	venus-boot-image:do_rootfs \
+	bcm2835-bootfiles:do_deploy \
 "
 
 # SD card image name
