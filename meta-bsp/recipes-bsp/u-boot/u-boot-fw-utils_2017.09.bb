@@ -18,8 +18,8 @@ SRCREV = "c98ac3487e413c71e5d36322ef3324b21c6f60f9"
 PROVIDES = ""
 
 do_compile () {
-	oe_runmake ${UBOOT_MACHINE}
-	oe_runmake CC="${CC} ${CFLAGS} ${LDFLAGS}" envtools
+	oe_runmake -C ${S} ${UBOOT_MACHINE}
+	oe_runmake -C ${S} CC="${CC} ${CFLAGS} ${LDFLAGS}" envtools
 }
 
 do_install () {

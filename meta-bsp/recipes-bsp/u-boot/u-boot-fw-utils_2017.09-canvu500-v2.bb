@@ -7,8 +7,8 @@ SRC_URI += " \
 PROVIDES = ""
 
 do_compile () {
-	oe_runmake ${UBOOT_MACHINE}
-	oe_runmake CC="${CC} ${CFLAGS} ${LDFLAGS}" envtools
+	oe_runmake -C ${S} ${UBOOT_MACHINE}
+	oe_runmake -C ${S} CC="${CC} ${CFLAGS} ${LDFLAGS}" envtools
 }
 
 do_install () {
