@@ -5,6 +5,8 @@ LIC_FILES_CHKSUM = "file://Licenses/README;md5=0507cd7da8e7ad6d6701926ec9b84c95"
 
 COMPATIBLE_MACHINE = "beaglebone"
 
+DEPENDS += "bc-native u-boot-mkimage-native"
+
 UBOOT_LOCALVERSION = "-venus"
 UBOOT_ENV = "uEnv"
 

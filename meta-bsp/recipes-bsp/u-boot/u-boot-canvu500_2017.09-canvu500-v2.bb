@@ -1,5 +1,7 @@
 require u-boot-canvu500.inc
 
+DEPENDS += "bc-native u-boot-mkimage-native"
+
 SRC_URI += "file://install.cmds"
 
 do_compile_append () {
