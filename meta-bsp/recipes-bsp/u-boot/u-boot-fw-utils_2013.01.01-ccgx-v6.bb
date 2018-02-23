@@ -19,7 +19,7 @@ SRC_URI += " \
 
 do_compile () {
 	oe_runmake -C ${S} ${UBOOT_MACHINE}
-	oe_runmake -C ${S} HOSTCC="${CC}" HOSTSTRIP="echo" env
+	oe_runmake -C ${S} HOSTCC="${CC} ${CFLAGS} ${LDFLAGS}" HOSTSTRIP="echo" env
 }
 
 do_install () {
