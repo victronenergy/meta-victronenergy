@@ -3,12 +3,12 @@ require ${COREBASE}/meta/recipes-bsp/u-boot/u-boot.inc
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
 
+SRC_URI = "git://github.com/victronenergy/u-boot.git;branch=master"
 SRC_URI += " \
 	file://fw_env.config \
 "
 
-SRC_URI[md5sum] = "58c92bf2c46dc82f1b57817f09ca8bd8"
-SRC_URI[sha256sum] = "37f7ffc75ec3c38ea3125350cc606d3ceac071ab68811c9fb0cfc25d70592e22"
+S = "${WORKDIR}/git"
 
 # This revision corresponds to the tag "v2017.09"
 # We use the revision in order to avoid having to fetch it from the

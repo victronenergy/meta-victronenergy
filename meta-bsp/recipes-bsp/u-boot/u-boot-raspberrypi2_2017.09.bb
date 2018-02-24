@@ -3,10 +3,13 @@ require u-boot-rpi.inc
 DEPENDS += "dtc-native"
 do_deploy[depends] += "bcm2835-bootfiles:do_deploy"
 
+SRC_URI = "git://github.com/victronenergy/u-boot.git;branch=master"
 SRC_URI += " \
     file://uEnv.txt \
     file://config.txt \
 "
+
+S = "${WORKDIR}/git"
 
 COMPATIBLE_MACHINE = "raspberrypi"
 
