@@ -5,18 +5,13 @@ LIC_FILES_CHKSUM = "file://LICENCE.broadcom;md5=4a4d169737c0786fb9482bb6d30401d1
 
 inherit deploy
 
-RPIFW_SRCREV ?= "390f53ed0fd79df274bdcc81d99e09fa262f03ab"
-RPIFW_DATE ?= "20160622"
-RPIFW_SRC_URI ?= "git://github.com/raspberrypi/firmware.git;protocol=git;branch=master"
-RPIFW_S ?= "${WORKDIR}/git"
-
-SRC_URI = "${RPIFW_SRC_URI}"
-SRCREV = "${RPIFW_SRCREV}"
-PV = "${RPIFW_DATE}"
+SRC_URI = "https://github.com/raspberrypi/firmware/archive/1.${PV}.tar.gz"
+SRC_URI[md5sum] = "4d27c1888a7bab3097471906e7b4a319"
+SRC_URI[sha256sum] = "46ce28c8d87ef22bdcc57ac1836ca3f04d1ec6f46580ff5a30bf76b3c0822117"
 
 COMPATIBLE_MACHINE = "raspberrypi"
 
-S = "${RPIFW_S}/boot"
+S = "${WORKDIR}/firmware-1.${PV}/boot"
 
 do_deploy() {
     install -d ${DEPLOYDIR}/${PN}
