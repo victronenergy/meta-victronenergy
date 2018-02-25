@@ -89,7 +89,7 @@ IMAGE_CMD_rpi-sdimg () {
 
 	# Create venus informational tree for data partition
 	install -d ${WORKDIR}/data/venus
-	printf "${DISTRO_VERSION}\n${DISTRO_NAME}\n${BUILDNAME}\n" > ${WORKDIR}/data/venus/image-version
+	cp ${IMAGE_ROOTFS}/opt/victronenergy/version ${WORKDIR}/data/venus/image-version
 
 	# Create empty data partition with only informational venus tree
 	DATA_BLOCKS=$(LC_ALL=C parted -s ${SDIMG} unit b print | awk '/ 4 / { print substr($4, 1, length($4 -1)) / 512 /2 }')
