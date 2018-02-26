@@ -13,16 +13,21 @@ INITRD_IMAGE = "venus-upgrade-initramfs-${MACHINE}.ext2.gz.u-boot"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 SDCARD = "${WORKDIR}/sdcard"
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}-${DISTRO_VERSION}"
+DEPENDS += "\
+	zip-native \
+"
+
+IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
 
 SWU = "venus-swu"
 
 do_install[depends] += " \
 	virtual/bootloader:do_deploy \
 	virtual/kernel:do_deploy \
-	venus-upgrade-initramfs:do_rootfs \
-	${SWU}:do_createlink \
+	venus-upgrade-initramfs:do_image_complete \
+	${SWU}:do_swuimage \
 "
 
 do_install () {
