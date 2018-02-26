@@ -9,6 +9,7 @@ INITSCRIPT_PARAMS = "remove"
 MOSQUITTO_D = "/data/conf/mosquitto.d"
 
 do_install_append() {
+	install -d ${D}${sysconfdir}/mosquitto
 	install -m 0644 ${WORKDIR}/mosquitto.conf ${D}${sysconfdir}/mosquitto
 	echo "include_dir ${MOSQUITTO_D}" >> ${D}${sysconfdir}/mosquitto/mosquitto.conf
 }
