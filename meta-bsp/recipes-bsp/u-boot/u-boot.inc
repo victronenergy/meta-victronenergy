@@ -13,14 +13,14 @@ UBOOT_IMAGE ?= "u-boot.img"
 UBOOT_MAKE_TARGET ?= "all"
 
 do_configure () {
-	oe_runmake ${UBOOT_MACHINE}
+	oe_runmake -C ${S} ${UBOOT_MACHINE}
 }
 
 do_compile () {
 	unset LDFLAGS
 	unset CFLAGS
 	unset CPPFLAGS
-	oe_runmake ${UBOOT_MAKE_TARGET}
+	oe_runmake -C ${S} ${UBOOT_MAKE_TARGET}
 }
 
 do_install () {

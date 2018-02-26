@@ -6,23 +6,24 @@ COMPATIBLE_MACHINE = "ccgx"
 
 inherit kernel
 
-DEPENDS += "u-boot-mkimage-native"
-
 LINUX_VERSION_EXTENSION = "-venus"
 
 KERNEL_CONFIG_COMMAND = "oe_runmake -C ${S} O=${B} ccgx_defconfig"
-KERNEL_EXTRA_ARGS = "LOADADDR=80008000 am3517-ccgx.dtb"
-KERNEL_IMAGETYPE = "uImage"
+KERNEL_IMAGETYPES = "uImage"
+KERNEL_EXTRA_ARGS = "zImage"
+KERNEL_DEVICETREE = "am3517-ccgx.dtb"
+KEEPUIMAGE = "no"
+UBOOT_ENTRYPOINT = "80008000"
 
 # To be compatible with the deployed u-boot, a uImage containing a
-# zImage with dtb appended is created. This builds a regular zImage
-# and dtb first, kernel_do_compile_append concatenates them and
-# creates an uImage for it.
-kernel_do_compile_append() {
-	rm ${KERNEL_OUTPUT}
-	cat arch/${ARCH}/boot/zImage arch/${ARCH}/boot/dts/am3517-ccgx.dtb > zImage-with-dtb
-	mkimage -A arm -O linux -C none  -T kernel -a 80008000 -e 80008000 -n 'Linux-with-dtb' -d zImage-with-dtb ${KERNEL_OUTPUT}
+# zImage with dtb appended is created.
+uboot_prep_kimage() {
+	cat arch/${ARCH}/boot/zImage arch/${ARCH}/boot/dts/am3517-ccgx.dtb \
+		> linux.bin
+        linux_comp=none
 }
+
+RDEPENDS_kernel-base = ""
 
 S = "${WORKDIR}/linux-${PV}"
 B = "${WORKDIR}/build"

@@ -1,4 +1,4 @@
-inherit siteinfo
+inherit pkgconfig siteinfo
 
 # run ./configure && make && make install
 

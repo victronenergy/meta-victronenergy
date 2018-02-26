@@ -5,14 +5,16 @@ S = "${WORKDIR}"
 
 inherit ve_package
 
+do_configure () {
+	printf "${DISTRO_VERSION}\n${DISTRO_NAME}\n${BUILDNAME}\n" > version
+}
+
+do_configure[nostamp] = "1"
+do_configure[vardepsexclude] = "BUILDNAME"
+
 do_install () {
-	printf "${DISTRO_VERSION}\n${DISTRO_NAME}\n${BUILDNAME}" > version
 	install -d ${D}${vedir}
 	install -m 644 version ${D}${vedir}
 }
-
-do_install[vardeps] += "DATETIME"
-do_install[nostamp] = "1"
-do_install[vardepsexclude] = "BUILDNAME"
 
 FILES_${PN} += "${vedir}"

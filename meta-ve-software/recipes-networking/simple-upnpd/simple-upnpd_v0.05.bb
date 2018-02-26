@@ -3,6 +3,8 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 
 DESCRIPTION = "Daemon which only announces the device its presence over upnp"
 
+inherit pkgconfig
+
 DEPENDS += "gupnp libsoup-2.4"
 RDEPENDS_${PN} = "glib-2.0 gupnp"
 PACKAGE_ARCH = "${MACHINE_ARCH}"

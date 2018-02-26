@@ -38,20 +38,20 @@ IMAGE_ROOTFS_ALIGNMENT = "4096"
 
 # Use an uncompressed ext4 by default as rootfs
 SDIMG_ROOTFS_TYPE ?= "ext4.gz"
-SDIMG_ROOTFS = "${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.${SDIMG_ROOTFS_TYPE}"
+SDIMG_ROOTFS = "${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.${SDIMG_ROOTFS_TYPE}"
 
-IMAGE_DEPENDS_rpi-sdimg = " \
-	parted-native \
-	mtools-native \
-	dosfstools-native \
-	zip-native \
+do_image_rpi_sdimg[depends] = " \
+	parted-native:do_populate_sysroot \
+	mtools-native:do_populate_sysroot \
+	dosfstools-native:do_populate_sysroot \
+	zip-native:do_populate_sysroot \
 	virtual/kernel:do_deploy \
-	venus-boot-image \
-	bcm2835-bootfiles \
+	venus-boot-image:do_rootfs \
+	bcm2835-bootfiles:do_deploy \
 "
 
 # SD card image name
-SDIMG = "${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.rpi-sdimg"
+SDIMG = "${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.rpi-sdimg"
 
 # Additional files and/or directories to be copied into the vfat partition from the IMAGE_ROOTFS.
 FATPAYLOAD ?= ""
@@ -89,7 +89,7 @@ IMAGE_CMD_rpi-sdimg () {
 
 	# Create venus informational tree for data partition
 	install -d ${WORKDIR}/data/venus
-	printf "${DISTRO_VERSION}\n${DISTRO_NAME}\n${BUILDNAME}\n" > ${WORKDIR}/data/venus/image-version
+	cp ${IMAGE_ROOTFS}/opt/victronenergy/version ${WORKDIR}/data/venus/image-version
 
 	# Create empty data partition with only informational venus tree
 	DATA_BLOCKS=$(LC_ALL=C parted -s ${SDIMG} unit b print | awk '/ 4 / { print substr($4, 1, length($4 -1)) / 512 /2 }')
@@ -98,7 +98,7 @@ IMAGE_CMD_rpi-sdimg () {
 	mkfs.ext4 -F ${WORKDIR}/data.img -d ${WORKDIR}/data
 
 	# Burn Partitions
-	zcat ${DEPLOY_DIR_IMAGE}/venus-boot-image-raspberrypi2.vfat.gz | dd of=${SDIMG} conv=notrunc seek=1 bs=$(expr ${IMAGE_ROOTFS_ALIGNMENT} \* 1024)
+	zcat ${IMGDEPLOYDIR}/venus-boot-image-raspberrypi2.vfat.gz | dd of=${SDIMG} conv=notrunc seek=1 bs=$(expr ${IMAGE_ROOTFS_ALIGNMENT} \* 1024)
 	zcat ${SDIMG_ROOTFS} | dd of=${SDIMG} conv=notrunc seek=1 bs=$(expr 1024 \* ${BOOT_SPACE_ALIGNED} + ${IMAGE_ROOTFS_ALIGNMENT} \* 1024)
 	dd if=${WORKDIR}/data.img of=${SDIMG} conv=notrunc seek=1 bs=$(expr 1024 \* ${BOOT_SPACE_ALIGNED} + ${IMAGE_ROOTFS_ALIGNMENT} \* 1024 + ${ROOT_SPACE_ALIGNED} \* 2048)
 }

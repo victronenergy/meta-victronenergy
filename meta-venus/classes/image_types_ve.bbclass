@@ -1,20 +1,20 @@
 inherit image_types
 
-IMAGE_TYPES += "live.img.gz"
+IMAGE_TYPES += "live-img.gz"
 
-IMAGE_TYPEDEP_live.img = "ext3"
+IMAGE_TYPEDEP_live-img = "ext3"
 
-IMAGE_DEPENDS_live.img = "\
+do_image_live_img[depends] += "\
 	dosfstools-native:do_populate_sysroot \
 	mtools-native:do_populate_sysroot \
 	parted-native:do_populate_sysroot \
-	virtual/bootloader \
+	virtual/bootloader:do_deploy \
 	virtual/kernel:do_deploy \
-	"
+"
 
-IMAGE_CMD_live.img () {
+IMAGE_CMD_live-img () {
 	BOOTIMG=${WORKDIR}/boot.img
-	LIVE_IMAGE=${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.live.img
+	LIVE_IMAGE=${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.live-img
 
 	# create live image with two partition, first to boot, second the rootfs itself
 	dd if=/dev/zero of=${LIVE_IMAGE} count=1024 bs=1M
@@ -33,6 +33,6 @@ IMAGE_CMD_live.img () {
 
 	# copy partitions into the image
 	dd if=${BOOTIMG} of=${LIVE_IMAGE} conv=notrunc seek=1 bs=1M
-	dd if=${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.ext3 of=${LIVE_IMAGE} bs=512 seek=194560
+	dd if=${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.ext3 of=${LIVE_IMAGE} bs=512 seek=194560
 }
 

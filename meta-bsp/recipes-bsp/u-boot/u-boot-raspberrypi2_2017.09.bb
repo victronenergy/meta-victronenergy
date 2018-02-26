@@ -3,10 +3,13 @@ require u-boot-rpi.inc
 DEPENDS += "dtc-native"
 do_deploy[depends] += "bcm2835-bootfiles:do_deploy"
 
+SRC_URI = "git://github.com/victronenergy/u-boot.git;branch=master"
 SRC_URI += " \
     file://uEnv.txt \
     file://config.txt \
 "
+
+S = "${WORKDIR}/git"
 
 COMPATIBLE_MACHINE = "raspberrypi"
 
@@ -19,7 +22,7 @@ SRCREV = "c98ac3487e413c71e5d36322ef3324b21c6f60f9"
 # load u-boot.
 do_deploy_append() {
 	install ${WORKDIR}/config.txt ${DEPLOYDIR}/config.txt
-	${S}/tools/mkenvimage -s 16384 -o ${DEPLOYDIR}/uboot.env ${WORKDIR}/uEnv.txt
+	${B}/tools/mkenvimage -s 16384 -o ${DEPLOYDIR}/uboot.env ${WORKDIR}/uEnv.txt
 
 	# Keep a version file, to enable future updates
 	echo "${PV}" > ${DEPLOYDIR}/u-boot-version.txt

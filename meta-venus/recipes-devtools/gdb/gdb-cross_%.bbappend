@@ -1,1 +1,0 @@
-gdb_%.bbappend
