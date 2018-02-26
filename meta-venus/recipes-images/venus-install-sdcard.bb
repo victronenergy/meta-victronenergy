@@ -5,11 +5,13 @@ INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.ext2.gz.u-boot"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 SDCARD = "${WORKDIR}/sdcard"
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 DEPENDS += "\
 	dosfstools-native \
 	mtools-native \
 	parted-native \
+	zip-native \
 "
 
 DTB_beaglebone = "${KERNEL_IMAGETYPE}-bbb-venus.dtb ${KERNEL_IMAGETYPE}-bbb-octo-venus.dtb ${KERNEL_IMAGETYPE}-bbe-venus.dtb"
@@ -18,13 +20,13 @@ SCR = "install-${MACHINE}.scr"
 
 SWU = "venus-swu"
 
-IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}-${DISTRO_VERSION}"
+IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
 
 do_install[depends] += " \
 	virtual/bootloader:do_deploy \
 	virtual/kernel:do_deploy \
-	venus-install-initramfs:do_rootfs \
-	${SWU}:do_createlink \
+	venus-install-initramfs:do_image_complete \
+	${SWU}:do_swuimage \
 "
 
 do_install () {
