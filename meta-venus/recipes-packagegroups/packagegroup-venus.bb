@@ -21,7 +21,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 LICENSE = "MIT"
 
-DEPENDS = "packagegroup-venus-optional-packages venus-swu"
+DEPENDS = "packagegroup-venus-optional-packages"
 
 # installer images
 DEPENDS_append_beaglebone += " venus-install-sdcard"
@@ -30,3 +30,5 @@ DEPENDS_append_canvu500 += "venus-install-sdcard"
 
 # "live" initial image
 DEPENDS_append_raspberrypi2 += "venus-image"
+
+do_package[depends] =+ "venus-swu:do_swuimage"
