@@ -17,6 +17,9 @@ SRC_URI_append_beaglebone += "\
 SRC_URI_append_nanopi += "\
 	file://mount.blacklist.nanopi \
 	file://slcan.rules \
+	file://wlan.rules \
+	file://wlan-rename \
+	file://wlan-update \
 "
 
 SRC_URI_append_raspberrypi2 += "\
@@ -49,6 +52,11 @@ do_install_append_ccgx() {
 
 do_install_append_nanopi() {
 	install -m 0644 ${WORKDIR}/slcan.rules ${D}${sysconfdir}/udev/rules.d
+	install -m 0644 ${WORKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
+
+	install -m 0755 -d ${D}${base_libdir}/udev
+	install -m 0755 ${WORKDIR}/wlan-rename ${D}${base_libdir}/udev
+	install -m 0755 ${WORKDIR}/wlan-update ${D}${base_libdir}/udev
 }
 
-FILES_${PN}_append_beaglebone += "${base_libdir}"
+FILES_${PN} += "${base_libdir}"
