@@ -27,7 +27,6 @@ RRECOMMENDS_${PN} += " \
 	dbus-qwacs \
 	dbus-redflow \
 	dbus-systemcalc-py \
-	dbus-systemcalc-py-bol \
 	dbus-valence \
 	dbus-vebus-to-pvinverter \
 	gps-dbus \
