@@ -1,4 +1,4 @@
-inherit image_types
+inherit image_types uboot-config
 
 DESCRIPTION = "Live image to program the rootfs"
 INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.ext2.gz.u-boot"
@@ -24,7 +24,7 @@ IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
 
 INSTALL_FILES = "\
 	${SPL_BINARY} \
-	u-boot.${UBOOT_SUFFIX} \
+	${UBOOT_BINARY} \
 	${SCR}:boot.scr \
 	${KERNEL_IMAGETYPE}-${MACHINE}.bin:${KERNEL_IMAGETYPE} \
 	${DTB} \
