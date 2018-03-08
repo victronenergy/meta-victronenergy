@@ -15,6 +15,7 @@ DEPENDS += "\
 "
 
 DTB_beaglebone = "${KERNEL_IMAGETYPE}-bbb-venus.dtb ${KERNEL_IMAGETYPE}-bbb-octo-venus.dtb ${KERNEL_IMAGETYPE}-bbe-venus.dtb"
+DTB_nanopi = "sun8i-h3-nanopi-easysolar.dtb"
 
 SCR = "install-${MACHINE}.scr"
 
