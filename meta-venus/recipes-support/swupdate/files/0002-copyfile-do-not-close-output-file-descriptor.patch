@@ -1,0 +1,30 @@
+From fdd6ee5dc972ba4e74e7e409ff1b85d938c1d07d Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Tue, 29 Nov 2016 12:25:03 +0000
+Subject: [PATCH 2/5] copyfile: do not close output file descriptor
+
+The copyfile() function should not close the output file descriptor.
+This is the responsibility of the caller which might need also need it
+for further operations.
+
+Signed-off-by: Mans Rullgard <mans@mansr.com>
+---
+ core/cpio_utils.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/core/cpio_utils.c b/core/cpio_utils.c
+index 7a5064b992a7..e51a1f6e1658 100644
+--- a/core/cpio_utils.c
++++ b/core/cpio_utils.c
+@@ -278,8 +278,6 @@ copyfile_exit:
+ 	if (dgst)
+ 		swupdate_HASH_cleanup(dgst);
+ 
+-	close(fdout);
+-
+ 	return ret;
+ }
+ 
+-- 
+2.16.2
+

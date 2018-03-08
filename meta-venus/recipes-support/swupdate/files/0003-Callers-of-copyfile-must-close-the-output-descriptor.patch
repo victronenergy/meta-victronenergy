@@ -1,0 +1,66 @@
+From 7b95418a1d86ddc887c757e872cc4ea459c6545e Mon Sep 17 00:00:00 2001
+From: Stefano Babic <sbabic@denx.de>
+Date: Wed, 30 Nov 2016 10:08:28 +0100
+Subject: [PATCH 3/5] Callers of copyfile() must close the output descriptor
+
+There are a couple of cases where the output
+file descriptor is not closed.
+
+Signed-off-by: Stefano Babic <sbabic@denx.de>
+Reported-by: Mans Rullgard <mans@mansr.com>
+Reviewed-by: Mans Rullgard <mans@mansr.com>
+---
+ core/cpio_utils.c          | 2 ++
+ corelib/stream_interface.c | 4 ++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/core/cpio_utils.c b/core/cpio_utils.c
+index e51a1f6e1658..20137ea922f6 100644
+--- a/core/cpio_utils.c
++++ b/core/cpio_utils.c
+@@ -352,10 +352,12 @@ off_t extract_sw_description(int fd, const char *descfile, off_t start)
+ 
+ 	if (lseek(fd, offset, SEEK_SET) < 0) {
+ 		ERROR("CPIO file corrupted : %s\n", strerror(errno));
++		close(fdout);
+ 		return -1;
+ 	}
+ 	if (copyfile(fd, &fdout, fdh.size, &offset, 0, 0, &checksum, NULL, 0, NULL) < 0) {
+ 		ERROR("%s corrupted or not valid\n", descfile);
++		close(fdout);
+ 		return -1;
+ 	}
+ 
+diff --git a/corelib/stream_interface.c b/corelib/stream_interface.c
+index 90f649b086b5..2fc997578728 100644
+--- a/corelib/stream_interface.c
++++ b/corelib/stream_interface.c
+@@ -105,9 +105,11 @@ static int extract_file_to_tmp(int fd, const char *fname, unsigned long *poffs)
+ 		return -1;
+ 
+ 	if (copyfile(fd, &fdout, fdh.size, poffs, 0, 0, &checksum, NULL, 0, NULL) < 0) {
++		close(fdout);
+ 		return -1;
+ 	}
+ 	if (checksum != (uint32_t)fdh.chksum) {
++		close(fdout);
+ 		ERROR("Checksum WRONG ! Computed 0x%ux, it should be 0x%ux\n",
+ 			(unsigned int)checksum, (unsigned int)fdh.chksum);
+ 			return -1;
+@@ -207,11 +209,13 @@ static int extract_files(int fd, struct swupdate_cfg *software)
+ 				if (fdout < 0)
+ 					return -1;
+ 				if (copyfile(fd, &fdout, fdh.size, &offset, 0, 0, &checksum, img->sha256, 0, NULL) < 0) {
++					close(fdout);
+ 					return -1;
+ 				}
+ 				if (checksum != (unsigned long)fdh.chksum) {
+ 					ERROR("Checksum WRONG ! Computed 0x%ux, it should be 0x%ux",
+ 						(unsigned int)checksum, (unsigned int)fdh.chksum);
++					close(fdout);
+ 					return -1;
+ 				}
+ 				close(fdout);
+-- 
+2.16.2
+
