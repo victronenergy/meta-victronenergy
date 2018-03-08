@@ -102,7 +102,7 @@ format_mmc() {
     mmc=$1
 
     msg "Creating partitions..."
-    sfdisk /dev/$mmc <<EOF
+    sfdisk -W always /dev/$mmc <<EOF
 	2048, 16384, c, *
 	, 655360, L
 	, 655360, L
@@ -112,10 +112,10 @@ format_mmc() {
 EOF
 
     msg "Formatting data partition..."
-    yes | mkfs.ext4 /dev/${mmc}p5
+    mkfs.ext4 -F /dev/${mmc}p5
 
     msg "Formatting scratch partition.."
-    yes | mkfs.ext4 /dev/${mmc}p6
+    mkfs.ext4 -F /dev/${mmc}p6
 
     DATADEV=/dev/${mmc}p5
     DATAFS=ext4
