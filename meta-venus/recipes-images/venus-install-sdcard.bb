@@ -77,6 +77,11 @@ do_install () {
         # copy vfat image into partition
         dd if=${FSIMAGE} of=${IMAGE} bs=1M seek=1
 
+	# write boot loader if required
+	if [ -n "${SDIMAGE_BOOT_FILE}" ]; then
+		dd if=${DEPLOY_DIR_IMAGE}/${SDIMAGE_BOOT_FILE} of=${IMAGE} conv=notrunc bs=1k seek=${SDIMAGE_BOOT_FILE_OFFS}
+	fi
+
 	zip -j ${IMAGE}.zip ${IMAGE}
 	rm ${IMAGE}
 	ln -sf ${IMAGE_NAME}.img.zip ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.img.zip
