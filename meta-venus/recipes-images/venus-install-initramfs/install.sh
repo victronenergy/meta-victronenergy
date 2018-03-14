@@ -112,10 +112,10 @@ format_mmc() {
 EOF
 
     msg "Formatting data partition..."
-    mkfs.ext4 /dev/${mmc}p5
+    yes | mkfs.ext4 /dev/${mmc}p5
 
     msg "Formatting scratch partition.."
-    mkfs.ext4 /dev/${mmc}p6
+    yes | mkfs.ext4 /dev/${mmc}p6
 
     DATADEV=/dev/${mmc}p5
     DATAFS=ext4
