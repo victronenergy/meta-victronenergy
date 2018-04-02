@@ -8,6 +8,7 @@ do_rootfs[depends] += "\
 	dosfstools-native:do_populate_sysroot \
 	mtools-native:do_populate_sysroot \
 	virtual/bootloader:do_deploy \
+	virtual/kernel:do_deploy \
 "
 
 do_configure[noexec] = "1"
