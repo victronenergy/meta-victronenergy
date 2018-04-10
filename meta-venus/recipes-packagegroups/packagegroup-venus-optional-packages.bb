@@ -8,6 +8,7 @@ DEPENDS += "\
 	git \
 	nodejs \
 	packagegroup-core-buildessential \
+	python-pylint \
 	s6 \
 	tcpdump \
 	tinymembench \
