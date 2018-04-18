@@ -22,7 +22,7 @@ do_install_append() {
 
 	if [ -e ${WORKDIR}/mount.blacklist.${MACHINE} ]; then
 		install -d ${D}/${sysconfdir}/udev/mount.blacklist.d
-		install -m 0644 ${WORKDIR}/mount.blacklist.beaglebone \
+		install -m 0644 ${WORKDIR}/mount.blacklist.${MACHINE} \
 			${D}/${sysconfdir}/udev/mount.blacklist.d/${MACHINE}
 	fi
 }
