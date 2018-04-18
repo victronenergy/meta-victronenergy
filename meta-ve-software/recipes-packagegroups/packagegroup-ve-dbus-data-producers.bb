@@ -23,6 +23,7 @@ RRECOMMENDS_${PN} += " \
 	dbus-bornay-windplus \
 	dbus-cgwacs \
 	dbus-fronius \
+	dbus-modem \
 	dbus-motordrive \
 	dbus-qwacs \
 	dbus-redflow \

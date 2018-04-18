@@ -43,6 +43,7 @@ RDEPENDS_${PN} += "\
 	custom-rc.d \
 	dbus \
 	dbus-tools \
+	dnsmasq \
 	e2fsprogs \
 	eglibc-utils \
 	gdbserver \
@@ -61,6 +62,7 @@ RDEPENDS_${PN} += "\
 	openssh-sftp-server \
 	opkg \
 	permanent-storage \
+	ppp \
 	python-pymodbus \
 	python-pyserial \
 	rsync \

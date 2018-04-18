@@ -1,0 +1,28 @@
+#! /bin/sh
+
+# Both connman and pppd maintain their own resolv.conf files in
+# accordance to the connections they manage.  Monitor both for changes
+# and point the local dnsmasq proxy at the preferred one: connman if
+# it has a nameserver entry, pppd otherwise.  The polling mode built
+# into dnsmasq is unsuitable as it picks the file with the most recent
+# timestamp, which doesn't necessarily correspond to the preferred
+# connection.
+
+CM_RESOLV_CONF=/run/connman/resolv.conf
+PPP_RESOLV_CONF=/run/ppp/resolv.conf
+RESOLV_CONF=/run/resolv.conf
+
+while true; do
+    if grep -q ^nameserver ${CM_RESOLV_CONF}; then
+        resolv_conf=${CM_RESOLV_CONF}
+    else
+        resolv_conf=${PPP_RESOLV_CONF}
+    fi
+
+    ln -sf ${resolv_conf} ${RESOLV_CONF}
+
+    /etc/init.d/dnsmasq reload
+
+    # monitor the the directories since the files might not exist yet
+    inotifywait -qq -e close_write ${CM_RESOLV_CONF%/*} ${PPP_RESOLV_CONF%/*}
+done

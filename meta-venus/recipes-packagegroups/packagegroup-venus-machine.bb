@@ -35,7 +35,6 @@ RDEPENDS_${PN}_append_ccgx += "\
 "
 
 RDEPENDS_${PN}_append_beaglebone += "\
-	dnsmasq \
 	gpio-export \
 	hostapd \
 	i2c-tools \
