@@ -40,6 +40,7 @@ games:x:60:
 shutdown:x:70:
 vnctunnel:x:99:
 users:x:100:
+signalk:x:992:
 nodered:x:993:
 avahi:x:994:
 messagebus:x:995:
