@@ -1,0 +1,23 @@
+{
+  "pipedProviders": [
+    {
+      "id": "n2k-on-ve.can-socket",
+      "pipeElements": [
+        {
+          "type": "providers/simple",
+          "options": {
+            "logging": false,
+            "type": "NMEA2000",
+            "subOptions": {
+              "type": "canbus-canboatjs",
+              "interface": "can0"
+            }
+          }
+        }
+      ],
+      "enabled": true
+    }
+  ],
+  "mdns": true
+}
+
