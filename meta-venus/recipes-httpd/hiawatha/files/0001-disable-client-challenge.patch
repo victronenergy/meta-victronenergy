@@ -1,0 +1,28 @@
+From 250cf869df1e153475f7f3d28ac53ebc431bbe38 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 19 Apr 2018 15:46:58 +0200
+Subject: [PATCH] disable client challenge
+
+The client challenge use /dev/random and hence waits for enough entropy
+to be available and hence it can take minutes for the webserver to respond.
+Since we use ChallengeClient, just disable it.
+---
+ config.h.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config.h.in b/config.h.in
+index 56946ec..43a193f 100644
+--- a/config.h.in
++++ b/config.h.in
+@@ -28,7 +28,7 @@
+ 
+ /* Other Hiawatha features
+  */
+-#define ENABLE_CHALLENGE ON
++#undef ENABLE_CHALLENGE
+ /* #define ENABLE_DEBUG ON */
+ #define ENABLE_FILEHASHES ON
+ #define ENABLE_THREAD_POOL ON
+-- 
+2.7.4
+

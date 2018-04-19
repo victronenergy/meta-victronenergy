@@ -1,7 +1,9 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-SRC_URI += "file://hiawatha.conf \ 
-           "
+SRC_URI += " \
+	file://hiawatha.conf \
+	file://0001-disable-client-challenge.patch \
+"
 RDEPENDS_${PN} += "php-fpm"
 
 EXTRA_OECMAKE = " -DENABLE_IPV6=OFF \
