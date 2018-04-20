@@ -31,6 +31,7 @@ TTYS="console"
 #TESTMODE=
 
 msg() {
+    eval "$HOOK_msg"
     for tty in $TTYS; do
         echo "$@" >/dev/$tty
     done
