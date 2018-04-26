@@ -60,10 +60,15 @@ static int get_vrm_boot_reason(int linux_flags)
 		return VRM_BOOT_REASON_UNKNOWN;
 	}
 }
-#else
+#elif defined(MACH_ccgx)
 static int get_vrm_boot_reason(int linux_flags)
 {
 	return linux_flags;
+}
+#else
+static int get_vrm_boot_reason(int linux_flags)
+{
+	return (linux_flags & WDIOF_CARDRESET ? VRM_BOOT_WATCHDOG_REBOOT : VRM_BOOT_REASON_UNKNOWN);
 }
 #endif
 
