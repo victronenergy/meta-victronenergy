@@ -30,6 +30,12 @@ TTYS="console"
 # set by findimg if ${CARD}/testmode exists
 #TESTMODE=
 
+# size of root partitions in MB
+ROOT_SIZE=320
+
+# size of data partition in MB
+DATA_SIZE=128
+
 msg() {
     eval "$HOOK_msg"
     for tty in $TTYS; do
@@ -102,13 +108,16 @@ findimg() {
 format_mmc() {
     mmc=$1
 
+    root_blocks=$((ROOT_SIZE * 1024 * 2))
+    data_blocks=$((DATA_SIZE * 1024 * 2))
+
     msg "Creating partitions..."
     sfdisk -W always /dev/$mmc <<EOF
 	2048, 16384, c, *
-	, 655360, L
-	, 655360, L
+	, $root_blocks, L
+	, $root_blocks, L
 	,, E
-	, 262144, L
+	, $data_blocks, L
 	,, L
 EOF
 
