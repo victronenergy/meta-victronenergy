@@ -30,7 +30,14 @@ TTYS="console"
 # set by findimg if ${CARD}/testmode exists
 #TESTMODE=
 
+# size of root partitions in MB
+ROOT_SIZE=320
+
+# size of data partition in MB
+DATA_SIZE=128
+
 msg() {
+    eval "$HOOK_msg"
     for tty in $TTYS; do
         echo "$@" >/dev/$tty
     done
@@ -101,21 +108,24 @@ findimg() {
 format_mmc() {
     mmc=$1
 
+    root_blocks=$((ROOT_SIZE * 1024 * 2))
+    data_blocks=$((DATA_SIZE * 1024 * 2))
+
     msg "Creating partitions..."
-    sfdisk /dev/$mmc <<EOF
+    sfdisk -W always /dev/$mmc <<EOF
 	2048, 16384, c, *
-	, 655360, L
-	, 655360, L
+	, $root_blocks, L
+	, $root_blocks, L
 	,, E
-	, 262144, L
+	, $data_blocks, L
 	,, L
 EOF
 
     msg "Formatting data partition..."
-    yes | mkfs.ext4 /dev/${mmc}p5
+    mkfs.ext4 -F /dev/${mmc}p5
 
     msg "Formatting scratch partition.."
-    yes | mkfs.ext4 /dev/${mmc}p6
+    mkfs.ext4 -F /dev/${mmc}p6
 
     DATADEV=/dev/${mmc}p5
     DATAFS=ext4

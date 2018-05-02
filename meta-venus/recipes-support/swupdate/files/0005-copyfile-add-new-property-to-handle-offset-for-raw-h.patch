@@ -1,0 +1,321 @@
+From 41e867edb3d37be35b5826a85f288232b9a4196d Mon Sep 17 00:00:00 2001
+From: Georges Savoundararadj <gsavoundararadj@witekio.us>
+Date: Mon, 10 Apr 2017 12:53:53 -0700
+Subject: [PATCH 5/5] copyfile: add new property to handle offset for raw
+ handler
+
+This new property allows the user to specify a specific offset from a
+raw device and not rely only on the partition.
+This is useful for example to update a kernel or a bootloader which is
+not part of a partition
+
+It handles the following multiplicative suffixes: K=1024 and M=1024*1024.
+
+This commit has been tested:
+* with and without signature
+* with and without compression
+
+Signed-off-by: Sid-Ali Teir <steir@witekio.us>
+Signed-off-by: Georges Savoundararadj <gsavoundararadj@witekio.us>
+
+Fix broken CPIO from last commit
+
+Commit 93f9b1972676a53ee7a8a44f5b069b04a3c2ed57 introduces a bug if the
+new attribute "offset" is not set. In fact, it retrieves the value with
+GET_FIELD_STRING, but this function does not touch the destination if no
+attribute is found.
+Initialize the attribute with an empty string before retrieving the
+field.
+
+Signed-off-by: Stefano Babic <sbabic@denx.de>
+Reviewed-by: Sid-Ali Teir <steir@witekio.us>
+Reviewed-by: Georges Savoundararadj <gsavoundararadj@witekio.us>
+CC: Sid-Ali Teir <steir@witekio.us>
+CC: Georges Savoundararadj <gsavoundararadj@witekio.us>
+CC: Romain Bazile <romain.bazile@ubiant.com>
+
+option handling: remove unneeded seek_str != NULL check
+
+The comparison of array seek_str != NULL is always true,
+hence remove it.
+
+Signed-off-by: Christian Storm <christian.storm@siemens.com>
+Reviewed-by: Stefano Babic <sbabic@denx.de>
+---
+ core/cpio_utils.c             | 19 +++++++++++++++----
+ corelib/stream_interface.c    |  6 +++---
+ doc/source/sw-description.rst | 14 ++++++++++++++
+ include/globals.h             |  1 +
+ include/swupdate.h            |  1 +
+ include/util.h                |  1 +
+ parser/parse_external.c       | 19 +++++++++++++++++++
+ parser/parser.c               | 22 ++++++++++++++++++++++
+ 8 files changed, 76 insertions(+), 7 deletions(-)
+
+diff --git a/core/cpio_utils.c b/core/cpio_utils.c
+index 20137ea922f6..5ec1a4e6aa6e 100644
+--- a/core/cpio_utils.c
++++ b/core/cpio_utils.c
+@@ -108,7 +108,7 @@ static int copy_write(void *out, const void *buf, int len)
+ 	return 0;
+ }
+ 
+-int copyfile(int fdin, void *out, int nbytes, unsigned long *offs,
++int copyfile(int fdin, void *out, int nbytes, unsigned long *offs, unsigned long long seek,
+ 	int skip_file, int __attribute__ ((__unused__)) compressed,
+ 	uint32_t *checksum, unsigned char *hash, int encrypted, writeimage callback)
+ {
+@@ -173,6 +173,16 @@ int copyfile(int fdin, void *out, int nbytes, unsigned long *offs,
+ 		}
+ 	}
+ 
++	if (seek) {
++		int fdout = (out != NULL) ? *(int *)out : -1;
++		TRACE("offset has been defined: %llu bytes\n", seek);
++		if (lseek(fdout, seek, SEEK_SET) < 0) {
++			ERROR("offset argument: seek failed\n");
++			ret = -EFAULT;
++			goto copyfile_exit;
++		}
++	}
++
+ #ifdef CONFIG_GUNZIP
+ 	if (compressed) {
+ 		ret = decompress_image(fdin, offs, nbytes, fdout, checksum, dgst);
+@@ -287,6 +297,7 @@ int copyimage(void *out, struct img_type *img, writeimage callback)
+ 			out,
+ 			img->size,
+ 			(unsigned long *)&img->offset,
++			img->seek,
+ 			0, /* no skip */
+ 			img->compressed,
+ 			&img->checksum,
+@@ -355,7 +366,7 @@ off_t extract_sw_description(int fd, const char *descfile, off_t start)
+ 		close(fdout);
+ 		return -1;
+ 	}
+-	if (copyfile(fd, &fdout, fdh.size, &offset, 0, 0, &checksum, NULL, 0, NULL) < 0) {
++	if (copyfile(fd, &fdout, fdh.size, &offset, 0, 0, 0, &checksum, NULL, 0, NULL) < 0) {
+ 		ERROR("%s corrupted or not valid\n", descfile);
+ 		close(fdout);
+ 		return -1;
+@@ -417,7 +428,7 @@ off_t extract_next_file(int fd, int fdout, off_t start, int compressed,
+ 
+ 	if (lseek(fd, offset, SEEK_SET) < 0)
+ 		ERROR("CPIO file corrupted : %s\n", strerror(errno));
+-	if (copyfile(fd, &fdout, fdh.size, &offset, 0, compressed, &checksum, hash, encrypted, NULL) < 0) {
++	if (copyfile(fd, &fdout, fdh.size, &offset, 0, 0, compressed, &checksum, hash, encrypted, NULL) < 0) {
+ 		ERROR("Error copying extracted file\n");
+ 	}
+ 
+@@ -466,7 +477,7 @@ int cpio_scan(int fd, struct swupdate_cfg *cfg, off_t start)
+ 		 * use copyfile for checksum verification, as we skip file
+ 		 * we do not have to provide fdout
+ 		 */
+-		if (copyfile(fd, NULL, fdh.size, &offset, 1, 0, &checksum, NULL, 0, NULL) != 0) {
++		if (copyfile(fd, NULL, fdh.size, &offset, 0, 1, 0, &checksum, NULL, 0, NULL) != 0) {
+ 			ERROR("invalid archive\n");
+ 			return -1;
+ 		}
+diff --git a/corelib/stream_interface.c b/corelib/stream_interface.c
+index 2fc997578728..4a8cc0feaa80 100644
+--- a/corelib/stream_interface.c
++++ b/corelib/stream_interface.c
+@@ -104,7 +104,7 @@ static int extract_file_to_tmp(int fd, const char *fname, unsigned long *poffs)
+ 	if (fdout < 0)
+ 		return -1;
+ 
+-	if (copyfile(fd, &fdout, fdh.size, poffs, 0, 0, &checksum, NULL, 0, NULL) < 0) {
++	if (copyfile(fd, &fdout, fdh.size, poffs, 0, 0, 0, &checksum, NULL, 0, NULL) < 0) {
+ 		close(fdout);
+ 		return -1;
+ 	}
+@@ -208,7 +208,7 @@ static int extract_files(int fd, struct swupdate_cfg *software)
+ 				fdout = openfileoutput(img->extract_file);
+ 				if (fdout < 0)
+ 					return -1;
+-				if (copyfile(fd, &fdout, fdh.size, &offset, 0, 0, &checksum, img->sha256, 0, NULL) < 0) {
++				if (copyfile(fd, &fdout, fdh.size, &offset, 0, 0, 0, &checksum, img->sha256, 0, NULL) < 0) {
+ 					close(fdout);
+ 					return -1;
+ 				}
+@@ -222,7 +222,7 @@ static int extract_files(int fd, struct swupdate_cfg *software)
+ 				break;
+ 
+ 			case SKIP_FILE:
+-				if (copyfile(fd, &fdout, fdh.size, &offset, skip, 0, &checksum, NULL, 0, NULL) < 0) {
++				if (copyfile(fd, &fdout, fdh.size, &offset, 0, skip, 0, &checksum, NULL, 0, NULL) < 0) {
+ 					return -1;
+ 				}
+ 				if (checksum != (unsigned long)fdh.chksum) {
+diff --git a/doc/source/sw-description.rst b/doc/source/sw-description.rst
+index a33b990ec472..fe6f33d866a8 100644
+--- a/doc/source/sw-description.rst
++++ b/doc/source/sw-description.rst
+@@ -172,6 +172,8 @@ The syntax is:
+ 			volume[optional] = <destination volume>;
+ 			device[optional] = <destination volume>;
+ 			type[optional] = <handler>;
++			/* optionally, the image can be copied at a specific offset */
++			offset[optional] = <offset>;
+ 			/* optionally, the image can be compressed if it is in raw mode */
+ 			compressed;
+ 		},
+@@ -204,6 +206,18 @@ To update an image in raw mode, the syntax is:
+ 			device = "/dev/mmcblk0p1";
+ 		}
+ 
++To flash am image at a specific offset, the syntax is:
++
++
++::
++
++		{
++			filename = "u-boot.bin";
++			device = "/dev/mmcblk0p1";
++			offset = "16K";
++		}
++
++The offset handles the following multiplicative suffixes: K=1024 and M=1024*1024.
+ 
+ However, writing to flash in raw mode must be managed in a special
+ way. Flashes must be erased before copying, and writing into NAND
+diff --git a/include/globals.h b/include/globals.h
+index ddb42de1d572..43b5d61dd5c7 100644
+--- a/include/globals.h
++++ b/include/globals.h
+@@ -31,6 +31,7 @@
+ #define UBOOT_VAR_LENGTH 16
+ #define MAX_REVISION_LENGTH	SWUPDATE_GENERAL_STRING_SIZE
+ #define MAX_UBOOT_SCRIPT_LINE_LENGTH	1024
++#define MAX_SEEK_STRING_SIZE	32
+ 
+ /* These are fixed path to temporary files */
+ #define SCRIPTS_DIR	TMPDIR "scripts/"
+diff --git a/include/swupdate.h b/include/swupdate.h
+index b244d3de18c8..49a0f0289220 100644
+--- a/include/swupdate.h
++++ b/include/swupdate.h
+@@ -69,6 +69,7 @@ struct img_type {
+ 	char type_data[SWUPDATE_GENERAL_STRING_SIZE];	/* Data for handler */
+ 	char extract_file[MAX_IMAGE_FNAME];
+ 	char filesystem[MAX_IMAGE_FNAME];
++	unsigned long long seek;
+ 	int required;
+ 	int provided;
+ 	int compressed;
+diff --git a/include/util.h b/include/util.h
+index 5438907d3df8..e7089fb53f8c 100644
+--- a/include/util.h
++++ b/include/util.h
+@@ -127,6 +127,7 @@ int decompress_image(int infile, unsigned long *offs, int nbytes,
+ int fw_set_one_env(const char *name, const char *value);
+ int openfile(const char *filename);
+ int copyfile(int fdin, void *out, int nbytes, unsigned long *offs,
++	unsigned long long seek,
+ 	int skip_file, int compressed, uint32_t *checksum,
+ 	unsigned char *hash, int encrypted, writeimage callback);
+ int copyimage(void *out, struct img_type *img, writeimage callback);
+diff --git a/parser/parse_external.c b/parser/parse_external.c
+index 7c5cce200a8b..d199a082c6ab 100644
+--- a/parser/parse_external.c
++++ b/parser/parse_external.c
+@@ -20,6 +20,7 @@
+  */
+ 
+ 
++#include <limits.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -43,6 +44,9 @@
+ static void sw_append_stream(struct img_type *img, const char *key,
+ 	       const char *value)
+ {
++	const char offset[] = "offset";
++	char seek_str[MAX_SEEK_STRING_SIZE];
++	char *endp = NULL;
+ 
+ 	if (!strcmp(key, "type"))
+ 		strncpy(img->type, value,
+@@ -75,6 +79,21 @@ static void sw_append_stream(struct img_type *img, const char *key,
+ 	if (!strcmp(key, "device"))
+ 		strncpy(img->device, value,
+ 			sizeof(img->device));
++	if (!strncmp(key, offset, sizeof(offset))) {
++		strncpy(seek_str, value,
++			sizeof(seek_str));
++		/* convert the offset handling multiplicative suffixes */
++		if (strnlen(seek_str, MAX_SEEK_STRING_SIZE) != 0) {
++			errno = 0;
++			img->seek = ustrtoull(seek_str, &endp, 0);
++			if (seek_str == endp || (img->seek == ULLONG_MAX && \
++					errno == ERANGE)) {
++				ERROR("offset argument: ustrtoull failed");
++				return;
++			}
++		} else
++			img->seek = 0;
++	}
+ 	if (!strcmp(key, "script"))
+ 		img->is_script = 1;
+ 	if (!strcmp(key, "path"))
+diff --git a/parser/parser.c b/parser/parser.c
+index eef69b7117ed..53d758cda183 100644
+--- a/parser/parser.c
++++ b/parser/parser.c
+@@ -17,6 +17,7 @@
+  * Foundation, Inc.
+  */
+ 
++#include <limits.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -352,6 +353,8 @@ static void parse_images(parsertype p, void *cfg, struct swupdate_cfg *swcfg)
+ 	void *setting, *elem;
+ 	int count, i;
+ 	struct img_type *image;
++	char seek_str[MAX_SEEK_STRING_SIZE];
++	char *endp = NULL;
+ 
+ 	setting = find_node(p, cfg, "images", swcfg);
+ 
+@@ -380,15 +383,34 @@ static void parse_images(parsertype p, void *cfg, struct swupdate_cfg *swcfg)
+ 			return;
+ 		}
+ 
++		/*
++		 * GET_FIELD_STRING does not touch the passed string if it is not
++		 * found, be sure that it is empty
++		 */
++		seek_str[0] = '\0';
++
+ 		GET_FIELD_STRING(p, elem, "name", image->id.name);
+ 		GET_FIELD_STRING(p, elem, "version", image->id.version);
+ 		GET_FIELD_STRING(p, elem, "filename", image->fname);
+ 		GET_FIELD_STRING(p, elem, "volume", image->volname);
+ 		GET_FIELD_STRING(p, elem, "device", image->device);
+ 		GET_FIELD_STRING(p, elem, "type", image->type);
++		GET_FIELD_STRING(p, elem, "offset", seek_str);
+ 		GET_FIELD_STRING(p, elem, "data", image->type_data);
+ 		get_hash_value(p, elem, image->sha256);
+ 
++		/* convert the offset handling multiplicative suffixes */
++		if (strnlen(seek_str, MAX_SEEK_STRING_SIZE) != 0) {
++			errno = 0;
++			image->seek = ustrtoull(seek_str, &endp, 0);
++			if (seek_str == endp || (image->seek == ULLONG_MAX && \
++					errno == ERANGE)) {
++				ERROR("offset argument: ustrtoull failed");
++				return;
++			}
++		} else
++			image->seek = 0;
++
+ 		/* if the handler is not explicit set, try to find the right one */
+ 		if (!strlen(image->type)) {
+ 			if (strlen(image->volname))
+-- 
+2.16.2
+

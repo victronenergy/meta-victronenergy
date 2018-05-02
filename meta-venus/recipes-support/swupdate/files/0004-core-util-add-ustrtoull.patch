@@ -1,0 +1,64 @@
+From ae366e35f05a2d6aa9993d4173e7a7c92a0a2b87 Mon Sep 17 00:00:00 2001
+From: Georges Savoundararadj <gsavoundararadj@witekio.us>
+Date: Tue, 4 Apr 2017 13:06:32 -0700
+Subject: [PATCH 4/5] core/util: add ustrtoull
+
+This function is copied from
+* remote: git://git.denx.de/u-boot.git
+* branch: master
+* commit hash: 7df54d316e70e2d6ae080ef98aa9d2388bbb8af9
+
+Signed-off-by: Georges Savoundararadj <gsavoundararadj@witekio.us>
+Signed-off-by: Sid-Ali Teir <steir@witekio.us>
+Acked-by: Stefano Babic <sbabic@denx.de>
+---
+ core/util.c    | 24 ++++++++++++++++++++++++
+ include/util.h |  2 ++
+ 2 files changed, 26 insertions(+)
+
+diff --git a/core/util.c b/core/util.c
+index 3497b49823dd..e7c7ec6f5290 100644
+--- a/core/util.c
++++ b/core/util.c
+@@ -408,3 +408,27 @@ unsigned char *get_aes_ivt(void) {
+ 		return NULL;
+ 	return aes_key->ivt;
+ }
++
++unsigned long long ustrtoull(const char *cp, char **endp, unsigned int base)
++{
++	unsigned long long result = strtoull(cp, endp, base);
++
++	switch (**endp) {
++	case 'G':
++		result *= 1024;
++		/* fall through */
++	case 'M':
++		result *= 1024;
++		/* fall through */
++	case 'K':
++	case 'k':
++		result *= 1024;
++		if ((*endp)[1] == 'i') {
++			if ((*endp)[2] == 'B')
++				(*endp) += 3;
++			else
++				(*endp) += 2;
++		}
++	}
++	return result;
++}
+diff --git a/include/util.h b/include/util.h
+index f906aa580283..5438907d3df8 100644
+--- a/include/util.h
++++ b/include/util.h
+@@ -153,4 +153,6 @@ int load_decryption_key(char *fname);
+ unsigned char *get_aes_key(void);
+ unsigned char *get_aes_ivt(void);
+ 
++unsigned long long ustrtoull(const char *cp, char **endp, unsigned int base);
++
+ #endif
+-- 
+2.16.2
+

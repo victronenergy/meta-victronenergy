@@ -1,0 +1,60 @@
+#! /bin/sh
+
+dev=$1
+rate=$2
+tty=/dev/tty$dev
+
+test -e $tty && is_slcan=y
+
+up_slcan() {
+    case ${rate%000} in
+        0)               ;;
+        10)   rate_idx=0 ;;
+        20)   rate_idx=1 ;;
+        50)   rate_idx=2 ;;
+        100)  rate_idx=3 ;;
+        125)  rate_idx=4 ;;
+        250)  rate_idx=5 ;;
+        500)  rate_idx=6 ;;
+        800)  rate_idx=7 ;;
+        1000) rate_idx=8 ;;
+        *)
+            echo "Invalid rate $rate"
+            exit 1
+            ;;
+    esac
+
+    slcand -o -f -t hw -s $rate_idx $tty $dev
+    ip link set $dev up
+}
+
+down_slcan() {
+    fuser -s -k $tty
+}
+
+up_ip() {
+    ip link set $dev up type can bitrate $rate restart-ms 100
+}
+
+down_ip() {
+    ip link set $dev down
+}
+
+down() {
+    if [ "$is_slcan" = y ]; then
+        down_slcan
+    else
+        down_ip
+    fi
+}
+
+up() {
+    if [ "$is_slcan" = y ]; then
+        up_slcan
+    else
+        up_ip
+    fi
+}
+
+down
+test $rate -gt 0 && up

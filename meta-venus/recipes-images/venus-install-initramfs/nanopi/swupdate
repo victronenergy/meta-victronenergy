@@ -1,0 +1,26 @@
+#!/bin/sh
+
+. /lib/venus/install.sh
+
+SWUDEV=mmcblk0p1
+MMCDEV=mmcblk1
+ROOT_SIZE=2048
+DATA_SIZE=2048
+TTYS="$TTYS lcd"
+
+clearlcd() {
+    printf '\f' >/dev/lcd
+}
+
+postinst() {
+    msg "Updating environment..."
+    fw_setenv -s /usr/share/u-boot/u-boot.env
+}
+
+HOOK_msg=clearlcd
+HOOK_postinst=postinst
+
+# initialise LCD
+printf '\f\e[Lb\e[Lc\e[LD\e[L+' >/dev/lcd
+
+do_install

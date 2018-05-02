@@ -12,6 +12,9 @@ dirs755 += "/scratch"
 # mount point for u-boot FAT partition on raspberrypi2.
 dirs755_append_raspberrypi2 += "/u-boot"
 
+# mount point for u-boot FAT partition on nanopi.
+dirs755_append_nanopi += "/u-boot"
+
 # Replace home dir with symlink to persistent volume
 do_install_append() {
 	if [ -d ${D}/home/root ]; then

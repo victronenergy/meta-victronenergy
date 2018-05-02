@@ -1,4 +1,4 @@
-inherit image_types
+inherit image_types uboot-config
 
 DESCRIPTION = "Live image to program the rootfs"
 INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.ext2.gz.u-boot"
@@ -15,12 +15,23 @@ DEPENDS += "\
 "
 
 DTB_beaglebone = "${KERNEL_IMAGETYPE}-bbb-venus.dtb ${KERNEL_IMAGETYPE}-bbb-octo-venus.dtb ${KERNEL_IMAGETYPE}-bbe-venus.dtb"
+DTB_nanopi = "sun8i-h3-nanopi-easysolar.dtb"
 
 SCR = "install-${MACHINE}.scr"
 
 SWU = "venus-swu"
 
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
+
+INSTALL_FILES = "\
+	${SPL_BINARY} \
+	${UBOOT_BINARY} \
+	${SCR}:boot.scr \
+	${KERNEL_IMAGETYPE}-${MACHINE}.bin:${KERNEL_IMAGETYPE} \
+	${DTB} \
+	${INITRD_IMAGE}:initramfs \
+	${SWU}-${MACHINE}.swu:venus.swu \
+"
 
 do_install[depends] += " \
 	virtual/bootloader:do_deploy \
@@ -35,19 +46,12 @@ do_install () {
 	fi
 
 	mkdir ${SDCARD}
-	cp ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}-${MACHINE}.bin ${SDCARD}/${KERNEL_IMAGETYPE}
-	if [ -n "${SPL_BINARY}" ]; then
-		cp ${DEPLOY_DIR_IMAGE}/${SPL_BINARY} ${SDCARD}
-	fi
-	cp ${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX} ${SDCARD}
-	cp ${DEPLOY_DIR_IMAGE}/${INITRD_IMAGE} ${SDCARD}/initramfs
-	cp ${DEPLOY_DIR_IMAGE}/${SCR} ${SDCARD}/boot.scr
-	cp ${DEPLOY_DIR_IMAGE}/${SWU}-${MACHINE}.swu ${SDCARD}/venus.swu
-	if [ -n "${DTB}" ]; then
-		for file in ${DTB}; do
-			cp ${DEPLOY_DIR_IMAGE}/${file} ${SDCARD}
-		done
-	fi
+
+	for file in ${INSTALL_FILES}; do
+		src=${file%:*}
+		dst=${file#*:}
+		cp ${DEPLOY_DIR_IMAGE}/${src} ${SDCARD}/${dst}
+	done
 
 	zip -rj ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
 	ln -sf ${IMAGE_NAME}.sdcard.zip ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.sdcard.zip
@@ -73,6 +77,11 @@ do_install () {
 
         # copy vfat image into partition
         dd if=${FSIMAGE} of=${IMAGE} bs=1M seek=1
+
+	# write boot loader if required
+	if [ -n "${SDIMAGE_BOOT_FILE}" ]; then
+		dd if=${DEPLOY_DIR_IMAGE}/${SDIMAGE_BOOT_FILE} of=${IMAGE} conv=notrunc bs=1k seek=${SDIMAGE_BOOT_FILE_OFFS}
+	fi
 
 	zip -j ${IMAGE}.zip ${IMAGE}
 	rm ${IMAGE}

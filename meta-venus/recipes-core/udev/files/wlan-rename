@@ -12,13 +12,15 @@
 # or may not have been renamed before this check, also include this
 # name and look for a total greater than 2.
 
-if ln -s $INTERFACE /tmp/wifi0; then
+LOCK=/run/wifi0
+
+if ln -s $INTERFACE $LOCK; then
     if [ $(ls /sys/class/net | grep -Ec '^(wlan|ap0)') -gt 2 ]; then
         echo disabled-wifi0
     else
         echo wifi0
     fi
 else
-    rm /tmp/wifi0
+    rm $LOCK
     echo ap0
 fi
