@@ -43,9 +43,6 @@ do_install_append() {
 	# by the serial starter script.
 	if [ -n "${VE_VEDIRECT_AND_CONSOLE_PORT}" ]; then echo ${VE_VEDIRECT_AND_CONSOLE_PORT} >  $conf/vedirect_and_console_port; fi
 
-	# gpio pins with a relay connected
-	if [ -n "${VE_RELAYS}" ]; then echo ${VE_RELAYS} > $conf/relays; fi
-
 	if [ -n "${VE_BUZZER}" ]; then echo ${VE_BUZZER} > $conf/buzzer; fi
 
 	if [ -n "${VE_PWM_BUZZER}" ]; then echo ${VE_PWM_BUZZER} > $conf/pwm_buzzer; fi
