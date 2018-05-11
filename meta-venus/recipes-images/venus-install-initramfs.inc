@@ -5,6 +5,7 @@ SWUPDATE_INIT ?= "tiny"
 IMAGE_INSTALL = " \
 	base-files \
 	base-passwd \
+	bash \
 	busybox \
 	swupdate \
 	u-boot-fw-utils \
