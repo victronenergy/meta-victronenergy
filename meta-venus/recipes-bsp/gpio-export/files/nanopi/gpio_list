@@ -7,7 +7,13 @@
 # IMPLEMENTED ON OTHER PLATFORMS. (Ask Matthijs :).
 
 # MK3_RST, GPIOA16
-16  out mkx_rst
+16  out mkx_rst		victronenergy,easysolar
 
 # VE.Bus Standby, GPIOA15
-15  out vebus_standby
+15  out vebus_standby	victronenergy,easysolar
+
+# Modem PWRKEY, GPIOA21
+21  out modem_pwr	victronenergy,paygo
+
+# USB VBUS, GPIOE13
+141 out usb_vbus	victronenergy,paygo
