@@ -6,8 +6,8 @@
 # NOTE: YOU ARE NOT ALLOWED TO USE THIS NAME UNTILL THIS FEATURE IS ALSO
 # IMPLEMENTED ON OTHER PLATFORMS. (Ask Matthijs :).
 
-# MK3_RST   A8 / GPIOA16
+# MK3_RST, GPIOA16
 16  out mkx_rst
 
-# VE.Bus Standby   A9 / GPIOA15
+# VE.Bus Standby, GPIOA15
 15  out vebus_standby
