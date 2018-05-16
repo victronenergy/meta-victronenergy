@@ -3,6 +3,8 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += " \
 	file://mount.sh \
+	file://dt-compatible \
+	file://dt-compat.rules \
 	file://rtl8192cu.rules \
 	file://simcom.rules \
 "
@@ -35,13 +37,16 @@ do_install_append() {
 			${D}/${sysconfdir}/udev/mount.blacklist.d/${MACHINE}
 	fi
 
+	install -m 0755 -d ${D}${base_libdir}/udev
+	install -m 0755 ${WORKDIR}/dt-compatible ${D}${base_libdir}/udev
+
+	install -m 0644 ${WORKDIR}/dt-compat.rules ${D}/${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/simcom.rules ${D}/${sysconfdir}/udev/rules.d
 }
 
 do_install_append_beaglebone() {
 	install -m 0644 ${WORKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
 
-	install -m 0755 -d ${D}${base_libdir}/udev
 	install -m 0755 ${WORKDIR}/wlan-rename ${D}${base_libdir}/udev
 	install -m 0755 ${WORKDIR}/wlan-update ${D}${base_libdir}/udev
 }
@@ -54,7 +59,6 @@ do_install_append_nanopi() {
 	install -m 0644 ${WORKDIR}/slcan.rules ${D}${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
 
-	install -m 0755 -d ${D}${base_libdir}/udev
 	install -m 0755 ${WORKDIR}/wlan-rename ${D}${base_libdir}/udev
 	install -m 0755 ${WORKDIR}/wlan-update ${D}${base_libdir}/udev
 }

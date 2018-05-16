@@ -1,0 +1,4 @@
+# import the board compatible string once and propagate it to all devices
+# so it can be matched in other rules
+ACTION=="add", DEVPATH=="/devices/platform/soc", IMPORT{program}="dt-compatible"
+ACTION=="add", IMPORT{parent}="BASE_COMPATIBLE"
