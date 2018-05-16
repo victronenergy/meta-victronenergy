@@ -1,11 +1,5 @@
-env default -a
-setenv mmcdev ${mmc_bootdev}:1
-setenv bootfile zImage
-setenv ramdiskfile initramfs
-setenv fdtfile sun8i-h3-nanopi-easysolar.dtb
-setenv loadimage 'load mmc ${mmcdev} ${kernel_addr_r} ${bootfile}'
-setenv loadramdisk 'load mmc ${mmcdev} ${ramdisk_addr_r} ${ramdiskfile}'
-setenv loadfdt 'load mmc ${mmcdev} ${fdt_addr_r} ${fdtfile}'
 setenv bootargs console=${console} root=/dev/ram0 rw ramdisk_size=32768
 run loadimage loadramdisk loadfdt
+fdt addr ${fdt_addr_r}
+fdt rm i2c0/eeprom@50 read-only
 bootz ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr_r}

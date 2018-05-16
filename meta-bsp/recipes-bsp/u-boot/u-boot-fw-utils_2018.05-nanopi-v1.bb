@@ -8,13 +8,13 @@ COMPATIBLE_MACHINE = "nanopi"
 PROVIDES = ""
 
 SRC_URI = " \
-	git://github.com/victronenergy/u-boot.git;protocol=https;branch=nanopi \
+	https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz \
 	file://fw_env.config \
-	file://u-boot.env \
 "
-SRCREV = "7de8ad4372d15404069f5cf77f4a5418ab7f9c07"
+SRC_URI[md5sum] = "7698560176f9c6b214fa914a87830ed5"
+SRC_URI[sha256sum] = "53c9fb151757b12144b00bb2221f6ad39c095a507044fdfe027677414f84e3a2"
 
-S = "${WORKDIR}/git"
+S = "${WORKDIR}/u-boot-${PV}"
 
 do_compile () {
 	oe_runmake -C ${S} ${UBOOT_MACHINE}
@@ -31,9 +31,6 @@ do_install () {
 
 	install -d ${D}${sysconfdir}
 	install -m 644 ${WORKDIR}/fw_env.config ${D}${sysconfdir}
-
-	install -d ${D}${datadir}/u-boot
-	install -m 644 ${WORKDIR}/u-boot.env ${D}${datadir}/u-boot
 }
 
 do_deploy[noexec] = "1"

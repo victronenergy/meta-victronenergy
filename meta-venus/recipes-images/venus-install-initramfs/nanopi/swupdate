@@ -12,13 +12,7 @@ clearlcd() {
     printf '\f' >/dev/lcd
 }
 
-postinst() {
-    msg "Updating environment..."
-    fw_setenv -s /usr/share/u-boot/u-boot.env
-}
-
 HOOK_msg=clearlcd
-HOOK_postinst=postinst
 
 # initialise LCD
 printf '\f\e[Lb\e[Lc\e[LD\e[L+' >/dev/lcd

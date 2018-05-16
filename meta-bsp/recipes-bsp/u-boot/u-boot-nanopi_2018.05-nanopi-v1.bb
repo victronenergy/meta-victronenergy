@@ -5,15 +5,16 @@ LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
 
 COMPATIBLE_MACHINE = "nanopi"
 
-DEPENDS += "bc-native dtc-native swig-native u-boot-mkimage-native"
+DEPENDS += "bc-native coreutils-native dtc-native swig-native u-boot-mkimage-native"
 
 SRC_URI = " \
-	git://github.com/victronenergy/u-boot.git;protocol=https;branch=nanopi \
+	https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz \
 	file://install.cmds \
 "
-SRCREV = "7de8ad4372d15404069f5cf77f4a5418ab7f9c07"
+SRC_URI[md5sum] = "7698560176f9c6b214fa914a87830ed5"
+SRC_URI[sha256sum] = "53c9fb151757b12144b00bb2221f6ad39c095a507044fdfe027677414f84e3a2"
 
-S = "${WORKDIR}/git"
+S = "${WORKDIR}/u-boot-${PV}"
 
 do_compile_append () {
 	mkimage -A arm -T script -C none -n 'Install Script' \
