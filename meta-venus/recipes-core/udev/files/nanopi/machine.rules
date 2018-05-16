@@ -1,0 +1,10 @@
+# EasySolar devices
+ENV{BASE_COMPATIBLE}!="victronenergy,easysolar", GOTO="end-easysolar"
+ACTION=="add", KERNEL=="ttyS[12]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
+ACTION=="add", KERNEL=="ttyS3", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="mkx"
+LABEL="end-easysolar"
+
+# PayGo devices
+ENV{BASE_COMPATIBLE}!="victronenergy,paygo", GOTO="end-paygo"
+ACTION=="add", KERNEL=="ttyS[12]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
+LABEL="end-paygo"
