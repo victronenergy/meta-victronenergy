@@ -113,6 +113,8 @@ format_mmc() {
 
     msg "Creating partitions..."
     sfdisk -W always /dev/$mmc <<EOF
+	label: dos
+	label-id: 0x564e5553
 	2048, 16384, c, *
 	, $root_blocks, L
 	, $root_blocks, L
