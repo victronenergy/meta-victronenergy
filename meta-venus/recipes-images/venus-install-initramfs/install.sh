@@ -39,6 +39,15 @@ ROOT_SIZE=1280
 # size of data partition in MB
 DATA_SIZE=512
 
+# name of board id nvmem device
+#BOARD_ID_DEV=
+
+# size of board id field in nvmem, padded with 0xff
+BOARD_ID_SIZE=16
+
+# file containing board id to program
+BOARD_ID_FILE=${CARD}/board_id
+
 msg() {
     eval "$HOOK_msg"
     for tty in $TTYS; do
@@ -193,6 +202,36 @@ install_swu() {
     swupdate "$@" -e "stable,bootloader"
 }
 
+read_board_id() {
+    file=$1
+
+    # strip newline, pad with 0xff
+    (tr -d '\n' <$1; tr '\0' '\377' </dev/zero) |
+        dd bs=1 count=$BOARD_ID_SIZE
+}
+
+setup_board_id() {
+    test -n "$BOARD_ID_DEV" || return 0
+    test -f $BOARD_ID_FILE|| return 0
+
+    msg "Writing board ID..."
+
+    board_id_mem=/sys/bus/nvmem/devices/$BOARD_ID_DEV/nvmem
+
+    # get padded board id string
+    board_id=$(read_board_id $BOARD_ID_FILE)
+
+    # write to nvmem
+    printf '%s' "$board_id" >$board_id_mem
+
+    # read back and verify
+    board_id_v=$(dd if=$board_id_mem bs=1 count=$BOARD_ID_SIZE)
+
+    if [ "$board_id" != "$board_id_v" ]; then
+        error "Failed to write board ID"
+    fi
+}
+
 cleanup() {
     eval $HOOK_cleanup
     test -n "$UBIPART" && ubidetach -m $UBIPART
@@ -207,6 +246,7 @@ do_install() {
     do_format
     setup_data $DATADEV $DATAFS
     install_swu
+    setup_board_id
 
     eval $HOOK_postinst
 
