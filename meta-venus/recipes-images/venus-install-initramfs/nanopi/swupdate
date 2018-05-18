@@ -6,6 +6,7 @@ SWUDEV=mmcblk0p1
 MMCDEV=mmcblk1
 ROOT_SIZE=2048
 DATA_SIZE=2048
+BOARD_ID_DEV=0-00500
 TTYS="$TTYS lcd"
 
 clearlcd() {
