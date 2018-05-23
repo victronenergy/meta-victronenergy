@@ -2,7 +2,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 INITSCRIPT_NAME = "svscanboot.sh"
-INITSCRIPT_PARAMS = "start 95 5 2 ."
+INITSCRIPT_PARAMS = "start 95 5 2 . stop 15 6 ."
 inherit update-rc.d
 
 RPROVIDES_${PN} += "virtual/daemontools-run"
