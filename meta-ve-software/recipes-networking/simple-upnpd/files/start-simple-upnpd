@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [[ ! -e /etc/simple-upnpd.xml ]]; then
+	hwaddr=$(ifconfig -a | grep "eth0.*HWaddr" | awk '{print $(NF)}')
+	hwaddr_small=$(echo ${hwaddr} | sed "s/://g" |  tr '[:upper:]' '[:lower:]' )
+	cat /etc/simple-upnpd.skeleton.xml | sed -e "s/:::MAC:::/${hwaddr}/g" -e "s/:::mac_small:::/${hwaddr_small}/g" > /etc/simple-upnpd.xml
+fi
+
+setuidgid simple-upnpd softlimit -d 100000000 -s 1000000 -a 100000000 /bin/simple-upnpd --xml /etc/simple-upnpd.xml -d

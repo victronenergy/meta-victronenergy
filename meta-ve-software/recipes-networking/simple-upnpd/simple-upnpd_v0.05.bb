@@ -5,24 +5,23 @@ DESCRIPTION = "Daemon which only announces the device its presence over upnp"
 
 inherit pkgconfig
 
-DEPENDS += "gupnp libsoup-2.4"
-RDEPENDS_${PN} = "glib-2.0 gupnp"
+DEPENDS += "glib-2.0 gupnp libsoup-2.4"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 S = "${WORKDIR}/git"
-PR = "r1"
 
-INITSCRIPT_NAME = "simple-upnpd"
-INITSCRIPT_PARAMS = "start 99 5 2 . stop 10 0 1 6 ."
-inherit update-rc.d useradd
+inherit daemontools useradd
 
 USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM_${PN} = "simple-upnpd"
 USERADD_PARAM_${PN} = "--no-create-home --shell /bin/false -g simple-upnpd simple-upnpd"
 
+DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
+DAEMONTOOLS_RUN = "${base_bindir}/start-simple-upnpd"
+
 SRC_URI = " \
 	git://github.com/victronenergy/simple-upnpd.git;protocol=https;tag=${PV} \
-	file://simple-upnpd \
+	file://start-simple-upnpd \
 	file://simple-upnpd.skeleton.xml \
 "
 
@@ -32,5 +31,5 @@ do_install() {
 	install -m 0755 ${S}/simple-upnpd ${D}/${base_bindir}
 	install -m 0755 ${WORKDIR}/simple-upnpd.skeleton.xml ${D}/${sysconfdir}
 	sed -i "s/:::MACHINE:::/${MACHINE}/g" ${D}${sysconfdir}/simple-upnpd.skeleton.xml
-	install -m 0755 ${WORKDIR}/simple-upnpd ${D}${sysconfdir}/init.d
+	install -m 0755 ${WORKDIR}/start-simple-upnpd ${D}${base_bindir}
 }
