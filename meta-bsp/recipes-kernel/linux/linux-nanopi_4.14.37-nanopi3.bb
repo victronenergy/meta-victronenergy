@@ -11,7 +11,8 @@ RDEPENDS_kernel-base += "kernel-devicetree"
 KERNEL_CONFIG_COMMAND = "oe_runmake -C ${S} O=${B} nanopi_easysolar_defconfig"
 KERNEL_DEVICETREE = "sun8i-h3-nanopi-easysolar.dtb"
 
-SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=nanopi_b4.14.37"
-SRCREV = "6dc2b4eb0e7df41c3246b5f753fd97bfc5477419"
+SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
+SRC_URI[md5sum] = "2ae670e241edf5b298dc7c36cdb26e40"
+SRC_URI[sha256sum] = "01d4104da5747c66c603c4ff0ba4bfa24cbc22cf793e2604f57d3aaceef23b5e"
 
-S = "${WORKDIR}/git"
+S = "${WORKDIR}/linux-${PV}"
