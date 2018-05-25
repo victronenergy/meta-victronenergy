@@ -30,6 +30,5 @@ do_install() {
 
 	install -m 0755 ${S}/simple-upnpd ${D}/${base_bindir}
 	install -m 0755 ${WORKDIR}/simple-upnpd.skeleton.xml ${D}/${sysconfdir}
-	sed -i "s/:::MACHINE:::/${MACHINE}/g" ${D}${sysconfdir}/simple-upnpd.skeleton.xml
 	install -m 0755 ${WORKDIR}/start-simple-upnpd ${D}${base_bindir}
 }

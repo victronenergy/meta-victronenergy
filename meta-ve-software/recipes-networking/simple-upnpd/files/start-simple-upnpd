@@ -1,9 +1,11 @@
 #!/bin/sh
 
 if [[ ! -e /etc/simple-upnpd.xml ]]; then
-	hwaddr=$(ifconfig -a | grep "eth0.*HWaddr" | awk '{print $(NF)}')
-	hwaddr_small=$(echo ${hwaddr} | sed "s/://g" |  tr '[:upper:]' '[:lower:]' )
-	cat /etc/simple-upnpd.skeleton.xml | sed -e "s/:::MAC:::/${hwaddr}/g" -e "s/:::mac_small:::/${hwaddr_small}/g" > /etc/simple-upnpd.xml
+	unique=$(cat /data/venus/unique-id)
+	UNIQUE=$(echo ${unique} | tr '[:lower:]' '[:upper:]' | sed -e 's/.\{2\}/&:/g' -e 's/:$//g')
+	name="$(installation-name)"
+	sed -e "s/:::UNIQUE:::/${UNIQUE}/g" -e "s/:::unique:::/${unique}/g" -e "s/:::name:::/${name}/g" /etc/simple-upnpd.skeleton.xml > /etc/simple-upnpd.xml.tmp
+	mv /etc/simple-upnpd.xml.tmp /etc/simple-upnpd.xml
 fi
 
 setuidgid simple-upnpd softlimit -d 100000000 -s 1000000 -a 100000000 /bin/simple-upnpd --xml /etc/simple-upnpd.xml -d
