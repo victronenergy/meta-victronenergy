@@ -151,7 +151,11 @@ elif [ "$offline" = y ]; then
         # reverse order gives preference to an unversioned file
         # followed by that with the most recent timestamp if
         # multiple files exist
-        SWU=$(ls -r $dev/venus-swu-${machine}*.swu 2>/dev/null | head -n1)
+        #
+        # MIND IT: There are ccgx and venusgx around which only check for
+        # venus-swu-${machine}*.swu so don't make an incompatible ccgxv2 or
+        # beaglebone-new MACHINE, since they are also accepted by the old ones.
+        SWU=$(ls -r $dev/venus-swu-${machine}-*.swu $dev/venus-swu-${machine}.swu 2>/dev/null | head -n1)
         test -f "$SWU" && break
     done
 
