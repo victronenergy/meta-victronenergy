@@ -4,7 +4,13 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-SRC_URI += "file://get-unique-id file://hw-revision file://unique-id.sh"
+SRC_URI += " \
+	file://get-unique-id \
+	file://hw-revision \
+	file://installation-name \
+	file://product-name \
+	file://unique-id.sh \
+"
 SRC_URI_append_ccgx += "file://get-unique-id.c"
 
 inherit update-rc.d
@@ -55,6 +61,8 @@ do_install_append() {
 
 	install -d ${D}/${bindir}
 	install -m 755 ${WORKDIR}/hw-revision ${D}/${bindir}
+	install -m 755 ${WORKDIR}/installation-name ${D}/${bindir}
+	install -m 755 ${WORKDIR}/product-name ${D}/${bindir}
 
 	install -d ${D}/var/www/javascript-vnc-client/venus
 	ln -s /data/venus/unique-id ${D}/var/www/javascript-vnc-client/venus

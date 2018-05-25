@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -e /data/conf/custom-name ]; then
+	name="$(cat /data/conf/custom-name)"
+	regex='^[A-Za-z0-9 -_]+$';
+	if [[ "$name" =~ $regex ]]; then
+		echo $name
+		exit
+	fi
+fi
+
+product-name
