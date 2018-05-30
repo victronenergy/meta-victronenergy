@@ -30,11 +30,14 @@ TTYS="console"
 # set by findimg if ${CARD}/testmode exists
 #TESTMODE=
 
+# Most SOM with emmc seem to be at least 4GB, but the available size seem to be
+# less then that, so by default reserve less then that.
+
 # size of root partitions in MB
-ROOT_SIZE=320
+ROOT_SIZE=1280
 
 # size of data partition in MB
-DATA_SIZE=128
+DATA_SIZE=512
 
 msg() {
     eval "$HOOK_msg"
