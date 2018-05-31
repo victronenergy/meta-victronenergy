@@ -4,4 +4,4 @@
 
 app=$(dirname $0)/dbus-modem.py
 
-start /dev/$tty
+start -s /dev/$tty
