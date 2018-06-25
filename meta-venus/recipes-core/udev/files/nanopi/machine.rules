@@ -8,3 +8,9 @@ LABEL="end-easysolar"
 ENV{BASE_COMPATIBLE}!="victronenergy,paygo", GOTO="end-paygo"
 ACTION=="add", KERNEL=="ttyS[12]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
 LABEL="end-paygo"
+
+# Moixa V4 Smart Hub devices
+ENV{BASE_COMPATIBLE}!="moixa,v4-smart-hub", GOTO="end-v4-smart-hub"
+ACTION=="add", KERNEL=="ttyS1", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
+ACTION=="add", KERNEL=="ttyS3", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="mkx"
+LABEL="end-v4-smart-hub"
