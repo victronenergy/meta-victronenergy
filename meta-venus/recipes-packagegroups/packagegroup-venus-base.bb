@@ -46,6 +46,7 @@ RDEPENDS_${PN} += "\
 	dnsmasq \
 	e2fsprogs \
 	eglibc-utils \
+	ftdi-control \
 	gdbserver \
 	iproute2 \
 	iw \
