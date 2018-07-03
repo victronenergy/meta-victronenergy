@@ -9,13 +9,13 @@ SRC_URI += " \
 	file://hw-revision \
 	file://installation-name \
 	file://product-name \
-	file://unique-id.sh \
+	file://machine-conf.sh \
 "
 SRC_URI_append_ccgx += "file://get-unique-id.c"
 
 inherit update-rc.d
 
-INITSCRIPT_NAME = "unique-id.sh"
+INITSCRIPT_NAME = "machine-conf.sh"
 INITSCRIPT_PARAMS = "start 90 S ."
 
 do_compile () {
@@ -51,7 +51,11 @@ do_install_append() {
 	if [ -n "${VE_BLANK_DISPLAY}" ]; then echo ${VE_BLANK_DISPLAY} > $conf/blank_display_device; fi
 	if [ -n "${VE_BACKLIGHT}" ]; then echo ${VE_BACKLIGHT} > $conf/backlight_device; fi
 
-	if [ -n "${VE_CAN_PORTS}" ]; then echo ${VE_CAN_PORTS} > $conf/canbus_ports; fi
+	if [ -e ${WORKDIR}/canbus_ports.in ]; then
+		install -m 644 ${WORKDIR}/canbus_ports.in ${conf}
+	elif [ -n "${VE_CAN_PORTS}" ]; then
+		echo ${VE_CAN_PORTS} > $conf/canbus_ports
+	fi
 
 	install -d ${D}/${base_sbindir}
 	install -m 755 ${WORKDIR}/get-unique-id ${D}/${base_sbindir}
@@ -66,5 +70,5 @@ do_install_append() {
 	ln -s /opt/victronenergy/version ${D}/var/www/javascript-vnc-client/venus
 
 	install -d ${D}${sysconfdir}/init.d
-	install -m 0755 ${WORKDIR}/unique-id.sh ${D}${sysconfdir}/init.d
+	install -m 0755 ${WORKDIR}/machine-conf.sh ${D}${sysconfdir}/init.d
 }
