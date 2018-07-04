@@ -55,6 +55,7 @@ RDEPENDS_${PN} += "\
 	linux-firmware-rt73 \
 	linux-firmware-rtl8192cu \
 	localedef \
+	logo \
 	nano \
 	ncurses-tools \
 	openssh \
