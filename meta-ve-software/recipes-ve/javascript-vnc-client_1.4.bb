@@ -25,8 +25,3 @@ do_install () {
 	install -m 0644 ${WORKDIR}/javascript-vnc-client.conf ${D}${sysconfdir}/hiawatha/sites-enabled/javascript-vnc-client.conf
 }
 
-pkg_postinst_${PN}() {
-	if [ "x$D" = "x" ]; then
-		/etc/init.d/hiawatha restart
-	fi
-}
