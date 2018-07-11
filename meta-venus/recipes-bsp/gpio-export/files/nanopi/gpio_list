@@ -12,8 +12,8 @@
 # VE.Bus Standby, GPIOA15
 15  out vebus_standby	victronenergy,easysolar
 
-# Modem PWRKEY, GPIOA21
-21  out modem_pwr	victronenergy,paygo
+# Modem RESET, GPIOA21
+21  out modem_rst	victronenergy,paygo
 
 # USB VBUS, GPIOE13
 141 out usb_vbus	victronenergy,paygo
