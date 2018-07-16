@@ -15,6 +15,7 @@ RDEPENDS_${PN} = "\
 SRC_URI = " \
 	gitsm://github.com/victronenergy/dbus-modem.git;protocol=https;tag=v${PV} \
 	file://start-modem.sh \
+	file://reset-modem.sh \
 "
 S = "${WORKDIR}/git"
 
@@ -28,6 +29,7 @@ do_install () {
 	install -d ${D}${bindir}
 	install -m 0755 ${S}/dbus-modem.py ${D}${bindir}
 	install -m 0755 ${WORKDIR}/start-modem.sh ${D}${bindir}
+	install -m 0755 ${WORKDIR}/reset-modem.sh ${D}${bindir}
 
 	for f in settingsdevice ve_utils vedbus; do
 		install -m 0644 ${S}/ext/velib_python/$f.py ${D}${bindir}
