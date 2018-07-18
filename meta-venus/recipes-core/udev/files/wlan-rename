@@ -1,10 +1,10 @@
 #! /bin/sh
 
 # The built-in wifi device provides two interfaces.  We want to use
-# one in normal station mode and the other as access point.  As there
-# is no way of differentiating them by udev attributes, whichever is
-# handled first becomes station and the other AP.  Since rules are run
-# in parallel, use a temporary symlink to synchronise the two processes.
+# one in normal station mode and the other as access point.  The MAC
+# addresses of the interfaces differ in the value of the locally
+# administered bit.  The interface with this bit unset becomes the
+# station, the other the access point.
 #
 # Additionally, if an external wifi adapter is attached, the built-in
 # one will not be used as station.  This condition is detected by
@@ -12,15 +12,13 @@
 # or may not have been renamed before this check, also include this
 # name and look for a total greater than 2.
 
-LOCK=/run/wifi0
+addr1=$(cut -d: -f1 /sys/class/net/$INTERFACE/address)
+local=$((0x$addr1 & 2))
 
-if ln -s $INTERFACE $LOCK; then
-    if [ $(ls /sys/class/net | grep -Ec '^(wlan|ap0)') -gt 2 ]; then
-        echo disabled-wifi0
-    else
-        echo wifi0
-    fi
-else
-    rm $LOCK
+if [ $local -gt 0 ]; then
     echo ap0
+elif [ $(ls /sys/class/net | grep -Ec '^(wlan|ap0)') -gt 2 ]; then
+    echo disabled-wifi0
+else
+    echo wifi0
 fi
