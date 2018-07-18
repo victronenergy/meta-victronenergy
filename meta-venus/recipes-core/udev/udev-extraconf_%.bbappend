@@ -3,6 +3,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += " \
 	file://mount.sh \
+	file://mount.blacklist.machine \
 	file://dt-compatible \
 	file://dt-compat.rules \
 	file://machine.rules \
@@ -11,32 +12,24 @@ SRC_URI += " \
 "
 
 SRC_URI_append_beaglebone += "\
-	file://mount.blacklist.beaglebone \
 	file://wlan.rules \
 	file://wlan-rename \
 	file://wlan-update \
 "
 
 SRC_URI_append_nanopi += "\
-	file://mount.blacklist.nanopi \
 	file://slcan.rules \
 	file://wlan.rules \
 	file://wlan-rename \
 	file://wlan-update \
 "
 
-SRC_URI_append_raspberrypi2 += "\
-	file://mount.blacklist.raspberrypi2 \
-"
-
 do_install_append() {
 	install -m 0755 ${WORKDIR}/mount.sh ${D}${sysconfdir}/udev/scripts
 
-	if [ -e ${WORKDIR}/mount.blacklist.${MACHINE} ]; then
-		install -d ${D}/${sysconfdir}/udev/mount.blacklist.d
-		install -m 0644 ${WORKDIR}/mount.blacklist.${MACHINE} \
-			${D}/${sysconfdir}/udev/mount.blacklist.d/${MACHINE}
-	fi
+	install -d ${D}/${sysconfdir}/udev/mount.blacklist.d
+	install -m 0644 ${WORKDIR}/mount.blacklist.machine \
+		${D}/${sysconfdir}/udev/mount.blacklist.d/machine
 
 	install -m 0755 -d ${D}${base_libdir}/udev
 	install -m 0755 ${WORKDIR}/dt-compatible ${D}${base_libdir}/udev
