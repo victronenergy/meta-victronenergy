@@ -1,0 +1,9 @@
+#!/bin/sh
+
+. /lib/venus/install.sh
+
+SWUDEV=mmcblk0p1
+MMCDEV=mmcblk1
+BOARD_ID_DEV=1-00500
+
+do_install

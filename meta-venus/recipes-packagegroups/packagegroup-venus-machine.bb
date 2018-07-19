@@ -44,6 +44,11 @@ RDEPENDS_${PN}_append_beaglebone += "\
 	swupdate-scripts \
 "
 
+RDEPENDS_${PN}_append_einstein += "\
+	linux-firmware-bcm20702a1 \
+	linux-firmware-bcm43362 \
+"
+
 RDEPENDS_${PN}_append_sunxi += "\
 	cpufrequtils \
 	gpio-export \

@@ -1,0 +1,5 @@
+setenv bootargs console=${console} root=/dev/ram0 rw ramdisk_size=32768
+run loadimage loadramdisk loadfdt
+fdt addr ${fdt_addr_r}
+fdt rm i2c1/eeprom@50 read-only
+bootz ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr_r}
