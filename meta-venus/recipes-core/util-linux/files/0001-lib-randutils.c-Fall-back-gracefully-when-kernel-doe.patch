@@ -1,0 +1,83 @@
+From c55e13be5fe949147687fb04d8611620e04bdf4e Mon Sep 17 00:00:00 2001
+From: Christopher James Halse Rogers <raof@ubuntu.com>
+Date: Mon, 7 Aug 2017 16:07:54 +1000
+Subject: [PATCH 1/8] lib/randutils.c: Fall back gracefully when kernel doesn't
+ support getrandom(2).
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The 3.16 kernel is supported until 2020, and various distros have kernels of the same
+vintage. It's entirely possible for code built against newer headers to be run against
+these kernels, so fall-back to the old “read /dev/{u,}random” method if the kernel doesn'
+support getrandom()
+---
+ lib/randutils.c | 44 ++++++++++++++++++++++++++------------------
+ 1 file changed, 26 insertions(+), 18 deletions(-)
+
+diff --git a/lib/randutils.c b/lib/randutils.c
+index 09dd261..ceeb474 100644
+--- a/lib/randutils.c
++++ b/lib/randutils.c
+@@ -99,32 +99,40 @@ void random_get_bytes(void *buf, size_t nbytes)
+ 	unsigned char *cp = (unsigned char *)buf;
+ 
+ #ifdef HAVE_GETRANDOM
++	errno = 0;
+ 	while (getrandom(buf, nbytes, 0) < 0) {
+ 		if (errno == EINTR)
+ 			continue;
+ 		break;
+ 	}
+-#else
+-	size_t n = nbytes;
+-	int fd = random_get_fd();
+-	int lose_counter = 0;
+-
+-	if (fd >= 0) {
+-		while (n > 0) {
+-			ssize_t x = read(fd, cp, n);
+-			if (x <= 0) {
+-				if (lose_counter++ > 16)
+-					break;
+-				continue;
++	if (errno == ENOSYS)
++	/*
++	 * We've been built against headers that support getrandom,
++	 * but the running kernel does not.
++	 * Fallback to reading from /dev/{u,}random as before
++	 */
++#endif
++	{
++		size_t n = nbytes;
++		int fd = random_get_fd();
++		int lose_counter = 0;
++
++		if (fd >= 0) {
++			while (n > 0) {
++				ssize_t x = read(fd, cp, n);
++				if (x <= 0) {
++					if (lose_counter++ > 16)
++						break;
++					continue;
++				}
++				n -= x;
++				cp += x;
++				lose_counter = 0;
+ 			}
+-			n -= x;
+-			cp += x;
+-			lose_counter = 0;
+-		}
+ 
+-		close(fd);
++			close(fd);
++		}
+ 	}
+-#endif
+ 	/*
+ 	 * We do this all the time, but this is the only source of
+ 	 * randomness if /dev/random/urandom is out to lunch.
+-- 
+2.7.4
+

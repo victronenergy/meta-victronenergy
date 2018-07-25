@@ -1,0 +1,33 @@
+From c16714c738ab722d85489aab2ef566193dfd6768 Mon Sep 17 00:00:00 2001
+From: Christopher James Halse Rogers <raof@ubuntu.com>
+Date: Mon, 7 Aug 2017 16:10:51 +1000
+Subject: [PATCH 2/8] lib/randutils.c: More paranoia in getrandom() call.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If getrandom() is called with nbytes ≥ 256 then it can return with less than the requested
+bytes filled.
+
+In this case we *could* adjust the buffer by the number of bytes actually read, but it's
+simpler to just redo the call.
+---
+ lib/randutils.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/randutils.c b/lib/randutils.c
+index ceeb474..7d85dc8 100644
+--- a/lib/randutils.c
++++ b/lib/randutils.c
+@@ -100,7 +100,7 @@ void random_get_bytes(void *buf, size_t nbytes)
+ 
+ #ifdef HAVE_GETRANDOM
+ 	errno = 0;
+-	while (getrandom(buf, nbytes, 0) < 0) {
++	while (getrandom(buf, nbytes, 0) != (ssize_t)nbytes) {
+ 		if (errno == EINTR)
+ 			continue;
+ 		break;
+-- 
+2.7.4
+
