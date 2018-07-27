@@ -1,10 +1,11 @@
-From 6216e9258f30dd4b91e8b4a81326abfdc1f12ab7 Mon Sep 17 00:00:00 2001
+From 3b71891c6af16aa2218194fd6b1e8bd006f5e2b3 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Fri, 29 Jun 2018 10:42:56 +0200
-Subject: [PATCH] use LDADD/LIBADD instead of LDFLAGS for the libraries
+Subject: [PATCH 1/4] use LDADD/LIBADD instead of LDFLAGS for the libraries
 
-Without this linking fails in OE since the libraries are in ./libs,
-but is not included with -L.
+Without this linking fails in OE since the non installed libraries are
+in ./libs and linking fails with "cannot find -lftdi-bitbang". Switching
+to LDADD fixes this since ./.libs/libftdi-bitbang.so is then used.
 ---
  src/Makefile.am | 21 ++++++++++++++-------
  1 file changed, 14 insertions(+), 7 deletions(-)

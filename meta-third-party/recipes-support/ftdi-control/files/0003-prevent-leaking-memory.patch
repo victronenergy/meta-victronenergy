@@ -1,0 +1,61 @@
+From 2f73103b0ef3fccbfa92aa4946b57466adf05d55 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Fri, 27 Jul 2018 14:24:22 +0200
+Subject: [PATCH 3/4] prevent leaking memory
+
+By changing the list itself when finding a match, the information about
+the skipped devices is not freed with ftdi_list_free, so use a seperate
+variable instead to search for a matching device.
+---
+ src/cmd-common.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/src/cmd-common.c b/src/cmd-common.c
+index a49413a..a3b5302 100755
+--- a/src/cmd-common.c
++++ b/src/cmd-common.c
+@@ -212,7 +212,7 @@ struct ftdi_context *common_ftdi_init()
+ {
+ 	int err = 0, i, n;
+ 	struct ftdi_context *ftdi = NULL;
+-	struct ftdi_device_list *list;
++	struct ftdi_device_list *list, *match;
+ 
+ 	/* initialize ftdi */
+ 	ftdi = ftdi_new();
+@@ -231,6 +231,7 @@ struct ftdi_context *common_ftdi_init()
+ 		fprintf(stderr, "unable to find any matching device\n");
+ 		return NULL;
+ 	}
++	match = list;
+ 	if (usb_description || usb_serial) {
+ 		for (i = 0; i < n; i++) {
+ 			char m[1024], d[1024], s[1024];
+@@ -240,13 +241,13 @@ struct ftdi_context *common_ftdi_init()
+ 			ftdi_usb_get_strings(ftdi, list->dev, m, 1024, d, 1024, s, 1024);
+ 			if (usb_description) {
+ 				if (strcmp(usb_description, d) != 0) {
+-					list = list->next;
++					match = match->next;
+ 					continue;
+ 				}
+ 			}
+ 			if (usb_serial) {
+ 				if (strcmp(usb_serial, s) != 0) {
+-					list = list->next;
++					match = match->next;
+ 					continue;
+ 				}
+ 			}
+@@ -258,7 +259,7 @@ struct ftdi_context *common_ftdi_init()
+ 			return NULL;
+ 		}
+ 	}
+-	err = ftdi_usb_open_dev(ftdi, list->dev);
++	err = ftdi_usb_open_dev(ftdi, match->dev);
+ 	ftdi_list_free(&list);
+ 	if (err < 0) {
+ 		fprintf(stderr, "unable to open ftdi device: %s\n", ftdi_get_error_string(ftdi));
+-- 
+2.7.4
+

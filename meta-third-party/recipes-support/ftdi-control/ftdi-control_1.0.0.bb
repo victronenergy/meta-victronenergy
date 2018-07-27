@@ -10,6 +10,9 @@ DEPENDS = "libftdi"
 SRC_URI = " \
 	git://github.com/aehparta/ftdi-bitbang.git \
 	file://0001-use-LDADD-LIBADD-instead-of-LDFLAGS-for-the-librarie.patch \
+	file://0002-print-the-usbid-of-the-usb-device.patch \
+	file://0003-prevent-leaking-memory.patch \
+	file://0004-add-an-option-to-select-on-usb-id.patch \
 "
 SRCREV = "0f4daf1e70ab0048e04ea0dfb7fba7aa72a9f861"
 S = "${WORKDIR}/git"

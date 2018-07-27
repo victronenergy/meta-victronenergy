@@ -1,0 +1,81 @@
+From c0e1a2fbda0da11538f0e8d74cae3041b1e9f8e6 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Fri, 27 Jul 2018 14:11:26 +0200
+Subject: [PATCH 2/4] print the usbid of the usb device
+
+The format of sysfs is used, so bus-id.id.
+---
+ src/cmd-common.c | 36 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 35 insertions(+), 1 deletion(-)
+
+diff --git a/src/cmd-common.c b/src/cmd-common.c
+index 5b387b3..a49413a 100755
+--- a/src/cmd-common.c
++++ b/src/cmd-common.c
+@@ -11,6 +11,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <libgen.h>
++#include <libusb.h>
+ #include <errno.h>
+ #include <libftdi1/ftdi.h>
+ #include "cmd-common.h"
+@@ -130,6 +131,37 @@ int common_options(int argc, char *argv[], const char opts[], struct option long
+ 	return 0;
+ }
+ 
++/* @note needs to be freed */
++static char * get_usbid(struct libusb_device *dev)
++{
++	int n, i = 0;
++	uint8_t port_numbers[7];
++	FILE *fh;
++	char *buf;
++	size_t len;
++
++	n = libusb_get_port_numbers(dev, port_numbers, sizeof(port_numbers) / sizeof(port_numbers[0]));
++	if (n == LIBUSB_ERROR_OVERFLOW) {
++		fprintf(stderr, "device has too many port numbers\n");
++		return NULL;
++	}
++
++	fh = open_memstream(&buf, &len);
++	if (!fh)
++		return NULL;
++
++	fprintf(fh, "%d-", libusb_get_bus_number(dev));
++	for (;;) {
++		fprintf(fh, "%d", port_numbers[i]);
++		if (++i == n)
++			break;
++		fputc('.', fh);
++	}
++	fclose(fh);
++
++	return buf;
++}
++
+ void common_ftdi_list_print()
+ {
+ 	int i, n;
+@@ -150,6 +182,7 @@ void common_ftdi_list_print()
+ 
+ 	for (i = 0; i < n; i++) {
+ 		char m[1024], d[1024], s[1024];
++		char *id = get_usbid(list->dev);
+ 		memset(m, 0, 1024);
+ 		memset(d, 0, 1024);
+ 		memset(s, 0, 1024);
+@@ -167,7 +200,8 @@ void common_ftdi_list_print()
+ 			}
+ 		}
+ 
+-		printf("%s : %s / %s\n", s, d, m);
++		printf("%s %s : %s / %s\n", id, s, d, m);
++		free(id);
+ 	}
+ 
+ 	ftdi_list_free(&list);
+-- 
+2.7.4
+
