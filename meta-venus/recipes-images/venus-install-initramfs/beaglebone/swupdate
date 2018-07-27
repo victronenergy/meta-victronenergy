@@ -4,6 +4,7 @@
 
 SWUDEV=mmcblk0p1
 MMCDEV=mmcblk1
+BOARD_ID_DEV=0-00500
 
 LED_0=heartbeat
 LED_1=mmc0

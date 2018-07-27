@@ -21,6 +21,8 @@ SCR = "install-${MACHINE}.scr"
 
 SWU = "venus-swu"
 
+SRC_URI += "file://board_id_*"
+
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
 
 INSTALL_FILES = "\
@@ -52,6 +54,8 @@ do_install () {
 		dst=${file#*:}
 		cp ${DEPLOY_DIR_IMAGE}/${src} ${SDCARD}/${dst}
 	done
+
+	cp ${WORKDIR}/board_id_* ${SDCARD}
 
 	zip -rj ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
 	ln -sf ${IMAGE_NAME}.sdcard.zip ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.sdcard.zip
