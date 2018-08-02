@@ -7,6 +7,7 @@ SRC_URI += " \
 INITSCRIPT_PARAMS = "remove"
 
 MOSQUITTO_D = "/data/conf/mosquitto.d"
+PACKAGECONFIG = "ssl uuid websockets"
 
 do_install_append() {
 	install -d ${D}${sysconfdir}/mosquitto
