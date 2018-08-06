@@ -4,7 +4,7 @@ LICENSE = "GPLv2"
 
 inherit module
 KERNEL_MODULES_META_PACKAGE = "linux-backports"
-KERNEL_MODULE_PATTERN = "linux-backport-module-%s"
+KERNEL_MODULE_PACKAGE_PREFIX  = "backport-"
 BACKPORTS_CONFIG = "ccgx.config"
 
 SRC_URI = " \
@@ -16,7 +16,6 @@ SRC_URI = " \
 SRC_URI[md5sum] = "212c07f28b622d21f41e7a969434c6b0"
 SRC_URI[sha256sum] = "acda012f244e7f2c6c383f998d06554c524a0896ab83dd7b1301ef9d284dfd80"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
-PR = "r1"
 
 KBUILD_OUTPUT ?= "${STAGING_KERNEL_DIR}"
 S = "${WORKDIR}/backports-${PV}"
@@ -31,3 +30,7 @@ do_install() {
 	oe_runmake install INSTALL_MOD_PATH=${D}
 }
 
+python split_kernel_module_packages_append () {
+    # complains about missing backport-kernel-module-eeprom-93cx6-3.7.1 without this
+    d.setVar('RDEPENDS_backport-kernel-module-rtl8187-3.7.1', "")
+}
