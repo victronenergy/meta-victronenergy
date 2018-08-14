@@ -2,6 +2,8 @@ DESCRIPTION = "Linux Driver backports"
 SECTION = "kernel"
 LICENSE = "GPLv2"
 
+DEPENDS += "coreutils-native"
+
 inherit module
 KERNEL_MODULES_META_PACKAGE = "linux-backports"
 KERNEL_MODULE_PACKAGE_PREFIX  = "backport-"
