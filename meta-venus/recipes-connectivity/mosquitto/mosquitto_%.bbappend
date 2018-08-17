@@ -1,8 +1,13 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
+DEPENDS += "libwebsockets"
+
 SRC_URI += " \
 	file://mosquitto.conf \
+	file://0001-config.mk-enable-websockets.patch \
 "
+
+PR = "2"
 
 INITSCRIPT_PARAMS = "remove"
 

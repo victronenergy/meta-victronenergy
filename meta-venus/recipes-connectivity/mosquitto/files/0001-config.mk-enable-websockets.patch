@@ -1,0 +1,25 @@
+From 029d6fc74db276b50578b57ee824e3dcd07ad3c5 Mon Sep 17 00:00:00 2001
+From: mpvader <mvader@victronenergy.com>
+Date: Fri, 17 Aug 2018 22:03:07 +0200
+Subject: [PATCH] config.mk: enable websockets
+
+---
+ config.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config.mk b/config.mk
+index 71f17e5..eef9c84 100644
+--- a/config.mk
++++ b/config.mk
+@@ -65,7 +65,7 @@ WITH_SRV:=yes
+ WITH_UUID:=yes
+ 
+ # Build with websockets support on the broker.
+-WITH_WEBSOCKETS:=no
++WITH_WEBSOCKETS:=yes
+ 
+ # Use elliptic keys in broker
+ WITH_EC:=yes
+-- 
+2.7.4
+
