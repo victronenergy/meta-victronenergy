@@ -38,6 +38,7 @@ case "$1" in
   stop)
 	# note: this forcefully kill the watchdog process, keeping the hw watchdog active
 	echo "Stopping $DESC (keeping hw watchdog alive)"
+	logger "Stopping $DESC (keeping hw watchdog alive)"
 	killall -9 watchdog
 	;;
   disable)
