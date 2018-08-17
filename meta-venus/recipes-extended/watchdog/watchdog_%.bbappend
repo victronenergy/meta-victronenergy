@@ -12,7 +12,7 @@ SRC_URI += "\
 
 INITSCRIPT_PACKAGES = "${PN}"
 INITSCRIPT_NAME_${PN} = "watchdog"
-INITSCRIPT_PARAMS_${PN} = "start 80 S . stop 20 0 1 6 ."
+INITSCRIPT_PARAMS_${PN} = "start 80 S . stop 00 0 1 6 ."
 
 do_compile_append () {
 	${CC} ${CFLAGS} ${LDFLAGS} -DMACH_${MACHINE} \
