@@ -1,0 +1,6 @@
+# CCGX2
+ENV{BASE_COMPATIBLE}!="victronenergy,ccgx2", GOTO="end-ccgx2"
+ACTION=="add", KERNEL=="ttyS1", ENV{VE_PRODUCT}="builtin-rs485", ENV{VE_SERVICE}="rs485"
+ACTION=="add", KERNEL=="ttyS3", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="mkx"
+ACTION=="add", KERNEL=="ttyS[4-7]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
+LABEL="end-ccgx2"
