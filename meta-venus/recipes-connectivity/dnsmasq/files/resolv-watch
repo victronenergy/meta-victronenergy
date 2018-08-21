@@ -12,6 +12,30 @@ CM_RESOLV_CONF=/run/connman/resolv.conf
 PPP_RESOLV_CONF=/run/ppp/resolv.conf
 RESOLV_CONF=/run/resolv.conf
 
+# monitor the the directories since the files might not exist yet
+WATCH_DIRS="${CM_RESOLV_CONF%/*} ${PPP_RESOLV_CONF%/*}"
+
+update_localsettings() {
+    dev=$(ip route get 1.1.1.1 | sed -n 's/.*\bdev\b *\([^ ]*\).*/\1/p')
+
+    case $dev in
+        eth*) conn=1 ;;
+        w*)   conn=2 ;;
+        ppp*) conn=3 ;;
+        *)    conn=0 ;;
+    esac
+
+    dbus-send --system --type=method_call --dest=com.victronenergy.settings \
+              /Settings com.victronenergy.Settings.AddSilentSetting \
+              string:'' string:/System/ActiveNetworkConnection \
+              int32:-1 string:i int32:-1 int32:3
+
+    dbus-send --system --print-reply=literal --type=method_call \
+              --dest=com.victronenergy.settings \
+              /Settings/System/ActiveNetworkConnection \
+              com.victronenergy.BusItem.SetValue int32:$conn
+}
+
 while true; do
     if grep -q ^nameserver ${CM_RESOLV_CONF}; then
         resolv_conf=${CM_RESOLV_CONF}
@@ -22,7 +46,7 @@ while true; do
     ln -sf ${resolv_conf} ${RESOLV_CONF}
 
     /etc/init.d/dnsmasq reload
+    update_localsettings && timeout= || timeout="-t 10"
 
-    # monitor the the directories since the files might not exist yet
-    inotifywait -qq -e close_write ${CM_RESOLV_CONF%/*} ${PPP_RESOLV_CONF%/*}
+    inotifywait -qq $timeout -e close_write ${WATCH_DIRS}
 done
