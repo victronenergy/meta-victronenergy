@@ -12,13 +12,15 @@ SRC_URI_append_beaglebone = "\
 	file://dnsmasq.ap.conf \
 "
 
+RW_INITSCRIPT_PARAMS="start 80 5 . stop 10 0 1 6 ."
+
 do_install_append() {
 	install -m 644 ${WORKDIR}/resolv.conf ${D}${sysconfdir}
 
 	install -d ${D}${sbindir}
 	install -m 755 ${WORKDIR}/resolv-watch ${D}${sbindir}
 	install -m 755 ${WORKDIR}/rw-init ${D}${sysconfdir}/init.d/resolv-watch
-	update-rc.d -r ${D} resolv-watch ${INITSCRIPT_PARAMS}
+	update-rc.d -r ${D} resolv-watch ${RW_INITSCRIPT_PARAMS}
 }
 
 do_install_append_beaglebone() {
