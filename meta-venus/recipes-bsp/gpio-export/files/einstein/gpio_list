@@ -1,0 +1,20 @@
+# MK3_BUS_STANDBY       PH2
+226 out vebus_standby
+
+# MK3_RESET             PH3
+227 out mkx_rst
+
+# RELAY_1               PB4
+36  out relay_1
+
+# RELAY_2               PB3
+35  out relay_2
+
+# DIGITAL_INPUT_1       PI14
+270 in  digital_input_1
+
+# DIGITAL_INPUT_2       PI15
+271 in  digital_input_2
+
+# DIGITAL_INPUT_3       PI13
+269 in  digital_input_3
