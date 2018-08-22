@@ -13,7 +13,7 @@ case "$1" in
         ;;
     stop)
         echo -n "stopping $DESC: $NAME... "
-        start-stop-daemon -K -p $PIDFILE -x $DAEMON
+        start-stop-daemon -K -p $PIDFILE -n $NAME
         echo "done."
         ;;
     status)
