@@ -4,7 +4,6 @@
 
 SWUDEV="mmcblk0p1 sda1 mmcblk0 sda"
 UBIPART=12
-MODULES="fbcon"
 TTYS="$TTYS tty0"
 
 postinst() {
