@@ -84,7 +84,7 @@ software =
 				},
 				{
 					name = "miscargs";
-					value = "omapdss.def_disp=lcd omapfb.vram=0:2M@0x8fe00000 fbskip";
+					value = "omapdss.def_disp=lcd omapfb.vram=0:2M@0x8fe00000 fbskip fbcon=vc:64";
 				},
 				{
 					name = "nandboot";
@@ -113,7 +113,7 @@ software =
 				},
 				{
 					name = "miscargs";
-					value = "omapdss.def_disp=lcd omapfb.vram=0:2M@0x8fe00000 fbskip";
+					value = "omapdss.def_disp=lcd omapfb.vram=0:2M@0x8fe00000 fbskip fbcon=vc:64";
 				},
 				{
 					name = "nandboot";
