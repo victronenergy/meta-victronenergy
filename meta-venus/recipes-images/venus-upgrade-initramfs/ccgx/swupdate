@@ -32,8 +32,6 @@ fi
 
 mkdir -p /run/lock
 
-modprobe fbcon
-
 msg "Searching for update image..."
 
 for d in sda1 mmcblk0p1 sda mmcblk0; do
