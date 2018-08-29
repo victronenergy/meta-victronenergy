@@ -16,10 +16,15 @@ gen_config() {
 EOF
 }
 
-# make sure interface exists
-iw dev ap0 info >/dev/null 2>&1 || exit 1
+stop() {
+	svc -d .
+	exit 1
+}
 
-gen_config || exit 1
+# make sure interface exists
+iw dev ap0 info >/dev/null 2>&1 || stop
+
+gen_config || stop
 
 rfkill unblock wifi
 exec /usr/sbin/hostapd /run/hostapd.conf
