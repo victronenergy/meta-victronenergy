@@ -3,7 +3,7 @@ require ${COREBASE}/meta/recipes-bsp/u-boot/u-boot.inc
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
 
-COMPATIBLE_MACHINE = "nanopi"
+COMPATIBLE_MACHINE = "sunxi"
 
 PROVIDES = ""
 
@@ -11,8 +11,8 @@ SRC_URI = " \
 	https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz \
 	file://fw_env.config \
 "
-SRC_URI[md5sum] = "7698560176f9c6b214fa914a87830ed5"
-SRC_URI[sha256sum] = "53c9fb151757b12144b00bb2221f6ad39c095a507044fdfe027677414f84e3a2"
+SRC_URI[md5sum] = "dda33501ea5cef319700dca67c650ff6"
+SRC_URI[sha256sum] = "89585c5d34d1858abd0b39993242a37fcd3eafb03037dbc7359e4366bf01ee4d"
 
 S = "${WORKDIR}/u-boot-${PV}"
 
