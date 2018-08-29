@@ -44,7 +44,7 @@ RDEPENDS_${PN}_append_beaglebone += "\
 	swupdate-scripts \
 "
 
-RDEPENDS_${PN}_append_nanopi += "\
+RDEPENDS_${PN}_append_sunxi += "\
 	cpufrequtils \
 	gpio-export \
 	hostapd \

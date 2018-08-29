@@ -27,7 +27,7 @@ DEPENDS = "packagegroup-venus-optional-packages"
 DEPENDS_append_beaglebone += " venus-install-sdcard"
 DEPENDS_append_ccgx += "venus-install-sdcard venus-upgrade-image"
 DEPENDS_append_canvu500 += "venus-install-sdcard"
-DEPENDS_append_nanopi += "venus-install-sdcard"
+DEPENDS_append_sunxi += "venus-install-sdcard"
 
 # "live" initial image
 DEPENDS_append_raspberrypi2 += "venus-image"

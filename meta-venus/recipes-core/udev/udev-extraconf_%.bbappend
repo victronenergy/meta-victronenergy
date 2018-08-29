@@ -17,7 +17,7 @@ SRC_URI_append_beaglebone += "\
 	file://wlan-update \
 "
 
-SRC_URI_append_nanopi += "\
+SRC_URI_append_sunxi += "\
 	file://slcan.rules \
 	file://wlan.rules \
 	file://wlan-rename \
@@ -50,7 +50,7 @@ do_install_append_ccgx() {
 	install -m 0644 ${WORKDIR}/rtl8192cu.rules ${D}${sysconfdir}/udev/rules.d
 }
 
-do_install_append_nanopi() {
+do_install_append_sunxi() {
 	install -m 0644 ${WORKDIR}/slcan.rules ${D}${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
 
