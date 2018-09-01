@@ -1,7 +1,7 @@
-From 985832e9b864ed9861b5a0fe9e48b662fcf49e06 Mon Sep 17 00:00:00 2001
+From 2dd7a3b5e2d264f1e4247c400f1fbebdc03f5a02 Mon Sep 17 00:00:00 2001
 From: Tomasz Bursztyka <tomasz.bursztyka@linux.intel.com>
 Date: Thu, 15 May 2014 12:19:12 +0100
-Subject: [PATCH 3/5] gweb: Do not lookup for a NULL key in a hash table
+Subject: [PATCH 3/9] gweb: Do not lookup for a NULL key in a hash table
 
 At this position, no key might have been provided yet.
 
@@ -14,7 +14,7 @@ http://git.kernel.org/cgit/network/connman/connman.git/commit/?id=22901212105055
  1 file changed, 3 insertions(+)
 
 diff --git a/gweb/gweb.c b/gweb/gweb.c
-index 6ce5028ad57c..a6e4a033bf4d 100644
+index 6ce5028..a6e4a03 100644
 --- a/gweb/gweb.c
 +++ b/gweb/gweb.c
 @@ -806,6 +806,9 @@ static void handle_multi_line(struct web_session *session)
@@ -28,5 +28,5 @@ index 6ce5028ad57c..a6e4a033bf4d 100644
  					session->result.last_key);
  	if (value) {
 -- 
-2.10.0
+2.7.4
 

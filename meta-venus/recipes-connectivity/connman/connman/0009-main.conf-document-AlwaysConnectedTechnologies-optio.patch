@@ -1,0 +1,49 @@
+From 1ad81c1448a940f8347deba1ac311c26c364d4cb Mon Sep 17 00:00:00 2001
+From: Ioan-Adrian Ratiu <adrian.ratiu@ni.com>
+Date: Wed, 23 Nov 2016 16:10:57 +0200
+Subject: [PATCH 9/9] main.conf: document AlwaysConnectedTechnologies option
+
+By default it's disabled and the list is empty.
+Also document the man page for this main.conf option.
+
+Signed-off-by: Daniel Wagner <daniel.wagner@bmw-carit.de>
+---
+ doc/connman.conf.5.in | 6 ++++++
+ src/main.conf         | 7 +++++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/doc/connman.conf.5.in b/doc/connman.conf.5.in
+index 2f69c49..5baedde 100644
+--- a/doc/connman.conf.5.in
++++ b/doc/connman.conf.5.in
+@@ -67,6 +67,12 @@ for this entry when empty is ethernet,wifi,cellular.
+ Services that are automatically connected must have been
+ set up and saved to storage beforehand.
+ .TP
++.BI AlwaysConnectedTechnologies= technology\fR[,...]
++List of technoolgies which are always connected regardless
++of PreferredTechnologies setting (AutoConnect = true). The
++default value is empty and this feature is disabled unless
++explicitely enabled in the config file.
++.TP
+ .BI PreferredTechnologies= technology\fR[,...]
+ List of preferred technologies from the most preferred
+ one to the least preferred one separated by commas ",".
+diff --git a/src/main.conf b/src/main.conf
+index acceda3..d619413 100644
+--- a/src/main.conf
++++ b/src/main.conf
+@@ -101,3 +101,10 @@
+ # quality. See RFC6343. Default value is false (as recommended by RFC6343
+ # section 4.1).
+ # Enable6to4 = false
++
++# List of technologies with AutoConnect = true which are always connected
++# regardless of PreferredTechnologies setting. Default value is empty and
++# will connect a technology only if it is at a higher preference than any
++# other which is already connected.
++# This setting has no effect if SingleConnectedTechnologies is enabled.
++# AlwaysConnectedTechnologies =
+-- 
+2.7.4
+

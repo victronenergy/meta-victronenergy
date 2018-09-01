@@ -1,7 +1,7 @@
-From 1d4edd955d73d114fb46c2c462b0bb679399de17 Mon Sep 17 00:00:00 2001
+From 4c6d2e996010af59f04ebd7e34af5d16c1c631a9 Mon Sep 17 00:00:00 2001
 From: Mans Rullgard <mans@mansr.com>
 Date: Thu, 15 Sep 2016 12:26:24 +0100
-Subject: [PATCH 4/7] wifi: make max connection retries configurable
+Subject: [PATCH 4/9] wifi: make max connection retries configurable
 
 If when connecting to a wifi network, the authentication phase fails,
 connman draws the conclusion that the wifi password was wrong. This is a
@@ -28,7 +28,7 @@ Signed-off-by: Mans Rullgard <mans@mansr.com>
  4 files changed, 25 insertions(+), 2 deletions(-)
 
 diff --git a/doc/connman.conf.5.in b/doc/connman.conf.5.in
-index ff97b7c4010c..2f69c4902e6b 100644
+index ff97b7c..2f69c49 100644
 --- a/doc/connman.conf.5.in
 +++ b/doc/connman.conf.5.in
 @@ -134,5 +134,10 @@ ethernet tethering.
@@ -43,7 +43,7 @@ index ff97b7c4010c..2f69c4902e6b 100644
  .SH "SEE ALSO"
  .BR connman (8)
 diff --git a/include/setting.h b/include/setting.h
-index a88202176f5e..3cb06101394a 100644
+index a882021..3cb0610 100644
 --- a/include/setting.h
 +++ b/include/setting.h
 @@ -34,6 +34,7 @@ unsigned int *connman_setting_get_uint_list(const char *key);
@@ -55,7 +55,7 @@ index a88202176f5e..3cb06101394a 100644
  #ifdef __cplusplus
  }
 diff --git a/plugins/wifi.c b/plugins/wifi.c
-index 9d566713267e..521ef9f6c4c4 100644
+index 9d56671..521ef9f 100644
 --- a/plugins/wifi.c
 +++ b/plugins/wifi.c
 @@ -61,7 +61,6 @@
@@ -77,7 +77,7 @@ index 9d566713267e..521ef9f6c4c4 100644
  	}
  
 diff --git a/src/main.c b/src/main.c
-index f44a2ed60e38..6afcd1cc622e 100644
+index f44a2ed..6afcd1c 100644
 --- a/src/main.c
 +++ b/src/main.c
 @@ -76,6 +76,7 @@ static struct {
@@ -147,5 +147,5 @@ index f44a2ed60e38..6afcd1cc622e 100644
  {
  	GOptionContext *context;
 -- 
-2.11.0
+2.7.4
 

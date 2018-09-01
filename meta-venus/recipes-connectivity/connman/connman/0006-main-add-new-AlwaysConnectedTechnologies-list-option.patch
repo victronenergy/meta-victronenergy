@@ -1,0 +1,81 @@
+From e681df9783199aa7fa580c19f982c0eaf5a46bf5 Mon Sep 17 00:00:00 2001
+From: Ioan-Adrian Ratiu <adrian.ratiu@ni.com>
+Date: Wed, 23 Nov 2016 16:10:54 +0200
+Subject: [PATCH 6/9] main: add new AlwaysConnectedTechnologies list option
+
+This option is a list of technologies which should always connect,
+by default it's empty and each element in the list depends on having
+AutoConnect=true.
+
+Signed-off-by: Daniel Wagner <daniel.wagner@bmw-carit.de>
+---
+ src/main.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/src/main.c b/src/main.c
+index 6afcd1c..a5c55cc 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -67,6 +67,7 @@ static struct {
+ 	char **pref_timeservers;
+ 	unsigned int *auto_connect;
+ 	unsigned int *preferred_techs;
++	unsigned int *always_connected_techs;
+ 	char **fallback_nameservers;
+ 	unsigned int timeout_inputreq;
+ 	unsigned int timeout_browserlaunch;
+@@ -82,6 +83,7 @@ static struct {
+ 	.pref_timeservers = NULL,
+ 	.auto_connect = NULL,
+ 	.preferred_techs = NULL,
++	.always_connected_techs = NULL,
+ 	.fallback_nameservers = NULL,
+ 	.timeout_inputreq = DEFAULT_INPUT_REQUEST_TIMEOUT,
+ 	.timeout_browserlaunch = DEFAULT_BROWSER_LAUNCH_TIMEOUT,
+@@ -97,6 +99,7 @@ static struct {
+ #define CONF_BG_SCAN                    "BackgroundScanning"
+ #define CONF_PREF_TIMESERVERS           "FallbackTimeservers"
+ #define CONF_AUTO_CONNECT               "DefaultAutoConnectTechnologies"
++#define CONF_ALWAYS_CONNECTED_TECHS     "AlwaysConnectedTechnologies"
+ #define CONF_PREFERRED_TECHS            "PreferredTechnologies"
+ #define CONF_FALLBACK_NAMESERVERS       "FallbackNameservers"
+ #define CONF_TIMEOUT_INPUTREQ           "InputRequestTimeout"
+@@ -113,6 +116,7 @@ static const char *supported_options[] = {
+ 	CONF_BG_SCAN,
+ 	CONF_PREF_TIMESERVERS,
+ 	CONF_AUTO_CONNECT,
++	CONF_ALWAYS_CONNECTED_TECHS,
+ 	CONF_PREFERRED_TECHS,
+ 	CONF_FALLBACK_NAMESERVERS,
+ 	CONF_TIMEOUT_INPUTREQ,
+@@ -300,6 +304,17 @@ static void parse_config(GKeyFile *config)
+ 	g_clear_error(&error);
+ 
+ 	str_list = __connman_config_get_string_list(config, "General",
++			CONF_ALWAYS_CONNECTED_TECHS, &len, &error);
++
++	if (!error)
++		connman_settings.always_connected_techs =
++			parse_service_types(str_list, len);
++
++	g_strfreev(str_list);
++
++	g_clear_error(&error);
++
++	str_list = __connman_config_get_string_list(config, "General",
+ 			CONF_FALLBACK_NAMESERVERS, &len, &error);
+ 
+ 	if (!error)
+@@ -584,6 +599,9 @@ unsigned int *connman_setting_get_uint_list(const char *key)
+ 	if (g_str_equal(key, CONF_PREFERRED_TECHS))
+ 		return connman_settings.preferred_techs;
+ 
++	if (g_str_equal(key, CONF_ALWAYS_CONNECTED_TECHS))
++		return connman_settings.always_connected_techs;
++
+ 	return NULL;
+ }
+ 
+-- 
+2.7.4
+

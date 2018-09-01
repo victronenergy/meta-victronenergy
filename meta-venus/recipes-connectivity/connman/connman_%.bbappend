@@ -9,13 +9,17 @@ VELIB_DEFAULT_DIRS = "1"
 inherit ve_package
 
 SRC_URI += "\
-            file://0001-Set-hwclock-when-time-is-decoded.patch \
-            file://0002-Increase-NTP-poll-interval.patch \
-            file://0003-gweb-Do-not-lookup-for-a-NULL-key-in-a-hash-table.patch \
-            file://0004-wifi-make-max-connection-retries-configurable.patch \
-            file://0001-service-Update-nameservers-and-timeservers-with-chan.patch \
-            file://main.conf \
-            file://connmand-watch.sh \
+	file://0001-Set-hwclock-when-time-is-decoded.patch \
+	file://0002-Increase-NTP-poll-interval.patch \
+	file://0003-gweb-Do-not-lookup-for-a-NULL-key-in-a-hash-table.patch \
+	file://0004-wifi-make-max-connection-retries-configurable.patch \
+	file://0005-service-Update-nameservers-and-timeservers-with-chan.patch \
+	file://0006-main-add-new-AlwaysConnectedTechnologies-list-option.patch \
+	file://0007-service-implement-AlwaysConnectedTechnologies-option.patch \
+	file://0008-service-abstract-the-more-complex-autoconnect-condit.patch \
+	file://0009-main.conf-document-AlwaysConnectedTechnologies-optio.patch \
+	file://main.conf \
+	file://connmand-watch.sh \
 "
 
 do_configure_append() {

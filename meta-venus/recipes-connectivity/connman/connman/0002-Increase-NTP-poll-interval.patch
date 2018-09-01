@@ -1,7 +1,7 @@
-From 047116750839523fd10bad963dc7a3414957f2d0 Mon Sep 17 00:00:00 2001
+From ec12f2e320f43b973101fc748a4a5ceb547b6cda Mon Sep 17 00:00:00 2001
 From: Mans Rullgard <mans@mansr.com>
 Date: Wed, 28 Sep 2016 14:08:03 +0100
-Subject: [PATCH 2/5] Increase NTP poll interval
+Subject: [PATCH 2/9] Increase NTP poll interval
 
 This reduces NTP network traffic to a bare minimum.
 ---
@@ -9,7 +9,7 @@ This reduces NTP network traffic to a bare minimum.
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/src/ntp.c b/src/ntp.c
-index 01f5dc605a22..b4725384d939 100644
+index 01f5dc6..b472538 100644
 --- a/src/ntp.c
 +++ b/src/ntp.c
 @@ -167,8 +167,7 @@ static void send_packet(int fd, struct sockaddr *server, uint32_t timeout)
@@ -23,5 +23,5 @@ index 01f5dc605a22..b4725384d939 100644
  
  	if (server->sa_family == AF_INET) {
 -- 
-2.10.0
+2.7.4
 

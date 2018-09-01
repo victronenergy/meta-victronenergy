@@ -1,8 +1,8 @@
-From 938343740a673346e5fad4bf632b6db18d60969e Mon Sep 17 00:00:00 2001
+From 200a491fea6291c48d7c487f0f5c7a51bd6f06e1 Mon Sep 17 00:00:00 2001
 From: Patrik Flykt <Patrik.Flykt@linux.intel.com>
 Date: Thu, 8 Dec 2016 10:53:07 +0200
-Subject: [PATCH] service: Update nameservers and timeservers with changes in
- IP
+Subject: [PATCH 5/9] service: Update nameservers and timeservers with changes
+ in IP
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -20,7 +20,7 @@ upstream: https://lists.01.org/pipermail/connman/2016-December/021307.html
  1 file changed, 14 insertions(+), 7 deletions(-)
 
 diff --git a/src/service.c b/src/service.c
-index 66b402b69c85..a8ab0fc40e1a 100644
+index 768426b..af1fe3d 100644
 --- a/src/service.c
 +++ b/src/service.c
 @@ -1906,19 +1906,26 @@ static void settings_changed(struct connman_service *service,
@@ -58,5 +58,5 @@ index 66b402b69c85..a8ab0fc40e1a 100644
  	__connman_notifier_ipconfig_changed(service, ipconfig);
  }
 -- 
-2.11.0
+2.7.4
 

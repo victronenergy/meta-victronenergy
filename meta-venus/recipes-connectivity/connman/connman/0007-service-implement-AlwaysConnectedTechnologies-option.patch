@@ -1,0 +1,86 @@
+From dea2d356b5709dfb2553a4517c14a47eacae7859 Mon Sep 17 00:00:00 2001
+From: Ioan-Adrian Ratiu <adrian.ratiu@ni.com>
+Date: Wed, 23 Nov 2016 16:10:55 +0200
+Subject: [PATCH 7/9] service: implement AlwaysConnectedTechnologies option
+
+Add a new array always_connect which stores the service technology type
+info wether it should always connect or not. Verify at various points in
+the auto_connect_service function the value for the autoconnecting service
+type to ensure it always connects regardless of any preffered technologies.
+
+Signed-off-by: Daniel Wagner <daniel.wagner@bmw-carit.de>
+---
+ src/service.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/src/service.c b/src/service.c
+index af1fe3d..cae5691 100644
+--- a/src/service.c
++++ b/src/service.c
+@@ -3648,6 +3648,7 @@ static void disconnect_on_last_session(enum connman_service_type type)
+ }
+ 
+ static int active_sessions[MAX_CONNMAN_SERVICE_TYPES] = {};
++static int always_connect[MAX_CONNMAN_SERVICE_TYPES] = {};
+ static int active_count = 0;
+ 
+ void __connman_service_set_active_session(bool enable, GSList *list)
+@@ -3753,6 +3754,15 @@ static GList *preferred_tech_list_get(void)
+ 	return tech_data.preferred_list;
+ }
+ 
++static void set_always_connecting_technologies()
++{
++	unsigned int *always_connected_techs =
++		connman_setting_get_uint_list("AlwaysConnectedTechnologies");
++	int i;
++	for (i = 0; always_connected_techs && always_connected_techs[i]; i++)
++		always_connect[always_connected_techs[i]] = 1;
++}
++
+ static bool auto_connect_service(GList *services,
+ 				enum connman_service_connect_reason reason,
+ 				bool preferred)
+@@ -3779,8 +3789,8 @@ static bool auto_connect_service(GList *services,
+ 		if (service->pending ||
+ 				is_connecting(service) ||
+ 				is_connected(service)) {
+-			if (!active_count)
+-				return true;
++			if (!active_count && !always_connect[service->type])
++					return true;
+ 
+ 			ignore[service->type] = true;
+ 			autoconnecting = true;
+@@ -3802,7 +3812,9 @@ static bool auto_connect_service(GList *services,
+ 				CONNMAN_SERVICE_STATE_IDLE)
+ 			continue;
+ 
+-		if (autoconnecting && !active_sessions[service->type]) {
++		if (autoconnecting &&
++				!active_sessions[service->type] &&
++				!always_connect[service->type]) {
+ 			DBG("service %p type %s has no users", service,
+ 				__connman_service_type2string(service->type));
+ 			continue;
+@@ -3813,7 +3825,7 @@ static bool auto_connect_service(GList *services,
+ 
+ 		__connman_service_connect(service, reason);
+ 
+-		if (!active_count)
++		if (!active_count && !always_connect[service->type])
+ 			return true;
+ 
+ 		ignore[service->type] = true;
+@@ -7105,6 +7117,8 @@ int __connman_service_init(void)
+ 		return err;
+ 	}
+ 
++	set_always_connecting_technologies();
++
+ 	connection = connman_dbus_get_connection();
+ 
+ 	service_hash = g_hash_table_new_full(g_str_hash, g_str_equal,
+-- 
+2.7.4
+
