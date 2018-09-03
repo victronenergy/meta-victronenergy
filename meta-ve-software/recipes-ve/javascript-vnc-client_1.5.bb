@@ -2,6 +2,8 @@ DESCRIPTION = "Javascript VNC Client: website that hosts a javascript vnc client
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
+inherit www
+
 # base-passwd is needed for www user
 DEPENDS = "base-passwd"
 RDEPENDS_${PN} = "hiawatha"
@@ -12,7 +14,7 @@ SRC_URI = " \
 "
 
 S = "${WORKDIR}/git"
-BASE_DIR = "/var/www/javascript-vnc-client/"
+BASE_DIR = "${WWW_ROOT}"
 DEST_DIR = "${D}${BASE_DIR}"
 
 do_configure[noexec] = "1"

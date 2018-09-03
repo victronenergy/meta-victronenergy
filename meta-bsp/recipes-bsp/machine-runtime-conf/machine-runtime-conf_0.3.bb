@@ -2,6 +2,8 @@ DESCRIPTION = "Creates the config files which are used runtime by Venus"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
+inherit www
+
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += " \
@@ -66,9 +68,9 @@ do_install_append() {
 	install -m 755 ${WORKDIR}/installation-name ${D}/${bindir}
 	install -m 755 ${WORKDIR}/product-name ${D}/${bindir}
 
-	install -d ${D}/var/www/javascript-vnc-client/venus
-	ln -s /data/venus/unique-id ${D}/var/www/javascript-vnc-client/venus
-	ln -s /opt/victronenergy/version ${D}/var/www/javascript-vnc-client/venus
+	install -d ${D}${WWW_ROOT}/venus
+	ln -s /data/venus/unique-id ${D}${WWW_ROOT}/venus
+	ln -s /opt/victronenergy/version ${D}${WWW_ROOT}/venus
 
 	install -d ${D}${sysconfdir}/init.d
 	install -m 0755 ${WORKDIR}/machine-conf.sh ${D}${sysconfdir}/init.d
