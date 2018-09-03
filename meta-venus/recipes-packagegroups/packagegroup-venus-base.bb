@@ -85,6 +85,7 @@ RDEPENDS_${PN} += "\
 	usbutils \
 	udev-extraconf \
 	venus-feed-configs \
+	venus-html5-app \
 	venus-version \
 	watchdog \
 	websockify-c \
