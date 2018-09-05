@@ -1,0 +1,23 @@
+From 95b2e2b12b35a27ac26e461ecee2a29a8ac7ca2d Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 5 Sep 2018 14:33:07 +0200
+Subject: [PATCH] wpa_supplicant: enable unix socket as well
+
+---
+ wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in b/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
+index d97ff39..98b72cf 100644
+--- a/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
++++ b/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
+@@ -1,5 +1,5 @@
+ [D-BUS Service]
+ Name=fi.w1.wpa_supplicant1
+-Exec=@BINDIR@/wpa_supplicant -u
++Exec=@BINDIR@/wpa_supplicant -u -O /var/run/wpa_supplicant -s
+ User=root
+ SystemdService=wpa_supplicant.service
+-- 
+2.7.4
+
