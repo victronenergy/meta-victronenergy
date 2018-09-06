@@ -18,6 +18,7 @@
 			$data = fopen('php://input', 'r');
 		}
 		if (file_put_contents(LOGO_CUSTOM, $data)) {
+			exec("/bin/sync");
 			echo 'ok';
 		}
 		exit();
@@ -26,6 +27,7 @@
 	// Handle resetting logo
 	if (isset($_GET['reset'])) {
 		if (!file_exists(LOGO_CUSTOM) || unlink(LOGO_CUSTOM)) {
+			exec("/bin/sync");
 			echo 'ok';
 		}
 		exit();
