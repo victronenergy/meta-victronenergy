@@ -8,7 +8,12 @@ inherit python-compile
 
 # note: the connected patch is reverted only because it needs to be tested first..
 # but we do want a newer version because of dbus bus selection
-SRC_URI = "gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;branch=bol2;tag=${PV}"
+SRC_URI = " \
+	gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;branch=bol2;tag=${PV} \
+	file://0001-change-vebus-system-selection-to-lowest-instance.patch \
+"
+
+PR = "1"
 
 S = "${WORKDIR}/git"
 

@@ -1,0 +1,74 @@
+From 1666345e743f998c891d196cf3864ae8196be657 Mon Sep 17 00:00:00 2001
+From: mpvader <mvader@victronenergy.com>
+Date: Wed, 5 Sep 2018 02:06:20 +0200
+Subject: [PATCH] change vebus system selection to lowest instance
+
+Better because less random. And USB connected systems will automatically
+be ignored if there is already one on the built-in port: USB connected
+systems get a higher instance number.
+
+Calculations:
+
+- In case the Multi(s) are selected as the battery monitor, the system
+already adds up DC volts and amps; which is fine: we assume they are
+all on the same battery.
+
+- Do not add up AC in or AC out values for the multiple systems: overview
+should show the main system. Note that not adding it up will probably
+mess up the total consumption power as shown on VRM dashboard.
+
+https://github.com/victronenergy/venus/issues/339
+---
+ dbus_systemcalc.py | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/dbus_systemcalc.py b/dbus_systemcalc.py
+index 7cdbdd2..a7572a0 100755
+--- a/dbus_systemcalc.py
++++ b/dbus_systemcalc.py
+@@ -313,7 +313,7 @@ class SystemCalc:
+ 		if self._get_first_connected_service('com.victronenergy.charger') is not None:
+ 			return None
+ 
+-		vebus_service = self._get_first_connected_service('com.victronenergy.vebus')
++		vebus_service = self._get_service_having_lowest_instance('com.victronenergy.vebus')
+ 		if vebus_service is None:
+ 			return None
+ 
+@@ -494,8 +494,7 @@ class SystemCalc:
+ 				newvalues['/Dc/System/Power'] = dc_pv_power + charger_power + vebuspower - battery_power
+ 
+ 		# ==== Vebus ====
+-		# Assume there's only 1 multi service present on the D-Bus
+-		multi = self._get_first_connected_service('com.victronenergy.vebus')
++		multi = self._get_service_having_lowest_instance('com.victronenergy.vebus')
+ 		multi_path = None
+ 		if multi is not None:
+ 			multi_path = multi[0]
+@@ -698,12 +697,23 @@ class SystemCalc:
+ 		self._remove_unconnected_services(services)
+ 		return services
+ 
++	# returns a tuple (servicename, instance)
+ 	def _get_first_connected_service(self, classfilter=None):
+ 		services = self._get_connected_service_list(classfilter=classfilter)
+ 		if len(services) == 0:
+ 			return None
+ 		return services.items()[0]
+ 
++	# returns a tuple (servicename, instance)
++	def _get_service_having_lowest_instance(self, classfilter=None):
++		services = self._get_connected_service_list(classfilter=classfilter)
++		if len(services) == 0:
++			return None
++
++		# sort the dict by value; returns list of tuples: (value, key)
++		s = sorted((value, key) for (key, value) in services.items())
++		return (s[0][1], s[0][0])
++
+ 
+ class DbusSystemCalc(SystemCalc):
+ 	def _create_dbus_monitor(self, *args, **kwargs):
+-- 
+2.7.4
+

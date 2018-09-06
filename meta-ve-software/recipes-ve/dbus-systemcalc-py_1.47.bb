@@ -11,7 +11,10 @@ inherit python-compile
 SRC_URI = " \
 	gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
 	file://com.victronenergy.system.conf \
+	file://0001-change-vebus-system-selection-to-lowest-instance.patch \
 "
+
+PR = "1"
 
 S = "${WORKDIR}/git"
 
