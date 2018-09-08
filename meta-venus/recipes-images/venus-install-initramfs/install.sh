@@ -40,7 +40,6 @@ ROOT_SIZE=1280
 DATA_SIZE=512
 
 msg() {
-    eval "$HOOK_msg"
     for tty in $TTYS; do
         echo "$@" >/dev/$tty
     done
@@ -115,9 +114,7 @@ format_mmc() {
     data_blocks=$((DATA_SIZE * 1024 * 2))
 
     msg "Creating partitions..."
-    sfdisk -W always /dev/$mmc <<EOF
-	label: dos
-	label-id: 0x564e5553
+    sfdisk /dev/$mmc <<EOF
 	2048, 16384, c, *
 	, $root_blocks, L
 	, $root_blocks, L
@@ -127,10 +124,10 @@ format_mmc() {
 EOF
 
     msg "Formatting data partition..."
-    mkfs.ext4 -F /dev/${mmc}p5
+    mkfs.ext4 /dev/${mmc}p5
 
     msg "Formatting scratch partition.."
-    mkfs.ext4 -F /dev/${mmc}p6
+    mkfs.ext4 /dev/${mmc}p6
 
     DATADEV=/dev/${mmc}p5
     DATAFS=ext4
