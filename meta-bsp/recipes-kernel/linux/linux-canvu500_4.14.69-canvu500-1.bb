@@ -6,15 +6,13 @@ inherit kernel
 
 COMPATIBLE_MACHINE = "canvu500"
 
-DEPENDS += "lzop-native"
+RDEPENDS_kernel-base += "kernel-devicetree"
 
-LINUX_VERSION = "4.14"
+KERNEL_CONFIG_COMMAND = "oe_runmake -C ${S} O=${B} canvu500_defconfig"
 
 S = "${WORKDIR}/linux-${PV}"
 B = "${WORKDIR}/build"
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-SRC_URI[md5sum] = "055e038f1510796a89cb9c60fd5e33b4"
-SRC_URI[sha256sum] = "570f4a50d6ca5d2ea2eaaaf1b56517b20ef51d72cd376f1164fe484c79d13b7e"
-
-SRC_URI += "file://defconfig"
+SRC_URI[md5sum] = "958cd23d99a5e9723221bcbfc34bc946"
+SRC_URI[sha256sum] = "d0bf67e95a87249f33215a99a5cd2239e74c6ebd09f7eea35f27a2e08e4391c1"
