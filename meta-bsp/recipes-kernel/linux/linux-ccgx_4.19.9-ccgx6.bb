@@ -28,7 +28,8 @@ RDEPENDS_kernel-base = ""
 S = "${WORKDIR}/linux-${PV}"
 B = "${WORKDIR}/build"
 
-SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
+SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz \
+	file://0001-lets-find-out-who-is-scheduling-NULL-pointers.patch"
 SRC_URI[md5sum] = "f31722464fa51ac69f2155c86292572e"
 SRC_URI[sha256sum] = "3a860cd57e71b88652f3b1bbbc41b374967463464e123ac654898155625301d4"
 
