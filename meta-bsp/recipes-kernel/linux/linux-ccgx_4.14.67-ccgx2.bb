@@ -29,6 +29,8 @@ S = "${WORKDIR}/linux-${PV}"
 B = "${WORKDIR}/build"
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz \
-	file://0001-lets-find-out-who-is-scheduling-NULL-pointers.patch"
+	file://0001-lets-find-out-who-is-scheduling-NULL-pointers.patch \
+	file://0001-mutex-always-use-unlock_slowpath.patch \
+"
 SRC_URI[md5sum] = "00b37bb2cb736fafeb0f0f466e7ec33d"
 SRC_URI[sha256sum] = "303ddb1fb3ee0b204e9fe093f07f1c4ef24dd9b1d58fd573db6d3aac618f6ee9"
