@@ -13,6 +13,7 @@ RDEPENDS_${PN}_append_canvu500 += "\
 	cinematicexperience \
 	evtest \
 	eglinfo-fb \
+	gpio-export \
 	imx-kobs \
 	kmscube \
 	mtd-utils \
