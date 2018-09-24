@@ -4,7 +4,7 @@ inherit pkgconfig siteinfo
 
 inherit ve_package
 
-CFLAGS += "${TOOLCHAIN_OPTIONS} ${TARGET_CC_ARCH}"
+CFLAGS += "${TOOLCHAIN_OPTIONS} ${TARGET_CC_ARCH} ${LDFLAGS}"
 
 oe_runconf () {
 	cfgscript="${S}/configure"
