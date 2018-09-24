@@ -1,6 +1,6 @@
 # changes bindir to point to a per package location
 vedir := "/opt/victronenergy"
-bindir := "${@base_conditional('VELIB_DEFAULT_DIRS', '1', '${bindir}', '${vedir}/${PN}', d)}"
+bindir := "${@oe.utils.conditional('VELIB_DEFAULT_DIRS', '1', '${bindir}', '${vedir}/${PN}', d)}"
 
 # During image updates the complete rootfs gets reflashed. The permanent storage
 # location will not get erased and is also available after such an update.
