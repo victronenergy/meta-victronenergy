@@ -1,2 +1,2 @@
-INITSCRIPT_PARAMS = "remove"
+INHIBIT_UPDATERCD_BBCLASS = "1"
 PACKAGECONFIG = "deprecated tools"
