@@ -4,7 +4,7 @@ SRC_URI += " \
 	file://mosquitto.conf \
 "
 
-INITSCRIPT_PARAMS = "remove"
+INHIBIT_UPDATERCD_BBCLASS = "1"
 
 MOSQUITTO_D = "/data/conf/mosquitto.d"
 PACKAGECONFIG = "ssl uuid websockets"
