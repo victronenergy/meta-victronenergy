@@ -88,5 +88,6 @@ RDEPENDS_${PN} += "\
 	venus-version \
 	watchdog \
 	websockify-c \
+	wget \
 	zip \
 "
