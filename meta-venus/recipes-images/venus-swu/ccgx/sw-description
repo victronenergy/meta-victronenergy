@@ -89,6 +89,10 @@ software =
 				{
 					name = "nandboot";
 					value = "mii write 0 0 8000; nand read ${loadaddr} ${kernel} && bootm ${loadaddr}";
+				},
+				{
+					name = "preboot";
+					value = "mw.l 48314028 ffe20000; nand read 8fe00000 splash 7f800; mw.l 48314048 bbbb; if gpio input 26; then setenv bootdelay -1; else setenv bootdelay -2; fi; mw.l 48314048 4444";
 				}
 			);
 		};
@@ -118,6 +122,10 @@ software =
 				{
 					name = "nandboot";
 					value = "mii write 0 0 8000; nand read ${loadaddr} ${kernel} && bootm ${loadaddr}";
+				},
+				{
+					name = "preboot";
+					value = "mw.l 48314028 ffe20000; nand read 8fe00000 splash 7f800; mw.l 48314048 bbbb; if gpio input 26; then setenv bootdelay -1; else setenv bootdelay -2; fi; mw.l 48314048 4444";
 				}
 			);
 		};
