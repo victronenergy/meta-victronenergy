@@ -17,3 +17,6 @@
 
 # USB VBUS, GPIOE13
 141 out usb_vbus	victronenergy,paygo
+
+# Light sensor
+411 in display_sensor	victronenergy,easysolar
