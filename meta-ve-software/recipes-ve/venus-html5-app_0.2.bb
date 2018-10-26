@@ -18,5 +18,5 @@ do_compile[noexec] = "1"
 
 do_install () {
 	install -d ${D}${BASE_DIR}
-	cp -a ${S}/app/* ${D}${BASE_DIR}
+	cp -a ${S}/dist/* ${D}${BASE_DIR}
 }
