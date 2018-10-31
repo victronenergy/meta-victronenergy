@@ -7,10 +7,9 @@ RDEPENDS_${PN} += "openssl"
 inherit ve_package
 inherit daemontools
 
-PR = "r1"
+
 SRC_URI = " \
-	git://github.com/kanaka/websockify.git;protocol=https;tag=${PV} \
-	file://fix-buffer-overflow.patch \
+	git://github.com/kanaka/websockify.git;protocol=https;rev=f0bdb0a621a4f3fb328d1410adfeaff76f088bfd \
 "
 
 S = "${WORKDIR}/git/other"
