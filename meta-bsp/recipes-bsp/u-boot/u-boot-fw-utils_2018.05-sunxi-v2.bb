@@ -11,8 +11,8 @@ SRC_URI = " \
 	https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz \
 	file://fw_env.config \
 "
-SRC_URI[md5sum] = "dda33501ea5cef319700dca67c650ff6"
-SRC_URI[sha256sum] = "89585c5d34d1858abd0b39993242a37fcd3eafb03037dbc7359e4366bf01ee4d"
+SRC_URI[md5sum] = "6d59be52e4d20b748488b2272e3d3bbf"
+SRC_URI[sha256sum] = "dc6f666cc33e61e37af530bbeb25407b5dff9cb7b3dfbc1f009cfb3da8d81f8b"
 
 S = "${WORKDIR}/u-boot-${PV}"
 
