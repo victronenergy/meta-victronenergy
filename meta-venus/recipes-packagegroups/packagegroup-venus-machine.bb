@@ -63,6 +63,7 @@ RDEPENDS_${PN}_append_sunxi += "\
 RDEPENDS_${PN}_append_raspberrypi2 += "\
 	gpio-export \
 	linux-firmware-bcm43430 \
+	linux-firmware-bcm43455 \
 	swupdate \
 	swupdate-scripts \
 "
