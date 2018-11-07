@@ -8,5 +8,9 @@ device_tree=bcm2709-rpi-2-b.dtb
 device_tree=bcm2710-rpi-3-b.dtb
 dtoverlay=pi3-miniuart-bt
 
+[pi3+]
+device_tree=bcm2710-rpi-3-b-plus.dtb
+dtoverlay=pi3-miniuart-bt
+
 [all]
 dtparam=spi=on
