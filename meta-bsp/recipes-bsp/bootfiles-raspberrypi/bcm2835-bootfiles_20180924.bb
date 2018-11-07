@@ -6,8 +6,8 @@ LIC_FILES_CHKSUM = "file://LICENCE.broadcom;md5=4a4d169737c0786fb9482bb6d30401d1
 inherit deploy
 
 SRC_URI = "https://github.com/raspberrypi/firmware/archive/1.${PV}.tar.gz"
-SRC_URI[md5sum] = "92d1019662471c0fa4ec8433fdd08620"
-SRC_URI[sha256sum] = "7a9314362d67b44f8e36a68ce35d91493f56f6b386a4855086a1779ac00c7602"
+SRC_URI[md5sum] = "f8c50e6c7ab92b65016b7701ad42172b"
+SRC_URI[sha256sum] = "e50f57b88ce09edb09a0a12b16173fced46eeae4e6e948b587af81ce745cf1fc"
 
 COMPATIBLE_MACHINE = "raspberrypi"
 
