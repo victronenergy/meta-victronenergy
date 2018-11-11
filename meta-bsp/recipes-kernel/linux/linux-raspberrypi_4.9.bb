@@ -2,7 +2,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
 LINUX_VERSION ?= "4.9.80"
 
-SRCREV = "027885087faa515133534cf767a1cd66cbd6cd1e"
+SRCREV = "7f9c648dad6473469b4133898fa6bb8d818ecff9"
 SRC_URI = "git://github.com/raspberrypi/linux.git;protocol=git;branch=rpi-4.9.y \
     file://logo.patch \
     file://hjelmslund.patch \
