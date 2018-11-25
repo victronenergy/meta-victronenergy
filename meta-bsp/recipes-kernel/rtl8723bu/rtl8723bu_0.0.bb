@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.GPLv2;md5=751419260aa954499f
 inherit module
 
 SRC_URI = " \
-	gitsm://github.com/lwfinger/rtl8723bu.git;protocol=https;rev=80916328932fa763bf4e37979aae70bd5e62da59 \
+	gitsm://github.com/lwfinger/rtl8723bu.git;protocol=https;rev=db024b4c130283a0372d2f89a015a3a5c36f9419 \
 	file://0001-fix-makefile-for-openembedded.patch \
 	file://0001-disable-proc-debug.patch \
 	file://0001-disable-roaming.patch \
