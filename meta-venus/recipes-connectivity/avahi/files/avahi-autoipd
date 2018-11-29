@@ -1,0 +1,44 @@
+#! /bin/sh
+
+DAEMON=/usr/sbin/avahi-autoipd
+NAME=avahi-autoipd
+DESC="IPv4LL configuration daemon"
+PIDFILE=/var/run/$NAME.pid
+DEV=eth0
+
+case "$1" in
+    start)
+        echo -n "starting $DESC: $NAME... "
+        ip link add link $DEV name ll-$DEV type macvlan
+        start-stop-daemon -S -p $PIDFILE -m -b -x $DAEMON -- -s ll-$DEV
+        echo "done."
+        ;;
+    stop)
+        echo -n "stopping $DESC: $NAME... "
+        start-stop-daemon -K -p $PIDFILE -x $DAEMON
+        ip link delete ll-$DEV type macvlan
+        echo "done."
+        ;;
+    status)
+        echo -n "$NAME "
+        if start-stop-daemon -q -K -t -p $PIDFILE -x $DAEMON; then
+                PID=$(cat $PIDFILE)
+                echo "($PID) is running"
+        else
+                echo "is not running"
+                exit 1
+        fi
+        ;;
+    restart)
+        echo "restarting $DESC: $NAME... "
+        $0 stop
+        $0 start
+        echo "done."
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|status|restart}"
+        exit 1
+        ;;
+esac
+
+exit 0
