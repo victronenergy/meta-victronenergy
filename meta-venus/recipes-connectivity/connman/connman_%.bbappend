@@ -18,6 +18,7 @@ SRC_URI += "\
 	file://0007-service-implement-AlwaysConnectedTechnologies-option.patch \
 	file://0008-service-abstract-the-more-complex-autoconnect-condit.patch \
 	file://0009-main.conf-document-AlwaysConnectedTechnologies-optio.patch \
+	file://0010-make-ipv4ll-fallback-configurable.patch \
 	file://main.conf \
 	file://connmand-watch.sh \
 "

@@ -1,0 +1,93 @@
+From 84197fb7e4af6d8148841effd3398dff78d192b5 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Thu, 29 Nov 2018 19:00:08 +0000
+Subject: [PATCH] make ipv4ll fallback configurable
+
+---
+ src/dhcp.c |  9 ++++++---
+ src/main.c | 14 ++++++++++++++
+ 2 files changed, 20 insertions(+), 3 deletions(-)
+
+diff --git a/src/dhcp.c b/src/dhcp.c
+index 57e7ac9a153b..396ed184af90 100644
+--- a/src/dhcp.c
++++ b/src/dhcp.c
+@@ -265,9 +265,12 @@ static void no_lease_cb(GDHCPClient *dhcp_client, gpointer user_data)
+ 	if (ipv4ll_running)
+ 		return;
+ 
+-	err = ipv4ll_start_client(dhcp);
+-	if (err < 0)
+-		DBG("Cannot start ipv4ll client (%d/%s)", err, strerror(-err));
++	if (connman_setting_get_bool("EnableIPv4LL")) {
++		err = ipv4ll_start_client(dhcp);
++		if (err < 0)
++			DBG("Cannot start ipv4ll client (%d/%s)", err,
++				strerror(-err));
++	}
+ 
+ 	/* Only notify upper layer if we have a problem */
+ 	dhcp_invalidate(dhcp, !ipv4ll_running);
+diff --git a/src/main.c b/src/main.c
+index a5c55cc15bcd..0d1c8a056954 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -78,6 +78,7 @@ static struct {
+ 	bool persistent_tethering_mode;
+ 	bool enable_6to4;
+ 	int favorite_max_retries;
++	bool enable_ipv4ll;
+ } connman_settings  = {
+ 	.bg_scan = true,
+ 	.pref_timeservers = NULL,
+@@ -94,6 +95,7 @@ static struct {
+ 	.persistent_tethering_mode = false,
+ 	.enable_6to4 = false,
+ 	.favorite_max_retries = 2,
++	.enable_ipv4ll = true,
+ };
+ 
+ #define CONF_BG_SCAN                    "BackgroundScanning"
+@@ -111,6 +113,7 @@ static struct {
+ #define CONF_PERSISTENT_TETHERING_MODE  "PersistentTetheringMode"
+ #define CONF_ENABLE_6TO4                "Enable6to4"
+ #define CONF_FAVORITE_MAX_RETRIES       "FavoriteMaxRetries"
++#define CONF_ENABLE_IPV4LL              "EnableIPv4LL"
+ 
+ static const char *supported_options[] = {
+ 	CONF_BG_SCAN,
+@@ -128,6 +131,7 @@ static const char *supported_options[] = {
+ 	CONF_PERSISTENT_TETHERING_MODE,
+ 	CONF_ENABLE_6TO4,
+ 	CONF_FAVORITE_MAX_RETRIES,
++	CONF_ENABLE_IPV4LL,
+ 	NULL
+ };
+ 
+@@ -394,6 +398,13 @@ static void parse_config(GKeyFile *config)
+ 		connman_settings.favorite_max_retries = retries;
+ 
+ 	g_clear_error(&error);
++
++	boolean = __connman_config_get_bool(config, "General",
++					CONF_ENABLE_IPV4LL, &error);
++	if (!error)
++		connman_settings.enable_ipv4ll = boolean;
++
++	g_clear_error(&error);
+ }
+ 
+ static int config_init(const char *file)
+@@ -571,6 +582,9 @@ bool connman_setting_get_bool(const char *key)
+ 	if (g_str_equal(key, CONF_ENABLE_6TO4))
+ 		return connman_settings.enable_6to4;
+ 
++	if (g_str_equal(key, CONF_ENABLE_IPV4LL))
++		return connman_settings.enable_ipv4ll;
++
+ 	return false;
+ }
+ 
+-- 
+2.19.2
+
