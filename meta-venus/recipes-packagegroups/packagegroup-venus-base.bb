@@ -28,6 +28,7 @@ inherit packagegroup
 LICENSE = "MIT"
 
 RDEPENDS_${PN} += "\
+	avahi-autoipd \
 	bash \
 	bluez5 \
 	bluez5-noinst-tools \
