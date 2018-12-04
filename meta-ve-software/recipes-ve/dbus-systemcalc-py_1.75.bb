@@ -11,13 +11,9 @@ inherit python-compile
 SRC_URI = " \
 	gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
 	file://com.victronenergy.system.conf \
-	file://0001-Revert-In-non-DVCC-systems-update-the-solarchargers-.patch \
-	file://0002-Revert-Removed-Shared-Voltage-Sense.patch \
 "
 
 S = "${WORKDIR}/git"
-
-PR = "r1"
 
 RDEPENDS_${PN} = " \
 	localsettings \
