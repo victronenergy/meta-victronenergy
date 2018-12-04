@@ -57,7 +57,6 @@ RDEPENDS_${PN}_append_beaglebone += "\
 RDEPENDS_${PN}_append_einstein += "\
 	linux-firmware-bcm20702a1 \
 	linux-firmware-bcm43362 \
-	${QT5_RDEPENDS} \
 "
 
 RDEPENDS_${PN}_append_sunxi += "\
