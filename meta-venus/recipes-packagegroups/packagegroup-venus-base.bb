@@ -68,6 +68,7 @@ RDEPENDS_${PN} += "\
 	python-pymodbus \
 	python-pyserial \
 	rsync \
+	rtl8192eu \
 	screen \
 	socat \
 	strace \
