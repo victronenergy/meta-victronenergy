@@ -57,6 +57,8 @@ RDEPENDS_${PN}_append_beaglebone += "\
 RDEPENDS_${PN}_append_einstein += "\
 	linux-firmware-bcm20702a1 \
 	linux-firmware-bcm43362 \
+	sunxi-mali \
+	sunxi-mali-blobs \
 "
 
 RDEPENDS_${PN}_append_sunxi += "\
