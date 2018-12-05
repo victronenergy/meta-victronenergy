@@ -11,8 +11,8 @@ RDEPENDS_kernel-base += "kernel-devicetree"
 KERNEL_CONFIG_COMMAND = "oe_runmake -C ${S} O=${B} sunxi_victron_defconfig"
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-SRC_URI[md5sum] = "e6436ea7e6883f9801f31578fde575a9"
-SRC_URI[sha256sum] = "4c2c8458ab6b8fa0b1510b6325f017e8c8c5e96d0a836e2c92ae3102669eebb1"
+SRC_URI[md5sum] = "fc8f94eff4a93a4e3a5cf177b09b786c"
+SRC_URI[sha256sum] = "0fe0742afb566862202ff41bfd95590ec270fa8b2282ceb7f42153096170a933"
 
 S = "${WORKDIR}/linux-${PV}"
 
