@@ -19,13 +19,17 @@ FILES_${PN}-rtl8723b = " \
 "
 
 # Include the NVRAM file for wifi firmware on rpi3.
-SRC_URI_append_raspberrypi2 += "file://brcmfmac43430-sdio.txt"
+SRC_URI_append_raspberrypi2 += "file://brcmfmac43430-sdio.txt file://brcmfmac43455-sdio.txt file://brcmfmac43455-sdio.clm_blob"
 FILES_${PN}-bcm43430_append_raspberrypi2 += " \
   /lib/firmware/brcm/brcmfmac43430-sdio.txt \
+  /lib/firmware/brcm/brcmfmac43455-sdio.txt \
+  /lib/firmware/brcm/brcmfmac43455-sdio.clm_blob \
 "
 
 do_install_append_raspberrypi2() {
-  install -D -m 0644 ${WORKDIR}/brcmfmac43430-sdio.txt ${D}/lib/firmware/brcm/brcmfmac43430-sdio.txt
+  install -D -m 0644 ${WORKDIR}/brcmfmac43430-sdio.txt ${D}/lib/firmware/brcm
+  install -D -m 0644 ${WORKDIR}/brcmfmac43455-sdio.txt ${D}/lib/firmware/brcm
+  install -D -m 0644 ${WORKDIR}/brcmfmac43455-sdio.clm_blob ${D}/lib/firmware/brcm
 }
 
 # Wifi NVRAM file for AP6210 module
