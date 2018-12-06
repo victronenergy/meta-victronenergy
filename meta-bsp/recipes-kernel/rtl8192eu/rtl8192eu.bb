@@ -10,20 +10,9 @@ SRC_URI = " \
 SRCREV = "63154169085566f879085678b5447bae12f8d69c"
 
 S = "${WORKDIR}/git"
-
-PV = "1.0-git"
-
-DEPENDS = "virtual/kernel"
+EXTRA_OEMAKE += "KSRC=${STAGING_KERNEL_DIR}"
 
 inherit module
-
-EXTRA_OEMAKE  = "ARCH=${ARCH}"
-EXTRA_OEMAKE += "KSRC=${STAGING_KERNEL_BUILDDIR}"
-
-do_compile () {
-    unset LDFLAGS
-    oe_runmake
-}
 
 do_install () {
     install -d ${D}/lib/modules/${KERNEL_VERSION}
