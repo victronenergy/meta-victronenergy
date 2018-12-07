@@ -231,7 +231,7 @@ fi
 if ! lock; then
     echo "Can't get lock, other process already running? Exit."
     swu_status 0 "$swu_version"
-    exit
+    exit 1
 fi
 
 echo "Starting swupdate to install version $swu_version ..."
