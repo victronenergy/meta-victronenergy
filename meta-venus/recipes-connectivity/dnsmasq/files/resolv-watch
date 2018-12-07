@@ -46,7 +46,7 @@ while true; do
     ln -sf ${resolv_conf} ${RESOLV_CONF}
 
     /etc/init.d/dnsmasq reload
-    update_localsettings && timeout= || timeout="-t 10"
+    update_localsettings && timeout=30 || timeout=10
 
-    inotifywait -qq $timeout -e close_write ${WATCH_DIRS}
+    inotifywait -qq -t $timeout -e close_write ${WATCH_DIRS}
 done
