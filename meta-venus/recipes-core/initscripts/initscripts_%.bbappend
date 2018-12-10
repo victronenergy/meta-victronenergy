@@ -30,6 +30,9 @@ do_install_append() {
 
 	install -m 0755 ${WORKDIR}/report-data-failure.sh ${D}${sysconfdir}/init.d
 	update-rc.d -r ${D} report-data-failure.sh start 82 5 .
+
+	rm ${D}${sysconfdir}/init.d/banner.sh
+	rm ${D}${sysconfdir}/rc*.d/*banner.sh
 }
 
 do_install_append_ccgx() {
