@@ -1,4 +1,5 @@
-DEPENDS = "freetype jpeg libpng zlib dbus tiff directfb tslib"
+DEPENDS = "freetype jpeg libpng zlib dbus tiff tslib"
+RDEPENDS_${PN} += "qt4-machine-conf"
 
 require qt4_ve_patches.inc
 
@@ -6,7 +7,7 @@ require qt4_ve_patches.inc
 QT_CONFIG_FLAGS = " \
 	-embedded $QT_ARCH \
 	-qtlibinfix ${QT_LIBINFIX} \
-	-plugin-gfx-transformed -plugin-gfx-qvfb -plugin-gfx-vnc -plugin-gfx-directfb \
+	-plugin-gfx-transformed -plugin-gfx-qvfb -plugin-gfx-vnc \
 	-no-svg -no-javascript-jit -optimized-qmake \
 	-plugin-mouse-tslib -qt-mouse-pc -qt-mouse-qvfb -qt-mouse-linuxinput \
    	-qt-kbd-tty -qt-kbd-linuxinput \
