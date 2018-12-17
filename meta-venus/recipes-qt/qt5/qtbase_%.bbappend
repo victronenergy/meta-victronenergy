@@ -1,3 +1,2 @@
-PACKAGECONFIG_DISTRO = "accessibility openssl sql-sqlite widgets"
-# Disable getentropy because of older than 3.17 kernel
-QT_CONFIG_FLAGS_ccgx += "--no-feature-getentropy -no-opengl"
+PACKAGECONFIG_DEFAULT = "accessibility dbus evdev freetype kms libs linuxfb sql-sqlite openssl udev widgets"
+PACKAGECONFIG_GL = "eglfs gles2"
