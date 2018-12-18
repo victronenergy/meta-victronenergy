@@ -9,7 +9,7 @@ do_install_append() {
 	install ${WORKDIR}/qt-kms.conf ${D}/${sysconfdir}
 
 	mkdir ${D}/${sysconfdir}/profile.d
-	echo "export QT_QPA_PLATFORM=eglfs" > ${D}/${sysconfdir}/profile.d/qt
-	echo "export QT_QPA_KMS_CONFIG=${sysconfdir}/qt-kms.conf" >> ${D}/${sysconfdir}/profile.d/qt
+	echo "export QT_QPA_PLATFORM=eglfs" > ${D}/${sysconfdir}/profile.d/qt5.sh
+	echo "export QT_QPA_KMS_CONFIG=${sysconfdir}/qt-kms.conf" >> ${D}/${sysconfdir}/profile.d/qt5.sh
 }
 

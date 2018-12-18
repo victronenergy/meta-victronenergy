@@ -14,7 +14,7 @@ QT5_RDEPENDS = " \
 	eglinfo-fb \
 	qt5-opengles2-test \
 	qtconnectivity \
-	qt-kms-config \
+	qtplatform \
 	qtquickcontrols \
 	qtquickcontrols2 \
 	qtserialport \
