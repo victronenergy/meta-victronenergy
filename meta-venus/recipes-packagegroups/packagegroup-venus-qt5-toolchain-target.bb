@@ -14,9 +14,7 @@ RDEPENDS_${PN} += " \
     qtbase-mkspecs \
     qtbase-plugins \
     qtbase-staticdev \
-    qttranslations-qt \
     qttranslations-qtbase \
-    qttranslations-qtconfig \
     qttranslations-qthelp \
     qtconnectivity-dev \
     qtconnectivity-mkspecs \
@@ -45,7 +43,6 @@ RDEPENDS_${PN} += " \
     qtquick1-mkspecs \
     qtquick1-plugins \
     ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'qtquick1-qmlplugins', '', d)} \
-    qttranslations-qtquick1 \
     qttranslations-qtwebsockets \
     qttranslations-qtxmlpatterns \
     qtxmlpatterns-dev \
