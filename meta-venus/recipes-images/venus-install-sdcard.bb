@@ -64,14 +64,14 @@ do_install () {
 	# size of card contents in MB
 	SIZE=$(du -sm ${SDCARD} | sed 's/[^0-9].*//')
 
-        # create vfat image
+	# create vfat image
 	FSIMAGE=${WORKDIR}/image.vfat
 	FSSIZE=$(expr ${SIZE} + 4)
 	rm -f ${FSIMAGE}
 	mkfs.vfat -S 512 -C ${FSIMAGE} $(expr ${FSSIZE} \* 1024)
 	mcopy -i ${FSIMAGE} ${SDCARD}/* ::/
 
-        # create partitioned image
+	# create partitioned image
 	IMAGE=${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.img
 	IMAGE_SIZE=$(expr ${FSSIZE} + 1)
 	dd if=/dev/null of=${IMAGE} bs=1M seek=${IMAGE_SIZE}
@@ -80,8 +80,8 @@ do_install () {
 		mkpart p fat32 1MiB -1s \
 		set 1 boot on
 
-        # copy vfat image into partition
-        dd if=${FSIMAGE} of=${IMAGE} bs=1M seek=1
+	# copy vfat image into partition
+	dd if=${FSIMAGE} of=${IMAGE} bs=1M seek=1
 
 	# write boot loader if required
 	if [ -n "${SDIMAGE_BOOT_FILE}" ]; then
