@@ -1,6 +1,0 @@
-if test "x$boot_dev" = "x"; then setenv boot_dev mmc; fi
-setenv stdout vga; echo preparing update from $boot_dev; setenv stdout serial
-setenv mtdparts 'mtdparts=omap2-nand.0:128k(spl1),128k(spl2),128k(spl3),128k(spl4),1m(u-boot),256k(env1),256k(env2),1m(u-boot2),256k(bootparms),768k(splash),6m(kernel1),6m(kernel2),496m(ubisystem),200m@10m(data)'
-setenv miscargs 'console=ttyO0,115200 root=/dev/ram rw omapdss.def_disp=lcd omapfb.vram=0:2M@0x8fe00000 fbskip ramdisk_size=32768'
-setenv bootargs $miscargs $mtdparts
-fatload $boot_dev 0 82000000 uimage && fatload $boot_dev 0 83000000 initramfs && bootm 82000000 83000000

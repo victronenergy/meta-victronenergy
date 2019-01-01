@@ -14,20 +14,17 @@ COMPATIBLE_MACHINE = "ccgx"
 SRC_URI += " \
 	file://install.cmds \
 	file://live.cmds \
-	file://upgrade.cmds \
 	file://splash.bgra \
 "
 
 do_compile_append () {
 	mkimage -A arm -T script -C none -n 'Install Script' -d ${WORKDIR}/install.cmds ${WORKDIR}/install.scr
 	mkimage -A arm -T script -C none -n 'Live Script' -d ${WORKDIR}/live.cmds ${WORKDIR}/live.scr
-	mkimage -A arm -T script -C none -n 'Upgrade Script' -d ${WORKDIR}/upgrade.cmds ${WORKDIR}/upgrade.scr
 }
 
 do_deploy_append () {
 	install -d ${DEPLOYDIR}
 	install -m 0644 ${WORKDIR}/install.scr ${DEPLOYDIR}/install-${MACHINE}.scr
 	install ${WORKDIR}/live.scr ${DEPLOYDIR}
-	install ${WORKDIR}/upgrade.scr ${DEPLOYDIR}
 	install ${WORKDIR}/splash.bgra ${DEPLOYDIR}
 }
