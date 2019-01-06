@@ -13,7 +13,6 @@ PR = "r0"
 
 SRC_URI = "\
 	https://registry.npmjs.org/${PN}/-/${PN}-${PV}.tgz;unpack=0 \
-	file://node-red.service \
 "
 
 SRC_URI[md5sum] = "9e4e183b252c89059035394cc172b1bf"
@@ -34,6 +33,14 @@ NPM_CACHE_DIR ?= "${WORKDIR}/npm_cache"
 NPM_REGISTRY ?= "http://registry.npmjs.org/"
 NPM_ARCH ?= "${@get_nodejs_arch(d.getVar('TARGET_ARCH'), d)}"
 NPM_INSTALL_FLAGS ?= "--production --without-ssl --insecure --no-optional --verbose"
+
+inherit daemontools
+
+DAEMON_PN = "${PN}"
+DAEMONTOOLS_SERVICE_DIR = "/etc/node-red/service"
+DAEMONTOOLS_SCRIPT = "HOME=/home/root exec ${bindir}/node-red"
+DAEMONTOOLS_DOWN = "1"
+DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/node-red"
 
 do_compile() {
 	export HOME=${WORKDIR}
@@ -65,23 +72,13 @@ do_install() {
 	# Symlinks
 	install -d ${D}${bindir}
 	ln -s ${NODE_MODULES_DIR}${PN}/red.js ${D}${bindir}/${PN}
-
-	# Service
-	install -d ${D}${systemd_unitdir}/system/
-	install -m 0644 ${WORKDIR}/${PN}.service ${D}${systemd_unitdir}/system/
 }
-
-inherit systemd
-
-SYSTEMD_AUTO_ENABLE = "enable"
-SYSTEMD_SERVICE_${PN} = "${PN}.service"
 
 PACKAGES = "${PN}"
 
 FILES_${PN} += "\
 	${NODE_MODULES_DIR} \
 	${bindir} \
-	${systemd_unitdir} \
 "
 
 INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
