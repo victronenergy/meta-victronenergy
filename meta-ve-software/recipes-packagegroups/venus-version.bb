@@ -1,4 +1,3 @@
-PR = "${DISTRO_VERSION}"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 S = "${WORKDIR}"
@@ -6,11 +5,11 @@ S = "${WORKDIR}"
 inherit ve_package
 
 do_configure () {
-	printf "${DISTRO_VERSION}\n${DISTRO_NAME}\n${BUILDNAME}\n" > version
+	printf "${DISTRO_VERSION}\n${DISTRO_NAME}\n${DATE}${TIME}\n" > version
 }
 
 do_configure[nostamp] = "1"
-do_configure[vardepsexclude] = "BUILDNAME"
+do_configure[vardepsexclude] = "DATE TIME"
 
 do_install () {
 	install -d ${D}${vedir}
