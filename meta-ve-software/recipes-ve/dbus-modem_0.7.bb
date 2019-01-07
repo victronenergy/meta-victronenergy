@@ -7,6 +7,7 @@ inherit daemontools
 inherit python-compile
 
 RDEPENDS_${PN} = "\
+	bash \
 	python-dbus \
 	python-pygobject \
 	python-pyserial \

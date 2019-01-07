@@ -18,6 +18,8 @@ SRC_URI_append_sunxi += "file://canbus_ports.in"
 
 inherit update-rc.d
 
+RDEPENDS_${PN} += "bash"
+
 INITSCRIPT_NAME = "machine-conf.sh"
 INITSCRIPT_PARAMS = "start 90 S ."
 

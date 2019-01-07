@@ -3,6 +3,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 DEPENDS += "update-rc.d-native"
+RDEPENDS_${PN} += "bash"
 
 INHIBIT_DEFAULT_DEPS = "1"
 
