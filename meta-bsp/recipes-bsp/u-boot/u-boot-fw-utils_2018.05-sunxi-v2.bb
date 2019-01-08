@@ -18,7 +18,7 @@ S = "${WORKDIR}/u-boot-${PV}"
 
 do_compile () {
 	oe_runmake -C ${S} ${UBOOT_MACHINE}
-	oe_runmake -C ${S} CC="${CC} ${CFLAGS} ${LDFLAGS}" envtools
+	oe_runmake -C ${S} CC="${CC} ${CFLAGS} ${LDFLAGS}" STRIP="echo" envtools
 }
 
 do_install () {
