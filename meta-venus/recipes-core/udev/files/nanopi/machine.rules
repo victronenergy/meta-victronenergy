@@ -2,6 +2,7 @@
 ENV{BASE_COMPATIBLE}!="victronenergy,easysolar", GOTO="end-easysolar"
 ACTION=="add", KERNEL=="ttyS[12]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
 ACTION=="add", KERNEL=="ttyS3", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="mkx"
+ACTION=="add", SUBSYSTEM=="tty", ENV{ID_MODEL}=="VE_SLCAN_Interface", SYMLINK+="ttycan0"
 LABEL="end-easysolar"
 
 # PayGo devices
