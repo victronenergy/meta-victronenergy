@@ -1,5 +1,6 @@
 DESCRIPTION = "Mali OpenGL ES userspace libraries for Allwinner SoCs"
 LICENSE = "Proprietary"
+LIC_FILES_CHKSUM = "file://EULA%20for%20Mali%20400MP%20_AW.pdf;md5=495406406519c27072a3e6f1e825c0a8"
 
 COMPATIBLE_MACHINE = "sunxi"
 
@@ -31,10 +32,10 @@ do_install() {
     cp -a ${S}/include/fbdev/* ${D}${includedir}
 
     install -d ${D}${libdir}
-    cp -dp ${S}/${MALI_REV}/${TARGET_ARCH}/fbdev/lib* ${D}${libdir}
+    install ${S}/${MALI_REV}/${TARGET_ARCH}/fbdev/lib* ${D}${libdir}
 }
 
 FILES_${PN} = "${libdir}/lib*.so*"
 FILES_${PN}-dev = "${includedir} ${libdir}/pkgconfig"
 
-INSANE_SKIP_${PN} += "dev-so"
+INSANE_SKIP_${PN} += "dev-so already-stripped"
