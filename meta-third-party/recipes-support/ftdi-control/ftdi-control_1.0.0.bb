@@ -1,7 +1,7 @@
 SUMMARY = "Basic control and eeprom routines for FTDI FTx232 chips."
 
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=3da9cfbcb788c80a0384361b4de20420"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=40b6d360639a1603e7be0a38631d5a3d"
 
 inherit autotools-brokensep pkgconfig
 
