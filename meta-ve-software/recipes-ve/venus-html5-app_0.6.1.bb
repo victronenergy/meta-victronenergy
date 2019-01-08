@@ -17,6 +17,7 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 do_install () {
-	install -d ${D}${BASE_DIR}
-	cp -a ${S}/dist/* ${D}${BASE_DIR}
+	for f in $( find ${S}/dist -type f -printf "%P\n" ); do
+		install -D "${S}/dist/$f" "${D}${BASE_DIR}/$f"
+	done
 }
