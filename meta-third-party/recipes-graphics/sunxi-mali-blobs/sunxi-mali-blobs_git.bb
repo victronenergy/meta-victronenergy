@@ -32,7 +32,7 @@ do_install() {
     cp -a ${S}/include/fbdev/* ${D}${includedir}
 
     install -d ${D}${libdir}
-    install ${S}/${MALI_REV}/${TARGET_ARCH}/fbdev/lib* ${D}${libdir}
+    cp --no-dereference --preserve=mode,links ${S}/${MALI_REV}/${TARGET_ARCH}/fbdev/lib* ${D}${libdir}
 }
 
 FILES_${PN} = "${libdir}/lib*.so*"
