@@ -1,5 +1,8 @@
 SDKIMAGE_FEATURES = "dev-pkgs"
 
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
+
 # add a custom target task to remove all default qt libs
 TOOLCHAIN_TARGET_TASK = "packagegroup-sdk-packages"
 TOOLCHAIN_TARGET_TASK += "packagegroup-venus-qt5-toolchain-target"
