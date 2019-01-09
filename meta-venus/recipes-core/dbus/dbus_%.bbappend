@@ -5,7 +5,7 @@ SRC_URI += " \
 	file://system.conf \
  "
 
-RDEPENDS_${PN}_venus = "inotify-tools"
+RDEPENDS_${PN}_append_venus = " inotify-tools"
 INITSCRIPT_PARAMS = "start 02 5 4 3 2 . stop 20 0 1 6 ."
 
 # For our own images, allow access to the system dbus and guard the dbus process.
