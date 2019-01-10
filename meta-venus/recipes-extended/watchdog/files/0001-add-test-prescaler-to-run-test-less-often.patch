@@ -1,0 +1,71 @@
+From 92e96dc3a898b9bd81b2fb36231d117c54a3f59a Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 10 Jan 2019 16:49:30 +0100
+Subject: [PATCH] add test-prescaler to run test less often
+
+When set in the config file, test are only run every n intervals.
+---
+ include/extern.h | 1 +
+ src/configfile.c | 3 +++
+ src/watchdog.c   | 5 +++--
+ 3 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/include/extern.h b/include/extern.h
+index f00e4cf..97c3c41 100644
+--- a/include/extern.h
++++ b/include/extern.h
+@@ -82,6 +82,7 @@ extern char *devname;
+ extern char *admin;
+ 
+ extern int	test_timeout;		/* test-binary time out value. */
++extern int	test_prescaler;
+ extern int	repair_timeout;		/* repair-binary time out value. */
+ extern int	dev_timeout;		/* Watchdog hardware time-out. */
+ extern int	retry_timeout;		/* Retry on non-critical errors. */
+diff --git a/src/configfile.c b/src/configfile.c
+index a0996e2..248b9d9 100644
+--- a/src/configfile.c
++++ b/src/configfile.c
+@@ -51,6 +51,7 @@ static void add_test_binaries(const char *path);
+ #define TEMPPOWEROFF   		"temp-power-off"
+ #define TESTBIN			"test-binary"
+ #define TESTTIMEOUT		"test-timeout"
++#define TESTPRESCALER		"test-prescaler"
+ #define HEARTBEAT		"heartbeat-file"
+ #define HBSTAMPS		"heartbeat-stamps"
+ #define LOGDIR			"log-dir"
+@@ -86,6 +87,7 @@ char *devname = NULL;
+ char *admin = "root";
+ 
+ int test_timeout = TIMER_MARGIN;   /* test-binary time out value. */
++int test_prescaler = 1;
+ int repair_timeout = TIMER_MARGIN; /* repair-binary time out value. */
+ int dev_timeout = TIMER_MARGIN;    /* Watchdog hardware time-out. */
+ int retry_timeout = TIMER_MARGIN;  /* Retry on non-critical errors. */
+@@ -199,6 +201,7 @@ void read_config(char *configfile)
+ 		} else if (READ_INT(REPAIRTIMEOUT, &repair_timeout) == 0) {
+ 		} else if (READ_LIST(TESTBIN, &tr_bin_list) == 0) {
+ 		} else if (READ_INT(TESTTIMEOUT, &test_timeout) == 0) {
++        } else if (READ_INT(TESTPRESCALER, &test_prescaler) == 0) {
+ 		} else if (READ_STRING(HEARTBEAT, &heartbeat) == 0) {
+ 		} else if (READ_INT(HBSTAMPS, &hbstamps) == 0) {
+ 		} else if (READ_STRING(ADMIN, &admin) == 0) {
+diff --git a/src/watchdog.c b/src/watchdog.c
+index 486384a..243a11c 100644
+--- a/src/watchdog.c
++++ b/src/watchdog.c
+@@ -549,8 +549,9 @@ int main(int argc, char *const argv[])
+ 				  act->parameter.net.packet, tint, pingcount), repair_bin, act);
+ 
+ 		/* test, or test/repair binaries in the watchdog.d directory */
+-		for (act = tr_bin_list; act != NULL; act = act->next)
+-			do_check(check_bin(act->name, test_timeout, act->version), repair_bin, act);
++		if ((count % test_prescaler) == 0)
++			for (act = tr_bin_list; act != NULL; act = act->next)
++				do_check(check_bin(act->name, test_timeout, act->version), repair_bin, act);
+ 
+ 		/* in case test binaries return quickly */
+ 		usleep(swait);
+-- 
+2.7.4
+
