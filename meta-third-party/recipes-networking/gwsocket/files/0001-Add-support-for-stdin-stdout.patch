@@ -1,0 +1,163 @@
+From e2fea53a16db12d51310e72025a67e7c89c25dba Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 9 Jan 2019 21:09:01 +0100
+Subject: [PATCH] Add support for stdin / stdout
+
+By default named pipes are used for io, this patch adds the option to use
+stdin / stdout as well. This allows e.g.
+
+./gwsocket --std > log.txt
+tail -F /var/log/syslog | ./gwsocket --std
+
+--stdin and --stdout are added for fine grained control.
+
+closes https://github.com/allinurl/gwsocket/issues/7
+
+todo: man page / README updates
+---
+ src/gwsocket.c  | 14 ++++++++++++++
+ src/websocket.c | 37 +++++++++++++++++++++++++++++++------
+ src/websocket.h |  4 ++++
+ 3 files changed, 49 insertions(+), 6 deletions(-)
+
+diff --git a/src/gwsocket.c b/src/gwsocket.c
+index 9552da3..2ab4728 100644
+--- a/src/gwsocket.c
++++ b/src/gwsocket.c
+@@ -57,6 +57,9 @@ static struct option long_opts[] = {
+   {"origin"         , required_argument , 0 ,  0  } ,
+   {"pipein"         , required_argument , 0 ,  0  } ,
+   {"pipeout"        , required_argument , 0 ,  0  } ,
++  {"std"            , no_argument       , 0 ,  0  } ,
++  {"stdin"          , no_argument       , 0 ,  0  } ,
++  {"stdout"         , no_argument       , 0 ,  0  } ,
+ #if HAVE_LIBSSL
+   {"ssl-cert"       , required_argument , 0 ,  0  } ,
+   {"ssl-key"        , required_argument , 0 ,  0  } ,
+@@ -94,6 +97,9 @@ cmd_help (void)
+   "                             from on the given path/file.\n"
+   "  --pipeout=<path/file>    - Creates a named pipe (FIFO) that writes\n"
+   "                             to on the given path/file.\n"
++  "  --std                    - Enable --stdin and --stdout.\n"
++  "  --stdin                  - Send stdin to the websocket.\n"
++  "  --stdout                 - Send received websocket data to stdout.\n"
+   "  --strict                 - Parse messages using strict mode. See\n"
+   "                             man page for more details.\n"
+   "  --ssl-cert=<cert.crt>    - Path to SSL certificate.\n"
+@@ -217,6 +223,14 @@ parse_long_opt (const char *name, const char *oarg)
+   if (!strcmp ("ssl-key", name))
+     ws_set_config_sslkey (oarg);
+ #endif
++  if (!strcmp ("std", name)) {
++    ws_set_config_stdin (1);
++    ws_set_config_stdout (1);
++  }
++  if (!strcmp ("stdin", name))
++    ws_set_config_stdin (1);
++  if (!strcmp ("stdout", name))
++    ws_set_config_stdout (1);
+ }
+ 
+ /* Read the user's supplied command line options. */
+diff --git a/src/websocket.c b/src/websocket.c
+index 6f197d6..761520b 100644
+--- a/src/websocket.c
++++ b/src/websocket.c
+@@ -547,7 +547,7 @@ ws_clear_pipein (WSPipeIn * pipein)
+   if (!pipein)
+     return;
+ 
+-  if (pipein->fd != -1)
++  if (pipein->fd != -1  && !wsconfig.use_stdin)
+     close (pipein->fd);
+ 
+   ws_clear_fifo_packet (*packet);
+@@ -564,7 +564,7 @@ ws_clear_pipeout (WSPipeOut * pipeout)
+   if (!pipeout)
+     return;
+ 
+-  if (pipeout->fd != -1)
++  if (pipeout->fd != -1 && !wsconfig.use_stdout)
+     close (pipeout->fd);
+ 
+   free (pipeout);
+@@ -2374,11 +2374,19 @@ ws_openfifo_out (WSPipeOut * pipeout)
+ static void
+ ws_fifo (WSServer * server)
+ {
+-  wsconfig.pipein = wsconfig.pipein ? wsconfig.pipein : WS_PIPEIN;
+-  wsconfig.pipeout = wsconfig.pipeout ? wsconfig.pipeout : WS_PIPEOUT;
++  if (wsconfig.use_stdin) {
++    server->pipein->fd = STDIN_FILENO;
++  } else {
++    wsconfig.pipein = wsconfig.pipein ? wsconfig.pipein : WS_PIPEIN;
++    ws_openfifo_in (server->pipein);
++  }
+ 
+-  ws_openfifo_in (server->pipein);
+-  ws_openfifo_out (server->pipeout);
++  if (wsconfig.use_stdout) {
++    server->pipeout->fd = STDOUT_FILENO;
++  } else {
++    wsconfig.pipeout = wsconfig.pipeout ? wsconfig.pipeout : WS_PIPEOUT;
++    ws_openfifo_out (server->pipeout);
++  }
+ }
+ 
+ /* Clear the queue for an outgoing named pipe. */
+@@ -2996,6 +3004,21 @@ ws_set_config_sslkey (const char *sslkey)
+   wsconfig.sslkey = sslkey;
+ }
+ 
++/* Use stdin instead of a pipe */
++void
++ws_set_config_stdin (int use_stdin)
++{
++  wsconfig.use_stdin = use_stdin;
++}
++
++
++/* Use stdout instead of a pipe */
++void
++ws_set_config_stdout (int use_stdout)
++{
++  wsconfig.use_stdout = use_stdout;
++}
++
+ /* Create a new websocket server context. */
+ WSServer *
+ ws_init (const char *host, const char *port)
+@@ -3016,6 +3039,8 @@ ws_init (const char *host, const char *port)
+   wsconfig.port = port;
+   wsconfig.strict = 0;
+   wsconfig.use_ssl = 0;
++  wsconfig.use_stdin = 0;
++  wsconfig.use_stdout = 0;
+ 
+   return server;
+ }
+diff --git a/src/websocket.h b/src/websocket.h
+index 08cf705..f446193 100644
+--- a/src/websocket.h
++++ b/src/websocket.h
+@@ -288,6 +288,8 @@ typedef struct WSConfig_
+   int strict;
+   int max_frm_size;
+   int use_ssl;
++  int use_stdin;
++  int use_stdout;
+ } WSConfig;
+ 
+ /* A WebSocket Instance */
+@@ -333,6 +335,8 @@ void ws_set_config_pipeout (const char *pipeout);
+ void ws_set_config_port (const char *port);
+ void ws_set_config_sslcert (const char *sslcert);
+ void ws_set_config_sslkey (const char *sslkey);
++void ws_set_config_stdin (int use_stdin);
++void ws_set_config_stdout (int use_stdout);
+ void ws_set_config_strict (int strict);
+ void ws_start (WSServer * server);
+ void ws_stop (WSServer * server);
+-- 
+2.7.4
+
