@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 
 inherit www
 
-RDEPENDS_${PN} = "hiawatha"
+RDEPENDS_${PN} = "hiawatha venus-html5-logger"
 
 SRC_URI = " \
 	gitsm://github.com/victronenergy/${PN}.git;protocol=https;tag=${PV} \

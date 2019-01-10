@@ -1,0 +1,10 @@
+#!/bin/sh
+exec 2>&1
+
+dir=/log/venus-html5-app
+if [ ! -d "$dir" ]; then
+	mkdir "$dir"
+	chown nobody:nogroup "$dir"
+fi
+
+exec setuidgid nobody multilog t s99999 n4 "$dir"
