@@ -1,7 +1,7 @@
 SUMMARY = " gwsocket is a standalone, simple, yet powerful rfc6455 compliant WebSocket Server."
 SECTION = "networking"
-LICENSE = "CLOSED"
-#LIC_FILES_CHKSUM = "file://LICENSE;md5=c5ad90debd10be20aa95189a0a7c4253"
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://COPYING;md5=f1761bc50122921c99a05384a66bf422"
 
 inherit autotools
 
