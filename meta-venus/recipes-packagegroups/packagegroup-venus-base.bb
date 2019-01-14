@@ -74,6 +74,7 @@ RDEPENDS_${PN} += "\
 	rtl8192eu \
 	screen \
 	socat \
+	start-stop-daemon \
 	strace \
 	sysctl-conf \
 	tzdata \
