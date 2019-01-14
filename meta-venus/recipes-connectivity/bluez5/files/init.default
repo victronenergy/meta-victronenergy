@@ -1,0 +1,1 @@
+SSD_OPTIONS="$SSD_OPTIONS -E -f /etc/bluetooth/ble.conf"
