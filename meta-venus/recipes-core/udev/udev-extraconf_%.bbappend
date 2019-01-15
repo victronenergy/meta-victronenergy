@@ -6,6 +6,7 @@ SRC_URI += " \
 	file://mount.blacklist.machine \
 	file://dt-compatible \
 	file://dt-compat.rules \
+	file://ether.rules \
 	file://machine.rules \
 	file://rtl8192cu.rules \
 	file://simcom.rules \
@@ -35,6 +36,7 @@ do_install_append() {
 	install -m 0755 ${WORKDIR}/dt-compatible ${D}${base_libdir}/udev
 
 	install -m 0644 ${WORKDIR}/dt-compat.rules ${D}/${sysconfdir}/udev/rules.d
+	install -m 0644 ${WORKDIR}/ether.rules ${D}/${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/machine.rules ${D}/${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/simcom.rules ${D}/${sysconfdir}/udev/rules.d
 }

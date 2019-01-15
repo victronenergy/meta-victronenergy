@@ -1,0 +1,3 @@
+# Lower the MTU of Ethernet/Wifi interfaces to avoid issues with
+# misconfigured firewalls.
+ACTION=="add", SUBSYSTEM=="net", ATTR{type}=="1", ATTR{mtu}="1450"
