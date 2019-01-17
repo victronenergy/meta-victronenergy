@@ -49,6 +49,7 @@ RDEPENDS_${PN} += "\
 	eglibc-utils \
 	ftdi-control \
 	gdbserver \
+	haveged \
 	iproute2 \
 	iw \
 	javascript-vnc-client \
