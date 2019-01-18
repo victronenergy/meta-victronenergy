@@ -4,6 +4,8 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 SRC_URI += " \
 	file://mount.sh \
 	file://mount.blacklist.machine \
+	file://bluetooth.rules \
+	file://bt-config \
 	file://dt-compatible \
 	file://dt-compat.rules \
 	file://ether.rules \
@@ -33,8 +35,10 @@ do_install_append() {
 		${D}/${sysconfdir}/udev/mount.blacklist.d/machine
 
 	install -m 0755 -d ${D}${base_libdir}/udev
+	install -m 0755 ${WORKDIR}/bt-config ${D}${base_libdir}/udev
 	install -m 0755 ${WORKDIR}/dt-compatible ${D}${base_libdir}/udev
 
+	install -m 0644 ${WORKDIR}/bluetooth.rules ${D}/${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/dt-compat.rules ${D}/${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/ether.rules ${D}/${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/machine.rules ${D}/${sysconfdir}/udev/rules.d

@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="bluetooth", RUN+="bt-config %k"

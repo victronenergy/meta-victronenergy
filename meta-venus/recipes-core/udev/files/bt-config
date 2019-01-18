@@ -1,0 +1,25 @@
+#! /bin/sh
+
+HCI=$1
+
+random_addr() {
+    dd if=/dev/urandom bs=6 count=1 | hexdump -e '6/1 "%d " "\n"' | (
+        read a b
+        set -- $(printf '%02x ' $((a|0xc0)) $b)
+        IFS=:
+        echo "$*"
+    )
+}
+
+while hciconfig $HCI | grep -qw INIT; do
+    usleep 200000
+done
+
+if hciconfig $HCI | grep -qw RAW; then
+    btmgmt -i $HCI public-addr $(random_addr)
+    usleep 200000
+fi
+
+btmgmt -i $HCI static-addr $(random_addr)
+btmgmt -i $HCI le on
+btmgmt -i $HCI bredr off
