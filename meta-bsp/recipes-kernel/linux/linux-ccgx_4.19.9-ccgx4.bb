@@ -29,8 +29,8 @@ S = "${WORKDIR}/linux-${PV}"
 B = "${WORKDIR}/build"
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-SRC_URI[md5sum] = "89122f7a2facb24baa5f9b72955e3a63"
-SRC_URI[sha256sum] = "6036f942d0514c6a3956201a4117a7f31e9650f2e4b7c450d55bf9a5b5667eaa"
+SRC_URI[md5sum] = "dad820d472e1bd051a131472a155fa5d"
+SRC_URI[sha256sum] = "66b87ec424315da2080f280148cc775cef2e73a0d728cc658a566796e63ba10d"
 
 DEPENDS += "openssl-native"
 HOST_EXTRACFLAGS += "-I${STAGING_INCDIR_NATIVE}"
