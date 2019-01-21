@@ -8,4 +8,4 @@ if [[ ! -e /etc/simple-upnpd.xml ]]; then
 	mv /etc/simple-upnpd.xml.tmp /etc/simple-upnpd.xml
 fi
 
-setuidgid simple-upnpd softlimit -d 100000000 -s 1000000 -a 100000000 /bin/simple-upnpd --xml /etc/simple-upnpd.xml -d
+exec setuidgid simple-upnpd softlimit -d 100000000 -s 1000000 -a 100000000 /bin/simple-upnpd --xml /etc/simple-upnpd.xml -d
