@@ -6,13 +6,14 @@ inherit ve_package
 SRC_URI += "\
 	file://static-nodes.sh \
 	file://test-data-partition.sh \
+	file://report-data-failure.sh \
 "
 
 SRC_URI_append_ccgx = "\
 	file://usbcheck.sh \
 "
 
-RDEPENDS_${PN} += "is-ro-partition u-boot-fw-utils"
+RDEPENDS_${PN} += "curl is-ro-partition u-boot-fw-utils"
 
 do_install_append() {
 	echo RANDOM_SEED_FILE=${permanentlocalstatedir}/lib/random-seed \
@@ -23,6 +24,9 @@ do_install_append() {
 
 	install -m 0755 ${WORKDIR}/test-data-partition.sh ${D}${sysconfdir}/init.d
 	update-rc.d -r ${D} test-data-partition.sh start 03 S .
+
+	install -m 0755 ${WORKDIR}/report-data-failure.sh ${D}${sysconfdir}/init.d
+	update-rc.d -r ${D} report-data-failure.sh start 82 5 .
 }
 
 do_install_append_ccgx() {
