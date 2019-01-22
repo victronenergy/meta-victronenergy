@@ -4,7 +4,7 @@ inherit ve_package
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 # Add the mount point for the data partition
-dirs755 += " /data"
+dirs755 += " ${permanentdir}"
 
 # mount point for the scratch partition
 dirs755 += "/scratch"
@@ -29,4 +29,9 @@ do_install_append() {
 		rmdir ${D}/media
 		ln -s /run/media ${D}/media
 	fi
+
+	if [ -d ${D}${localstatedir}/log ]; then
+		rmdir ${D}${localstatedir}/log
+	fi
+	ln -sf ${permanentdir}/log ${D}${localstatedir}/log
 }

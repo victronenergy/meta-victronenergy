@@ -36,5 +36,6 @@ do_install_append() {
 	install -d ${D}${sysconfdir}/hiawatha/sites-enabled
 	install -d ${D}${sysconfdir}/default/volatiles
 	echo "d root root 0755 ${localstatedir}/volatile/log/hiawatha none" \
-	     > ${D}${sysconfdir}/default/volatiles/99_hiawatha    
+	     > ${D}${sysconfdir}/default/volatiles/99_hiawatha
+	rm -rf ${D}${localstatedir}/log
 }

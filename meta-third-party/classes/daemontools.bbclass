@@ -10,7 +10,6 @@ DAEMONTOOLS_virtclass-nativesdk = ""
 
 DAEMONTOOLS_SERVICES_DIR ?= "/service"
 DAEMONTOOLS_LOG_DIR_PREFIX = "${localstatedir}/log"
-DAEMONTOOLS_LOG_DIR_PREFIX_ccgx ="/log"
 DAEMONTOOLS_SERVICE_SYMLINK ?= "1"
 
 python () {

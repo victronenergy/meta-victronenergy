@@ -9,6 +9,6 @@ fi
 code="$1"
 echo $code > /data/watchdog.reset
 
-top -b -n1 > /log/watchdog_processlist.txt
+top -b -n1 > /data/log/watchdog_processlist.txt
 
 exit $code
