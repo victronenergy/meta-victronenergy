@@ -12,6 +12,8 @@ SRC_URI_append_ccgx = "\
 	file://usbcheck.sh \
 "
 
+RDEPENDS_${PN} += "is-ro-partition u-boot-fw-utils"
+
 do_install_append() {
 	echo RANDOM_SEED_FILE=${permanentlocalstatedir}/lib/random-seed \
 		>${D}${sysconfdir}/default/urandom
