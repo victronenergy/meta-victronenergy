@@ -13,7 +13,7 @@ SRC_URI_append_ccgx = "\
 	file://usbcheck.sh \
 "
 
-RDEPENDS_${PN} += "curl is-ro-partition u-boot-fw-utils"
+RDEPENDS_${PN} += "curl is-ro-partition"
 
 do_install_append() {
 	echo RANDOM_SEED_FILE=${permanentlocalstatedir}/lib/random-seed \
