@@ -1,0 +1,34 @@
+From 02f981840cf60c62cbb65b91431fa7eb3bbe18bb Mon Sep 17 00:00:00 2001
+From: mpvader <mvader@victronenergy.com>
+Date: Sun, 3 Feb 2019 10:22:49 +0100
+Subject: [PATCH] llmnrd: set stdout to line buffering
+
+The log output of llmnrd works well when operated from a terminal; but not when its
+stdout is piped to a log-file or -tool; due to buffering:
+
+   By default, stdout is buffered (line buffered if connected to a
+   terminal), and stderr is unbuffered. [1]
+
+Changing stdout to line buffering fixes this.
+
+[1] https://www.gnu.org/software/libc/manual/html_node/Buffering-Concepts.html
+---
+ llmnrd.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/llmnrd.c b/llmnrd.c
+index c9ec6b5..d076484 100644
+--- a/llmnrd.c
++++ b/llmnrd.c
+@@ -161,6 +161,8 @@ int main(int argc, char **argv)
+ 	int llmnrd_sock_rtnl = -1;
+ 	int nfds;
+ 
++	setlinebuf(stdout);
++
+ 	while ((c = getopt_long(argc, argv, short_opts, long_opts, NULL)) != -1) {
+ 		switch (c) {
+ 		case 'd':
+-- 
+2.7.4
+
