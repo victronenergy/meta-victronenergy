@@ -32,7 +32,7 @@ start_log() {
     log_pipe=/var/tmp/$(basename $0).log
     mkfifo $log_pipe || return
     exec 3>&1
-    tee <$log_pipe /dev/fd/3 | multilog t s99999 n8 /log/swupdate &
+    tee <$log_pipe /dev/fd/3 | multilog t s99999 n8 /data/log/swupdate &
     exec 1>$log_pipe 2>&1
     rm -f $log_pipe
 }
