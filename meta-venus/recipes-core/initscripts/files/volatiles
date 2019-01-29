@@ -36,7 +36,8 @@ l root root 0755 /var/run /run
 l root root 1777 /var/tmp /var/volatile/tmp
 l root root 1777 /tmp /var/tmp
 d root root 0755 /var/lock/subsys none
-f root root 0664 /var/log/wtmp none
+f root root 0664 /var/volatile/log/wtmp none
+l root root 0664 /var/log/wtmp /var/volatile/log/wtmp
 f root root 0664 /var/run/utmp none
 d root root 0755 /var/run/connman none
 d root root 0755 /var/run/ppp none
