@@ -128,7 +128,7 @@ do_install_append() {
 	if [ "x${DAEMONTOOLS_LOG_DIR}" = "x" ]; then
 		DAEMONTOOLS_LOG_DIR="${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}"
 	fi
-	echo "exec multilog t s99999 n8 ${DAEMONTOOLS_LOG_DIR}" >> ${SERVICE}/log/run
+	echo "exec multilog t s25000 n4 ${DAEMONTOOLS_LOG_DIR}" >> ${SERVICE}/log/run
 	chmod 755 ${SERVICE}/log/run
 
 	if [ "x${DAEMONTOOLS_DOWN}" != "x" ]; then
