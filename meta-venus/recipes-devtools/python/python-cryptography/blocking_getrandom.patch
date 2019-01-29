@@ -1,3 +1,19 @@
+From 3531439f8a09dd40102ac0e336cb962e86d8bf57 Mon Sep 17 00:00:00 2001
+From: Paul Kehrer <paul.l.kehrer@gmail.com>
+Date: Sun, 2 Dec 2018 13:13:02 +0800
+Subject: [PATCH] switch osrandom engine to blocking mode when getting entropy
+ (#4620)
+
+* switch osrandom engine to blocking mode when getting entropy
+
+* review feedback
+
+* we can remove this too
+---
+ src/_cffi_src/openssl/src/osrandom_engine.c | 17 +++--------------
+ src/_cffi_src/openssl/src/osrandom_engine.h |  1 -
+ 2 files changed, 3 insertions(+), 15 deletions(-)
+
 diff --git a/src/_cffi_src/openssl/src/osrandom_engine.c b/src/_cffi_src/openssl/src/osrandom_engine.c
 index 947c79aac..e6a76a346 100644
 --- a/src/_cffi_src/openssl/src/osrandom_engine.c
