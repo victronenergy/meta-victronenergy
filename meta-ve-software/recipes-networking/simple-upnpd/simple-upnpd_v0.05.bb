@@ -16,7 +16,7 @@ USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM_${PN} = "simple-upnpd"
 USERADD_PARAM_${PN} = "--no-create-home --shell /bin/false -g simple-upnpd simple-upnpd"
 
-DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
+DAEMONTOOLS_SERVICE_DIR = "${sysconfdir}/${PN}/service"
 DAEMONTOOLS_RUN = "${base_bindir}/start-simple-upnpd"
 
 SRC_URI = " \
@@ -26,7 +26,7 @@ SRC_URI = " \
 "
 
 do_install() {
-	install -d ${D}/${base_bindir} ${D}${sysconfdir}/init.d
+	install -d ${D}/${base_bindir} ${D}${sysconfdir}
 
 	install -m 0755 ${S}/simple-upnpd ${D}/${base_bindir}
 	install -m 0755 ${WORKDIR}/simple-upnpd.skeleton.xml ${D}/${sysconfdir}
