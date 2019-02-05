@@ -10,9 +10,8 @@ UBOOT_LOCALVERSION = "-venus"
 
 SRC_URI = "\
 	https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz \
-	file://0001-canvu500-use-version-for-swupdate.patch \
 "
-SRC_URI[md5sum] = "33a9acc72dd3e24a038676b01b344ec3"
-SRC_URI[sha256sum] = "eac51dd2b36689643737c0541086fda9f5871074b791fb135bbf4fae6240fda2"
+SRC_URI[md5sum] = "cb22b1a1e62d8555665b40bc4658fd62"
+SRC_URI[sha256sum] = "0dc1ef04b643e6b5f8177b91cb850f409dbcb463f6b7c446fb43f5716d7d1b25"
 
 S = "${WORKDIR}/u-boot-${PV}"
