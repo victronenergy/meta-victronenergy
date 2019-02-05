@@ -1,0 +1,1 @@
+ACTION=="add", ENV{DEVTYPE}=="mtd", SYMLINK+="mtd/$attr{name}"
