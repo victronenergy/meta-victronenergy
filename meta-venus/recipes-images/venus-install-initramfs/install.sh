@@ -83,6 +83,19 @@ do_modules() {
     done
 }
 
+do_mtdparts() {
+    test -e /proc/mtd || return 0
+
+    mkdir -p /dev/mtd
+
+    for d in /sys/class/mtd/*; do
+        test -e $d/name || continue
+        dev=$(basename $d)
+        name=$(cat $d/name)
+        ln -s ../$dev /dev/mtd/$name
+    done
+}
+
 waitdev() {
     while true; do
         for d; do
@@ -241,6 +254,7 @@ cleanup() {
 do_install() {
     do_mounts
     do_modules $MODULES
+    do_mtdparts
     waitdev $SWUDEV
     findimg $SWUDEV
     do_format
