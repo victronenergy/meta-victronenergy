@@ -1,0 +1,44 @@
+From 53b1fb0083b4b242f9050569d099572d420e6f84 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Tue, 4 Dec 2018 09:58:12 +0200
+Subject: [PATCH] Enable powering of the loads (or feeding in excess PV) inside
+ a scheduled charging window.
+
+Discharge is disabled inside a scheduled charge window, so that after the
+target SOC is reached the battery will not start discharging until after
+the scheduled charge period. Disabling discharge also causes hub4control
+to disable feed-in, which means we cannot feed loads or feed in excess PV.
+By simply changing the discharge limit to 1W instead of zero, we sidestep
+this behaviour and feed-in is enabled while retaining the general non-discharge
+behaviour.
+---
+ delegates/schedule.py  | 2 +-
+ tests/schedule_test.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/delegates/schedule.py b/delegates/schedule.py
+index 88237fd..01f6548 100644
+--- a/delegates/schedule.py
++++ b/delegates/schedule.py
+@@ -187,7 +187,7 @@ def _on_timer(self):
+ 
+ 				# Signal that scheduled charging is active
+ 				self.active = True
+-				self.maxdischargepower = 0
++				self.maxdischargepower = 1
+ 				break
+ 		else:
+ 			self.forcecharge = False
+diff --git a/tests/schedule_test.py b/tests/schedule_test.py
+index 918009b..a17c283 100644
+--- a/tests/schedule_test.py
++++ b/tests/schedule_test.py
+@@ -124,7 +124,7 @@ def test_scheduled_charge_stop_on_soc(self):
+         self._check_external_values({
+                 'com.victronenergy.hub4': {
+                 '/Overrides/ForceCharge': 0,
+-                '/Overrides/MaxDischargePower': 0,
++                '/Overrides/MaxDischargePower': 1,
+         }})
+ 
+         # When we emerge from the charge window, discharge is allowed again.

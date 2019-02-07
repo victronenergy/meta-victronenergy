@@ -13,11 +13,12 @@ SRC_URI = " \
 	file://com.victronenergy.system.conf \
 	file://0001-Revert-In-non-DVCC-systems-update-the-solarchargers-.patch \
 	file://0002-Revert-Removed-Shared-Voltage-Sense.patch \
+	file://0003-Enable-powering-of-the-loads-or-feeding-in-excess-PV.patch \
 "
 
 S = "${WORKDIR}/git"
 
-PR = "r1"
+PR = "r2"
 
 RDEPENDS_${PN} = " \
 	localsettings \
