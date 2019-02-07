@@ -12,6 +12,13 @@ software =
 					path = "/tmp/u-boot.swu.imx";
 				}
 			);
+			images: (
+				{
+					filename = "splash.bmp.gz";
+					type = "flash";
+					mtdname = "splash";
+				}
+			);
 			scripts: (
 				{
 					filename = "imx-kobs-update.sh";
