@@ -226,7 +226,7 @@ ubiblacklist() {
 }
 
 install_swu() {
-    set -- -i ${SWU}
+    set -- -v -i ${SWU}
     test -n "$UBIPART" && set -- "$@" -b "$(ubiblacklist)"
 
     msg "Installing rootfs1..."
