@@ -2,8 +2,10 @@
 
 . /lib/venus/install.sh
 
+do_mounts
+
 SWUDEV="sda1 sda"
-UBIPART=2
+UBIPART=$(sed -n '/ubi/s/^mtd\([0-9]*\):.*/\1/p' /proc/mtd)
 TTYS="$TTYS tty0"
 
 do_install
