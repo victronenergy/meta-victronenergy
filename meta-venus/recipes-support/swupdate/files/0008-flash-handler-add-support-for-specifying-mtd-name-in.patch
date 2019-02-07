@@ -1,0 +1,38 @@
+From 386d187ab0f8d414e18f351505750e3953b60e91 Mon Sep 17 00:00:00 2001
+From: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
+Date: Mon, 12 Dec 2016 13:22:32 +0100
+Subject: [PATCH 8/8] flash handler: add support for specifying mtd name
+ instead of device
+
+Use get_mtd_by_name() if a path (mtdname) is specified to retrieve the
+mtd device number, instead of using the mtd device name.
+
+Signed-off-by: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
+Acked-by: Stefano Babic <sbabic@denx.de>
+---
+ handlers/flash_handler.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/handlers/flash_handler.c b/handlers/flash_handler.c
+index fcaa6bf9222a..3e2ad22093f3 100644
+--- a/handlers/flash_handler.c
++++ b/handlers/flash_handler.c
+@@ -685,10 +685,13 @@ static int install_flash_image(struct img_type *img,
+ 		return -1;
+ 	}
+ 
+-	mtdnum= get_mtd_from_device(img->device);
++	if (strlen(img->path))
++		mtdnum = get_mtd_from_name(img->path);
++	else
++		mtdnum = get_mtd_from_device(img->device);
+ 	if (mtdnum < 0) {
+ 		ERROR("Wrong MTD device in description: %s",
+-			img->device);
++			strlen(img->path) ? img->path : img->device);
+ 		return -1;
+ 	}
+ 
+-- 
+2.20.1
+

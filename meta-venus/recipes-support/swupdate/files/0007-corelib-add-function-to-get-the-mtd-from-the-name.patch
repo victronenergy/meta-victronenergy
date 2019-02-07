@@ -1,0 +1,57 @@
+From c9663c4650e634860960b2cffdf64bf891ee0e9b Mon Sep 17 00:00:00 2001
+From: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
+Date: Mon, 12 Dec 2016 13:22:31 +0100
+Subject: [PATCH 7/8] corelib: add function to get the mtd from the name
+
+Add get_mtd_from_name() the mtd-interface. It tries the find the
+mtd number by the specified name.
+
+Signed-off-by: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
+Acked-by: Stefano Babic <sbabic@denx.de>
+---
+ corelib/mtd-interface.c | 16 ++++++++++++++++
+ include/flash.h         |  1 +
+ 2 files changed, 17 insertions(+)
+
+diff --git a/corelib/mtd-interface.c b/corelib/mtd-interface.c
+index c8a9e4528f15..36dad6de5a1a 100644
+--- a/corelib/mtd-interface.c
++++ b/corelib/mtd-interface.c
+@@ -65,6 +65,22 @@ int get_mtd_from_device(char *s) {
+ 	return mtdnum;
+ }
+ 
++int get_mtd_from_name(const char *s)
++{
++	struct flash_description *flash = get_flash_info();
++	struct mtd_dev_info *info;
++	int i;
++
++	for (i = flash->mtd.lowest_mtd_num;
++	     i <= flash->mtd.highest_mtd_num; i++) {
++		info = &flash->mtd_info[i].mtd;
++		if (!strcmp(info->name, s))
++			return i;
++	}
++
++	return -1;
++}
++
+ void ubi_init(void)
+ {
+ 	struct flash_description *nand = get_flash_info();
+diff --git a/include/flash.h b/include/flash.h
+index 969da345e3df..06b66d4e37eb 100644
+--- a/include/flash.h
++++ b/include/flash.h
+@@ -66,6 +66,7 @@ void ubi_init(void);
+ int scan_mtd_devices (void);
+ void mtd_cleanup (void);
+ int get_mtd_from_device(char *s);
++int get_mtd_from_name(const char *s);
+ 
+ struct flash_description *get_flash_info(void);
+ #define isNand(flash, index) \
+-- 
+2.20.1
+

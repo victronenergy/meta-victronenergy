@@ -1,0 +1,40 @@
+From 2bda7d232d3f7ba08e572b9202b53bf908edd787 Mon Sep 17 00:00:00 2001
+From: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
+Date: Mon, 12 Dec 2016 13:22:30 +0100
+Subject: [PATCH 6/8] parser: add parsing of mtdname property
+
+Add parsing of the mtdname property for images and store it
+in the path property of the img_type struct, similar to the
+external parser.
+
+Signed-off-by: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
+Acked-by: Stefano Babic <sbabic@denx.de>
+---
+ parser/parser.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/parser/parser.c b/parser/parser.c
+index 53d758cda183..a02391705cf1 100644
+--- a/parser/parser.c
++++ b/parser/parser.c
+@@ -394,6 +394,7 @@ static void parse_images(parsertype p, void *cfg, struct swupdate_cfg *swcfg)
+ 		GET_FIELD_STRING(p, elem, "filename", image->fname);
+ 		GET_FIELD_STRING(p, elem, "volume", image->volname);
+ 		GET_FIELD_STRING(p, elem, "device", image->device);
++		GET_FIELD_STRING(p, elem, "mtdname", image->path);
+ 		GET_FIELD_STRING(p, elem, "type", image->type);
+ 		GET_FIELD_STRING(p, elem, "offset", seek_str);
+ 		GET_FIELD_STRING(p, elem, "data", image->type_data);
+@@ -430,7 +431,8 @@ static void parse_images(parsertype p, void *cfg, struct swupdate_cfg *swcfg)
+ 			image->id.version,
+ 			image->fname,
+ 			strlen(image->volname) ? "volume" : "device",
+-			strlen(image->volname) ? image->volname : image->device,
++			strlen(image->volname) ? image->volname :
++			strlen(image->path) ? image->path : image->device,
+ 			strlen(image->type) ? image->type : "NOT FOUND",
+ 			image->install_directly ? " (installed from stream)" : "",
+ 			(strlen(image->id.name) && image->id.install_if_different) ?
+-- 
+2.20.1
+
