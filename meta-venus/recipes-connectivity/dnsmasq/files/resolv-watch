@@ -12,7 +12,7 @@ CM_RESOLV_CONF=/run/connman/resolv.conf
 PPP_RESOLV_CONF=/run/ppp/resolv.conf
 RESOLV_CONF=/run/resolv.conf
 
-# monitor the the directories since the files might not exist yet
+# monitor the the directories since the files might be replaced
 WATCH_DIRS="${CM_RESOLV_CONF%/*} ${PPP_RESOLV_CONF%/*}"
 
 update_localsettings() {
@@ -35,6 +35,9 @@ update_localsettings() {
               /Settings/System/ActiveNetworkConnection \
               com.victronenergy.BusItem.SetValue int32:$conn
 }
+
+# make sure the files exist, or dnsmasq gets unhappy
+touch ${CM_RESOLV_CONF} ${PPP_RESOLV_CONF}
 
 while true; do
     if grep -q ^nameserver ${CM_RESOLV_CONF}; then
