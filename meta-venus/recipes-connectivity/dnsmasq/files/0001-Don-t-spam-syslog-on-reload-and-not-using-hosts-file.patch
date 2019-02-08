@@ -1,0 +1,37 @@
+From 5279a5ea105225b03110e2a51e350b2d1cbaaef6 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 8 Feb 2019 14:05:56 +0000
+Subject: [PATCH 1/2] Don't spam syslog on reload and not using hosts files
+
+---
+ src/cache.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
+
+diff --git a/src/cache.c b/src/cache.c
+index 713e58c793df..7fd65790d6d9 100644
+--- a/src/cache.c
++++ b/src/cache.c
+@@ -1296,16 +1296,11 @@ void cache_reload(void)
+ 	  }
+       }
+ 	
+-  if (option_bool(OPT_NO_HOSTS) && !daemon->addn_hosts)
+-    {
+-      if (daemon->cachesize > 0)
+-	my_syslog(LOG_INFO, _("cleared cache"));
+-    }
+-  else
+-    {
+-      if (!option_bool(OPT_NO_HOSTS))
+-	total_size = read_hostsfile(HOSTSFILE, SRC_HOSTS, total_size, (struct crec **)daemon->packet, revhashsz);
++  if (!option_bool(OPT_NO_HOSTS))
++    total_size = read_hostsfile(HOSTSFILE, SRC_HOSTS, total_size, (struct crec **)daemon->packet, revhashsz);
+       
++  if (daemon->addn_hosts)
++    {
+       daemon->addn_hosts = expand_filelist(daemon->addn_hosts);
+       for (ah = daemon->addn_hosts; ah; ah = ah->next)
+ 	if (!(ah->flags & AH_INACTIVE))
+-- 
+2.20.1
+

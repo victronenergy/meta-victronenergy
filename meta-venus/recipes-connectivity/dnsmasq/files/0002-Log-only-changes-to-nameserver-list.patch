@@ -1,0 +1,85 @@
+From a9c281ac2027c26cce98256f4f7e6c8134ca76a8 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 8 Feb 2019 15:11:32 +0000
+Subject: [PATCH 2/2] Log only changes to nameserver list
+
+---
+ src/dnsmasq.h |  1 +
+ src/network.c | 21 ++++++++++++++++++---
+ 2 files changed, 19 insertions(+), 3 deletions(-)
+
+diff --git a/src/dnsmasq.h b/src/dnsmasq.h
+index 0dc1de9ac596..4fcded527b9f 100644
+--- a/src/dnsmasq.h
++++ b/src/dnsmasq.h
+@@ -519,6 +519,7 @@ union mysockaddr {
+ #define SERV_LOOP           8192  /* server causes forwarding loop */
+ #define SERV_DO_DNSSEC     16384  /* Validate DNSSEC when using this server */
+ #define SERV_GOT_TCP       32768  /* Got some data from the TCP connection */
++#define SERV_NEW           65536  /* server was just added */
+ 
+ struct serverfd {
+   int fd;
+diff --git a/src/network.c b/src/network.c
+index 5a8ca77566c8..86c67c6fca42 100644
+--- a/src/network.c
++++ b/src/network.c
+@@ -1304,6 +1304,12 @@ void pre_allocate_sfds(void)
+       }  
+ }
+ 
++static void log_gone(struct server *serv)
++{
++  int port = prettyprint_addr(&serv->addr, daemon->namebuff);
++  my_syslog(LOG_INFO, _("stopped using nameserver %s#%d"), daemon->namebuff, port);
++}
++
+ void mark_servers(int flag)
+ {
+   struct server *serv;
+@@ -1331,6 +1337,7 @@ void cleanup_servers(void)
+       if (serv->flags & SERV_MARK)
+        {
+          server_gone(serv);
++         log_gone(serv);
+          *up = serv->next;
+          if (serv->domain)
+ 	   free(serv->domain);
+@@ -1369,8 +1376,9 @@ void add_update_server(int flags,
+ 	    if (serv->flags & SERV_HAS_DOMAIN)
+ 	      continue;
+ 	  }
+-	
+-        break;
++
++	if (!memcmp(addr, &serv->addr, sizeof(*addr)))
++	  break;
+       }
+ 
+   if (serv)
+@@ -1400,6 +1408,8 @@ void add_update_server(int flags,
+ 	  if (domain)
+ 	    strcpy(domain_str, domain);
+ 	}
++
++      flags |= SERV_NEW;
+     }
+   
+   if (serv)
+@@ -1511,7 +1521,12 @@ void check_servers(void)
+ 	  if (serv->sfd)
+ 	    serv->sfd->used = 1;
+ 	}
+-      
++
++      if (!(serv->flags & SERV_NEW))
++	continue;
++
++      serv->flags &= ~SERV_NEW;
++
+       if (!(serv->flags & SERV_NO_REBIND) && !(serv->flags & SERV_LITERAL_ADDRESS))
+ 	{
+ 	  if (++count > SERVERS_LOGGED)
+-- 
+2.20.1
+
