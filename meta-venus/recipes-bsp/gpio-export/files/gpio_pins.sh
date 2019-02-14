@@ -46,7 +46,7 @@ set_pin() {
     PIN_NAME=$3
 
     #echo "Setting gpio pin #${PIN_NUM}/${PIN_NAME} to ${PIN_DIR}"
-    export_pin "${PIN_NUM}"
+    export_pin "${PIN_NUM}" || return
     set_pin_dir "${PIN_DIR}" "${PIN_NUM}"
     create_link "${PIN_NUM}" "${PIN_NAME}"
 }
