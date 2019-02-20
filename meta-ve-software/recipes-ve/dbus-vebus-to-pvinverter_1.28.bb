@@ -19,5 +19,6 @@ do_install () {
 
 	install -d ${D}${bindir}/ext/velib_python
 	install ${S}/ext/velib_python/vedbus.py ${D}${bindir}/ext/velib_python
+	install ${S}/ext/velib_python/ve_utils.py ${D}${bindir}/ext/velib_python
 }
 
