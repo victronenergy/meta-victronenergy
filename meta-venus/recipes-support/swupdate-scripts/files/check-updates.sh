@@ -208,7 +208,7 @@ if [[ -z $forceswu ]]; then
     echo "installed: $cur_version"
     echo "available: $swu_version"
 
-    if [ "$force" != y -a "${swu_build}" -le "${cur_build}" ]; then
+    if [ "$force" != y -a "${swu_build}" = "${cur_build}" ]; then
         echo "No newer version available, exit."
         swu_status 0
         exit
