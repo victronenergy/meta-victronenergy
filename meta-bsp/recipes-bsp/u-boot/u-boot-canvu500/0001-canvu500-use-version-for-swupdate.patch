@@ -1,0 +1,29 @@
+From d1719b3c9cb7d49631dfda0e6349d5e72335f55b Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jeroen@myspectrum.nl>
+Date: Wed, 27 Feb 2019 14:51:36 +0100
+Subject: [PATCH] canvu500: use version for swupdate
+
+The userland expects the swupdate version in the version variable instead
+of the swversion. So make the canvu500 behave the same as the other boards.
+---
+ include/configs/canvu500.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/configs/canvu500.h b/include/configs/canvu500.h
+index 74ebaab..9486e00 100644
+--- a/include/configs/canvu500.h
++++ b/include/configs/canvu500.h
+@@ -95,8 +95,8 @@
+ 		"console=${console},${baudrate} "			\
+ 		"${mtdparts} ubi.mtd=ubi "				\
+ 		"root=${root} rootfstype=ubifs ${runlevel}\0"		\
+-	"setroot=setenv root ubi0:rootfs${swversion}\0"			\
+-	"swversion=1\0"							\
++	"setroot=setenv root ubi0:rootfs${version}\0"			\
++	"version=1\0"							\
+ 	"ubiboot=ubi part ubi && ubifsmount ${root} && ubifsload ${loadaddr} boot/fitImage && bootm\0" \
+ 	"usbboot=usb reset && load usb 0 ${loadaddr} boot.scr && source ${loadaddr}; sleep 2; run usbboot\0" \
+ 	"videomode=video=ctfb:x:800,y:480,depth:24,pclk:37037,le:40,ri:60,up:10,lo:10,hs:20,vs:10,sync:0,vmode:0\0"
+-- 
+2.7.4
+

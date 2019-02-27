@@ -31,7 +31,15 @@ software =
 			uboot: (
 				{
 					name = "swversion";
+					value = "";
+				},
+				{
+					name = "version";
 					value = "1";
+				},
+				{
+					name = "setroot";
+					value = "setenv root ubi0:rootfs${version}";
 				}
 			);
 		};
@@ -47,7 +55,15 @@ software =
 			uboot: (
 				{
 					name = "swversion";
+					value = "";
+				},
+				{
+					name = "version";
 					value = "2";
+				},
+				{
+					name = "setroot";
+					value = "setenv root ubi0:rootfs${version}";
 				}
 			);
 		};
