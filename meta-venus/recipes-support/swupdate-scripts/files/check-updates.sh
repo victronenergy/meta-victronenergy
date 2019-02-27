@@ -74,7 +74,10 @@ echo "arguments: $@"
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        -auto)   update=auto ;;
+        -auto)
+                 update=auto
+                 auto=1
+                 ;;
         -check)  update=2    ;;
         -update) update=1    ;;
         -delay)  delay=y     ;;
@@ -208,7 +211,7 @@ if [[ -z $forceswu ]]; then
     echo "installed: $cur_version"
     echo "available: $swu_version"
 
-    if [ "$force" != y -a "${swu_build}" = "${cur_build}" ]; then
+    if [ "$force" != y -a \( "${swu_build}" = "${cur_build}" -o "$auto" = "1" -a "${swu_build}" -le "${cur_build}" \) ]; then
         echo "No newer version available, exit."
         swu_status 0
         exit
