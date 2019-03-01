@@ -1,4 +1,4 @@
 #!/bin/sh
 
-cat /proc/device-tree/model
+cat /sys/firmware/devicetree/base/model
 
