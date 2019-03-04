@@ -1,4 +1,4 @@
 #!/bin/sh
 
-cat /sys/firmware/devicetree/base/model
+cat /sys/firmware/devicetree/base/model | tr '\0' '\n'
 
