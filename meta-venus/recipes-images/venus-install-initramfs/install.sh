@@ -251,10 +251,19 @@ cleanup() {
     umount ${CARD}
 }
 
+watchdog() (
+    exec >/dev/watchdog
+    while :; do
+        echo t
+        sleep 10
+    done
+)
+
 do_install() {
     do_mounts
     do_modules $MODULES
     do_mtdparts
+    watchdog &
     waitdev $SWUDEV
     findimg $SWUDEV
     do_format
