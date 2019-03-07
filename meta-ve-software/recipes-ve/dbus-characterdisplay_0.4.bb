@@ -6,7 +6,7 @@ inherit gmakevelib
 inherit daemontools
 inherit python-compile
 
-COMPATIBLE_MACHINE = "nanopi"
+RDEPENDS_${PN} = "machine-runtime-conf"
 
 SRC_URI = " \
 	gitsm://github.com/victronenergy/dbus-characterdisplay.git;protocol=https;tag=v${PV} \
