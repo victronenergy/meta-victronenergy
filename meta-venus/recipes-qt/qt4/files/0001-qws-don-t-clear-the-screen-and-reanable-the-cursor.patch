@@ -1,0 +1,31 @@
+From 9319922c0685e8d342e4074076906884c20ad351 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 7 Mar 2019 13:13:00 +0100
+Subject: [PATCH] qws: don't clear the screen and reanable the cursor
+
+---
+ src/gui/embedded/qscreenlinuxfb_qws.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/gui/embedded/qscreenlinuxfb_qws.cpp b/src/gui/embedded/qscreenlinuxfb_qws.cpp
+index db18e20..a7bef27 100644
+--- a/src/gui/embedded/qscreenlinuxfb_qws.cpp
++++ b/src/gui/embedded/qscreenlinuxfb_qws.cpp
+@@ -156,12 +156,14 @@ void QLinuxFbScreenPrivate::closeTty()
+     if (ttyfd == -1)
+         return;
+ 
++#if 0
+     if (doGraphicsMode)
+         ioctl(ttyfd, KDSETMODE, oldKdMode);
+ 
+     // Blankin' screen, blinkin' cursor!
+     const char termctl[] = "\033[9;15]\033[?33h\033[?25h\033[?0c";
+     QT_WRITE(ttyfd, termctl, sizeof(termctl));
++#endif
+ 
+     QT_CLOSE(ttyfd);
+     ttyfd = -1;
+-- 
+2.7.4
+

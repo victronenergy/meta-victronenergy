@@ -9,4 +9,5 @@ SRC_URI += " \
 	file://0005-qws-vncserver-add-vnc-authentication.patch \
 	file://0006-PATCH-QNativeSocketEngine-fix-SO_REUSEPORT-problems-.patch \
 	file://0001-VisualItemModel-fix-updateIndices.patch \
+	file://0001-qws-don-t-clear-the-screen-and-reanable-the-cursor.patch \
 "
