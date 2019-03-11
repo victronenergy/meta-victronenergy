@@ -7,6 +7,7 @@ inherit pkgconfig
 
 DEPENDS += "glib-2.0 gupnp libsoup-2.4"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+RDEPENDS_${PN} += "machine-runtime-conf"
 
 S = "${WORKDIR}/git"
 

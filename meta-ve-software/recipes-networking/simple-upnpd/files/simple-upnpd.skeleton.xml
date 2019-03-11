@@ -11,9 +11,12 @@
     <manufacturer>Victron Energy</manufacturer>
     <manufacturerURL>http://www.victronenergy.com</manufacturerURL>
     <modelName>CCGX</modelName>
-    <modelNumber>1.0</modelNumber>
+    <modelNumber>:::productid:::</modelNumber>
     <modelURL>http://www.victronenergy.com/live/ccgx:start</modelURL>
+    <serialNumber>:::serialnr:::</serialNumber>
     <presentationURL>/</presentationURL>
     <UDN>uuid:com.victronenergy.ccgx.:::UNIQUE:::</UDN>
+    <ve:X_VenusVersion xmlns:ve="urn:schemas-victronenergy-com:venusinfo-1">:::venusversion:::</ve:X_VenusVersion>
+    <ve:X_VrmPortalId xmlns:ve="urn:schemas-victronenergy-com:venusinfo-1">:::unique:::</ve:X_VrmPortalId>
   </device>
 </root>

@@ -2,9 +2,19 @@
 
 if [[ ! -e /etc/simple-upnpd.xml ]]; then
 	unique=$(cat /data/venus/unique-id)
+	productid=$(product-id)
+	serialnr=$(cat /data/venus/serial-number)
 	UNIQUE=$(echo ${unique} | tr '[:lower:]' '[:upper:]' | sed -e 's/.\{2\}/&:/g' -e 's/:$//g')
 	name="$(installation-name)"
-	sed -e "s/:::UNIQUE:::/${UNIQUE}/g" -e "s/:::unique:::/${unique}/g" -e "s/:::name:::/${name}/g" /etc/simple-upnpd.skeleton.xml > /etc/simple-upnpd.xml.tmp
+	venusversion=$(head -n1 /opt/victronenergy/version)
+	sed \
+		-e "s/:::UNIQUE:::/${UNIQUE}/g" \
+		-e "s/:::unique:::/${unique}/g" \
+		-e "s/:::name:::/${name}/g" \
+		-e "s/:::productid:::/${productid}/g" \
+		-e "s/:::serialnr:::/${serialnr}/g" \
+		-e "s/:::venusversion:::/${venusversion}/g" \
+		 /etc/simple-upnpd.skeleton.xml > /etc/simple-upnpd.xml.tmp
 	mv /etc/simple-upnpd.xml.tmp /etc/simple-upnpd.xml
 fi
 
