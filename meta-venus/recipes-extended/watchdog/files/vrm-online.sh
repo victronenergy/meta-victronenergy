@@ -25,13 +25,18 @@ do_test() {
     interval=$(get_value settings /Settings/Vrmlogger/LogInterval)
     last=$(get_value logger /Vrm/TimeLastContact)
     now=$(date +%s)
+    totaltimeout=$((interval + timeout))
 
     if [ -z "$last" ]; then
         # no contact yet, use boot time
         last=$(awk '/^btime/ { print $2 }' /proc/stat)
+        # make sure there is at least a 5 minutes time on a clean boot
+        if [ $totaltimeout -lt 300 ]; then
+            totaltimeout=300
+        fi
     fi
 
-    if [ $now -gt $((last + interval + timeout)) ]; then
+    if [ $now -gt $((last + totaltimeout)) ]; then
         logger "VRM unreachable, rebooting"
         exit -10
     fi

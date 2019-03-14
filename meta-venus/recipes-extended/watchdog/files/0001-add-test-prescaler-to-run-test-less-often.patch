@@ -1,17 +1,18 @@
-From 92e96dc3a898b9bd81b2fb36231d117c54a3f59a Mon Sep 17 00:00:00 2001
+From d2fd1df5e8e0e3875916b0467eff8f68314c8e53 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
-Date: Thu, 10 Jan 2019 16:49:30 +0100
+Date: Thu, 14 Mar 2019 13:24:29 +0000
 Subject: [PATCH] add test-prescaler to run test less often
 
 When set in the config file, test are only run every n intervals.
 ---
- include/extern.h | 1 +
- src/configfile.c | 3 +++
- src/watchdog.c   | 5 +++--
- 3 files changed, 7 insertions(+), 2 deletions(-)
+ include/extern.h  | 3 ++-
+ src/configfile.c  | 3 +++
+ src/test_binary.c | 5 ++++-
+ src/watchdog.c    | 4 ++--
+ 4 files changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/include/extern.h b/include/extern.h
-index f00e4cf..97c3c41 100644
+index f00e4cf..e09119e 100644
 --- a/include/extern.h
 +++ b/include/extern.h
 @@ -82,6 +82,7 @@ extern char *devname;
@@ -22,6 +23,15 @@ index f00e4cf..97c3c41 100644
  extern int	repair_timeout;		/* repair-binary time out value. */
  extern int	dev_timeout;		/* Watchdog hardware time-out. */
  extern int	retry_timeout;		/* Retry on non-critical errors. */
+@@ -152,7 +153,7 @@ int check_temp(struct list *act);
+ int close_tempcheck(void);
+ 
+ /** test_binary.c **/
+-int check_bin(char *, int, int);
++int check_bin(char *, int, int, int);
+ void free_process(void);
+ 
+ /** pidfile.c **/
 diff --git a/src/configfile.c b/src/configfile.c
 index a0996e2..248b9d9 100644
 --- a/src/configfile.c
@@ -50,22 +60,47 @@ index a0996e2..248b9d9 100644
  		} else if (READ_STRING(HEARTBEAT, &heartbeat) == 0) {
  		} else if (READ_INT(HBSTAMPS, &hbstamps) == 0) {
  		} else if (READ_STRING(ADMIN, &admin) == 0) {
+diff --git a/src/test_binary.c b/src/test_binary.c
+index 2211f9e..d3e07d6 100644
+--- a/src/test_binary.c
++++ b/src/test_binary.c
+@@ -235,7 +235,7 @@ static int check_processes(const char *name, int *ecode)
+  * A time-out of zero will disable the time-out checking, but in that case a blocked child
+  * will simply persist indefinitely and no error will be found.
+  */
+-int check_bin(char *tbinary, int timeout, int version)
++int check_bin(char *tbinary, int timeout, int version, int dorun)
+ {
+ 	pid_t child_pid;
+ 	int ecode = EDONTKNOW;
+@@ -256,6 +256,9 @@ int check_bin(char *tbinary, int timeout, int version)
+ 		return EDONTKNOW;
+ 	}
+ 
++	if (!dorun)
++		return ecode;
++
+ 	child_pid = fork();
+ 	if (!child_pid) {
+ 
 diff --git a/src/watchdog.c b/src/watchdog.c
-index 486384a..243a11c 100644
+index 486384a..869dee9 100644
 --- a/src/watchdog.c
 +++ b/src/watchdog.c
-@@ -549,8 +549,9 @@ int main(int argc, char *const argv[])
- 				  act->parameter.net.packet, tint, pingcount), repair_bin, act);
+@@ -550,11 +550,11 @@ int main(int argc, char *const argv[])
  
  		/* test, or test/repair binaries in the watchdog.d directory */
--		for (act = tr_bin_list; act != NULL; act = act->next)
+ 		for (act = tr_bin_list; act != NULL; act = act->next)
 -			do_check(check_bin(act->name, test_timeout, act->version), repair_bin, act);
-+		if ((count % test_prescaler) == 0)
-+			for (act = tr_bin_list; act != NULL; act = act->next)
-+				do_check(check_bin(act->name, test_timeout, act->version), repair_bin, act);
++			do_check(check_bin(act->name, test_timeout, act->version, (count % test_prescaler) == 0), repair_bin, act);
  
  		/* in case test binaries return quickly */
  		usleep(swait);
+-		check_bin(NULL, test_timeout, 0);
++		check_bin(NULL, test_timeout, 0, 0);
+ 
+ 		/* finally sleep for a full cycle */
+ 		/* we have just triggered the device with the last check */
 -- 
 2.7.4
 
