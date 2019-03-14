@@ -6,8 +6,6 @@ inherit ve_package
 inherit daemontools
 inherit python-compile
 
-# note: the connected patch is reverted only because it needs to be tested first..
-# but we do want a newer version because of dbus bus selection
 SRC_URI = " \
 	gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
 	file://com.victronenergy.system.conf \
