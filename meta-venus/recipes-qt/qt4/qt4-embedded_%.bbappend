@@ -22,7 +22,7 @@ QT_CONFIG_FLAGS = " \
 	-no-multimedia -no-audio-backend -no-phonon-backend \
 	-qdbus -no-openssl -no-qt3support -no-xmlpatterns \
 	-no-webkit -no-phonon -no-qt3support \
-	-no-svg -no-javascript-jit -optimized-qmake -no-xvideo \
+	-svg -no-javascript-jit -optimized-qmake -no-xvideo \
 	${QT_DISTRO_FLAGS} \
 	${QT_GLFLAGS}"
 
