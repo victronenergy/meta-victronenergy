@@ -29,6 +29,7 @@ RDEPENDS_${PN}_append_canvu500 += "\
 	mtd-utils \
 	mtd-utils-ubifs \
 	pointercal \
+	prodtest \
 	swupdate \
 	swupdate-scripts \
 	${QT5_RDEPENDS} \
