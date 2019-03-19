@@ -4,6 +4,15 @@
 
 do_mounts
 
+testmode() {
+    mknod /dev/ttyUSB1 c 188 1
+    do_modules ftdi-sio usbserial
+    stty -F /dev/ttyUSB1 115200
+    TTYS="$TTYS ttyUSB1"
+}
+
+HOOK_testmode="testmode"
+
 SWUDEV="sda1 sda"
 UBIPART=$(sed -n '/ubi/s/^mtd\([0-9]*\):.*/\1/p' /proc/mtd)
 TTYS="$TTYS tty0"

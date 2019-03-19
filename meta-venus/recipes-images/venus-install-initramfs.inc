@@ -14,7 +14,7 @@ IMAGE_INSTALL = " \
 "
 
 IMAGE_INSTALL_append_beaglebone = "e2fsprogs-mke2fs util-linux-sfdisk"
-IMAGE_INSTALL_append_canvu500 = "imx-kobs mtd-utils-ubifs"
+IMAGE_INSTALL_append_canvu500 = "imx-kobs mtd-utils-ubifs kernel-module-usbserial kernel-module-ftdi-sio"
 IMAGE_INSTALL_append_ccgx = "mtd-utils-ubifs"
 IMAGE_INSTALL_append_sunxi = "e2fsprogs-mke2fs util-linux-sfdisk"
 
