@@ -5,8 +5,10 @@
 do_mounts
 
 testmode() {
-    mknod /dev/ttyUSB1 c 188 1
     do_modules ftdi-sio usbserial
+    if [ ! -c /dev/ttyUSB1 ]; then
+		error "Console on VE.Direct not available"
+    fi
     stty -F /dev/ttyUSB1 115200
     TTYS="$TTYS ttyUSB1"
 }
