@@ -8,6 +8,7 @@ SRC_URI += "\
 	file://init \
 	file://localsettings \
 	file://store_watchdog_error.sh \
+	file://services.sh \
 	file://vrm-online.sh \
 	file://0001-Use-MemAvailable-instead-of-MemFree.patch \
 	file://0001-add-test-prescaler-to-run-test-less-often.patch \
@@ -29,6 +30,7 @@ do_install_append () {
 	install -m 0755 ${WORKDIR}/store_watchdog_error.sh ${D}${sbindir}
 
 	install -d ${D}${sysconfdir}/watchdog.d
+	install -m 0755 ${WORKDIR}/services.sh ${D}/${sysconfdir}/watchdog.d
 	install -m 0755 ${WORKDIR}/vrm-online.sh ${D}/${sysconfdir}/watchdog.d
 }
 

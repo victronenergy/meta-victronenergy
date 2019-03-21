@@ -33,6 +33,7 @@ case "$1" in
 	fi
 	# the value will be changed after it is uploaded, so keep the original value
 	cp /tmp/last_boot_type /tmp/last_boot_type.orig
+        mkdir -p /run/watchdog
         start-stop-daemon --start -x "$DAEMON" -- $OPTS
         ;;
   stop)
