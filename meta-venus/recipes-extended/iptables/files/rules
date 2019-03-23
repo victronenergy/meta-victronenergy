@@ -1,0 +1,5 @@
+*filter
+:new-conn -
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m conntrack --ctstate NEW -j new-conn
+COMMIT

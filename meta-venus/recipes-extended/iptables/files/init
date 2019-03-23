@@ -1,0 +1,18 @@
+#! /bin/sh
+
+RULES=/etc/iptables/rules
+
+start() {
+    iptables-restore <$RULES
+    ip6tables-restore <$RULES
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    *)
+        echo "Unsupported action $1"
+        exit 1
+        ;;
+esac

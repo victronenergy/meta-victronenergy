@@ -1,0 +1,39 @@
+#! /bin/sh
+
+cmd=$1
+shift
+
+apply() {
+    iptables "$@"
+    ip6tables "$@"
+}
+
+rules() {
+    allow=$1
+    deny=$2
+    proto=$3
+    port=$4
+
+    match="-p $proto --dport $port"
+
+    apply $allow new-conn $match -j ACCEPT
+    apply $deny  new-conn $match -j REJECT
+}
+
+allow() {
+    rules -A -D "$@"
+}
+
+deny() {
+    rules -D -A "$@"
+}
+
+case "$cmd" in
+    allow|deny)
+        $cmd "$@"
+        ;;
+    *)
+        echo "Unknown action $cmd"
+        exit 1
+        ;;
+esac
