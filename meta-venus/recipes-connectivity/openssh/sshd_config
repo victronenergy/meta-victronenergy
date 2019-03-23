@@ -45,7 +45,7 @@ PermitRootLogin yes
 
 #RSAAuthentication yes
 #PubkeyAuthentication yes
-AuthorizedKeysFile	.ssh/authorized_keys .ssh/authorized_keys2 /usr/share/support-keys/authorized_keys
+AuthorizedKeysFile	.ssh/authorized_keys .ssh/authorized_keys2 /run/ssh_support_keys
 
 # For this to work you will also need host keys in /etc/ssh/ssh_known_hosts
 #RhostsRSAAuthentication no
