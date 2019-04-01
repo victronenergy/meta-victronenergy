@@ -7,10 +7,11 @@ inherit www
 RDEPENDS_${PN} = "hiawatha venus-html5-logger"
 
 SRC_URI = " \
-	https://github.com/victronenergy/venus-html5-app/releases/download/${PV}/venus-html5-app.tar.gz \
+	https://github.com/victronenergy/venus-html5-app/releases/download/${PV}/venus-html5-app.tar.gz;downloadfilename=venus-html5-app-${PV}.tar.gz \
+ \
 "
-SRC_URI[md5sum] = "72a30417d4734b1c1cf83e14f4df4d9a"
-SRC_URI[sha256sum] = "5a6e648160b10a083da39d5fc711710764b561345a5ad5a27b941608aa21a51e"
+SRC_URI[md5sum] = "03f16d5acdfd2faede2d6dfaa0cf327b"
+SRC_URI[sha256sum] = "827f1ad4bb35aafed82ebd563d137ca4f5993b3c312537d6527d96ffa41451b3"
 
 S = "${WORKDIR}"
 BASE_DIR = "${WWW_ROOT}/app"
