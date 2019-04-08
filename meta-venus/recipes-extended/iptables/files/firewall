@@ -3,9 +3,25 @@
 cmd=$1
 shift
 
+do_ipt() {
+    cmd=$1
+    opt=$2
+    shift 2
+
+    case $opt in
+        -A)
+            $cmd -C "$@" 2>/dev/null && return
+            $cmd -A "$@"
+            ;;
+        -D)
+            while $cmd -D "$@" 2>/dev/null; do true; done
+            ;;
+    esac
+}
+
 apply() {
-    iptables "$@"
-    ip6tables "$@"
+    do_ipt iptables  "$@"
+    do_ipt ip6tables "$@"
 }
 
 rules() {
