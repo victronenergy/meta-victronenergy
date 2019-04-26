@@ -30,8 +30,8 @@ B = "${WORKDIR}/build"
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz \
 	file://0001-lets-find-out-who-is-scheduling-NULL-pointers.patch"
-SRC_URI[md5sum] = "f31722464fa51ac69f2155c86292572e"
-SRC_URI[sha256sum] = "3a860cd57e71b88652f3b1bbbc41b374967463464e123ac654898155625301d4"
+SRC_URI[md5sum] = "4bd685c0a580922e90c97e76aeb1f7a8"
+SRC_URI[sha256sum] = "1915be753b490b5045430fbd57f9af1cd9ea5fac127047cb0967c596c9d6f836"
 
 DEPENDS += "openssl-native"
 HOST_EXTRACFLAGS += "-I${STAGING_INCDIR_NATIVE}"
