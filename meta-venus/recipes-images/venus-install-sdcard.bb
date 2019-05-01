@@ -22,7 +22,12 @@ SCR = "install-${MACHINE}.scr"
 SWU = "venus-swu"
 
 SRC_URI_beaglebone += "file://board_id_octogx"
-SRC_URI_nanopi += "file://board_id_easysolar  file://board_id_paygo file://board_id_multiplus2"
+SRC_URI_nanopi += "\
+	file://board_id_easysolar \
+	file://board_id_maxigx \
+	file://board_id_multiplus2 \
+	file://board_id_paygo \
+"
 
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
 
