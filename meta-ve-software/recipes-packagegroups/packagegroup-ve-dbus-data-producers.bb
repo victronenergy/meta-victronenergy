@@ -43,6 +43,10 @@ RRECOMMENDS_${PN}_append_canvu500 += "\
 	dbus-digitalinputs \
 "
 
+RRECOMMENDS_${PN}_append_nanopi += "\
+	dbus-digitalinputs \
+"
+
 RRECOMMENDS_${PN}_append_raspberrypi2 += "\
 	dbus-digitalinputs \
 "

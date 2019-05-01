@@ -6,7 +6,10 @@ inherit ve_package
 inherit daemontools
 inherit python-compile
 
-SRC_URI = "gitsm://github.com/victronenergy/dbus-digitalinputs.git;protocol=https;tag=v${PV}"
+SRC_URI = "\
+	gitsm://github.com/victronenergy/dbus-digitalinputs.git;protocol=https;tag=v${PV} \
+	file://start-digitalinputs.sh \
+"
 S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \
@@ -16,9 +19,10 @@ RDEPENDS_${PN} = " \
 "
 
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
-DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_digitalinputs.py /dev/gpio/digital_input_*"
+DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/start-digitalinputs.sh"
 
 do_install () {
 	install -d ${D}${bindir}
 	cp -r ${S}/* ${D}${bindir}
+	install -m 0755 ${WORKDIR}/start-digitalinputs.sh ${D}${bindir}
 }
