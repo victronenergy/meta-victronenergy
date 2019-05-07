@@ -16,6 +16,9 @@ case $(product-name) in
 "MultiPlus-II")
 	echo C008
 	;;
+"Maxi GX")
+	echo C009
+	;;
 *)
 	echo C003
 esac
