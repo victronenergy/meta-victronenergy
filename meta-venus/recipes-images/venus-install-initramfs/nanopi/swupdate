@@ -10,8 +10,8 @@ BOARD_ID_DEV=0-00500
 TTYS="$TTYS lcd"
 
 testmode() {
-    stty -F /dev/ttyS1 115200
-    TTYS="$TTYS ttyS1"
+    stty -F /dev/ttyS2 115200
+    TTYS="$TTYS ttyS2"
 }
 
 clearlcd() {
