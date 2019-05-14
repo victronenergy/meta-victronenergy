@@ -1,20 +1,23 @@
-# MK3_BUS_STANDBY       PH2
-226 out vebus_standby
+# DIGITAL_INPUT_2       PA4
+4   in  digital_input_2
 
-# MK3_RESET             PH3
-227 out mkx_rst
+# DIGITAL_INPUT_4       PA5
+5   in  digital_input_4
 
-# RELAY_1               PB4
-36  out relay_1
+# DIGITAL_INPUT_1       PA6
+6   in  digital_input_1
+
+# DIGITAL_INPUT_3       PA7
+7   in  digital_input_3
 
 # RELAY_2               PB3
 35  out relay_2
 
-# DIGITAL_INPUT_1       PI14
-270 in  digital_input_1
+# RELAY_1               PB4
+36  out relay_1
 
-# DIGITAL_INPUT_2       PI15
-271 in  digital_input_2
+# MK3_BUS_STANDBY       PB9
+41  out vebus_standby
 
-# DIGITAL_INPUT_3       PI13
-269 in  digital_input_3
+# MK3_RESET             PB10
+42  out mkx_rst
