@@ -97,5 +97,6 @@ RDEPENDS_${PN} += "\
     watchdog \
     websockify-c \
     wget \
+    wireless-regdb-static \
     zip \
 "
