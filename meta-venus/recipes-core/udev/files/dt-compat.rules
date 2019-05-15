@@ -1,2 +1,0 @@
-# import the board compatible string for tty's
-ACTION=="add", SUBSYSTEM=="tty", IMPORT{program}="dt-compatible"

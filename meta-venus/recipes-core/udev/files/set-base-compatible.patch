@@ -1,0 +1,12 @@
+--- a/init
++++ b/init
+@@ -55,6 +55,9 @@ case "$1" in
+     [ -e /proc/sys/kernel/hotplug ] && echo -e '\000' >/proc/sys/kernel/hotplug
+     @UDEVD@ -d
+ 
++    compat=$(tr '\0' '\n' </sys/firmware/devicetree/base/compatible | head -n1)
++    udevadm control --env=BASE_COMPATIBLE="$compat"
++
+     udevadm control --env=STARTUP=1
+     if [ "$not_first_boot" != "" ];then
+             if [ "$PROBE_PLATFORM_BUS" != "yes" ]; then

@@ -1,4 +1,0 @@
-#! /bin/sh
-
-tr '\0' '\n' </sys/firmware/devicetree/base/compatible | head -n1 |
-    sed s/^/BASE_COMPATIBLE=/
