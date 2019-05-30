@@ -1,10 +1,8 @@
 #! /bin/sh
 
-inputs=$(find /dev/gpio/ -maxdepth 1 -name 'digital_input_*')
-
-if [ -z "$inputs" ]; then
+if ! test -e /dev/gpio/digital_input_1; then
     svc -d .
     exit 0
 fi
 
-exec $(dirname $0)/dbus_digitalinputs.py $inputs
+exec $(dirname $0)/dbus_digitalinputs.py /dev/gpio/digital_input_*
