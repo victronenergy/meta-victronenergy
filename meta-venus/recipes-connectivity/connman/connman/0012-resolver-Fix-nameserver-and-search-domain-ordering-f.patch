@@ -1,0 +1,42 @@
+From 1449514e95b37ff9bf82d033c40242a3f0554649 Mon Sep 17 00:00:00 2001
+From: Sam Nazarko <email@samnazarko.co.uk>
+Date: Thu, 21 Jul 2016 17:39:24 +0000
+Subject: [PATCH 12/13] resolver: Fix nameserver and search domain ordering for
+ resolv.conf
+
+(cherry picked from commit 9dd23f911cfb365d207e6facf0e516ed3806b858)
+---
+ src/resolver.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/resolver.c b/src/resolver.c
+index fbe4be731827..c4adbc6ef7d1 100644
+--- a/src/resolver.c
++++ b/src/resolver.c
+@@ -100,9 +100,9 @@ static int resolvfile_export(void)
+ 	 * MAXDNSRCH/MAXNS entries are used.
+ 	 */
+ 
+-	for (count = 0, list = g_list_last(resolvfile_list);
++	for (count = 0, list = g_list_first(resolvfile_list);
+ 						list && (count < MAXDNSRCH);
+-						list = g_list_previous(list)) {
++						list = g_list_next(list)) {
+ 		struct resolvfile_entry *entry = list->data;
+ 
+ 		if (!entry->domain)
+@@ -118,9 +118,9 @@ static int resolvfile_export(void)
+ 	if (count)
+ 		g_string_append_printf(content, "\n");
+ 
+-	for (count = 0, list = g_list_last(resolvfile_list);
++	for (count = 0, list = g_list_first(resolvfile_list);
+ 						list && (count < MAXNS);
+-						list = g_list_previous(list)) {
++						list = g_list_next(list)) {
+ 		struct resolvfile_entry *entry = list->data;
+ 
+ 		if (!entry->server)
+-- 
+2.21.0
+

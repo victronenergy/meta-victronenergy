@@ -1,0 +1,152 @@
+From 3a78e844a9e1b37fe1632cfee166bc6597634e2c Mon Sep 17 00:00:00 2001
+From: Daniel Wagner <wagi@monom.org>
+Date: Sat, 27 Apr 2019 13:50:38 +0200
+Subject: [PATCH 13/13] resolver: Don't export domain or nameserver duplicates
+
+Track exported elements and do not append the same domain or
+nameserver twice.
+
+connman_resolver_append() is called several times during connection
+bring up and might include domains or nameserver already in the
+resolvfile_list. This happens for example if two interfaces are
+brought up which happend to have the same
+configuration (e.g. nameserver 8.8.8.8).
+
+connmand[9080]: enp4s0 {newlink} index 2 operstate 6 <UP>
+connmand[9080]: src/resolver.c:connman_resolver_append() index 2 domain (null) server 192.168.154.1
+connmand[9080]: src/resolver.c:append_resolver() index 2 domain (null) server 192.168.154.1 lifetime 0 flags 0
+connmand[9080]: src/resolver.c:__connman_resolvfile_append() index 2 domain (null) server 192.168.154.1
+connmand[9080]: Cannot create /var/run/connman/resolv.conf falling back to /etc/resolv.conf
+connmand[9080]: src/resolver.c:connman_resolver_append() index 2 domain lan server (null)
+connmand[9080]: src/resolver.c:append_resolver() index 2 domain lan server (null) lifetime 0 flags 0
+connmand[9080]: src/resolver.c:__connman_resolvfile_append() index 2 domain lan server (null)
+connmand[9080]: Setting hostname to beryllium
+connmand[9080]: Setting domainname to lan
+connmand[9080]: enp4s0 {add} address 192.168.154.174/24 label enp4s0 family 2
+connmand[9080]: src/resolver.c:connman_resolver_remove() index 2 domain (null) server 192.168.154.1
+connmand[9080]: src/resolver.c:__connman_resolvfile_remove() index 2 domain (null) server 192.168.154.1
+connmand[9080]: src/resolver.c:connman_resolver_remove() index 2 domain lan server (null)
+connmand[9080]: src/resolver.c:__connman_resolvfile_remove() index 2 domain lan server (null)
+connmand[9080]: src/resolver.c:connman_resolver_append() index 2 domain (null) server 192.168.154.1
+connmand[9080]: src/resolver.c:append_resolver() index 2 domain (null) server 192.168.154.1 lifetime 0 flags 0
+connmand[9080]: src/resolver.c:__connman_resolvfile_append() index 2 domain (null) server 192.168.154.1
+connmand[9080]: src/resolver.c:connman_resolver_append() index 2 domain lan server (null)
+connmand[9080]: src/resolver.c:append_resolver() index 2 domain lan server (null) lifetime 0 flags 0
+connmand[9080]: src/resolver.c:__connman_resolvfile_append() index 2
+domain lan server (null)
+[...]
+connmand[9080]: wlan0 {newlink} index 7 operstate 6 <UP>
+connmand[9080]: src/resolver.c:connman_resolver_append() index 7 domain (null) server 192.168.154.1
+connmand[9080]: src/resolver.c:append_resolver() index 7 domain (null) server 192.168.154.1 lifetime 0 flags 0
+connmand[9080]: src/resolver.c:__connman_resolvfile_append() index 7 domain (null) server 192.168.154.1
+connmand[9080]: src/resolver.c:connman_resolver_append() index 7 domain lan server (null)
+connmand[9080]: src/resolver.c:append_resolver() index 7 domain lan server (null) lifetime 0 flags 0
+connmand[9080]: src/resolver.c:__connman_resolvfile_append() index 7 domain lan server (null)
+
+(cherry picked from commit 700f5df4c6d5d5ca48ebc947bb0a11517c2eb15e)
+---
+ src/resolver.c | 39 ++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 34 insertions(+), 5 deletions(-)
+
+diff --git a/src/resolver.c b/src/resolver.c
+index c4adbc6ef7d1..51d6554a0490 100644
+--- a/src/resolver.c
++++ b/src/resolver.c
+@@ -84,9 +84,22 @@ static void resolvfile_remove_entries(GList *entries)
+ 	g_list_free(entries);
+ }
+ 
++static bool already_exported(GList *export_list, const char *str)
++{
++	GList *list;
++
++	for (list = export_list; list; list = g_list_next(list)) {
++		const char *str0 = list->data;
++		if (g_strcmp0(str0, str) == 0)
++			return true;
++	}
++
++	return false;
++}
++
+ static int resolvfile_export(void)
+ {
+-	GList *list;
++	GList *list, *export_list;
+ 	GString *content;
+ 	int fd, err;
+ 	unsigned int count;
+@@ -100,6 +113,7 @@ static int resolvfile_export(void)
+ 	 * MAXDNSRCH/MAXNS entries are used.
+ 	 */
+ 
++	export_list = NULL;
+ 	for (count = 0, list = g_list_first(resolvfile_list);
+ 						list && (count < MAXDNSRCH);
+ 						list = g_list_next(list)) {
+@@ -108,16 +122,25 @@ static int resolvfile_export(void)
+ 		if (!entry->domain)
+ 			continue;
+ 
++		if (already_exported(export_list, entry->domain))
++			continue;
++
+ 		if (count == 0)
+ 			g_string_append_printf(content, "search ");
+ 
+ 		g_string_append_printf(content, "%s ", entry->domain);
++
++		export_list = g_list_append(export_list, entry->domain);
++
+ 		count++;
+ 	}
++	g_list_free(export_list);
++
+ 
+ 	if (count)
+ 		g_string_append_printf(content, "\n");
+ 
++	export_list = NULL;
+ 	for (count = 0, list = g_list_first(resolvfile_list);
+ 						list && (count < MAXNS);
+ 						list = g_list_next(list)) {
+@@ -126,10 +149,16 @@ static int resolvfile_export(void)
+ 		if (!entry->server)
+ 			continue;
+ 
+-		g_string_append_printf(content, "nameserver %s\n",
+-								entry->server);
++		if (already_exported(export_list, entry->server))
++			continue;
++
++		g_string_append_printf(content, "nameserver %s\n", entry->server);
++
++		export_list = g_list_append(export_list, entry->server);
++
+ 		count++;
+ 	}
++	g_list_free(export_list);
+ 
+ 	old_umask = umask(022);
+ 
+@@ -173,7 +202,7 @@ int __connman_resolvfile_append(int index, const char *domain,
+ {
+ 	struct resolvfile_entry *entry;
+ 
+-	DBG("index %d server %s", index, server);
++	DBG("index %d domain %s server %s", index, domain, server);
+ 
+ 	if (index < 0)
+ 		return -ENOENT;
+@@ -196,7 +225,7 @@ int __connman_resolvfile_remove(int index, const char *domain,
+ {
+ 	GList *list, *matches = NULL;
+ 
+-	DBG("index %d server %s", index, server);
++	DBG("index %d domain %s server %s", index, domain, server);
+ 
+ 	for (list = resolvfile_list; list; list = g_list_next(list)) {
+ 		struct resolvfile_entry *entry = list->data;
+-- 
+2.21.0
+
