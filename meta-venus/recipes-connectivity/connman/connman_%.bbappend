@@ -19,6 +19,8 @@ SRC_URI += "\
 	file://0008-service-abstract-the-more-complex-autoconnect-condit.patch \
 	file://0009-main.conf-document-AlwaysConnectedTechnologies-optio.patch \
 	file://0010-make-ipv4ll-fallback-configurable.patch \
+	file://0012-resolver-Fix-nameserver-and-search-domain-ordering-f.patch \
+	file://0013-resolver-Don-t-export-domain-or-nameserver-duplicate.patch \
 	file://main.conf \
 	file://connmand-watch.sh \
 "
