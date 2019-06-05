@@ -24,7 +24,11 @@ gen_config() (
     done <${conf}.in >${conf}
 )
 
-CONFIGS=canbus_ports
+CONFIGS="
+    backlight_device
+    blank_display_device
+    canbus_ports
+"
 
 for file in ${CONFIGS}; do
     gen_config /etc/venus/${file}
