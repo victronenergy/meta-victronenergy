@@ -20,6 +20,7 @@ RRECOMMENDS_${PN} += " \
 	can-bus-bms \
 	dbus-bornay-windplus \
 	dbus-cgwacs \
+	dbus-digitalinputs \
 	dbus-fronius \
 	dbus-modem \
 	dbus-motordrive \
@@ -36,17 +37,4 @@ RRECOMMENDS_${PN} += " \
 
 RRECOMMENDS_${PN}_append_beaglebone += "\
 	dbus-adc \
-	dbus-digitalinputs \
-"
-
-RRECOMMENDS_${PN}_append_canvu500 += "\
-	dbus-digitalinputs \
-"
-
-RRECOMMENDS_${PN}_append_nanopi += "\
-	dbus-digitalinputs \
-"
-
-RRECOMMENDS_${PN}_append_raspberrypi2 += "\
-	dbus-digitalinputs \
 "
