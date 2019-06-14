@@ -36,7 +36,7 @@ do_install_append() {
 	install -m 0755 -d ${D}${base_libdir}/udev
 	install -m 0755 ${WORKDIR}/bt-config ${D}${base_libdir}/udev
 
-#	install -m 0644 ${WORKDIR}/bluetooth.rules ${D}/${sysconfdir}/udev/rules.d
+	install -m 0644 ${WORKDIR}/bluetooth.rules ${D}/${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/ether.rules ${D}/${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/machine.rules ${D}/${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/mtd.rules ${D}/${sysconfdir}/udev/rules.d
