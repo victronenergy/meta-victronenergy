@@ -20,6 +20,5 @@ if hciconfig $HCI | grep -qw RAW; then
     usleep 200000
 fi
 
-btmgmt -i $HCI static-addr $(random_addr)
 btmgmt -i $HCI le on
 btmgmt -i $HCI bredr off
