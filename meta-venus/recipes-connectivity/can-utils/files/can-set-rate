@@ -2,7 +2,7 @@
 
 dev=$1
 rate=$2
-tty=/dev/tty$dev
+tty=$(ps |grep slcand|grep $dev|sed 's/.*\/dev/\/dev/' |cut -d' ' -f0)
 
 test -e $tty && is_slcan=y
 
