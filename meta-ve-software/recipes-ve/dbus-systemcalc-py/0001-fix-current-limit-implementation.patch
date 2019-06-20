@@ -1,0 +1,50 @@
+From b34f0c11251c9e19421cd232152dc9edf613c767 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Mon, 17 Jun 2019 16:07:18 +0200
+Subject: [PATCH] Fix current limit implementation
+
+Backports the fix in systemcalc which was spread over v2.00 and v2.01
+
+It fixes that a (dvcc) user configured charge current limit was not
+applied correctly in case Venus OS booted while there is no PV present
+on the system.
+
+The bug only affects systems with non-intelligent batteries that have a
+user-defined charge current limit configured (part of dvcc). It does not
+affect systems with an intelligent battery.
+
+The bug was introduced in Venus OS v2.30.
+---
+ delegates/dvcc.py | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index 3809e1d..26e51dd 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -469,7 +469,6 @@ def __init__(self, monitor, service):
+ 		self._service = service
+ 		self.bol = BatteryOperationalLimits(self)
+ 		self._dc_current = monitor.get_value(service, '/Dc/0/Current') or 0
+-		self._charge_current_limit = None
+ 
+ 	@property
+ 	def service(self):
+@@ -514,12 +513,11 @@ def maxchargecurrent(self):
+ 
+ 	@maxchargecurrent.setter
+ 	def maxchargecurrent(self, v):
+-		# The maximum present charge current is 6-parallel 12V 5kva units, 6*220 = 1320A.
+-		# We will consider 10000A to be unlimited. Write to dbus only when it changes
+-		# to avoid frequent dbus writes.
+-		if self._charge_current_limit != v:
+-			self.monitor.set_value_async(self.service, '/Dc/0/MaxChargeCurrent', v if v is not None else 10000)
+-		self._charge_current_limit = v
++		# If the Multi is not ready, don't write to it just yet
++		if self.active and self.maxchargecurrent is not None:
++			# The maximum present charge current is 6-parallel 12V 5kva units, 6*220 = 1320A.
++			# We will consider 10000A to be impossibly high.
++			self.monitor.set_value_async(self.service, '/Dc/0/MaxChargeCurrent', 10000 if v is None else v)
+ 
+ 	@property
+ 	def state(self):
