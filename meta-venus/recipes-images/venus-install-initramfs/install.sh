@@ -9,6 +9,9 @@ SWU=${CARD}/venus.swu
 # ttys to print progress/error message on
 TTYS="console"
 
+# additional ttys for test mode
+#TESTMODE_TTYS=
+
 # devices to search for swupdate image
 #SWUDEV=
 
@@ -27,7 +30,7 @@ TTYS="console"
 # filesystem type of /data, set by format_mmc/ubi
 #DATAFS=
 
-# set by findimg if ${CARD}/testmode exists
+# set if ${CARD}/testmode exists
 #TESTMODE=
 
 # Most SOM with emmc seem to be at least 4GB, but the available size seem to be
@@ -123,11 +126,21 @@ findimg() {
     else
         error "Installer image not found"
     fi
+}
 
-    if [ -f ${CARD}/testmode ]; then
-        TESTMODE=1
-        $HOOK_testmode
-    fi
+do_testmode() {
+    test -f ${CARD}/testmode || return 0
+
+    TESTMODE=1
+    eval $HOOK_testmode
+
+    for tty in $TESTMODE_TTYS; do
+        if [ ! -c /dev/$tty ]; then
+            error "Console $tty not available"
+        fi
+        stty -F /dev/$tty 115200
+        TTYS="$TTYS $tty"
+    done
 }
 
 format_mmc() {
@@ -266,6 +279,7 @@ do_install() {
     watchdog &
     waitdev $SWUDEV
     findimg $SWUDEV
+    do_testmode
     do_format
     setup_data $DATADEV $DATAFS
     install_swu

@@ -5,6 +5,7 @@
 SWUDEV=mmcblk0p1
 MMCDEV=mmcblk1
 BOARD_ID_DEV=0-00500
+TESTMODE_TTYS="ttyO2"
 
 LED_0=heartbeat
 LED_1=mmc0
@@ -28,13 +29,7 @@ capeled() {
     fi
 }
 
-testmode() {
-    stty -F /dev/ttyO2 115200
-    TTYS="$TTYS ttyO2"
-}
-
 HOOK_error="capeled red default-on"
-HOOK_testmode="testmode"
 HOOK_format="setleds 0 timer; capeled red timer"
 HOOK_rootfs1="setleds 0 default-on 1 timer"
 HOOK_rootfs2="setleds 1 default-on 2 timer"

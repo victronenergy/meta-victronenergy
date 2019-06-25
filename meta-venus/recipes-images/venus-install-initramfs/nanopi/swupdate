@@ -8,18 +8,13 @@ ROOT_SIZE=2048
 DATA_SIZE=2048
 BOARD_ID_DEV=0-00500
 TTYS="$TTYS lcd"
-
-testmode() {
-    stty -F /dev/ttyS2 115200
-    TTYS="$TTYS ttyS2"
-}
+TESTMODE_TTYS="ttyS2"
 
 clearlcd() {
     printf '\f' >/dev/lcd
 }
 
 HOOK_msg=clearlcd
-HOOK_testmode="testmode"
 
 # initialise LCD
 printf '\f\e[Lb\e[Lc\e[LD\e[L+' >/dev/lcd
