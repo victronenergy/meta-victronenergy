@@ -5,6 +5,7 @@
 SWUDEV=mmcblk0p1
 MMCDEV=mmcblk1
 BOARD_ID_DEV=1-00500
-TTYS="$TTYS ttyS5 tty0"
+TTYS="$TTYS tty0"
+TESTMODE_TTYS="ttyS7"
 
 do_install
