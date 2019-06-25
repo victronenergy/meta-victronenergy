@@ -1,0 +1,13 @@
+--- a/securetty
++++ b/securetty
+@@ -7,6 +7,10 @@ ttyS0
+ ttyS1
+ ttyS2
+ ttyS3
++ttyS4
++ttyS5
++ttyS6
++ttyS7
+ 
+ # ARM AMBA SoCs
+ ttyAM0
