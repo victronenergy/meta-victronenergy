@@ -6,6 +6,7 @@ SRC_URI += " \
 	file://mount.blacklist.machine \
 	file://bluetooth.rules \
 	file://bt-config \
+	file://display-hotplug \
 	file://ether.rules \
 	file://machine.rules \
 	file://mtd.rules \
@@ -35,6 +36,7 @@ do_install_append() {
 
 	install -m 0755 -d ${D}${base_libdir}/udev
 	install -m 0755 ${WORKDIR}/bt-config ${D}${base_libdir}/udev
+	install -m 0755 ${WORKDIR}/display-hotplug ${D}${base_libdir}/udev
 
 	install -m 0644 ${WORKDIR}/bluetooth.rules ${D}/${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/ether.rules ${D}/${sysconfdir}/udev/rules.d

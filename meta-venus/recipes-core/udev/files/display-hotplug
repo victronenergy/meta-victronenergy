@@ -1,0 +1,35 @@
+#! /bin/sh
+
+dev=/sys/$1
+con=$2
+bus=$3
+
+card=$(basename $dev)
+stat=$(cat $dev/$card-$con/status)
+
+get_devices() (
+    cd /sys/bus/i2c/devices/$1
+    ls -d ${1#*-}-*
+)
+
+connected() {
+    for d in $(get_devices $bus); do
+        echo $d >/sys/bus/i2c/drivers_probe
+    done
+}
+
+disconnected() {
+    for d in $(get_devices $bus); do
+        echo $d >/sys/bus/i2c/devices/$d/driver/unbind
+    done
+}
+
+case $stat in
+    connected|disconnected)
+        $stat
+        svc -t /service/gui
+        ;;
+    *)
+        logger "Unknown display status: $stat"
+        ;;
+esac
