@@ -19,8 +19,6 @@ DTB_beaglebone = "${KERNEL_IMAGETYPE}-bbb-venus.dtb ${KERNEL_IMAGETYPE}-bbb-octo
 
 SCR = "install-${MACHINE}.scr"
 
-SWU = "venus-swu"
-
 SRC_URI_beaglebone += "file://board_id_octogx"
 SRC_URI_nanopi += "\
 	file://board_id_easysolar \
