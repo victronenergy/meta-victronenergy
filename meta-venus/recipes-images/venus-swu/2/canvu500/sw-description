@@ -1,0 +1,92 @@
+software =
+{
+	venus-version = "0";
+
+	version = "0.1.0";
+
+	stable: {
+		bootloader: {
+			files: (
+				{
+					filename = "u-boot.imx";
+					path = "/tmp/u-boot.swu.imx";
+				}
+			);
+			images: (
+				{
+					filename = "splash.bmp.gz";
+					type = "flash";
+					mtdname = "splash";
+				}
+			);
+			scripts: (
+				{
+					filename = "imx-kobs-update.sh";
+					type = "postinstall";
+				}
+			);
+		};
+		copy1: {
+			files: (
+				{
+					filename = "ubi-install.sh";
+					path = "/tmp/ubi-install.sh";
+				}
+			)
+			images: (
+				{
+					filename = "venus-image-canvu500.tar.gz";
+					type = "pipe";
+					data = "sh /tmp/ubi-install.sh";
+					device = "rootfs1";
+					installed-directly = true;
+				}
+			);
+			uboot: (
+				{
+					name = "swversion";
+					value = "";
+				},
+				{
+					name = "version";
+					value = "1";
+				},
+				{
+					name = "setroot";
+					value = "setenv root ubi0:rootfs${version}";
+				}
+			);
+		};
+		copy2: {
+			files: (
+				{
+					filename = "ubi-install.sh";
+					path = "/tmp/ubi-install.sh";
+				}
+			)
+			images: (
+				{
+					filename = "venus-image-canvu500.tar.gz";
+					type = "pipe";
+					data = "sh /tmp/ubi-install.sh";
+					device = "rootfs2";
+					installed-directly = true;
+				}
+			);
+			uboot: (
+				{
+					name = "swversion";
+					value = "";
+				},
+				{
+					name = "version";
+					value = "2";
+				},
+				{
+					name = "setroot";
+					value = "setenv root ubi0:rootfs${version}";
+				}
+			);
+		};
+	};
+}
