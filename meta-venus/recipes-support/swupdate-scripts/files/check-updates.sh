@@ -140,6 +140,8 @@ if [ "$delay" = y ]; then
 fi
 
 machine=$(cat /etc/venus/machine)
+swu_name=$(cat /etc/venus/swu-name)
+swu_base=${swu_name}-${machine}
 
 if [[ $forceswu ]]; then
     echo "Updating to $forceswu"
@@ -158,7 +160,7 @@ elif [ "$offline" = y ]; then
         # MIND IT: There are ccgx and venusgx around which only check for
         # venus-swu-${machine}*.swu so don't make an incompatible ccgxv2 or
         # beaglebone-new MACHINE, since they are also accepted by the old ones.
-        SWU=$(ls -r $dev/venus-swu-${machine}-*.swu $dev/venus-swu-${machine}.swu 2>/dev/null | head -n1)
+        SWU=$(ls -r $dev/${swu_base}-*.swu $dev/${swu_base}.swu 2>/dev/null | head -n1)
         test -f "$SWU" && break
     done
 
@@ -184,7 +186,7 @@ else
     esac
 
     URL_BASE=https://updates.victronenergy.com/feeds/venus/${feed}/images/${machine}
-    SWU=${URL_BASE}/venus-swu-${machine}.swu
+    SWU=${URL_BASE}/${swu_base}.swu
 fi
 
 if [[ -z $forceswu ]]; then
@@ -205,7 +207,7 @@ if [[ -z $forceswu ]]; then
 
     if [ "$offline" != y ]; then
         # change SWU url into the full name
-        SWU=${URL_BASE}/venus-swu-${machine}-${swu_version// /-}.swu
+        SWU=${URL_BASE}/${swu_base}-${swu_version// /-}.swu
     fi
 
     echo "installed: $cur_version"
