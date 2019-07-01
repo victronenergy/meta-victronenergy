@@ -37,6 +37,7 @@ do_compile () {
 }
 
 CONF_FILES = "\
+	SWU:swu-name \
 	VE_BACKLIGHT:backlight_device \
 	VE_BLANK_DISPLAY:blank_display_device \
 	VE_BUZZER:buzzer \
