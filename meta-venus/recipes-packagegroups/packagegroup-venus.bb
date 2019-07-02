@@ -21,7 +21,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 LICENSE = "MIT"
 
-DEPENDS = "packagegroup-venus-optional-packages"
+DEPENDS = "packagegroup-venus-optional-packages venus-swu"
 
 # installer images
 DEPENDS_append_beaglebone += " venus-install-sdcard"
@@ -32,4 +32,9 @@ DEPENDS_append_sunxi += "venus-install-sdcard"
 # "live" initial image
 DEPENDS_append_raspberrypi2 += "venus-image"
 
-do_package[depends] =+ "venus-swu:do_swuimage"
+python () {
+    deps = d.getVar('DEPENDS').split()
+    for pkg in deps:
+        if pkg.startswith('venus-swu'):
+            d.appendVarFlag('do_package', 'depends', ' %s:do_swuimage' % pkg)
+}
