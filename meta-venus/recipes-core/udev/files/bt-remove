@@ -1,0 +1,5 @@
+#! /bin/sh
+
+if [ -z "$(ls /sys/class/bluetooth)" ]; then
+    svc -d /service/vesmart-server
+fi

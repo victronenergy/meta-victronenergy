@@ -1,1 +1,2 @@
 ACTION=="add", SUBSYSTEM=="bluetooth", RUN+="bt-config %k"
+ACTION=="remove", SUBSYSTEM=="bluetooth", RUN+="bt-remove %k"
