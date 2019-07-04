@@ -5,19 +5,30 @@ if [ ! -d /data/keys ]; then
 	chmod 700 /data/keys
 fi
 
+check_key() (
+	key=$1
+
+	a=$(ssh-keygen -y -f $key     2>/dev/null) || return
+	b=$(cut -d ' ' -f -2 $key.pub 2>/dev/null) || return
+
+	test "$a" = "$b"
+)
+
+gen_key() {
+	type=$1
+	key=/data/keys/ssh_host_${type}_key
+
+	check_key $key && return
+
+	echo "  generating ssh ${type} key..."
+	rm -f $key $key.pub
+	ssh-keygen -q -f $key -N '' -t $type
+}
+
 echo "*** Create keys if necessary..."
-if [ ! -f /data/keys/ssh_host_rsa_key ]; then
-	echo "  generating ssh RSA key..."
-	ssh-keygen -q -f /data/keys/ssh_host_rsa_key -N '' -t rsa
-fi
-if [ ! -f /data/keys/ssh_host_ecdsa_key ]; then
-	echo "  generating ssh ECDSA key..."
-	ssh-keygen -q -f /data/keys/ssh_host_ecdsa_key -N '' -t ecdsa
-fi
-if [ ! -f /data/keys/ssh_host_dsa_key ]; then
-	echo "  generating ssh DSA key..."
-	ssh-keygen -q -f /data/keys/ssh_host_dsa_key -N '' -t dsa
-fi
+gen_key rsa
+gen_key ecdsa
+gen_key dsa
 
 echo "*** Create the PrivSep empty dir if necessary..."
 if [ ! -d /var/run/sshd ]; then
