@@ -12,4 +12,4 @@ permanentsysconfdir = "${permanentdir}/conf"
 # persistant storage for applications (typically ${permanentlocalstatedir}lib/${PN} is used)
 permanentlocalstatedir = "${permanentdir}/var"
 
-DAEMONTOOLS_SERVICE_DIR ?= "${bindir}/service"
+DAEMONTOOLS_SERVICE_DIR ?= "${vedir}/service/${PN}"
