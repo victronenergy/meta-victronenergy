@@ -47,23 +47,36 @@ enum vrm_boot_reason
 #if defined(MACH_beaglebone)
 static int get_vrm_boot_reason(int linux_flags)
 {
-	switch (linux_flags) {
-	case 0:
+	if (linux_flags & 0x20)
 		return VRM_BOOT_RESET_BUTTON;
-	case 1:
-		return VRM_BOOT_COLD_BOOT;
-	case 2:
-		return VRM_BOOT_REBOOT_CMD;
-	case 16:
+
+	if (linux_flags & 0x10)
 		return VRM_BOOT_WATCHDOG_REBOOT;
-	default:
-		return VRM_BOOT_REASON_UNKNOWN;
-	}
+
+	if (linux_flags & 0x02)
+		return VRM_BOOT_REBOOT_CMD;
+
+	if (linux_flags & 0x01)
+		return VRM_BOOT_COLD_BOOT;
+
+	return VRM_BOOT_REASON_UNKNOWN;
 }
 #elif defined(MACH_ccgx)
 static int get_vrm_boot_reason(int linux_flags)
 {
-	return linux_flags;
+	if (linux_flags & 0x40)
+		return VRM_BOOT_RESET_BUTTON;
+
+	if (linux_flags & 0x30)
+		return VRM_BOOT_WATCHDOG_REBOOT;
+
+	if (linux_flags & 0x02)
+		return VRM_BOOT_REBOOT_CMD;
+
+	if (linux_flags & 0x01)
+		return VRM_BOOT_COLD_BOOT_OR_REBOOT;
+
+	return VRM_BOOT_REASON_UNKNOWN;
 }
 #else
 static int get_vrm_boot_reason(int linux_flags)
