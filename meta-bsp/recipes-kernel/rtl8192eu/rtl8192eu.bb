@@ -15,7 +15,8 @@ EXTRA_OEMAKE += "KSRC=${STAGING_KERNEL_DIR}"
 inherit module
 
 do_install () {
-    install -d ${D}/lib/modules/${KERNEL_VERSION}
-    install -m 0755 ${B}/8192eu.ko ${D}/lib/modules/${KERNEL_VERSION}/8192eu.ko
+    dest=${D}/lib/modules/${KERNEL_VERSION}/${PN}
+    install -d ${dest}
+    install -m 0644 ${B}/8192eu.ko ${dest}
 }
 
