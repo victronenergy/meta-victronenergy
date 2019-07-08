@@ -1,2 +1,2 @@
-ACTION=="add", SUBSYSTEM=="bluetooth", RUN+="bt-config %k"
-ACTION=="remove", SUBSYSTEM=="bluetooth", RUN+="bt-remove %k"
+ACTION=="add", SUBSYSTEM=="bluetooth", ENV{DEVTYPE}=="host", RUN+="bt-config %k"
+ACTION=="remove", SUBSYSTEM=="bluetooth", ENV{DEVTYPE}=="host", RUN+="bt-remove %k"
