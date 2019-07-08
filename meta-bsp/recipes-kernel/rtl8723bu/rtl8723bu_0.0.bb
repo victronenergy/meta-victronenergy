@@ -19,6 +19,7 @@ inherit module
 
 do_install() {
     # Module
-    install -d ${D}/lib/modules/${KERNEL_VERSION}/kernel/net/wireless
-    install -m 0644 8723bu.ko ${D}/lib/modules/${KERNEL_VERSION}/kernel/net/wireless/8723bu.ko
+    dest=${D}/lib/modules/${KERNEL_VERSION}/${PN}
+    install -d ${dest}
+    install -m 0644 8723bu.ko ${dest}
 }
