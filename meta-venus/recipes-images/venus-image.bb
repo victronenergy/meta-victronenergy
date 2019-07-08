@@ -1,6 +1,13 @@
 DESCRIPTION = "Generic Victron image"
 
-IMAGE_INSTALL = "packagegroup-core-boot packagegroup-base packagegroup-venus-base packagegroup-venus-machine ${CORE_IMAGE_EXTRA_INSTALL}"
+IMAGE_INSTALL = "\
+	packagegroup-core-boot \
+	packagegroup-base \
+	packagegroup-venus-base \
+	packagegroup-venus-machine \
+	${CORE_IMAGE_EXTRA_INSTALL} \
+	${KERNEL_PACKAGES} \
+"
 IMAGE_INSTALL += "packagegroup-ve-console-apps"
 IMAGE_FEATURES += "package-management ssh-server-openssh"
 
