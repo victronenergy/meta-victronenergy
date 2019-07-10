@@ -7,6 +7,10 @@ SRC_URI += "\
 	file://init.default \
 "
 
+EXTRA_OECONF += "\
+	--localstatedir=/data/var \
+"
+
 do_install_append() {
 	install -m 0644 ${WORKDIR}/ble.conf ${D}${sysconfdir}/bluetooth
 
