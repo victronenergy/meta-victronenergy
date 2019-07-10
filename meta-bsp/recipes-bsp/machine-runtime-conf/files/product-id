@@ -19,6 +19,9 @@ case $(product-name) in
 "Maxi GX")
 	echo C009
 	;;
+"Cerbo GX")
+	echo C00A
+	;;
 *)
 	echo C003
 esac
