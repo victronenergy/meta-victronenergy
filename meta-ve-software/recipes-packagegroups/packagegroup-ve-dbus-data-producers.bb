@@ -23,6 +23,7 @@ RRECOMMENDS_${PN} += " \
     dbus-digitalinputs \
     dbus-fronius \
     dbus-imt-si-rs485tc \
+    dbus-modbus-client \
     dbus-modem \
     dbus-motordrive \
     dbus-qwacs \
