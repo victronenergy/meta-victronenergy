@@ -6,7 +6,7 @@ inherit qmakeve
 inherit daemontools
 
 SRC_URI = " \
-	git://github.com/victronenergy/dbus_modbustcp.git;tag=v${PV};protocol=https \
+	gitsm://github.com/victronenergy/dbus_modbustcp.git;tag=v${PV};protocol=https \
 "
 S = "${WORKDIR}/git"
 DEST_DIR = "${D}${bindir}"
