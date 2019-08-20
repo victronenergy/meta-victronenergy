@@ -3,6 +3,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 PACKAGECONFIG = "deprecated readline tools"
 
 SRC_URI += "\
+	file://disable_gatt_reverse_service_discovery.patch \
 	file://ble.conf \
 	file://init.default \
 "

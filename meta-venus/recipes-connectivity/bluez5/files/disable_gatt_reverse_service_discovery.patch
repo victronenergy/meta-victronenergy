@@ -1,0 +1,126 @@
+From a4d62c43c5511e8a5974be61193be9740fc0e3fd Mon Sep 17 00:00:00 2001
+From: Thiemo van Engelen <tvanengelen@victronenergy.com>
+Date: Fri, 12 Jul 2019 13:03:34 +0200
+Subject: Make reverse service discovery configurable
+
+For some reason, doing a reverse gatt service discovery or automatic
+enabling of higher connection security causes iOS to keep a connection
+open, even when all applications have closed the connection. This
+prevents bluez from advertising and being connectable for other devices.
+
+Not doing a reverse gatt discovery also helps in the initial throughput.
+
+For this reason, the reverse gatt service discovery can be disabled by
+setting reverse_sdp to false in the config file.
+---
+ src/adapter.c       | 2 +-
+ src/attrib-server.c | 2 +-
+ src/device.c        | 9 +++++----
+ src/device.h        | 2 +-
+ src/gatt-database.c | 3 ++-
+ 5 files changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/src/adapter.c b/src/adapter.c
+index af340fd6e..2a5062991 100644
+--- a/src/adapter.c
++++ b/src/adapter.c
+@@ -3148,7 +3148,7 @@ static void device_connect_cb(GIOChannel *io, GError *gerr, gpointer user_data)
+ 
+ 	if (data->dst_type != BDADDR_BREDR){
+ 		g_io_channel_set_close_on_unref(io, FALSE);
+-		device_attach_att(device, io);
++		device_attach_att(device, io, true);
+ 	}
+ 
+ 	device_discover_services(device);
+diff --git a/src/attrib-server.c b/src/attrib-server.c
+index 7c15a4e8f..480666566 100644
+--- a/src/attrib-server.c
++++ b/src/attrib-server.c
+@@ -1281,7 +1281,7 @@ static void connect_event(GIOChannel *io, GError *gerr, void *user_data)
+ 	if (!device)
+ 		return;
+ 
+-	device_attach_att(device, io);
++	device_attach_att(device, io, true);
+ }
+ 
+ static gboolean register_core_services(struct gatt_server *server)
+diff --git a/src/device.c b/src/device.c
+index 4f1af7012..70ae91768 100644
+--- a/src/device.c
++++ b/src/device.c
+@@ -4951,7 +4951,7 @@ static bool remote_counter(uint32_t *sign_cnt, void *user_data)
+ 	return true;
+ }
+ 
+-bool device_attach_att(struct btd_device *dev, GIOChannel *io)
++bool device_attach_att(struct btd_device *dev, GIOChannel *io, bool client_init)
+ {
+ 	GError *gerr = NULL;
+ 	GAttrib *attrib;
+@@ -4973,7 +4973,7 @@ bool device_attach_att(struct btd_device *dev, GIOChannel *io)
+ 		return false;
+ 	}
+ 
+-	if (sec_level == BT_IO_SEC_LOW && dev->le_state.paired) {
++	if (client_init && sec_level == BT_IO_SEC_LOW && dev->le_state.paired) {
+ 		DBG("Elevating security level since LTK is available");
+ 
+ 		sec_level = BT_IO_SEC_MEDIUM;
+@@ -5021,7 +5021,8 @@ bool device_attach_att(struct btd_device *dev, GIOChannel *io)
+ 		load_gatt_db(dev, btd_adapter_get_storage_dir(dev->adapter),
+ 								dstaddr);
+ 
+-	gatt_client_init(dev);
++	if (client_init)
++		gatt_client_init(dev);
+ 	gatt_server_init(dev, database);
+ 
+ 	/*
+@@ -5065,7 +5066,7 @@ static void att_connect_cb(GIOChannel *io, GError *gerr, gpointer user_data)
+ 		goto done;
+ 	}
+ 
+-	if (!device_attach_att(device, io))
++	if (!device_attach_att(device, io, true))
+ 		goto done;
+ 
+ 	if (!device->bonding)
+diff --git a/src/device.h b/src/device.h
+index 06b100499..0d93a0b5e 100644
+--- a/src/device.h
++++ b/src/device.h
+@@ -76,7 +76,7 @@ struct bt_gatt_server *btd_device_get_gatt_server(struct btd_device *device);
+ void *btd_device_get_attrib(struct btd_device *device);
+ void btd_device_gatt_set_service_changed(struct btd_device *device,
+ 						uint16_t start, uint16_t end);
+-bool device_attach_att(struct btd_device *dev, GIOChannel *io);
++bool device_attach_att(struct btd_device *dev, GIOChannel *io, bool incoming);
+ void btd_device_add_uuid(struct btd_device *device, const char *uuid);
+ void device_add_eir_uuids(struct btd_device *dev, GSList *uuids);
+ void device_set_manufacturer_data(struct btd_device *dev, GSList *list,
+diff --git a/src/gatt-database.c b/src/gatt-database.c
+index 99c8ea231..5920d3d20 100644
+--- a/src/gatt-database.c
++++ b/src/gatt-database.c
+@@ -46,6 +46,7 @@
+ #include "dbus-common.h"
+ #include "profile.h"
+ #include "service.h"
++#include "hcid.h"
+ 
+ #ifndef ATT_CID
+ #define ATT_CID 4
+@@ -637,7 +638,7 @@ static void connect_cb(GIOChannel *io, GError *gerr, gpointer user_data)
+ 	if (!device)
+ 		return;
+ 
+-	device_attach_att(device, io);
++	device_attach_att(device, io, main_opts.reverse_sdp);
+ }
+ 
+ static void gap_device_name_read_cb(struct gatt_db_attribute *attrib,
+-- 
+2.17.1
+
