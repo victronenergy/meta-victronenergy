@@ -2,7 +2,7 @@
 ACTION=="add", ENV{DEVTYPE}=="wlan", ENV{ID_BUS}=="usb", ATTRS{removable}=="fixed", PROGRAM="wlan-rename", NAME="%c", GOTO="end"
 
 # external wifi
-ACTION=="add", ENV{DEVTYPE}=="wlan", ENV{ID_BUS}=="usb", RUN+="wlan-update"
+ACTION=="add", ENV{DEVTYPE}=="wlan", RUN+="wlan-update"
 ACTION=="remove", ENV{DEVTYPE}=="wlan", RUN+="wlan-update"
 
 LABEL="end"
