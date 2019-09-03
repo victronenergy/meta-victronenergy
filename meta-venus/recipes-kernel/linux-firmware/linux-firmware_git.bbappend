@@ -1,7 +1,7 @@
 # NOTE: this can be done a bit smarter since it is known which firmware is needed
 # for fw in `find /lib/modules/ -name '*.ko' -exec modinfo -F firmware {} \;`; do echo -n "$fw "; if [ ! -f /lib/firmware/$fw ]; then echo "not shipped"; else echo ok; fi; done
 
-PACKAGES =+ "${PN}-rt2800 ${PN}-rt73 ${PN}-rtl8723b"
+PACKAGES =+ "${PN}-rt2800 ${PN}-rt73"
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 #LICENSE_${PN}-rt2800 = "LICENCE.ralink-firmware.txt"
@@ -14,8 +14,9 @@ FILES_${PN}-rt73 = " \
   /lib/firmware/rt73.bin \
 "
 
-FILES_${PN}-rtl8723b = " \
-  /lib/firmware/rtl_bt/rtl8723b_fw.bin \
+PACKAGES =+ "${PN}-rtl-bt"
+FILES_${PN}-rtl-bt = " \
+  /lib/firmware/rtl_bt \
 "
 
 # Include the NVRAM file for wifi firmware on rpi3.

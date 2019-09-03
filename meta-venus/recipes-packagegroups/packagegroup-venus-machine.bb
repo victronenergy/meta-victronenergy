@@ -49,7 +49,7 @@ RDEPENDS_${PN}_append_beaglebone += "\
 	gpio-export \
 	hostapd \
 	i2c-tools \
-	linux-firmware-rtl8723b \
+	linux-firmware-rtl-bt \
 	prodtest \
 	swupdate \
 	swupdate-scripts \
@@ -66,7 +66,7 @@ RDEPENDS_${PN}_append_sunxi += "\
 	cpufrequtils \
 	gpio-export \
 	hostapd \
-	linux-firmware-rtl8723b \
+	linux-firmware-rtl-bt \
 	prodtest \
 	rtl8723bu \
 	swupdate \
