@@ -24,8 +24,7 @@ up_slcan() {
             ;;
     esac
 
-    stty -F $dev 1500000
-    slcand -o -f -t hw -s $rate_idx $tty $dev
+    slcand -o -f -t hw -s $rate_idx -S 1500000 $tty $dev
     ip link set $dev up
 }
 
