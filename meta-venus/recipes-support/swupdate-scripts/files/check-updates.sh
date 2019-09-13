@@ -88,6 +88,10 @@ while [[ $# -gt 0 ]]; do
                  forceswu="$1"
                  update="1"
         ;;
+        -swubase)
+                 shift
+                 swubase="$1"
+        ;;
         -offline)offline=y   ;;
         -help)   help=y      ;;
         *)       echo "Invalid option $arg"
@@ -101,17 +105,19 @@ if [ "$help" = y ]; then
     echo "check-updates.sh: wrapper script around swupdate"
     echo
     echo "Arguments:"
-    echo "-auto    script will check automatic update setting in localsettings."
-    echo "         use this when calling from cron or after boot."
-    echo "-delay   sleep for a random delay before starting the download of"
-    echo "         new image (to prevent thousands of units starting the"
-    echo "         download at the same time)."
-    echo "         use this when calling from cron or after boot."
-    echo "-check   (only) check if there is a new version available."
-    echo "-update  check and, when necessary, update."
-    echo "-force   force downloading and installing the new image, even if its"
-    echo "         version is older or same as already installed version."
-    echo "-swu url forcefully install the swu from given url"
+    echo "-auto        script will check automatic update setting in localsettings."
+    echo "             use this when calling from cron or after boot."
+    echo "-delay       sleep for a random delay before starting the download of"
+    echo "             new image (to prevent thousands of units starting the"
+    echo "             download at the same time)."
+    echo "             use this when calling from cron or after boot."
+    echo "-check       (only) check if there is a new version available."
+    echo "-update      check and, when necessary, update."
+    echo "-force       force downloading and installing the new image, even if its"
+    echo "             version is older or same as already installed version."
+    echo "-swu url     forcefully install the swu from given url"
+    echo "-swubase url use given url as a base, rather than the default:"
+    echo "             https://updates.victronenergy.com/feeds/venus/[feed]/"
     echo "-offline search for updates on removable storage devices"
     echo "-help    this help"
     echo
@@ -185,12 +191,16 @@ else
            ;;
     esac
 
-    URL_BASE=https://updates.victronenergy.com/feeds/venus/${feed}/images/${machine}
+    if [ -z "$swubase" ]; then
+        swubase=https://updates.victronenergy.com/feeds/venus/${feed}/
+    fi
+
+    URL_BASE=${swubase}images/${machine}
     SWU=${URL_BASE}/${swu_base}.swu
 fi
 
 if [[ -z $forceswu ]]; then
-    echo "Retrieving latest version (feed=$feed)..."
+    echo "Retrieving latest version... (from $SWU)"
     swu_status 1
 
     cur_version=$(get_version)
