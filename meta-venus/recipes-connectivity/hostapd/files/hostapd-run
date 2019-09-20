@@ -1,5 +1,9 @@
 #! /bin/sh
 
+set_led() {
+	echo "$1" >/sys/class/leds/wifi/trigger
+}
+
 gen_config() {
 	test -e /run/hostapd.conf && return 0
 
@@ -21,10 +25,21 @@ stop() {
 	exit 1
 }
 
+finish() {
+	test -n "$pid" && kill $pid
+	set_led blink-slow
+}
+
 # make sure interface exists
 iw dev ap0 info >/dev/null 2>&1 || stop
 
 gen_config || stop
 
 rfkill unblock wifi
-exec /usr/sbin/hostapd /run/hostapd.conf
+set_led none
+
+trap finish EXIT
+
+/usr/sbin/hostapd /run/hostapd.conf &
+pid=$!
+wait
