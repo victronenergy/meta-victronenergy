@@ -5,11 +5,22 @@ ACTION=="add", KERNEL=="ttyS3", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="
 ACTION=="add", SUBSYSTEM=="tty", ENV{ID_MODEL}=="VE_SLCAN_Interface", SYMLINK+="ttycan0"
 LABEL="end-easysolar"
 
+# EasySolar A9 devices
+ENV{BASE_COMPATIBLE}!="victronenergy,easysolar-a9", GOTO="end-easysolar-a9"
+ACTION=="add", KERNEL=="ttyS[12]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
+ACTION=="add", KERNEL=="ttyS3", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="mkx"
+LABEL="end-easysolar-a9"
+
 # Maxi GX devices
 ENV{BASE_COMPATIBLE}!="victronenergy,maxi-gx", GOTO="end-maxi-gx"
 ACTION=="add", KERNEL=="ttyS2", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
 ACTION=="add", SUBSYSTEM=="tty", ENV{ID_MODEL}=="VE_SLCAN_Interface", SYMLINK+="ttycan0"
 LABEL="end-maxi-gx"
+
+# Maxi GX A9 devices
+ENV{BASE_COMPATIBLE}!="victronenergy,maxi-gx-a9", GOTO="end-maxi-gx-a9"
+ACTION=="add", KERNEL=="ttyS2", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
+LABEL="end-maxi-gx-a9"
 
 # PayGo devices
 ENV{BASE_COMPATIBLE}!="victronenergy,paygo", GOTO="end-paygo"
