@@ -25,6 +25,7 @@ SRC_URI_einstein += "\
 "
 SRC_URI_nanopi += "\
 	file://board_id_easysolar \
+	file://board_id_easysolar_a9 \
 	file://board_id_maxigx \
 	file://board_id_multiplus2 \
 	file://board_id_paygo \
