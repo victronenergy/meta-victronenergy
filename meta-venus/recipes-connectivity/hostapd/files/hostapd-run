@@ -1,7 +1,8 @@
 #! /bin/sh
 
-set_led() {
-	echo "$1" >/sys/class/leds/wifi/trigger
+set_leds() {
+	echo "$1" >/sys/class/leds/status-green/trigger  2>/dev/null
+	echo "$2" >/sys/class/leds/status-orange/trigger 2>/dev/null
 }
 
 gen_config() {
@@ -27,7 +28,7 @@ stop() {
 
 finish() {
 	test -n "$pid" && kill $pid
-	set_led blink-slow
+	set_leds none blink-slow
 }
 
 # make sure interface exists
@@ -36,7 +37,7 @@ iw dev ap0 info >/dev/null 2>&1 || stop
 gen_config || stop
 
 rfkill unblock wifi
-set_led none
+set_leds blink-slow none
 
 trap finish EXIT
 
