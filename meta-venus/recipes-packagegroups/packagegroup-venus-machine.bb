@@ -69,6 +69,7 @@ RDEPENDS_${PN}_append_sunxi += "\
 	linux-firmware-rtl-bt \
 	prodtest \
 	rtl8723bu \
+	rtl8723du \
 	swupdate \
 	swupdate-scripts \
 "
