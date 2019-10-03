@@ -10,18 +10,6 @@ case $(product-name) in
 "Octo GX")
 	echo C006
 	;;
-"EasySolar-II")
-	echo C007
-	;;
-"MultiPlus-II")
-	echo C008
-	;;
-"Maxi GX")
-	echo C009
-	;;
-"Cerbo GX")
-	echo C00A
-	;;
 *)
 	echo C003
 esac

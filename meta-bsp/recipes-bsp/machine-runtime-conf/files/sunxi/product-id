@@ -1,0 +1,14 @@
+#! /bin/sh
+
+id=$(dd if=/sys/bus/nvmem/devices/0-00500/nvmem bs=4 count=1 2>//dev/null)
+
+case $id in
+	VECB) echo C00A ;;	# Cerbo GX
+	VEES) echo C007 ;;	# EasySolar-II
+	VES9) echo C00B ;;	# EasySolar-II rev A9
+	VEMX) echo C009 ;;	# Maxi GX
+	VMX9) echo C00D ;;	# Maxi GX rev A9
+	VEMP) echo C008 ;;	# MultiPlus-II
+	VMP9) echo C00C ;;	# MultiPlus-II rev A9
+	*)    echo C003 ;;
+esac
