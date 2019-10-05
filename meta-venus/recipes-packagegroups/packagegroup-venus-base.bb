@@ -35,6 +35,7 @@ RDEPENDS_${PN} += "\
 	bsdiff \
 	bzip2 \
 	ca-certificates \
+	canutils \
 	can-utils \
 	connman \
 	connman-tools \
