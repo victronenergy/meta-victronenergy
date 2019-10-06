@@ -14,5 +14,6 @@ DEPENDS += "\
 	tinymembench \
 	tmux \
 	valgrind \
+	venus-socketcan-test \
 	vim \
 "
