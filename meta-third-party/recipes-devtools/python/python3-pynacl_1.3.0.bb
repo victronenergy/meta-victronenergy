@@ -4,7 +4,7 @@ SECTION = "devel/python"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=8cc789b082b3d97e1ccc5261f8594d3f"
 
-DEPENDS = "libsodium-native python3-cffi-native"
+DEPENDS = "libsodium-native python3-cffi-native libsodium"
 
 PYPI_PACKAGE = "PyNaCl"
 
@@ -19,5 +19,4 @@ do_compile_prepend () {
 	${S}/setup.py
 }
 
-RDEPENDS_${PN} = "libsodium"
 export SODIUM_INSTALL="system"
