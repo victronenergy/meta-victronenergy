@@ -53,6 +53,7 @@ RDEPENDS_${PN}_append_beaglebone += "\
 	prodtest \
 	swupdate \
 	swupdate-scripts \
+	venus-button-handler \
 "
 
 RDEPENDS_${PN}_append_einstein += "\
@@ -60,6 +61,7 @@ RDEPENDS_${PN}_append_einstein += "\
 	linux-firmware-bcm43362 \
 	sunxi-mali \
 	sunxi-mali-blobs \
+	venus-button-handler \
 "
 
 RDEPENDS_${PN}_append_sunxi += "\
