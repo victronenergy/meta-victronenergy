@@ -7,6 +7,7 @@ DEPENDS += "\
 	gdb \
 	git \
 	nodejs \
+	openvpn \
 	packagegroup-core-buildessential \
 	python-pylint \
 	s6 \
