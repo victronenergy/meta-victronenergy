@@ -1,5 +1,21 @@
 #! /bin/sh
 
+get_setting() {
+    dbus-send --print-reply=literal --system --type=method_call \
+              --dest=com.victronenergy.settings $1 \
+              com.victronenergy.BusItem.GetValue |
+        awk '/int32/ { print $3 }'
+}
+
+bridge_conf=/data/conf/mosquitto.d/vrm_bridge.conf
+bridge_link=/run/mosquitto/vrm_bridge.conf
+
+if [ "$(get_setting /Settings/Services/MqttVrm)" = 1 ]; then
+    ln -sf $bridge_conf $bridge_link
+else
+    rm -f $bridge_link
+fi
+
 keydir=/data/keys
 cert=$keydir/mosquitto.crt
 key=$keydir/mosquitto.key
