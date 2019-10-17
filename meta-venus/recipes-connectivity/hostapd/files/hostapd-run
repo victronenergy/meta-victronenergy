@@ -1,8 +1,22 @@
 #! /bin/sh
 
+case $(board-compat) in
+	victronenergy,cerbo-gx)
+		leds_off="status-green=none status-orange=blink-slow"
+		leds_on="status-green=blink-slow status-orange=none"
+		;;
+	sancloud,am335x-boneenhanced|unipoin,gridless-octo)
+		leds_off="vecape:green:ve0=blink-slow vecape:red:ve1=blink-slow"
+		leds_on="vecape:green:ve0=blink-slow vecape:red:ve1=none"
+		;;
+esac
+
 set_leds() {
-	echo "$1" >/sys/class/leds/status-green/trigger  2>/dev/null
-	echo "$2" >/sys/class/leds/status-orange/trigger 2>/dev/null
+	for led; do
+		name=${led%=*}
+		trig=${led#*=}
+		echo $trig >/sys/class/leds/$name/trigger
+	done
 }
 
 gen_config() {
@@ -28,7 +42,7 @@ stop() {
 
 finish() {
 	test -n "$pid" && kill $pid
-	set_leds none blink-slow
+	set_leds $leds_off
 }
 
 # make sure interface exists
@@ -37,7 +51,7 @@ iw dev ap0 info >/dev/null 2>&1 || stop
 gen_config || stop
 
 rfkill unblock wifi
-set_leds blink-slow none
+set_leds $leds_on
 
 trap finish EXIT
 
