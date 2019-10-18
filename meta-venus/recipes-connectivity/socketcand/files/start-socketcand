@@ -1,0 +1,9 @@
+#!/bin/sh
+
+interfaces=$(sed -e 's/ /,/g' /etc/venus/canbus_ports)
+if [ "$interfaces" = "" ]; then
+	svc -d .
+	exit 1
+fi
+
+socketcand -i $interfaces -v
