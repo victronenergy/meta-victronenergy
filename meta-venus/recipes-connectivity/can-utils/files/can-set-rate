@@ -6,6 +6,12 @@ tty=/dev/tty$dev
 
 test -e $tty && is_slcan=y
 
+# Preferably the tx queue is not increased, but many programs
+# fail to work properly without it.
+#
+# See e.g. https://rtime.felk.cvut.cz/can/socketcan-qdisc-final.pdf
+# "3.4.  Blocking the application when the queue is full"
+
 up_slcan() {
     case ${rate%000} in
         0)               ;;
@@ -25,7 +31,7 @@ up_slcan() {
     esac
 
     slcand -o -f -t hw -s $rate_idx -S 1500000 $tty $dev
-    ip link set $dev up
+    ip link set $dev up txqueuelen 100
 }
 
 down_slcan() {
@@ -33,7 +39,7 @@ down_slcan() {
 }
 
 up_ip() {
-    ip link set $dev up type can bitrate $rate restart-ms 100
+    ip link set $dev up txqueuelen 100 type can bitrate $rate restart-ms 100
 }
 
 down_ip() {
