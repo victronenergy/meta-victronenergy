@@ -17,4 +17,5 @@ DEPENDS += "\
 	valgrind \
 	venus-socketcan-test \
 	vim \
+	x11vnc \
 "
