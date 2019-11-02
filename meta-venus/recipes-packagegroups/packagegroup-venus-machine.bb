@@ -28,7 +28,6 @@ RDEPENDS_${PN}_append_canvu500 += "\
 	kmscube \
 	mtd-utils \
 	mtd-utils-ubifs \
-	pointercal \
 	prodtest \
 	swupdate \
 	swupdate-scripts \
