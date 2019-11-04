@@ -38,3 +38,7 @@ RRECOMMENDS_${PN} += " \
 RRECOMMENDS_${PN}_append_beaglebone += "\
     dbus-adc \
 "
+
+RRECOMMENDS_${PN}_append_einstein += "\
+    dbus-adc \
+"
