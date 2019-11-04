@@ -51,6 +51,9 @@ BOARD_ID_SIZE=16
 # file containing board id to program
 BOARD_ID_FILE=${CARD}/board_id
 
+# location of firmware files
+FIRMWARE_DIR=/opt/victronenergy/firmware
+
 msg() {
     eval "$HOOK_msg"
     for tty in $TTYS; do
@@ -228,6 +231,16 @@ install_swu() {
     swupdate "$@" -e "stable,bootloader"
 }
 
+install_firmware() {
+    test -d "$FIRMWARE_DIR" || return 0
+
+    msg "Installing firmware..."
+
+    find $FIRMWARE_DIR -type f | while read f; do
+        /opt/victronenergy/venus-firmware-update/venus-firmware-update "$f"
+    done
+}
+
 read_board_id() {
     file=$1
 
@@ -283,6 +296,7 @@ do_install() {
     do_format
     setup_data $DATADEV $DATAFS
     install_swu
+    install_firmware
     setup_board_id
 
     eval $HOOK_postinst
