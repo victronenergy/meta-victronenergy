@@ -1,0 +1,37 @@
+#! /bin/sh
+
+set -e
+
+do_openocd() {
+    conf=$1
+    data=$2
+    openocd -f "$conf" -c "program $data verify reset exit"
+}
+
+do_cerbo() {
+    file=$1
+
+    case $(basename "$file") in
+        samc21_slcan_adc*.bin)
+            do_openocd cerbogx-samc21-can-adc.cfg "$file"
+            return
+            ;;
+        default)
+            echo "Unknown firmware file $file"
+            return 1
+    esac
+}
+
+case $(board-compat) in
+    victronenergy,cerbo-gx)
+        handler=do_cerbo
+        ;;
+    *)
+        echo "Unknown board"
+        exit 1
+        ;;
+esac
+
+for fw; do
+    $handler "$fw"
+done
