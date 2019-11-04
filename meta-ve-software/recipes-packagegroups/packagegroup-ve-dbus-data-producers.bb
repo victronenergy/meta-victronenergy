@@ -26,7 +26,6 @@ RRECOMMENDS_${PN} += " \
 	dbus-modem \
 	dbus-motordrive \
 	dbus-qwacs \
-	dbus-redflow \
 	dbus-systemcalc-py \
 	dbus-valence \
 	dbus-vebus-to-pvinverter \
