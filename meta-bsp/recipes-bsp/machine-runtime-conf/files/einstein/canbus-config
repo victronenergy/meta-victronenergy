@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ "$1" == "can0" ]; then
+	echo any
+elif [ "$1" == "can1" ]; then
+	echo forced-canbus-bms
+else
+	echo any
+fi
+

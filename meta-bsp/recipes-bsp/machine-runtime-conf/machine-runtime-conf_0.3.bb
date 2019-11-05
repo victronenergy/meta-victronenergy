@@ -8,6 +8,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += " \
 	file://board-compat \
+	file://canbus-config \
 	file://get-unique-id \
 	file://hw-revision \
 	file://installation-name \
@@ -80,6 +81,7 @@ do_install_append() {
 
 	install -d ${D}/${bindir}
 	install -m 755 ${WORKDIR}/board-compat ${D}/${bindir}
+	install -m 755 ${WORKDIR}/canbus-config ${D}/${bindir}
 	install -m 755 ${WORKDIR}/hw-revision ${D}/${bindir}
 	install -m 755 ${WORKDIR}/installation-name ${D}/${bindir}
 	install -m 755 ${WORKDIR}/product-id ${D}/${bindir}
