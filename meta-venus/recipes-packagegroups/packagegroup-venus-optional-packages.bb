@@ -5,8 +5,10 @@ LICENSE = "MIT"
 DEPENDS += "\
 	devmem2 \
 	gdb \
+	gpsd \
 	git \
 	nodejs \
+	ntp \
 	openvpn \
 	packagegroup-core-buildessential \
 	python-pylint \
