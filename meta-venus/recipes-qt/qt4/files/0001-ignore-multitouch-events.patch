@@ -1,0 +1,26 @@
+From 2855a75cc08a8edec0a6af8b42f624b403b49fed Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 7 Nov 2019 16:46:19 +0100
+Subject: [PATCH] ignore multitouch events
+
+---
+ src/gui/embedded/qmouselinuxinput_qws.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/gui/embedded/qmouselinuxinput_qws.cpp b/src/gui/embedded/qmouselinuxinput_qws.cpp
+index 55fd4f14fa..bf390b7fd7 100644
+--- a/src/gui/embedded/qmouselinuxinput_qws.cpp
++++ b/src/gui/embedded/qmouselinuxinput_qws.cpp
+@@ -170,6 +170,9 @@ void QWSLinuxInputMousePrivate::readMouseData()
+                 m_x = data->value;
+             } else if (data->code == ABS_Y) {
+                 m_y = data->value;
++            } else if (data->code == ABS_MT_POSITION_X || data->code == ABS_MT_POSITION_Y ||
++                       data->code == ABS_MT_TRACKING_ID || data->code == ABS_MT_SLOT) {
++                // ignore multitouch
+             } else {
+                 unknown = true;
+             }
+-- 
+2.17.1
+
