@@ -13,12 +13,12 @@ S = "${WORKDIR}/git"
 MALI_REV ?= "r8p1"
 MALI_DIR = "${S}/${MALI_REV}/src/devicedrv/mali"
 MALI_OPTS = "\
-	USING_UMP=0 \
-	BUILD=release \
-	USING_PROFILING=0 \
-	MALI_PLATFORM=sunxi \
-	USING_DVFS=1 \
-	USING_DEVFREQ=1 \
+    USING_UMP=0 \
+    BUILD=release \
+    USING_PROFILING=0 \
+    MALI_PLATFORM=sunxi \
+    USING_DVFS=1 \
+    USING_DEVFREQ=1 \
 "
 
 EXTRA_OEMAKE += "${MALI_OPTS} KDIR=${STAGING_KERNEL_BUILDDIR} -C ${MALI_DIR}"

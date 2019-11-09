@@ -1,8 +1,8 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 SRC_URI += " \
-	file://dbus-daemon-watch.sh \
-	file://system.conf \
+    file://dbus-daemon-watch.sh \
+    file://system.conf \
  "
 
 RDEPENDS_${PN}_append_venus = " inotify-tools"

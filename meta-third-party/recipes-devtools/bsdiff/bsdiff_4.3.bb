@@ -7,7 +7,7 @@ DEPENDS = "bzip2"
 RDEPENDS_${PN} = "bzip2"
 
 SRC_URI = "http://www.daemonology.net/bsdiff/bsdiff-4.3.tar.gz \
-	   file://bsdiff-4.3/Makefile"
+       file://bsdiff-4.3/Makefile"
 
 LICENSE = "BSD-2-Clause"
 SRC_URI[md5sum] = "e6d812394f0e0ecc8d5df255aa1db22a"
@@ -23,7 +23,7 @@ do_configure () {
 #EXTRA_OEMAKE = "all"
 
 do_install () {
-	install -d ${D}/${bindir}
-	install -m 0755 ${S}/bsdiff ${D}/${bindir}
-	install -m 0755 ${S}/bspatch ${D}/${bindir}
+    install -d ${D}/${bindir}
+    install -m 0755 ${S}/bsdiff ${D}/${bindir}
+    install -m 0755 ${S}/bspatch ${D}/${bindir}
 }

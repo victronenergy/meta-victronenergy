@@ -7,7 +7,7 @@ inherit www
 RDEPENDS_${PN} = "hiawatha venus-html5-logger"
 
 SRC_URI = " \
-	https://github.com/victronenergy/venus-html5-app/releases/download/${PV}/venus-html5-app.tar.gz;downloadfilename=venus-html5-app-${PV}.tar.gz \
+    https://github.com/victronenergy/venus-html5-app/releases/download/${PV}/venus-html5-app.tar.gz;downloadfilename=venus-html5-app-${PV}.tar.gz \
  \
 "
 SRC_URI[md5sum] = "ac8329baa7423c08947ff02bb477082d"
@@ -20,7 +20,7 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 do_install () {
-	for f in $( find ${S}/dist -type f -printf "%P\n" ); do
-		install -D "${S}/dist/$f" "${D}${BASE_DIR}/$f"
-	done
+    for f in $( find ${S}/dist -type f -printf "%P\n" ); do
+        install -D "${S}/dist/$f" "${D}${BASE_DIR}/$f"
+    done
 }

@@ -11,12 +11,12 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 # is no longer there.
 
 SRC_URI += " \
-	file://0001-lib-randutils.c-Fall-back-gracefully-when-kernel-doe.patch \
-	file://0002-lib-randutils.c-More-paranoia-in-getrandom-call.patch \
-	file://0003-lib-randutils-improve-getrandom-usage.patch \
-	file://0004-lib-randutils-reset-lose-counter.patch \
-	file://0005-misc-fix-some-printf-format-strings.patch \
-	file://0006-lib-randutils-remove-superfluous-continue.patch \
-	file://0007-lib-randutils-Do-not-block-on-getrandom.patch \
-	file://0008-lib-randutils-don-t-break-on-EAGAIN-use-usleep.patch \
+    file://0001-lib-randutils.c-Fall-back-gracefully-when-kernel-doe.patch \
+    file://0002-lib-randutils.c-More-paranoia-in-getrandom-call.patch \
+    file://0003-lib-randutils-improve-getrandom-usage.patch \
+    file://0004-lib-randutils-reset-lose-counter.patch \
+    file://0005-misc-fix-some-printf-format-strings.patch \
+    file://0006-lib-randutils-remove-superfluous-continue.patch \
+    file://0007-lib-randutils-Do-not-block-on-getrandom.patch \
+    file://0008-lib-randutils-don-t-break-on-EAGAIN-use-usleep.patch \
 "

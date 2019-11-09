@@ -9,17 +9,17 @@ inherit python-compile
 RDEPENDS_${PN} = "machine-runtime-conf"
 
 SRC_URI = " \
-	gitsm://github.com/victronenergy/dbus-characterdisplay.git;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/dbus-characterdisplay.git;protocol=https;tag=v${PV} \
 "
 
 S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \
-	dbus-systemcalc-py \
-	localsettings \
-	python-argparse \
-	python-dbus \
-	python-evdev \
+    dbus-systemcalc-py \
+    localsettings \
+    python-argparse \
+    python-dbus \
+    python-evdev \
 "
 
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"

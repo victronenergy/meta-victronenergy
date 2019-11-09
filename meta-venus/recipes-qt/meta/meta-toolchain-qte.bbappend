@@ -19,7 +19,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 SRC_URI += "file://hardcode-qt-mkspec-paths.sh"
 
 create_sdk_files_append() {
-	cp ${WORKDIR}/hardcode-qt-mkspec-paths.sh ${SDK_OUTPUT}/${SDKPATH}/
+    cp ${WORKDIR}/hardcode-qt-mkspec-paths.sh ${SDK_OUTPUT}/${SDKPATH}/
 }
 
 # See openembedded-core/meta/files/toolchain-shar-extract.sh and

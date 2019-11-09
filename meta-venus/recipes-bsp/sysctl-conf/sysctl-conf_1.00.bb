@@ -5,7 +5,7 @@ SRC_URI = "file://sysctl.conf"
 S = "${WORKDIR}"
 
 do_install () {
-	install -m 0755 -d ${D}${sysconfdir}
-	install -m 0644 ${WORKDIR}/sysctl.conf ${D}${sysconfdir}
+    install -m 0755 -d ${D}${sysconfdir}
+    install -m 0644 ${WORKDIR}/sysctl.conf ${D}${sysconfdir}
 }
 

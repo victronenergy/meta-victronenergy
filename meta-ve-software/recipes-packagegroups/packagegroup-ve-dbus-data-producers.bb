@@ -17,24 +17,24 @@ inherit packagegroup
 # These are RRECOMMENDS so the are only included when available.
 
 RRECOMMENDS_${PN} += " \
-	can-bus-bms \
-	dbus-bornay-windplus \
-	dbus-cgwacs \
-	dbus-digitalinputs \
-	dbus-fronius \
-	dbus-imt-si-rs485tc \
-	dbus-modem \
-	dbus-motordrive \
-	dbus-qwacs \
-	dbus-systemcalc-py \
-	dbus-valence \
-	dbus-vebus-to-pvinverter \
-	gps-dbus \
-	mk2-dbus \
-	vecan-dbus \
-	vedirect-interface \
+    can-bus-bms \
+    dbus-bornay-windplus \
+    dbus-cgwacs \
+    dbus-digitalinputs \
+    dbus-fronius \
+    dbus-imt-si-rs485tc \
+    dbus-modem \
+    dbus-motordrive \
+    dbus-qwacs \
+    dbus-systemcalc-py \
+    dbus-valence \
+    dbus-vebus-to-pvinverter \
+    gps-dbus \
+    mk2-dbus \
+    vecan-dbus \
+    vedirect-interface \
 "
 
 RRECOMMENDS_${PN}_append_beaglebone += "\
-	dbus-adc \
+    dbus-adc \
 "

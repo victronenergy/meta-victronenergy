@@ -1,8 +1,8 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 SRC_URI += "\
-	file://hostapd.conf \
-	file://hostapd-run \
+    file://hostapd.conf \
+    file://hostapd-run \
 "
 
 inherit daemontools

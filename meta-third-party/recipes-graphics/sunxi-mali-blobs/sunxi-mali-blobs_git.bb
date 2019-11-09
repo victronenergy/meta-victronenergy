@@ -9,10 +9,10 @@ PROVIDES += "virtual/egl virtual/libgles1 virtual/libgles2"
 inherit insane
 
 SRC_URI = "\
-	git://github.com/bootlin/mali-blobs.git;protocol=https \
-	file://egl.pc \
-	file://glesv1_cm.pc \
-	file://glesv2.pc \
+    git://github.com/bootlin/mali-blobs.git;protocol=https \
+    file://egl.pc \
+    file://glesv1_cm.pc \
+    file://glesv2.pc \
 "
 SRCREV = "418f55585e76f375792dbebb3e97532f0c1c556d"
 S = "${WORKDIR}/git"

@@ -8,8 +8,8 @@ inherit daemontools
 inherit python-compile
 
 SRC_URI = " \
-	gitsm://github.com/victronenergy/dbus-imt-si-rs485tc.git;protocol=https;tag=${PV} \
-	file://start.sh \
+    gitsm://github.com/victronenergy/dbus-imt-si-rs485tc.git;protocol=https;tag=${PV} \
+    file://start.sh \
 "
 
 S = "${WORKDIR}/git"
@@ -21,13 +21,13 @@ DAEMONTOOLS_SERVICE_SYMLINK = "0"
 DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}.TTY"
 
 RDEPENDS_${PN} = " \
-	bash \
-	localsettings \
-	python \
-	python-dbus \
-	python-pymodbus \
+    bash \
+    localsettings \
+    python \
+    python-dbus \
+    python-pymodbus \
 "
 
 do_install_append () {
-	install -m 755 ${WORKDIR}/start.sh ${D}${bindir}
+    install -m 755 ${WORKDIR}/start.sh ${D}${bindir}
 }

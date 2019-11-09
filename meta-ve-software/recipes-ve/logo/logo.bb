@@ -10,7 +10,7 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 do_install () {
-	mkdir -p "${D}${WWW_ROOT}"
-	install -m 644 ${WORKDIR}/logo.php "${D}${WWW_ROOT}"
+    mkdir -p "${D}${WWW_ROOT}"
+    install -m 644 ${WORKDIR}/logo.php "${D}${WWW_ROOT}"
 }
 

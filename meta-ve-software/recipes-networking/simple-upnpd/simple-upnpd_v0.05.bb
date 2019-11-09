@@ -20,15 +20,15 @@ DAEMONTOOLS_SERVICE_DIR = "${sysconfdir}/${PN}/service"
 DAEMONTOOLS_RUN = "${base_bindir}/start-simple-upnpd"
 
 SRC_URI = " \
-	git://github.com/victronenergy/simple-upnpd.git;protocol=https;tag=${PV} \
-	file://start-simple-upnpd \
-	file://simple-upnpd.skeleton.xml \
+    git://github.com/victronenergy/simple-upnpd.git;protocol=https;tag=${PV} \
+    file://start-simple-upnpd \
+    file://simple-upnpd.skeleton.xml \
 "
 
 do_install() {
-	install -d ${D}/${base_bindir} ${D}${sysconfdir}
+    install -d ${D}/${base_bindir} ${D}${sysconfdir}
 
-	install -m 0755 ${S}/simple-upnpd ${D}/${base_bindir}
-	install -m 0755 ${WORKDIR}/simple-upnpd.skeleton.xml ${D}/${sysconfdir}
-	install -m 0755 ${WORKDIR}/start-simple-upnpd ${D}${base_bindir}
+    install -m 0755 ${S}/simple-upnpd ${D}/${base_bindir}
+    install -m 0755 ${WORKDIR}/simple-upnpd.skeleton.xml ${D}/${sysconfdir}
+    install -m 0755 ${WORKDIR}/start-simple-upnpd ${D}${base_bindir}
 }

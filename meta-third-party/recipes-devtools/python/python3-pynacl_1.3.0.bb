@@ -14,9 +14,9 @@ SRC_URI[sha256sum] = "0c6100edd16fefd1557da078c7a31e7b7d7a52ce39fdca2bec29d4f7b6
 inherit setuptools3 pypi
 
 do_compile_prepend () {
-	sed -i -e 's:configure, "--dis:configure, "--host=${TARGET_SYS}", "--dis:g' \
-	-e 's:.*make.*check.*:#&:g' \
-	${S}/setup.py
+    sed -i -e 's:configure, "--dis:configure, "--host=${TARGET_SYS}", "--dis:g' \
+    -e 's:.*make.*check.*:#&:g' \
+    ${S}/setup.py
 }
 
 export SODIUM_INSTALL="system"

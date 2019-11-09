@@ -8,6 +8,6 @@ SRC_URI = "git://github.com/victronenergy/dbus-tools.git;tag=${PV};name=dbus-too
 S = "${WORKDIR}/git"
 
 do_install () {
-	install -d ${D}${bindir}/
-	install -m 0755 ${S}/dbus ${D}${bindir}/
+    install -d ${D}${bindir}/
+    install -m 0755 ${S}/dbus ${D}${bindir}/
 }

@@ -5,8 +5,8 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 INHIBIT_DEFAULT_DEPS = "1"
 
 SRC_URI = " \
-	file://custom-rc-early.sh \
-	file://custom-rc-late.sh \
+    file://custom-rc-early.sh \
+    file://custom-rc-late.sh \
 "
 
 S = "${WORKDIR}"
@@ -29,10 +29,10 @@ RDEPENDS_${PN} += "${PN}-early ${PN}-late"
 ALLOW_EMPTY_${PN} = "1"
 
 do_install () {
-	install -d ${D}${sysconfdir}/rcS.d
-	install -d ${D}${sysconfdir}/rc5.d
-	install -d ${D}${sysconfdir}/init.d
+    install -d ${D}${sysconfdir}/rcS.d
+    install -d ${D}${sysconfdir}/rc5.d
+    install -d ${D}${sysconfdir}/init.d
 
-	install -m 0755 ${WORKDIR}/custom-rc-early.sh	${D}${sysconfdir}/init.d/custom-rc-early.sh
-	install -m 0755 ${WORKDIR}/custom-rc-late.sh	${D}${sysconfdir}/init.d/custom-rc-late.sh
+    install -m 0755 ${WORKDIR}/custom-rc-early.sh    ${D}${sysconfdir}/init.d/custom-rc-early.sh
+    install -m 0755 ${WORKDIR}/custom-rc-late.sh    ${D}${sysconfdir}/init.d/custom-rc-late.sh
 }

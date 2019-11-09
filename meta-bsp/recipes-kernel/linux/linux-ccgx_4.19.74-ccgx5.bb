@@ -18,8 +18,8 @@ UBOOT_ENTRYPOINT = "80008000"
 # To be compatible with the deployed u-boot, a uImage containing a
 # zImage with dtb appended is created.
 uboot_prep_kimage() {
-	cat arch/${ARCH}/boot/zImage arch/${ARCH}/boot/dts/am3517-ccgx.dtb \
-		> linux.bin
+    cat arch/${ARCH}/boot/zImage arch/${ARCH}/boot/dts/am3517-ccgx.dtb \
+        > linux.bin
         linux_comp=none
 }
 

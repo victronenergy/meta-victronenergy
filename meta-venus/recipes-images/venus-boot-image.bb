@@ -5,10 +5,10 @@ BOOT_IMAGE_SIZE = "8192"
 BOOT_IMAGE_SIZE_raspberrypi2 = "40960"
 
 do_rootfs[depends] += "\
-	dosfstools-native:do_populate_sysroot \
-	mtools-native:do_populate_sysroot \
-	virtual/bootloader:do_deploy \
-	virtual/kernel:do_deploy \
+    dosfstools-native:do_populate_sysroot \
+    mtools-native:do_populate_sysroot \
+    virtual/bootloader:do_deploy \
+    virtual/kernel:do_deploy \
 "
 
 do_configure[noexec] = "1"

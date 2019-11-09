@@ -7,27 +7,27 @@ inherit daemontools
 inherit python-compile
 
 SRC_URI = " \
-	gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
-	file://com.victronenergy.system.conf \
+    gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
+    file://com.victronenergy.system.conf \
 "
 
 S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \
-	localsettings \
-	python \
-	python-dbus \
-	python-pprint \
-	python-pygobject \
+    localsettings \
+    python \
+    python-dbus \
+    python-pprint \
+    python-pygobject \
 "
 
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_systemcalc.py"
 
 do_install () {
-	install -d ${D}${bindir}
-	cp -r ${S}/* ${D}${bindir}
+    install -d ${D}${bindir}
+    cp -r ${S}/* ${D}${bindir}
 
-	install -d ${D}/${sysconfdir}/dbus-1/system.d
-	install -m 644 ${WORKDIR}/com.victronenergy.system.conf ${D}/${sysconfdir}/dbus-1/system.d
+    install -d ${D}/${sysconfdir}/dbus-1/system.d
+    install -m 644 ${WORKDIR}/com.victronenergy.system.conf ${D}/${sysconfdir}/dbus-1/system.d
 }

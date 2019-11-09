@@ -1,6 +1,6 @@
 DESCRIPTION = " \
-	s6 is a small suite of programs for UNIX, designed to allow process supervision (a.k.a service supervision), \
-	in the line of daemontools and runit, as well as various operations on processes and daemons. \
+    s6 is a small suite of programs for UNIX, designed to allow process supervision (a.k.a service supervision), \
+    in the line of daemontools and runit, as well as various operations on processes and daemons. \
 "
 
 HOMEPAGE = "http://skarnet.org/software/s6/"
@@ -16,9 +16,9 @@ DEPENDS = "execline skalibs make-native"
 RDEPENDS_${PN} = "execline skalibs"
 
 do_configure() {
-	./configure --with-sysdeps=${PKG_CONFIG_SYSROOT_DIR}/usr/lib/skalibs/sysdeps --with-lib=${PKG_CONFIG_SYSROOT_DIR}/usr/lib --libexecdir=${libexecdir}
+    ./configure --with-sysdeps=${PKG_CONFIG_SYSROOT_DIR}/usr/lib/skalibs/sysdeps --with-lib=${PKG_CONFIG_SYSROOT_DIR}/usr/lib --libexecdir=${libexecdir}
 }
 
 do_install () {
-	oe_runmake 'DESTDIR=${D}' install
+    oe_runmake 'DESTDIR=${D}' install
 }

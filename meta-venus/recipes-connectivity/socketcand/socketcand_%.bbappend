@@ -3,8 +3,8 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 SRC_URI += "file://start-socketcand"
 
 do_install_append() {
-	install -d ${D}${sbindir}
-	install -m 0755 ${WORKDIR}/start-socketcand ${D}${sbindir}
+    install -d ${D}${sbindir}
+    install -m 0755 ${WORKDIR}/start-socketcand ${D}${sbindir}
 }
 
 FILES_${PN} += "${sbindir}/start-socketcand"

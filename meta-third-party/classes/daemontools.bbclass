@@ -13,44 +13,44 @@ DAEMONTOOLS_LOG_DIR_PREFIX = "${localstatedir}/log"
 DAEMONTOOLS_SERVICE_SYMLINK ?= "1"
 
 python () {
-	pkg = d.getVar('DAEMON_PN', True)
-	d.appendVar('RDEPENDS_' + pkg, ' ${DAEMONTOOLS}')
-	d.appendVar('FILES_' + pkg, ' ${DAEMONTOOLS_SERVICES_DIR} ${DAEMONTOOLS_SERVICE_DIR}')
+    pkg = d.getVar('DAEMON_PN', True)
+    d.appendVar('RDEPENDS_' + pkg, ' ${DAEMONTOOLS}')
+    d.appendVar('FILES_' + pkg, ' ${DAEMONTOOLS_SERVICES_DIR} ${DAEMONTOOLS_SERVICE_DIR}')
 }
 
 DAEMONTOOLS_preinst() {
-	if test "x$D" = "x"; then
-		if [ -d ${DAEMONTOOLS_SERVICES_DIR}/${PN} ]; then
-			echo "Stopping ${PN}"
-			svc -d ${DAEMONTOOLS_SERVICES_DIR}/${PN}
-			svc -d ${DAEMONTOOLS_SERVICES_DIR}/${PN}/log
-		fi
-	fi
+    if test "x$D" = "x"; then
+        if [ -d ${DAEMONTOOLS_SERVICES_DIR}/${PN} ]; then
+            echo "Stopping ${PN}"
+            svc -d ${DAEMONTOOLS_SERVICES_DIR}/${PN}
+            svc -d ${DAEMONTOOLS_SERVICES_DIR}/${PN}/log
+        fi
+    fi
 }
 
 DAEMONTOOLS_postinst() {
-	if test "x$D" = "x"; then
-		if [ "x${DAEMONTOOLS_DOWN}" = "x" ]; then
-			echo "Starting ${PN}"
-			svc -u ${DAEMONTOOLS_SERVICES_DIR}/${PN}/log
-			svc -u ${DAEMONTOOLS_SERVICES_DIR}/${PN}
-		fi
-	fi
+    if test "x$D" = "x"; then
+        if [ "x${DAEMONTOOLS_DOWN}" = "x" ]; then
+            echo "Starting ${PN}"
+            svc -u ${DAEMONTOOLS_SERVICES_DIR}/${PN}/log
+            svc -u ${DAEMONTOOLS_SERVICES_DIR}/${PN}
+        fi
+    fi
 }
 
 DAEMONTOOLS_prerm() {
-	if test "x$D" = "x"; then
-		echo "Stopping ${PN}"
-		svc -d ${DAEMONTOOLS_SERVICES_DIR}/${PN}
-		svc -d ${DAEMONTOOLS_SERVICES_DIR}/${PN}/log
-	fi
+    if test "x$D" = "x"; then
+        echo "Stopping ${PN}"
+        svc -d ${DAEMONTOOLS_SERVICES_DIR}/${PN}
+        svc -d ${DAEMONTOOLS_SERVICES_DIR}/${PN}/log
+    fi
 }
 
 # opkg forgets to remove symlinks, dpkg doesn't so check if still there
 DAEMONTOOLS_postrm() {
-	if [ -d ${DAEMONTOOLS_SERVICES_DIR}/${PN} ]; then
-		rm ${DAEMONTOOLS_SERVICES_DIR}/${PN}
-	fi
+    if [ -d ${DAEMONTOOLS_SERVICES_DIR}/${PN} ]; then
+        rm ${DAEMONTOOLS_SERVICES_DIR}/${PN}
+    fi
 }
 
 def daemontools_after_parse(d):
@@ -110,35 +110,35 @@ python populate_packages_prepend () {
 
 
 do_install_append() {
-	SERVICE="${D}${DAEMONTOOLS_SERVICE_DIR}"
+    SERVICE="${D}${DAEMONTOOLS_SERVICE_DIR}"
 
-	install -d ${SERVICE}
-	echo "#!/bin/sh" > ${SERVICE}/run
-	echo "exec 2>&1" >> ${SERVICE}/run
-	if [ "x${DAEMONTOOLS_SCRIPT}" = "x" ]; then
-		DAEMONTOOLS_SCRIPT="exec ${DAEMONTOOLS_RUN}"
-	fi
-	echo "${DAEMONTOOLS_SCRIPT}" >> ${SERVICE}/run
-	chmod 755 ${SERVICE}/run
+    install -d ${SERVICE}
+    echo "#!/bin/sh" > ${SERVICE}/run
+    echo "exec 2>&1" >> ${SERVICE}/run
+    if [ "x${DAEMONTOOLS_SCRIPT}" = "x" ]; then
+        DAEMONTOOLS_SCRIPT="exec ${DAEMONTOOLS_RUN}"
+    fi
+    echo "${DAEMONTOOLS_SCRIPT}" >> ${SERVICE}/run
+    chmod 755 ${SERVICE}/run
 
-	install -d ${SERVICE}/log
-	echo "#!/bin/sh" > ${SERVICE}/log/run
-	echo "exec 2>&1" >> ${SERVICE}/log/run
-	if [ "x${DAEMONTOOLS_LOG_DIR}" = "x" ]; then
-		DAEMONTOOLS_LOG_DIR="${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}"
-	fi
-	echo "exec multilog t s25000 n4 ${DAEMONTOOLS_LOG_DIR}" >> ${SERVICE}/log/run
-	chmod 755 ${SERVICE}/log/run
+    install -d ${SERVICE}/log
+    echo "#!/bin/sh" > ${SERVICE}/log/run
+    echo "exec 2>&1" >> ${SERVICE}/log/run
+    if [ "x${DAEMONTOOLS_LOG_DIR}" = "x" ]; then
+        DAEMONTOOLS_LOG_DIR="${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}"
+    fi
+    echo "exec multilog t s25000 n4 ${DAEMONTOOLS_LOG_DIR}" >> ${SERVICE}/log/run
+    chmod 755 ${SERVICE}/log/run
 
-	if [ "x${DAEMONTOOLS_DOWN}" != "x" ]; then
-		touch ${SERVICE}/down
-		touch ${SERVICE}/log/down
-	fi
+    if [ "x${DAEMONTOOLS_DOWN}" != "x" ]; then
+        touch ${SERVICE}/down
+        touch ${SERVICE}/log/down
+    fi
 
-	if [ ${DAEMONTOOLS_SERVICE_SYMLINK} = "1" ]; then
-		install -d ${D}${DAEMONTOOLS_SERVICES_DIR}
-		ln -s ${DAEMONTOOLS_SERVICE_DIR} ${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}
-	fi
+    if [ ${DAEMONTOOLS_SERVICE_SYMLINK} = "1" ]; then
+        install -d ${D}${DAEMONTOOLS_SERVICES_DIR}
+        ln -s ${DAEMONTOOLS_SERVICE_DIR} ${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}
+    fi
 }
 
 

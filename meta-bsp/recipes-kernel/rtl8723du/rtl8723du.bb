@@ -3,7 +3,7 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.GPLv2;md5=751419260aa954499f7abaabaa882bbe"
 
 SRC_URI = " \
-	git://github.com/lwfinger/rtl8723du.git;protocol=https;branch=master \
+    git://github.com/lwfinger/rtl8723du.git;protocol=https;branch=master \
 "
 SRCREV = "a8735e5e739a1e01aa17a6bd34b5cedba992b0be"
 

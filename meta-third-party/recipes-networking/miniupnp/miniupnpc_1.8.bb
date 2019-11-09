@@ -14,5 +14,5 @@ CFLAGS += "-D_BSD_SOURCE -D_POSIX_C_SOURCE=1 -fPIC"
 #EXTRA_OEMAKE = "INSTALLPREFIX=${D}/usr/"
 
 do_install () {
-	oe_runmake install INSTALLPREFIX=${D}/usr/
+    oe_runmake install INSTALLPREFIX=${D}/usr/
 }

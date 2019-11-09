@@ -9,8 +9,8 @@ DEPENDS = "base-passwd"
 RDEPENDS_${PN} = "hiawatha"
 
 SRC_URI = " \
-	file://javascript-vnc-client.conf \
-	gitsm://github.com/victronenergy/javascript-vnc-client.git;protocol=https;tag=${PV} \
+    file://javascript-vnc-client.conf \
+    gitsm://github.com/victronenergy/javascript-vnc-client.git;protocol=https;tag=${PV} \
 "
 
 S = "${WORKDIR}/git"
@@ -21,9 +21,9 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 do_install () {
-	install -d ${DEST_DIR}/
-	oe_runmake DESTDIR=${DEST_DIR} install
-	install -d ${D}${sysconfdir}/hiawatha/sites-enabled
-	install -m 0644 ${WORKDIR}/javascript-vnc-client.conf ${D}${sysconfdir}/hiawatha/sites-enabled/javascript-vnc-client.conf
+    install -d ${DEST_DIR}/
+    oe_runmake DESTDIR=${DEST_DIR} install
+    install -d ${D}${sysconfdir}/hiawatha/sites-enabled
+    install -m 0644 ${WORKDIR}/javascript-vnc-client.conf ${D}${sysconfdir}/hiawatha/sites-enabled/javascript-vnc-client.conf
 }
 

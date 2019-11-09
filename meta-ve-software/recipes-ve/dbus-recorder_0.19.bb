@@ -11,14 +11,14 @@ SRC_URI = "git://github.com/victronenergy/dbus-recorder.git;protocol=https;tag=$
 S = "${WORKDIR}/git"
 
 do_install () {
-	install -d ${D}/${bindir}
+    install -d ${D}/${bindir}
 
-	install -m 0755 ${S}/play.sh ${D}/${bindir}
-	install -m 0755 ${S}/startdemo.sh ${D}/${bindir}
-	install -m 0755 ${S}/stopdemo.sh ${D}/${bindir}
+    install -m 0755 ${S}/play.sh ${D}/${bindir}
+    install -m 0755 ${S}/startdemo.sh ${D}/${bindir}
+    install -m 0755 ${S}/stopdemo.sh ${D}/${bindir}
 
-	# copy python scripts
-	install -m 755 -D ${S}/*.py ${D}/${bindir}
-	# copy data files
-	install -m 444 -D ${S}/*.dat ${D}/${bindir}
+    # copy python scripts
+    install -m 755 -D ${S}/*.py ${D}/${bindir}
+    # copy data files
+    install -m 444 -D ${S}/*.dat ${D}/${bindir}
 }

@@ -7,15 +7,15 @@ inherit allarch
 RDEPENDS_${PN} = "bash e2fsprogs-resize2fs swupdate"
 
 SRC_URI = " \
-	file://check-updates.init \
-	file://check-updates.sh \
-	file://functions.sh \
-	file://machine.sh \
-	file://resize2fs.sh \
-	file://scan-versions.init \
-	file://scan-versions.sh \
-	file://set-feed.sh \
-	file://set-version.sh \
+    file://check-updates.init \
+    file://check-updates.sh \
+    file://functions.sh \
+    file://machine.sh \
+    file://resize2fs.sh \
+    file://scan-versions.init \
+    file://scan-versions.sh \
+    file://set-feed.sh \
+    file://set-version.sh \
 "
 
 S = "${WORKDIR}"

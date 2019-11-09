@@ -13,7 +13,7 @@ RDEPENDS_${PN} += "daemontools"
 SRC_URI += "file://svscanboot.sh"
 
 do_install () {
-	mkdir -p ${D}/${sysconfdir}/init.d
-	install -D ${WORKDIR}/svscanboot.sh ${D}/${sysconfdir}/init.d
+    mkdir -p ${D}/${sysconfdir}/init.d
+    install -D ${WORKDIR}/svscanboot.sh ${D}/${sysconfdir}/init.d
 }
 

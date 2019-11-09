@@ -11,7 +11,7 @@ DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/sshd"
 SRC_URI += "file://start-sshd.sh"
 
 do_install_append() {
-	install -m 755 ${WORKDIR}/start-sshd.sh ${D}${bindir}
+    install -m 755 ${WORKDIR}/start-sshd.sh ${D}${bindir}
 }
 
 # disable the update-rc.d

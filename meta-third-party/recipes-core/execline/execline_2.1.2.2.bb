@@ -13,9 +13,9 @@ DEPENDS = "skalibs make-native"
 RDEPENDS_${PN} = "skalibs"
 
 do_configure() {
-	./configure --with-sysdeps=${PKG_CONFIG_SYSROOT_DIR}/usr/lib/skalibs/sysdeps --libdir=${libdir} --dynlibdir=${libdir} --with-lib=${PKG_CONFIG_SYSROOT_DIR}/usr/lib
+    ./configure --with-sysdeps=${PKG_CONFIG_SYSROOT_DIR}/usr/lib/skalibs/sysdeps --libdir=${libdir} --dynlibdir=${libdir} --with-lib=${PKG_CONFIG_SYSROOT_DIR}/usr/lib
 }
 
 do_install () {
-	oe_runmake 'DESTDIR=${D}' install
+    oe_runmake 'DESTDIR=${D}' install
 }

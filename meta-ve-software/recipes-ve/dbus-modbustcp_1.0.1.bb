@@ -6,7 +6,7 @@ inherit qmakeve
 inherit daemontools
 
 SRC_URI = " \
-	gitsm://github.com/victronenergy/dbus_modbustcp.git;tag=v${PV};protocol=https \
+    gitsm://github.com/victronenergy/dbus_modbustcp.git;tag=v${PV};protocol=https \
 "
 S = "${WORKDIR}/git"
 DEST_DIR = "${D}${bindir}"
@@ -18,8 +18,8 @@ DAEMONTOOLS_DOWN = "1"
 EXTRA_QMAKEVARS_POST += "DEFINES+=TARGET_ccgx"
 
 do_install_append () {
-	install -m 0644 ${S}/attributes.csv ${D}${bindir}
-	install -m 0644 ${S}/unitid2di.csv ${D}${bindir}
+    install -m 0644 ${S}/attributes.csv ${D}${bindir}
+    install -m 0644 ${S}/unitid2di.csv ${D}${bindir}
 }
 
 

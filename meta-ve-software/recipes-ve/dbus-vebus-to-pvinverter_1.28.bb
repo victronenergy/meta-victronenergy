@@ -14,11 +14,11 @@ S = "${WORKDIR}/git"
 RDEPENDS_${PN} = "python python-dbus"
 
 do_install () {
-	install -d ${D}${bindir}
-	install -m 755 -D ${S}/*.py ${D}${bindir}
+    install -d ${D}${bindir}
+    install -m 755 -D ${S}/*.py ${D}${bindir}
 
-	install -d ${D}${bindir}/ext/velib_python
-	install ${S}/ext/velib_python/vedbus.py ${D}${bindir}/ext/velib_python
-	install ${S}/ext/velib_python/ve_utils.py ${D}${bindir}/ext/velib_python
+    install -d ${D}${bindir}/ext/velib_python
+    install ${S}/ext/velib_python/vedbus.py ${D}${bindir}/ext/velib_python
+    install ${S}/ext/velib_python/ve_utils.py ${D}${bindir}/ext/velib_python
 }
 
