@@ -8,6 +8,7 @@ inherit python-compile
 
 RDEPENDS_${PN} = "\
 	bash \
+	python \
 	python-dbus \
 	python-pygobject \
 	python-pyserial \

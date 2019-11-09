@@ -15,6 +15,7 @@ S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \
 	localsettings \
+	python \
 	python-dbus \
 	python-pprint \
 	python-pygobject \

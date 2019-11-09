@@ -14,6 +14,7 @@ S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \
 	localsettings \
+	python \
 	python-argparse \
 	python-datetime \
 	python-dbus \
