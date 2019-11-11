@@ -1,6 +1,6 @@
 root=true
 
-[*.{bb,bbclass,bbappend}]
+[*.{bb,bbclass,bbappend,inc}]
 charset = utf-8
 indent_style = space
 indent_size = 4
