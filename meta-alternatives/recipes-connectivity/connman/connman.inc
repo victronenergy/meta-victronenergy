@@ -55,39 +55,39 @@ inherit autotools pkgconfig update-rc.d useradd
 # control.  Really the at_console flag should work, which would mean that
 # both this and the xuser patch can be dropped.
 do_compile_append() {
-	sed -i -e s:deny:allow:g ${S}/src/connman-dbus.conf
+    sed -i -e s:deny:allow:g ${S}/src/connman-dbus.conf
 }
 
 do_install_append() {
-	install -d ${D}${sysconfdir}/init.d
-	install -m 0755 ${WORKDIR}/connman ${D}${sysconfdir}/init.d/connman
+    install -d ${D}${sysconfdir}/init.d
+    install -m 0755 ${WORKDIR}/connman ${D}${sysconfdir}/init.d/connman
 
-	install -d ${D}${bindir}
-	install -m 0755 ${B}/tools/*-test ${D}${bindir}
-	#install -m 0755 ${B}/tools/wispr ${D}${bindir}
-	install -m 0755 ${B}/client/connmanctl ${D}${bindir}
+    install -d ${D}${bindir}
+    install -m 0755 ${B}/tools/*-test ${D}${bindir}
+    #install -m 0755 ${B}/tools/wispr ${D}${bindir}
+    install -m 0755 ${B}/client/connmanctl ${D}${bindir}
 
-	# We don't need to package an empty directory
-	rmdir ${D}${libdir}/connman/scripts
+    # We don't need to package an empty directory
+    rmdir ${D}${libdir}/connman/scripts
 
-	# Automake 1.12 won't install empty directories, but we need the
-	# plugins directory to be present for ownership
-	mkdir -p ${D}${libdir}/connman/plugins
+    # Automake 1.12 won't install empty directories, but we need the
+    # plugins directory to be present for ownership
+    mkdir -p ${D}${libdir}/connman/plugins
 }
 
 # These used to be plugins, but now they are core
 RPROVIDES_${PN} = "\
-	connman-plugin-loopback \
-	connman-plugin-ethernet \
-	${@bb.utils.contains('DISTRO_FEATURES', 'wifi','connman-plugin-wifi', '', d)} \
-	${@bb.utils.contains('DISTRO_FEATURES', '3g','connman-plugin-ofono', '', d)} \
-	"
+    connman-plugin-loopback \
+    connman-plugin-ethernet \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'wifi','connman-plugin-wifi', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', '3g','connman-plugin-ofono', '', d)} \
+    "
 
 RDEPENDS_${PN} = "\
-	dbus \
-	${@bb.utils.contains('DISTRO_FEATURES', 'wifi','wpa-supplicant', '', d)} \
-	${@bb.utils.contains('DISTRO_FEATURES', '3g','ofono', '', d)} \
-	"
+    dbus \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'wifi','wpa-supplicant', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', '3g','ofono', '', d)} \
+    "
 
 PACKAGES_DYNAMIC = "${PN}-plugin-*"
 

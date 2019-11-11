@@ -9,7 +9,7 @@ COMPATIBLE_MACHINE = "canvu500"
 UBOOT_LOCALVERSION = "-venus"
 
 SRC_URI = "\
-	https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz \
+    https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz \
 "
 SRC_URI[md5sum] = "cb22b1a1e62d8555665b40bc4658fd62"
 SRC_URI[sha256sum] = "0dc1ef04b643e6b5f8177b91cb850f409dbcb463f6b7c446fb43f5716d7d1b25"

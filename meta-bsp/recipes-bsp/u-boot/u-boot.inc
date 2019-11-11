@@ -13,19 +13,19 @@ UBOOT_IMAGE ?= "u-boot.img"
 UBOOT_MAKE_TARGET ?= "all"
 
 do_configure () {
-	oe_runmake -C ${S} ${UBOOT_MACHINE}
+    oe_runmake -C ${S} ${UBOOT_MACHINE}
 }
 
 do_compile () {
-	unset LDFLAGS
-	unset CFLAGS
-	unset CPPFLAGS
-	oe_runmake -C ${S} ${UBOOT_MAKE_TARGET}
+    unset LDFLAGS
+    unset CFLAGS
+    unset CPPFLAGS
+    oe_runmake -C ${S} ${UBOOT_MAKE_TARGET}
 }
 
 do_install () {
-	install -d ${D}/boot
-	install ${S}/${UBOOT_IMAGE} ${D}/boot/${MACHINE}-${UBOOT_IMAGE}
+    install -d ${D}/boot
+    install ${S}/${UBOOT_IMAGE} ${D}/boot/${MACHINE}-${UBOOT_IMAGE}
 }
 
 inherit deploy
@@ -33,11 +33,11 @@ inherit deploy
 addtask deploy before do_package after do_compile
 
 do_deploy () {
-	install -d ${DEPLOYDIR}
-	install ${S}/${UBOOT_IMAGE} ${DEPLOYDIR}/${UBOOT_IMAGE}
-	if [ -e ${S}/MLO ] ; then
-		install ${S}/MLO ${DEPLOYDIR}/MLO
-	fi
+    install -d ${DEPLOYDIR}
+    install ${S}/${UBOOT_IMAGE} ${DEPLOYDIR}/${UBOOT_IMAGE}
+    if [ -e ${S}/MLO ] ; then
+        install ${S}/MLO ${DEPLOYDIR}/MLO
+    fi
 }
 
 FILES_${PN} = "/boot ${sysconfdir}"

@@ -10,9 +10,9 @@ SRC_URI[sha256sum] = "f4b2edfa0d226b70bd4ca31ea7e389325990283da23465d572ed1f70a7
 inherit pypi
 
 RDEPENDS_${PN} += "\
-	${PYTHON_PN}-pycrypto \
-	${PYTHON_PN}-bcrypt \
-	${PYTHON_PN}-cryptography \
-	${PYTHON_PN}-pynacl \
-	${PYTHON_PN}-unixadmin \
+    ${PYTHON_PN}-pycrypto \
+    ${PYTHON_PN}-bcrypt \
+    ${PYTHON_PN}-cryptography \
+    ${PYTHON_PN}-pynacl \
+    ${PYTHON_PN}-unixadmin \
 "

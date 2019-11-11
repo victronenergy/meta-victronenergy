@@ -3,14 +3,14 @@ SUMMARY = "rootfs to flash an image"
 SWUPDATE_INIT ?= "tiny"
 
 IMAGE_INSTALL = " \
-	base-files \
-	base-passwd \
-	bash \
-	busybox \
-	swupdate \
-	u-boot-fw-utils \
-	venus-version \
-	${@bb.utils.contains('SWUPDATE_INIT', 'tiny', '', 'initscripts sysvinit tinylogin', d)} \
+    base-files \
+    base-passwd \
+    bash \
+    busybox \
+    swupdate \
+    u-boot-fw-utils \
+    venus-version \
+    ${@bb.utils.contains('SWUPDATE_INIT', 'tiny', '', 'initscripts sysvinit tinylogin', d)} \
 "
 
 IMAGE_INSTALL_append_beaglebone = "e2fsprogs-mke2fs util-linux-sfdisk"
@@ -29,25 +29,25 @@ IMAGE_ROOTFS_SIZE = "32000"
 inherit image
 
 python __anonymous() {
-	d.delVarFlag('do_unpack', 'noexec')
+    d.delVarFlag('do_unpack', 'noexec')
 }
 
 addtask unpack before do_rootfs
 
 SRC_URI = "\
-	file://install.sh \
-	file://swupdate \
+    file://install.sh \
+    file://swupdate \
 "
 
 add_program_instructions() {
-	install -d ${IMAGE_ROOTFS}/${base_libdir}/venus
-	install ${WORKDIR}/install.sh ${IMAGE_ROOTFS}/${base_libdir}/venus
+    install -d ${IMAGE_ROOTFS}/${base_libdir}/venus
+    install ${WORKDIR}/install.sh ${IMAGE_ROOTFS}/${base_libdir}/venus
 
-	if [ "${SWUPDATE_INIT}" = "tiny" ]; then
-		install ${WORKDIR}/swupdate ${IMAGE_ROOTFS}/${base_sbindir}/init
-	else
-		cp ${WORKDIR}/swupdate ${IMAGE_ROOTFS}${sysconfdir}/init.d
-	fi
+    if [ "${SWUPDATE_INIT}" = "tiny" ]; then
+        install ${WORKDIR}/swupdate ${IMAGE_ROOTFS}/${base_sbindir}/init
+    else
+        cp ${WORKDIR}/swupdate ${IMAGE_ROOTFS}${sysconfdir}/init.d
+    fi
 }
 
 # remove unneeded pkg informations
