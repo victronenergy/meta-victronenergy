@@ -81,11 +81,11 @@ RDEPENDS_${PN}_append_sunxi += "\
 "
 
 RDEPENDS_${PN}_append_rpi += "\
-    crda \
     gpio-export \
     linux-firmware-bcm43430 \
     linux-firmware-bcm43455 \
     resize-sdcard \
     swupdate \
     swupdate-scripts \
+    wireless-regdb-static \
 "
