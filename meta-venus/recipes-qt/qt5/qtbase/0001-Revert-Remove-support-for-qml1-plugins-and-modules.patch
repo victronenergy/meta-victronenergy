@@ -1,0 +1,116 @@
+From a51e0a971059141920e74ae42bdba04202f56a35 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 14 Nov 2019 17:14:17 +0100
+Subject: [PATCH] Revert "Remove support for qml1 plugins and modules"
+
+This reverts commit 1983abddc06350541ac7a4bb4b2da14091e96311.
+
+Change-Id: I9d7f5497a9ca161a6672a1e938a7750e20c64a67
+---
+ .gitignore                       |  1 +
+ mkspecs/features/qml1_module.prf | 13 +++++++++++++
+ mkspecs/features/qml1_plugin.prf | 13 +++++++++++++
+ mkspecs/features/qml_plugin.prf  | 25 ++++++++++++++++++++-----
+ 4 files changed, 47 insertions(+), 5 deletions(-)
+ create mode 100644 mkspecs/features/qml1_module.prf
+ create mode 100644 mkspecs/features/qml1_plugin.prf
+
+diff --git a/.gitignore b/.gitignore
+index b9188d84f7..f133a2124e 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -98,6 +98,7 @@ qt*-config.pri
+ /bin/qhelpgenerator
+ /bin/qlalr
+ /bin/qml
++/bin/qml1plugindump
+ /bin/qmleasing
+ /bin/qmlimportscanner
+ /bin/qmljs
+diff --git a/mkspecs/features/qml1_module.prf b/mkspecs/features/qml1_module.prf
+new file mode 100644
+index 0000000000..33c3e44808
+--- /dev/null
++++ b/mkspecs/features/qml1_module.prf
+@@ -0,0 +1,13 @@
++#
++#  W A R N I N G
++#  -------------
++#
++# This file is not part of the Qt API.  It exists purely as an
++# implementation detail.  It may change from version to version
++# without notice, or even be removed.
++#
++# We mean it.
++#
++
++CONFIG += qml1_target
++load(qml_module)
+diff --git a/mkspecs/features/qml1_plugin.prf b/mkspecs/features/qml1_plugin.prf
+new file mode 100644
+index 0000000000..cb1f0ce267
+--- /dev/null
++++ b/mkspecs/features/qml1_plugin.prf
+@@ -0,0 +1,13 @@
++#
++#  W A R N I N G
++#  -------------
++#
++# This file is not part of the Qt API.  It exists purely as an
++# implementation detail.  It may change from version to version
++# without notice, or even be removed.
++#
++# We mean it.
++#
++
++CONFIG += qml1_target
++load(qml_plugin)
+diff --git a/mkspecs/features/qml_plugin.prf b/mkspecs/features/qml_plugin.prf
+index 02068ae766..705646a413 100644
+--- a/mkspecs/features/qml_plugin.prf
++++ b/mkspecs/features/qml_plugin.prf
+@@ -48,9 +48,15 @@ exists($$QMLTYPEFILE): AUX_QML_FILES += $$QMLTYPEFILE
+ 
+ load(qt_build_paths)
+ 
+-DESTDIR = $$MODULE_BASE_OUTDIR/qml/$$TARGETPATH
++qml1_target {
++    DESTDIR = $$MODULE_BASE_OUTDIR/imports/$$TARGETPATH
++    instbase = $$[QT_INSTALL_IMPORTS]
++} else {
++    DESTDIR = $$MODULE_BASE_OUTDIR/qml/$$TARGETPATH
++    instbase = $$[QT_INSTALL_QML]
++}
+ 
+-target.path = $$[QT_INSTALL_QML]/$$TARGETPATH
++target.path = $$instbase/$$TARGETPATH
+ INSTALLS += target
+ 
+ # Some final setup
+@@ -69,11 +75,20 @@ load(qt_common)
+ # directory.  Then review and commit the changes made to plugins.qmltypes.
+ #
+ !cross_compile {
+-    qmlplugindump = qmlplugindump
+-    importpath.name = QML2_IMPORT_PATH
++    qml1_target {
++        qmlplugindump = qml1plugindump
++        importpath.name = QML_IMPORT_PATH
++    } else {
++        qmlplugindump = qmlplugindump
++        importpath.name = QML2_IMPORT_PATH
++    }
+     importpath.value =
+     for(qmod, QTREPOS) {
+-        exists($$qmod/qml): importpath.value += $$shell_path($$qmod/qml)
++        qml1_target: \
++            qmod = $$qmod/imports
++        else: \
++            qmod = $$qmod/qml
++        exists($$qmod): importpath.value += $$shell_path($$qmod)
+     }
+     importpath.value = $$unique(importpath.value)
+     QT_TOOL_ENV = importpath
+-- 
+2.17.1
+
