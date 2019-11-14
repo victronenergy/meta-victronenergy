@@ -18,5 +18,6 @@
     <UDN>uuid:com.victronenergy.ccgx.:::UNIQUE:::</UDN>
     <ve:X_VenusVersion xmlns:ve="urn:schemas-victronenergy-com:venusinfo-1">:::venusversion:::</ve:X_VenusVersion>
     <ve:X_VrmPortalId xmlns:ve="urn:schemas-victronenergy-com:venusinfo-1">:::unique:::</ve:X_VrmPortalId>
+    <ve:X_MqttOnLan xmlns:ve="urn:schemas-victronenergy-com:venusinfo-1">:::mqttonlan:::</ve:X_MqttOnLan>
   </device>
 </root>

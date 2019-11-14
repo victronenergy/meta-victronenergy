@@ -1,21 +1,33 @@
 #!/bin/sh
 
-if [[ ! -e /etc/simple-upnpd.xml ]]; then
-	unique=$(cat /data/venus/unique-id)
-	productid=$(product-id)
-	serialnr=$(cat /data/venus/serial-number)
-	UNIQUE=$(echo ${unique} | tr '[:lower:]' '[:upper:]' | sed -e 's/.\{2\}/&:/g' -e 's/:$//g')
-	name="$(installation-name)"
-	venusversion=$(head -n1 /opt/victronenergy/version)
-	sed \
-		-e "s/:::UNIQUE:::/${UNIQUE}/g" \
-		-e "s/:::unique:::/${unique}/g" \
-		-e "s/:::name:::/${name}/g" \
-		-e "s/:::productid:::/${productid}/g" \
-		-e "s/:::serialnr:::/${serialnr}/g" \
-		-e "s/:::venusversion:::/${venusversion}/g" \
-		 /etc/simple-upnpd.skeleton.xml > /etc/simple-upnpd.xml.tmp
-	mv /etc/simple-upnpd.xml.tmp /etc/simple-upnpd.xml
-fi
+get_setting() {
+    dbus-send --print-reply=literal --system --type=method_call \
+              --dest=com.victronenergy.settings $1 \
+              com.victronenergy.BusItem.GetValue |
+        awk '/int32/ { print $3 }'
+}
 
-exec setuidgid simple-upnpd softlimit -d 100000000 -s 1000000 -a 100000000 /bin/simple-upnpd --xml /etc/simple-upnpd.xml -d
+unique=$(cat /data/venus/unique-id)
+productid=$(product-id)
+serialnr=$(cat /data/venus/serial-number)
+UNIQUE=$(echo ${unique} | tr '[:lower:]' '[:upper:]' | sed -e 's/.\{2\}/&:/g' -e 's/:$//g')
+name="$(installation-name)"
+venusversion=$(head -n1 /opt/victronenergy/version)
+
+mqttonlan=""
+while [ "$mqttonlan" != "0" -a "$mqttonlan" != "1" ]; do
+	mqttonlan=$(get_setting /Settings/Services/MqttLocal)
+	sleep 1
+done
+
+sed \
+	-e "s/:::UNIQUE:::/${UNIQUE}/g" \
+	-e "s/:::unique:::/${unique}/g" \
+	-e "s/:::name:::/${name}/g" \
+	-e "s/:::productid:::/${productid}/g" \
+	-e "s/:::serialnr:::/${serialnr}/g" \
+	-e "s/:::venusversion:::/${venusversion}/g" \
+	-e "s/:::mqttonlan:::/${mqttonlan}/g" \
+	 /etc/simple-upnpd.skeleton.xml > /var/run/simple-upnpd.xml
+
+exec setuidgid simple-upnpd softlimit -d 100000000 -s 1000000 -a 100000000 /bin/simple-upnpd --xml /var/run/simple-upnpd.xml -d
