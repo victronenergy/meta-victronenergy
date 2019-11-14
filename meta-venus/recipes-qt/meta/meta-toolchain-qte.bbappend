@@ -8,7 +8,7 @@ TOOLCHAIN_TARGET_TASK = "packagegroup-sdk-packages"
 TOOLCHAIN_TARGET_TASK += "packagegroup-venus-qt5-toolchain-target"
 
 TOOLCHAIN_HOST_TASK += "nativesdk-packagegroup-qt5-toolchain-host qt5-conf"
-TOOLCHAIN_HOST_TASK += "nativesdk-python-importlib nativesdk-python-json"
+TOOLCHAIN_HOST_TASK += "nativesdk-python-json"
 
 # The part below hardcodes the paths / commands in the mkspecs of the Qt SDK,
 # so they work from Qt Creator without having to source the envirmental script.
