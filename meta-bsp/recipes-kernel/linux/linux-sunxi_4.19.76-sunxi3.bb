@@ -10,10 +10,9 @@ RDEPENDS_kernel-base += "kernel-devicetree"
 
 KERNEL_CONFIG_COMMAND = "oe_runmake -C ${S} O=${B} sunxi_victron_defconfig"
 
-SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz \
-    file://0001-configs-sunxi_victron-disable-mousedev.patch "
-SRC_URI[md5sum] = "fb9458776cfc1087e739c9f7bdf34318"
-SRC_URI[sha256sum] = "4b159955b429f997fb6283d2201e596095f604e5c42e4dedb3f8807f32fbb668"
+SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
+SRC_URI[md5sum] = "8310d73cd45f9014ccf0f56f8f260c21"
+SRC_URI[sha256sum] = "aac03f099dac567619bbee51439e2d9159ad05f5e2c0f20ec94dfd50752bec9c"
 
 S = "${WORKDIR}/linux-${PV}"
 
