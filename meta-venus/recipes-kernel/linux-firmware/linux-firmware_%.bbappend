@@ -1,6 +1,3 @@
-# NOTE: this can be done a bit smarter since it is known which firmware is needed
-# for fw in `find /lib/modules/ -name '*.ko' -exec modinfo -F firmware {} \;`; do echo -n "$fw "; if [ ! -f /lib/firmware/$fw ]; then echo "not shipped"; else echo ok; fi; done
-
 PACKAGES =+ "${PN}-rt2800 ${PN}-rt73"
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
@@ -18,20 +15,6 @@ PACKAGES =+ "${PN}-rtl-bt"
 FILES_${PN}-rtl-bt = " \
   /lib/firmware/rtl_bt \
 "
-
-# Include the NVRAM file for wifi firmware on rpi3.
-SRC_URI_append_raspberrypi2 += "file://brcmfmac43430-sdio.txt file://brcmfmac43455-sdio.txt file://brcmfmac43455-sdio.clm_blob"
-FILES_${PN}-bcm43430_append_raspberrypi2 += " \
-  /lib/firmware/brcm/brcmfmac43430-sdio.txt \
-  /lib/firmware/brcm/brcmfmac43455-sdio.txt \
-  /lib/firmware/brcm/brcmfmac43455-sdio.clm_blob \
-"
-
-do_install_append_raspberrypi2() {
-  install -D -m 0644 ${WORKDIR}/brcmfmac43430-sdio.txt ${D}/lib/firmware/brcm
-  install -D -m 0644 ${WORKDIR}/brcmfmac43455-sdio.txt ${D}/lib/firmware/brcm
-  install -D -m 0644 ${WORKDIR}/brcmfmac43455-sdio.clm_blob ${D}/lib/firmware/brcm
-}
 
 # Wifi NVRAM file for AP6210 module
 SRC_URI += "file://brcm/brcmfmac43362-sdio.txt"
