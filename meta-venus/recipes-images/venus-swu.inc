@@ -28,7 +28,7 @@ do_swuimage[depends] += "virtual/bootloader:do_deploy"
 
 ROOT_FSTYPE = "ubifs"
 ROOT_FSTYPE_beaglebone = "ext4.gz"
-ROOT_FSTYPE_raspberrypi2 = "ext4.gz"
+ROOT_FSTYPE_rpi = "ext4.gz"
 ROOT_FSTYPE_sunxi = "ext4.gz"
 
 BOOT_FSTYPE = "vfat.gz"
