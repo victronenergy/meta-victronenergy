@@ -28,7 +28,7 @@ do_rootfs () {
     rm -f ${BOOTIMG}
     mkfs.vfat -S 512 -C ${BOOTIMG} ${BOOT_IMAGE_SIZE}
 
-    for file in ${IMAGE_BOOT_FILES}; do
+    for file in "${IMAGE_BOOT_FILES}"; do
         mcopy -i ${BOOTIMG} -s ${DEPLOY_DIR_IMAGE}/${file} ::/
     done
 
