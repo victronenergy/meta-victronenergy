@@ -18,6 +18,7 @@ DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/${PN
 RDEPENDS_${PN} += " \
     python \
     python-dbus \
+    python-enum34 \
     python-lxml \
 "
 
