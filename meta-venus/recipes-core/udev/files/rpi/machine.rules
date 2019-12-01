@@ -1,3 +1,11 @@
+ENV{BASE_COMPATIBLE}!="raspberrypi,3-model-b", GOTO="end-rpi3-model-b"
+ACTION=="add",SUBSYSTEM=="tty",KERNEL=="ttyS0",RUN+="/usr/bin/hciattach -t 10 /dev/ttyS0 bcm43xx 921600 noflow -"
+LABEL="end-rpi3-model-b"
+
+ENV{BASE_COMPATIBLE}!="raspberrypi,3-model-b-plus", GOTO="end-rpi3-model-b-plus"
+ACTION=="add",SUBSYSTEM=="tty",KERNEL=="ttyS0",RUN+="/usr/bin/hciattach -t 10 /dev/ttyS0 bcm43xx 921600 noflow -"
+LABEL="end-rpi3-model-b-plus"
+
 ENV{BASE_COMPATIBLE}!="raspberrypi,4-model-b", GOTO="end-rpi4-model-b"
 ACTION=="add",SUBSYSTEM=="tty",KERNEL=="ttyAMA0",RUN+="/usr/bin/hciattach /dev/ttyAMA0 bcm43xx 3000000 flow -"
 LABEL="end-rpi4-model-b"

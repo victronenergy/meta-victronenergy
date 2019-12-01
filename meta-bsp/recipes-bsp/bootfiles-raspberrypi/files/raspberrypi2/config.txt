@@ -5,11 +5,15 @@ device_tree=bcm2709-rpi-2-b.dtb
 
 [pi3]
 device_tree=bcm2710-rpi-3-b.dtb
-dtoverlay=pi3-miniuart-bt
+dtoverlay=miniuart-bt
+core_freq=400
+core_freq_min=400
 
 [pi3+]
 device_tree=bcm2710-rpi-3-b-plus.dtb
-dtoverlay=pi3-miniuart-bt
+dtoverlay=miniuart-bt
+core_freq=400
+core_freq_min=400
 
 [all]
 dtparam=spi=on
