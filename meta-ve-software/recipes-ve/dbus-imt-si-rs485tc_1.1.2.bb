@@ -26,6 +26,7 @@ RDEPENDS_${PN} = " \
     python \
     python-dbus \
     python-pymodbus \
+    python-pyserial \
 "
 
 do_install_append () {
