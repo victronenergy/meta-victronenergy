@@ -6,8 +6,8 @@ case $(board-compat) in
 		leds_on="status-green=blink-slow status-orange=none"
 		;;
 	sancloud,am335x-boneenhanced|unipoin,gridless-octo)
-		leds_off="vecape:green:ve0=blink-slow vecape:red:ve1=blink-slow"
-		leds_on="vecape:green:ve0=blink-slow vecape:red:ve1=none"
+		leds_off="vecape:green:ve0=blink-slow"
+		leds_on="vecape:green:ve0=blink-fast"
 		;;
 esac
 
