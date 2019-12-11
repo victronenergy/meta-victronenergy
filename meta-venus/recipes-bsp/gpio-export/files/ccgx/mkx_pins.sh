@@ -9,6 +9,9 @@
 ### END INIT INFO
 
 if [ $(hw-revision) -gt 2 ]; then
+	echo 0 > /dev/gpio/mkx_rst/active_low
+	echo 0 > /dev/gpio/vebus_standby/active_low
+else
 	echo 1 > /dev/gpio/mkx_rst/active_low
 	echo 1 > /dev/gpio/vebus_standby/active_low
 fi
