@@ -13,7 +13,7 @@ SRC_URI += "\
 
 hostap = ""
 hostap_beaglebone = "1"
-hostap_nanopi = "1"
+hostap_sunxi = "1"
 
 RW_INITSCRIPT_PARAMS="start 80 5 . stop 10 0 1 6 ."
 
