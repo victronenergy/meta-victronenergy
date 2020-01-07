@@ -1,0 +1,15 @@
+#! /bin/sh
+
+# The built-in wifi device provides two interfaces.  The MAC
+# addresses of the interfaces differ in the value of the locally
+# administered bit.  The interface with this bit set becomes the
+# the access point, the other is unused.
+
+addr1=$(cut -d: -f1 /sys/class/net/$INTERFACE/address)
+local=$((0x$addr1 & 2))
+
+if [ $local -gt 0 ]; then
+    echo ap0
+else
+    echo disabled-$INTERFACE
+fi
