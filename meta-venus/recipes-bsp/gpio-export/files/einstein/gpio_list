@@ -10,11 +10,11 @@
 # DIGITAL_INPUT_3       PA7
 7   in  digital_input_3
 
-# RELAY_2               PB3
-35  out relay_2
+# RELAY_1               PB3
+35  out relay_1
 
-# RELAY_1               PB4
-36  out relay_1
+# RELAY_2               PB4
+36  out relay_2
 
 # MK3_BUS_STANDBY       PB9
 41  out vebus_standby
