@@ -7,15 +7,8 @@ rename_if() {
 
 case $ACTION in
     add)
-        # if this is the built-in interface, check for external ones,
-        # otherwise check if the built-in one is enabled
-        case $INTERFACE in
-            wifi0) check=wlan  ;;
-            *)     check=wifi0 ;;
-        esac
-
-        # disable built-in interface when an external one is found
-        if ls /sys/class/net | grep -q ^$check; then
+        # disable built-in interface if this is the first external one
+        if ls /sys/class/net | grep -q ^wifi0; then
             rename_if wifi0 disabled-wifi0
         fi
         ;;
