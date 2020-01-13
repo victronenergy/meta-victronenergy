@@ -1,5 +1,5 @@
 # built-in wifi
-ACTION=="add", ENV{DEVTYPE}=="wlan", ENV{ID_BUS}=="usb", ATTRS{removable}=="fixed", PROGRAM="wlan-rename", NAME="%c", GOTO="end"
+ACTION=="add", ENV{DEVTYPE}=="wlan", ENV{ID_BUS}=="usb", ATTRS{bDeviceClass}!="09", ATTRS{removable}=="fixed", PROGRAM="wlan-rename", NAME="%c", GOTO="end"
 ACTION=="add", ENV{DEVTYPE}=="wlan", SUBSYSTEMS=="sdio", PROGRAM="wlan-rename", NAME="%c", GOTO="end"
 
 # external wifi
