@@ -1,0 +1,69 @@
+From 75f863b0de7a8a0e01c820098b56c4f3ec4990c0 Mon Sep 17 00:00:00 2001
+From: Will Thompson <wjt@endlessm.com>
+Date: Wed, 22 Nov 2017 11:43:55 +0000
+Subject: [PATCH 1/2] gfileutils: make g_file_set_contents() always fsync()
+
+Previously, this function only called fsync() if @filename exists and is
+non-empty. This behaviour was introduced when the function was first
+written (6cff88ba18b3bc0d118308f109840cb163dcea03) and shortly
+afterwards (d20a188b1250ab3cf211d684429127d99378e886) respectively, with
+the latter justified as a performance optimisation.
+
+This meant that g_file_set_contents() does not provide the guarantee
+that developers assume it has, namely that after a call and a crash,
+@filename will either contain its previous contents or its new
+@contents. In practice, when it was previously non-existent or empty on
+a bog-standard ext4 filesystem, it would often contain NUL bytes
+matching the @length of @contents, requiring application developers to
+explicitly handle this third case.
+
+Given the documentation includes the word "atomic", we make this
+function provide the guarantee that was previously implied but untrue,
+and document it. If applications require higher performance at the cost
+of correctness, they can open-code the old behaviour, or we can add a
+new function to glib providing weaker guarantees.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=790638
+---
+ glib/gfileutils.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/glib/gfileutils.c b/glib/gfileutils.c
+index ea3806eeb..a8378cd76 100644
+--- a/glib/gfileutils.c
++++ b/glib/gfileutils.c
+@@ -1101,16 +1101,14 @@ write_to_temp_file (const gchar  *contents,
+ 
+ #ifdef HAVE_FSYNC
+   {
+-    struct stat statbuf;
+-
+     errno = 0;
+-    /* If the final destination exists and is > 0 bytes, we want to sync the
++    /* We want to sync the
+      * newly written file to ensure the data is on disk when we rename over
+      * the destination. Otherwise if we get a system crash we can lose both
+      * the new and the old file on some filesystems. (I.E. those that don't
+      * guarantee the data is written to the disk before the metadata.)
+      */
+-    if (g_lstat (dest_file, &statbuf) == 0 && statbuf.st_size > 0 && fsync (fd) != 0)
++    if (fsync (fd) != 0)
+       {
+         int saved_errno = errno;
+         set_file_error (err,
+@@ -1163,6 +1161,12 @@ write_to_temp_file (const gchar  *contents,
+  *   lists, metadata etc. may be lost. If @filename is a symbolic link,
+  *   the link itself will be replaced, not the linked file.
+  *
++ * - On UNIX, if the filesystem is uncleanly unmounted after a successful call
++ *   to this function, it is guaranteed that @filename will contain either its
++ *   old contents, or @contents. In particular, if @filename did not previously
++ *   exist, following a crash it will either not exist or contain its new
++ *   @contents.
++ *
+  * - On Windows renaming a file will not remove an existing file with the
+  *   new name, so on Windows there is a race condition between the existing
+  *   file being removed and the temporary file being renamed.
+-- 
+2.17.1
+

@@ -1,0 +1,51 @@
+From 24f0c38ed8b50ea7bc67e3de14ed376fbd1094bb Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Tue, 14 Jan 2020 12:54:53 +0100
+Subject: [PATCH 2/2] flush the metadata of the rename
+
+While rename does atomically rename, it doesn't provide durability. So
+flush the directory so the meta-data is on the disk as well, before
+reporting g_file_set_contents was successfull, so even in case of a
+crash the new contents will be there.
+
+For our use case: embedded product with ubifs, which doesn't have have
+workaround for buggy applications [1] that behaviour is wanted. For
+e.g. connman storess the wifi password etc with g_file_set_contents.
+When power cycling the device after entering the wifi settings, the
+enter settings should be used directly. Not after an unknown amount
+of time.
+
+[1] https://gitlab.gnome.org/GNOME/glib/issues/1302
+[2] http://www.linux-mtd.infradead.org/doc/ubifs.html#L_sync_exceptions
+---
+ glib/gfileutils.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/glib/gfileutils.c b/glib/gfileutils.c
+index a8378cd76..323359e91 100644
+--- a/glib/gfileutils.c
++++ b/glib/gfileutils.c
+@@ -1259,6 +1259,20 @@ g_file_set_contents (const gchar  *filename,
+ #endif
+     }
+ 
++#ifdef HAVE_FSYNC
++  {
++    gchar *dirname = g_path_get_dirname(filename);
++    int fd = g_open(dirname, 0);
++
++    if (fd != -1)
++  {
++    fsync (fd);
++    g_close (fd, NULL);
++  }
++    g_free(dirname);
++  }
++#endif
++
+   retval = TRUE;
+   
+  out:
+-- 
+2.17.1
+
