@@ -1,0 +1,1 @@
+ubi0:data            /data                ubifs      defaults,noatime,rw   0  0
