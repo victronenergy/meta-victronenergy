@@ -3,6 +3,11 @@ inherit ve_package
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
+SRC_URI += "\
+    file://fstab.mmc1 \
+    file://fstab.ubi \
+"
+
 # Add the mount point for the data partition
 dirs755 += " ${permanentdir}"
 
@@ -11,6 +16,12 @@ dirs755 += "/scratch"
 
 # mount point for u-boot FAT partition on raspberrypi2.
 dirs755_append_raspberrypi2 += "/u-boot"
+
+do_compile_append() {
+    for f in ${FSTAB}; do
+        cat fstab.${FSTAB} >>fstab
+    done
+}
 
 # Replace home dir with symlink to persistent volume
 do_install_append() {
