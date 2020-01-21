@@ -1,2 +1,1 @@
 /dev/mmcblk1p5       /data                ext4       noatime               0  0
-/dev/mmcblk1p6       /scratch             ext4       noatime               0  0

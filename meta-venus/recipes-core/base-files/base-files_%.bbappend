@@ -11,9 +11,6 @@ SRC_URI += "\
 # Add the mount point for the data partition
 dirs755 += " ${permanentdir}"
 
-# mount point for the scratch partition
-dirs755 += "/scratch"
-
 # mount point for u-boot FAT partition on raspberrypi2.
 dirs755_append_raspberrypi2 += "/u-boot"
 
