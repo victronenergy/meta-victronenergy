@@ -150,7 +150,6 @@ format_mmc() {
     mmc=$1
 
     root_blocks=$((ROOT_SIZE * 1024 * 2))
-    data_blocks=$((DATA_SIZE * 1024 * 2))
 
     msg "Creating partitions..."
     sfdisk -W always /dev/$mmc <<EOF
@@ -160,15 +159,11 @@ format_mmc() {
 	, $root_blocks, L
 	, $root_blocks, L
 	,, E
-	, $data_blocks, L
 	,, L
 EOF
 
     msg "Formatting data partition..."
     mkfs.ext4 -F /dev/${mmc}p5
-
-    msg "Formatting scratch partition.."
-    mkfs.ext4 -F /dev/${mmc}p6
 
     DATADEV=/dev/${mmc}p5
     DATAFS=ext4
