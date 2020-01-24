@@ -43,6 +43,7 @@ CONF_FILES = "\
     VE_BLANK_DISPLAY:blank_display_device \
     VE_BUZZER:buzzer \
     VE_CAN_PORTS:canbus_ports \
+    VE_CAN_NAMES:can_names \
     VE_MKX_PORT:mkx_port \
     VE_PWM_BUZZER:pwm_buzzer \
     VE_VEDIRECT_AND_CONSOLE_PORT:vedirect_and_console_port \
