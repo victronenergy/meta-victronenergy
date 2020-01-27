@@ -12,7 +12,7 @@ DAEMONTOOLS_RUN = "/usr/sbin/hostapd-run"
 DAEMONTOOLS_DOWN = "1"
 
 # disable rc.d start/stop
-INITSCRIPT_PARAMS = "start ."
+INHIBIT_UPDATERCD_BBCLASS = "1"
 
 do_install_append() {
     install -m 0755 ${WORKDIR}/hostapd-run ${D}${sbindir}
