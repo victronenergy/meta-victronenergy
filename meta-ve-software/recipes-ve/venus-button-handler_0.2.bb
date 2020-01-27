@@ -7,6 +7,7 @@ inherit daemontools
 inherit python-compile
 
 RDEPENDS_${PN} = "\
+    python \
     python-argparse \
     python-dbus \
     python-evdev \
