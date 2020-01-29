@@ -18,7 +18,7 @@ INITSCRIPT_PACKAGES = "${PN}-early ${PN}-late"
 INITSCRIPT_NAME_${PN}-early = "custom-rc-early.sh"
 INITSCRIPT_PARAMS_${PN}-early = "start 99 S ."
 INITSCRIPT_NAME_${PN}-late = "custom-rc-late.sh"
-INITSCRIPT_PARAMS_${PN}-late = "start 99 5 ."
+INITSCRIPT_PARAMS_${PN}-late = "start 99 5 . stop 1 6 ."
 
 PACKAGES =+ "${PN}-early ${PN}-late"
 
