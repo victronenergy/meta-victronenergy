@@ -1,0 +1,30 @@
+From 9681a9a3407f9a472349fc80d4fe7077c68d714b Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Tue, 28 Jan 2020 18:26:06 +0000
+Subject: [PATCH 16/16] network: do not mark network failed on connection error
+
+---
+ src/network.c | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/src/network.c b/src/network.c
+index 2e423bc362ec..73cc885ed897 100644
+--- a/src/network.c
++++ b/src/network.c
+@@ -1323,13 +1323,6 @@ int connman_network_set_connected(struct connman_network *network,
+ 		network, network->connected, connected, network->connecting,
+ 		network->associating);
+ 
+-	if ((network->connecting || network->associating) &&
+-							!connected) {
+-		connman_network_set_error(network,
+-					CONNMAN_NETWORK_ERROR_CONNECT_FAIL);
+-		return 0;
+-	}
+-
+ 	if (network->connected == connected)
+ 		return -EALREADY;
+ 
+-- 
+2.25.0
+
