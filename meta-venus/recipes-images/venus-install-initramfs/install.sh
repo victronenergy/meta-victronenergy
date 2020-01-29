@@ -217,10 +217,6 @@ install_swu() {
     eval $HOOK_rootfs1
     swupdate "$@" -e "stable,copy1"
 
-    msg "Installing rootfs2..."
-    eval $HOOK_rootfs2
-    swupdate "$@" -e "stable,copy2"
-
     msg "Installing bootloader..."
     eval $HOOK_bootloader
     swupdate "$@" -e "stable,bootloader"
