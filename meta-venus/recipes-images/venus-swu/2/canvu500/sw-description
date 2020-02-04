@@ -35,7 +35,7 @@ software =
 			)
 			images: (
 				{
-					filename = "venus-image-canvu500.tar.gz";
+					filename =~ "${VENUS_IMAGE_FILE}";
 					type = "pipe";
 					data = "sh /tmp/ubi-install.sh";
 					device = "rootfs1";
@@ -66,7 +66,7 @@ software =
 			)
 			images: (
 				{
-					filename = "venus-image-canvu500.tar.gz";
+					filename =~ "${VENUS_IMAGE_FILE}";
 					type = "pipe";
 					data = "sh /tmp/ubi-install.sh";
 					device = "rootfs2";
