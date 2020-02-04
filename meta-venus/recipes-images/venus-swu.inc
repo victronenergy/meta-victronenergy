@@ -19,6 +19,8 @@ inherit swupdate
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
+VENUS_VERSION = "${BUILDNAME} ${DISTRO_VERSION}"
+
 # IMAGE_DEPENDS: list of images that contains a root filesystem
 # it will be ensured they are built before creating swupdate image
 IMAGE_DEPENDS = "venus-image"
@@ -53,15 +55,26 @@ SWUPDATE_IMAGES_NOAPPEND_MACHINE[MLO] = "1"
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[splash.bgra] = "1"
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[splash.bmp.gz] = "1"
 
-do_version() {
-    sed -e "s/venus-version = .*;/venus-version = \"${BUILDNAME} ${DISTRO_VERSION}\";/" \
-        -i ${WORKDIR}/sw-description
+python do_subst() {
+    import fileinput
+    import re
+    import sys
+
+    swd = os.path.join(d.getVar('WORKDIR'), 'sw-description')
+    f = fileinput.input(files=(swd), inplace=True)
+
+    for line in f:
+        line, n = re.subn(r'(\s*\w+)\s*=~\s*', r'\1 = ', line)
+        if n:
+            line = re.sub(r'\$\{(\w+)\}', lambda m: d.getVar(m.group(1)), line)
+        sys.stdout.write(line)
+
+    f.close()
 }
 
-addtask do_version after do_unpack before do_swuimage
+addtask do_subst after do_unpack before do_swuimage
 
-do_version[depends] += "venus-image:do_rootfs"
-do_version[nostamp] = "1"
-do_version[vardepsexclude] += "BUILDNAME"
+do_unpack[nostamp] = "1"
+do_subst[nostamp] = "1"
 
 do_swuimage[vardepsexclude] += "IMAGE_NAME"
