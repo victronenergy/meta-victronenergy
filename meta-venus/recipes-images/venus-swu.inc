@@ -20,6 +20,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
+VENUS_IMAGE_FILE = "venus-image-${MACHINE}.${ROOT_FSTYPE}"
 VENUS_VERSION = "${BUILDNAME} ${DISTRO_VERSION}"
 
 # IMAGE_DEPENDS: list of images that contains a root filesystem
