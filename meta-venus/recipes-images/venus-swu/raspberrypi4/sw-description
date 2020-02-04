@@ -8,7 +8,7 @@ software =
 		copy1: {
 			images: (
 				{
-					filename = "venus-image-raspberrypi4.ext4.gz";
+					filename =~ "${VENUS_IMAGE_FILE}";
 					device = "/dev/mmcblk0p2";
 					compressed = true;
 					installed-directly = true;
@@ -24,7 +24,7 @@ software =
 		copy2: {
 			images: (
 				{
-					filename = "venus-image-raspberrypi4.ext4.gz";
+					filename =~ "${VENUS_IMAGE_FILE}";
 					device = "/dev/mmcblk0p3";
 					compressed = true;
 					installed-directly = true;
