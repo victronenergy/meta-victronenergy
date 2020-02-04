@@ -17,7 +17,7 @@ software =
 		copy1: {
 			images: (
 				{
-					filename = "venus-image-nanopi.ext4.gz";
+					filename =~ "${VENUS_IMAGE_FILE}";
 					device = "/dev/mmcblk1p2";
 					compressed = true;
 					installed-directly = true;
@@ -33,7 +33,7 @@ software =
 		copy2: {
 			images: (
 				{
-					filename = "venus-image-nanopi.ext4.gz";
+					filename =~ "${VENUS_IMAGE_FILE}";
 					device = "/dev/mmcblk1p3";
 					compressed = true;
 					installed-directly = true;
