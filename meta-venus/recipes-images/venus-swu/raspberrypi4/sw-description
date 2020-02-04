@@ -1,6 +1,6 @@
 software =
 {
-	venus-version = "0";
+	venus-version =~ "${VENUS_VERSION}";
 
 	version = "0.1.0";
 
