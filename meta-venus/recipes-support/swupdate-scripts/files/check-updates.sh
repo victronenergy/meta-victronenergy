@@ -191,6 +191,18 @@ else
            ;;
     esac
 
+    imgtype=$(get_setting ImageType)
+
+    case $imgtype in
+        0) imgtype=       ;;
+        1) imgtype=-large ;;
+        *) echo "Invalid image type."
+           exit 1
+           ;;
+    esac
+
+    swu_base=${swu_name}${imgtype}-${machine}
+
     if [ -z "$swubase" ]; then
         swubase=https://updates.victronenergy.com/feeds/venus/${feed}/
     fi
