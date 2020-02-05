@@ -23,9 +23,10 @@ key=$keydir/mosquitto.key
 mkdir -m 700 -p $keydir
 
 if ! openssl rsa -check -noout -in $key ||
-   ! openssl verify -CAfile $cert $cert; then
+   ! openssl verify -CAfile $cert $cert ||
+   ! openssl x509 -noout -checkend 31536000 -in $cert; then
     openssl req -subj /CN=venus.local -newkey rsa:2048 -nodes \
-            -keyout $key -x509 -out $cert
+            -keyout $key -x509 -days 36524 -out $cert
 fi
 
 exec softlimit -d 100000000 -s 1000000 -a 100000000 \
