@@ -17,12 +17,26 @@ unpack() {
     esac
 }
 
-for dir in /media/*; do
-    for suf in $ARCHIVE_SUF; do
-        archive=$dir/$ARCHIVE_NAME.$suf
-        if [ -f "$archive" ]; then
-            echo "Updating /data with $archive"
-            unpack "$archive" /data
-        fi
+update_data() {
+    for dir in /media/*; do
+        for suf in $ARCHIVE_SUF; do
+            archive=$dir/$ARCHIVE_NAME.$suf
+            if [ -f "$archive" ]; then
+                echo "Updating /data with $archive"
+                unpack "$archive" /data && return 0
+            fi
+        done
     done
-done
+
+    return 1
+}
+
+delayed_update() {
+    udevadm settle
+    mkdir -p $(readlink /media)
+    inotifywait -q -m -e create,isdir -t 30 /media
+    update_data
+}
+
+update_data && exit 0
+delayed_update &
