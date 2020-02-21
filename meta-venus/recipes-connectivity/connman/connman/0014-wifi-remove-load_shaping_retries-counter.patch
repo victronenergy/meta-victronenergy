@@ -1,0 +1,72 @@
+From 776a5a71b6102cb6445bcc5b5d8fe2d10f777e27 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 21 Feb 2020 13:28:54 +0000
+Subject: [PATCH 14/16] wifi: remove load_shaping_retries counter
+
+---
+ plugins/wifi.c | 21 ---------------------
+ 1 file changed, 21 deletions(-)
+
+diff --git a/plugins/wifi.c b/plugins/wifi.c
+index 521ef9f6c4c4..5fc701c46065 100644
+--- a/plugins/wifi.c
++++ b/plugins/wifi.c
+@@ -70,9 +70,6 @@
+ #define P2P_LISTEN_PERIOD 500
+ #define P2P_LISTEN_INTERVAL 2000
+ 
+-#define ASSOC_STATUS_NO_CLIENT 17
+-#define LOAD_SHAPING_MAX_RETRIES 3
+-
+ static struct connman_technology *wifi_technology = NULL;
+ static struct connman_technology *p2p_technology = NULL;
+ 
+@@ -130,7 +127,6 @@ struct wifi_data {
+ 	unsigned flags;
+ 	unsigned int watch;
+ 	int retries;
+-	int load_shaping_retries;
+ 	struct hidden_params *hidden;
+ 	bool postpone_hidden;
+ 	struct wifi_tethering_info *tethering_param;
+@@ -2311,19 +2307,6 @@ static bool handle_wps_completion(GSupplicantInterface *interface,
+ 	return true;
+ }
+ 
+-static bool handle_assoc_status_code(GSupplicantInterface *interface,
+-                                     struct wifi_data *wifi)
+-{
+-	if (wifi->state == G_SUPPLICANT_STATE_ASSOCIATING &&
+-			wifi->assoc_code == ASSOC_STATUS_NO_CLIENT &&
+-			wifi->load_shaping_retries < LOAD_SHAPING_MAX_RETRIES) {
+-		wifi->load_shaping_retries ++;
+-		return TRUE;
+-	}
+-	wifi->load_shaping_retries = 0;
+-	return FALSE;
+-}
+-
+ static bool handle_4way_handshake_failure(GSupplicantInterface *interface,
+ 					struct connman_network *network,
+ 					struct wifi_data *wifi)
+@@ -2419,7 +2402,6 @@ static void interface_state(GSupplicantInterface *interface)
+ 
+ 		wifi->disconnect_code = 0;
+ 		wifi->assoc_code = 0;
+-		wifi->load_shaping_retries = 0;
+ 		break;
+ 
+ 	case G_SUPPLICANT_STATE_DISCONNECTED:
+@@ -2437,9 +2419,6 @@ static void interface_state(GSupplicantInterface *interface)
+ 		if (is_idle(wifi))
+ 			break;
+ 
+-		if (handle_assoc_status_code(interface, wifi))
+-			break;
+-
+ 		/* If previous state was 4way-handshake, then
+ 		 * it's either: psk was incorrect and thus we retry
+ 		 * or if we reach the maximum retries we declare the
+-- 
+2.25.0
+

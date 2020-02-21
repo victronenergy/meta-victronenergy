@@ -1,0 +1,27 @@
+From 05d993cb6a7d23027934b292bb175babffc325ec Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Tue, 28 Jan 2020 16:51:45 +0000
+Subject: [PATCH 15/16] service: attempt auto-connect of services in failed
+ state
+
+---
+ src/service.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/src/service.c b/src/service.c
+index d30a413ccdfc..60091f98312a 100644
+--- a/src/service.c
++++ b/src/service.c
+@@ -3620,9 +3620,6 @@ static bool is_ignore(struct connman_service *service)
+ 	if (service->ignore)
+ 		return true;
+ 
+-	if (service->state == CONNMAN_SERVICE_STATE_FAILURE)
+-		return true;
+-
+ 	if (!is_ipconfig_usable(service))
+ 		return true;
+ 
+-- 
+2.25.0
+
