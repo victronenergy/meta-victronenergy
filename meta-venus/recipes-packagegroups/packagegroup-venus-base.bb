@@ -45,6 +45,7 @@ RDEPENDS_${PN} += "\
     custom-rc.d \
     dbus \
     dbus-tools \
+    default-locale \
     dnsmasq \
     e2fsprogs \
     eglibc-utils \

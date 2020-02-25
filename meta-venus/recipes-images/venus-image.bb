@@ -11,7 +11,7 @@ IMAGE_INSTALL = "\
 IMAGE_INSTALL += "packagegroup-ve-console-apps"
 IMAGE_FEATURES += "package-management ssh-server-openssh"
 
-IMAGE_LINGUAS = " "
+IMAGE_LINGUAS = "en-us"
 
 LICENSE = "MIT"
 
