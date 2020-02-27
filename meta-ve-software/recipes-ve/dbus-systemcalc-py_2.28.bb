@@ -9,7 +9,12 @@ inherit python-compile
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
     file://com.victronenergy.system.conf \
+    file://0001-remove-old-Lynx-Ion-battery-from-battery-settings.patch \
+    file://0002-don-t-crash-when-the-firmware-on-the-Multi-is-old.patch \
+    file://0003-make-grid-alarm-more-robust.patch \
 "
+
+PR = "1"
 
 S = "${WORKDIR}/git"
 

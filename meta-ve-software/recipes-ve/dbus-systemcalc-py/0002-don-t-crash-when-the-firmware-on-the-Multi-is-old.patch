@@ -1,0 +1,37 @@
+From b0f40597dd3dc46a8c5f4e52b258b0cc4685df61 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Fri, 17 Jan 2020 15:23:28 +0200
+Subject: [PATCH 2/3] don't crash when the firmware on the Multi is old
+
+https://github.com/victronenergy/venus/issues/591
+---
+ delegates/dvcc.py | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index c53e8b9..a16767f 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -847,12 +847,13 @@ class Dvcc(SystemCalcDelegate):
+ 				self._multi.bol.maxchargecurrent = mcc
+ 
+ 			# Copy the rest unmodified
+-			copy_dbus_value(self._dbusmonitor,
+-				bms_service.service, '/Info/BatteryLowVoltage',
+-				self._multi.service, '/BatteryOperationalLimits/BatteryLowVoltage')
+-			copy_dbus_value(self._dbusmonitor,
+-				bms_service.service, '/Info/MaxDischargeCurrent',
+-				self._multi.service, '/BatteryOperationalLimits/MaxDischargeCurrent')
++			if self._dbusmonitor.seen(self._multi.service, '/BatteryOperationalLimits/MaxDischargeCurrent'):
++				copy_dbus_value(self._dbusmonitor,
++					bms_service.service, '/Info/BatteryLowVoltage',
++					self._multi.service, '/BatteryOperationalLimits/BatteryLowVoltage')
++				copy_dbus_value(self._dbusmonitor,
++					bms_service.service, '/Info/MaxDischargeCurrent',
++					self._multi.service, '/BatteryOperationalLimits/MaxDischargeCurrent')
+ 			return 1
+ 
+ 		return 0
+-- 
+2.7.4
+
