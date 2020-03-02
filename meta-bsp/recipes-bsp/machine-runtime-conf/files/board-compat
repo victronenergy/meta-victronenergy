@@ -1,5 +1,7 @@
 #!/bin/sh
 
-# return the first compatible dtf compatible string. Since different products
+N=${1:-1}
+
+# return the Nth dtb compatible string. Since different products
 # can have the same board, use this for board configuration.
-cat /sys/firmware/devicetree/base/compatible | tr '\0' '\n' | head -n1
+cat /sys/firmware/devicetree/base/compatible | tr '\0' '\n' | sed -n "${N}p"
