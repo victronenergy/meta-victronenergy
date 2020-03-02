@@ -1,6 +1,13 @@
 #! /bin/sh
 
-id=$(dd if=/sys/bus/nvmem/devices/0-00500/nvmem bs=4 count=1 2>//dev/null)
+case $(board-compat 2) in
+    cubietech,einstein)          eeprom=1-00500 ;;
+    friendlyarm,nanopi-neo-core) eeprom=0-00500 ;;
+esac
+
+if [ -n "$eeprom" ]; then
+    id=$(dd if=/sys/bus/nvmem/devices/$eeprom/nvmem bs=4 count=1 2>/dev/null)
+fi
 
 case $id in
 	VECB) echo C00A ;;	# Cerbo GX
