@@ -4,7 +4,6 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425
 
 SRC_URI = " \
     gitsm://github.com/lwfinger/rtl8723bu.git;protocol=https;rev=b5bad435151c7fa6fa1ef9c1923b6d7679df2430 \
-    file://0001-fix-makefile-for-openembedded.patch \
     file://0001-disable-proc-debug.patch \
     file://0001-disable-roaming.patch \
     file://be-less-verbose.patch \
@@ -16,6 +15,8 @@ inherit module
 
 # The inherit of module.bbclass will automatically name module packages with
 # "kernel-module-" prefix as required by the oe-core build environment.
+
+EXTRA_OEMAKE += "KSRC=${STAGING_KERNEL_DIR}"
 
 do_install() {
     # Module
