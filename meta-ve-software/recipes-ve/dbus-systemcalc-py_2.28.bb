@@ -12,9 +12,11 @@ SRC_URI = " \
     file://0001-remove-old-Lynx-Ion-battery-from-battery-settings.patch \
     file://0002-don-t-crash-when-the-firmware-on-the-Multi-is-old.patch \
     file://0003-make-grid-alarm-more-robust.patch \
+    file://0004-deal-with-multi-compact-that-shows-disconnected-when.patch \
+    file://0005-allow-quirks-to-raise-the-charge-voltage.patch \
 "
 
-PR = "1"
+PR = "2"
 
 S = "${WORKDIR}/git"
 

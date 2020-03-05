@@ -1,0 +1,40 @@
+From 0931b133f997e4785f11589b08da4e7bf253d8fd Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Tue, 3 Mar 2020 13:04:08 +0200
+Subject: [PATCH 2/2] allow quirks to raise the charge voltage
+
+This adds support for the BYD Premium battery.
+
+Previously there was a blanket clamp in place to ensure
+that a quirk could not raise the charge voltage. The idea
+was that we could never accidentally raise the charge voltage.
+For the BYD Premium battery, it is necessary to raise the charge
+voltage as it sets it 2V lower than the current battery voltage,
+causing the Multi to discharge it.
+
+The other quirks already clamp the voltage, so the blanket clamp
+is not required.
+---
+ delegates/dvcc.py | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index a16767f..1570b60 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -822,10 +822,8 @@ class Dvcc(SystemCalcDelegate):
+ 		quirk = QUIRKS.get(bms_service.product_id)
+ 		if quirk is not None:
+ 			# If any quirks are registered for this battery, use that
+-			# instead. For safety, let's cap the voltage to what the BMS
+-			# requests: A quirk can only lower the voltage.
+-			voltage, mcc, feedback_allowed = quirk(self, bms_service, cv, mcc, feedback_allowed)
+-			cv = min(voltage, cv)
++			# instead.
++			cv, mcc, feedback_allowed = quirk(self, bms_service, cv, mcc, feedback_allowed)
+ 
+ 		# Add debug offsets
+ 		if cv is not None:
+-- 
+2.7.4
+
