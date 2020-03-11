@@ -1,0 +1,902 @@
+From 86cc892c6cb6121e29eb703f56ceea69726603f5 Mon Sep 17 00:00:00 2001
+From: dmig <dmitriy.geels@gmail.com>
+Date: Fri, 10 Nov 2017 13:47:48 +0700
+Subject: [PATCH] Produce less noise in system log
+
+---
+ core/rtw_cmd.c                | 10 +++++-----
+ core/rtw_ioctl_set.c          |  8 ++++----
+ core/rtw_mlme.c               |  2 +-
+ core/rtw_mlme_ext.c           | 28 +++++++++++++--------------
+ core/rtw_pwrctrl.c            |  8 ++++----
+ core/rtw_security.c           | 12 ++++++------
+ core/rtw_wlan_util.c          | 10 +++++-----
+ core/rtw_xmit.c               |  2 +-
+ hal/hal_com.c                 |  8 ++++----
+ hal/rtl8723b_cmd.c            | 36 +++++++++++++++++------------------
+ include/rtw_debug.h           |  4 ++--
+ os_dep/ioctl_cfg80211.c       |  4 ++--
+ os_dep/ioctl_linux.c          |  8 ++++----
+ os_dep/linux/ioctl_cfg80211.c |  4 ++--
+ os_dep/os_intfs.c             | 36 +++++++++++++++++------------------
+ os_dep/usb_intf.c             | 10 +++++-----
+ 16 files changed, 95 insertions(+), 95 deletions(-)
+
+diff --git a/core/rtw_cmd.c b/core/rtw_cmd.c
+index 321497a..14debb4 100644
+--- a/core/rtw_cmd.c
++++ b/core/rtw_cmd.c
+@@ -442,19 +442,19 @@ thread_return rtw_cmd_thread(thread_context context)
+ 	while(1)
+ 	{
+ 		if (_rtw_down_sema(&pcmdpriv->cmd_queue_sema) == _FAIL) {
+-			DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" _rtw_down_sema(&pcmdpriv->cmd_queue_sema) return _FAIL, break\n", FUNC_ADPT_ARG(padapter));
++			DBG_871X_LEVEL(_drv_emerg_, FUNC_ADPT_FMT" _rtw_down_sema(&pcmdpriv->cmd_queue_sema) return _FAIL, break\n", FUNC_ADPT_ARG(padapter));
+ 			break;
+ 		}
+ 
+ 		if ((padapter->bDriverStopped == _TRUE)||(padapter->bSurpriseRemoved == _TRUE))
+ 		{
+-			DBG_871X_LEVEL(_drv_always_, "%s: DriverStopped(%d) SurpriseRemoved(%d) break at line %d\n",
++			DBG_871X_LEVEL(_drv_emerg_, "%s: DriverStopped(%d) SurpriseRemoved(%d) break at line %d\n",
+ 				__FUNCTION__, padapter->bDriverStopped, padapter->bSurpriseRemoved, __LINE__);
+ 			break;
+ 		}
+ 
+ 		if (pcmdpriv->stop_req) {
+-			DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" stop_req:%u, break\n", FUNC_ADPT_ARG(padapter), pcmdpriv->stop_req);
++			DBG_871X_LEVEL(_drv_emerg_, FUNC_ADPT_FMT" stop_req:%u, break\n", FUNC_ADPT_ARG(padapter), pcmdpriv->stop_req);
+ 			break;
+ 		}
+ 
+@@ -476,7 +476,7 @@ thread_return rtw_cmd_thread(thread_context context)
+ _next:
+ 		if ((padapter->bDriverStopped == _TRUE)||(padapter->bSurpriseRemoved== _TRUE))
+ 		{
+-			DBG_871X_LEVEL(_drv_always_, "%s: DriverStopped(%d) SurpriseRemoved(%d) break at line %d\n",
++			DBG_871X_LEVEL(_drv_emerg_, "%s: DriverStopped(%d) SurpriseRemoved(%d) break at line %d\n",
+ 				__FUNCTION__, padapter->bDriverStopped, padapter->bSurpriseRemoved, __LINE__);
+ 			break;
+ 		}
+@@ -1602,7 +1602,7 @@ u8 rtw_clearstakey_cmd(_adapter *padapter, struct sta_info *sta, u8 enqueue)
+ 	if(!enqueue)
+ 	{
+ 		while((cam_id = rtw_camid_search(padapter, sta->hwaddr, -1)) >= 0) {
+-			DBG_871X_LEVEL(_drv_always_, "clear key for addr:"MAC_FMT", camid:%d\n", MAC_ARG(sta->hwaddr), cam_id);
++			DBG_871X_LEVEL(_drv_info_, "clear key for addr:"MAC_FMT", camid:%d\n", MAC_ARG(sta->hwaddr), cam_id);
+ 			clear_cam_entry(padapter, cam_id);
+ 			rtw_camid_free(padapter, cam_id);
+ 		}
+diff --git a/core/rtw_ioctl_set.c b/core/rtw_ioctl_set.c
+index 07c4aea..a49442c 100644
+--- a/core/rtw_ioctl_set.c
++++ b/core/rtw_ioctl_set.c
+@@ -212,7 +212,7 @@ u8 rtw_set_802_11_bssid(_adapter* padapter, u8 *bssid)
+ 
+ 
+ 
+-	DBG_871X_LEVEL(_drv_always_, "set bssid:%pM\n", bssid);
++	DBG_871X_LEVEL(_drv_info_, "set bssid:%pM\n", bssid);
+ 
+ 	if ((bssid[0]==0x00 && bssid[1]==0x00 && bssid[2]==0x00 && bssid[3]==0x00 && bssid[4]==0x00 &&bssid[5]==0x00) ||
+ 	    (bssid[0]==0xFF && bssid[1]==0xFF && bssid[2]==0xFF && bssid[3]==0xFF && bssid[4]==0xFF &&bssid[5]==0xFF))
+@@ -298,7 +298,7 @@ u8 rtw_set_802_11_ssid(_adapter* padapter, NDIS_802_11_SSID *ssid)
+ 
+ 
+ 
+-	DBG_871X_LEVEL(_drv_always_, "set ssid [%s] fw_state=0x%08x\n",
++	DBG_871X_LEVEL(_drv_info_, "set ssid [%s] fw_state=0x%08x\n",
+ 			ssid->Ssid, get_fwstate(pmlmepriv));
+ 
+ 	if(padapter->hw_init_completed==_FALSE){
+@@ -444,7 +444,7 @@ u8 rtw_set_802_11_connect(_adapter* padapter, u8 *bssid, NDIS_802_11_SSID *ssid)
+ 
+ 	SPIN_LOCK_BH(pmlmepriv->lock, &irqL);
+ 
+-	DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT"  fw_state=0x%08x\n",
++	DBG_871X_LEVEL(_drv_dump_, FUNC_ADPT_FMT"  fw_state=0x%08x\n",
+ 		FUNC_ADPT_ARG(padapter), get_fwstate(pmlmepriv));
+ 
+ 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == _TRUE) {
+@@ -1346,6 +1346,6 @@ int rtw_set_band(_adapter *adapter, enum _BAND band)
+ 		return _SUCCESS;
+ 	}
+ 
+-	DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" band:%d fail\n", FUNC_ADPT_ARG(adapter), band);
++	DBG_871X_LEVEL(_drv_err_, FUNC_ADPT_FMT" band:%d fail\n", FUNC_ADPT_ARG(adapter), band);
+ 	return _FAIL;
+ }
+diff --git a/core/rtw_mlme.c b/core/rtw_mlme.c
+index 95057d4..0aa9137 100644
+--- a/core/rtw_mlme.c
++++ b/core/rtw_mlme.c
+@@ -1931,7 +1931,7 @@ void rtw_joinbss_event_prehandle(_adapter *adapter, u8 *pbuf)
+ 			}
+ 			else
+ 			{
+-				DBG_871X_LEVEL(_drv_always_, "Can't find ptarget_wlan when joinbss_event callback\n");
++				DBG_871X_LEVEL(_drv_warning_, "Can't find ptarget_wlan when joinbss_event callback\n");
+ 				SPIN_UNLOCK_BH(pmlmepriv->scanned_queue.lock, &irqL);
+ 				goto ignore_joinbss_callback;
+ 			}
+diff --git a/core/rtw_mlme_ext.c b/core/rtw_mlme_ext.c
+index b904317..7367ae6 100644
+--- a/core/rtw_mlme_ext.c
++++ b/core/rtw_mlme_ext.c
+@@ -1285,7 +1285,7 @@ unsigned int OnBeacon(_adapter *padapter, union recv_frame *precv_frame)
+ 
+ 				ret = rtw_check_bcn_info(padapter, pframe, len);
+ 				if (!ret) {
+-						DBG_871X_LEVEL(_drv_always_, "ap has changed, disconnect now\n ");
++						DBG_871X_LEVEL(_drv_notice_, "ap has changed, disconnect now\n ");
+ 						receive_disconnect(padapter, pmlmeinfo->network.MacAddress , 0);
+ 						return _SUCCESS;
+ 				}
+@@ -1685,7 +1685,7 @@ unsigned int OnAuthClient(_adapter *padapter, union recv_frame *precv_frame)
+ 
+ 	if (go2asoc)
+ 	{
+-		DBG_871X_LEVEL(_drv_always_, "auth success, start assoc\n");
++		DBG_871X_LEVEL(_drv_notice_, "auth success, start assoc\n");
+ 		start_clnt_assoc(padapter);
+ 		return _SUCCESS;
+ 	}
+@@ -2471,7 +2471,7 @@ unsigned int OnDeAuth(_adapter *padapter, union recv_frame *precv_frame)
+ 		struct sta_info *psta;
+ 		struct sta_priv *pstapriv = &padapter->stapriv;
+ 
+-		DBG_871X_LEVEL(_drv_always_, "ap recv deauth reason code(%d) sta:%pM\n",
++		DBG_871X_LEVEL(_drv_notice_, "ap recv deauth reason code(%d) sta:%pM\n",
+ 				reason, GetAddr2Ptr(pframe));
+ 
+ 		psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));
+@@ -2517,7 +2517,7 @@ unsigned int OnDeAuth(_adapter *padapter, union recv_frame *precv_frame)
+ 			}
+ 		}
+ 
+-		DBG_871X_LEVEL(_drv_always_, "sta recv deauth reason code(%d) sta:%pM, ignore = %d\n",
++		DBG_871X_LEVEL(_drv_notice_, "sta recv deauth reason code(%d) sta:%pM, ignore = %d\n",
+ 				reason, GetAddr3Ptr(pframe), ignore_received_deauth);
+ 
+ 		if ( 0 == ignore_received_deauth )
+@@ -2566,7 +2566,7 @@ unsigned int OnDisassoc(_adapter *padapter, union recv_frame *precv_frame)
+ 		struct sta_info *psta;
+ 		struct sta_priv *pstapriv = &padapter->stapriv;
+ 
+-		DBG_871X_LEVEL(_drv_always_, "ap recv disassoc reason code(%d) sta:%pM\n",
++		DBG_871X_LEVEL(_drv_notice_, "ap recv disassoc reason code(%d) sta:%pM\n",
+ 				reason, GetAddr2Ptr(pframe));
+ 
+ 		psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));
+@@ -2592,7 +2592,7 @@ unsigned int OnDisassoc(_adapter *padapter, union recv_frame *precv_frame)
+ 	else
+ #endif
+ 	{
+-		DBG_871X_LEVEL(_drv_always_, "sta recv disassoc reason code(%d) sta:%pM\n",
++		DBG_871X_LEVEL(_drv_notice_, "sta recv disassoc reason code(%d) sta:%pM\n",
+ 				reason, GetAddr3Ptr(pframe));
+ 
+ 		receive_disconnect(padapter, GetAddr3Ptr(pframe), reason);
+@@ -9984,7 +9984,7 @@ void start_clnt_auth(_adapter* padapter)
+ 	pmlmeext->retry = 0;
+ 
+ 
+-	DBG_871X_LEVEL(_drv_always_, "start auth\n");
++	DBG_871X_LEVEL(_drv_info_, "start auth\n");
+ 	issue_auth(padapter, NULL, 0);
+ 
+ 	set_link_timer(pmlmeext, REAUTH_TO);
+@@ -11380,7 +11380,7 @@ void linked_status_chk(_adapter *padapter)
+ 			if (rx_chk == _FAIL) {
+ 				pmlmeext->retry++;
+ 				if (pmlmeext->retry > rx_chk_limit) {
+-					DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" disconnect or roaming\n",
++					DBG_871X_LEVEL(_drv_notice_, FUNC_ADPT_FMT" disconnect or roaming\n",
+ 						FUNC_ADPT_ARG(padapter));
+ 					receive_disconnect(padapter, pmlmeinfo->network.MacAddress
+ 						, WLAN_REASON_EXPIRATION_CHK);
+@@ -12094,7 +12094,7 @@ static int rtw_scan_ch_decision(_adapter *padapter, struct rtw_ieee80211_channel
+ 		)
+ 		{
+ 			if (j >= out_num) {
+-				DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" out_num:%u not enough\n",
++				DBG_871X_LEVEL(_drv_info_, FUNC_ADPT_FMT" out_num:%u not enough\n",
+ 					FUNC_ADPT_ARG(padapter), out_num);
+ 				break;
+ 			}
+@@ -12115,7 +12115,7 @@ static int rtw_scan_ch_decision(_adapter *padapter, struct rtw_ieee80211_channel
+ 		for (i=0;i<pmlmeext->max_chan_nums;i++) {
+ 			if (rtw_mlme_band_check(padapter, pmlmeext->channel_set[i].ChannelNum) == _TRUE) {
+ 				if (j >= out_num) {
+-					DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" out_num:%u not enough\n",
++					DBG_871X_LEVEL(_drv_info_, FUNC_ADPT_FMT" out_num:%u not enough\n",
+ 						FUNC_ADPT_ARG(padapter), out_num);
+ 					break;
+ 				}
+@@ -12333,7 +12333,7 @@ u8 setkey_hdl(_adapter *padapter, u8 *pbuf)
+ 
+ 		ctrl = BIT(15) | BIT6 |((pparm->algorithm) << 2) | pparm->keyid;
+ 		write_cam(padapter, cam_id, ctrl, addr, pparm->key);
+-		DBG_871X_LEVEL(_drv_always_, "set group key camid:%d, addr:"MAC_FMT", kid:%d, type:%s\n"
++		DBG_871X_LEVEL(_drv_info_, "set group key camid:%d, addr:"MAC_FMT", kid:%d, type:%s\n"
+ 			,cam_id, MAC_ARG(addr), pparm->keyid, security_type_str(pparm->algorithm));
+ 	}
+ 
+@@ -12367,7 +12367,7 @@ u8 set_stakey_hdl(_adapter *padapter, u8 *pbuf)
+ 
+ 	psta = rtw_get_stainfo(pstapriv, pparm->addr);
+ 	if (!psta) {
+-		DBG_871X_LEVEL(_drv_always_, "%s sta:"MAC_FMT" not found\n", __func__, MAC_ARG(pparm->addr));
++		DBG_871X_LEVEL(_drv_notice_, "%s sta:"MAC_FMT" not found\n", __func__, MAC_ARG(pparm->addr));
+ 		ret = H2C_REJECTED;
+ 		goto exit;
+ 	}
+@@ -12380,12 +12380,12 @@ u8 set_stakey_hdl(_adapter *padapter, u8 *pbuf)
+ write_to_cam:
+ 	if(pparm->algorithm == _NO_PRIVACY_) {
+ 		while((cam_id = rtw_camid_search(padapter, pparm->addr, -1)) >= 0) {
+-			DBG_871X_LEVEL(_drv_always_, "clear key for addr:"MAC_FMT", camid:%d\n", MAC_ARG(pparm->addr), cam_id);
++			DBG_871X_LEVEL(_drv_info_, "clear key for addr:"MAC_FMT", camid:%d\n", MAC_ARG(pparm->addr), cam_id);
+ 			clear_cam_entry(padapter, cam_id);
+ 			rtw_camid_free(padapter,cam_id);
+ 		}
+ 	} else {
+-		DBG_871X_LEVEL(_drv_always_, "set pairwise key camid:%d, addr:"MAC_FMT", kid:%d, type:%s\n",
++		DBG_871X_LEVEL(_drv_info_, "set pairwise key camid:%d, addr:"MAC_FMT", kid:%d, type:%s\n",
+ 			cam_id, MAC_ARG(pparm->addr), pparm->keyid, security_type_str(pparm->algorithm));
+ 		ctrl = BIT(15) | ((pparm->algorithm) << 2) | pparm->keyid;
+ 		write_cam(padapter, cam_id, ctrl, pparm->addr, pparm->key);
+diff --git a/core/rtw_pwrctrl.c b/core/rtw_pwrctrl.c
+index a82bf09..f4a0f82 100644
+--- a/core/rtw_pwrctrl.c
++++ b/core/rtw_pwrctrl.c
+@@ -85,7 +85,7 @@ void _ips_enter(_adapter * padapter)
+ 	if(rf_off == pwrpriv->change_rfpwrstate )
+ 	{
+ 		pwrpriv->bpower_saving = _TRUE;
+-		DBG_871X_LEVEL(_drv_always_, "nolinked power save enter\n");
++		DBG_871X_LEVEL(_drv_info_, "nolinked power save enter\n");
+ 
+ 		if(pwrpriv->ips_mode == IPS_LEVEL_2)
+ 			pwrpriv->bkeepfwalive = _TRUE;
+@@ -126,7 +126,7 @@ int _ips_leave(_adapter * padapter)
+ 		if ((result = rtw_ips_pwr_up(padapter)) == _SUCCESS) {
+ 			pwrpriv->rf_pwrstate = rf_on;
+ 		}
+-		DBG_871X_LEVEL(_drv_always_, "nolinked power save leave\n");
++		DBG_871X_LEVEL(_drv_info_, "nolinked power save leave\n");
+ 
+ 		DBG_871X("==> ips_leave.....LED(0x%08x)...\n",rtw_read32(padapter,0x4c));
+ 		pwrpriv->bips_processing = _FALSE;
+@@ -248,8 +248,8 @@ static bool rtw_pwr_unassociated_idle(_adapter *adapter)
+ 
+ 	if (pxmit_priv->free_xmitbuf_cnt != NR_XMITBUFF ||
+ 		pxmit_priv->free_xmit_extbuf_cnt != NR_XMIT_EXTBUFF) {
+-		DBG_871X_LEVEL(_drv_always_, "There are some pkts to transmit\n");
+-		DBG_871X_LEVEL(_drv_always_, "free_xmitbuf_cnt: %d, free_xmit_extbuf_cnt: %d\n",
++		DBG_871X_LEVEL(_drv_notice_, "There are some pkts to transmit\n");
++		DBG_871X_LEVEL(_drv_notice_, "free_xmitbuf_cnt: %d, free_xmit_extbuf_cnt: %d\n",
+ 			pxmit_priv->free_xmitbuf_cnt, pxmit_priv->free_xmit_extbuf_cnt);
+ 		goto exit;
+ 	}
+diff --git a/core/rtw_security.c b/core/rtw_security.c
+index fda9b5b..193bee1 100644
+--- a/core/rtw_security.c
++++ b/core/rtw_security.c
+@@ -877,7 +877,7 @@ u32 rtw_tkip_decrypt(_adapter *padapter, u8 *precvframe)
+ 
+ 					if (rtw_get_passing_time_ms(start) > 1000) {
+ 						if (no_gkey_bc_cnt || no_gkey_mc_cnt) {
+-							DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
++							DBG_871X_LEVEL(_drv_info_, FUNC_ADPT_FMT" no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
+ 								FUNC_ADPT_ARG(padapter), no_gkey_bc_cnt, no_gkey_mc_cnt);
+ 						}
+ 						start = rtw_get_current_time();
+@@ -888,7 +888,7 @@ u32 rtw_tkip_decrypt(_adapter *padapter, u8 *precvframe)
+ 				}
+ 
+ 				if (no_gkey_bc_cnt || no_gkey_mc_cnt) {
+-					DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" gkey installed. no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
++					DBG_871X_LEVEL(_drv_info_, FUNC_ADPT_FMT" gkey installed. no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
+ 						FUNC_ADPT_ARG(padapter), no_gkey_bc_cnt, no_gkey_mc_cnt);
+ 				}
+ 				start = 0;
+@@ -2020,7 +2020,7 @@ u32	rtw_aes_decrypt(_adapter *padapter, u8 *precvframe)
+ 
+ 					if (rtw_get_passing_time_ms(start) > 1000) {
+ 						if (no_gkey_bc_cnt || no_gkey_mc_cnt) {
+-							DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
++							DBG_871X_LEVEL(_drv_info_, FUNC_ADPT_FMT" no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
+ 								FUNC_ADPT_ARG(padapter), no_gkey_bc_cnt, no_gkey_mc_cnt);
+ 						}
+ 						start = rtw_get_current_time();
+@@ -2032,7 +2032,7 @@ u32	rtw_aes_decrypt(_adapter *padapter, u8 *precvframe)
+ 				}
+ 
+ 				if (no_gkey_bc_cnt || no_gkey_mc_cnt) {
+-					DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" gkey installed. no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
++					DBG_871X_LEVEL(_drv_info_, FUNC_ADPT_FMT" gkey installed. no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
+ 						FUNC_ADPT_ARG(padapter), no_gkey_bc_cnt, no_gkey_mc_cnt);
+ 				}
+ 				start = 0;
+@@ -3124,12 +3124,12 @@ u8 rtw_handle_tkip_countermeasure(_adapter* adapter, const char *caller)
+ 	if (securitypriv->btkip_countermeasure == _TRUE) {
+ 		u32 passing_ms = rtw_get_passing_time_ms(securitypriv->btkip_countermeasure_time);
+ 		if (passing_ms > 60*1000) {
+-			DBG_871X_LEVEL(_drv_always_, "%s("ADPT_FMT") countermeasure time:%ds > 60s \n",
++			DBG_871X_LEVEL(_drv_info_, "%s("ADPT_FMT") countermeasure time:%ds > 60s \n",
+ 				caller, ADPT_ARG(adapter), passing_ms/1000);
+ 			securitypriv->btkip_countermeasure = _FALSE;
+ 			securitypriv->btkip_countermeasure_time = 0;
+ 		} else {
+-			DBG_871X_LEVEL(_drv_always_, "%s("ADPT_FMT") countermeasure time:%ds < 60s \n",
++			DBG_871X_LEVEL(_drv_info_, "%s("ADPT_FMT") countermeasure time:%ds < 60s \n",
+ 				caller, ADPT_ARG(adapter), passing_ms/1000);
+ 			status = _FAIL;
+ 		}
+diff --git a/core/rtw_wlan_util.c b/core/rtw_wlan_util.c
+index eb2bda3..3f6c979 100644
+--- a/core/rtw_wlan_util.c
++++ b/core/rtw_wlan_util.c
+@@ -949,7 +949,7 @@ s16 rtw_get_camid(_adapter *adapter, struct sta_info *sta, s16 kid)
+ 
+ 		if((mlmeinfo->state&0x03) == WIFI_FW_AP_STATE) {
+ 			if((macid == 1) || (macid > (NUM_STA - 4))) {
+-				DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT
++				DBG_871X_LEVEL(_drv_emerg_, FUNC_ADPT_FMT
+ 					       " failed, mac_id=%d\n",
+ 					       FUNC_ADPT_ARG(adapter), macid);
+ 				camid = -1;
+@@ -1068,7 +1068,7 @@ s16 rtw_camid_alloc(_adapter *adapter, struct sta_info *sta, u8 kid)
+ 			&& !sta) {
+ 			/* AP/Ad-hoc mode group key: static alloction to default key by key ID */
+ 			if (kid > 3) {
+-				DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" group key with invalid key id:%u\n"
++				DBG_871X_LEVEL(_drv_warning_, FUNC_ADPT_FMT" group key with invalid key id:%u\n"
+ 					, FUNC_ADPT_ARG(adapter), kid);
+ 				rtw_warn_on(1);
+ 				goto bitmap_handle;
+@@ -1094,7 +1094,7 @@ s16 rtw_camid_alloc(_adapter *adapter, struct sta_info *sta, u8 kid)
+ 				if (sta || _rtw_camid_is_gk(adapter, i) == _TRUE)
+ 					cam_id = i;
+ 				else
+-					DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" group key id:%u the same key id as pairwise key\n"
++					DBG_871X_LEVEL(_drv_info_, FUNC_ADPT_FMT" group key id:%u the same key id as pairwise key\n"
+ 						, FUNC_ADPT_ARG(adapter), kid);
+ 				goto bitmap_handle;
+ 			}
+@@ -1105,10 +1105,10 @@ s16 rtw_camid_alloc(_adapter *adapter, struct sta_info *sta, u8 kid)
+ 
+ 			if (i == TOTAL_CAM_ENTRY) {
+ 				if (sta)
+-					DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" pairwise key with "MAC_FMT" id:%u no room\n"
++					DBG_871X_LEVEL(_drv_info_, FUNC_ADPT_FMT" pairwise key with "MAC_FMT" id:%u no room\n"
+ 					, FUNC_ADPT_ARG(adapter), MAC_ARG(sta->hwaddr), kid);
+ 				else
+-					DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" group key id:%u no room\n"
++					DBG_871X_LEVEL(_drv_info_, FUNC_ADPT_FMT" group key id:%u no room\n"
+ 					, FUNC_ADPT_ARG(adapter), kid);
+ 				rtw_warn_on(1);
+ 				goto bitmap_handle;
+diff --git a/core/rtw_xmit.c b/core/rtw_xmit.c
+index 5e6d02b..7540030 100644
+--- a/core/rtw_xmit.c
++++ b/core/rtw_xmit.c
+@@ -1002,7 +1002,7 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
+ 
+ 
+ 	} else if (0x888e == pattrib->ether_type) {
+-		DBG_871X_LEVEL(_drv_always_, "send eapol packet\n");
++		DBG_871X_LEVEL(_drv_info_, "send eapol packet\n");
+ 	}
+ 
+ 	if ( (pattrib->ether_type == 0x888e) || (pattrib->dhcp_pkt == 1) )
+diff --git a/hal/hal_com.c b/hal/hal_com.c
+index 8b9eb8f..11d086f 100644
+--- a/hal/hal_com.c
++++ b/hal/hal_com.c
+@@ -928,12 +928,12 @@ void hw_var_port_switch(_adapter *adapter)
+ 	if (adapter->iface_type == IFACE_PORT0) {
+ 		adapter->iface_type = IFACE_PORT1;
+ 		adapter->pbuddy_adapter->iface_type = IFACE_PORT0;
+-		DBG_871X_LEVEL(_drv_always_, "port switch - port0("ADPT_FMT"), port1("ADPT_FMT")\n",
++		DBG_871X_LEVEL(_drv_info_, "port switch - port0("ADPT_FMT"), port1("ADPT_FMT")\n",
+ 			ADPT_ARG(adapter->pbuddy_adapter), ADPT_ARG(adapter));
+ 	} else {
+ 		adapter->iface_type = IFACE_PORT0;
+ 		adapter->pbuddy_adapter->iface_type = IFACE_PORT1;
+-		DBG_871X_LEVEL(_drv_always_, "port switch - port0("ADPT_FMT"), port1("ADPT_FMT")\n",
++		DBG_871X_LEVEL(_drv_info_, "port switch - port0("ADPT_FMT"), port1("ADPT_FMT")\n",
+ 			ADPT_ARG(adapter), ADPT_ARG(adapter->pbuddy_adapter));
+ 	}
+ 
+@@ -1200,7 +1200,7 @@ SetHalDefVar(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
+ 		hal_data->AntDetection = *((u8 *)value);
+ 		break;
+ 	default:
+-		DBG_871X_LEVEL(_drv_always_, "%s: [WARNING] HAL_DEF_VARIABLE(%d) not defined!\n", __FUNCTION__, variable);
++		DBG_871X_LEVEL(_drv_warning_, "%s: [WARNING] HAL_DEF_VARIABLE(%d) not defined!\n", __FUNCTION__, variable);
+ 		bResult = _FAIL;
+ 		break;
+ 	}
+@@ -1256,7 +1256,7 @@ GetHalDefVar(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
+ 			*(( u32*)value) = PAGE_SIZE_128;
+ 			break;
+ 		default:
+-			DBG_871X_LEVEL(_drv_always_, "%s: [WARNING] HAL_DEF_VARIABLE(%d) not defined!\n", __FUNCTION__, variable);
++			DBG_871X_LEVEL(_drv_warning_, "%s: [WARNING] HAL_DEF_VARIABLE(%d) not defined!\n", __FUNCTION__, variable);
+ 			bResult = _FAIL;
+ 			break;
+ 	}
+diff --git a/hal/rtl8723b_cmd.c b/hal/rtl8723b_cmd.c
+index eeee425..ae1af3b 100644
+--- a/hal/rtl8723b_cmd.c
++++ b/hal/rtl8723b_cmd.c
+@@ -989,7 +989,7 @@ static void rtl8723b_set_FwRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpag
+ 	SET_8723B_H2CCMD_RSVDPAGE_LOC_QOS_NULL_DATA(u1H2CRsvdPageParm, rsvdpageloc->LocQosNull);
+ 	SET_8723B_H2CCMD_RSVDPAGE_LOC_BT_QOS_NULL_DATA(u1H2CRsvdPageParm, rsvdpageloc->LocBTQosNull);
+ 
+-	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CRsvdPageParm:", u1H2CRsvdPageParm, H2C_RSVDPAGE_LOC_LEN);
++	RT_PRINT_DATA(_module_hal_init_c_, _drv_dump_, "u1H2CRsvdPageParm:", u1H2CRsvdPageParm, H2C_RSVDPAGE_LOC_LEN);
+ 	FillH2CCmd8723B(padapter, H2C_8723B_RSVD_PAGE, H2C_RSVDPAGE_LOC_LEN, u1H2CRsvdPageParm);
+ }
+ 
+@@ -1016,7 +1016,7 @@ static void rtl8723b_set_FwAoacRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsv
+ #ifdef CONFIG_GTK_OL
+ 		SET_H2CCMD_AOAC_RSVDPAGE_LOC_GTK_EXT_MEM(u1H2CAoacRsvdPageParm, rsvdpageloc->LocGTKEXTMEM);
+ #endif // CONFIG_GTK_OL
+-		RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CAoacRsvdPageParm:", u1H2CAoacRsvdPageParm, H2C_AOAC_RSVDPAGE_LOC_LEN);
++		RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "u1H2CAoacRsvdPageParm:", u1H2CAoacRsvdPageParm, H2C_AOAC_RSVDPAGE_LOC_LEN);
+ 		FillH2CCmd8723B(padapter, H2C_8723B_AOAC_RSVD_PAGE, H2C_AOAC_RSVDPAGE_LOC_LEN, u1H2CAoacRsvdPageParm);
+ 	} else {
+ #ifdef CONFIG_PNO_SUPPORT
+@@ -1082,7 +1082,7 @@ void rtl8723b_set_FwMediaStatusRpt_cmd(PADAPTER	padapter, u8 mstatus, u8 macid)
+ 	SET_8723B_H2CCMD_MSRRPT_PARM_MACID(u1H2CMediaStatusRptParm, macid);
+ 	SET_8723B_H2CCMD_MSRRPT_PARM_MACID_END(u1H2CMediaStatusRptParm, macid_end);
+ 
+-	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CMediaStatusRptParm:", u1H2CMediaStatusRptParm, H2C_MEDIA_STATUS_RPT_LEN);
++	RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "u1H2CMediaStatusRptParm:", u1H2CMediaStatusRptParm, H2C_MEDIA_STATUS_RPT_LEN);
+ 	FillH2CCmd8723B(padapter, H2C_8723B_MEDIA_STATUS_RPT, H2C_MEDIA_STATUS_RPT_LEN, u1H2CMediaStatusRptParm);
+ }
+ 
+@@ -1097,7 +1097,7 @@ static void rtl8723b_set_FwKeepAlive_cmd(PADAPTER padapter, u8 benable, u8 pkt_t
+ 	SET_8723B_H2CCMD_KEEPALIVE_PARM_PKT_TYPE(u1H2CKeepAliveParm, pkt_type);
+ 	SET_8723B_H2CCMD_KEEPALIVE_PARM_CHECK_PERIOD(u1H2CKeepAliveParm, check_period);
+ 
+-	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CKeepAliveParm:", u1H2CKeepAliveParm, H2C_KEEP_ALIVE_CTRL_LEN);
++	RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "u1H2CKeepAliveParm:", u1H2CKeepAliveParm, H2C_KEEP_ALIVE_CTRL_LEN);
+ 
+ 	FillH2CCmd8723B(padapter, H2C_8723B_KEEP_ALIVE, H2C_KEEP_ALIVE_CTRL_LEN, u1H2CKeepAliveParm);
+ }
+@@ -1113,7 +1113,7 @@ static void rtl8723b_set_FwDisconDecision_cmd(PADAPTER padapter, u8 benable)
+ 	SET_8723B_H2CCMD_DISCONDECISION_PARM_CHECK_PERIOD(u1H2CDisconDecisionParm, check_period);
+ 	SET_8723B_H2CCMD_DISCONDECISION_PARM_TRY_PKT_NUM(u1H2CDisconDecisionParm, trypkt_num);
+ 
+-	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CDisconDecisionParm:", u1H2CDisconDecisionParm, H2C_DISCON_DECISION_LEN);
++	RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "u1H2CDisconDecisionParm:", u1H2CDisconDecisionParm, H2C_DISCON_DECISION_LEN);
+ 
+ 	FillH2CCmd8723B(padapter, H2C_8723B_DISCON_DECISION, H2C_DISCON_DECISION_LEN, u1H2CDisconDecisionParm);
+ }
+@@ -1135,7 +1135,7 @@ void rtl8723b_set_FwMacIdConfig_cmd(_adapter* padapter, u8 mac_id, u8 raid, u8 b
+ 	SET_8723B_H2CCMD_MACID_CFG_RATE_MASK2(u1H2CMacIdConfigParm, (u8)((mask & 0x00ff0000) >> 16));
+ 	SET_8723B_H2CCMD_MACID_CFG_RATE_MASK3(u1H2CMacIdConfigParm, (u8)((mask & 0xff000000) >> 24));
+ 
+-	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CMacIdConfigParm:", u1H2CMacIdConfigParm, H2C_MACID_CFG_LEN);
++	RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "u1H2CMacIdConfigParm:", u1H2CMacIdConfigParm, H2C_MACID_CFG_LEN);
+ 	FillH2CCmd8723B(padapter, H2C_8723B_MACID_CFG, H2C_MACID_CFG_LEN, u1H2CMacIdConfigParm);
+ 
+ 
+@@ -1172,7 +1172,7 @@ static void rtl8723b_set_FwAPReqRPT_cmd(PADAPTER padapter, u32 need_ack)
+ 	SET_8723B_H2CCMD_APREQRPT_PARM_MACID1(u1H2CApReqRptParm, macid1);
+ 	SET_8723B_H2CCMD_APREQRPT_PARM_MACID2(u1H2CApReqRptParm, macid2);
+ 
+-	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CApReqRptParm:", u1H2CApReqRptParm, H2C_AP_REQ_TXRPT_LEN);
++	RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "u1H2CApReqRptParm:", u1H2CApReqRptParm, H2C_AP_REQ_TXRPT_LEN);
+ 	FillH2CCmd8723B(padapter, H2C_8723B_AP_REQ_TXRPT, H2C_AP_REQ_TXRPT_LEN, u1H2CApReqRptParm);
+ }
+ 
+@@ -1335,7 +1335,7 @@ void rtl8723b_set_FwPwrMode_cmd(PADAPTER padapter, u8 psmode)
+ 	rtw_btcoex_RecordPwrMode(padapter, u1H2CPwrModeParm, H2C_PWRMODE_LEN);
+ #endif // CONFIG_BT_COEXIST
+ 
+-	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CPwrModeParm:", u1H2CPwrModeParm, H2C_PWRMODE_LEN);
++	RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "u1H2CPwrModeParm:", u1H2CPwrModeParm, H2C_PWRMODE_LEN);
+ 
+ 	FillH2CCmd8723B(padapter, H2C_8723B_SET_PWR_MODE, H2C_PWRMODE_LEN, u1H2CPwrModeParm);
+ 
+@@ -1359,7 +1359,7 @@ void rtl8723b_set_FwPsTuneParam_cmd(PADAPTER padapter)
+ 	SET_8723B_H2CCMD_PSTUNE_PARM_ADOPT(u1H2CPsTuneParm, 1);
+ 	SET_8723B_H2CCMD_PSTUNE_PARM_DTIM_PERIOD(u1H2CPsTuneParm, dtim_period);
+ 
+-	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CPsTuneParm:", u1H2CPsTuneParm, H2C_PSTUNEPARAM_LEN);
++	RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "u1H2CPsTuneParm:", u1H2CPsTuneParm, H2C_PSTUNEPARAM_LEN);
+ 
+ 	FillH2CCmd8723B(padapter, H2C_8723B_PS_TUNING_PARA, H2C_PSTUNEPARAM_LEN, u1H2CPsTuneParm);
+ 
+@@ -1380,7 +1380,7 @@ void rtl8723b_set_FwBtMpOper_cmd(PADAPTER padapter, u8 idx, u8 ver, u8 reqnum, u
+ 	SET_8723B_H2CCMD_BT_MPOPER_PARAM2(u1H2CBtMpOperParm, param[1]);
+ 	SET_8723B_H2CCMD_BT_MPOPER_PARAM3(u1H2CBtMpOperParm, param[2]);
+ 
+-	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CBtMpOperParm:", u1H2CBtMpOperParm, H2C_BTMP_OPER_LEN);
++	RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "u1H2CBtMpOperParm:", u1H2CBtMpOperParm, H2C_BTMP_OPER_LEN);
+ 
+ 	FillH2CCmd8723B(padapter, H2C_8723B_BT_MP_OPER, H2C_BTMP_OPER_LEN+1, u1H2CBtMpOperParm);
+ 
+@@ -1438,7 +1438,7 @@ static void rtl8723b_set_FwWoWlanCtrl_Cmd(PADAPTER padapter, u8 bFuncEn)
+ 	//SET_H2CCMD_WOWLAN_GPIO_PULSE_EN(u1H2CWoWlanCtrlParm, 1);
+ 	SET_H2CCMD_WOWLAN_GPIO_PULSE_COUNT(u1H2CWoWlanCtrlParm, 0x09);
+ 
+-	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CWoWlanCtrlParm:", u1H2CWoWlanCtrlParm, H2C_WOWLAN_LEN);
++	RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "u1H2CWoWlanCtrlParm:", u1H2CWoWlanCtrlParm, H2C_WOWLAN_LEN);
+ 
+ 	FillH2CCmd8723B(padapter, H2C_8723B_WOWLAN, H2C_WOWLAN_LEN, u1H2CWoWlanCtrlParm);
+ }
+@@ -1482,7 +1482,7 @@ static void rtl8723b_set_FwRemoteWakeCtrl_Cmd(PADAPTER padapter, u8 benable)
+ 	}
+ #endif
+ exit:
+-	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CRemoteWakeCtrlParm:", u1H2CRemoteWakeCtrlParm, H2C_REMOTE_WAKE_CTRL_LEN);
++	RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "u1H2CRemoteWakeCtrlParm:", u1H2CRemoteWakeCtrlParm, H2C_REMOTE_WAKE_CTRL_LEN);
+ 	FillH2CCmd8723B(padapter, H2C_8723B_REMOTE_WAKE_CTRL,
+ 		H2C_REMOTE_WAKE_CTRL_LEN, u1H2CRemoteWakeCtrlParm);
+ #ifdef CONFIG_PNO_SUPPORT
+@@ -1509,7 +1509,7 @@ static void rtl8723b_set_FwAOACGlobalInfo_Cmd(PADAPTER padapter,  u8 group_alg,
+ 	SET_H2CCMD_AOAC_GLOBAL_INFO_PAIRWISE_ENC_ALG(u1H2CAOACGlobalInfoParm, pairwise_alg);
+ 	SET_H2CCMD_AOAC_GLOBAL_INFO_GROUP_ENC_ALG(u1H2CAOACGlobalInfoParm, group_alg);
+ 
+-	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CAOACGlobalInfoParm:", u1H2CAOACGlobalInfoParm, H2C_AOAC_GLOBAL_INFO_LEN);
++	RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "u1H2CAOACGlobalInfoParm:", u1H2CAOACGlobalInfoParm, H2C_AOAC_GLOBAL_INFO_LEN);
+ 
+ 	FillH2CCmd8723B(padapter, H2C_8723B_AOAC_GLOBAL_INFO, H2C_AOAC_GLOBAL_INFO_LEN, u1H2CAOACGlobalInfoParm);
+ }
+@@ -1529,7 +1529,7 @@ static void rtl8723b_set_FwScanOffloadInfo_cmd(PADAPTER padapter, PRSVDPAGE_LOC
+ 	SET_H2CCMD_AOAC_RSVDPAGE_LOC_PROBE_PACKET(u1H2CScanOffloadInfoParm, rsvdpageloc->LocProbePacket);
+ 	SET_H2CCMD_AOAC_RSVDPAGE_LOC_SSID_INFO(u1H2CScanOffloadInfoParm, rsvdpageloc->LocSSIDInfo);
+ 
+-	RT_PRINT_DATA(_module_hal_init_c_, _drv_always_, "u1H2CScanOffloadInfoParm:", u1H2CScanOffloadInfoParm, H2C_SCAN_OFFLOAD_CTRL_LEN);
++	RT_PRINT_DATA(_module_hal_init_c_, _drv_notice_, "u1H2CScanOffloadInfoParm:", u1H2CScanOffloadInfoParm, H2C_SCAN_OFFLOAD_CTRL_LEN);
+ 	FillH2CCmd8723B(padapter, H2C_8723B_D0_SCAN_OFFLOAD_INFO, H2C_SCAN_OFFLOAD_CTRL_LEN, u1H2CScanOffloadInfoParm);
+ 
+ 	rtw_msleep_os(20);
+@@ -1544,7 +1544,7 @@ static void rtl8723b_set_FwWoWlanRelated_cmd(_adapter* padapter, u8 enable)
+ 	struct sta_info *psta = NULL;
+ 	u8	pkt_type = 0;
+ 
+-	DBG_871X_LEVEL(_drv_always_, "+%s()+: enable=%d\n", __func__, enable);
++	DBG_871X_LEVEL(_drv_debug_, "+%s()+: enable=%d\n", __func__, enable);
+ 
+ 	if(enable)
+ 	{
+@@ -1584,7 +1584,7 @@ static void rtl8723b_set_FwWoWlanRelated_cmd(_adapter* padapter, u8 enable)
+ 	}
+ 
+ 
+-	DBG_871X_LEVEL(_drv_always_, "-%s()-\n", __func__);
++	DBG_871X_LEVEL(_drv_debug_, "-%s()-\n", __func__);
+ 	return ;
+ }
+ 
+@@ -1648,7 +1648,7 @@ static void rtl8723b_set_AP_FwWoWlan_cmd(_adapter* padapter, u8 enable)
+ 	u8	pkt_type = 0;
+ 	u8	res = 0;
+ 
+-	DBG_871X_LEVEL(_drv_always_, "+%s()+: enable=%d\n", __func__, enable);
++	DBG_871X_LEVEL(_drv_debug_, "+%s()+: enable=%d\n", __func__, enable);
+ 
+ 	if (enable) {
+ #ifdef CONFIG_CONCURRENT_MODE
+@@ -1670,7 +1670,7 @@ static void rtl8723b_set_AP_FwWoWlan_cmd(_adapter* padapter, u8 enable)
+ 	rtl8723b_set_Fw_AP_Offload_Cmd(padapter, enable);
+ 	rtw_msleep_os(10);
+ 
+-	DBG_871X_LEVEL(_drv_always_, "-%s()-\n", __func__);
++	DBG_871X_LEVEL(_drv_debug_, "-%s()-\n", __func__);
+ 	return ;
+ }
+ 
+diff --git a/include/rtw_debug.h b/include/rtw_debug.h
+index ed9c8d9..e96b6f4 100644
+--- a/include/rtw_debug.h
++++ b/include/rtw_debug.h
+@@ -201,7 +201,7 @@
+ #define DBG_871X_SEL(sel, fmt, arg...) \
+ 	do {\
+ 		if (sel == RTW_DBGDUMP)\
+-			_DBG_871X_LEVEL(_drv_always_, fmt, ##arg); \
++			_DBG_871X_LEVEL(_drv_debug_, fmt, ##arg); \
+ 		else {\
+ 			_seqdump(sel, fmt, ##arg) /*rtw_warn_on(1)*/; \
+ 		} \
+@@ -211,7 +211,7 @@
+ #define DBG_871X_SEL_NL(sel, fmt, arg...) \
+ 	do {\
+ 		if (sel == RTW_DBGDUMP)\
+-			DBG_871X_LEVEL(_drv_always_, fmt, ##arg); \
++			DBG_871X_LEVEL(_drv_debug_, fmt, ##arg); \
+ 		else {\
+ 			_seqdump(sel, fmt, ##arg) /*rtw_warn_on(1)*/; \
+ 		} \
+diff --git a/os_dep/ioctl_cfg80211.c b/os_dep/ioctl_cfg80211.c
+index a77a11c..41af5e7 100644
+--- a/os_dep/ioctl_cfg80211.c
++++ b/os_dep/ioctl_cfg80211.c
+@@ -645,7 +645,7 @@ void rtw_cfg80211_ibss_indicate_connect(_adapter *padapter)
+ 		}
+ 
+ 		if (!rtw_cfg80211_check_bss(padapter))
+-			DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" BSS not found !!\n", FUNC_ADPT_ARG(padapter));
++			DBG_871X_LEVEL(_drv_warning_, FUNC_ADPT_FMT" BSS not found !!\n", FUNC_ADPT_ARG(padapter));
+ 	}
+ 	//notify cfg80211 that device joined an IBSS
+ #if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 15, 0))
+@@ -721,7 +721,7 @@ void rtw_cfg80211_indicate_connect(_adapter *padapter)
+ 
+ check_bss:
+ 	if (!rtw_cfg80211_check_bss(padapter))
+-		DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" BSS not found !!\n", FUNC_ADPT_ARG(padapter));
++		DBG_871X_LEVEL(_drv_warning_, FUNC_ADPT_FMT" BSS not found !!\n", FUNC_ADPT_ARG(padapter));
+ 
+ 	if (rtw_to_roam(padapter) > 0) {
+ 		#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 39) || defined(COMPAT_KERNEL_RELEASE)
+diff --git a/os_dep/ioctl_linux.c b/os_dep/ioctl_linux.c
+index 566b3d5..8892d99 100644
+--- a/os_dep/ioctl_linux.c
++++ b/os_dep/ioctl_linux.c
+@@ -228,7 +228,7 @@ void rtw_indicate_wx_assoc_event(_adapter *padapter)
+ 	else
+ 		_rtw_memcpy(wrqu.ap_addr.sa_data, pmlmepriv->cur_network.network.MacAddress, ETH_ALEN);
+ 
+-	DBG_871X_LEVEL(_drv_always_, "assoc success\n");
++	DBG_871X_LEVEL(_drv_info_, "assoc success\n");
+ #ifndef CONFIG_IOCTL_CFG80211
+ 	wireless_send_event(padapter->pnetdev, SIOCGIWAP, &wrqu, NULL);
+ #endif
+@@ -244,7 +244,7 @@ void rtw_indicate_wx_disassoc_event(_adapter *padapter)
+ 	_rtw_memset(wrqu.ap_addr.sa_data, 0, ETH_ALEN);
+ 
+ #ifndef CONFIG_IOCTL_CFG80211
+-	DBG_871X_LEVEL(_drv_always_, "indicate disassoc\n");
++	DBG_871X_LEVEL(_drv_info_, "indicate disassoc\n");
+ 	wireless_send_event(padapter->pnetdev, SIOCGIWAP, &wrqu, NULL);
+ #endif
+ }
+@@ -8546,7 +8546,7 @@ static int rtw_wowlan_ctrl(struct net_device *dev,
+ 	//mutex_lock(&ioctl_mutex);
+ _rtw_wowlan_ctrl_exit_free:
+ 	DBG_871X("-rtw_wowlan_ctrl( subcode = %d)\n", poidparam.subcode);
+-	DBG_871X_LEVEL(_drv_always_, "%s in %d ms\n", __func__,
++	DBG_871X_LEVEL(_drv_dump_, "%s in %d ms\n", __func__,
+ 			rtw_get_passing_time_ms(start_time));
+ _rtw_wowlan_ctrl_exit:
+ 	return ret;
+@@ -8642,7 +8642,7 @@ static int rtw_ap_wowlan_ctrl(struct net_device *dev,
+ 	//mutex_lock(&ioctl_mutex);
+ _rtw_ap_wowlan_ctrl_exit_free:
+ 	DBG_871X("-rtw_ap_wowlan_ctrl( subcode = %d)\n", poidparam.subcode);
+-	DBG_871X_LEVEL(_drv_always_, "%s in %d ms\n", __func__,
++	DBG_871X_LEVEL(_drv_dump_, "%s in %d ms\n", __func__,
+ 			rtw_get_passing_time_ms(start_time));
+ _rtw_ap_wowlan_ctrl_exit:
+ 	return ret;
+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
+index 98ec2a6..e433d9a 100644
+--- a/os_dep/linux/ioctl_cfg80211.c
++++ b/os_dep/linux/ioctl_cfg80211.c
+@@ -659,7 +659,7 @@ void rtw_cfg80211_ibss_indicate_connect(_adapter *padapter)
+ 		}
+ 
+ 		if (!rtw_cfg80211_check_bss(padapter))
+-			DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" BSS not found !!\n", FUNC_ADPT_ARG(padapter));
++			DBG_871X_LEVEL(_drv_warning_, FUNC_ADPT_FMT" BSS not found !!\n", FUNC_ADPT_ARG(padapter));
+ 	}
+ 	//notify cfg80211 that device joined an IBSS
+ 	cfg80211_ibss_joined(padapter->pnetdev, cur_network->network.MacAddress, GFP_ATOMIC);
+@@ -730,7 +730,7 @@ void rtw_cfg80211_indicate_connect(_adapter *padapter)
+ 
+ check_bss:
+ 	if (!rtw_cfg80211_check_bss(padapter))
+-		DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" BSS not found !!\n", FUNC_ADPT_ARG(padapter));
++		DBG_871X_LEVEL(_drv_warning_, FUNC_ADPT_FMT" BSS not found !!\n", FUNC_ADPT_ARG(padapter));
+ 
+ 	if (rtw_to_roam(padapter) > 0) {
+ 		#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 39) || defined(COMPAT_KERNEL_RELEASE)
+diff --git a/os_dep/os_intfs.c b/os_dep/os_intfs.c
+index 5bb3ecc..db915a3 100644
+--- a/os_dep/os_intfs.c
++++ b/os_dep/os_intfs.c
+@@ -673,7 +673,7 @@ static int rtw_ndev_init(struct net_device *dev)
+ {
+ 	_adapter *adapter = rtw_netdev_priv(dev);
+ 
+-	DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
++	DBG_871X_LEVEL(_drv_debug_, FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
+ 	strncpy(adapter->old_ifname, dev->name, IFNAMSIZ);
+ 	rtw_adapter_proc_init(dev);
+ 
+@@ -684,7 +684,7 @@ static void rtw_ndev_uninit(struct net_device *dev)
+ {
+ 	_adapter *adapter = rtw_netdev_priv(dev);
+ 
+-	DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
++	DBG_871X_LEVEL(_drv_debug_, FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
+ 	rtw_adapter_proc_deinit(dev);
+ }
+ 
+@@ -2817,11 +2817,11 @@ void rtw_dev_unload(PADAPTER padapter)
+ 
+ 		//check the status of IPS
+ 		if(rtw_hal_check_ips_status(padapter) == _TRUE || pwrctl->rf_pwrstate == rf_off) { //check HW status and SW state
+-			DBG_871X_LEVEL(_drv_always_, "%s: driver in IPS-FWLPS\n", __func__);
++			DBG_871X_LEVEL(_drv_info_, "%s: driver in IPS-FWLPS\n", __func__);
+ 			pdbgpriv->dbg_dev_unload_inIPS_cnt++;
+ 			LeaveAllPowerSaveMode(padapter);
+ 		} else {
+-			DBG_871X_LEVEL(_drv_always_, "%s: driver not in IPS\n", __func__);
++			DBG_871X_LEVEL(_drv_info_, "%s: driver not in IPS\n", __func__);
+ 		}
+ 
+ 		if (padapter->bSurpriseRemoved == _FALSE)
+@@ -2832,7 +2832,7 @@ void rtw_dev_unload(PADAPTER padapter)
+ #ifdef CONFIG_WOWLAN
+ 			if (pwrctl->bSupportRemoteWakeup == _TRUE &&
+ 				pwrctl->wowlan_mode ==_TRUE) {
+-				DBG_871X_LEVEL(_drv_always_, "%s bSupportRemoteWakeup==_TRUE  do not run rtw_hal_deinit()\n",__FUNCTION__);
++				DBG_871X_LEVEL(_drv_info_, "%s bSupportRemoteWakeup==_TRUE  do not run rtw_hal_deinit()\n",__FUNCTION__);
+ 			}
+ 			else
+ #endif
+@@ -2905,7 +2905,7 @@ static int rtw_suspend_free_assoc_resource(_adapter *padapter)
+ 
+ 	if (check_fwstate(pmlmepriv, _FW_UNDER_LINKING) == _TRUE)
+ 	{
+-		DBG_871X_LEVEL(_drv_always_, "%s: fw_under_linking\n", __FUNCTION__);
++		DBG_871X_LEVEL(_drv_info_, "%s: fw_under_linking\n", __FUNCTION__);
+ 		rtw_indicate_disconnect(padapter);
+ 	}
+ 
+@@ -2985,11 +2985,11 @@ int rtw_suspend_wow(_adapter *padapter)
+ 			}
+ 		}
+ 
+-		DBG_871X_LEVEL(_drv_always_, "%s: wowmode suspending\n", __func__);
++		DBG_871X_LEVEL(_drv_info_, "%s: wowmode suspending\n", __func__);
+ 
+ 		if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == _TRUE)
+ 		{
+-			DBG_871X_LEVEL(_drv_always_, "%s: fw_under_survey\n", __func__);
++			DBG_871X_LEVEL(_drv_info_, "%s: fw_under_survey\n", __func__);
+ 			rtw_indicate_scan_done(padapter, 1);
+ 			clr_fwstate(pmlmepriv, _FW_UNDER_SURVEY);
+ 		}
+@@ -3006,7 +3006,7 @@ int rtw_suspend_wow(_adapter *padapter)
+ 		#endif
+ 
+ 		if(pwrpriv->wowlan_pno_enable)
+-			DBG_871X_LEVEL(_drv_always_, "%s: pno: %d\n", __func__, pwrpriv->wowlan_pno_enable);
++			DBG_871X_LEVEL(_drv_info_, "%s: pno: %d\n", __func__, pwrpriv->wowlan_pno_enable);
+ 		#ifdef CONFIG_LPS
+ 		else
+ 			rtw_set_ps_mode(padapter, PS_MODE_DTIM, 0, 0, "WOWLAN");
+@@ -3015,7 +3015,7 @@ int rtw_suspend_wow(_adapter *padapter)
+ 	}
+ 	else
+ 	{
+-		DBG_871X_LEVEL(_drv_always_, "%s: ### ERROR ### wowlan_mode=%d\n", __FUNCTION__, pwrpriv->wowlan_mode);
++		DBG_871X_LEVEL(_drv_crit_, "%s: ### ERROR ### wowlan_mode=%d\n", __FUNCTION__, pwrpriv->wowlan_mode);
+ 	}
+ 	DBG_871X("<== "FUNC_ADPT_FMT" exit....\n", FUNC_ADPT_ARG(padapter));
+ 	return ret;
+@@ -3082,7 +3082,7 @@ int rtw_suspend_ap_wow(_adapter *padapter)
+ 	padapter->HalFunc.SetHwRegHandler(padapter,
+ 					HW_VAR_AP_WOWLAN,(u8 *)&poidparam);
+ 
+-	DBG_871X_LEVEL(_drv_always_, "%s: wowmode suspending\n", __func__);
++	DBG_871X_LEVEL(_drv_info_, "%s: wowmode suspending\n", __func__);
+ 
+ #ifdef CONFIG_CONCURRENT_MODE
+ 	if (check_buddy_fwstate(padapter, WIFI_AP_STATE) == _TRUE) {
+@@ -3155,7 +3155,7 @@ static int rtw_suspend_normal(_adapter *padapter)
+ 	if ((rtw_hal_check_ips_status(padapter) == _TRUE)
+ 		|| (adapter_to_pwrctl(padapter)->rf_pwrstate == rf_off))
+ 	{
+-		DBG_871X_LEVEL(_drv_always_, "%s: ### ERROR #### driver in IPS ####ERROR###!!!\n", __FUNCTION__);
++		DBG_871X_LEVEL(_drv_crit_, "%s: ### ERROR #### driver in IPS ####ERROR###!!!\n", __FUNCTION__);
+ 
+ 	}
+ 
+@@ -3184,7 +3184,7 @@ int rtw_suspend_common(_adapter *padapter)
+ 	int ret = 0;
+ 	u32 start_time = rtw_get_current_time();
+ 
+-	DBG_871X_LEVEL(_drv_always_, " suspend start\n");
++	DBG_871X_LEVEL(_drv_info_, " suspend start\n");
+ 	DBG_871X("==> %s (%s:%d)\n",__FUNCTION__, current->comm, current->pid);
+ 	pdbgpriv->dbg_suspend_cnt++;
+ 
+@@ -3283,7 +3283,7 @@ int rtw_suspend_common(_adapter *padapter)
+ 		rtw_suspend_normal(padapter);
+ 	}
+ 
+-	DBG_871X_LEVEL(_drv_always_, "rtw suspend success in %d ms\n",
++	DBG_871X_LEVEL(_drv_info_, "rtw suspend success in %d ms\n",
+ 		rtw_get_passing_time_ms(start_time));
+ 
+ exit:
+@@ -3402,7 +3402,7 @@ int rtw_resume_process_wow(_adapter *padapter)
+ 	}
+ 	else{
+ 
+-		DBG_871X_LEVEL(_drv_always_, "%s: ### ERROR ### wowlan_mode=%d\n", __FUNCTION__, pwrpriv->wowlan_mode);
++		DBG_871X_LEVEL(_drv_crit_, "%s: ### ERROR ### wowlan_mode=%d\n", __FUNCTION__, pwrpriv->wowlan_mode);
+ 	}
+ 
+ 	if( padapter->pid[1]!=0) {
+@@ -3453,7 +3453,7 @@ int rtw_resume_process_wow(_adapter *padapter)
+ 		rtw_set_pwr_state_check_timer(pwrpriv);
+ #endif
+ 	} else {
+-		DBG_871X_LEVEL(_drv_always_, "do not reset timer\n");
++		DBG_871X_LEVEL(_drv_info_, "do not reset timer\n");
+ 	}
+ 
+ 	pwrpriv->wowlan_mode =_FALSE;
+@@ -3743,7 +3743,7 @@ int rtw_resume_common(_adapter *padapter)
+ 
+ 
+ 
+-	DBG_871X_LEVEL(_drv_always_, "resume start\n");
++	DBG_871X_LEVEL(_drv_info_, "resume start\n");
+ 	DBG_871X("==> %s (%s:%d)\n",__FUNCTION__, current->comm, current->pid);
+ 
+ 	if (check_fwstate(pmlmepriv,WIFI_STATION_STATE) == _TRUE
+@@ -3793,7 +3793,7 @@ int rtw_resume_common(_adapter *padapter)
+ 		pwrpriv->pno_in_resume = _FALSE;
+ 	#endif
+ 	}
+-	DBG_871X_LEVEL(_drv_always_, "%s:%d in %d ms\n", __FUNCTION__ ,ret,
++	DBG_871X_LEVEL(_drv_dump_, "%s:%d in %d ms\n", __FUNCTION__ ,ret,
+ 		rtw_get_passing_time_ms(start_time));
+ 
+ 
+diff --git a/os_dep/usb_intf.c b/os_dep/usb_intf.c
+index a8c668b..e3b6def 100644
+--- a/os_dep/usb_intf.c
++++ b/os_dep/usb_intf.c
+@@ -1354,10 +1354,10 @@ static int __init rtw_drv_entry(void)
+ {
+ 	int ret = 0;
+ 
+-	DBG_871X_LEVEL(_drv_always_, "module init start\n");
++	DBG_871X_LEVEL(_drv_info_, "module init start\n");
+ 	dump_drv_version(RTW_DBGDUMP);
+ #ifdef BTCOEXVERSION
+-	DBG_871X_LEVEL(_drv_always_, DRV_NAME" BT-Coex version = %s\n", BTCOEXVERSION);
++	DBG_871X_LEVEL(_drv_info_, DRV_NAME" BT-Coex version = %s\n", BTCOEXVERSION);
+ #endif // BTCOEXVERSION
+ 
+ 	ret = platform_wifi_power_on();
+@@ -1387,13 +1387,13 @@ static int __init rtw_drv_entry(void)
+ 	}
+ 
+ exit:
+-	DBG_871X_LEVEL(_drv_always_, "module init ret=%d\n", ret);
++	DBG_871X_LEVEL(_drv_info_, "module init ret=%d\n", ret);
+ 	return ret;
+ }
+ 
+ static void __exit rtw_drv_halt(void)
+ {
+-	DBG_871X_LEVEL(_drv_always_, "module exit start\n");
++	DBG_871X_LEVEL(_drv_info_, "module exit start\n");
+ 
+ 	usb_drv.drv_registered = _FALSE;
+ 
+@@ -1405,7 +1405,7 @@ static void __exit rtw_drv_halt(void)
+ 	rtw_drv_proc_deinit();
+ 	rtw_ndev_notifier_unregister();
+ 
+-	DBG_871X_LEVEL(_drv_always_, "module exit success\n");
++	DBG_871X_LEVEL(_drv_info_, "module exit success\n");
+ 
+ 	rtw_mstat_dump(RTW_DBGDUMP);
+ }
