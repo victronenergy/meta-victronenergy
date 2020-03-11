@@ -11,6 +11,12 @@ ACTION=="add", KERNEL=="ttyS[12]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SE
 ACTION=="add", KERNEL=="ttyS3", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="mkx"
 LABEL="end-easysolar-a9"
 
+# EasySolar A10 devices
+ENV{BASE_COMPATIBLE}!="victronenergy,easysolar-a10", GOTO="end-easysolar-a10"
+ACTION=="add", KERNEL=="ttyS[12]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
+ACTION=="add", KERNEL=="ttyS3", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="mkx"
+LABEL="end-easysolar-a10"
+
 # Maxi GX devices
 ENV{BASE_COMPATIBLE}!="victronenergy,maxi-gx", GOTO="end-maxi-gx"
 ACTION=="add", KERNEL=="ttyS2", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
