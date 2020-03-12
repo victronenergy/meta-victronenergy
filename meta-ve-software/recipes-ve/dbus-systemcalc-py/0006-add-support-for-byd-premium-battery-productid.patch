@@ -1,0 +1,26 @@
+From 282423bbfd29a414e24bd451a61ee2e0add2f850 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Mon, 9 Mar 2020 11:11:18 +0200
+Subject: [PATCH 6/6] add support for byd premium battery productid
+
+Support for BYD Premium was added in a previous commit, but
+had to be extended because the battery got its own productId.
+---
+ delegates/dvcc.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index 1570b60..5375a80 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -78,6 +78,7 @@ QUIRKS = {
+ 	0xB009: _pylontech_quirk,
+ 	0xB00A: _byd_quirk,
+ 	0xB015: _byd_quirk,
++	0xB019: _byd_quirk,
+ }
+ 
+ def distribute(current_values, max_values, increment):
+-- 
+2.17.1
+

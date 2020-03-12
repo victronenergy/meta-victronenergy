@@ -1,7 +1,7 @@
 From 52f26e42a7d4e96161d8a38dbd0084618eb74e81 Mon Sep 17 00:00:00 2001
 From: Izak Burger <isburger@gmail.com>
 Date: Thu, 23 Jan 2020 15:32:18 +0200
-Subject: [PATCH 3/3] make grid alarm more robust
+Subject: [PATCH 3/6] make grid alarm more robust
 
 In rare cases, the alarm delay would be cancelled before it could
 raise the alarm. Also make the timeout slightly longer since a VE.Bus
@@ -106,5 +106,5 @@ index 8942376..62a2508 100644
  
  		# Grid returns
 -- 
-2.7.4
+2.17.1
 

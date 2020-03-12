@@ -1,7 +1,7 @@
-From a64075ab3db55df437f9c214ca9e1e06a31b4ce9 Mon Sep 17 00:00:00 2001
+From 5fad36ecbdceb464fe225adcc3bb3bf5024aabde Mon Sep 17 00:00:00 2001
 From: Izak Burger <isburger@gmail.com>
 Date: Tue, 3 Mar 2020 16:54:04 +0200
-Subject: [PATCH 1/2] deal with multi compact that shows disconnected when
+Subject: [PATCH 4/6] deal with multi compact that shows disconnected when
  turned off
 
 Some Multi models show that the input is disconnected (rather than invalid)
@@ -129,5 +129,5 @@ index 62a2508..d84c523 100644
 +        self._update_values(interval=12000)
 +        self._check_values({'/Ac/Alarms/GridLost': 0})
 -- 
-2.7.4
+2.17.1
 

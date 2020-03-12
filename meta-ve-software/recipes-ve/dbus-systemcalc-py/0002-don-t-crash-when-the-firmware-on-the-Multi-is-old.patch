@@ -1,7 +1,7 @@
 From b0f40597dd3dc46a8c5f4e52b258b0cc4685df61 Mon Sep 17 00:00:00 2001
 From: Izak Burger <isburger@gmail.com>
 Date: Fri, 17 Jan 2020 15:23:28 +0200
-Subject: [PATCH 2/3] don't crash when the firmware on the Multi is old
+Subject: [PATCH 2/6] don't crash when the firmware on the Multi is old
 
 https://github.com/victronenergy/venus/issues/591
 ---
@@ -33,5 +33,5 @@ index c53e8b9..a16767f 100644
  
  		return 0
 -- 
-2.7.4
+2.17.1
 
