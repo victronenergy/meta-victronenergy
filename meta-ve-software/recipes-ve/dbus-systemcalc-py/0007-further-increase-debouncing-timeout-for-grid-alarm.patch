@@ -1,0 +1,85 @@
+From 454676d0ef331bf6788272202896282299611a7f Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Mon, 16 Mar 2020 12:07:50 +0200
+Subject: [PATCH 7/7] further increase debouncing timeout for grid alarm
+
+Set the timeout for the grid alarm to 30 seconds.
+
+Further future improvements will be necessary to deal with this.
+Many grid codes mandate even longer reconnection times that will
+cause false grid alarms.
+---
+ delegates/gridalarm.py  |  2 +-
+ tests/gridalarm_test.py | 14 +++++++-------
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/delegates/gridalarm.py b/delegates/gridalarm.py
+index dcb7842..08937f2 100644
+--- a/delegates/gridalarm.py
++++ b/delegates/gridalarm.py
+@@ -2,7 +2,7 @@ import gobject
+ from delegates.base import SystemCalcDelegate
+ 
+ class GridAlarm(SystemCalcDelegate):
+-	ALARM_TIMEOUT = 15000
++	ALARM_TIMEOUT = 30000
+ 	def __init__(self):
+ 		super(GridAlarm, self).__init__()
+ 		self._timer = None
+diff --git a/tests/gridalarm_test.py b/tests/gridalarm_test.py
+index d84c523..db63676 100644
+--- a/tests/gridalarm_test.py
++++ b/tests/gridalarm_test.py
+@@ -54,11 +54,11 @@ class TestGridAlarm(TestSystemCalcBase):
+         self._monitor.set_value(self.vebus, '/Ac/ActiveIn/ActiveInput', 0xF0)
+ 
+         # Alarm doesn't activate immediately
+-        self._update_values(interval=8000)
++        self._update_values(interval=16000)
+         self._check_values({'/Ac/Alarms/GridLost': 0})
+ 
+         # Alarm activates after timeout
+-        self._update_values(interval=8000)
++        self._update_values(interval=16000)
+         self._check_values({'/Ac/Alarms/GridLost': 2})
+ 
+         # Alarm resets if the grid come back
+@@ -73,12 +73,12 @@ class TestGridAlarm(TestSystemCalcBase):
+ 
+         # Fail, no alarm
+         self._monitor.set_value(self.vebus, '/Ac/ActiveIn/ActiveInput', 0xF0)
+-        self._update_values(interval=8000)
++        self._update_values(interval=16000)
+         self._check_values({'/Ac/Alarms/GridLost': 0})
+ 
+         # AC Return before the timeout
+         self._monitor.set_value(self.vebus, '/Ac/ActiveIn/ActiveInput', 1)
+-        self._update_values(interval=8000)
++        self._update_values(interval=16000)
+         self._check_values({'/Ac/Alarms/GridLost': 0})
+ 
+     def test_grid_alarm_on_genertor(self):
+@@ -90,11 +90,11 @@ class TestGridAlarm(TestSystemCalcBase):
+         self._monitor.set_value(self.vebus, '/Ac/ActiveIn/ActiveInput', 0)
+ 
+         # Alarm doesn't activate immediately
+-        self._update_values(interval=8000)
++        self._update_values(interval=16000)
+         self._check_values({'/Ac/Alarms/GridLost': 0})
+ 
+         # Alarm activates after timeout
+-        self._update_values(interval=8000)
++        self._update_values(interval=16000)
+         self._check_values({'/Ac/Alarms/GridLost': 2})
+ 
+ 		# Grid returns
+@@ -112,5 +112,5 @@ class TestGridAlarm(TestSystemCalcBase):
+         self._monitor.set_value(self.vebus, '/Mode', 4) # Off
+ 
+         # Alarm doesn't activate
+-        self._update_values(interval=12000)
++        self._update_values(interval=35000)
+         self._check_values({'/Ac/Alarms/GridLost': 0})
+-- 
+2.17.1
+

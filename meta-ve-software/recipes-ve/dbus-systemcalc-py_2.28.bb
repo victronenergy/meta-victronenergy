@@ -15,9 +15,10 @@ SRC_URI = " \
     file://0004-deal-with-multi-compact-that-shows-disconnected-when.patch \
     file://0005-allow-quirks-to-raise-the-charge-voltage.patch \
     file://0006-add-support-for-byd-premium-battery-productid.patch \
+    file://0007-further-increase-debouncing-timeout-for-grid-alarm.patch \
 "
 
-PR = "3"
+PR = "4"
 
 S = "${WORKDIR}/git"
 
