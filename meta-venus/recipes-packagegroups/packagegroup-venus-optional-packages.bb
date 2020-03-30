@@ -7,6 +7,8 @@ DEPENDS += "\
     gdb \
     gpsd \
     git \
+    lsof \
+    net-tools \
     nodejs \
     ntp \
     openvpn \
