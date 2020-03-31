@@ -8,11 +8,11 @@ DEPENDS += "\
     gpsd \
     git \
     lsof \
-    net-tools \
     nodejs \
     ntp \
     openvpn \
     packagegroup-core-buildessential \
+    packagegroup-replace-busybox \
     python-pylint \
     s6 \
     tcpdump \
