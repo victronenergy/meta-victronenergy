@@ -1,0 +1,90 @@
+From 8a9a23e16270a9612ea05bd9459ba4eaf79119a5 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Wed, 4 Mar 2020 13:47:52 +0200
+Subject: [PATCH 2/3] dvcc: remove sony/murata quirk
+
+Murata changed their firmware so this quirk is no longer needed.
+---
+ delegates/dvcc.py | 11 -----------
+ tests/hub_test.py | 36 ------------------------------------
+ 2 files changed, 47 deletions(-)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index 5375a80..522108d 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -35,16 +35,6 @@ def _byd_quirk(dvcc, bms, charge_voltage, charge_current, feedback_allowed):
+ 		return (55, 40, feedback_allowed)
+ 	return (charge_voltage, charge_current, feedback_allowed)
+ 
+-def _sony_quirk(dvcc, bms, charge_voltage, charge_current, feedback_allowed):
+-	""" Quirk for Sony batteries. These batteries drop the charge limit to
+-		2A per module whenever you go into discharge in an attempt to
+-		facilitate a cleaner ramp-up afterwards. This messes up the feeding of
+-		loads. """
+-	# This is safe even if charge_current is None
+-	if charge_current > 0:
+-		return (charge_voltage, max(1000, charge_current), feedback_allowed)
+-	return (charge_voltage, charge_current, feedback_allowed)
+-
+ def _lg_quirk(dvcc, bms, charge_voltage, charge_current, feedback_allowed):
+ 	""" Quirk for LG batteries. The hard limit is 58V. Above that you risk
+ 	    tripping on high voltage. The batteries publish a charge voltage of 57.7V
+@@ -74,7 +64,6 @@ def _pylontech_quirk(dvcc, bms, charge_voltage, charge_current, feedback_allowed
+ # Quirk = namedtuple('Quirk', ['product_id', 'floatvoltage', 'floatcurrent'])
+ QUIRKS = {
+ 	0xB004: _lg_quirk,
+-	0xB008: _sony_quirk,
+ 	0xB009: _pylontech_quirk,
+ 	0xB00A: _byd_quirk,
+ 	0xB015: _byd_quirk,
+diff --git a/tests/hub_test.py b/tests/hub_test.py
+index bcdd29f..b454be5 100644
+--- a/tests/hub_test.py
++++ b/tests/hub_test.py
+@@ -1179,42 +1179,6 @@ class TestHubSystem(TestSystemCalcBase):
+ 		})
+ 		self._check_values({ '/Control/EffectiveChargeVoltage': 55 })
+ 
+-	def test_sony_quirks(self):
+-		""" Sony batteries drop their CCL even while under discharge, affecting
+-		    feeding of loads. We artificially work around it. """
+-		self._add_device('com.victronenergy.battery.ttyO2',
+-			product_name='battery',
+-			values={
+-				'/Dc/0/Voltage': 55.1,
+-				'/Dc/0/Current': 3,
+-				'/Dc/0/Power': 165.3,
+-				'/Soc': 100,
+-				'/DeviceInstance': 2,
+-				'/Info/BatteryLowVoltage': 47,
+-				'/Info/MaxChargeCurrent': 12,
+-				'/Info/MaxChargeVoltage': 57.2,
+-				'/Info/MaxDischargeCurrent': 100,
+-				'/ProductId': 0xB008})
+-		self._monitor.set_value('com.victronenergy.vebus.ttyO1', '/Dc/0/Current', 25)
+-		self._update_values(interval=10000)
+-		self._check_external_values({
+-			'com.victronenergy.vebus.ttyO1': {
+-				'/BatteryOperationalLimits/MaxChargeVoltage': 57.2,
+-				'/BatteryOperationalLimits/MaxChargeCurrent': 1000
+-			}
+-		})
+-
+-		# If we are asked to stop we still do it.
+-		self._monitor.set_value('com.victronenergy.battery.ttyO2', '/Info/MaxChargeCurrent', 0)
+-		self._update_values(interval=3000)
+-		self._check_external_values({
+-			'com.victronenergy.vebus.ttyO1': {
+-				'/BatteryOperationalLimits/MaxChargeCurrent': 0,
+-				'/BatteryOperationalLimits/MaxChargeVoltage': 57.2
+-			}
+-		})
+-		self._check_values({ '/Control/EffectiveChargeVoltage': 57.2 })
+-
+ 	def test_lg_quirks(self):
+ 		""" LG Batteries run at 57.7V, when we add an 0.4V offset we sometimes
+ 		    trip the overvoltage protection at 58.1V. So we attempt to avoid that
+-- 
+2.7.4
+

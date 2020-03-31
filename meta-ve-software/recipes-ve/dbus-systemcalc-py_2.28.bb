@@ -16,9 +16,11 @@ SRC_URI = " \
     file://0005-allow-quirks-to-raise-the-charge-voltage.patch \
     file://0006-add-support-for-byd-premium-battery-productid.patch \
     file://0007-further-increase-debouncing-timeout-for-grid-alarm.patch \
+    file://0008-dvcc-remove-sony-murata-quirk.patch \
+    file://0009-Fix-error-67-problem-for-VE.Can-chargers.patch \
 "
 
-PR = "4"
+PR = "5"
 
 S = "${WORKDIR}/git"
 

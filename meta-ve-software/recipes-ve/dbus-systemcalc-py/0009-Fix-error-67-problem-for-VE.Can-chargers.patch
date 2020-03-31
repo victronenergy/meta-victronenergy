@@ -1,0 +1,43 @@
+From 06fa41b292a2cfdc5c4d23e53b56e29de2e471f2 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Tue, 31 Mar 2020 12:39:23 +0200
+Subject: [PATCH 3/3] Fix error 67 problem for VE.Can chargers.
+
+When the battery lowers the maximum charge current to less than
+the total solar charging capacity, a charge current limit would be set
+on the chargers. If the battery subsequently raised the charge current
+limit again, VE.Can chargers were not correctly maxed-out and would
+raise error 67 after some minutes.
+---
+ delegates/dvcc.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index 522108d..c17b23a 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -195,9 +195,10 @@ class SolarCharger(object):
+ 	def maximize_charge_current(self):
+ 		""" Max out the charge current of this solar charger by setting
+ 		    ChargeCurrent to the configured limit in settings. """
+-		copy_dbus_value(self.monitor,
+-			self.service, '/Settings/ChargeCurrentLimit',
+-			self.service, '/Link/ChargeCurrent')
++		if self.monitor.seen(self.service, '/Link/ChargeCurrent'):
++			copy_dbus_value(self.monitor,
++				self.service, '/Settings/ChargeCurrentLimit',
++				self.service, '/Link/ChargeCurrent')
+ 
+ 	def update_values(self):
+ 		# This is called periodically from a timer to maintain
+@@ -256,7 +257,6 @@ class SolarChargerSubsystem(object):
+ 	def maximize_charge_current(self):
+ 		""" Max out all chargers. """
+ 		for charger in self._solarchargers.values():
+-			if charger.connection == 'VE.Can': continue
+ 			charger.maximize_charge_current()
+ 
+ 	def set_networked(self, has_bms, charge_voltage, max_charge_current, feedback_allowed):
+-- 
+2.7.4
+
