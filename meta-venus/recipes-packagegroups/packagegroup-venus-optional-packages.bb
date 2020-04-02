@@ -13,6 +13,7 @@ DEPENDS += "\
     openvpn \
     packagegroup-core-buildessential \
     packagegroup-replace-busybox \
+    perf \
     python-pylint \
     s6 \
     tcpdump \
