@@ -7,5 +7,6 @@ ACTION=="add", KERNEL=="ttyS1", ENV{VE_PRODUCT}="builtin-rs485", ENV{VE_SERVICE}
 ACTION=="add", KERNEL=="ttyS3", ENV{VE_SERVICE}="ignore", SYMLINK+="ttycan1"
 ACTION=="add", KERNEL=="ttyS4", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="mkx"
 ACTION=="add", KERNEL=="ttyS[5-7]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
+ACTION=="add", SUBSYSTEM=="iio", ATTR{name}=="cerbo-gx-adc", SYMLINK+="adc/builtin0"
 ACTION=="change", SUBSYSTEM=="drm", ENV{HOTPLUG}=="1", RUN+="display-hotplug %p HDMI-A-1 i2c-2"
 LABEL="end-cerbo-gx"

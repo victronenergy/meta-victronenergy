@@ -1,3 +1,5 @@
+ACTION=="add", SUBSYSTEM=="iio", ATTR{name}=="TI-am335x-adc.*", SYMLINK+="adc/builtin0"
+
 ENV{BASE_COMPATIBLE}!="unipoin,gridless-octo", GOTO="end-octo-gx"
 ACTION=="add", SUBSYSTEM=="tty", ENV{ID_PATH}=="platform-musb-hdrc.0-usb-0:1.2:1.0", ENV{VE_PRODUCT}="builtin-rs485", ENV{VE_SERVICE}="rs485"
 ACTION=="add", SUBSYSTEM=="tty", ENV{ID_PATH}=="platform-musb-hdrc.1*", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
