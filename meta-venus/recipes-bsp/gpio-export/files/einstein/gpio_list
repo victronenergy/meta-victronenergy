@@ -1,23 +1,8 @@
-# DIGITAL_INPUT_2       PA4
-4   in  digital_input_2
-
-# DIGITAL_INPUT_4       PA5
-5   in  digital_input_4
-
-# DIGITAL_INPUT_1       PA6
-6   in  digital_input_1
-
-# DIGITAL_INPUT_3       PA7
-7   in  digital_input_3
-
-# RELAY_1               PB3
-35  out relay_1
-
-# RELAY_2               PB4
-36  out relay_2
-
-# MK3_BUS_STANDBY       PB9
-41  out vebus_standby
-
-# MK3_RESET             PB10
-42  out mkx_rst
+- in  digital_input_1
+- in  digital_input_2
+- in  digital_input_3
+- in  digital_input_4
+- out relay_1
+- out relay_2
+- out mkx_rst
+- out vebus_standby
