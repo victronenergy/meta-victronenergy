@@ -40,13 +40,27 @@ create_link() {
     ln -s ${FILE} ${GPIO_DIR}/$2
 }
 
+find_pin() {
+    gpio=$(gpiofind "$1") || return 1
+    set -- $gpio
+    chip=$1
+    offs=$2
+    base=$(cat /sys/bus/gpio/devices/$chip/../gpio/*/base)
+    echo $((base + offs))
+}
+
 set_pin() {
     PIN_NUM=$1
     PIN_DIR=$2
     PIN_NAME=$3
 
+    case $PIN_NUM in
+        -) PIN_NUM=$(find_pin "${PIN_NAME}") || return 1 ;;
+        +) PIN_NUM=$(find_pin "${PIN_NAME}") || return 0 ;;
+    esac
+
     #echo "Setting gpio pin #${PIN_NUM}/${PIN_NAME} to ${PIN_DIR}"
-    export_pin "${PIN_NUM}" || return
+    export_pin "${PIN_NUM}" || return 1
     set_pin_dir "${PIN_DIR}" "${PIN_NUM}"
     create_link "${PIN_NUM}" "${PIN_NAME}"
 }
@@ -68,6 +82,7 @@ sed 's/#.*//' ${GPIO_FILE} | while read num dir name compat; do
         check_compat "$compat" || continue
     fi
 
-    set_pin "$num" "$dir" "$name"
+    set_pin "$num" "$dir" "$name" ||
+        echo "Error configuring pin $num as $name"
 done
 
