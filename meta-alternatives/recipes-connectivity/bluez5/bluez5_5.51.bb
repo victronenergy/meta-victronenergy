@@ -7,6 +7,11 @@ SRC_URI[sha256sum] = "ebedfb359f62957940822f1d0b39fcee30422380e435608dad06bb3913
 FILESEXTRAPATHS_prepend := "${THISDIR}/../../../../openembedded-core/meta/recipes-connectivity/bluez5/bluez5:"
 SRC_URI_remove = "file://0001-Allow-using-obexd-without-systemd-in-the-user-sessio.patch"
 
+# Skip patches from the inc files which are already included in v5.51
+SRC_URI_remove += "file://CVE-2018-10910.patch"
+SRC_URI_remove += "file://gcc9-fixes.patch"
+SRC_URI_remove += "file://0001-tools-Fix-build-after-y2038-changes-in-glibc.patch"
+
 # noinst programs in Makefile.tools that are conditional on READLINE
 # support
 NOINST_TOOLS_READLINE ?= " \
