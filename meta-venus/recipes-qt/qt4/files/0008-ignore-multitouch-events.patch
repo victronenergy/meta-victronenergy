@@ -1,14 +1,14 @@
-From 2855a75cc08a8edec0a6af8b42f624b403b49fed Mon Sep 17 00:00:00 2001
+From 0323044f733f4a0e0e4391e94896bf9325800250 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Thu, 7 Nov 2019 16:46:19 +0100
-Subject: [PATCH] ignore multitouch events
+Subject: [PATCH 08/10] ignore multitouch events
 
 ---
  src/gui/embedded/qmouselinuxinput_qws.cpp | 3 +++
  1 file changed, 3 insertions(+)
 
 diff --git a/src/gui/embedded/qmouselinuxinput_qws.cpp b/src/gui/embedded/qmouselinuxinput_qws.cpp
-index 55fd4f14fa..bf390b7fd7 100644
+index 306a3a09a8..ce08053d6b 100644
 --- a/src/gui/embedded/qmouselinuxinput_qws.cpp
 +++ b/src/gui/embedded/qmouselinuxinput_qws.cpp
 @@ -170,6 +170,9 @@ void QWSLinuxInputMousePrivate::readMouseData()

@@ -1,7 +1,7 @@
-From 060331635283b238c9cb40f59671e59ee0aecff1 Mon Sep 17 00:00:00 2001
+From 36408b3f22420431c6270bf433f85b0269f606b5 Mon Sep 17 00:00:00 2001
 From: mpvader <mvader@victronenergy.com>
 Date: Mon, 5 Oct 2015 06:57:16 +0000
-Subject: [PATCH 4/5] qws vncserver: bind to localhost instead of all
+Subject: [PATCH 04/10] qws vncserver: bind to localhost instead of all
  interfaces
 
 ---
@@ -9,7 +9,7 @@ Subject: [PATCH 4/5] qws vncserver: bind to localhost instead of all
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp b/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp
-index 6d09429..30eadba 100644
+index 7e4ca20377..540d243bf6 100644
 --- a/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp
 +++ b/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp
 @@ -597,7 +597,7 @@ void QVNCServer::init(uint port)
@@ -22,5 +22,5 @@ index 6d09429..30eadba 100644
      else
          qDebug("QVNCServer created on port %d", port);
 -- 
-1.9.1
+2.17.1
 

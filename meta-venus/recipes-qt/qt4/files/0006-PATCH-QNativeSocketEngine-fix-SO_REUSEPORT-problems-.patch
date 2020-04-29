@@ -1,8 +1,8 @@
-From 7ba6ac6728b4ee72811ff423ecc4ced82ede0407 Mon Sep 17 00:00:00 2001
+From b7d047a392a9097cd40b80ac680fc6e38bfea273 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Tue, 2 May 2017 23:18:57 +0200
-Subject: [PATCH 6/6] [PATCH] QNativeSocketEngine: fix SO_REUSEPORT problems on
- Linux
+Subject: [PATCH 06/10] [PATCH] QNativeSocketEngine: fix SO_REUSEPORT problems
+ on Linux
 
 backport from qt5, https://bugreports.qt.io/browse/QTBUG-47011
 
@@ -24,7 +24,7 @@ Reviewed-by: Richard J. Moore <rich@kde.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/network/socket/qnativesocketengine_unix.cpp b/src/network/socket/qnativesocketengine_unix.cpp
-index c0541ff..4fdeb91 100644
+index 4bd9f98ad8..ef2ce1e72a 100644
 --- a/src/network/socket/qnativesocketengine_unix.cpp
 +++ b/src/network/socket/qnativesocketengine_unix.cpp
 @@ -307,7 +307,7 @@ bool QNativeSocketEnginePrivate::setOption(QNativeSocketEngine::SocketOption opt
@@ -37,5 +37,5 @@ index c0541ff..4fdeb91 100644
          // same port (which is useful for multicast UDP). SO_REUSEPORT is, but
          // we most definitely do not want to use this for TCP. See QTBUG-6305.
 -- 
-2.7.4
+2.17.1
 

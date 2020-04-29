@@ -1,18 +1,18 @@
-From 1b5906b40ebfb049875fe6c3980d6d7e3a3dd1fb Mon Sep 17 00:00:00 2001
+From f4f7163c1203a185d4524e0d20fe0675368b059a Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Thu, 1 Oct 2015 10:51:22 +0200
-Subject: [PATCH 3/5] add mkspecs for the victron sdk
+Subject: [PATCH 03/10] add mkspecs for the victron sdk
 
 ---
- mkspecs/qws/linux-arm-ve-gnueabi-g++/qmake.conf    | 21 +++++++++++
- .../qws/linux-arm-ve-gnueabi-g++/qplatformdefs.h   | 42 ++++++++++++++++++++++
+ .../qws/linux-arm-ve-gnueabi-g++/qmake.conf   | 21 ++++++++++
+ .../linux-arm-ve-gnueabi-g++/qplatformdefs.h  | 42 +++++++++++++++++++
  2 files changed, 63 insertions(+)
  create mode 100644 mkspecs/qws/linux-arm-ve-gnueabi-g++/qmake.conf
  create mode 100644 mkspecs/qws/linux-arm-ve-gnueabi-g++/qplatformdefs.h
 
 diff --git a/mkspecs/qws/linux-arm-ve-gnueabi-g++/qmake.conf b/mkspecs/qws/linux-arm-ve-gnueabi-g++/qmake.conf
 new file mode 100644
-index 0000000..d606166
+index 0000000000..d606166f55
 --- /dev/null
 +++ b/mkspecs/qws/linux-arm-ve-gnueabi-g++/qmake.conf
 @@ -0,0 +1,21 @@
@@ -39,7 +39,7 @@ index 0000000..d606166
 +load(qt_config)
 diff --git a/mkspecs/qws/linux-arm-ve-gnueabi-g++/qplatformdefs.h b/mkspecs/qws/linux-arm-ve-gnueabi-g++/qplatformdefs.h
 new file mode 100644
-index 0000000..9e6b0f5
+index 0000000000..9e6b0f5bcc
 --- /dev/null
 +++ b/mkspecs/qws/linux-arm-ve-gnueabi-g++/qplatformdefs.h
 @@ -0,0 +1,42 @@
@@ -86,5 +86,5 @@ index 0000000..9e6b0f5
 +
 +#include "../../linux-g++/qplatformdefs.h"
 -- 
-1.9.1
+2.17.1
 

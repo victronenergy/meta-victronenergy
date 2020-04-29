@@ -1,15 +1,15 @@
-From e2903121c112e596dbe5b2757d856cfaef4d1e1e Mon Sep 17 00:00:00 2001
+From f85d17a1482d3c403eed0ef7f0de9e98b74d60ac Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Mon, 16 Sep 2013 17:05:12 +0200
-Subject: [PATCH 1/5] add insert/remove/append/clear to the VisualItemModel
+Subject: [PATCH 01/10] add insert/remove/append/clear to the VisualItemModel
 
 ---
- .../graphicsitems/qdeclarativevisualitemmodel.cpp  | 74 ++++++++++++++++++++++
- .../graphicsitems/qdeclarativevisualitemmodel_p.h  |  5 ++
+ .../qdeclarativevisualitemmodel.cpp           | 74 +++++++++++++++++++
+ .../qdeclarativevisualitemmodel_p.h           |  5 ++
  2 files changed, 79 insertions(+)
 
 diff --git a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
-index 9760088..b78642e 100644
+index 80d796f416..5c9bbd38d1 100644
 --- a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
 +++ b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
 @@ -93,10 +93,57 @@ public:
@@ -27,7 +27,7 @@ index 9760088..b78642e 100644
 +    void updateIndices()
 +    {
 +        QList<Item>::iterator i;
-+        int n;
++        int n = 0;
 +
 +        for (i = children.begin(); i != children.end(); ++i) {
 +            QDeclarativeVisualItemModelAttached *attached = QDeclarativeVisualItemModelAttached::properties((*i).item);
@@ -105,7 +105,7 @@ index 9760088..b78642e 100644
  
  class VDMDelegateDataType : public QDeclarativeOpenMetaObjectType
 diff --git a/src/declarative/graphicsitems/qdeclarativevisualitemmodel_p.h b/src/declarative/graphicsitems/qdeclarativevisualitemmodel_p.h
-index 73a7cb4..8b5d843 100644
+index 5487977667..84b3853d79 100644
 --- a/src/declarative/graphicsitems/qdeclarativevisualitemmodel_p.h
 +++ b/src/declarative/graphicsitems/qdeclarativevisualitemmodel_p.h
 @@ -130,6 +130,11 @@ public:
@@ -121,5 +121,5 @@ index 73a7cb4..8b5d843 100644
      void childrenChanged();
  
 -- 
-1.9.1
+2.17.1
 

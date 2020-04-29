@@ -1,20 +1,20 @@
-From 3e1a3c39d7ac6535aebbc74abc36a9779f8808ff Mon Sep 17 00:00:00 2001
+From c359f0b95f38a15a17907de6eb8e8fb32e37191b Mon Sep 17 00:00:00 2001
 From: mpvader <mvader@victronenergy.com>
 Date: Mon, 12 Oct 2015 11:56:00 +0000
-Subject: [PATCH 5/5] qws vncserver: add vnc authentication
+Subject: [PATCH 05/10] qws vncserver: add vnc authentication
 
 the filename is passed via the commandline. Advantage of doing it
 like this is that you don't have to restart the application every-
 time the password is changed. The last 8 characters of the firstline
 in the file are used.
 ---
- README.md                                     |  18 ++
+ README.md                                     |  18 +
  src/gui/embedded/embedded.pri                 |   6 +-
- src/plugins/gfxdrivers/vnc/README.txt         |  52 ++++
- src/plugins/gfxdrivers/vnc/d3des.c            | 430 ++++++++++++++++++++++++++
+ src/plugins/gfxdrivers/vnc/README.txt         |  52 +++
+ src/plugins/gfxdrivers/vnc/d3des.c            | 430 ++++++++++++++++++
  src/plugins/gfxdrivers/vnc/d3des.h            |  51 +++
  src/plugins/gfxdrivers/vnc/qscreenvnc_p.h     |  18 +-
- src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp | 109 ++++++-
+ src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp | 109 ++++-
  src/plugins/gfxdrivers/vnc/vnc.pro            |   9 +-
  8 files changed, 683 insertions(+), 10 deletions(-)
  create mode 100644 README.md
@@ -24,7 +24,7 @@ in the file are used.
 
 diff --git a/README.md b/README.md
 new file mode 100644
-index 0000000..3372d6f
+index 0000000000..3372d6f55e
 --- /dev/null
 +++ b/README.md
 @@ -0,0 +1,18 @@
@@ -47,7 +47,7 @@ index 0000000..3372d6f
 +  is still available in Qt5 hasn't been look into yet.
 +
 diff --git a/src/gui/embedded/embedded.pri b/src/gui/embedded/embedded.pri
-index 836c116..bedc4bb 100644
+index 836c116053..bedc4bbd95 100644
 --- a/src/gui/embedded/embedded.pri
 +++ b/src/gui/embedded/embedded.pri
 @@ -136,8 +136,10 @@ embedded {
@@ -65,7 +65,7 @@ index 836c116..bedc4bb 100644
  	contains( gfx-drivers, transformed ) {
 diff --git a/src/plugins/gfxdrivers/vnc/README.txt b/src/plugins/gfxdrivers/vnc/README.txt
 new file mode 100644
-index 0000000..6a47aac
+index 0000000000..6a47aacd62
 --- /dev/null
 +++ b/src/plugins/gfxdrivers/vnc/README.txt
 @@ -0,0 +1,52 @@
@@ -123,7 +123,7 @@ index 0000000..6a47aac
 +>81^done
 diff --git a/src/plugins/gfxdrivers/vnc/d3des.c b/src/plugins/gfxdrivers/vnc/d3des.c
 new file mode 100644
-index 0000000..040964f
+index 0000000000..040964f487
 --- /dev/null
 +++ b/src/plugins/gfxdrivers/vnc/d3des.c
 @@ -0,0 +1,430 @@
@@ -559,7 +559,7 @@ index 0000000..040964f
 + **********************************************************************/
 diff --git a/src/plugins/gfxdrivers/vnc/d3des.h b/src/plugins/gfxdrivers/vnc/d3des.h
 new file mode 100644
-index 0000000..ea3da44
+index 0000000000..ea3da44ce9
 --- /dev/null
 +++ b/src/plugins/gfxdrivers/vnc/d3des.h
 @@ -0,0 +1,51 @@
@@ -615,7 +615,7 @@ index 0000000..ea3da44
 +/* d3des.h V5.09 rwo 9208.04 15:06 Graven Imagery
 + ********************************************************************/
 diff --git a/src/plugins/gfxdrivers/vnc/qscreenvnc_p.h b/src/plugins/gfxdrivers/vnc/qscreenvnc_p.h
-index 2a99220..692ce56 100644
+index f6f4c2426b..020b768557 100644
 --- a/src/plugins/gfxdrivers/vnc/qscreenvnc_p.h
 +++ b/src/plugins/gfxdrivers/vnc/qscreenvnc_p.h
 @@ -62,6 +62,11 @@
@@ -676,7 +676,7 @@ index 2a99220..692ce56 100644
      bool handleMsg;
      QRfbPixelFormat pixelFormat;
 diff --git a/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp b/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp
-index 30eadba..dfb8b90 100644
+index 540d243bf6..c27b9cca5a 100644
 --- a/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp
 +++ b/src/plugins/gfxdrivers/vnc/qscreenvnc_qws.cpp
 @@ -636,6 +636,7 @@ void QVNCServer::newConnection()
@@ -832,7 +832,7 @@ index 30eadba..dfb8b90 100644
      switch (depth()) {
  #ifdef QT_QWS_DEPTH_32
 diff --git a/src/plugins/gfxdrivers/vnc/vnc.pro b/src/plugins/gfxdrivers/vnc/vnc.pro
-index 31da2f4..69fbd36 100644
+index 31da2f404e..69fbd36943 100644
 --- a/src/plugins/gfxdrivers/vnc/vnc.pro
 +++ b/src/plugins/gfxdrivers/vnc/vnc.pro
 @@ -7,10 +7,15 @@ QTDIR_build:DESTDIR = $$QT_BUILD_TREE/plugins/gfxdrivers
@@ -854,5 +854,5 @@ index 31da2f4..69fbd36 100644
 +OTHER_FILES += \
 +	README.txt
 -- 
-1.9.1
+2.17.1
 

@@ -1,14 +1,14 @@
-From 9319922c0685e8d342e4074076906884c20ad351 Mon Sep 17 00:00:00 2001
+From 32c8f3976e708e76bd1e3d5bfcc25eb68a82f008 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Thu, 7 Mar 2019 13:13:00 +0100
-Subject: [PATCH] qws: don't clear the screen and reanable the cursor
+Subject: [PATCH 07/10] qws: don't clear the screen and re-enable the cursor
 
 ---
  src/gui/embedded/qscreenlinuxfb_qws.cpp | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/src/gui/embedded/qscreenlinuxfb_qws.cpp b/src/gui/embedded/qscreenlinuxfb_qws.cpp
-index db18e20..a7bef27 100644
+index a86687d8e4..ce82fdf2fb 100644
 --- a/src/gui/embedded/qscreenlinuxfb_qws.cpp
 +++ b/src/gui/embedded/qscreenlinuxfb_qws.cpp
 @@ -156,12 +156,14 @@ void QLinuxFbScreenPrivate::closeTty()
@@ -27,5 +27,5 @@ index db18e20..a7bef27 100644
      QT_CLOSE(ttyfd);
      ttyfd = -1;
 -- 
-2.7.4
+2.17.1
 

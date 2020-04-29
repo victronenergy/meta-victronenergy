@@ -1,7 +1,7 @@
-From f542b6a4e46f4d57631c7faf2e6208bec8ed850a Mon Sep 17 00:00:00 2001
+From 322272baaa9520ecca58c50a186bfce9baab628a Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Mon, 23 Sep 2013 18:17:45 +0200
-Subject: [PATCH 2/5] qml: add the show property
+Subject: [PATCH 02/10] qml: add the show property
 
 Hidding elements with the visible property does
 not work as expected, since the page stack will
@@ -9,15 +9,15 @@ alter these values for its navigation. Therefore
 add a seperate show property for Items which should
 never be displayed.
 ---
- src/declarative/graphicsitems/qdeclarativeitem.cpp |  61 ++++++++++
- src/declarative/graphicsitems/qdeclarativeitem.h   |   7 ++
- src/declarative/graphicsitems/qdeclarativeitem_p.h |   8 +-
- .../graphicsitems/qdeclarativelistview.cpp         | 125 ++++++++++++++++-----
- .../graphicsitems/qdeclarativelistview_p.h         |   1 +
+ .../graphicsitems/qdeclarativeitem.cpp        |  61 +++++++++
+ .../graphicsitems/qdeclarativeitem.h          |   7 +
+ .../graphicsitems/qdeclarativeitem_p.h        |   8 +-
+ .../graphicsitems/qdeclarativelistview.cpp    | 125 ++++++++++++++----
+ .../graphicsitems/qdeclarativelistview_p.h    |   1 +
  5 files changed, 176 insertions(+), 26 deletions(-)
 
 diff --git a/src/declarative/graphicsitems/qdeclarativeitem.cpp b/src/declarative/graphicsitems/qdeclarativeitem.cpp
-index d7ab7c7..a5257c2 100644
+index 1ddd638209..85a827f71b 100644
 --- a/src/declarative/graphicsitems/qdeclarativeitem.cpp
 +++ b/src/declarative/graphicsitems/qdeclarativeitem.cpp
 @@ -3791,6 +3791,67 @@ qint64 QDeclarativeItemPrivate::restart(QElapsedTimer &t)
@@ -89,7 +89,7 @@ index d7ab7c7..a5257c2 100644
  
  #include <moc_qdeclarativeitem.cpp>
 diff --git a/src/declarative/graphicsitems/qdeclarativeitem.h b/src/declarative/graphicsitems/qdeclarativeitem.h
-index 472c599..f226a1e 100644
+index 1f0cbe34be..a3ae471bce 100644
 --- a/src/declarative/graphicsitems/qdeclarativeitem.h
 +++ b/src/declarative/graphicsitems/qdeclarativeitem.h
 @@ -94,6 +94,7 @@ class Q_DECLARATIVE_EXPORT QDeclarativeItem : public QGraphicsObject, public QDe
@@ -121,7 +121,7 @@ index 472c599..f226a1e 100644
  protected:
      bool isComponentComplete() const;
 diff --git a/src/declarative/graphicsitems/qdeclarativeitem_p.h b/src/declarative/graphicsitems/qdeclarativeitem_p.h
-index 0150582..fe6db69 100644
+index 43f1f9a644..2d3598c698 100644
 --- a/src/declarative/graphicsitems/qdeclarativeitem_p.h
 +++ b/src/declarative/graphicsitems/qdeclarativeitem_p.h
 @@ -128,7 +128,7 @@ public:
@@ -154,7 +154,7 @@ index 0150582..fe6db69 100644
      QDeclarativeItemKeyFilter *keyHandler;
  
 diff --git a/src/declarative/graphicsitems/qdeclarativelistview.cpp b/src/declarative/graphicsitems/qdeclarativelistview.cpp
-index c2a2c42..877c93b 100644
+index 6a94c9b359..797fe30a53 100644
 --- a/src/declarative/graphicsitems/qdeclarativelistview.cpp
 +++ b/src/declarative/graphicsitems/qdeclarativelistview.cpp
 @@ -102,8 +102,11 @@ public:
@@ -360,7 +360,7 @@ index c2a2c42..877c93b 100644
  {
      Q_D(QDeclarativeListView);
 diff --git a/src/declarative/graphicsitems/qdeclarativelistview_p.h b/src/declarative/graphicsitems/qdeclarativelistview_p.h
-index 8301b9a..1fd9807 100644
+index af4260a29f..42b18d73a8 100644
 --- a/src/declarative/graphicsitems/qdeclarativelistview_p.h
 +++ b/src/declarative/graphicsitems/qdeclarativelistview_p.h
 @@ -272,6 +272,7 @@ private Q_SLOTS:
@@ -372,5 +372,5 @@ index 8301b9a..1fd9807 100644
  
  class QDeclarativeListViewAttached : public QObject
 -- 
-1.9.1
+2.17.1
 

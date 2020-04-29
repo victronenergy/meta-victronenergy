@@ -1,0 +1,39 @@
+From fc7091175907beb0464bb0af56e9fa54f416a61a Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 29 Apr 2020 14:01:01 +0200
+Subject: [PATCH 10/10] silence expansion-to-defined / nullptr warnings
+
+---
+ configure | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/configure b/configure
+index 4a9db85bd3..a800c2e236 100755
+--- a/configure
++++ b/configure
+@@ -3452,6 +3452,11 @@ export SYSROOT_FLAG    # used by config.tests/unix/compile.test
+ # Since qt4 is no longer officialy maintained, silence the harmless warnings
+ # since nobody is going to fix them anyway...
+ 
++if compilerSupportsFlag $TEST_COMPILER -Wexpansion-to-defined -Werror; then
++	QMakeVar add QMAKE_CFLAGS -Wno-expansion-to-defined
++	QMakeVar add QMAKE_CXXFLAGS -Wno-expansion-to-defined
++fi
++
+ if compilerSupportsFlag $TEST_COMPILER -Wunused-but-set-variable -Werror; then
+ 	QMakeVar add QMAKE_CFLAGS -Wno-unused-but-set-variable
+ 	QMakeVar add QMAKE_CXXFLAGS -Wno-unused-but-set-variable
+@@ -3493,6 +3498,10 @@ if compilerSupportsFlag $TEST_COMPILER -Wswitch -Werror; then
+ 	QMakeVar add QMAKE_CXXFLAGS -Wno-switch
+ fi
+ 
++if compilerSupportsFlag $TEST_COMPILER -Wc++11-compat -Werror; then
++	QMakeVar add QMAKE_CXXFLAGS -Wno-c++11-compat
++fi
++
+ if compilerSupportsFlag $TEST_COMPILER -Wdeprecated-copy -Werror; then
+ 	QMakeVar add QMAKE_CXXFLAGS -Wno-deprecated-copy
+ fi
+-- 
+2.17.1
+
