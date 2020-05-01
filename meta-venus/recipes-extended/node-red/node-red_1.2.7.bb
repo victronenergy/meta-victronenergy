@@ -13,6 +13,7 @@ PR = "r0"
 
 SRC_URI = "\
 	https://registry.npmjs.org/${PN}/-/${PN}-${PV}.tgz;unpack=0 \
+	file://npm-shrinkwrap.json \
 "
 
 SRC_URI[md5sum] = "9e4e183b252c89059035394cc172b1bf"
@@ -48,6 +49,8 @@ do_compile() {
 	# Set and clear cache
 	npm set cache ${NPM_CACHE_DIR}
 	npm cache clear --force
+
+	cp ${WORKDIR}/npm-shrinkwrap.json package-lock.json
 
 	# Install
 	npm --registry=${NPM_REGISTRY} --arch=${NPM_ARCH} --target_arch=${NPM_ARCH} ${NPM_INSTALL_FLAGS} install
