@@ -18,6 +18,7 @@ inherit packagegroup
 
 RRECOMMENDS_${PN} += " \
     can-bus-bms \
+    dbus-adc \
     dbus-bornay-windplus \
     dbus-cgwacs \
     dbus-digitalinputs \
@@ -34,12 +35,4 @@ RRECOMMENDS_${PN} += " \
     mk2-dbus \
     vecan-dbus \
     vedirect-interface \
-"
-
-RRECOMMENDS_${PN}_append_beaglebone += "\
-    dbus-adc \
-"
-
-RRECOMMENDS_${PN}_append_einstein += "\
-    dbus-adc \
 "
