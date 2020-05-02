@@ -12,4 +12,5 @@ SRC_URI += " \
     file://0008-ignore-multitouch-events.patch \
     file://0009-add-VisualModels.patch \
     file://0010-silence-expansion-to-defined-nullptr-warnings.patch \
+    file://0011-qdeclarativelistview-set-currentItem-to-false-in-cle.patch \
 "
