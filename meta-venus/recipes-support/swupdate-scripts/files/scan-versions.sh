@@ -17,11 +17,21 @@ if [ -z "$other" ]; then
 fi
 
 lock || exit
+trap unlock EXIT
 
-if mount -r -t $rootfstype $(get_rootdev $other) $altroot; then
+altdev=$(get_rootdev $other)
+
+case $rootfstype in
+    ext*)
+        if ! e2fsck -nf $altdev >/dev/null 2>&1; then
+            echo "Filesystem errors detected on backup rootfs"
+            exit 1
+        fi
+    ;;
+esac
+
+if mount -r -t $rootfstype $altdev $altroot; then
     get_version $altroot/$version | tee -a /var/run/versions |
         sed 's/^/Backup version: /'
     umount $altroot
 fi
-
-unlock

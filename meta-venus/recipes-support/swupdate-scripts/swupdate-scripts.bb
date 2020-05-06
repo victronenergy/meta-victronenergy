@@ -40,7 +40,7 @@ do_install () {
 
     DEST=${D}${sysconfdir}/rc5.d
     install -d ${DEST}
-    ln -sf ../init.d/scan-versions.sh ${DEST}/S90scan-versions.sh
+    ln -sf ../init.d/scan-versions.sh ${DEST}/S98scan-versions.sh
     ln -sf ../init.d/check-updates.sh ${DEST}/S99check-updates.sh
 }
 
