@@ -3,10 +3,14 @@ HOMEPAGE = "http://nodered.org"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=d6f37569f5013072e9490d2194d10ae6"
 
+RDEPENDS_${PN} += "\
+	bash \
+"
 
 SRC_URI = "\
 	https://registry.npmjs.org/${PN}/-/${PN}-${PV}.tgz;unpack=0 \
 	file://npm-shrinkwrap.json \
+	file://start-node-red.sh \
 "
 
 SRC_URI[md5sum] = "9e4e183b252c89059035394cc172b1bf"
@@ -29,7 +33,8 @@ do_install_append() {
 
 	# Symlinks
 	mkdir ${D}${bindir}
-	ln -s ${libdir}/node_modules/${PN}/red.js ${D}${bindir}/${PN}
+	#ln -s ${libdir}/node_modules/${PN}/red.js ${D}${bindir}/${PN}
+	install -m 0755 ${WORKDIR}/start-node-red.sh ${D}${bindir}/${PN}
 }
 
 FILES_${PN} += " \
