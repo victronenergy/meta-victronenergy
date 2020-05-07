@@ -1,7 +1,7 @@
-From 36408b3f22420431c6270bf433f85b0269f606b5 Mon Sep 17 00:00:00 2001
+From d977efccb180d8f14e1c6475fd079f36d6bc9028 Mon Sep 17 00:00:00 2001
 From: mpvader <mvader@victronenergy.com>
 Date: Mon, 5 Oct 2015 06:57:16 +0000
-Subject: [PATCH 04/10] qws vncserver: bind to localhost instead of all
+Subject: [PATCH 04/14] qws vncserver: bind to localhost instead of all
  interfaces
 
 ---

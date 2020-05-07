@@ -1,7 +1,7 @@
 From f85d17a1482d3c403eed0ef7f0de9e98b74d60ac Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Mon, 16 Sep 2013 17:05:12 +0200
-Subject: [PATCH 01/10] add insert/remove/append/clear to the VisualItemModel
+Subject: [PATCH 01/14] add insert/remove/append/clear to the VisualItemModel
 
 ---
  .../qdeclarativevisualitemmodel.cpp           | 74 +++++++++++++++++++

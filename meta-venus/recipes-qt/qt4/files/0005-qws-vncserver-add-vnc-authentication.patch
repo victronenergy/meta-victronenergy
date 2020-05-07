@@ -1,7 +1,7 @@
-From c359f0b95f38a15a17907de6eb8e8fb32e37191b Mon Sep 17 00:00:00 2001
+From 3a2893117387c6448a7af744a92c2c2a20dc11af Mon Sep 17 00:00:00 2001
 From: mpvader <mvader@victronenergy.com>
 Date: Mon, 12 Oct 2015 11:56:00 +0000
-Subject: [PATCH 05/10] qws vncserver: add vnc authentication
+Subject: [PATCH 05/14] qws vncserver: add vnc authentication
 
 the filename is passed via the commandline. Advantage of doing it
 like this is that you don't have to restart the application every-

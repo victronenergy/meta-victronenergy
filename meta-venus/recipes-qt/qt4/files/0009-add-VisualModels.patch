@@ -1,7 +1,7 @@
-From 460790de007445f4991c03d1d2b955acab9f6234 Mon Sep 17 00:00:00 2001
+From fc0cd6c3db32e938ddc2859624bf12d0fe6ba574 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Tue, 28 Apr 2020 20:50:27 +0200
-Subject: [PATCH 09/10] add VisualModels
+Subject: [PATCH 09/14] add VisualModels
 
 The VisualModels makes it possible to concatenate multiple VisualModel
 derived ones. It is intended for (mostly) static models like menus in

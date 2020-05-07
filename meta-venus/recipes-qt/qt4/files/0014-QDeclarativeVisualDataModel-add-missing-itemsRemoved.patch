@@ -1,0 +1,31 @@
+From 5009116ff9bc0fcd1e392b097ff26a1f885c9b5a Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 7 May 2020 16:55:11 +0200
+Subject: [PATCH 14/14] QDeclarativeVisualDataModel: add missing itemsRemoved
+ signal
+
+When a model is reassigned, it should be signalled that the old rows
+are no longer there.
+---
+ .../graphicsitems/qdeclarativevisualitemmodel.cpp            | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
+index 80f551924d..a85beebf1a 100644
+--- a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
++++ b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
+@@ -779,6 +779,11 @@ QVariant QDeclarativeVisualDataModel::model() const
+ void QDeclarativeVisualDataModel::setModel(const QVariant &model)
+ {
+     Q_D(QDeclarativeVisualDataModel);
++
++    int n = count();
++    if (n)
++        emit itemsRemoved(0, n);
++
+     delete d->m_listAccessor;
+     d->m_listAccessor = 0;
+     d->m_modelVariant = model;
+-- 
+2.17.1
+

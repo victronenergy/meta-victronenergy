@@ -13,4 +13,7 @@ SRC_URI += " \
     file://0009-add-VisualModels.patch \
     file://0010-silence-expansion-to-defined-nullptr-warnings.patch \
     file://0011-qdeclarativelistview-set-currentItem-to-false-in-cle.patch \
+    file://0012-QDeclarativeVisualDataModel-crashes-getting-QAbstrac.patch \
+    file://0013-add-.model-to-QDeclarativeVisualDataModelData.patch \
+    file://0014-QDeclarativeVisualDataModel-add-missing-itemsRemoved.patch \
 "

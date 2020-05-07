@@ -1,0 +1,34 @@
+From 41c7f51227796f3f51a3c657c0477e7274ec00d6 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Tue, 5 May 2020 13:25:18 +0200
+Subject: [PATCH 12/14] QDeclarativeVisualDataModel crashes getting
+ QAbstractItemModel roles.
+
+Don't iterate over a temporary.
+
+Task-number: QTBUG-26209
+Change-Id: Iab99d0756c5c30e4f5bb9b674a20eaf76ebce1e6
+Reviewed-by: Andrew den Exter <andrew.den-exter@nokia.com>
+---
+ .../graphicsitems/qdeclarativevisualitemmodel.cpp            | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
+index 6cb7a14051..8554809748 100644
+--- a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
++++ b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
+@@ -362,8 +362,9 @@ public:
+                 for (int ii = 0; ii < m_roles.count(); ++ii)
+                     m_roleNames.insert(m_listModelInterface->toString(m_roles.at(ii)).toUtf8(), m_roles.at(ii));
+             } else if (m_abstractItemModel) {
+-                for (QHash<int,QByteArray>::const_iterator it = m_abstractItemModel->roleNames().begin();
+-                        it != m_abstractItemModel->roleNames().end(); ++it) {
++                QHash<int,QByteArray> roleNames = m_abstractItemModel->roleNames();
++                for (QHash<int,QByteArray>::const_iterator it = roleNames.begin();
++                        it != roleNames.end(); ++it) {
+                     m_roles.append(it.key());
+                     m_roleNames.insert(*it, it.key());
+                 }
+-- 
+2.17.1
+

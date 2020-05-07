@@ -1,7 +1,7 @@
-From b7d047a392a9097cd40b80ac680fc6e38bfea273 Mon Sep 17 00:00:00 2001
+From 5d4da43b5c968013b127aabe8f415c275532fef4 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Tue, 2 May 2017 23:18:57 +0200
-Subject: [PATCH 06/10] [PATCH] QNativeSocketEngine: fix SO_REUSEPORT problems
+Subject: [PATCH 06/14] [PATCH] QNativeSocketEngine: fix SO_REUSEPORT problems
  on Linux
 
 backport from qt5, https://bugreports.qt.io/browse/QTBUG-47011

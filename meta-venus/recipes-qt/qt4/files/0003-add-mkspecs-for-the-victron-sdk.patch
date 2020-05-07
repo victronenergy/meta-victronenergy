@@ -1,7 +1,7 @@
-From f4f7163c1203a185d4524e0d20fe0675368b059a Mon Sep 17 00:00:00 2001
+From d325d0132f9012255ed56c6765a426b965e42035 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Thu, 1 Oct 2015 10:51:22 +0200
-Subject: [PATCH 03/10] add mkspecs for the victron sdk
+Subject: [PATCH 03/14] add mkspecs for the victron sdk
 
 ---
  .../qws/linux-arm-ve-gnueabi-g++/qmake.conf   | 21 ++++++++++

@@ -1,7 +1,7 @@
-From 322272baaa9520ecca58c50a186bfce9baab628a Mon Sep 17 00:00:00 2001
+From 41ed6655727d3dc5d15baab69c0f677e9b896781 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Mon, 23 Sep 2013 18:17:45 +0200
-Subject: [PATCH 02/10] qml: add the show property
+Subject: [PATCH 02/14] qml: add the show property
 
 Hidding elements with the visible property does
 not work as expected, since the page stack will
@@ -121,7 +121,7 @@ index 1f0cbe34be..a3ae471bce 100644
  protected:
      bool isComponentComplete() const;
 diff --git a/src/declarative/graphicsitems/qdeclarativeitem_p.h b/src/declarative/graphicsitems/qdeclarativeitem_p.h
-index 43f1f9a644..2d3598c698 100644
+index 43f1f9a644..1cb8d55359 100644
 --- a/src/declarative/graphicsitems/qdeclarativeitem_p.h
 +++ b/src/declarative/graphicsitems/qdeclarativeitem_p.h
 @@ -128,7 +128,7 @@ public:
@@ -129,7 +129,7 @@ index 43f1f9a644..2d3598c698 100644
        smooth(false), transformOriginDirty(true), doneEventPreHandler(false),
        inheritedLayoutMirror(false), effectiveLayoutMirror(false), isMirrorImplicit(true),
 -      inheritMirrorFromParent(false), inheritMirrorFromItem(false), hadFocus(false), hadActiveFocus(false), keyHandler(0),
-+      inheritMirrorFromParent(false), inheritMirrorFromItem(false), mShow(true), hadFocus(false), hadActiveFocus(false), keyHandler(0),
++      inheritMirrorFromParent(false), inheritMirrorFromItem(false), hadFocus(false), hadActiveFocus(false), mShow(true), keyHandler(0),
        mWidth(0), mHeight(0), mImplicitWidth(0), mImplicitHeight(0), attachedLayoutDirection(0)
      {
          QGraphicsItemPrivate::acceptedMouseButtons = 0;
