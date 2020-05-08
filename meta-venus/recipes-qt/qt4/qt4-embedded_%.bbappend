@@ -1,5 +1,4 @@
 DEPENDS = "freetype jpeg libpng zlib dbus tiff tslib"
-RDEPENDS_libqt-embeddedcore4 += "qt4-machine-conf"
 
 require qt4_ve_patches.inc
 
