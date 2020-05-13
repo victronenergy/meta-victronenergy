@@ -28,7 +28,9 @@ SRC_URI_nanopi += "\
     file://board_id_easysolar_a9 \
     file://board_id_easysolar_a10 \
     file://board_id_maxigx \
+    file://board_id_maxigx_a10 \
     file://board_id_multiplus2 \
+    file://board_id_multiplus2_a10 \
     file://board_id_paygo \
 "
 
