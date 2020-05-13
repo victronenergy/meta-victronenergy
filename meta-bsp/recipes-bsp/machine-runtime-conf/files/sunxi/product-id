@@ -13,9 +13,12 @@ case $id in
 	VECB) echo C00A ;;	# Cerbo GX
 	VEES) echo C007 ;;	# EasySolar-II
 	VES9) echo C00B ;;	# EasySolar-II rev A9
+	VESA) echo C00E ;;	# EasySolar-II rev A10
 	VEMX) echo C009 ;;	# Maxi GX
 	VMX9) echo C00D ;;	# Maxi GX rev A9
+	VMXA) echo C010 ;;	# Maxi GX rev A10
 	VEMP) echo C008 ;;	# MultiPlus-II
 	VMP9) echo C00C ;;	# MultiPlus-II rev A9
+	VMPA) echo C00F ;;	# MultiPlus-II rev A10
 	*)    echo C003 ;;
 esac
