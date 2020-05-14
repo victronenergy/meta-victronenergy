@@ -22,6 +22,7 @@ QT5_RDEPENDS = " \
 "
 
 RDEPENDS_${PN}_append_canvu500 += "\
+    crda \
     evtest \
     gpio-export \
     imx-kobs \
@@ -42,9 +43,11 @@ RDEPENDS_${PN}_append_ccgx += "\
     swupdate \
     swupdate-scripts \
     technexion-serial \
+    wireless-regdb-static \
 "
 
 RDEPENDS_${PN}_append_beaglebone += "\
+    crda \
     gpio-export \
     hostapd \
     i2c-tools \
@@ -74,9 +77,11 @@ RDEPENDS_${PN}_append_sunxi += "\
     rtl8723du \
     swupdate \
     swupdate-scripts \
+    wireless-regdb-static \
 "
 
 RDEPENDS_${PN}_append_raspberrypi2 += "\
+    crda \
     gpio-export \
     linux-firmware-bcm43430 \
     linux-firmware-bcm43455 \
