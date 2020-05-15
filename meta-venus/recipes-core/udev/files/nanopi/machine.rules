@@ -28,6 +28,11 @@ ENV{BASE_COMPATIBLE}!="victronenergy,maxi-gx-a9", GOTO="end-maxi-gx-a9"
 ACTION=="add", KERNEL=="ttyS2", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
 LABEL="end-maxi-gx-a9"
 
+# Maxi GX A10 devices
+ENV{BASE_COMPATIBLE}!="victronenergy,maxi-gx-a10", GOTO="end-maxi-gx-a10"
+ACTION=="add", KERNEL=="ttyS2", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
+LABEL="end-maxi-gx-a10"
+
 # PayGo devices
 ENV{BASE_COMPATIBLE}!="victronenergy,paygo", GOTO="end-paygo"
 ACTION=="add", KERNEL=="ttyS[12]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
