@@ -23,7 +23,7 @@ uboot_prep_kimage() {
         linux_comp=none
 }
 
-RDEPENDS_kernel-base = ""
+RDEPENDS_${KERNEL_PACKAGE_NAME}-base = ""
 
 S = "${WORKDIR}/linux-${PV}"
 B = "${WORKDIR}/build"

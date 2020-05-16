@@ -6,7 +6,7 @@ inherit kernel
 
 COMPATIBLE_MACHINE = "canvu500"
 
-RDEPENDS_kernel-base += "kernel-devicetree"
+RDEPENDS_${KERNEL_PACKAGE_NAME}-base += "kernel-devicetree"
 
 KERNEL_CONFIG_COMMAND = "oe_runmake -C ${S} O=${B} canvu500_defconfig"
 
