@@ -1,10 +1,8 @@
 inherit image_types uboot-config
 
 DESCRIPTION = "Live image to program the rootfs"
-INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.ext2.gz.u-boot"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
-SDCARD = "${WORKDIR}/sdcard"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 DEPENDS += "\
@@ -14,8 +12,8 @@ DEPENDS += "\
     zip-native \
 "
 
+INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.ext2.gz.u-boot"
 DTB = "${KERNEL_DEVICETREE}"
-
 SCR = "install-${MACHINE}.scr"
 
 SRC_URI_beaglebone += "file://board_id_octogx"
@@ -54,6 +52,8 @@ do_install[depends] += " \
 "
 
 do_install () {
+    SDCARD="${WORKDIR}/sdcard"
+
     if [ -d ${SDCARD} ]; then
         rm -rf ${SDCARD}
     fi
