@@ -1,4 +1,6 @@
 SUMMARY = "rootfs to flash an image"
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SWUPDATE_INIT ?= "tiny"
 
@@ -20,9 +22,6 @@ IMAGE_INSTALL_append_ccgx = "mtd-utils-ubifs"
 IMAGE_INSTALL_append_sunxi = "e2fsprogs-mke2fs util-linux-sfdisk"
 
 IMAGE_LINGUAS = " "
-
-LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 IMAGE_FSTYPES = "ext2.gz.u-boot"
 IMAGE_ROOTFS_SIZE = "32000"
