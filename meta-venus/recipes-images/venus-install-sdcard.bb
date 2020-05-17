@@ -12,7 +12,7 @@ DEPENDS += "\
     zip-native \
 "
 
-INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.ext2.gz.u-boot"
+INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.cpio.gz.u-boot"
 DTB = "${KERNEL_DEVICETREE}"
 SCR = "install-${MACHINE}.scr"
 

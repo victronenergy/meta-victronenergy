@@ -23,8 +23,7 @@ IMAGE_INSTALL_append_sunxi = "e2fsprogs-mke2fs util-linux-sfdisk"
 
 IMAGE_LINGUAS = " "
 
-IMAGE_FSTYPES = "ext2.gz.u-boot"
-IMAGE_ROOTFS_SIZE = "32000"
+IMAGE_FSTYPES = "cpio.gz.u-boot"
 
 inherit image
 
