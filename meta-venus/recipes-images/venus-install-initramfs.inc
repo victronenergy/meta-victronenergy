@@ -32,14 +32,14 @@ python __anonymous() {
     d.delVarFlag('do_unpack', 'noexec')
 }
 
-addtask unpack before do_rootfs
+addtask unpack before do_add_files
 
 SRC_URI = "\
     file://install.sh \
     file://swupdate \
 "
 
-add_program_instructions() {
+do_add_files() {
     install -d ${IMAGE_ROOTFS}/${base_libdir}/venus
     install ${WORKDIR}/install.sh ${IMAGE_ROOTFS}/${base_libdir}/venus
 
@@ -50,5 +50,4 @@ add_program_instructions() {
     fi
 }
 
-# remove unneeded pkg informations
-ROOTFS_POSTPROCESS_COMMAND += "add_program_instructions ;"
+addtask add_files after do_rootfs before do_image
