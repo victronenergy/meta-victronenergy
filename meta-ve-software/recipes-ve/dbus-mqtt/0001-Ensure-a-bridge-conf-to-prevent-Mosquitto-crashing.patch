@@ -1,0 +1,77 @@
+From 2a1a3071b8f3ff5da3b0e0292c98fc6539d8cdca Mon Sep 17 00:00:00 2001
+From: Wiebe Cazemier <wiebe@ytec.nl>
+Date: Tue, 19 May 2020 15:34:17 +0200
+Subject: [PATCH 1/2] Ensure a bridge conf to prevent Mosquitto crashing
+
+There are two conditions when Mosquitto would crash:
+
+- 'VRM two-way communication' was enabled on installations without
+  internet.
+- Installations lost their /data partition and then also have 'VRM
+  two-way communication' (re)enabled.
+
+Both scenarios create a symlink that is dead, that would only heal
+itself once the mosquitto_bridge_registrator.py successfully posted its
+auth credentials, which it can't do without internet, or when it it's
+reflashed and it tries to overwrite existing credentials.
+
+This fix will create an empty config first, regardless of success.
+
+https://github.com/victronenergy/venus/issues/620
+
+(original: 5992930cefe14614fbe633d19a8ece735c2441f8)
+---
+ mosquitto_bridge_registrator.py | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
+
+diff --git a/mosquitto_bridge_registrator.py b/mosquitto_bridge_registrator.py
+index 6a81e4d..e01d1cf 100644
+--- a/mosquitto_bridge_registrator.py
++++ b/mosquitto_bridge_registrator.py
+@@ -136,6 +136,21 @@ class MosquittoBridgeRegistrator(object):
+ 	def client_id(self):
+ 		return self._client_id
+ 
++	def _write_config_atomically(self, path, contents):
++		with open(path + ".tmp", 'wt') as out_file:
++			# make sure the new config is on the disk
++			out_file.write(contents)
++			out_file.flush()
++			os.fsync(out_file.fileno())
++
++			# make sure there is either the old file or the new one
++			os.rename(path + ".tmp", path)
++
++			# update the directory meta-info
++			fd = os.open(os.path.dirname(path), 0)
++			os.fsync(fd)
++			os.close(fd)
++
+ 	def _init_broker(self, quiet=True, timeout=5):
+ 		try:
+ 			with open(LockFilePath, "a") as lockFile:
+@@ -155,6 +170,9 @@ class MosquittoBridgeRegistrator(object):
+ 				except IOError:
+ 					if not quiet:
+ 						logging.info('[InitBroker] Reading config file failed.')
++				# We need a guarantee an empty file, otherwise Mosquitto crashes on load.
++				if not os.path.exists(BridgeConfigPath):
++					self._write_config_atomically(BridgeConfigPath, "");
+ 				# Fix items missing from config
+ 				if self._client_id is None:
+ 					self._client_id = 'ccgx_' + get_random_string(12)
+@@ -182,10 +200,7 @@ class MosquittoBridgeRegistrator(object):
+ 							config_dir = os.path.dirname(BridgeConfigPath)
+ 							if not os.path.exists(config_dir):
+ 								os.makedirs(config_dir)
+-							with open(BridgeConfigPath, 'wt') as out_file:
+-								out_file.write(config)
+-								out_file.flush()
+-								os.fsync(out_file.fileno())
++							self._write_config_atomically(BridgeConfigPath, config)
+ 							self._restart_broker()
+ 						self._init_broker_timer = None
+ 						logging.getLogger("requests").setLevel(self._requests_log_level)
+-- 
+2.7.4
+

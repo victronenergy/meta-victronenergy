@@ -1,0 +1,76 @@
+From 4deb28c88aaaa75d2edee9b91f3fa2bc3c79506f Mon Sep 17 00:00:00 2001
+From: mpvader <mvader@victronenergy.com>
+Date: Thu, 21 May 2020 08:57:53 +0200
+Subject: [PATCH 2/2] mosquitto_bridge_registrator: fix path creation bug
+
+The previous commit missed the path creation, so it wouldn't really fix it
+on a new system. With this fix it does.
+
+Verified and tested (on a new install - no /data/conf/mosquitto.d folder)
+
+Error without this fix:
+
+2020-05-21 07:26:28.293546500 Traceback (most recent call last):
+2020-05-21 07:26:28.293644500   File "/opt/victronenergy/mqtt-rpc/ext/velib_python/mosquitto_bridge_registrator.py", line 185, in _init_broker
+2020-05-21 07:26:28.294560500     self._write_config_atomically(BridgeConfigPath, "");
+2020-05-21 07:26:28.294605500   File "/opt/victronenergy/mqtt-rpc/ext/velib_python/mosquitto_bridge_registrator.py", line 150, in _write_config_atomically
+2020-05-21 07:26:28.294782500     with open(path + ".tmp", 'wt') as out_file:
+2020-05-21 07:26:28.294902500 IOError: [Errno 2] No such file or directory: '/data/conf/mosquitto.d/vrm_bridge.conf.tmp'
+2020-05-21 07:26:28.295620500 INFO:root:[InitBroker] Registration failed. Retrying in thread, silently.
+2020-05-21 07:26:28.297922500 Traceback (most recent call last):
+2020-05-21 07:26:28.298027500   File "/opt/victronenergy/mqtt-rpc/mqtt-rpc.py", line 830, in <module>
+2020-05-21 07:26:28.299342500     main()
+2020-05-21 07:26:28.299500500   File "/opt/victronenergy/mqtt-rpc/mqtt-rpc.py", line 814, in main
+2020-05-21 07:26:28.300496500     init_paho(registrator.get_apikey(), registrator.get_password())
+2020-05-21 07:26:28.300627500   File "/opt/victronenergy/mqtt-rpc/ext/velib_python/mosquitto_bridge_registrator.py", line 234, in get_password
+2020-05-21 07:26:28.300950500     assert self._global_broker_password is not None
+2020-05-21 07:26:28.301012500 AssertionError
+
+And the error in mosquitto if VRM Two way communication is enabled:
+
+(ie. the broken symlink)
+
+2020-05-21 07:30:10.352933500 RSA key ok
+2020-05-21 07:30:10.380979500 /data/keys/mosquitto.crt: OK
+2020-05-21 07:30:10.431105500 Error: Unable to open config file /run/mosquitto/vrm_bridge.conf
+2020-05-21 07:30:10.431113500
+2020-05-21 07:30:10.431204500 Error found at /run/mosquitto/vrm_bridge.conf:0.
+2020-05-21 07:30:10.431208500 Error found at /etc/mosquitto/mosquitto.conf:11.
+2020-05-21 07:30:10.431215500 Error: Unable to open configuration file.
+
+https://github.com/victronenergy/venus/issues/620
+
+(original: c3df0969f6a363d8050d3094bcaa593fc8a1a03d)
+---
+ mosquitto_bridge_registrator.py | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/mosquitto_bridge_registrator.py b/mosquitto_bridge_registrator.py
+index e01d1cf..b56c013 100644
+--- a/mosquitto_bridge_registrator.py
++++ b/mosquitto_bridge_registrator.py
+@@ -137,6 +137,11 @@ class MosquittoBridgeRegistrator(object):
+ 		return self._client_id
+ 
+ 	def _write_config_atomically(self, path, contents):
++
++		config_dir = os.path.dirname(path)
++		if not os.path.exists(config_dir):
++			os.makedirs(config_dir)
++
+ 		with open(path + ".tmp", 'wt') as out_file:
+ 			# make sure the new config is on the disk
+ 			out_file.write(contents)
+@@ -197,9 +202,6 @@ class MosquittoBridgeRegistrator(object):
+ 						# Do we need to adjust the settings file?
+ 						if config != orig_config:
+ 							logging.info('[InitBroker] Writing new config file')
+-							config_dir = os.path.dirname(BridgeConfigPath)
+-							if not os.path.exists(config_dir):
+-								os.makedirs(config_dir)
+ 							self._write_config_atomically(BridgeConfigPath, config)
+ 							self._restart_broker()
+ 						self._init_broker_timer = None
+-- 
+2.7.4
+

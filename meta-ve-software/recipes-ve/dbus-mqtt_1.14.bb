@@ -10,7 +10,12 @@ RDEPENDS_${PN} = "python mosquitto"
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-mqtt.git;protocol=https;tag=v${PV} \
     file://0001-add-dummy-distclean.patch \
+    file://0001-Ensure-a-bridge-conf-to-prevent-Mosquitto-crashing.patch;patchdir=ext/velib_python \
+    file://0002-mosquitto_bridge_registrator-fix-path-creation-bug.patch;patchdir=ext/velib_python \
 "
+
+PR = "1"
+
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
