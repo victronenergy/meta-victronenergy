@@ -18,9 +18,11 @@ SRC_URI = " \
     file://0007-further-increase-debouncing-timeout-for-grid-alarm.patch \
     file://0008-dvcc-remove-sony-murata-quirk.patch \
     file://0009-Fix-error-67-problem-for-VE.Can-chargers.patch \
+    file://0010-add-quirk-for-24V-pylontech-battery.patch \
+    file://0011-dvcc-Aways-copy-discharge-current-voltage-to-Multi.patch \
 "
 
-PR = "5"
+PR = "6"
 
 S = "${WORKDIR}/git"
 

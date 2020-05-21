@@ -1,0 +1,115 @@
+From b44d15a3bb2c4ba53f35f7f3f58d91fd7d89e324 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Wed, 22 Jan 2020 13:26:39 +0200
+Subject: [PATCH 10/11] add quirk for 24V pylontech battery
+
+The 24V Pylontech battery sends CCL=0 when the battery is full. This
+results in a sawtooth voltage effect and causes the SOC to jitter
+between 99% and 100%. We therefore override CCL=0 and keep it at 0.25C
+(25% of the declared battery capacity).
+---
+ delegates/dvcc.py | 26 +++++++++++++++++++-------
+ tests/hub_test.py | 22 +++++++++++++++++++++-
+ 2 files changed, 40 insertions(+), 8 deletions(-)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index c17b23a..db41298 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -54,12 +54,18 @@ def _pylontech_quirk(dvcc, bms, charge_voltage, charge_current, feedback_allowed
+ 	    thing with an 8-to-15 cell ratio, +-3.45V per cell.
+ 	"""
+ 	# Use 3.45V per cell, 52V for 48V batteries and 27.6V for 24V batteries.
+-	target = 52.0 if charge_voltage > 30 else 27.6
+-
+-	# Hold at target, but allow the battery to call for a lower voltage.
+-	# This also handles the case where charge_voltage == None, since None
+-	# is always smaller than anything else.
+-	return (min(charge_voltage, target), charge_current, feedback_allowed)
++	if charge_voltage > 30:
++		# 48V battery (15 cells)
++		return (min(charge_voltage, 52.0), charge_current, feedback_allowed)
++	else:
++		# 24V battery (8 cells). 24V batteries send CCL=0 when they are full,
++		# whereas the 48V batteries reduce CCL by 50% when the battery is full.
++		# Do the same for 24V batteries. The normal limit is C/2, so put the
++		# limit to C/4. Note that this is just a nicety, the important part is
++		# to clip the charge voltage to 27.6 volts. That fixes the sawtooth
++		# issue.
++		capacity = bms.capacity or 55
++		return (min(charge_voltage, 27.6), max(charge_current, round(capacity/4.0)), feedback_allowed)
+ 
+ # Quirk = namedtuple('Quirk', ['product_id', 'floatvoltage', 'floatcurrent'])
+ QUIRKS = {
+@@ -413,6 +419,11 @@ class Battery(object):
+ 		""" Returns Product ID of battery. """
+ 		return self.monitor.get_value(self.service, '/ProductId')
+ 
++	@property
++	def capacity(self):
++		""" Capacity of battery, if defined. """
++		return self.monitor.get_value(self.service, '/InstalledCapacity')
++
+ 
+ class BatterySubsystem(object):
+ 	""" Encapsulates multiple battery services. We may have both a BMV and a
+@@ -576,7 +587,8 @@ class Dvcc(SystemCalcDelegate):
+ 				'/Info/BatteryLowVoltage',
+ 				'/Info/MaxChargeCurrent',
+ 				'/Info/MaxChargeVoltage',
+-				'/Info/MaxDischargeCurrent']),
++				'/Info/MaxDischargeCurrent',
++				'/InstalledCapacity']),
+ 			('com.victronenergy.vebus', [
+ 				'/Ac/ActiveIn/Connected',
+ 				'/Hub/ChargeVoltage',
+diff --git a/tests/hub_test.py b/tests/hub_test.py
+index b454be5..4d019a8 100644
+--- a/tests/hub_test.py
++++ b/tests/hub_test.py
+@@ -1220,6 +1220,7 @@ class TestHubSystem(TestSystemCalcBase):
+ 				'/Info/MaxChargeCurrent': 25,
+ 				'/Info/MaxChargeVoltage': 53.2,
+ 				'/Info/MaxDischargeCurrent': 25,
++				'/InstalledCapacity': None,
+ 				'/ProductId': 0xB009})
+ 		self._update_values(interval=3000)
+ 		self._check_external_values({
+@@ -1232,14 +1233,33 @@ class TestHubSystem(TestSystemCalcBase):
+ 
+ 		# 24V battery is scaled accordingly
+ 		self._monitor.set_value('com.victronenergy.battery.ttyO2', '/Info/MaxChargeVoltage', 28.4)
++		self._monitor.set_value('com.victronenergy.battery.ttyO2', '/Info/MaxChargeCurrent', 55)
+ 		self._update_values(interval=3000)
+ 		self._check_external_values({
+ 			'com.victronenergy.vebus.ttyO1': {
+-				'/BatteryOperationalLimits/MaxChargeVoltage': 27.6
++				'/BatteryOperationalLimits/MaxChargeVoltage': 27.6,
++				'/BatteryOperationalLimits/MaxChargeCurrent': 55
+ 			}
+ 		})
+ 		self._check_values({ '/Control/EffectiveChargeVoltage': 27.6 })
+ 
++		# 24V battery has a CCL=0 quirk, replace with 0.25C charge rate. If charge rate is unknown
++		# assume a single module at 55Ah.
++		self._monitor.set_value('com.victronenergy.battery.ttyO2', '/Info/MaxChargeCurrent', 0)
++		self._update_values(interval=3000)
++		self._check_external_values({
++			'com.victronenergy.vebus.ttyO1': {
++				'/BatteryOperationalLimits/MaxChargeCurrent': 14
++			}
++		})
++		self._monitor.set_value('com.victronenergy.battery.ttyO2', '/InstalledCapacity', 222)
++		self._update_values(interval=3000)
++		self._check_external_values({
++			'com.victronenergy.vebus.ttyO1': {
++				'/BatteryOperationalLimits/MaxChargeCurrent': 56
++			}
++		})
++
+ 	def test_no_bms_max_charge_current_setting(self):
+ 		# Test that with no BMS but a user limit, /Dc/0/MaxChargeCurrent is correctly set.
+ 		self._monitor.add_value('com.victronenergy.vebus.ttyO1', '/Hub/ChargeVoltage', 55.2)
+-- 
+2.7.4
+

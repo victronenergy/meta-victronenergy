@@ -1,0 +1,53 @@
+From 60abb4160a7388357d8f8d872eb2f443e4423670 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Mon, 27 Apr 2020 13:28:50 +0200
+Subject: [PATCH 11/11] dvcc: Aways copy discharge current/voltage to Multi
+
+An optimisation would copy these values only if the dbus paths
+were "seen". On some systems, for some reason, a race condition
+seems to exist that causes them to never be written. To make
+it simpler, simply always write them.
+---
+ delegates/dvcc.py | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index db41298..ca0cc5c 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -410,6 +410,16 @@ class Battery(object):
+ 		return self.monitor.get_value(self.service, '/Info/MaxChargeVoltage')
+ 
+ 	@property
++	def batterylowvoltage(self):
++		""" Returns battery low voltage published by the BMS. """
++		return self.monitor.get_value(self.service, '/Info/BatteryLowVoltage')
++
++	@property
++	def maxdischargecurrent(self):
++		""" Returns max discharge current published by the BMS. """
++		return self.monitor.get_value(self.service, '/Info/MaxDischargeCurrent')
++
++	@property
+ 	def voltage(self):
+ 		""" Returns current voltage of battery. """
+ 		return self.monitor.get_value(self.service, '/Dc/0/Voltage')
+@@ -847,13 +857,8 @@ class Dvcc(SystemCalcDelegate):
+ 				self._multi.bol.maxchargecurrent = mcc
+ 
+ 			# Copy the rest unmodified
+-			if self._dbusmonitor.seen(self._multi.service, '/BatteryOperationalLimits/MaxDischargeCurrent'):
+-				copy_dbus_value(self._dbusmonitor,
+-					bms_service.service, '/Info/BatteryLowVoltage',
+-					self._multi.service, '/BatteryOperationalLimits/BatteryLowVoltage')
+-				copy_dbus_value(self._dbusmonitor,
+-					bms_service.service, '/Info/MaxDischargeCurrent',
+-					self._multi.service, '/BatteryOperationalLimits/MaxDischargeCurrent')
++			self._multi.bol.maxdischargecurrent = bms_service.maxdischargecurrent
++			self._multi.bol.batterylowvoltage = bms_service.batterylowvoltage
+ 			return 1
+ 
+ 		return 0
+-- 
+2.7.4
+
