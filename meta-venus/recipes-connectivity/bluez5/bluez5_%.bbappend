@@ -6,6 +6,7 @@ SRC_URI += "\
     file://disable_gatt_reverse_service_discovery.patch \
     file://ble.conf \
     file://init.default \
+    file://0001-correct-the-firmware-directory.patch \
 "
 
 EXTRA_OECONF += "\
