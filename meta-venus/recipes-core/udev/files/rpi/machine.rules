@@ -1,0 +1,3 @@
+ENV{BASE_COMPATIBLE}!="raspberrypi,4-model-b", GOTO="end-rpi4-model-b"
+ACTION=="add",SUBSYSTEM=="tty",KERNEL=="ttyAMA0",RUN+="/usr/bin/hciattach /dev/ttyAMA0 bcm43xx 3000000 flow -"
+LABEL="end-rpi4-model-b"
