@@ -1,4 +1,4 @@
-From 75f863b0de7a8a0e01c820098b56c4f3ec4990c0 Mon Sep 17 00:00:00 2001
+From 89768a46284410f225ed316e3d03603357690d2d Mon Sep 17 00:00:00 2001
 From: Will Thompson <wjt@endlessm.com>
 Date: Wed, 22 Nov 2017 11:43:55 +0000
 Subject: [PATCH 1/2] gfileutils: make g_file_set_contents() always fsync()
@@ -25,14 +25,14 @@ new function to glib providing weaker guarantees.
 
 https://bugzilla.gnome.org/show_bug.cgi?id=790638
 ---
- glib/gfileutils.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ glib/gfileutils.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/glib/gfileutils.c b/glib/gfileutils.c
-index ea3806eeb..a8378cd76 100644
+index d6beaa5c094b..9fd0cfa4e5cc 100644
 --- a/glib/gfileutils.c
 +++ b/glib/gfileutils.c
-@@ -1101,16 +1101,14 @@ write_to_temp_file (const gchar  *contents,
+@@ -1111,16 +1111,14 @@ write_to_temp_file (const gchar  *contents,
  
  #ifdef HAVE_FSYNC
    {
@@ -51,19 +51,6 @@ index ea3806eeb..a8378cd76 100644
        {
          int saved_errno = errno;
          set_file_error (err,
-@@ -1163,6 +1161,12 @@ write_to_temp_file (const gchar  *contents,
-  *   lists, metadata etc. may be lost. If @filename is a symbolic link,
-  *   the link itself will be replaced, not the linked file.
-  *
-+ * - On UNIX, if the filesystem is uncleanly unmounted after a successful call
-+ *   to this function, it is guaranteed that @filename will contain either its
-+ *   old contents, or @contents. In particular, if @filename did not previously
-+ *   exist, following a crash it will either not exist or contain its new
-+ *   @contents.
-+ *
-  * - On Windows renaming a file will not remove an existing file with the
-  *   new name, so on Windows there is a race condition between the existing
-  *   file being removed and the temporary file being renamed.
 -- 
-2.17.1
+2.26.2
 

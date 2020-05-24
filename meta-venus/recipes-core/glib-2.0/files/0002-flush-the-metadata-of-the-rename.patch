@@ -1,4 +1,4 @@
-From 24f0c38ed8b50ea7bc67e3de14ed376fbd1094bb Mon Sep 17 00:00:00 2001
+From 1612b7867df22d4554f72c80d20847a849e3a748 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Tue, 14 Jan 2020 12:54:53 +0100
 Subject: [PATCH 2/2] flush the metadata of the rename
@@ -22,10 +22,10 @@ of time.
  1 file changed, 14 insertions(+)
 
 diff --git a/glib/gfileutils.c b/glib/gfileutils.c
-index a8378cd76..323359e91 100644
+index 9fd0cfa4e5cc..d970a56cb81b 100644
 --- a/glib/gfileutils.c
 +++ b/glib/gfileutils.c
-@@ -1259,6 +1259,20 @@ g_file_set_contents (const gchar  *filename,
+@@ -1274,6 +1274,20 @@ g_file_set_contents (const gchar  *filename,
  #endif
      }
  
@@ -47,5 +47,5 @@ index a8378cd76..323359e91 100644
    
   out:
 -- 
-2.17.1
+2.26.2
 
