@@ -1,4 +1,4 @@
-From 250cf869df1e153475f7f3d28ac53ebc431bbe38 Mon Sep 17 00:00:00 2001
+From d7d2871c0aea032ce92e5918a513e0dbe0feb182 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Thu, 19 Apr 2018 15:46:58 +0200
 Subject: [PATCH] disable client challenge
@@ -11,10 +11,10 @@ Since we use ChallengeClient, just disable it.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/config.h.in b/config.h.in
-index 56946ec..43a193f 100644
+index cf6841677342..4a8592f1d47d 100644
 --- a/config.h.in
 +++ b/config.h.in
-@@ -28,7 +28,7 @@
+@@ -29,7 +29,7 @@
  
  /* Other Hiawatha features
   */
@@ -22,7 +22,7 @@ index 56946ec..43a193f 100644
 +#undef ENABLE_CHALLENGE
  /* #define ENABLE_DEBUG ON */
  #define ENABLE_FILEHASHES ON
- #define ENABLE_THREAD_POOL ON
+ /* #define ENABLE_MEMDBG ON */
 -- 
-2.7.4
+2.26.2
 
