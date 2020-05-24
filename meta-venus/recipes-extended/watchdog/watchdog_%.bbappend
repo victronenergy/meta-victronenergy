@@ -11,7 +11,7 @@ SRC_URI += "\
     file://services.sh \
     file://vrm-online.sh \
     file://0001-Use-MemAvailable-instead-of-MemFree.patch \
-    file://0001-add-test-prescaler-to-run-test-less-often.patch \
+    file://0002-add-test-prescaler-to-run-test-less-often.patch \
 "
 
 INITSCRIPT_PACKAGES = "${PN}"

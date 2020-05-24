@@ -1,7 +1,7 @@
-From dfd5635e9aa6103194e9211501b5ff84d4006b14 Mon Sep 17 00:00:00 2001
+From e38da4eb088c2562e1d073a0ad83346e4ad2525a Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Fri, 9 Dec 2016 14:36:06 +0100
-Subject: [PATCH] Use MemAvailable instead of MemFree
+Subject: [PATCH 1/2] Use MemAvailable instead of MemFree
 
 MemFree does not include cached pages and hence underestimates the
 amount of memory that _could_ be freed when needed. MemFree + Cached
@@ -18,18 +18,18 @@ reboot loop in such a case...
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/memory.c b/src/memory.c
-index 4893ea9..298bc9d 100644
+index ff2489ac1d8c..6b9b99c225a0 100644
 --- a/src/memory.c
 +++ b/src/memory.c
-@@ -16,7 +16,7 @@
- #include <syslog.h>
- #endif
+@@ -28,7 +28,7 @@
+ #include "extern.h"
+ #include "watch_err.h"
  
 -#define FREEMEM		"MemFree:"
 +#define FREEMEM		"MemAvailable:"
  #define FREESWAP	"SwapFree:"
  
- int check_memory(void)
+ static int mem_fd = -1;
 -- 
-2.7.4
+2.26.2
 

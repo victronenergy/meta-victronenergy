@@ -1,7 +1,7 @@
-From d2fd1df5e8e0e3875916b0467eff8f68314c8e53 Mon Sep 17 00:00:00 2001
+From cf40809bd808cc9dfdd37d7086bcdebabf8320b3 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Thu, 14 Mar 2019 13:24:29 +0000
-Subject: [PATCH] add test-prescaler to run test less often
+Subject: [PATCH 2/2] add test-prescaler to run test less often
 
 When set in the config file, test are only run every n intervals.
 ---
@@ -12,7 +12,7 @@ When set in the config file, test are only run every n intervals.
  4 files changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/include/extern.h b/include/extern.h
-index f00e4cf..e09119e 100644
+index f00e4cfa253e..e09119ec7a2d 100644
 --- a/include/extern.h
 +++ b/include/extern.h
 @@ -82,6 +82,7 @@ extern char *devname;
@@ -33,7 +33,7 @@ index f00e4cf..e09119e 100644
  
  /** pidfile.c **/
 diff --git a/src/configfile.c b/src/configfile.c
-index a0996e2..248b9d9 100644
+index a0996e228c78..248b9d90d0a2 100644
 --- a/src/configfile.c
 +++ b/src/configfile.c
 @@ -51,6 +51,7 @@ static void add_test_binaries(const char *path);
@@ -61,7 +61,7 @@ index a0996e2..248b9d9 100644
  		} else if (READ_INT(HBSTAMPS, &hbstamps) == 0) {
  		} else if (READ_STRING(ADMIN, &admin) == 0) {
 diff --git a/src/test_binary.c b/src/test_binary.c
-index 2211f9e..d3e07d6 100644
+index 2211f9e9db77..74064fe56d56 100644
 --- a/src/test_binary.c
 +++ b/src/test_binary.c
 @@ -235,7 +235,7 @@ static int check_processes(const char *name, int *ecode)
@@ -84,7 +84,7 @@ index 2211f9e..d3e07d6 100644
  	if (!child_pid) {
  
 diff --git a/src/watchdog.c b/src/watchdog.c
-index 486384a..869dee9 100644
+index 486384aec113..869dee94b812 100644
 --- a/src/watchdog.c
 +++ b/src/watchdog.c
 @@ -550,11 +550,11 @@ int main(int argc, char *const argv[])
@@ -102,5 +102,5 @@ index 486384a..869dee9 100644
  		/* finally sleep for a full cycle */
  		/* we have just triggered the device with the last check */
 -- 
-2.7.4
+2.26.2
 
