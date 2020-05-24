@@ -1,4 +1,4 @@
-From f637e52f570b504236b652e0a5405f8e29b6c75c Mon Sep 17 00:00:00 2001
+From 8c015cb96c8f784e8633c0d1e553f0746cfd6f41 Mon Sep 17 00:00:00 2001
 From: Natanael Copa <ncopa@alpinelinux.org>
 Date: Tue, 3 Jun 2014 08:53:47 +0000
 Subject: [PATCH 1/2] pppd: add support for defaultroute-metric option
@@ -55,7 +55,7 @@ index c8b595d760e2..b13b5ca71b8c 100644
  .B disconnect \fIscript
  Execute the command specified by \fIscript\fR, by passing it to a
 diff --git a/pppd/sys-linux.c b/pppd/sys-linux.c
-index 87801c8e1d3b..088062eca115 100644
+index a105505094af..1b24249fc6ca 100644
 --- a/pppd/sys-linux.c
 +++ b/pppd/sys-linux.c
 @@ -235,7 +235,7 @@ static int baud_rate_of (int speed);
@@ -125,7 +125,7 @@ index 87801c8e1d3b..088062eca115 100644
  	}
 @@ -1639,9 +1645,9 @@ int sifdefaultroute (int unit, u_int32_t ouraddr, u_int32_t gateway, bool replac
           * are called again, we will delete the current default route
-          * and set the new default route in this function.
+          * and set the new default route in this function.  
           * - this is normally only the case the doing demand: */
 -	if (defaultroute_exists( &tmp_rt ))
 +	if (defaultroute_exists( &tmp_rt, -1 ))
@@ -154,5 +154,5 @@ index 87801c8e1d3b..088062eca115 100644
  	SET_SA_FAMILY (rt.rt_genmask, AF_INET);
  	SIN_ADDR(rt.rt_genmask) = 0L;
 -- 
-2.15.1
+2.26.2
 

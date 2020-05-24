@@ -1,4 +1,4 @@
-From bf3efd5b7aaf7338cf5c69e11bebde61a3e752e1 Mon Sep 17 00:00:00 2001
+From 8a7973f4a1ab15b162e1df8e784518c9e4d584c6 Mon Sep 17 00:00:00 2001
 From: Mans Rullgard <mans@mansr.com>
 Date: Sat, 9 Dec 2017 12:46:33 +0000
 Subject: [PATCH 2/2] pppd: clear resolv.conf on link down
@@ -12,10 +12,10 @@ Signed-off-by: Mans Rullgard <mans@mansr.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/pppd/ipcp.c b/pppd/ipcp.c
-index 303ef157a439..73a7fe576255 100644
+index 4be2d7deb2b7..27f2093a8c04 100644
 --- a/pppd/ipcp.c
 +++ b/pppd/ipcp.c
-@@ -2029,6 +2029,8 @@ ipcp_down(f)
+@@ -2031,6 +2031,8 @@ ipcp_down(f)
  	sifdown(f->unit);
  	ipcp_clear_addrs(f->unit, ipcp_gotoptions[f->unit].ouraddr,
  			 ipcp_hisoptions[f->unit].hisaddr, 0);
@@ -25,5 +25,5 @@ index 303ef157a439..73a7fe576255 100644
  
      /* Execute the ip-down script */
 -- 
-2.15.1
+2.26.2
 
