@@ -5,18 +5,18 @@
 # The <name> part is used to create an symlink in /dev/gpio.
 
 # Relay 1          GPIO 5_22
-182 out relay_1
+- out relay_1
 
 # Buzzer           GPIO 2_3
-35  out buzzer
+-  out buzzer
 
 # MK3_RST          GPIO 4_27
-155 out mkx_rst
+- out mkx_rst
 
 # VE.Bus Standby   GPIO 4_25
-153 out vebus_standby
+- out vebus_standby
 
 # HW rev
-96  in  hwrev_2
-98  in  hwrev_1
-94  in  hwrev_0
+- in  hwrev_2
+- in  hwrev_1
+- in  hwrev_0
