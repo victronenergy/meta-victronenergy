@@ -25,7 +25,3 @@
 
 # VE.Bus Standby   P8.41 / GPIO 2_10
 74  out vebus_standby
-
-# S2 User Button   P8.43 / SYS_BOOT/LCDDATA2
-72  in  s2_button
-
