@@ -4,5 +4,5 @@
 #
 # The <name> part is used to create an symlink in /dev/gpio.
 
-256 out relay_1
-257 in  digital_input_1
+- out relay_1
+- in  digital_input_1
