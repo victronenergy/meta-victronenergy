@@ -2,23 +2,16 @@
 # They are documented at: https://github.com/victronenergy/venus/wiki/bbb-gpio
 # Format: <pin_number> <direction: in/out> <name>
 
-# MK3_RST, GPIOA16
-16  out mkx_rst		victronenergy,easysolar.*|moixa,v4-smart-hub
++ out mkx_rst
++ out vebus_standby
 
-# VE.Bus Standby, GPIOA15
-15  out vebus_standby	victronenergy,easysolar.*|moixa,v4-smart-hub
++ out modem_rst
 
-# Modem RESET, GPIOA21
-21  out modem_rst	victronenergy,paygo
++ out digital_output_1
 
-# Digital output, GPIOC2
-66  out digital_output_1 victronenergy,paygo
++ out usb_vbus
 
-# USB VBUS, GPIOE13
-141 out usb_vbus	victronenergy,paygo
-
-# Light sensor
-+ in display_sensor
++ in  display_sensor
 
 + in  digital_input_1
 + in  digital_input_2
