@@ -18,12 +18,11 @@
 141 out usb_vbus	victronenergy,paygo
 
 # Light sensor
-411 in display_sensor	victronenergy,easysolar.*
++ in display_sensor
 
-384 in  digital_input_1	victronenergy,maxi-gx.*
-385 in  digital_input_2	victronenergy,maxi-gx.*
-386 in  digital_input_3	victronenergy,maxi-gx.*
-387 in  digital_input_4	victronenergy,maxi-gx.*
-388 out relay_1		victronenergy,maxi-gx.*
-389 out relay_2		victronenergy,maxi-gx.*
-411 in  display_sensor	victronenergy,maxi-gx.*
++ in  digital_input_1
++ in  digital_input_2
++ in  digital_input_3
++ in  digital_input_4
++ out relay_1
++ out relay_2
