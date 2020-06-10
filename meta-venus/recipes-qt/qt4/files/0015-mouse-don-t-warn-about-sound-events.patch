@@ -1,0 +1,25 @@
+From 7f1ebbbb533a0fe039d69b02f1165ee089c30c27 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 10 Jun 2020 12:39:46 +0200
+Subject: [PATCH 15/15] mouse: don't warn about sound events
+
+---
+ src/gui/embedded/qmouselinuxinput_qws.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/gui/embedded/qmouselinuxinput_qws.cpp b/src/gui/embedded/qmouselinuxinput_qws.cpp
+index ce08053d6b..06086658eb 100644
+--- a/src/gui/embedded/qmouselinuxinput_qws.cpp
++++ b/src/gui/embedded/qmouselinuxinput_qws.cpp
+@@ -205,6 +205,8 @@ void QWSLinuxInputMousePrivate::readMouseData()
+         } else if (data->type == EV_MSC && data->code == MSC_SCAN) {
+             // kernel encountered an unmapped key - just ignore it
+             continue;
++        } else if (data->type == EV_SND) {
++            continue;
+         } else {
+             unknown = true;
+         }
+-- 
+2.17.1
+
