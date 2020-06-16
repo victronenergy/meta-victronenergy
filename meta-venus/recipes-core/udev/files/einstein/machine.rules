@@ -1,6 +1,9 @@
 # Cerbo GX
 ENV{BASE_COMPATIBLE}!="victronenergy,cerbo-gx", GOTO="end-cerbo-gx"
-ACTION=="add", KERNEL=="ttyS1", ENV{VE_PRODUCT}="builtin-rs485", ENV{VE_SERVICE}="rs485"
+
+# The rs485 driver is not placed.... so ignore it instead of assigning rs485 as a service
+ACTION=="add", KERNEL=="ttyS1", ENV{VE_PRODUCT}="builtin-rs485", ENV{VE_SERVICE}="ignore"
+
 ACTION=="add", KERNEL=="ttyS3", ENV{VE_SERVICE}="ignore", SYMLINK+="ttycan1"
 ACTION=="add", KERNEL=="ttyS4", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="mkx"
 ACTION=="add", KERNEL=="ttyS[5-7]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
