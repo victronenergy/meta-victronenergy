@@ -24,3 +24,10 @@ DEPENDS += "\
     vim \
     x11vnc \
 "
+
+# Add as optional packages until we include python3 proper
+DEPENDS += "\
+    python3-requests \
+    python3-lxml \
+    python3-paho-mqtt \
+"
