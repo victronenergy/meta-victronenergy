@@ -30,4 +30,5 @@ DEPENDS += "\
     python3-requests \
     python3-lxml \
     python3-paho-mqtt \
+    python3-pymodbus \
 "
