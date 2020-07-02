@@ -7,6 +7,7 @@ inherit www
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += " \
+    file://bad-unique-id \
     file://board-compat \
     file://canbus-config \
     file://get-unique-id \
@@ -81,6 +82,7 @@ do_install_append() {
     install -m 755 ${WORKDIR}/get-unique-id ${D}/${base_sbindir}
 
     install -d ${D}/${bindir}
+    install -m 755 ${WORKDIR}/bad-unique-id ${D}/${bindir}
     install -m 755 ${WORKDIR}/board-compat ${D}/${bindir}
     install -m 755 ${WORKDIR}/canbus-config ${D}/${bindir}
     install -m 755 ${WORKDIR}/hw-revision ${D}/${bindir}
