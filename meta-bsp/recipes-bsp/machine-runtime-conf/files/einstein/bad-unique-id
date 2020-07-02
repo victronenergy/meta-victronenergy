@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# u-boot creates a mac address based on the sid.
+# see https://github.com/victronenergy/u-boot/blob/7e1a3fb9c9d4cad90ab8951131d621e507f390af/board/sunxi/board.c#L686
+# This reports the value as reported by u-boot.
+
+# The Einsteins produced after 06/07/2020 use the wifi since production,
+# no need to report bad-unique-ids for them.
+installer_version="$(sed -n '3p' /data/venus/installer-version 2>/dev/null)"
+if [ ${installer_version:-0} -ge 20200706000000 ]; then
+        exit
+fi
+
+mac=$(hexdump -e '16/1 "%02x " "\n"' -n 16 /sys/bus/nvmem/devices/sunxi-sid0/nvmem | awk '{print "02"$4$13 " " $14$15$16}')
+read -a parts <<< "$mac"
+if [ ${parts[1]} = "000000" ]; then
+    parts[1]="800000"
+fi
+echo ${parts[0]}${parts[1]}
