@@ -5,7 +5,8 @@ con=$2
 bus=$3
 
 card=$(basename $dev)
-stat=$(cat $dev/$card-$con/status)
+disp=$dev/$card-$con
+stat=$(cat $disp/status)
 
 get_devices() (
     cd /sys/bus/i2c/devices/$1
@@ -16,6 +17,9 @@ connected() {
     for d in $(get_devices $bus); do
         echo $d >/sys/bus/i2c/drivers_probe
     done
+    mode=$(head -n1 $disp/modes)
+    fbset -xres ${mode%x*} -yres ${mode#*x}
+    cat /dev/zero >/dev/fb0
 }
 
 disconnected() {
