@@ -10,12 +10,13 @@ RDEPENDS_${PN} = "\
     bash \
     python \
     python-dbus \
+    python-dnslib \
     python-pygobject \
     python-pymodbus \
 "
 
 SRC_URI = " \
-    gitsm://github.com/victronenergy/${BPN}.git;protocol=ssh;user=git;tag=v${PV};branch=b0.7 \
+    gitsm://github.com/victronenergy/${BPN}.git;protocol=ssh;user=git;tag=v${PV} \
     file://start-serial.sh \
 "
 S = "${WORKDIR}/git"
