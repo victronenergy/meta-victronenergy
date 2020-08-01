@@ -16,10 +16,10 @@ DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/${PN}.py --path=/data/conf"
 
 RDEPENDS_${PN} += " \
-    python \
-    python-dbus \
-    python-enum34 \
-    python-lxml \
+    python3-core \
+    python3-dbus \
+    python3-pygobject \
+    python3-lxml \
 "
 
 do_install () {
