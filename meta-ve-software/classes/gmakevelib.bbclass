@@ -4,6 +4,8 @@ inherit pkgconfig siteinfo
 
 inherit ve_package
 
+DEPENDS += "python3-native"
+
 CFLAGS += "${TOOLCHAIN_OPTIONS} ${TARGET_CC_ARCH} ${LDFLAGS}"
 
 oe_runconf () {
@@ -26,6 +28,10 @@ oe_runconf () {
 gmakevelib_do_configure() {
     if [ -e ${S}/configure ]; then
         oe_runconf
+
+        # force python3, OE lacks a python symlink
+        velib=$(sed -e 's/VELIB_PATH := //' velib_path.mk)
+        find ${S}/$velib -name define2make.py -exec sed -i -e 's,#!/usr/bin/env python$,#!/usr/bin/env python3,' {} \;
     else
         bbnote "nothing to configure"
     fi
