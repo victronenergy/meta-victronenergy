@@ -7,14 +7,14 @@ inherit python-compile
 
 RDEPENDS_${PN} = " \
     mosquitto \
-    python \
-    python-lxml \
-    python-requests \
+    python3-core \
+    python3-lxml \
+    python3-paho-mqtt \
+    python3-requests \
 "
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-mqtt.git;protocol=https;tag=v${PV} \
-    file://0001-add-dummy-distclean.patch \
 "
 S = "${WORKDIR}/git"
 
