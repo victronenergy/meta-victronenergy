@@ -4,7 +4,6 @@ inherit www
 
 SRC_URI += " \
     file://hiawatha.conf \
-    file://0001-disable-client-challenge.patch \
 "
 RDEPENDS_${PN} += "php-fpm"
 
