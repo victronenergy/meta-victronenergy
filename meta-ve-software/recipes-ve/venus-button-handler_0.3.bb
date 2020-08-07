@@ -7,11 +7,10 @@ inherit daemontools
 inherit python-compile
 
 RDEPENDS_${PN} = "\
-    python \
-    python-argparse \
-    python-dbus \
-    python-evdev \
-    python-pygobject \
+    python3-core \
+    python3-dbus \
+    python3-evdev \
+    python3-pygobject \
 "
 
 SRC_URI = "\
