@@ -1,0 +1,407 @@
+From 8854ac9a33c7b00772dc107c162ea2f3236dc191 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Fri, 14 Aug 2020 07:28:47 +0000
+Subject: [PATCH] test: use python3
+
+---
+ test/backtrace              | 2 +-
+ test/connect-provider       | 2 +-
+ test/disable-tethering      | 2 +-
+ test/enable-tethering       | 2 +-
+ test/get-global-timeservers | 2 +-
+ test/get-proxy-autoconfig   | 2 +-
+ test/get-services           | 2 +-
+ test/get-state              | 2 +-
+ test/list-services          | 2 +-
+ test/monitor-connman        | 2 +-
+ test/monitor-services       | 2 +-
+ test/monitor-vpn            | 2 +-
+ test/p2p-on-supplicant      | 2 +-
+ test/remove-provider        | 2 +-
+ test/service-move-before    | 2 +-
+ test/set-clock              | 2 +-
+ test/set-domains            | 2 +-
+ test/set-global-timeservers | 2 +-
+ test/set-ipv4-method        | 2 +-
+ test/set-ipv6-method        | 2 +-
+ test/set-nameservers        | 2 +-
+ test/set-proxy              | 2 +-
+ test/set-timeservers        | 2 +-
+ test/show-introspection     | 2 +-
+ test/simple-agent           | 2 +-
+ test/test-clock             | 2 +-
+ test/test-compat            | 2 +-
+ test/test-connman           | 2 +-
+ test/test-counter           | 2 +-
+ test/test-manager           | 2 +-
+ test/test-new-supplicant    | 2 +-
+ test/test-session           | 2 +-
+ test/vpn-connect            | 2 +-
+ test/vpn-disconnect         | 2 +-
+ test/vpn-get                | 2 +-
+ test/vpn-property           | 2 +-
+ 36 files changed, 36 insertions(+), 36 deletions(-)
+
+diff --git a/test/backtrace b/test/backtrace
+index c906f36..0b86c4f 100755
+--- a/test/backtrace
++++ b/test/backtrace
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import os
+ import re
+diff --git a/test/connect-provider b/test/connect-provider
+index 15128c8..35e4690 100755
+--- a/test/connect-provider
++++ b/test/connect-provider
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/disable-tethering b/test/disable-tethering
+index a3d5908..407bf1f 100755
+--- a/test/disable-tethering
++++ b/test/disable-tethering
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/enable-tethering b/test/enable-tethering
+index cbcd4e7..c024333 100755
+--- a/test/enable-tethering
++++ b/test/enable-tethering
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/get-global-timeservers b/test/get-global-timeservers
+index adcf175..8f09056 100755
+--- a/test/get-global-timeservers
++++ b/test/get-global-timeservers
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import dbus
+ 
+diff --git a/test/get-proxy-autoconfig b/test/get-proxy-autoconfig
+index 6709a9e..2cb8706 100755
+--- a/test/get-proxy-autoconfig
++++ b/test/get-proxy-autoconfig
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import dbus
+ import urllib
+diff --git a/test/get-services b/test/get-services
+index 0956480..8a6fde1 100755
+--- a/test/get-services
++++ b/test/get-services
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import dbus
+ 
+diff --git a/test/get-state b/test/get-state
+index 75d5a16..3638b48 100755
+--- a/test/get-state
++++ b/test/get-state
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import dbus
+ 
+diff --git a/test/list-services b/test/list-services
+index 6be4945..4aed529 100755
+--- a/test/list-services
++++ b/test/list-services
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import dbus
+ 
+diff --git a/test/monitor-connman b/test/monitor-connman
+index 1b3b84c..823dd6d 100755
+--- a/test/monitor-connman
++++ b/test/monitor-connman
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import gobject
+ 
+diff --git a/test/monitor-services b/test/monitor-services
+index 9476bf8..db776e4 100755
+--- a/test/monitor-services
++++ b/test/monitor-services
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import gobject
+ 
+diff --git a/test/monitor-vpn b/test/monitor-vpn
+index 2b63687..d12f10a 100755
+--- a/test/monitor-vpn
++++ b/test/monitor-vpn
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import gobject
+ 
+diff --git a/test/p2p-on-supplicant b/test/p2p-on-supplicant
+index 8cc76e8..9177820 100755
+--- a/test/p2p-on-supplicant
++++ b/test/p2p-on-supplicant
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ from os import O_NONBLOCK
+ from sys import stdin, stdout, exit, version_info, argv
+diff --git a/test/remove-provider b/test/remove-provider
+index 39f8de7..52b0b1a 100755
+--- a/test/remove-provider
++++ b/test/remove-provider
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/service-move-before b/test/service-move-before
+index d912c88..158b84e 100755
+--- a/test/service-move-before
++++ b/test/service-move-before
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/set-clock b/test/set-clock
+index a9db3e3..136a251 100755
+--- a/test/set-clock
++++ b/test/set-clock
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/set-domains b/test/set-domains
+index 87e563e..944c4a8 100755
+--- a/test/set-domains
++++ b/test/set-domains
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/set-global-timeservers b/test/set-global-timeservers
+index d7551a1..fa5c617 100755
+--- a/test/set-global-timeservers
++++ b/test/set-global-timeservers
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/set-ipv4-method b/test/set-ipv4-method
+index 235113f..bf17914 100755
+--- a/test/set-ipv4-method
++++ b/test/set-ipv4-method
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/set-ipv6-method b/test/set-ipv6-method
+index eb1f1b5..1934950 100755
+--- a/test/set-ipv6-method
++++ b/test/set-ipv6-method
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/set-nameservers b/test/set-nameservers
+index ece69b8..8082394 100755
+--- a/test/set-nameservers
++++ b/test/set-nameservers
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/set-proxy b/test/set-proxy
+index b9da7b0..389270d 100755
+--- a/test/set-proxy
++++ b/test/set-proxy
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/set-timeservers b/test/set-timeservers
+index 19cc938..00a6b85 100755
+--- a/test/set-timeservers
++++ b/test/set-timeservers
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/show-introspection b/test/show-introspection
+index 4b6450f..844b6fc 100755
+--- a/test/show-introspection
++++ b/test/show-introspection
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import dbus
+ 
+diff --git a/test/simple-agent b/test/simple-agent
+index 01c82ba..706f669 100755
+--- a/test/simple-agent
++++ b/test/simple-agent
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import gobject
+ 
+diff --git a/test/test-clock b/test/test-clock
+index e9b76fc..dd62728 100755
+--- a/test/test-clock
++++ b/test/test-clock
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import dbus
+ 
+diff --git a/test/test-compat b/test/test-compat
+index cd1ca7a..515bc66 100755
+--- a/test/test-compat
++++ b/test/test-compat
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import dbus
+ 
+diff --git a/test/test-connman b/test/test-connman
+index d047c86..f1ad662 100755
+--- a/test/test-connman
++++ b/test/test-connman
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/test-counter b/test/test-counter
+index ce83580..f28cc7f 100755
+--- a/test/test-counter
++++ b/test/test-counter
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import gobject
+diff --git a/test/test-manager b/test/test-manager
+index 2b4493c..8f44f60 100755
+--- a/test/test-manager
++++ b/test/test-manager
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import dbus
+ 
+diff --git a/test/test-new-supplicant b/test/test-new-supplicant
+index be230dc..7457905 100755
+--- a/test/test-new-supplicant
++++ b/test/test-new-supplicant
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import dbus
+ 
+diff --git a/test/test-session b/test/test-session
+index 2d82fb6..fdfded4 100755
+--- a/test/test-session
++++ b/test/test-session
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import gobject
+diff --git a/test/vpn-connect b/test/vpn-connect
+index 0f8636d..6d98df7 100755
+--- a/test/vpn-connect
++++ b/test/vpn-connect
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/vpn-disconnect b/test/vpn-disconnect
+index d7a49ba..3094786 100755
+--- a/test/vpn-disconnect
++++ b/test/vpn-disconnect
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+diff --git a/test/vpn-get b/test/vpn-get
+index f1f760c..20aabdd 100755
+--- a/test/vpn-get
++++ b/test/vpn-get
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import dbus
+ 
+diff --git a/test/vpn-property b/test/vpn-property
+index d05f4c7..1e83bb5 100755
+--- a/test/vpn-property
++++ b/test/vpn-property
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ import sys
+ import dbus
+-- 
+2.17.1
+

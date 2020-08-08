@@ -2,6 +2,7 @@ require connman.inc
 
 SRC_URI  = "https://www.kernel.org/pub/linux/network/connman/connman-${PV}.tar.xz \
             file://connman \
+            file://0001-test-use-python3.patch \
            "
 
 SRC_URI[md5sum] = "c51903fd3e7a6a371d12ac5d72a1fa01"

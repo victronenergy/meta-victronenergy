@@ -113,7 +113,7 @@ PACKAGES =+ "${PN}-tools ${PN}-tests"
 FILES_${PN}-tools = "${bindir}/connmanctl"
 
 FILES_${PN}-tests = "${bindir}/*-test ${libdir}/${BPN}/test/*"
-RDEPENDS_${PN}-tests = "python python-dbus python-pygobject python-textutils python-subprocess python-fcntl python-netclient"
+RDEPENDS_${PN}-tests = "python3-core python3-dbus python3-pygobject python3-fcntl python3-netclient"
 
 FILES_${PN} = "${bindir}/* ${sbindir}/* ${libexecdir}/* ${libdir}/lib*.so.* \
             ${libdir}/connman/plugins \
