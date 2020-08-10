@@ -1,3 +1,3 @@
 #!/bin/sh
 
-sed -e 's,:,,g' /sys/class/net/wifi0/address
+sed -e 's,:,,g' /sys/class/net/*wifi0/address
