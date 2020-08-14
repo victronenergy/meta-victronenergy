@@ -1,4 +1,4 @@
-require ${COREBASE}/meta/recipes-bsp/u-boot/u-boot.inc
+require u-boot.inc
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=0507cd7da8e7ad6d6701926ec9b84c95"
@@ -6,9 +6,6 @@ LIC_FILES_CHKSUM = "file://Licenses/README;md5=0507cd7da8e7ad6d6701926ec9b84c95"
 COMPATIBLE_MACHINE = "beaglebone"
 
 DEPENDS += "bc-native u-boot-mkimage-native"
-
-UBOOT_LOCALVERSION = "-venus"
-UBOOT_ENV = "uEnv"
 
 S = "${WORKDIR}/u-boot-${PV}"
 
@@ -27,5 +24,6 @@ do_compile_append () {
 
 do_deploy_append () {
     install -d ${DEPLOYDIR}
+    install -m 0644 ${WORKDIR}/uEnv.txt ${DEPLOYDIR}/uEnv.txt
     install -m 0644 ${WORKDIR}/install.scr ${DEPLOYDIR}/install-${MACHINE}.scr
 }

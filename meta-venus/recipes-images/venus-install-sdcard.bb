@@ -15,7 +15,7 @@ DEPENDS += "\
 "
 
 DTB = "${KERNEL_DEVICETREE}"
-DTB_beaglebone = "${KERNEL_IMAGETYPE}-bbb-venus.dtb ${KERNEL_IMAGETYPE}-bbb-octo-venus.dtb ${KERNEL_IMAGETYPE}-bbe-venus.dtb"
+DTB_beaglebone = "bbb-venus.dtb bbb-octo-venus.dtb bbe-venus.dtb"
 
 SCR = "install-${MACHINE}.scr"
 

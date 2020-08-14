@@ -4,7 +4,7 @@ if gpio in 72; then
 	setenv bootdir /
 	setenv bootfile zImage
 	setenv ramdiskfile initramfs
-	setenv fdtfile zImage-bbb-venus.dtb
+	setenv fdtfile bbb-venus.dtb
 	setenv loadramdisk 'load mmc ${mmcdev} ${rdaddr} ${ramdiskfile}'
 	setenv ramargs ${ramargs} ramdisk_size=32768
 	run loadimage loadramdisk loadfdt ramboot
