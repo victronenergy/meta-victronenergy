@@ -11,7 +11,6 @@ RDEPENDS_${PN} += "\
 
 QT5_RDEPENDS = " \
     cinematicexperience \
-    eglinfo-fb \
     qt5-opengles2-test \
     qtconnectivity \
     qtplatform \
