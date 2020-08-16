@@ -1,0 +1,39 @@
+From fcef5c1819f7ff0240d0d5ecf12c6d7b1396f9bc Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jeroen@myspectrum.nl>
+Date: Sun, 16 Aug 2020 14:32:30 +0200
+Subject: [PATCH] revert sunxi: Use binman for sunxi boards
+
+Using a complex python script with all kind of dependencies is complete
+overkill to just concatenate two files and breaks with python3. Instead
+of fixing that, fix the root cause; overcomplicating things.
+
+This reverts 61b994a386eb6f631dc1c2194d4cce9b1a43542c.
+---
+ Makefile | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f31ee60e4c..85585f4235 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1214,13 +1214,10 @@ u-boot-x86-16bit.bin: u-boot FORCE
+ endif
+ 
+ ifneq ($(CONFIG_ARCH_SUNXI),)
+-ifeq ($(CONFIG_ARM64),)
+-u-boot-sunxi-with-spl.bin: spl/sunxi-spl.bin u-boot.img u-boot.dtb FORCE
+-	$(call if_changed,binman)
+-else
+-u-boot-sunxi-with-spl.bin: spl/sunxi-spl.bin u-boot.itb FORCE
+-	$(call if_changed,cat)
+-endif
++OBJCOPYFLAGS_u-boot-sunxi-with-spl.bin = -I binary -O binary \
++				   --pad-to=$(CONFIG_SPL_PAD_TO) --gap-fill=0xff
++u-boot-sunxi-with-spl.bin: spl/sunxi-spl.bin u-boot.img FORCE
++	$(call if_changed,pad_cat)
+ endif
+ 
+ ifneq ($(CONFIG_TEGRA),)
+-- 
+2.17.1
+

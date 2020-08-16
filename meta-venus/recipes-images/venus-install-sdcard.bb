@@ -36,7 +36,7 @@ IMAGE_NAME[vardepsexclude] += "DATETIME"
 
 INSTALL_FILES = "\
     ${SPL_BINARY} \
-    ${UBOOT_BINARY} \
+    ${UBOOT_IMAGE} \
     ${SCR}:boot.scr \
     ${KERNEL_IMAGETYPE}-${MACHINE}.bin:${KERNEL_IMAGETYPE} \
     ${DTB} \

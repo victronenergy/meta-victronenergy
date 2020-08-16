@@ -1,9 +1,11 @@
-require ${COREBASE}/meta/recipes-bsp/u-boot/u-boot.inc
+require u-boot.inc
 require u-boot-sunxi.inc
 
 DEPENDS += "bc-native coreutils-native dtc-native swig-native u-boot-mkimage-native"
 
 SRC_URI += "file://install.cmds"
+SRC_URI += "file://0001-revert-sunxi-Use-binman-for-sunxi-boards.patch"
+SRC_URI += "file://0001-don-t-build-libpyfdt.patch"
 
 do_compile_append () {
     mkimage -A arm -T script -C none -n 'Install Script' \

@@ -1,0 +1,23 @@
+From 681a31d6ec539df2b248baf4e008450f1c1e42bf Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jeroen@myspectrum.nl>
+Date: Fri, 7 Aug 2020 12:12:44 +0200
+Subject: [PATCH] don't build libpyfdt
+
+fails to build in u-boot and not needed.
+---
+ scripts/dtc/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/dtc/Makefile b/scripts/dtc/Makefile
+index 90ef2db85c..de3a1a4407 100644
+--- a/scripts/dtc/Makefile
++++ b/scripts/dtc/Makefile
+@@ -31,4 +31,4 @@ $(obj)/dtc-lexer.lex.o: $(obj)/dtc-parser.tab.h
+ clean-files	:= dtc-lexer.lex.c dtc-parser.tab.c dtc-parser.tab.h
+ 
+ # Added for U-Boot
+-subdir-$(CONFIG_PYLIBFDT) += pylibfdt
++# subdir-$(CONFIG_PYLIBFDT) += pylibfdt
+-- 
+2.17.1
+
