@@ -15,7 +15,7 @@ RDEPENDS_${PN} = "\
 "
 
 SRC_URI = " \
-    gitsm://github.com/victronenergy/${BPN}.git;protocol=ssh;user=git;tag=v${PV} \
+    gitsm://github.com/victronenergy/${BPN}.git;protocol=ssh;user=git;tag=v${PV};branch=b0.7 \
     file://start-serial.sh \
 "
 S = "${WORKDIR}/git"
