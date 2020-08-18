@@ -35,6 +35,7 @@ SRC_URI_nanopi += "\
 "
 
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
+IMAGE_NAME[vardepsexclude] += "DATETIME"
 
 INSTALL_FILES = "\
     ${SPL_BINARY} \
