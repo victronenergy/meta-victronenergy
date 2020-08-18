@@ -14,7 +14,7 @@ DEPENDS += "\
     packagegroup-core-buildessential \
     packagegroup-replace-busybox \
     perf \
-    python-pylint \
+    python3-pylint \
     s6 \
     tcpdump \
     tinymembench \
