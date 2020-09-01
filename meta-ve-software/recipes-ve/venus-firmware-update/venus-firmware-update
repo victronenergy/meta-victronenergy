@@ -2,10 +2,20 @@
 
 set -e
 
+release_gpios() {
+    conf=$(find /usr/share/openocd -name $1) || return 0
+    for n in $(awk '/^sysfsgpio/ { print $2 }' $conf); do
+        if [ -e /sys/class/gpio/gpio$n ]; then
+            echo $n >/sys/class/gpio/unexport
+        fi
+    done
+}
+
 do_openocd() {
     conf=$1
     data=$2
     openocd -f "$conf" -c "program $data verify reset exit"
+    release_gpios "$conf"
 }
 
 get_modules() {
