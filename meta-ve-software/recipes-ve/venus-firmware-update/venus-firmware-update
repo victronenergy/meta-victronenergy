@@ -8,12 +8,29 @@ do_openocd() {
     openocd -f "$conf" -c "program $data verify reset exit"
 }
 
+get_modules() {
+    for m; do
+        grep -ow ^$m /proc/modules || true
+    done
+}
+
+mod_unload() {
+    MODULES=$(get_modules $@)
+    test -n "$MODULES" && modprobe -r $MODULES || true
+}
+
+mod_reload() {
+    test -n "$MODULES" && modprobe -a $MODULES || true
+}
+
 do_cerbo() {
     file=$1
 
     case $(basename "$file") in
         samc21_slcan_adc*.bin)
+            mod_unload victron_cerbogx_adc
             do_openocd cerbogx-samc21-can-adc.cfg "$file"
+            mod_reload
             return
             ;;
         default)
