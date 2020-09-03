@@ -12,6 +12,9 @@ LIC_FILES_CHKSUM = " \
     file://LICENSE.FDL;md5=6d9f2a9af4c8b8c3c769f6cc1b6aaf7e \
 "
 
+# Prevent installing the qml plugins v1 in the same location as qtquick2
+OE_QMAKE_PATH_QML = "${libdir}${QT_DIR_NAME}/QtQuick1"
+
 DEPENDS += "qtscript qtsvg qtxmlpatterns"
 # qttools
 
