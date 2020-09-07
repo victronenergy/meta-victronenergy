@@ -2,6 +2,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
 
 KBUILD_DEFCONFIG_raspberrypi ?= "bcmrpi_defconfig"
 KBUILD_DEFCONFIG_raspberrypi2 ?= "bcm2709_defconfig"
+KBUILD_DEFCONFIG_raspberrypi4 ?= "bcm2711_defconfig"
 
 SECTION = "kernel"
 LICENSE = "GPLv2"
