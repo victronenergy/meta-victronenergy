@@ -20,6 +20,9 @@ B = "${WORKDIR}/build"
 SRCREV = "10552421195fbfe7a48ff8f692f0684c32229e46"
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=git;branch=rpi_4.19.81"
 
+# fix make[3]: *** [scripts/extract-cert] Error 1
+DEPENDS += "openssl-native"
+
 # NOTE: the regular dtb handling flattens the overlays with the
 # normal dtbs. So handle dtb seperately.
 do_compile_append() {
