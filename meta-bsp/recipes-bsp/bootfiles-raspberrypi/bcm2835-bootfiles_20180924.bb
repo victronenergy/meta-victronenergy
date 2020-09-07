@@ -16,16 +16,9 @@ S = "${WORKDIR}/firmware-1.${PV}/boot"
 do_deploy() {
     install -d ${DEPLOYDIR}/${PN}
     cp ${S}/*.elf ${S}/*.dat ${S}/*.bin ${S}/LICENCE.broadcom ${DEPLOYDIR}/${PN}
-
-    # Symlinks to make boot image construction easier
-    install -d ${DEPLOYDIR}/boot
-    for i in ${DEPLOYDIR}/${PN}/*; do
-        fn=`basename $i`
-        ln -sf ../${PN}/$fn ${DEPLOYDIR}/boot/$fn
-    done
 }
 
 addtask deploy before do_package after do_install
-do_deploy[dirs] += "${DEPLOYDIR}/${PN} ${DEPLOYDIR}/boot"
+do_deploy[dirs] += "${DEPLOYDIR}/${PN}"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"

@@ -23,13 +23,12 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 # it will be ensured they are built before creating swupdate image
 IMAGE_DEPENDS = "venus-image"
 IMAGE_DEPENDS_append_beaglebone = " venus-boot-image"
-IMAGE_DEPENDS_append_raspberrypi2 = " venus-boot-image"
 
 do_swuimage[depends] += "virtual/bootloader:do_deploy"
 
 ROOT_FSTYPE = "ubifs"
 ROOT_FSTYPE_beaglebone = "ext4.gz"
-ROOT_FSTYPE_raspberrypi2 = "ext4.gz"
+ROOT_FSTYPE_rpi = "ext4.gz"
 ROOT_FSTYPE_sunxi = "ext4.gz"
 
 BOOT_FSTYPE = "vfat.gz"

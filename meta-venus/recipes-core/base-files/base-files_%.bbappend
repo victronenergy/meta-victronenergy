@@ -12,7 +12,7 @@ SRC_URI += "\
 dirs755 += " ${permanentdir}"
 
 # mount point for u-boot FAT partition on raspberrypi2.
-dirs755_append_raspberrypi2 += "/u-boot"
+dirs755_append_rpi += "/u-boot"
 
 do_compile_append() {
     for f in ${FSTAB}; do

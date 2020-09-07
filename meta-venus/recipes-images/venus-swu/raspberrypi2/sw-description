@@ -5,15 +5,6 @@ software =
 	version = "0.1.0";
 
 	stable: {
-		bootloader: {
-			images: (
-				{
-					filename = "venus-boot-image-raspberrypi-raspberrypi2.vfat.gz";
-					device = "/dev/mmcblk0p1";
-					compressed = true;
-				}
-			);
-		};
 		copy1: {
 			images: (
 				{

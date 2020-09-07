@@ -80,11 +80,12 @@ RDEPENDS_${PN}_append_sunxi += "\
     wireless-regdb-static \
 "
 
-RDEPENDS_${PN}_append_raspberrypi2 += "\
-    crda \
+RDEPENDS_${PN}_append_rpi += "\
     gpio-export \
     linux-firmware-bcm43430 \
     linux-firmware-bcm43455 \
+    resize-sdcard \
     swupdate \
     swupdate-scripts \
+    wireless-regdb-static \
 "

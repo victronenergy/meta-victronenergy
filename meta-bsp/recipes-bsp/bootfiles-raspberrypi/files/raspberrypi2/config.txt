@@ -1,4 +1,3 @@
-device_tree_address=0x00000100
 kernel=u-boot.bin
 
 [pi2]
