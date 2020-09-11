@@ -17,4 +17,5 @@ SRC_URI += " \
     file://0013-add-.model-to-QDeclarativeVisualDataModelData.patch \
     file://0014-QDeclarativeVisualDataModel-add-missing-itemsRemoved.patch \
     file://0015-mouse-don-t-warn-about-sound-events.patch \
+    file://0016-make-showChanged-a-queued-connection.patch \
 "

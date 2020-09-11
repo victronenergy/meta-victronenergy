@@ -1,0 +1,29 @@
+From 89ce84b3b2d26e4862914a2cd36c635404feb3a5 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 10 Sep 2020 17:17:27 +0200
+Subject: [PATCH 16/16] make showChanged a queued connection
+
+When a relayout creates a new item and during creation the show
+property changes, it will trigger a new layout causing a crash. So
+instead of handling the showChanged during creation of the item,
+postpone it till after the creation of the item.
+---
+ src/declarative/graphicsitems/qdeclarativelistview.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/declarative/graphicsitems/qdeclarativelistview.cpp b/src/declarative/graphicsitems/qdeclarativelistview.cpp
+index 96311f0daa..ab76db44b3 100644
+--- a/src/declarative/graphicsitems/qdeclarativelistview.cpp
++++ b/src/declarative/graphicsitems/qdeclarativelistview.cpp
+@@ -104,7 +104,7 @@ public:
+             attached->setView(view);
+ 
+         // assuming the view destroys the items, this will disconnect automatically
+-        item->connect(item, SIGNAL(showChanged(bool)), view, SLOT(showChanged()));
++        item->connect(item, SIGNAL(showChanged(bool)), view, SLOT(showChanged()), Qt::QueuedConnection);
+     }
+ 
+     qreal position() const {
+-- 
+2.17.1
+
