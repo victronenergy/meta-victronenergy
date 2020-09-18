@@ -30,6 +30,7 @@ DEPENDS += "\
     valgrind \
     venus-socketcan-test \
     vim \
+    wayvnc \
     x11vnc \
 "
 
