@@ -1,0 +1,29 @@
+From 71e1272ae97ce2d9ce434dbb979044fc9efafa82 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Tue, 12 Apr 2022 12:22:15 +0200
+Subject: [PATCH] don't check for graphics mode
+
+---
+ backend/session/direct.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/backend/session/direct.c b/backend/session/direct.c
+index f9041070..81faf73d 100644
+--- a/backend/session/direct.c
++++ b/backend/session/direct.c
+@@ -187,12 +187,6 @@ static bool setup_tty(struct direct_session *session, struct wl_display *display
+ 		goto error;
+ 	}
+ 
+-	if (default_tty && kd_mode != KD_TEXT) {
+-		wlr_log(WLR_ERROR,
+-			"tty already in graphics mode; is another display server running?");
+-		goto error;
+-	}
+-
+ 	ioctl(fd, VT_ACTIVATE, tty);
+ 	ioctl(fd, VT_WAITACTIVE, tty);
+ 
+-- 
+2.25.1
+
