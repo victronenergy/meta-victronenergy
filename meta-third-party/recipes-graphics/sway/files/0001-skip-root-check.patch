@@ -1,0 +1,25 @@
+From 7678d9610d79ffd60d1a5ea1cff06596c0346b25 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 16 Sep 2020 11:35:09 +0200
+Subject: [PATCH] skip root check
+
+---
+ sway/main.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/sway/main.c b/sway/main.c
+index cd03c873..fa81d68a 100644
+--- a/sway/main.c
++++ b/sway/main.c
+@@ -197,6 +197,8 @@ static bool drop_permissions(void) {
+ 			return false;
+ 		}
+ 	}
++	// skip root check
++	return true;
+ 	if (setgid(0) != -1 || setuid(0) != -1) {
+ 		sway_log(SWAY_ERROR, "Unable to drop root (we shouldn't be able to "
+ 			"restore it after setuid), refusing to start");
+-- 
+2.17.1
+
