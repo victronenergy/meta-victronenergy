@@ -11,6 +11,9 @@
 # Modem RESET, GPIOA21
 21  out modem_rst	victronenergy,paygo
 
+# Digital input, GPIOC2
+66  in  digital_input_1 victronenergy,paygo
+
 # USB VBUS, GPIOE13
 141 out usb_vbus	victronenergy,paygo
 
