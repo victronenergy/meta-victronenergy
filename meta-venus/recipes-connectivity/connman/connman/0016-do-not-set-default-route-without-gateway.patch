@@ -1,0 +1,31 @@
+From 93583ceb1a05bf42677bc3b675cec85c8e661a99 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Thu, 26 Nov 2020 15:44:02 +0000
+Subject: [PATCH 17/17] do not set default route without gateway
+
+---
+ src/connection.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/src/connection.c b/src/connection.c
+index 6b005e7f5345..37cafcac69cc 100644
+--- a/src/connection.c
++++ b/src/connection.c
+@@ -423,6 +423,14 @@ static void set_default_gateway(struct gateway_data *data,
+ 	DBG("type %d gateway ipv4 %p ipv6 %p", type, data->ipv4_gateway,
+ 						data->ipv6_gateway);
+ 
++	if (data->ipv4_gateway &&
++	    g_strcmp0(data->ipv4_gateway->gateway, "0.0.0.0") == 0)
++		do_ipv4 = false;
++
++	if (data->ipv6_gateway &&
++	    g_strcmp0(data->ipv6_gateway->gateway, "::") == 0)
++		do_ipv6 = false;
++
+ 	if (do_ipv4 && data->ipv4_gateway &&
+ 					data->ipv4_gateway->vpn) {
+ 		connman_inet_set_gateway_interface(data->index);
+-- 
+2.29.2
+
