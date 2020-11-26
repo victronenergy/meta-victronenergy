@@ -39,6 +39,12 @@ down_slcan() {
 }
 
 up_ip() {
+    # note: the can driver depends on the can_dev module, but not on the can module.
+    # As a consequence the frames received between the time the device is up and
+    # actually used are counted as dropped. Since can-busses shouldn't drop frames,
+    # that counter is important, so make sure the can module is loaded before upping
+    # the interface so the rx dropped count stays at 0.
+    modprobe can
     ip link set $dev up txqueuelen 100 type can bitrate $rate restart-ms 100
 }
 
