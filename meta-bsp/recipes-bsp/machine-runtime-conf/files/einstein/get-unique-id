@@ -1,3 +1,11 @@
 #!/bin/sh
 
-sed -e 's,:,,g' /sys/class/net/*wifi0/address
+sdio=/sys/bus/sdio/devices/mmc2:0001:1/net
+
+if [ -e $sdio ]; then
+    addr=$sdio/*/address
+else
+    addr=/sys/class/net/*wifi0/address
+fi
+
+sed -e 's,:,,g' $addr
