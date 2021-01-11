@@ -73,7 +73,7 @@ do_install_append() {
         else
             eval val=\${${name}}
             if [ -n "${val}" ]; then
-                echo "${val}" >${conf}/${file}
+                printf "${val}\n" >${conf}/${file}
             fi
         fi
     done
