@@ -63,8 +63,6 @@ RDEPENDS_${PN}_append_einstein += "\
     linux-firmware-bcm20702a1 \
     linux-firmware-bcm43362 \
     read-edid \
-    sunxi-mali \
-    sunxi-mali-blobs \
     venus-button-handler \
 "
 
