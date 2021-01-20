@@ -1,4 +1,4 @@
-From ca7fea65548699e0b37639a6f008626056086b95 Mon Sep 17 00:00:00 2001
+From d19a289de074130aa73aace7ce54caec49d8fd84 Mon Sep 17 00:00:00 2001
 From: Mans Rullgard <mans@mansr.com>
 Date: Fri, 8 Feb 2019 14:05:56 +0000
 Subject: [PATCH 1/2] Don't spam syslog on reload and not using hosts files
@@ -8,11 +8,11 @@ Subject: [PATCH 1/2] Don't spam syslog on reload and not using hosts files
  1 file changed, 4 insertions(+), 9 deletions(-)
 
 diff --git a/src/cache.c b/src/cache.c
-index 6daaf3e07822..8918072aedee 100644
+index 2f2c519cd49a..d578ff90bcc1 100644
 --- a/src/cache.c
 +++ b/src/cache.c
-@@ -1173,16 +1173,11 @@ void cache_reload(void)
- #endif
+@@ -1290,16 +1290,11 @@ void cache_reload(void)
+ 	  }
        }
  	
 -  if (option_bool(OPT_NO_HOSTS) && !daemon->addn_hosts)
@@ -33,5 +33,5 @@ index 6daaf3e07822..8918072aedee 100644
        for (ah = daemon->addn_hosts; ah; ah = ah->next)
  	if (!(ah->flags & AH_INACTIVE))
 -- 
-2.26.2
+2.30.0
 

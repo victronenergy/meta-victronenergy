@@ -1,4 +1,4 @@
-From db039148ac544c9fa0792c92470f2c68a6b375d6 Mon Sep 17 00:00:00 2001
+From 6d763488e57e1054a827a1c244c1ff82851b5026 Mon Sep 17 00:00:00 2001
 From: Mans Rullgard <mans@mansr.com>
 Date: Fri, 8 Feb 2019 15:11:32 +0000
 Subject: [PATCH 2/2] Log only changes to nameserver list
@@ -9,10 +9,10 @@ Subject: [PATCH 2/2] Log only changes to nameserver list
  2 files changed, 19 insertions(+), 3 deletions(-)
 
 diff --git a/src/dnsmasq.h b/src/dnsmasq.h
-index f53e9a5be6cd..0efb1e5a456a 100644
+index 914f4699d8a2..c30380c47eb5 100644
 --- a/src/dnsmasq.h
 +++ b/src/dnsmasq.h
-@@ -524,6 +524,7 @@ union mysockaddr {
+@@ -529,6 +529,7 @@ union mysockaddr {
  #define SERV_LOOP           8192  /* server causes forwarding loop */
  #define SERV_DO_DNSSEC     16384  /* Validate DNSSEC when using this server */
  #define SERV_GOT_TCP       32768  /* Got some data from the TCP connection */
@@ -21,10 +21,10 @@ index f53e9a5be6cd..0efb1e5a456a 100644
  struct serverfd {
    int fd;
 diff --git a/src/network.c b/src/network.c
-index 8ae7a7061dc8..1881720f685e 100644
+index 7cf2546f912c..6f4d53e0a9f3 100644
 --- a/src/network.c
 +++ b/src/network.c
-@@ -1345,6 +1345,12 @@ void pre_allocate_sfds(void)
+@@ -1445,6 +1445,12 @@ void pre_allocate_sfds(void)
        }  
  }
  
@@ -37,7 +37,7 @@ index 8ae7a7061dc8..1881720f685e 100644
  void mark_servers(int flag)
  {
    struct server *serv;
-@@ -1372,6 +1378,7 @@ void cleanup_servers(void)
+@@ -1472,6 +1478,7 @@ void cleanup_servers(void)
        if (serv->flags & SERV_MARK)
         {
           server_gone(serv);
@@ -45,7 +45,7 @@ index 8ae7a7061dc8..1881720f685e 100644
           *up = serv->next;
           if (serv->domain)
  	   free(serv->domain);
-@@ -1410,8 +1417,9 @@ void add_update_server(int flags,
+@@ -1510,8 +1517,9 @@ void add_update_server(int flags,
  	    if (serv->flags & SERV_HAS_DOMAIN)
  	      continue;
  	  }
@@ -57,7 +57,7 @@ index 8ae7a7061dc8..1881720f685e 100644
        }
  
    if (serv)
-@@ -1441,6 +1449,8 @@ void add_update_server(int flags,
+@@ -1541,6 +1549,8 @@ void add_update_server(int flags,
  	  if (domain)
  	    strcpy(domain_str, domain);
  	}
@@ -66,7 +66,7 @@ index 8ae7a7061dc8..1881720f685e 100644
      }
    
    if (serv)
-@@ -1552,7 +1562,12 @@ void check_servers(void)
+@@ -1652,7 +1662,12 @@ void check_servers(void)
  	  if (serv->sfd)
  	    serv->sfd->used = 1;
  	}
@@ -81,5 +81,5 @@ index 8ae7a7061dc8..1881720f685e 100644
  	{
  	  if (++count > SERVERS_LOGGED)
 -- 
-2.26.2
+2.30.0
 
