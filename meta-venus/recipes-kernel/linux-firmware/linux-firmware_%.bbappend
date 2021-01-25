@@ -30,14 +30,14 @@ FILES_${PN}-bcm20702a1 = "\
 "
 
 do_install_append() {
-  install -d ${D}/lib/firmware/brcm
-  install -m 0644 ${WORKDIR}/brcm/brcmfmac43362-sdio.txt ${D}/lib/firmware/brcm
-  install -m 0644 ${WORKDIR}/brcm/BCM20702A1.hcd ${D}/lib/firmware/brcm
+  install -d ${D}${nonarch_base_libdir}/firmware/brcm
+  install -m 0644 ${WORKDIR}/brcm/brcmfmac43362-sdio.txt ${D}${nonarch_base_libdir}/firmware/brcm
+  install -m 0644 ${WORKDIR}/brcm/BCM20702A1.hcd ${D}${nonarch_base_libdir}/firmware/brcm
 }
 
 do_install_append_rpi() {
-  rm ${D}/${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.bin
-  rm ${D}/${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.AP6212.txt
+  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.bin
+  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.AP6212.txt
   rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.MUR1DX.txt
-  rm ${D}/${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.bin
+  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.bin
 }
