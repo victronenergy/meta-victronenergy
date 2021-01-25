@@ -7,12 +7,9 @@ S = "${WORKDIR}/git"
 RDEPENDS_${PN} += " \
     canutils \
     can-utils \
-    python3-argparse \
     python3-core \
     python3-json \
     python3-paramiko \
-    python3-re \
-    python3-subprocess \
     python3-termcolor \
 "
 
