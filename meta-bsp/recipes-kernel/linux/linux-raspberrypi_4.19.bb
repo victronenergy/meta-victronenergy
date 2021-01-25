@@ -53,4 +53,4 @@ do_deploy_append() {
     done
 }
 
-FILES_kernel-devicetree += "/boot/overlays"
+FILES_${KERNEL_PACKAGE_NAME}-devicetree += "/boot/overlays"
