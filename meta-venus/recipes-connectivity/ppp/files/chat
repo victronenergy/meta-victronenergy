@@ -1,5 +1,0 @@
-ABORT   ERROR
-ABORT   'NO CARRIER'
-''      ATZ
-OK      AT+CGDATA="PPP",1
-CONNECT ''

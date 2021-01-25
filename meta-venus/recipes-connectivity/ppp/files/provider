@@ -1,4 +1,4 @@
-connect "/usr/sbin/chat -f /etc/chatscripts/gsm"
+connect "/usr/sbin/chat -f /run/ppp/chat"
 /dev/modem
 115200
 noauth
