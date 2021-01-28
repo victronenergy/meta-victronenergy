@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 TOOLCHAIN_TARGET_TASK = "packagegroup-sdk-packages"
 TOOLCHAIN_TARGET_TASK += "packagegroup-venus-qt5-toolchain-target"
 
-TOOLCHAIN_HOST_TASK += "nativesdk-packagegroup-qt5-toolchain-host qt5-conf"
+TOOLCHAIN_HOST_TASK += "nativesdk-packagegroup-qt5-toolchain-host nativesdk-qt5-conf"
 TOOLCHAIN_HOST_TASK += "nativesdk-python-json"
 
 # The part below hardcodes the paths / commands in the mkspecs of the Qt SDK,
