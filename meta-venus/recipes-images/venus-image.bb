@@ -19,3 +19,5 @@ inherit core-image
 
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
 IMAGE_NAME[vardepsexclude] += "DATETIME"
+
+IMAGE_OVERHEAD_FACTOR_beaglebone = "1.15"
