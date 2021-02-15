@@ -2,7 +2,7 @@
 
 # only called when starting
 if [ "$1" = "start" ]; then
-	/data/rc.local
+	test -x /data/rc.local && /data/rc.local
 fi
 
 # alternative, passing the argument
