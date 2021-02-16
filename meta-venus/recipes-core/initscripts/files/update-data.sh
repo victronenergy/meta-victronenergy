@@ -12,7 +12,7 @@ unpack() {
             tar xzf "$archive" -C "$dest"
             ;;
         *.zip)
-            unzip -d "$dest" "$archive"
+            unzip -o -d "$dest" "$archive"
             ;;
     esac
 }
