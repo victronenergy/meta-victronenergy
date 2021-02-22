@@ -5,6 +5,7 @@ inherit packagegroup
 LICENSE = "MIT"
 
 RDEPENDS_${PN} = "\
+    dbus-dev \
     node-red \
     node-red-contrib-victron \
     nodejs-npm \
