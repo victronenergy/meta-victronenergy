@@ -22,5 +22,5 @@ S = "${WORKDIR}/linux-${PV}"
 B = "${WORKDIR}/build"
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-SRC_URI[md5sum] = "a58427fcb954ad25f0695942d30a051a"
-SRC_URI[sha256sum] = "446cf076aafd1f0639efd5b339695bb7cbf8ada4f8f7532b7edec56328e7f0e4"
+SRC_URI[md5sum] = "584f407b40918266bf9730e5954f109a"
+SRC_URI[sha256sum] = "235c1d922d8c23bf7f622829870391b28deb55d1b2c878887516da2be6cbd082"
