@@ -4,9 +4,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425
 
 SRC_URI = " \
     git://github.com/lwfinger/rtl8723du.git;protocol=https;branch=master \
-    file://0001-rtl8723du-fix-build-for-pre-4.15-kernels.patch \
 "
-SRCREV = "ce2f21df1536a2276059cb03fce6c6ae41e3ecda"
+SRCREV = "9690f34fc2603d04b53432df4e3d6c282f3d1ca6"
 
 S = "${WORKDIR}/git"
 
