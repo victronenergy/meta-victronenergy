@@ -17,7 +17,7 @@ KERNEL_CONFIG_COMMAND = "oe_runmake -C ${S} O=${B} ${KBUILD_DEFCONFIG}"
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
-SRCREV = "165553eb3e805a89531af7aef7bd844c5ee1fd5a"
+SRCREV = "6ff6f0c970199071c79176ec6147fda82fb28530"
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=git;branch=rpi_4.19.81"
 
 # fix make[3]: *** [scripts/extract-cert] Error 1
