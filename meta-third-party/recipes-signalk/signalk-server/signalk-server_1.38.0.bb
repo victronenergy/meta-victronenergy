@@ -16,8 +16,8 @@ SRC_URI = "\
 	file://defaults.json \
 "
 
-SRC_URI[md5sum] = "a5ada0862f6550250bd4263d7053a33d"
-SRC_URI[sha256sum] = "5e5aa3b982106ad56a1e70d0e586bd994bea240be1b447135a85c75f3fdf161c"
+SRC_URI[md5sum] = "301a1cf4092ac04fa038e85801baba29"
+SRC_URI[sha256sum] = "70fcfb40fec9dca2390c31f6c51ef541fd40dcb2fd5519c57204e80afb1a2e55"
 
 inherit npmve
 inherit daemontools
