@@ -16,14 +16,13 @@ SRC_URI = "\
 	file://defaults.json \
 "
 
-SRC_URI[md5sum] = "a5ada0862f6550250bd4263d7053a33d"
-SRC_URI[sha256sum] = "5e5aa3b982106ad56a1e70d0e586bd994bea240be1b447135a85c75f3fdf161c"
+SRC_URI[md5sum] = "8d31cbddd2a80075a45480d6a6a72fe9"
+SRC_URI[sha256sum] = "dce512ccce4f5ddc35aa9799240f180977f1c48592ccd69f7634e296ac91ad54"
 
 inherit npmve
 inherit daemontools
 
 DAEMON_PN = "${PN}"
-DAEMONTOOLS_SERVICE_DIR = "${sysconfdir}/${PN}/service"
 DAEMONTOOLS_SCRIPT = "HOME=/home/root exec ${bindir}/signalk-server"
 DAEMONTOOLS_DOWN = "1"
 DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/signalk-server"
