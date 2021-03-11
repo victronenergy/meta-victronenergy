@@ -43,7 +43,7 @@ do_install_append() {
 	install -m 0755 ${WORKDIR}/venus.json ${NPM_INSTALLDIR}/defaults
 	install -m 0755 ${WORKDIR}/logo.svg ${NPM_INSTALLDIR}/defaults
 
-	(cd ${NPM_INSTALLDIR}; npm --arch=${NPM_ARCH} --target_arch=${NPM_ARCH} install signalk-venus-plugin@1.22.0)
+	(cd ${NPM_INSTALLDIR}; npm --arch=${NPM_ARCH} --target_arch=${NPM_ARCH} install signalk-venus-plugin@1.24.1)
 
 	# remove the files in put/test: they are compiled, though not cross-compiled thus
 	# giving QA errors as well as being useless; and also they are not necessary
