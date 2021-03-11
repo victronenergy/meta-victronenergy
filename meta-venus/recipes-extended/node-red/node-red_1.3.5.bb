@@ -15,14 +15,13 @@ SRC_URI = "\
 	file://user-authentication.js \
 "
 
-SRC_URI[md5sum] = "9e4e183b252c89059035394cc172b1bf"
-SRC_URI[sha256sum] = "0565a54a07a769b527b4d0c48e4d5c8dbdf030912ca324c43cc7cdc5394b2871"
+SRC_URI[md5sum] = "51422973df42ff1ab94c36a6f637efaf"
+SRC_URI[sha256sum] = "ca321e7654ddbedad71e8cc2fe22a49d1d667ff36edda803576cca3f7acceee0"
 
 inherit npmve
 inherit daemontools
 
 DAEMON_PN = "${PN}"
-DAEMONTOOLS_SERVICE_DIR = "/etc/node-red/service"
 DAEMONTOOLS_SCRIPT = "HOME=/home/root exec ${bindir}/node-red"
 DAEMONTOOLS_DOWN = "1"
 DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/node-red"
