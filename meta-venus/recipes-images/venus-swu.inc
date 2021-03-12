@@ -13,7 +13,7 @@ python () {
         d.appendVar('PROVIDES', pb)
 
     if pv != '1':
-        ps.append(pv)
+        pl.append(pv)
 
     d.setVar('IMAGE_BASENAME', '-'.join(pl + ps))
 }
