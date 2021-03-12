@@ -158,6 +158,9 @@ if [[ $forceswu ]]; then
 elif [ "$offline" = y ]; then
     echo "Searching for update on SD/USB..."
 
+    # use wildcard to allow image variants such as -large
+    swu_base="${swu_name}*-${machine}"
+
     for dev in /media/*; do
         # reverse order gives preference to an unversioned file
         # followed by that with the most recent timestamp if
