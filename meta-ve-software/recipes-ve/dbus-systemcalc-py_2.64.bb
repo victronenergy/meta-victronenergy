@@ -11,9 +11,10 @@ SRC_URI = " \
     file://com.victronenergy.system.conf \
     file://0001-MFD-Avoid-race-using-Multi-as-battery-measurement.patch \
     file://0003-Force-DVCC-for-Lynx-Smart-BMS.patch \
+    file://0004-force-DVCC-settings-for-BSLBATT-batteries.patch \
 "
 
-PR = "1"
+PR = "2"
 
 S = "${WORKDIR}/git"
 

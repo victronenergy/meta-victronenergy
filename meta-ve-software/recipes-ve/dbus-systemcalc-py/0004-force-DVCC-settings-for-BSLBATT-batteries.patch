@@ -1,0 +1,50 @@
+From b964879274aecac0e7ab2cfa267702c5f7ee0e4c Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Tue, 30 Mar 2021 10:29:57 +0200
+Subject: [PATCH 1/2] force DVCC settings for BSLBATT batteries
+
+https://github.com/victronenergy/venus/issues/780
+---
+ delegates/batterysettings.py | 3 ++-
+ tests/batterysense_test.py   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/delegates/batterysettings.py b/delegates/batterysettings.py
+index 6ca2b85..43cfdd8 100644
+--- a/delegates/batterysettings.py
++++ b/delegates/batterysettings.py
+@@ -10,6 +10,7 @@ BATTERY_FREEDOMWON = 0xB014
+ BATTERY_BLUENOVA = 0xB020
+ BATTERY_LYNX_SMART_BMS_500 = 0xA3E5
+ BATTERY_LYNX_SMART_BMS_1000 = 0xA3E6
++BATTERY_BSLBATT = 0xB021
+ 
+ class BatterySettings(SystemCalcDelegate):
+ 	""" Manages battery settings for known batteries. At present
+@@ -33,7 +34,7 @@ class BatterySettings(SystemCalcDelegate):
+ 		# for some batteries.
+ 		if pid in (BATTERY_BYD, BATTERY_BYD_L, BATTERY_BYD_PREMIUM,
+ 				BATTERY_DISCOVER_AES, BATTERY_FREEDOMWON, BATTERY_BLUENOVA,
+-				BATTERY_LYNX_SMART_BMS_500, BATTERY_LYNX_SMART_BMS_1000):
++				BATTERY_LYNX_SMART_BMS_500, BATTERY_LYNX_SMART_BMS_1000, BATTERY_BSLBATT):
+ 			self._settings['vsense'] = 2 # Forced Off
+ 			self._settings['tsense'] = 2 # Forced Off
+ 			self._settings['bol'] = 3 # Forced on
+diff --git a/tests/batterysense_test.py b/tests/batterysense_test.py
+index 8bdabfc..065e8e6 100644
+--- a/tests/batterysense_test.py
++++ b/tests/batterysense_test.py
+@@ -655,8 +655,8 @@ class VoltageSenseTest(TestSystemCalcBase):
+ 		self._set_setting('/Settings/Services/Bol', 0)
+ 		self._set_setting('/Settings/SystemSetup/SharedVoltageSense', 1)
+ 
+-		# BYD, FreedomWON, Discover AES, BlueNova, Lynx Smart
+-		for product_id in (0xB00A, 0xB014, 0xB015, 0xB016, 0xB019, 0xB020, 0xA3E5, 0xA3E6):
++		# BYD, FreedomWON, Discover AES, BlueNova, BSL-BATT, Lynx Smart
++		for product_id in (0xB00A, 0xB014, 0xB015, 0xB016, 0xB019, 0xB020, 0xB021, 0xA3E5, 0xA3E6):
+ 			self._add_device('com.victronenergy.battery.ttyO2',
+ 				product_name='battery',
+ 				values={
+-- 
+2.7.4
+
