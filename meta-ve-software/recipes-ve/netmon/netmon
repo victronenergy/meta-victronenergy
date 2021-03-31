@@ -1,0 +1,149 @@
+#! /usr/bin/python -u
+
+from argparse import ArgumentParser
+import logging
+import os
+import select
+import socket
+import time
+import traceback
+
+from pyroute2 import IPRoute
+
+log = logging.getLogger()
+
+UPDATE_INTERVAL = 10
+
+ADDR_RESTART = [
+    ['avahi-daemon', '/run/avahi-daemon/pid'],
+]
+
+changes = {}
+
+def get_iface(ip, idx):
+    try:
+        r = ip.link('get', index=idx)
+        iname = r[0].get_attr('IFLA_IFNAME')
+        itype = r[0]['ifi_type']
+    except:
+        return None, -1
+
+    return iname, itype
+
+def get_ifname(ip, idx):
+    iname, itype = get_iface(ip, idx)
+    return iname
+
+def get_route_dev(ip, dst):
+    try:
+        r = ip.route('get', dst=dst)
+        oif = r[0].get_attr('RTA_OIF') if r else None
+        ifn = get_ifname(ip, oif) if oif is not None else None
+    except:
+        ifn = None
+
+    return ifn
+
+def do_link(ip, msg):
+    name = msg.get_attr('IFLA_IFNAME')
+    stat = msg.get_attr('IFLA_OPERSTATE')
+
+    log.debug('%s: %s %s', msg['event'], name, stat)
+
+    if stat == 'UP':
+        changes['link_up'] = 1
+    else:
+        changes['lind_down'] = 1
+
+def do_addr(ip, msg):
+    name, ityp = get_iface(ip, msg['index'])
+    fmly = msg['family']
+    addr = msg.get_attr('IFA_ADDRESS')
+
+    log.debug('%s: %s(%s) %s %s', msg['event'], name, ityp, fmly, addr)
+
+    if ityp != 1:               # ignore non-ethernet
+        return
+
+    if fmly == socket.AF_INET:
+        changes['ipv4_addr'] = 1
+    elif fmly == socket.AF_INET6:
+        changes['ipv6_addr'] = 1
+
+def do_route(ip, msg):
+    fmly = msg['family']
+    oidx = msg.get_attr('RTA_OIF')
+    name = get_ifname(ip, oidx)
+    dest = msg.get_attr('RTA_DST')
+
+    log.debug('%s: %s %s %s', msg['event'], name, fmly, dest)
+
+    changes['route'] = 1
+
+def handle_msg(ip, m):
+    evt = m['event']
+
+    if evt in ['RTM_NEWLINK', 'RTM_DELLINK']:
+        do_link(ip, m)
+    elif evt in ['RTM_NEWADDR', 'RTM_DELADDR']:
+        do_addr(ip, m)
+    elif evt in ['RTM_NEWROUTE', 'RTM_DELROUTE']:
+        do_route(ip, m)
+
+def update_route(ip):
+    dev = get_route_dev(ip, '1.1.1.1')
+
+    log.info('default dev: %s', dev)
+
+def restart_daemons(dl):
+    for d in dl:
+        if os.path.exists(d[1]):
+            os.system('/etc/init.d/%s restart' % d[0])
+
+def do_updates(ip):
+    if changes.get('route'):
+        update_route(ip)
+
+    if changes.get('ipv4_addr'):
+        restart_daemons(ADDR_RESTART)
+
+    changes.clear()
+
+def monitor():
+    ip = IPRoute()
+    ip.bind()
+
+    p = select.poll()
+    p.register(ip, select.POLLIN)
+
+    update_route(ip)
+    last_update = time.time()
+
+    while True:
+        if p.poll(1000):
+            msg = ip.get()
+            for m in msg:
+                try:
+                    handle_msg(ip, m)
+                except:
+                    traceback.print_exc()
+
+        now = time.time()
+        if now - last_update > UPDATE_INTERVAL:
+            do_updates(ip)
+            last_update = now
+
+def main():
+    parser = ArgumentParser(description='netmon', add_help=True)
+    parser.add_argument('-d', '--debug', help='enable debug logging',
+                        action='store_true')
+
+    args = parser.parse_args()
+
+    logging.basicConfig(format='%(levelname)-8s %(message)s',
+                        level=(logging.DEBUG if args.debug else logging.INFO))
+
+    monitor()
+
+if __name__ == '__main__':
+    main()
