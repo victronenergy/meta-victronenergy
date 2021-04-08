@@ -15,6 +15,10 @@ if [ ! -d $NODE_RED ]; then
 	sed -i "s/a-secret-key/`openssl rand -hex 32`/g" "$NODE_RED/settings.js"
 fi
 
+if [ ! -d $DATA_MODULES ]; then
+	mkdir $DATA_MODULES
+fi
+
 if [ -d $VICTRON ]; then
 	rm -rf $VICTRON
 fi
