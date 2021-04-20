@@ -28,7 +28,6 @@ RDEPENDS_${PN}_append_canvu500 += "\
     kmscube \
     mtd-utils \
     mtd-utils-ubifs \
-    prodtest \
     swupdate \
     swupdate-scripts \
     ${QT5_RDEPENDS} \
@@ -38,7 +37,6 @@ RDEPENDS_${PN}_append_ccgx += "\
     gpio-export \
     mtd-utils \
     mtd-utils-ubifs \
-    prodtest \
     swupdate \
     swupdate-scripts \
     technexion-serial \
@@ -51,7 +49,6 @@ RDEPENDS_${PN}_append_beaglebone += "\
     hostapd \
     i2c-tools \
     linux-firmware-rtl-bt \
-    prodtest \
     rtl8723bu \
     rtl8723du \
     swupdate \
