@@ -10,7 +10,6 @@ DESCRIPTION = " \
 
 RDEPENDS_${PN} += " \
     dbus-generator-starter \
-    dbus-modbustcp \
     dbus-mqtt \
     dbus-pump \
     dbus-recorder \
