@@ -1,14 +1,14 @@
 #!/bin/bash
 exec 2>&1
 
+if [ $# -eq 0 ]; then
+	echo "*** Starting node-red ***"                   
+fi
+
 NODE_RED="/data/home/root/.node-red"
 DATA_MODULES="$NODE_RED/node_modules"
 VICTRON="$DATA_MODULES/@victronenergy"
 DEFAULTCONF="/usr/lib/node_modules/node-red/defaults"
-
-if [ $# -eq 0 ]; then
-	echo "*** Starting node-red ***"                   
-fi
 
 if [ ! -d $NODE_RED ]; then
 	mkdir $NODE_RED
