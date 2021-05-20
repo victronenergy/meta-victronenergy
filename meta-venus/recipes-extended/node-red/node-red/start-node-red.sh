@@ -6,6 +6,10 @@ DATA_MODULES="$NODE_RED/node_modules"
 VICTRON="$DATA_MODULES/@victronenergy"
 DEFAULTCONF="/usr/lib/node_modules/node-red/defaults"
 
+if [ $# -eq 0 ]; then
+	echo "*** Starting node-red ***"                   
+fi
+
 if [ ! -d $NODE_RED ]; then
 	mkdir $NODE_RED
 	mkdir $DATA_MODULES
@@ -26,10 +30,6 @@ for MODULE in bcryptjs debug; do
 	if [ ! -d $DATA_MODULES/${MODULE} ]; then
 		(cd $NODE_RED; npm install ${MODULE})
 	fi
-done
-
-if [ $# -eq 0 ]; then
-	echo "*** Starting node-red ***"                   
-fi                                                   
+done                                                
                                                      
 exec /usr/lib/node_modules/node-red/red.js $@ --userDir ${NODE_RED}
