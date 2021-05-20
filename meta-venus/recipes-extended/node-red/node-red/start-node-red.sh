@@ -1,6 +1,9 @@
 #!/bin/bash
 exec 2>&1
-echo "*** Starting node-red ***"
+
+if [ $# -eq 0 ]; then
+	echo "*** Starting node-red ***"                   
+fi
 
 NODE_RED="/data/home/root/.node-red"
 DATA_MODULES="$NODE_RED/node_modules"
@@ -23,8 +26,10 @@ if [ ! -f $VICTRON ]; then
     touch $VICTRON
 fi
 
-if [ ! -d $DATA_MODULES/bcryptjs ]; then
-    (cd $NODE_RED; npm install bcryptjs; npm install debug)
-fi
-
-exec /usr/lib/node_modules/node-red/red.js
+for MODULE in bcryptjs debug; do
+	if [ ! -d $DATA_MODULES/${MODULE} ]; then
+		(cd $NODE_RED; npm install ${MODULE})
+	fi
+done                                                
+                                                     
+exec /usr/lib/node_modules/node-red/red.js $@ --userDir ${NODE_RED}
