@@ -91,6 +91,7 @@ RDEPENDS_${PN} += "\
     tzdata-pacific \
     usbutils \
     udev-extraconf \
+    util-linux-mount \
     venus-feed-configs \
     venus-html5-app \
     venus-version \
