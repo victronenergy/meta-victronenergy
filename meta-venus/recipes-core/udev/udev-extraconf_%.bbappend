@@ -11,6 +11,7 @@ SRC_URI += " \
     file://ether.rules \
     file://machine.rules \
     file://mtd.rules \
+    file://rfkill.rules \
     file://rtl8192cu.rules \
     file://simcom.rules \
 "
@@ -44,6 +45,7 @@ do_install_append() {
     install -m 0644 ${WORKDIR}/ether.rules ${D}/${sysconfdir}/udev/rules.d
     install -m 0644 ${WORKDIR}/machine.rules ${D}/${sysconfdir}/udev/rules.d
     install -m 0644 ${WORKDIR}/mtd.rules ${D}/${sysconfdir}/udev/rules.d
+    install -m 0644 ${WORKDIR}/rfkill.rules ${D}/${sysconfdir}/udev/rules.d
     install -m 0644 ${WORKDIR}/simcom.rules ${D}/${sysconfdir}/udev/rules.d
 }
 

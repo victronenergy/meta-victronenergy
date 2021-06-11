@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="rfkill", ATTR{soft}="0"
