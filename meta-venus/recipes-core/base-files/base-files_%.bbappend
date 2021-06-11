@@ -6,7 +6,6 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 SRC_URI += "\
     file://fstab.mmc1 \
     file://fstab.ubi \
-    file://rfkill.conf \
 "
 
 # Add the mount point for the data partition
@@ -43,7 +42,4 @@ do_install_append() {
         rmdir ${D}${localstatedir}/log
     fi
     ln -sf ${permanentdir}/log ${D}${localstatedir}/log
-
-    install -d ${D}${sysconfdir}/modprobe.d
-    install -m 0644 ${WORKDIR}/rfkill.conf ${D}${sysconfdir}/modprobe.d
 }
