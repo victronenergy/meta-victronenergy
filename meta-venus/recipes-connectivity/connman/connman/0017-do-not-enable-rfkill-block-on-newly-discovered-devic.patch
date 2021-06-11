@@ -1,0 +1,26 @@
+From 81b88824117207c7b8c929ec6c9664e27d260868 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 11 Jun 2021 15:08:23 +0100
+Subject: [PATCH 17/17] do not enable rfkill block on newly discovered devices
+
+---
+ src/technology.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/src/technology.c b/src/technology.c
+index 660af52ae43d..bc3d3704efec 100644
+--- a/src/technology.c
++++ b/src/technology.c
+@@ -1731,9 +1731,6 @@ done:
+ 	if (technology->softblocked &&
+ 				technology->enable_persistent)
+ 		return __connman_rfkill_block(type, false);
+-	else if (!technology->softblocked &&
+-				!technology->enable_persistent)
+-		return __connman_rfkill_block(type, true);
+ 
+ 	return 0;
+ }
+-- 
+2.31.1
+
