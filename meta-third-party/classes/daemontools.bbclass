@@ -114,6 +114,7 @@ do_install_append() {
 
     install -d ${SERVICE}
     echo "#!/bin/sh" > ${SERVICE}/run
+    echo "echo \"*** starting ${PN} ***\"" >> ${SERVICE}/run
     echo "exec 2>&1" >> ${SERVICE}/run
     if [ "x${DAEMONTOOLS_SCRIPT}" = "x" ]; then
         DAEMONTOOLS_SCRIPT="exec ${DAEMONTOOLS_RUN}"
