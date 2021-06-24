@@ -1,0 +1,29 @@
+From be286d9254c4eeb4d8edd010eace143a69399416 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 24 Jun 2021 14:39:55 +0200
+Subject: [PATCH] Kconfig: venus: select the mediatek wifi modules
+
+---
+ Kconfig.venus | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Kconfig.venus b/Kconfig.venus
+index dc1c520d8b0b..1c38f24357ce 100644
+--- a/Kconfig.venus
++++ b/Kconfig.venus
+@@ -245,6 +245,12 @@ config VENUS_MODULES
+ 	select RTL8187
+ 	select RTL_CARDS
+ 	select RTL8192CU
++	select WLAN_VENDOR_MEDIATEK
++	select MT7601U
++	select MT76x0U
++	select MT76x2U
++	select MT7663U
++	select MT7663S
+ 
+ 	# ppp
+ 	select PPP
+-- 
+2.17.1
+

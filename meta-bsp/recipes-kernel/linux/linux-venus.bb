@@ -13,8 +13,10 @@ LINUX_VERSION_VENUS = "1"
 LINUX_VERSION_EXTENSION = "-venus-${LINUX_VERSION_VENUS}"
 
 PV = "${LINUX_VERSION}${LINUX_VERSION_EXTENSION}"
+PR = "1"
 
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=venus-${LINUX_VERSION};tag=v${PV}"
+SRC_URI += "file://0001-Kconfig-venus-select-the-mediatek-wifi-modules.patch"
 S = "${WORKDIR}/git"
 
 do_configure_append() {
