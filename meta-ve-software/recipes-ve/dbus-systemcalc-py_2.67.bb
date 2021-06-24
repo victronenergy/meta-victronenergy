@@ -9,9 +9,11 @@ inherit python-compile
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
     file://com.victronenergy.system.conf \
+    file://0001-add-quirk-for-Lynx-Smart-BMS.patch \
 "
 
 S = "${WORKDIR}/git"
+PR = "1"
 
 RDEPENDS_${PN} = " \
     localsettings \
