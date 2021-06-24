@@ -1,0 +1,174 @@
+From d975ebe6325398dd05ad0192a24c3ec7746de637 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Wed, 2 Jun 2021 16:58:49 +0200
+Subject: [PATCH] add quirk for Lynx Smart BMS
+
+---
+ delegates/dvcc.py | 50 +++++++++++++++++++++++++++++++----------------
+ 1 file changed, 33 insertions(+), 17 deletions(-)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index de7b8c6..bdeb76a 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -5,7 +5,6 @@ from math import pi, floor, ceil
+ import traceback
+ from itertools import izip, count
+ from functools import partial, wraps
+-from collections import namedtuple
+ 
+ # Victron packages
+ from sc_utils import safeadd, copy_dbus_value, reify
+@@ -32,8 +31,8 @@ def _byd_quirk(dvcc, bms, charge_voltage, charge_current, feedback_allowed):
+ 	""" Quirk for the BYD batteries. When the battery sends CCL=0, float it at
+ 	   55V. """
+ 	if charge_current == 0:
+-		return (55, 40, feedback_allowed)
+-	return (charge_voltage, charge_current, feedback_allowed)
++		return (55, 40, feedback_allowed, False)
++	return (charge_voltage, charge_current, feedback_allowed, False)
+ 
+ def _lg_quirk(dvcc, bms, charge_voltage, charge_current, feedback_allowed):
+ 	""" Quirk for LG batteries. The hard limit is 58V. Above that you risk
+@@ -41,7 +40,7 @@ def _lg_quirk(dvcc, bms, charge_voltage, charge_current, feedback_allowed):
+ 	    but we need to make room for an 0.4V overvoltage when feed-in is enabled.
+ 	"""
+ 	# Make room for a potential 0.4V at the top
+-	return (min(charge_voltage, 57.3), charge_current, feedback_allowed)
++	return (min(charge_voltage, 57.3), charge_current, feedback_allowed, False)
+ 
+ def _pylontech_quirk(dvcc, bms, charge_voltage, charge_current, feedback_allowed):
+ 	""" Quirk for Pylontech. Make a bit of room at the top. Pylontech says that
+@@ -59,7 +58,7 @@ def _pylontech_quirk(dvcc, bms, charge_voltage, charge_current, feedback_allowed
+ 	# See https://github.com/victronenergy/venus/issues/536
+ 	if charge_voltage > 30:
+ 		# 48V battery (15 cells)
+-		return (min(charge_voltage, 52.4), charge_current, feedback_allowed)
++		return (min(charge_voltage, 52.4), charge_current, feedback_allowed, False)
+ 	else:
+ 		# 24V battery (8 cells). 24V batteries send CCL=0 when they are full,
+ 		# whereas the 48V batteries reduce CCL by 50% when the battery is full.
+@@ -68,15 +67,20 @@ def _pylontech_quirk(dvcc, bms, charge_voltage, charge_current, feedback_allowed
+ 		# to clip the charge voltage to 27.8 volts. That fixes the sawtooth
+ 		# issue.
+ 		capacity = bms.capacity or 55
+-		return (min(charge_voltage, 27.8), max(charge_current, round(capacity/4.0)), feedback_allowed)
++		return (min(charge_voltage, 27.8), max(charge_current, round(capacity/4.0)), feedback_allowed, False)
++
++def _lynx_smart_bms_quirk(dvcc, bms, charge_voltage, charge_current, feedback_allowed):
++	""" When the Lynx Smart BMS sends CCL=0, it wants all chargers to stop. """
++	return (charge_voltage, charge_current, feedback_allowed, True)
+ 
+-# Quirk = namedtuple('Quirk', ['product_id', 'floatvoltage', 'floatcurrent'])
+ QUIRKS = {
+ 	0xB004: _lg_quirk,
+ 	0xB009: _pylontech_quirk,
+ 	0xB00A: _byd_quirk,
+ 	0xB015: _byd_quirk,
+ 	0xB019: _byd_quirk,
++	0xA3E5: _lynx_smart_bms_quirk,
++	0xA3E6: _lynx_smart_bms_quirk,
+ }
+ 
+ def distribute(current_values, max_values, increment):
+@@ -294,7 +298,12 @@ class SolarChargerSubsystem(object):
+ 		for charger in self._solarchargers.values():
+ 			charger.maximize_charge_current()
+ 
+-	def set_networked(self, has_bms, charge_voltage, max_charge_current, feedback_allowed):
++	def shutdown_chargers(self):
++		""" Shut down all chargers. """
++		for charger in self._solarchargers.values():
++			charger.maxchargecurrent = 0
++
++	def set_networked(self, has_bms, charge_voltage, max_charge_current, feedback_allowed, stop_on_mcc0):
+ 		""" This is the main entry-point into the solar charger subsystem. This
+ 		    sets all chargers to the same charge_voltage, and distributes
+ 		    max_charge_current between the chargers. If feedback_allowed, then
+@@ -338,7 +347,9 @@ class SolarChargerSubsystem(object):
+ 		chargers = filter(lambda x: x.state !=0 and x.n2k_device_instance in (0, None),
+ 			self._solarchargers.values())
+ 		if len(chargers) > 0:
+-			if feedback_allowed:
++			if stop_on_mcc0 and max_charge_current == 0:
++				self.shutdown_chargers()
++			elif feedback_allowed:
+ 				self.maximize_charge_current()
+ 			elif max_charge_current is not None:
+ 				if len(chargers) == 1:
+@@ -791,8 +802,9 @@ class Dvcc(SystemCalcDelegate):
+ 		max_charge_current = None
+ 		charge_voltage = None
+ 		feedback_allowed = self.feedback_allowed
++		stop_on_mcc0 = False
+ 		if bms_service is not None:
+-			charge_voltage, max_charge_current, feedback_allowed = \
++			charge_voltage, max_charge_current, feedback_allowed, stop_on_mcc0 = \
+ 				self._adjust_battery_operational_limits(bms_service, feedback_allowed)
+ 
+ 		# Take the lesser of the BMS and user current limits, wherever they exist
+@@ -819,16 +831,19 @@ class Dvcc(SystemCalcDelegate):
+ 		# modifying one of them to compensate for vebus current.
+ 		_max_charge_current = max_charge_current
+ 
+-		# If we have vebus current, we have to compensate for it
++		# If we have vebus current, we have to compensate for it. But if we must
++		# stop on MCC=0, then only if the max charge current is above zero.
++		# Otherwise leave it unmodified so that the solarchargers are also
++		# stopped.
+ 		vebus_dc_current = self._multi.dc_current
+ 		if _max_charge_current is not None and vebus_dc_current is not None and \
+-				vebus_dc_current < 0:
++				(not stop_on_mcc0 or _max_charge_current > 0) and vebus_dc_current < 0:
+ 			_max_charge_current = ceil(_max_charge_current - vebus_dc_current)
+ 
+ 		# Try to push the solar chargers to the vebus-compensated value
+ 		voltage_written, current_written, effective_charge_voltage = \
+ 			self._update_solarchargers(bms_service is not None, charge_voltage,
+-			_max_charge_current, feedback_allowed)
++			_max_charge_current, feedback_allowed, stop_on_mcc0)
+ 		self._dbusservice['/Control/SolarChargeVoltage'] = voltage_written
+ 		self._dbusservice['/Control/SolarChargeCurrent'] = current_written
+ 		self._dbusservice['/Control/EffectiveChargeVoltage'] = effective_charge_voltage
+@@ -874,17 +889,18 @@ class Dvcc(SystemCalcDelegate):
+ 		mcc = bms_service.maxchargecurrent
+ 
+ 		quirk = QUIRKS.get(bms_service.product_id)
++		stop_on_mcc0 = False
+ 		if quirk is not None:
+ 			# If any quirks are registered for this battery, use that
+ 			# instead.
+-			cv, mcc, feedback_allowed = quirk(self, bms_service, cv, mcc, feedback_allowed)
++			cv, mcc, feedback_allowed, stop_on_mcc0 = quirk(self, bms_service, cv, mcc, feedback_allowed)
+ 
+ 		# Add debug offsets
+ 		if cv is not None:
+ 			cv = safeadd(cv, self.invertervoltageoffset)
+ 		if mcc is not None:
+ 			mcc = safeadd(mcc, self.currentoffset)
+-		return cv, mcc, feedback_allowed
++		return cv, mcc, feedback_allowed, stop_on_mcc0
+ 
+ 	def _update_battery_operational_limits(self, bms_service, cv, mcc):
+ 		""" This function writes the bms parameters across to the Multi
+@@ -913,7 +929,7 @@ class Dvcc(SystemCalcDelegate):
+ 			self._dbusmonitor.get_value('com.victronenergy.settings',
+ 				'/Settings/CGwacs/OvervoltageFeedIn') == 1
+ 
+-	def _update_solarchargers(self, has_bms, bms_charge_voltage, max_charge_current, feedback_allowed):
++	def _update_solarchargers(self, has_bms, bms_charge_voltage, max_charge_current, feedback_allowed, stop_on_mcc0):
+ 		""" This function updates the solar chargers only. Parameters
+ 		    related to the Multi are handled elsewhere. """
+ 
+@@ -936,7 +952,7 @@ class Dvcc(SystemCalcDelegate):
+ 			return 0, 0, None
+ 
+ 		voltage_written, current_written = self._solarsystem.set_networked(
+-			has_bms, charge_voltage, max_charge_current, feedback_allowed)
++			has_bms, charge_voltage, max_charge_current, feedback_allowed, stop_on_mcc0)
+ 
+ 		# Charge voltage cannot by written directly to the CAN-bus solar chargers, we have to use
+ 		# the com.victronenergy.vecan.* service instead.
+-- 
+2.17.1
+
