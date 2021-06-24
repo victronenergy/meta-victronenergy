@@ -29,6 +29,13 @@ FILES_${PN}-bcm20702a1 = "\
   /lib/firmware/brcm/BCM20702A1.hcd \
 "
 
+# For mediatek mt7662
+PACKAGES =+ "${PN}-mt7662"
+FILES_${PN}-mt7662 = " \
+  ${nonarch_base_libdir}/firmware/mt7662_rom_patch.bin \
+  ${nonarch_base_libdir}/firmware/mt7662.bin \
+"
+
 do_install_append() {
   install -d ${D}${nonarch_base_libdir}/firmware/brcm
   install -m 0644 ${WORKDIR}/brcm/brcmfmac43362-sdio.txt ${D}${nonarch_base_libdir}/firmware/brcm
