@@ -1,6 +1,7 @@
 require linux-venus.bb
 
 COMPATIBLE_MACHINE = "ccgx"
+FILESEXTRAPATHS_prepend := "${THISDIR}/linux-venus:"
 
 KERNEL_CONFIG = "ccgx_defconfig"
 KERNEL_EXTRA_ARGS = "zImage"
