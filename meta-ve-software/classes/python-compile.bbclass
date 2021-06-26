@@ -1,4 +1,4 @@
-DEPENDS += "python-native"
+DEPENDS += "python-native python3-native"
 
 do_install_append() {
     case "${RDEPENDS_${PN}}" in
