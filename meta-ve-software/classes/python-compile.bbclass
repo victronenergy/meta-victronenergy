@@ -8,8 +8,10 @@ do_install_append() {
                                -e 's,#!\s\?/usr/bin/env python$,#!/usr/bin/python3,' \
                                -e 's,#!\s\?/usr/bin/python\s\(.*\)$,#!/usr/bin/python3 \1,' \
                                 {} \;
+        nativepython3 -m compileall ${D}
+        ;;
+      *)
+        nativepython -m compileall ${D}
         ;;
     esac
-
-    python -m compileall ${D}
 }
