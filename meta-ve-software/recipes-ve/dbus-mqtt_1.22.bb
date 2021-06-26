@@ -5,7 +5,12 @@ inherit gmakevelib
 inherit daemontools
 inherit python-compile
 
-RDEPENDS_${PN} = "python mosquitto"
+RDEPENDS_${PN} = " \
+    mosquitto \
+    python \
+    python-lxml \
+    python-requests \
+"
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-mqtt.git;protocol=https;tag=v${PV} \
