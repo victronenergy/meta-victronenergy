@@ -1,0 +1,36 @@
+From 22539e61c45d2f855bf27522e3388b831f871492 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Sun, 27 Jun 2021 16:21:51 +0100
+Subject: [PATCH 3/3] ARM: dts: ccgx: fix mmc cd gpio
+
+---
+ arch/arm/boot/dts/am3517-ccgx.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/am3517-ccgx.dts b/arch/arm/boot/dts/am3517-ccgx.dts
+index 0d8ba0841ec2..cf646f32a842 100644
+--- a/arch/arm/boot/dts/am3517-ccgx.dts
++++ b/arch/arm/boot/dts/am3517-ccgx.dts
+@@ -336,7 +336,7 @@
+ 	bus-width = <4>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mmc1_pins>;
+-	cd-gpios = <&gpio4 30 GPIO_ACTIVE_HIGH>; /* gpio_126 */
++	cd-gpios = <&gpio4 30 GPIO_ACTIVE_LOW>; /* gpio_126 */
+ };
+ 
+ &mmc2 {
+@@ -449,8 +449,8 @@
+ };
+ 
+ &gpio4 {
+-	gpio-line-names = "hwrev_2", "hwrev_1";
+-	gpio-line-numbers = <0>, <2>;
++	gpio-line-names = "hwrev_2", "hwrev_1", "mmc_cd";
++	gpio-line-numbers = <0>, <2>, <30>;
+ };
+ 
+ &gpio5 {
+-- 
+2.17.1
+
