@@ -8,7 +8,6 @@ SRC_URI += "\
     file://test-data-partition.sh \
     file://report-data-failure.sh \
     file://update-data.sh \
-    file://update-mmc-parts.sh \
 "
 
 SRC_URI_append_ccgx = "\
@@ -16,7 +15,6 @@ SRC_URI_append_ccgx = "\
 "
 
 RDEPENDS_${PN} += "curl is-ro-partition"
-RDEPENDS_${PN}_beaglebone += "util-linux-sfdisk"
 
 do_install_append() {
     echo RANDOM_SEED_FILE=${permanentlocalstatedir}/lib/random-seed \
@@ -39,11 +37,6 @@ do_install_append() {
 
     rm ${D}${sysconfdir}/init.d/banner.sh
     rm ${D}${sysconfdir}/rc*.d/*banner.sh
-}
-
-do_install_append_beaglebone() {
-    install -m 0755 ${WORKDIR}/update-mmc-parts.sh ${D}${sysconfdir}/init.d
-    update-rc.d -r ${D} update-mmc-parts.sh start 02 S .
 }
 
 do_install_append_ccgx() {
