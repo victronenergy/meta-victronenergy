@@ -57,4 +57,6 @@ do_install_append_rpi() {
   rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.Hampoo-D2D3_Vi8A1.txt
   rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.MUR1DX.txt
   rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.bin
+  rm ${D}${nonarch_base_libdir}/firmware/brcm/BCM43430A1.hcd
+  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.txt
 }
