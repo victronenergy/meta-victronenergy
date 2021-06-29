@@ -8,10 +8,10 @@ inherit python-compile
 
 RDEPENDS_${PN} = "\
     bash \
-    python \
-    python-dbus \
-    python-pygobject \
-    python-pyserial \
+    python3-core \
+    python3-dbus \
+    python3-pygobject \
+    python3-pyserial \
 "
 
 SRC_URI = " \
