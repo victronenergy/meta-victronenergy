@@ -8,11 +8,11 @@ inherit python-compile
 
 RDEPENDS_${PN} = "\
     bash \
-    python \
-    python-dbus \
-    python-dnslib \
-    python-pygobject \
-    python-pymodbus \
+    python3-core \
+    python3-dbus \
+    python3-dnslib \
+    python3-pygobject \
+    python3-pymodbus \
 "
 
 SRC_URI = " \
