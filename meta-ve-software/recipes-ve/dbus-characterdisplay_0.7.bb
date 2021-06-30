@@ -17,9 +17,9 @@ S = "${WORKDIR}/git"
 RDEPENDS_${PN} = " \
     dbus-systemcalc-py \
     localsettings \
-    python-argparse \
-    python-dbus \
-    python-evdev \
+    python3-core \
+    python3-dbus \
+    python3-evdev \
 "
 
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
