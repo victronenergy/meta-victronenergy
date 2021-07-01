@@ -14,12 +14,11 @@ S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \
     localsettings \
-    python \
-    python-argparse \
-    python-datetime \
-    python-dbus \
-    python-json \
-    python-pygobject \
+    python3-core \
+    python3-datetime \
+    python3-dbus \
+    python3-json \
+    python3-pygobject \
 "
 
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
