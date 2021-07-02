@@ -14,7 +14,7 @@ SRC_URI[md5sum] = "117003ce5d60258f2383491f09c70a61"
 SRC_URI[sha256sum] = "14c7e51bee71908527e783605699435a963d28243bf39c99bd87294850c8204a"
 
 S = "${WORKDIR}"
-BASE_DIR = "${WWW_ROOT}/app"
+BASE_DIR = "${WWW_ROOT}/default/app"
 
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
@@ -23,4 +23,6 @@ do_install () {
     for f in $( find ${S}/dist -type f -printf "%P\n" ); do
         install -D "${S}/dist/$f" "${D}${BASE_DIR}/$f"
     done
+
+    ln -s /run/www/app ${D}${WWW_ROOT}/app
 }
