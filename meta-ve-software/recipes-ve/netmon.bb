@@ -6,9 +6,8 @@ inherit ve_package
 inherit daemontools
 
 RDEPENDS_${PN} = "\
-    python \
-    python-dbus \
-    python-pyroute2 \
+    python3-core \
+    python3-pyroute2 \
 "
 
 SRC_URI = "\
