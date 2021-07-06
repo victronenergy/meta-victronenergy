@@ -24,8 +24,7 @@ DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}.TTY"
 
 RDEPENDS_${PN} = " \
     localsettings \
-    python \
-    python-argparse \
-    python-dbus \
-    python-pymodbus \
+    python3-core \
+    python3-dbus \
+    python3-pymodbus \
 "
