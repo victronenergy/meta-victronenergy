@@ -9,18 +9,15 @@ inherit python-compile
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
     file://com.victronenergy.system.conf \
-    file://0001-add-quirk-for-Lynx-Smart-BMS.patch \
 "
-
 S = "${WORKDIR}/git"
-PR = "1"
 
 RDEPENDS_${PN} = " \
     localsettings \
-    python \
-    python-dbus \
-    python-pprint \
-    python-pygobject \
+    python3-core \
+    python3-dbus \
+    python3-pprint \
+    python3-pygobject \
 "
 
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
