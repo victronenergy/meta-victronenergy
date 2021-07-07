@@ -14,7 +14,9 @@ DEPENDS += "\
     packagegroup-core-buildessential \
     packagegroup-replace-busybox \
     perf \
+    python3-pip \
     python3-pylint \
+    python3-spidev \
     s6 \
     tcpdump \
     tinymembench \
@@ -25,10 +27,3 @@ DEPENDS += "\
     x11vnc \
 "
 
-# Add as optional packages until we include python3 proper
-DEPENDS += "\
-    python3-requests \
-    python3-lxml \
-    python3-paho-mqtt \
-    python3-pymodbus \
-"
