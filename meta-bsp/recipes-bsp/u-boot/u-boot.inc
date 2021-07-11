@@ -5,6 +5,10 @@ SECTION = "bootloaders"
 PROVIDES = "virtual/bootloader"
 DEPENDS = "mtd-utils"
 
+# just for parsing
+RPROVIDES_${PN} += "u-boot-default-env"
+ALLOW_EMPTY_u-boot-default-env = "1"
+
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 # gcc 4.9.2 has a BUG cause false array out bound warnings.. (which is in fido)
 EXTRA_OEMAKE = 'CROSS_COMPILE=${TARGET_PREFIX} CC="${TARGET_PREFIX}gcc ${TOOLCHAIN_OPTIONS} -Wno-error=array-bounds"'
