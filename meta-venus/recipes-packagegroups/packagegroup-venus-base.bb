@@ -73,6 +73,7 @@ RDEPENDS_${PN} += "\
     permanent-storage \
     pointercal \
     ppp \
+    python-symlink \
     rsync \
     rtl8192eu \
     screen \
