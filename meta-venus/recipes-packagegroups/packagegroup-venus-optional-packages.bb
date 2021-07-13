@@ -1,4 +1,6 @@
 # build but not installed in the image
+include qt5-packages.inc
+
 inherit packagegroup
 LICENSE = "MIT"
 
@@ -27,3 +29,6 @@ DEPENDS += "\
     x11vnc \
 "
 
+RDEPENDS_${PN} += " \
+    ${QT5_PACKAGES} \
+"

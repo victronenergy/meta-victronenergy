@@ -5,19 +5,10 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 LICENSE = "MIT"
 
+include qt5-packages.inc
+
 RDEPENDS_${PN} += "\
     simple-upnpd \
-"
-
-QT5_RDEPENDS = " \
-    cinematicexperience \
-    qt5-opengles2-test \
-    qtconnectivity \
-    qtplatform \
-    qtquickcontrols \
-    qtquickcontrols2 \
-    qtserialport \
-    qtsvg-plugins \
 "
 
 RDEPENDS_${PN}_append_canvu500 += "\
@@ -29,7 +20,7 @@ RDEPENDS_${PN}_append_canvu500 += "\
     mtd-utils-ubifs \
     swupdate \
     swupdate-scripts \
-    ${QT5_RDEPENDS} \
+    ${QT5_PACKAGES} \
 "
 
 RDEPENDS_${PN}_append_ccgx += "\
