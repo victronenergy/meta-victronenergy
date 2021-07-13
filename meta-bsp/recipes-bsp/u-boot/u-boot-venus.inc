@@ -13,4 +13,4 @@ UBOOT_SRC_URI ?= ""
 SRC_URI = "${UBOOT_SRC_URI}"
 
 S = "${WORKDIR}/git"
-
+B = "${WORKDIR}/build"

@@ -13,8 +13,8 @@ EXTRA_OEMAKE_class-cross = 'HOSTCC="${CC} ${CFLAGS} ${LDFLAGS}" V=1'
 inherit uboot-config
 
 do_compile () {
-    oe_runmake ${UBOOT_MACHINE}
-    oe_runmake envtools
+    oe_runmake -C ${S} ${UBOOT_MACHINE}
+    oe_runmake -C ${S} envtools
 }
 
 do_install () {
