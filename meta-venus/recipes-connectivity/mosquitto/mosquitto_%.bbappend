@@ -8,7 +8,7 @@ SRC_URI += " \
 INHIBIT_UPDATERCD_BBCLASS = "1"
 
 MOSQUITTO_D = "/run/mosquitto"
-PACKAGECONFIG = "ssl uuid websockets"
+PACKAGECONFIG = "ssl websockets"
 
 do_install_append() {
     install -m 0755 ${WORKDIR}/start-mosquitto ${D}${sbindir}
