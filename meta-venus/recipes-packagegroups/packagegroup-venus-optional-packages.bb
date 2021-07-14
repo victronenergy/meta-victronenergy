@@ -29,6 +29,10 @@ DEPENDS += "\
     x11vnc \
 "
 
+# disable for now for the rpi's, linux must be updated
+DEPENDS_remove_raspberrypi2 = "perf"
+DEPENDS_remove_raspberrypi4 = "perf"
+
 RDEPENDS_${PN} += " \
     ${QT5_PACKAGES} \
 "
