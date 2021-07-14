@@ -17,7 +17,7 @@ SRC_URI[sha256sum] = "c7dd35420d7925c1443a0001a64a35f56593683f93612537617a18d603
 
 do_compile () {
     oe_runmake -C ${S} ${UBOOT_MACHINE}
-    oe_runmake -C ${S} CC="${CC} ${CFLAGS} ${LDFLAGS}" env
+    oe_runmake -C ${S} STRIP="echo" CC="${CC} ${CFLAGS} ${LDFLAGS}" env
 }
 
 do_install () {
