@@ -1,7 +1,7 @@
---- a/init
-+++ b/init
-@@ -55,6 +55,9 @@ case "$1" in
-     [ -e /proc/sys/kernel/hotplug ] && echo -e '\000' >/proc/sys/kernel/hotplug
+--- a/init	2021-07-14 13:30:30.019770372 +0200
++++ b/init	2021-07-14 16:21:40.476728963 +0200
+@@ -55,6 +55,9 @@
+     [ -e /proc/sys/kernel/hotplug ] && printf '\0\n' >/proc/sys/kernel/hotplug
      @UDEVD@ -d
  
 +    compat=$(tr '\0' '\n' </sys/firmware/devicetree/base/compatible | head -n1)
