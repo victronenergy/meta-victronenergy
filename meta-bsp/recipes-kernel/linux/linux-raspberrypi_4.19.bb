@@ -20,6 +20,9 @@ B = "${WORKDIR}/build"
 SRCREV = "6ff6f0c970199071c79176ec6147fda82fb28530"
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=git;branch=rpi_4.19.81"
 
+# needed for building newer perf
+SRC_URI += "file://0001-perf-Make-perf-able-to-build-with-latest-libbfd.patch"
+
 # fix make[3]: *** [scripts/extract-cert] Error 1
 DEPENDS += "openssl-native"
 
