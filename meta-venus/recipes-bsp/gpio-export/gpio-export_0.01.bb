@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 DEPENDS += "update-rc.d-native"
 RDEPENDS_${PN} += "\
     bash \
-    libgpiod \
+    libgpiod-tools \
 "
 
 INHIBIT_DEFAULT_DEPS = "1"
