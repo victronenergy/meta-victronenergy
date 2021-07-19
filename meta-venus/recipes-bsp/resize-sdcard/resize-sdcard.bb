@@ -6,7 +6,9 @@ RDEPENDS_${PN} = "parted swupdate-scripts"
 
 inherit update-rc.d
 
-INITSCRIPT_PACKAGES = "${PN} ${PN}-resize2fs"
+# Not running automatically, since there is a readonly rootfs now.
+# Add ${PN}-resize2fs to INITSCRIPT_PACKAGES to run it during boot.
+INITSCRIPT_PACKAGES = "${PN}"
 INITSCRIPT_NAME_${PN} = "zzz-resize-sdcard"
 INITSCRIPT_PARAMS_${PN} = "start 2 S ."
 INITSCRIPT_NAME_${PN}-resize2fs = "resize2fs"
