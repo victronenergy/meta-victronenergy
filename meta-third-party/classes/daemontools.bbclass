@@ -15,6 +15,9 @@ DAEMONTOOLS_SERVICE_SYMLINK ?= "1"
 DEAMONTOOLS_COMMON_SERVICES_DIR = "/opt/victronenergy/service"
 DAEMONTOOLS_SERVICE_DIR ?= "${DEAMONTOOLS_COMMON_SERVICES_DIR}/${PN}"
 
+DEAMONTOOLS_COMMON_TEMPLATES_DIR = "/opt/victronenergy/service-templates"
+DAEMONTOOLS_TEMPLATE_DIR ?= "${DEAMONTOOLS_COMMON_TEMPLATES_DIR}/${PN}"
+
 python () {
     pkg = d.getVar('DAEMON_PN', True)
     d.appendVar('RDEPENDS_' + pkg, ' ${DAEMONTOOLS}')
