@@ -12,6 +12,9 @@ DAEMONTOOLS_SERVICES_DIR ?= "/service"
 DAEMONTOOLS_LOG_DIR_PREFIX = "${localstatedir}/log"
 DAEMONTOOLS_SERVICE_SYMLINK ?= "1"
 
+DEAMONTOOLS_COMMON_SERVICES_DIR = "/opt/victronenergy/service"
+DAEMONTOOLS_SERVICE_DIR ?= "${DEAMONTOOLS_COMMON_SERVICES_DIR}/${PN}"
+
 python () {
     pkg = d.getVar('DAEMON_PN', True)
     d.appendVar('RDEPENDS_' + pkg, ' ${DAEMONTOOLS}')
