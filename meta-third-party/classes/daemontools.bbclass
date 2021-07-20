@@ -12,6 +12,11 @@ DAEMONTOOLS_SERVICES_DIR ?= "/service"
 DAEMONTOOLS_LOG_DIR_PREFIX = "${localstatedir}/log"
 DAEMONTOOLS_SERVICE_SYMLINK ?= "1"
 
+# to allow the rootfs to be readonly in venus, /service might be overlayed
+# with /opt/victronenergy/service.
+DAEMONTOOLS_OVERLAYFS = "0"
+DAEMONTOOLS_OVERLAYFS_venus = "1"
+
 DEAMONTOOLS_COMMON_SERVICES_DIR = "/opt/victronenergy/service"
 DAEMONTOOLS_SERVICE_DIR ?= "${DEAMONTOOLS_COMMON_SERVICES_DIR}/${PN}"
 
@@ -144,7 +149,9 @@ do_install_append() {
 
     if [ ${DAEMONTOOLS_SERVICE_SYMLINK} = "1" ]; then
         install -d ${D}${DAEMONTOOLS_SERVICES_DIR}
-        ln -s ${DAEMONTOOLS_SERVICE_DIR} ${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}
+        if [ ${DAEMONTOOLS_OVERLAYFS} = "0" ]; then
+            ln -s ${DAEMONTOOLS_SERVICE_DIR} ${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}
+        fi
     fi
 }
 

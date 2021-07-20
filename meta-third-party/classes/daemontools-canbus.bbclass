@@ -25,7 +25,9 @@ do_per_canbus_service() {
         sed -i "s:DEV:$dev:" "$SERVICE/run"
         sed -i "s:DEV:$dev:" "$SERVICE/log/run"
 
-	ln -s "${DEAMONTOOLS_COMMON_SERVICES_DIR}/${PN}.$dev" "${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}.$dev"
+        if [ ${DAEMONTOOLS_OVERLAYFS} = "0" ]; then
+            ln -s "${DEAMONTOOLS_COMMON_SERVICES_DIR}/${PN}.$dev" "${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}.$dev"
+        fi
     done
 }
 

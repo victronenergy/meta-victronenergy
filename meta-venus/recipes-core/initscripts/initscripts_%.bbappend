@@ -4,6 +4,7 @@ VELIB_DEFAULT_DIRS = "1"
 inherit ve_package
 
 SRC_URI += "\
+    file://overlays.sh \
     file://static-nodes.sh \
     file://test-data-partition.sh \
     file://report-data-failure.sh \
@@ -24,9 +25,11 @@ do_install_append() {
         >${D}${sysconfdir}/default/timestamp
 
     install -m 0755 ${WORKDIR}/static-nodes.sh ${D}${sysconfdir}/init.d
-    update-rc.d -r ${D} static-nodes.sh start 20 S .
-
     install -m 0755 ${WORKDIR}/test-data-partition.sh ${D}${sysconfdir}/init.d
+    install -m 0755 ${WORKDIR}/overlays.sh ${D}${sysconfdir}/init.d
+
+    update-rc.d -r ${D} overlays.sh start 10 S .
+    update-rc.d -r ${D} static-nodes.sh start 20 S .
     update-rc.d -r ${D} test-data-partition.sh start 03 S .
 
     install -m 0755 ${WORKDIR}/report-data-failure.sh ${D}${sysconfdir}/init.d
