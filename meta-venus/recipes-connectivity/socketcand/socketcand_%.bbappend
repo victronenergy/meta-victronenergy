@@ -9,7 +9,6 @@ do_install_append() {
 
 FILES_${PN} += "${sbindir}/start-socketcand"
 
-DAEMONTOOLS_SERVICE_DIR = "${sysconfdir}/${PN}/service"
 DAEMONTOOLS_RUN = "${sbindir}/start-socketcand"
 DAEMONTOOLS_DOWN = "1"
 

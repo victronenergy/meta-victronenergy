@@ -7,7 +7,6 @@ SRC_URI += "\
 
 inherit daemontools
 
-DAEMONTOOLS_SERVICE_DIR = "${sysconfdir}/${PN}/service"
 DAEMONTOOLS_RUN = "/usr/sbin/hostapd-run"
 DAEMONTOOLS_DOWN = "1"
 

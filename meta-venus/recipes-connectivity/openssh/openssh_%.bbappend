@@ -3,7 +3,6 @@ FILESEXTRAPATHS_prepend := "${THISDIR}:"
 inherit daemontools
 
 DAEMON_PN = "${PN}-sshd"
-DAEMONTOOLS_SERVICE_DIR = "/etc/ssh/service"
 DAEMONTOOLS_RUN = "${bindir}/start-sshd.sh"
 DAEMONTOOLS_DOWN = "1"
 DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/sshd"

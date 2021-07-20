@@ -8,7 +8,6 @@ SRC_URI = " \
 "
 S = "${WORKDIR}/git"
 
-DAEMONTOOLS_SERVICE_DIR = "${sysconfdir}/${PN}/service"
 DAEMONTOOLS_RUN = "setuidgid nobody ${sbindir}/llmnrd -H venus -6"
 DAEMONTOOLS_LOG_DIR = "${localstatedir}/volatile/log/${PN}"
 

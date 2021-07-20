@@ -7,7 +7,6 @@ SRC_URI += "\
     file://0002-pppd-clear-resolv.conf-on-link-down.patch \
 "
 
-DAEMONTOOLS_SERVICE_DIR = "${sysconfdir}/${PN}/service"
 DAEMONTOOLS_RUN = "${sbindir}/pppd call provider nodetach"
 DAEMONTOOLS_DOWN = "1"
 

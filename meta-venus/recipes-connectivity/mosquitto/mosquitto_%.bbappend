@@ -26,7 +26,6 @@ FILES_${PN} += "\
     ${sysconfdir}/default \
 "
 
-DAEMONTOOLS_SERVICE_DIR = "${sysconfdir}/mosquitto/service"
 DAEMONTOOLS_RUN = "${sbindir}/start-mosquitto"
 DAEMONTOOLS_DOWN = "1"
 
