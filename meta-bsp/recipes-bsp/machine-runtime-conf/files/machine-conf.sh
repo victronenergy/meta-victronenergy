@@ -21,7 +21,7 @@ gen_config() (
         fi
 
         echo ${val}
-    done <${conf}.in >${conf}
+    done <${conf}.in >/run/venus/$(basename ${conf})
 )
 
 CONFIGS="
@@ -30,6 +30,7 @@ CONFIGS="
     canbus_ports
 "
 
+mkdir -p /run/venus
 for file in ${CONFIGS}; do
     gen_config /etc/venus/${file}
 done

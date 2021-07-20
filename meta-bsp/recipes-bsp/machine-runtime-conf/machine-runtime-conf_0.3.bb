@@ -70,6 +70,7 @@ do_install_append() {
 
         if [ -e ${WORKDIR}/${file}.in ]; then
             install -m 644 ${WORKDIR}/${file}.in ${conf}
+            ln -s /run/venus/${file} ${conf}/${file}
         else
             eval val=\${${name}}
             if [ -n "${val}" ]; then
