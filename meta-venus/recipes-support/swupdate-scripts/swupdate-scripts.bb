@@ -11,10 +11,12 @@ SRC_URI = " \
     file://check-updates.sh \
     file://functions.sh \
     file://machine.sh \
+    file://remount-rw.sh \
     file://resize2fs.sh \
     file://scan-versions.init \
     file://scan-versions.sh \
     file://set-feed.sh \
+    file://set-swu-feed.sh \
     file://set-version.sh \
 "
 
@@ -28,9 +30,11 @@ do_install () {
     install -m 0755 ${WORKDIR}/check-updates.sh ${DEST}/check-updates.sh
     install -m 0644 ${WORKDIR}/functions.sh     ${DEST}/functions.sh
     install -m 0644 ${WORKDIR}/machine.sh       ${DEST}/machine.sh
+    install -m 0755 ${WORKDIR}/remount-rw.sh    ${DEST}/remount-rw.sh
     install -m 0755 ${WORKDIR}/resize2fs.sh     ${DEST}/resize2fs.sh
     install -m 0755 ${WORKDIR}/scan-versions.sh ${DEST}/scan-versions.sh
     install -m 0755 ${WORKDIR}/set-feed.sh      ${DEST}/set-feed.sh
+    install -m 0755 ${WORKDIR}/set-swu-feed.sh  ${DEST}/set-swu-feed.sh
     install -m 0755 ${WORKDIR}/set-version.sh   ${DEST}/set-version.sh
 
     DEST=${D}${sysconfdir}/init.d
