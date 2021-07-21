@@ -1,0 +1,77 @@
+From e981f543d58a2c34e684efb4e91b93dc1c0ec4d8 Mon Sep 17 00:00:00 2001
+From: Thiemo van Engelen <tvanengelen@victronenergy.com>
+Date: Mon, 19 Jul 2021 11:10:46 +0200
+Subject: [PATCH 1/2] Cache the UUID of characteristics
+
+This prevents (multiple) synchronous dbus calls to retrieve the UUID on
+a read or write of a characteristic value.
+
+Change-Id: I888e932cb5e2efdf1b15bdf83a4578e568f97924
+---
+ src/bluetooth/qlowenergycontroller_bluezdbus.cpp | 9 +++++----
+ src/bluetooth/qlowenergycontroller_bluezdbus_p.h | 1 +
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/src/bluetooth/qlowenergycontroller_bluezdbus.cpp b/src/bluetooth/qlowenergycontroller_bluezdbus.cpp
+index d69fb6cd..a6b4c59e 100644
+--- a/src/bluetooth/qlowenergycontroller_bluezdbus.cpp
++++ b/src/bluetooth/qlowenergycontroller_bluezdbus.cpp
+@@ -580,6 +580,7 @@ void QLowEnergyControllerPrivateBluezDBus::discoverServiceDetails(const QBluetoo
+                                             QStringLiteral("org.bluez"), it.key().path(),
+                                             QDBusConnection::systemBus());
+                 GattCharacteristic dbusCharData;
++                dbusCharData.uuid = QBluetoothUuid(charInterface->uUID());
+                 dbusCharData.characteristic = charInterface;
+                 dbusData.characteristics.append(dbusCharData);
+             } else if (iface == QStringLiteral("org.bluez.GattDescriptor1")) {
+@@ -939,7 +940,7 @@ void QLowEnergyControllerPrivateBluezDBus::scheduleNextJob()
+                             service->characteristicList.value(nextJob.handle);
+         bool foundChar = false;
+         for (const auto &gattChar : qAsConst(dbusServiceData.characteristics)) {
+-            if (charData.uuid != QBluetoothUuid(gattChar.characteristic->uUID()))
++            if (charData.uuid != gattChar.uuid)
+                 continue;
+ 
+             QDBusPendingReply<QByteArray> reply = gattChar.characteristic->ReadValue(QVariantMap());
+@@ -968,7 +969,7 @@ void QLowEnergyControllerPrivateBluezDBus::scheduleNextJob()
+                             service->characteristicList.value(nextJob.handle);
+         bool foundChar = false;
+         for (const auto &gattChar : qAsConst(dbusServiceData.characteristics)) {
+-            if (charData.uuid != QBluetoothUuid(gattChar.characteristic->uUID()))
++            if (charData.uuid != gattChar.uuid)
+                 continue;
+ 
+             QVariantMap options;
+@@ -1010,7 +1011,7 @@ void QLowEnergyControllerPrivateBluezDBus::scheduleNextJob()
+         const QBluetoothUuid descUuid = charData.descriptorList[nextJob.handle].uuid;
+         bool foundDesc = false;
+         for (const auto &gattChar : qAsConst(dbusServiceData.characteristics)) {
+-            if (charData.uuid != QBluetoothUuid(gattChar.characteristic->uUID()))
++            if (charData.uuid != gattChar.uuid)
+                 continue;
+ 
+             for (const auto &gattDesc : qAsConst(gattChar.descriptors)) {
+@@ -1054,7 +1055,7 @@ void QLowEnergyControllerPrivateBluezDBus::scheduleNextJob()
+         const QBluetoothUuid descUuid = charData.descriptorList[nextJob.handle].uuid;
+         bool foundDesc = false;
+         for (const auto &gattChar : qAsConst(dbusServiceData.characteristics)) {
+-            if (charData.uuid != QBluetoothUuid(gattChar.characteristic->uUID()))
++            if (charData.uuid != gattChar.uuid)
+                 continue;
+ 
+             for (const auto &gattDesc : qAsConst(gattChar.descriptors)) {
+diff --git a/src/bluetooth/qlowenergycontroller_bluezdbus_p.h b/src/bluetooth/qlowenergycontroller_bluezdbus_p.h
+index 3215b08d..7a4903fe 100644
+--- a/src/bluetooth/qlowenergycontroller_bluezdbus_p.h
++++ b/src/bluetooth/qlowenergycontroller_bluezdbus_p.h
+@@ -147,6 +147,7 @@ private:
+ 
+     struct GattCharacteristic
+     {
++        QBluetoothUuid uuid;
+         QSharedPointer<OrgBluezGattCharacteristic1Interface> characteristic;
+         QSharedPointer<OrgFreedesktopDBusPropertiesInterface> charMonitor;
+         QVector<QSharedPointer<OrgBluezGattDescriptor1Interface>> descriptors;
+-- 
+2.30.2
+

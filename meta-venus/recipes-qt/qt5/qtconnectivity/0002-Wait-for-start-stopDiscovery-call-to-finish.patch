@@ -1,0 +1,49 @@
+From 12d1c2eaee36beab8cc900c9bda1c55cde02be2a Mon Sep 17 00:00:00 2001
+From: Thiemo van Engelen <tvanengelen@victronenergy.com>
+Date: Mon, 19 Jul 2021 11:15:19 +0200
+Subject: [PATCH 2/2] Wait for start/stopDiscovery call to finish
+
+The code would send a startDiscovery or stopDiscovery call over the dbus
+without waiting for the response. This could lead to wrong behaviour in
+Bluez where it would still perform a discovery even after the call to
+stopDiscovery due to slow processing of the startDiscovery call. By
+waiting for the response of the startDiscovery, we can be sure that it
+is fully processed in Bluez and that a stopDiscovery will do what it is
+supposed to do.
+
+Change-Id: Ie0fdc118e4b8f585258e1b523127304751b08939
+---
+ src/bluetooth/bluez/bluez5_helper.cpp | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/src/bluetooth/bluez/bluez5_helper.cpp b/src/bluetooth/bluez/bluez5_helper.cpp
+index 58da1ed3..a1e04dd7 100644
+--- a/src/bluetooth/bluez/bluez5_helper.cpp
++++ b/src/bluetooth/bluez/bluez5_helper.cpp
+@@ -390,8 +390,11 @@ bool QtBluezDiscoveryManager::registerDiscoveryInterest(const QString &adapterPa
+ 
+     d->references[adapterPath] = data;
+ 
+-    if (!data->wasListeningAlready)
+-        iface.StartDiscovery();
++    if (!data->wasListeningAlready) {
++        auto reply = iface.StartDiscovery();
++        reply.waitForFinished();
++        return !reply.isError();
++    }
+ 
+     return true;
+ }
+@@ -411,7 +414,8 @@ void QtBluezDiscoveryManager::unregisterDiscoveryInterest(const QString &adapter
+     if (!data->wasListeningAlready) { // Qt turned discovery mode on, Qt has to turn it off again
+         OrgBluezAdapter1Interface iface(QStringLiteral("org.bluez"), adapterPath,
+                                         QDBusConnection::systemBus());
+-        iface.StopDiscovery();
++        auto reply = iface.StopDiscovery();
++        reply.waitForFinished();
+     }
+ 
+     delete data->propteryListener;
+-- 
+2.30.2
+
