@@ -1,0 +1,337 @@
+From 22ffd865d6e2ff982f078949cb292e14d7815fb9 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 23 Jul 2021 13:49:03 +0100
+Subject: [PATCH] Revert "Allow multiple console output"
+
+This reverts commit 986bee63c05ad98bea77997be7dd2bfc957cfc2f.
+---
+ src/bootlogd.c | 172 +++++++++++++++++++++----------------------------
+ 1 file changed, 72 insertions(+), 100 deletions(-)
+
+diff --git a/src/bootlogd.c b/src/bootlogd.c
+index 787db8799125..67606495f8f7 100644
+--- a/src/bootlogd.c
++++ b/src/bootlogd.c
+@@ -56,8 +56,6 @@
+ #endif
+ #include "bootlogd.h"
+ 
+-#define MAX_CONSOLES 16
+-#define KERNEL_COMMAND_LENGTH 4096
+ 
+ char ringbuf[32768];
+ char *endptr = ringbuf + sizeof(ringbuf);
+@@ -69,11 +67,6 @@ int didnl = 1;
+ int createlogfile = 0;
+ int syncalot = 0;
+ 
+-struct real_cons {
+-	char name[1024];
+-	int fd;
+-};
+-
+ /*
+  *	Console devices as listed on the kernel command line and
+  *	the mapping to actual devices in /dev
+@@ -109,10 +102,6 @@ void handler(int sig)
+ /*
+  *	Scan /dev and find the device name.
+  */
+-/*
+-This function does not appear to be called anymore. Commenting it
+-out for now, can probably be removed entirely in the future.
+-
+ static int findtty(char *res, const char *startdir, int rlen, dev_t dev)
+ {
+ 	DIR		*dir;
+@@ -140,7 +129,7 @@ static int findtty(char *res, const char *startdir, int rlen, dev_t dev)
+ 			snprintf(path, rlen, "%s/%s", startdir, ent->d_name);
+ 			r = findtty(res, path, rlen, dev);
+ 			free(path);
+-			if (0 == r) { 
++			if (0 == r) { /* device found, return */
+ 				closedir(dir);
+ 				chdir(olddir);
+ 				return 0;
+@@ -168,9 +157,6 @@ static int findtty(char *res, const char *startdir, int rlen, dev_t dev)
+ 	chdir(olddir);
+ 	return r;
+ }
+-*/
+-
+-
+ 
+ /*
+  *	For some reason, openpty() in glibc sometimes doesn't
+@@ -243,21 +229,46 @@ int isconsole(char *s, char *res, int rlen)
+ }
+ 
+ /*
+- *	Find out the _real_ console(s). Assume that stdin is connected to
++ *	Find out the _real_ console. Assume that stdin is connected to
+  *	the console device (/dev/console).
+  */
+-int consolenames(struct real_cons *cons, int max_consoles)
++int consolename(char *res, int rlen)
+ {
+ #ifdef TIOCGDEV
+-	/* This appears to be unused.  unsigned int	kdev; */
++	unsigned int	kdev;
+ #endif
+ 	struct stat	st, st2;
+-	char		buf[KERNEL_COMMAND_LENGTH];
++	char		buf[256];
+ 	char		*p;
+ 	int		didmount = 0;
+-	int		n;
++	int		n, r;
+ 	int		fd;
+-	int		considx, num_consoles = 0;
++
++	fstat(0, &st);
++	if (major(st.st_rdev) != 5 || minor(st.st_rdev) != 1) {
++		/*
++		 *	Old kernel, can find real device easily.
++		 */
++		int r = findtty(res, "/dev", rlen, st.st_rdev);
++		if (0 != r)
++			fprintf(stderr, "bootlogd: cannot find console device "
++				"%d:%d under /dev\n", major(st.st_rdev), minor(st.st_rdev));
++		return r;
++	}
++
++#ifdef TIOCGDEV
++# ifndef  ENOIOCTLCMD
++#  define ENOIOCTLCMD	515
++# endif
++	if (ioctl(0, TIOCGDEV, &kdev) == 0) {
++		int r = findtty(res, "/dev", rlen, (dev_t)kdev);
++		if (0 != r)
++			fprintf(stderr, "bootlogd: cannot find console device "
++				"%d:%d under /dev\n", major(kdev), minor(kdev));
++		return r;
++	}
++	if (errno != ENOIOCTLCMD) return -1;
++#endif
+ 
+ #ifdef __linux__
+ 	/*
+@@ -266,7 +277,7 @@ int consolenames(struct real_cons *cons, int max_consoles)
+ 	stat("/", &st);
+ 	if (stat("/proc", &st2) < 0) {
+ 		perror("bootlogd: /proc");
+-		return 0;
++		return -1;
+ 	}
+ 	if (st.st_dev == st2.st_dev) {
+ 		if (mount("proc", "/proc", "proc", 0, NULL) < 0) {
+@@ -276,18 +287,21 @@ int consolenames(struct real_cons *cons, int max_consoles)
+ 		didmount = 1;
+ 	}
+ 
+-	n = -1;
++	n = 0;
++	r = -1;
+ 	if ((fd = open("/proc/cmdline", O_RDONLY)) < 0) {
+ 		perror("bootlogd: /proc/cmdline");
+ 	} else {
+ 		buf[0] = 0;
+-		if ((n = read(fd, buf, KERNEL_COMMAND_LENGTH - 1)) < 0)
++		if ((n = read(fd, buf, sizeof(buf) - 1)) >= 0)
++			r = 0;
++		else
+ 			perror("bootlogd: /proc/cmdline");
+ 		close(fd);
+ 	}
+ 	if (didmount) umount("/proc");
+-                
+-	if (n < 0) return 0;
++
++	if (r < 0) return r;
+ 
+ 	/*
+ 	 *	OK, so find console= in /proc/cmdline.
+@@ -295,32 +309,21 @@ int consolenames(struct real_cons *cons, int max_consoles)
+ 	 */
+ 	p = buf + n;
+ 	*p-- = 0;
++	r = -1;
+ 	while (p >= buf) {
+ 		if (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n') {
+ 			*p-- = 0;
+ 			continue;
+ 		}
+ 		if (strncmp(p, "console=", 8) == 0 &&
+-			isconsole(p + 8, cons[num_consoles].name, sizeof(cons[num_consoles].name))) {
+-				/*
+-				 *	Suppress duplicates
+-				 */
+-				for (considx = 0; considx < num_consoles; considx++) {
+-					if (!strcmp(cons[num_consoles].name, cons[considx].name)) {
+-						goto dontuse;
+-					}
+-				}
+-			
+-			num_consoles++;
+-			if (num_consoles >= max_consoles) {
+-				break;
+-			}
++		    isconsole(p + 8, res, rlen)) {
++			r = 0;
++			break;
+ 		}
+-dontuse:
+ 		p--;
+ 	}
+ 
+-	if (num_consoles > 0) return num_consoles;
++	if (r == 0) return r;
+ #endif
+ 
+ 	/*
+@@ -328,12 +331,12 @@ dontuse:
+ 	 *	guess the default console.
+ 	 */
+ 	for (n = 0; defcons[n]; n++)
+-		if (isconsole(defcons[n], cons[0].name, sizeof(cons[0].name))) 
+-			return 1;
++		if (isconsole(defcons[n], res, rlen))
++			return 0;
+ 
+ 	fprintf(stderr, "bootlogd: cannot deduce real console device\n");
+ 
+-	return 0;
++	return -1;
+ }
+ 
+ 
+@@ -477,22 +480,21 @@ int main(int argc, char **argv)
+ 	struct timeval	tv;
+ 	fd_set		fds;
+ 	char		buf[1024];
++	char		realcons[1024];
+ 	char		*p;
+ 	char		*logfile;
+ 	char		*pidfile;
+ 	int		rotate;
+ 	int		dontfork;
+ 	int		ptm, pts;
+-	/* int		realfd;   -- this is now unused */
++	int		realfd;
+ 	int		n, m, i;
+ 	int		todo;
+ #ifndef __linux__	/* BSD-style ioctl needs an argument. */
+ 	int		on = 1;
+ #endif
+-	int		considx;
+-	struct real_cons cons[MAX_CONSOLES];
+-	int		num_consoles, consoles_left;
+         int             print_escape_sequence = 0;
++
+ 	fp = NULL;
+ 	logfile = LOGFILE;
+ 	pidfile = NULL;
+@@ -541,7 +543,6 @@ int main(int argc, char **argv)
+ 	/*
+ 	 *	Open console device directly.
+ 	 */
+-        /*
+ 	if (consolename(realcons, sizeof(realcons)) < 0)
+ 		return 1;
+ 
+@@ -554,25 +555,6 @@ int main(int argc, char **argv)
+ 		fprintf(stderr, "bootlogd: %s: %s\n", realcons, strerror(errno));
+ 		return 1;
+ 	}
+-        */
+-        if ((num_consoles = consolenames(cons, MAX_CONSOLES)) <= 0)
+-                return 1;
+-        consoles_left = num_consoles;
+-        for (considx = 0; considx < num_consoles; considx++) {
+-               if (strcmp(cons[considx].name, "/dev/tty0") == 0)
+-                       strcpy(cons[considx].name, "/dev/tty1");
+-               if (strcmp(cons[considx].name, "/dev/vc/0") == 0)
+-                       strcpy(cons[considx].name, "/dev/vc/1");
+-
+-               if ((cons[considx].fd = open_nb(cons[considx].name)) < 0) {
+-                       fprintf(stderr, "bootlogd: %s: %s\n", 
+-                                cons[considx].name, strerror(errno));
+-                       consoles_left--;
+-               }
+-        }
+-        if (!consoles_left)
+-               return 1;
+-
+ 
+ 	/*
+ 	 *	Grab a pty, and redirect console messages to it.
+@@ -656,35 +638,27 @@ int main(int argc, char **argv)
+ 			if ((n = read(ptm, inptr, endptr - inptr)) >= 0) {
+ 				/*
+ 				 *	Write data (in chunks if needed)
+-				 *	to the real output devices.
++				 *	to the real output device.
+ 				 */
+-				for (considx = 0; considx < num_consoles; considx++) {
+-					if (cons[considx].fd < 0) continue;
+-					m = n;
+-					p = inptr;
+-					while (m > 0) {
+-						i = write(cons[considx].fd, p, m);
+-						if (i >= 0) {
+-							m -= i;
+-							p += i;
+-							continue;
+-						}
+-						/*
+-						 *	Handle EIO (somebody hung
+-						 *	up our filedescriptor)
+-						 */
+-						cons[considx].fd = write_err(pts,
+-							cons[considx].fd,
+-							cons[considx].name, errno);
+-						if (cons[considx].fd >= 0) continue;
+-						/*	
+-						 *	If this was the last console,
+-						 *	generate a fake signal
+-						 */
+-						if (--consoles_left <= 0) got_signal = 1;
+-						break;
+- 					}   /* end of while */
+-				}     /* end of going through all consoles */
++				m = n;
++				p = inptr;
++				while (m > 0) {
++					i = write(realfd, p, m);
++					if (i >= 0) {
++						m -= i;
++						p += i;
++						continue;
++					}
++					/*
++					 *	Handle EIO (somebody hung
++					 *	up our filedescriptor)
++					 */
++					realfd = write_err(pts, realfd,
++						realcons, errno);
++					if (realfd >= 0) continue;
++					got_signal = 1; /* Not really */
++					break;
++				}
+ 
+ 				/*
+ 				 *	Increment buffer position. Handle
+@@ -729,9 +703,7 @@ int main(int argc, char **argv)
+ 
+ 	close(pts);
+ 	close(ptm);
+-	for (considx = 0; considx < num_consoles; considx++) {
+-		close(cons[considx].fd);
+-	}
++	close(realfd);
+ 
+ 	return 0;
+ }
+-- 
+2.32.0
+
