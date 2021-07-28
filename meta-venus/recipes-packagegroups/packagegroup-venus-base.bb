@@ -42,7 +42,6 @@ RDEPENDS_${PN} += "\
     curl \
     custom-rc.d \
     dbus \
-    dbus-tools \
     default-locale \
     dnsmasq \
     dpkg-start-stop \
@@ -93,6 +92,7 @@ RDEPENDS_${PN} += "\
     usbutils \
     udev-extraconf \
     util-linux-mount \
+    venus-dbus-tools \
     venus-feed-configs \
     venus-html5-app \
     venus-version \
