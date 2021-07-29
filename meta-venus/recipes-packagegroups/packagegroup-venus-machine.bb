@@ -58,7 +58,6 @@ RDEPENDS_${PN}_append_sunxi += "\
     gpio-export \
     hostapd \
     linux-firmware-rtl-bt \
-    prodtest \
     rtl8723bu \
     rtl8723du \
     swupdate \
