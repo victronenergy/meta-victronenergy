@@ -15,8 +15,8 @@ SRC_URI = "\
 	file://user-authentication.js \
 "
 
-SRC_URI[md5sum] = "51422973df42ff1ab94c36a6f637efaf"
-SRC_URI[sha256sum] = "ca321e7654ddbedad71e8cc2fe22a49d1d667ff36edda803576cca3f7acceee0"
+SRC_URI[md5sum] = "794b3b20c6edd9bd02e2cf94913da093"
+SRC_URI[sha256sum] = "19986a0d2be89abc161676b4c06c4628d5ba1163a8e389b3060dd2a82aac910e"
 
 inherit npmve
 inherit daemontools
