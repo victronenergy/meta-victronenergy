@@ -57,7 +57,7 @@ function getPassword() {
     const data = String(fs.readFileSync('/data/conf/vncpassword.txt')).trim()
     return data.length > 0 ? data : null
   } catch (err) {
-    console.err(err)
+    console.error(err)
     return null
   }
 }
