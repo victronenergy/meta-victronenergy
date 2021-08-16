@@ -36,7 +36,7 @@ do_install_append() {
 	# to the data partition on first boot.
 	install -d ${NPM_INSTALLDIR}/defaults
 	install -m 0755 ${WORKDIR}/settings.js ${NPM_INSTALLDIR}/defaults
-	install -m 0755 ${WORKDIR}/user-authentication.js ${NPM_INSTALLDIR}/defaults
+	install -m 0755 ${WORKDIR}/user-authentication.js ${NPM_INSTALLDIR}
 
 	# Symlinks
 	mkdir ${D}${bindir}
