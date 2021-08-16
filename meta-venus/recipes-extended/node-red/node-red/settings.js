@@ -118,9 +118,11 @@ module.exports = {
 
     // Securing Node-RED
     // -----------------
-    // To password protect the Node-RED editor and admin API, the following
+    // To password protect the Node-RED editor and admin API, the adminAuth
     // property can be used. See http://nodered.org/docs/security.html for details.
-    adminAuth: require("./user-authentication"),
+    // The /usr/lib/node_modules/node-red/user-authentication.js require
+    // uses the password from /data/conf/vncpassword.txt for authentication.
+    adminAuth: require("/usr/lib/node_modules/node-red/user-authentication.js"),
 
     // To password protect the node-defined HTTP endpoints (httpNodeRoot), or
     // the static content (httpStatic), the following properties can be used.
