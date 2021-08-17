@@ -3,4 +3,4 @@ PACKAGECONFIG_GL = "eglfs gles2"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-#SRC_URI += "file://0001-Revert-Remove-support-for-qml1-plugins-and-modules.patch"
+SRC_URI += "file://0001-Revert-Remove-support-for-qml1-plugins-and-modules.patch"
