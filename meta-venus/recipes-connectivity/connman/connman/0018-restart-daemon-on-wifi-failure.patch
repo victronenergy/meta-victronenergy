@@ -1,0 +1,103 @@
+From a6383e5a60a87490ebdc08d9675f04600422e652 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Wed, 18 Aug 2021 14:39:13 +0100
+Subject: [PATCH 18/18] restart daemon on wifi failure
+
+To avoid wifi networks getting stuck in a failed state, restart the
+connman daemon whenever a service remains failed for 30 seconds.
+
+This solution is simpler than tracking down and removing all checks
+throughout the code.
+---
+ include/setting.h |  2 ++
+ src/main.c        | 13 +++++++++++++
+ src/service.c     | 15 +++++++++++++++
+ 3 files changed, 30 insertions(+)
+
+diff --git a/include/setting.h b/include/setting.h
+index 3cb06101394a..e054ce43ec77 100644
+--- a/include/setting.h
++++ b/include/setting.h
+@@ -36,6 +36,8 @@ unsigned int connman_timeout_input_request(void);
+ unsigned int connman_timeout_browser_launch(void);
+ int connman_favorite_max_retries(void);
+ 
++int connman_restart(void);
++
+ #ifdef __cplusplus
+ }
+ #endif
+diff --git a/src/main.c b/src/main.c
+index 0d1c8a056954..7a2b10f02b60 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -634,6 +634,13 @@ int connman_favorite_max_retries(void)
+ 	return connman_settings.favorite_max_retries;
+ }
+ 
++static char **connman_argv;
++
++int connman_restart(void)
++{
++	return execvp(connman_argv[0], connman_argv);
++}
++
+ int main(int argc, char *argv[])
+ {
+ 	GOptionContext *context;
+@@ -641,6 +648,12 @@ int main(int argc, char *argv[])
+ 	DBusConnection *conn;
+ 	DBusError err;
+ 	guint signal;
++	int i;
++
++	connman_argv = calloc(argc + 1, sizeof(*connman_argv));
++
++	for (i = 0; i < argc; i++)
++		connman_argv[i] = strdup(argv[i]);
+ 
+ 	context = g_option_context_new(NULL);
+ 	g_option_context_add_main_entries(context, options, NULL);
+diff --git a/src/service.c b/src/service.c
+index 60091f98312a..1e0e2ddfdc1d 100644
+--- a/src/service.c
++++ b/src/service.c
+@@ -38,6 +38,7 @@
+ #include "connman.h"
+ 
+ #define CONNECT_TIMEOUT		120
++#define RESTART_TIMEOUT		30
+ 
+ static DBusConnection *connection = NULL;
+ 
+@@ -5343,6 +5344,16 @@ static const char *get_dbus_sender(struct connman_service *service)
+ 	return dbus_message_get_sender(service->pending);
+ }
+ 
++static gboolean restart_timeout(gpointer user_data)
++{
++	struct connman_service *service = user_data;
++
++	if (service->state == CONNMAN_SERVICE_STATE_FAILURE)
++		connman_restart();
++
++	return FALSE;
++}
++
+ static int service_indicate_state(struct connman_service *service)
+ {
+ 	enum connman_service_state old_state, new_state;
+@@ -5530,6 +5541,10 @@ static int service_indicate_state(struct connman_service *service)
+ 			return 0;
+ 		service_complete(service);
+ 
++		if (service->type == CONNMAN_SERVICE_TYPE_WIFI)
++			g_timeout_add_seconds(RESTART_TIMEOUT, restart_timeout,
++					      service);
++
+ 		break;
+ 	}
+ 
+-- 
+2.32.0
+

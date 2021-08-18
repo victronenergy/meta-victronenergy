@@ -25,6 +25,7 @@ SRC_URI += "\
     file://0015-service-attempt-auto-connect-of-services-in-failed-s.patch \
     file://0016-do-not-set-default-route-without-gateway.patch \
     file://0017-do-not-enable-rfkill-block-on-newly-discovered-devic.patch \
+    file://0018-restart-daemon-on-wifi-failure.patch \
     file://main.conf \
     file://connmand-watch.sh \
 "
