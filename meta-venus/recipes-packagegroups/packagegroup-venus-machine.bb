@@ -51,6 +51,8 @@ RDEPENDS_${PN}_append_einstein += "\
     linux-firmware-bcm43430a1 \
     read-edid \
     venus-button-handler \
+    ${QT5_PACKAGES} \
+    kmscube \
 "
 
 RDEPENDS_${PN}_append_sunxi += "\
