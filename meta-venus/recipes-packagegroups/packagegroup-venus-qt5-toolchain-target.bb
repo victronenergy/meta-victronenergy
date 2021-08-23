@@ -39,10 +39,6 @@ RDEPENDS_${PN} += " \
     qtsystems-dev \
     qtsystems-mkspecs \
     ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'qtsystems-qmlplugins', '', d)} \
-    qtquick1-dev \
-    qtquick1-mkspecs \
-    qtquick1-plugins \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'qtquick1-qmlplugins', '', d)} \
     qttranslations-qtwebsockets \
     qttranslations-qtxmlpatterns \
     qtxmlpatterns-dev \
@@ -50,6 +46,14 @@ RDEPENDS_${PN} += " \
     qtquickcontrols2 \
     qtquickcontrols2-dev \
     qtquickcontrols2-mkspecs \
+"
+
+# Disabled for now, qt5 must be patched to support the project type.
+QTQUICK1 = " \
+    qtquick1-dev \
+    qtquick1-mkspecs \
+    qtquick1-plugins \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'qtquick1-qmlplugins', '', d)} \
 "
 
 RRECOMMENDS_${PN} += " \
