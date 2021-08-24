@@ -13,13 +13,14 @@ LINUX_VERSION_VENUS = "1"
 LINUX_VERSION_EXTENSION = "-venus-${LINUX_VERSION_VENUS}"
 
 PV = "${LINUX_VERSION}${LINUX_VERSION_EXTENSION}"
-PR = "2"
+PR = "3"
 
 SRC_URI = " \
     git://github.com/victronenergy/linux.git;protocol=https;branch=venus-${LINUX_VERSION};tag=v${PV} \
     file://0001-Kconfig-venus-select-the-mediatek-wifi-modules.patch \
     file://0002-Bluetooth-btbcm-add-default-address-for-BCM43430A1.patch \
     file://0003-ARM-dts-ccgx-fix-mmc-cd-gpio.patch \
+    file://0004-Bluetooth-Fix-default-values-for-advertising-interva.patch \
 "
 S = "${WORKDIR}/git"
 

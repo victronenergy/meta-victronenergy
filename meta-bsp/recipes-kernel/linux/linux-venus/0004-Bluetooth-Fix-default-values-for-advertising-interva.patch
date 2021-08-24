@@ -1,0 +1,33 @@
+From c65023cf4bbf86955c6c52bc72376e6fe32ad41c Mon Sep 17 00:00:00 2001
+From: Marcel Holtmann <marcel@holtmann.org>
+Date: Tue, 6 Apr 2021 21:55:54 +0200
+Subject: [PATCH 4/9] Bluetooth: Fix default values for advertising interval
+
+The DISCOV_LE_FAST_ADV_INT_{MIN,MAX} contants are in msec, but then used
+later on directly while it is suppose to be N * 0.625 ms according to
+the Bluetooth Core specification.
+
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+---
+ include/net/bluetooth/hci_core.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
+index df611c8b6b59..f99dbe2d90fc 100644
+--- a/include/net/bluetooth/hci_core.h
++++ b/include/net/bluetooth/hci_core.h
+@@ -1698,8 +1698,8 @@ void hci_mgmt_chan_unregister(struct hci_mgmt_chan *c);
+ #define DISCOV_INTERLEAVED_INQUIRY_LEN	0x04
+ #define DISCOV_BREDR_INQUIRY_LEN	0x08
+ #define DISCOV_LE_RESTART_DELAY		msecs_to_jiffies(200)	/* msec */
+-#define DISCOV_LE_FAST_ADV_INT_MIN     100     /* msec */
+-#define DISCOV_LE_FAST_ADV_INT_MAX     150     /* msec */
++#define DISCOV_LE_FAST_ADV_INT_MIN	0x00A0	/* 100 msec */
++#define DISCOV_LE_FAST_ADV_INT_MAX	0x00F0	/* 150 msec */
+ 
+ void mgmt_fill_version_info(void *ver);
+ int mgmt_new_settings(struct hci_dev *hdev);
+-- 
+2.17.1
+
