@@ -1,0 +1,61 @@
+From 0f1fcd5c88fdbef2f3ba3d26b6f638a2d278b7c0 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 13 Aug 2021 19:37:43 +0100
+Subject: [PATCH 9/9] ARM: dts: ccgx2: add regulator for devices on hdmi i2c
+ bus
+
+Add a dummy regulator for the devices on the hdmi i2c bus in order
+to defer probing until the usb vbus has been enabled.
+---
+ arch/arm/boot/dts/sun7i-a20-einstein-ccgx2.dts | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm/boot/dts/sun7i-a20-einstein-ccgx2.dts b/arch/arm/boot/dts/sun7i-a20-einstein-ccgx2.dts
+index b9e0986d3ca4..c8798ded4649 100644
+--- a/arch/arm/boot/dts/sun7i-a20-einstein-ccgx2.dts
++++ b/arch/arm/boot/dts/sun7i-a20-einstein-ccgx2.dts
+@@ -150,6 +150,17 @@
+ 		enable-active-high;
+ 		gpio = <&pio 8 3 GPIO_ACTIVE_HIGH>; /* PI3 */
+ 	};
++
++	reg_hdmi_vcc: hdmi-vcc {
++		compatible = "regulator-fixed";
++		regulator-name = "hdmi-vcc";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&reg_usb0_vbus>;
++		startup-delay-us = <1500000>;
++		enable-active-high;
++		gpio = <&pio 1 13 GPIO_ACTIVE_HIGH>; /* PB13 */
++	};
+ };
+ 
+ &de {
+@@ -235,6 +246,7 @@
+ 	touchscreen@38 {
+ 		compatible = "edt,edt-ft5316", "edt,edt-ft5306";
+ 		reg = <0x38>;
++		vcc-supply = <&reg_hdmi_vcc>;
+ 		interrupt-parent = <&pio>;
+ 		interrupts = <8 11 IRQ_TYPE_EDGE_FALLING>;
+ 	};
+@@ -242,6 +254,7 @@
+ 	eeprom@50 {
+ 		compatible = "atmel,24c02";
+ 		reg = <0x50>;
++		vcc-supply = <&reg_hdmi_vcc>;
+ 		pagesize = <16>;
+ 		read-only;
+ 	};
+@@ -249,6 +262,7 @@
+ 	backlight@51 {
+ 		compatible = "victronenergy,gxdisp-backlight";
+ 		reg = <0x51>;
++		vcc-supply = <&reg_hdmi_vcc>;
+ 		default-on;
+ 		default-brightness = <15>;
+ 	};
+-- 
+2.17.1
+

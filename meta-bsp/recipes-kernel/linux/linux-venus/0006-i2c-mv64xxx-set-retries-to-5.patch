@@ -1,0 +1,24 @@
+From 31d7d958596ea6174e517c1651d9dc53e6ec8478 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Sat, 14 Aug 2021 15:54:55 +0100
+Subject: [PATCH 6/9] i2c: mv64xxx: set retries to 5
+
+---
+ drivers/i2c/busses/i2c-mv64xxx.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
+index 5cfe70aedced..02f5d8ebacec 100644
+--- a/drivers/i2c/busses/i2c-mv64xxx.c
++++ b/drivers/i2c/busses/i2c-mv64xxx.c
+@@ -955,6 +955,7 @@ mv64xxx_i2c_probe(struct platform_device *pd)
+ 
+ 	drv_data->adapter.dev.parent = &pd->dev;
+ 	drv_data->adapter.algo = &mv64xxx_i2c_algo;
++	drv_data->adapter.retries = 5;
+ 	drv_data->adapter.owner = THIS_MODULE;
+ 	drv_data->adapter.class = I2C_CLASS_DEPRECATED;
+ 	drv_data->adapter.nr = pd->id;
+-- 
+2.17.1
+
