@@ -1,7 +1,7 @@
 From fa96a0a7963e14f0881a277a754f94b40383c55b Mon Sep 17 00:00:00 2001
 From: Mans Rullgard <mans@mansr.com>
 Date: Thu, 17 Jun 2021 13:29:50 +0100
-Subject: [PATCH 2/3] Bluetooth: btbcm: add default address for BCM43430A1
+Subject: [PATCH 2/9] Bluetooth: btbcm: add default address for BCM43430A1
 
 ---
  drivers/bluetooth/btbcm.c | 5 +++++

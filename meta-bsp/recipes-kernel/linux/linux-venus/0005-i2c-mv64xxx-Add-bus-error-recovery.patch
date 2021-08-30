@@ -1,0 +1,98 @@
+From 72223f6628e2ae738055f9292d247b655c450891 Mon Sep 17 00:00:00 2001
+From: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+Date: Thu, 27 Aug 2020 10:35:16 +1200
+Subject: [PATCH 5/9] i2c: mv64xxx: Add bus error recovery
+
+This adds i2c bus recovery to the mv64xxx driver.
+
+Implement bus recovery to recover from SCL/SDA stuck low.
+
+This uses the generic recovery function, setting the clock/data lines as
+GPIO pins, and sending 9 clocks to try and recover the bus.
+
+Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+[wsa: added some curly braces]
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+(cherry picked from commit 9c7cae2427715502227f823364a6a77828fdf3ea)
+---
+ drivers/i2c/busses/i2c-mv64xxx.c | 29 ++++++++++++++++++++++++++++-
+ 1 file changed, 28 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
+index e0e45fc19b8f..5cfe70aedced 100644
+--- a/drivers/i2c/busses/i2c-mv64xxx.c
++++ b/drivers/i2c/busses/i2c-mv64xxx.c
+@@ -17,6 +17,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/mv643xx_i2c.h>
+ #include <linux/platform_device.h>
++#include <linux/pinctrl/consumer.h>
+ #include <linux/reset.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
+@@ -147,6 +148,7 @@ struct mv64xxx_i2c_data {
+ 	bool			irq_clear_inverted;
+ 	/* Clk div is 2 to the power n, not 2 to the power n + 1 */
+ 	bool			clk_n_base_0;
++	struct i2c_bus_recovery_info	rinfo;
+ };
+ 
+ static struct mv64xxx_i2c_regs mv64xxx_i2c_regs_mv64xxx = {
+@@ -325,7 +327,8 @@ mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u32 status)
+ 			 drv_data->msg->flags);
+ 		drv_data->action = MV64XXX_I2C_ACTION_SEND_STOP;
+ 		mv64xxx_i2c_hw_init(drv_data);
+-		drv_data->rc = -EIO;
++		i2c_recover_bus(&drv_data->adapter);
++		drv_data->rc = -EAGAIN;
+ 	}
+ }
+ 
+@@ -561,6 +564,7 @@ mv64xxx_i2c_wait_for_completion(struct mv64xxx_i2c_data *drv_data)
+ 				"time_left: %d\n", drv_data->block,
+ 				(int)time_left);
+ 			mv64xxx_i2c_hw_init(drv_data);
++			i2c_recover_bus(&drv_data->adapter);
+ 		}
+ 	} else
+ 		spin_unlock_irqrestore(&drv_data->lock, flags);
+@@ -870,6 +874,25 @@ mv64xxx_of_config(struct mv64xxx_i2c_data *drv_data,
+ }
+ #endif /* CONFIG_OF */
+ 
++static int mv64xxx_i2c_init_recovery_info(struct mv64xxx_i2c_data *drv_data,
++					  struct device *dev)
++{
++	struct i2c_bus_recovery_info *rinfo = &drv_data->rinfo;
++
++	rinfo->pinctrl = devm_pinctrl_get(dev);
++	if (IS_ERR(rinfo->pinctrl)) {
++		if (PTR_ERR(rinfo->pinctrl) == -EPROBE_DEFER)
++			return -EPROBE_DEFER;
++		dev_info(dev, "can't get pinctrl, bus recovery not supported\n");
++		return PTR_ERR(rinfo->pinctrl);
++	} else if (!rinfo->pinctrl) {
++		return -ENODEV;
++	}
++
++	drv_data->adapter.bus_recovery_info = rinfo;
++	return 0;
++}
++
+ static int
+ mv64xxx_i2c_probe(struct platform_device *pd)
+ {
+@@ -926,6 +949,10 @@ mv64xxx_i2c_probe(struct platform_device *pd)
+ 		goto exit_reset;
+ 	}
+ 
++	rc = mv64xxx_i2c_init_recovery_info(drv_data, &pd->dev);
++	if (rc == -EPROBE_DEFER)
++		goto exit_reset;
++
+ 	drv_data->adapter.dev.parent = &pd->dev;
+ 	drv_data->adapter.algo = &mv64xxx_i2c_algo;
+ 	drv_data->adapter.owner = THIS_MODULE;
+-- 
+2.17.1
+

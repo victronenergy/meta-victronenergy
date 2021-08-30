@@ -20,15 +20,16 @@ mkdir -p /var/volatile/tmp
 
 # Make sure the exiting partition layout is exactly as expected.
 # Ignore the preamble as the disk id might be a random value.
+# Also ignore the size of the last partition as the mmc size varies.
 tmp=$(mktemp)
-sfdisk -d $DEV | grep ^/ >$tmp
+sfdisk -d $DEV | grep ^/ | sed '/p[46] :/s/size=[ 0-9]*/size=/' >$tmp
 cmp $tmp - <<EOF || finish "Unexpected partition table"
 /dev/mmcblk1p1 : start=        2048, size=       16384, type=c, bootable
 /dev/mmcblk1p2 : start=       18432, size=      655360, type=83
 /dev/mmcblk1p3 : start=      673792, size=      655360, type=83
-/dev/mmcblk1p4 : start=     1329152, size=     6305792, type=5
+/dev/mmcblk1p4 : start=     1329152, size=, type=5
 /dev/mmcblk1p5 : start=     1331200, size=      262144, type=83
-/dev/mmcblk1p6 : start=     1595392, size=     6039552, type=83
+/dev/mmcblk1p6 : start=     1595392, size=, type=83
 EOF
 
 # Make sure rootfs is read-only so it can be relocated safely.

@@ -5,6 +5,7 @@
 SWUDEV=mmcblk0p1
 MMCDEV=mmcblk1
 BOARD_ID_DEV=1-00500
+MODULES="sun4i-backend sun4i-drm sun4i-drm-hdmi victron-gxdisp-bl"
 TTYS="$TTYS tty0"
 TESTMODE_TTYS="ttyS7"
 

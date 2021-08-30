@@ -1,7 +1,7 @@
 From 22539e61c45d2f855bf27522e3388b831f871492 Mon Sep 17 00:00:00 2001
 From: Mans Rullgard <mans@mansr.com>
 Date: Sun, 27 Jun 2021 16:21:51 +0100
-Subject: [PATCH 3/3] ARM: dts: ccgx: fix mmc cd gpio
+Subject: [PATCH 3/9] ARM: dts: ccgx: fix mmc cd gpio
 
 ---
  arch/arm/boot/dts/am3517-ccgx.dts | 6 +++---
