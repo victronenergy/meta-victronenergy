@@ -13,7 +13,7 @@ $(dirname "$0")/remount-rw.sh
 fs=$(grep -E '^\S+\s+/\s' /proc/mounts | awk '{print $3}')
 if [ "$fs" != "ext4" ]; then
     echo "Rootfs is not ext4, but $fs. Exit."
-    exit 1
+    exit 0
 fi
 
 echo "resizing $root"
