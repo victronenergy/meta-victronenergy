@@ -3,11 +3,13 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 inherit www
+inherit localsettings
 
 RDEPENDS_${PN} = "hiawatha venus-html5-logger"
 
 SRC_URI = " \
     https://github.com/victronenergy/venus-html5-app/releases/download/${PV}/venus-html5-app.tar.gz;downloadfilename=venus-html5-app-${PV}.tar.gz \
+    file://localsettings \
  \
 "
 SRC_URI[sha256sum] = "f47568b80d3b4c663efee801916ffcef35ff76f081369136da6e4087752ad3ea"
