@@ -19,6 +19,7 @@ inherit packagegroup
 RRECOMMENDS_${PN} += " \
     can-bus-bms \
     dbus-adc \
+    dbus-ble-sensors \
     dbus-bornay-windplus \
     dbus-cgwacs \
     dbus-digitalinputs \
