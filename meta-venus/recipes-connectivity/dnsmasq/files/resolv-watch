@@ -25,11 +25,6 @@ update_localsettings() {
         *)    conn=0 ;;
     esac
 
-    dbus-send --system --type=method_call --dest=com.victronenergy.settings \
-              /Settings com.victronenergy.Settings.AddSilentSetting \
-              string:'' string:/System/ActiveNetworkConnection \
-              int32:-1 string:i int32:-1 int32:3
-
     dbus-send --system --print-reply=literal --type=method_call \
               --dest=com.victronenergy.settings \
               /Settings/System/ActiveNetworkConnection \
