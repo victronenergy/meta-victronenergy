@@ -15,6 +15,8 @@ RESOLV_CONF=/run/resolv.conf
 # monitor the the directories since the files might be replaced
 WATCH_DIRS="${CM_RESOLV_CONF%/*} ${PPP_RESOLV_CONF%/*}"
 
+last_conn=-1
+
 update_localsettings() {
     dev=$(ip route get 1.1.1.1 | sed -n 's/.*\bdev\b *\([^ ]*\).*/\1/p')
 
@@ -25,10 +27,17 @@ update_localsettings() {
         *)    conn=0 ;;
     esac
 
-    dbus-send --system --print-reply=literal --type=method_call \
+    # only send changes over the dbus..
+    if [ $conn -eq $last_conn ]; then
+        return
+    fi
+
+    if dbus-send --system --print-reply=literal --type=method_call \
               --dest=com.victronenergy.settings \
               /Settings/System/ActiveNetworkConnection \
-              com.victronenergy.BusItem.SetValue int32:$conn
+              com.victronenergy.BusItem.SetValue int32:$conn ; then
+        last_conn=$conn
+    fi
 }
 
 # make sure the files exist, or dnsmasq gets unhappy
