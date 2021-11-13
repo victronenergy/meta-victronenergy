@@ -20,5 +20,5 @@ do_install () {
     # copy python scripts
     install -m 755 -D ${S}/*.py ${D}/${bindir}
     # copy data files
-    install -m 444 -D ${S}/*.csv ${D}/${bindir}
+    install -m 444 -D ${S}/*.dat ${D}/${bindir}
 }
