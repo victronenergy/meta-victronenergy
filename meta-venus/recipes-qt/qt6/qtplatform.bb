@@ -1,4 +1,4 @@
-SRC_URI += "file://qt-kms.conf file://qt5.sh"
+SRC_URI += "file://qt-kms.conf file://qt6.sh"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 LICENSE = "MIT"
@@ -9,6 +9,6 @@ do_install_append() {
     install ${WORKDIR}/qt-kms.conf ${D}/${sysconfdir}
 
     mkdir ${D}/${sysconfdir}/profile.d
-    install ${WORKDIR}/qt5.sh ${D}/${sysconfdir}/profile.d/qt5.sh
+    install ${WORKDIR}/qt6.sh ${D}/${sysconfdir}/profile.d/qt6.sh
 }
 

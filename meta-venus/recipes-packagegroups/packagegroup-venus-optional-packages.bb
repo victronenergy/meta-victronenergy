@@ -1,5 +1,5 @@
 # build but not installed in the image
-include qt5-packages.inc
+include qt6-packages.inc
 
 inherit packagegroup
 LICENSE = "MIT"
@@ -9,6 +9,7 @@ DEPENDS += "\
     gdb \
     gpsd \
     git \
+    kmscube \
     lsof \
     nodejs \
     ntp \
@@ -30,5 +31,5 @@ DEPENDS += "\
 "
 
 RDEPENDS_${PN} += " \
-    ${QT5_PACKAGES} \
+    ${QT6_PACKAGES} \
 "

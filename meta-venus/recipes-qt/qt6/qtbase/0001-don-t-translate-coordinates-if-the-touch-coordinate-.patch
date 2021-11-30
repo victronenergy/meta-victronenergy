@@ -1,0 +1,80 @@
+From 3e1857f23ae6bc38bf7bb6fb50e47ddf7c6d6d8c Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Sat, 27 Nov 2021 10:28:07 +0100
+Subject: [PATCH] don't translate coordinates if the touch coordinate range is
+ unknown
+
+The ft5x06 driver for linux reports the max uint16_t value if the actual value
+is unknown. This causes the touch to screen coordinate translation to fail.
+Since this also happens with screen with a calibrated touch ic inside, assume
+the reported coordinate is the screen coordinate.
+
+It would be nicer if the driver could simply report the correct value.
+
+Change-Id: I93ff73ea90cfcc1eccd63613b681c0756c3333a4
+---
+ .../input/evdevtouch/qevdevtouchhandler.cpp   | 27 +++++++++++++------
+ 1 file changed, 19 insertions(+), 8 deletions(-)
+
+diff --git a/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp b/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp
+index eb693426d9..731c01f909 100644
+--- a/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp
++++ b/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp
+@@ -150,6 +150,7 @@ public:
+     int hw_range_y_max;
+     int hw_pressure_min;
+     int hw_pressure_max;
++    bool hw_in_screen_coordinates;
+     QString hw_name;
+     QString deviceNode;
+     bool m_forceToActiveWindow;
+@@ -180,6 +181,7 @@ QEvdevTouchScreenData::QEvdevTouchScreenData(QEvdevTouchScreenHandler *q_ptr, co
+       hw_range_x_min(0), hw_range_x_max(0),
+       hw_range_y_min(0), hw_range_y_max(0),
+       hw_pressure_min(0), hw_pressure_max(0),
++      hw_in_screen_coordinates(false),
+       m_forceToActiveWindow(false), m_typeB(false), m_singleTouch(false),
+       m_filtered(false), m_prediction(0)
+ {
+@@ -336,6 +338,13 @@ QEvdevTouchScreenHandler::QEvdevTouchScreenHandler(const QString &device, const
+                 d->hw_range_x_min, d->hw_range_x_max, d->hw_range_y_min, d->hw_range_y_max);
+     }
+ 
++    // The ft5x06 driver on linux can report bogus max values (uint16_t) -1, but typically does report events
++    // in coordinates of the attached screen in such a case. Since Victron Energy uses a HDMI interface with
++    // several different, removable displays it can't be easily added to the dts. So disable the coordinate
++    // translation for this case and simply assume they are in screen coordinates.
++    if (d->hw_name.startsWith(QLatin1String("generic ft5x06")) && d->hw_range_x_max == 65535)
++        d->hw_in_screen_coordinates = true;
++
+     bool grabSuccess = !ioctl(m_fd, EVIOCGRAB, (void *) 1);
+     if (grabSuccess)
+         ioctl(m_fd, EVIOCGRAB, (void *) 0);
+@@ -778,14 +787,16 @@ void QEvdevTouchScreenData::reportPoints()
+         // Generate a screen position that is always inside the active window
+         // or the primary screen.  Even though we report this as a QRectF, internally
+         // Qt uses QRect/QPoint so we need to bound the size to winRect.size() - QSize(1, 1)
+-        const qreal wx = winRect.left() + tp.normalPosition.x() * (winRect.width() - 1);
+-        const qreal wy = winRect.top() + tp.normalPosition.y() * (winRect.height() - 1);
+-        const qreal sizeRatio = (winRect.width() + winRect.height()) / qreal(hw_w + hw_h);
+-        if (tp.area.width() == -1) // touch major was not provided
+-            tp.area = QRectF(0, 0, 8, 8);
+-        else
+-            tp.area = QRectF(0, 0, tp.area.width() * sizeRatio, tp.area.height() * sizeRatio);
+-        tp.area.moveCenter(QPointF(wx, wy));
++        if (!hw_in_screen_coordinates) {
++            const qreal wx = winRect.left() + tp.normalPosition.x() * (winRect.width() - 1);
++            const qreal wy = winRect.top() + tp.normalPosition.y() * (winRect.height() - 1);
++            const qreal sizeRatio = (winRect.width() + winRect.height()) / qreal(hw_w + hw_h);
++            if (tp.area.width() == -1) // touch major was not provided
++                tp.area = QRectF(0, 0, 8, 8);
++            else
++                tp.area = QRectF(0, 0, tp.area.width() * sizeRatio, tp.area.height() * sizeRatio);
++            tp.area.moveCenter(QPointF(wx, wy));
++        }
+ 
+         // Calculate normalized pressure.
+         if (!hw_pressure_min && !hw_pressure_max)
+-- 
+2.25.1
+

@@ -5,7 +5,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 LICENSE = "MIT"
 
-include qt5-packages.inc
+include qt6-packages.inc
 
 RDEPENDS_${PN} += "\
     simple-upnpd \
@@ -20,7 +20,6 @@ RDEPENDS_${PN}_append_canvu500 += "\
     mtd-utils-ubifs \
     swupdate \
     swupdate-scripts \
-    ${QT5_PACKAGES} \
 "
 
 RDEPENDS_${PN}_append_ccgx += "\
@@ -51,8 +50,6 @@ RDEPENDS_${PN}_append_einstein += "\
     linux-firmware-bcm43430a1 \
     read-edid \
     venus-button-handler \
-    ${QT5_PACKAGES} \
-    kmscube \
 "
 
 RDEPENDS_${PN}_append_sunxi += "\
