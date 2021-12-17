@@ -14,6 +14,7 @@ RDEPENDS_${PN} += " \
     dbus-pump \
     dbus-recorder \
     dbus-systemcalc-py \
+    dbus-tempsensor-relay \
     dbus-vebus-to-pvinverter \
     javascript-vnc-client \
     localsettings \
