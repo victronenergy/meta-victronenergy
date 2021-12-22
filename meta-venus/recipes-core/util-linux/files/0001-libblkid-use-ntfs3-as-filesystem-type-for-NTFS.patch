@@ -1,0 +1,25 @@
+From deabadab11f75c57fa0c823fff945d4727b8c28e Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Thu, 16 Dec 2021 12:58:58 +0000
+Subject: [PATCH] libblkid: use ntfs3 as filesystem type for NTFS
+
+---
+ libblkid/src/superblocks/ntfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libblkid/src/superblocks/ntfs.c b/libblkid/src/superblocks/ntfs.c
+index be2e3d895f98..3019b10f8c02 100644
+--- a/libblkid/src/superblocks/ntfs.c
++++ b/libblkid/src/superblocks/ntfs.c
+@@ -238,7 +238,7 @@ int blkid_probe_is_ntfs(blkid_probe pr)
+ 
+ const struct blkid_idinfo ntfs_idinfo =
+ {
+-	.name		= "ntfs",
++	.name		= "ntfs3",
+ 	.usage		= BLKID_USAGE_FILESYSTEM,
+ 	.probefunc	= probe_ntfs,
+ 	.magics		=
+-- 
+2.34.1
+
