@@ -1,6 +1,6 @@
 DESCRIPTION = "Venus HTML5 app"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 inherit www
 inherit localsettings
@@ -12,13 +12,17 @@ SRC_URI = " \
     file://localsettings \
  \
 "
-SRC_URI[sha256sum] = "f882c7d66d79af346b594fb7b43c153b4679653c8167b640b7ce35f58fe7285a"
+SRC_URI[sha256sum] = "e6542a81cf74cc296be8dfc7ddb9c275bfa7121a201fa335bbafa94c4d8cecb0"
 
 S = "${WORKDIR}"
 BASE_DIR = "${WWW_ROOT}/default/app"
 
+INHIBIT_DEFAULT_DEPS = "1"
+
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
+
+inherit allarch
 
 do_install () {
     for f in $( find ${S}/dist -type f -printf "%P\n" ); do
