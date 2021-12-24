@@ -10,4 +10,5 @@ RDEPENDS:${PN}:class-target += " \
     noto-sans-hinted-regularitalic \
     noto-sans-hinted-bold \
     noto-sans-hinted-bolditalic \
+    qtplatform \
 "
