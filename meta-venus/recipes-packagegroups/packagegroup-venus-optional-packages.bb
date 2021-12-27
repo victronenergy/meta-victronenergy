@@ -22,6 +22,7 @@ DEPENDS += "\
     python3-pylint \
     python3-spidev \
     s6 \
+    start-fingerpaint \
     tcpdump \
     tinymembench \
     tmux \
