@@ -12,10 +12,11 @@ DAEMONTOOLS_SERVICES_DIR ?= "/service"
 DAEMONTOOLS_LOG_DIR_PREFIX = "${localstatedir}/log"
 DAEMONTOOLS_SERVICE_SYMLINK ?= "1"
 
-# to allow the rootfs to be readonly in venus, /service might be overlayed
-# with /opt/victronenergy/service.
-DAEMONTOOLS_OVERLAYFS = "0"
-DAEMONTOOLS_OVERLAYFS:venus = "1"
+DEAMONTOOLS_DOWN ?= ""
+
+# to allow the rootfs to be readonly in venus, /service might be in RAM
+DAEMONTOOLS_TMPFS = "0"
+DAEMONTOOLS_TMPFS:venus = "1"
 
 DEAMONTOOLS_COMMON_SERVICES_DIR = "/opt/victronenergy/service"
 DAEMONTOOLS_SERVICE_DIR ?= "${DEAMONTOOLS_COMMON_SERVICES_DIR}/${PN}"
@@ -41,10 +42,9 @@ DAEMONTOOLS_preinst() {
 
 DAEMONTOOLS_postinst() {
     if test "x$D" = "x"; then
-        if [ "x${DAEMONTOOLS_DOWN}" = "x" ]; then
-            echo "Starting ${PN}"
-            svc -u ${DAEMONTOOLS_SERVICES_DIR}/${PN}/log
-            svc -u ${DAEMONTOOLS_SERVICES_DIR}/${PN}
+        if [ "${DAEMONTOOLS_TMPFS}" -eq "1" ]; then
+            mkdir -p ${DAEMONTOOLS_SERVICES_DIR}/${PN}
+            cp -a ${DAEMONTOOLS_SERVICE_DIR}/* ${DAEMONTOOLS_SERVICES_DIR}/${PN}
         fi
     fi
 }
@@ -60,7 +60,7 @@ DAEMONTOOLS_prerm() {
 # opkg forgets to remove symlinks, dpkg doesn't so check if still there
 DAEMONTOOLS_postrm() {
     if [ -d ${DAEMONTOOLS_SERVICES_DIR}/${PN} ]; then
-        rm ${DAEMONTOOLS_SERVICES_DIR}/${PN}
+        rm -rf ${DAEMONTOOLS_SERVICES_DIR}/${PN}
     fi
 }
 
@@ -151,7 +151,7 @@ do_install:append() {
 
     if [ ${DAEMONTOOLS_SERVICE_SYMLINK} = "1" ]; then
         install -d ${D}${DAEMONTOOLS_SERVICES_DIR}
-        if [ ${DAEMONTOOLS_OVERLAYFS} = "0" ]; then
+        if [ ${DAEMONTOOLS_TMPFS} = "0" ]; then
             ln -s ${DAEMONTOOLS_SERVICE_DIR} ${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}
         fi
     fi
