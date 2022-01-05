@@ -3,6 +3,7 @@
 case $(board-compat 2) in
     cubietech,einstein)          eeprom=1-00500 ;;
     friendlyarm,nanopi-neo-core) eeprom=0-00500 ;;
+    sinlinx,sinh3-core)          eeprom=0-00500 ;;
 esac
 
 if [ -n "$eeprom" ]; then
@@ -23,5 +24,6 @@ case $id in
     VMP9) echo C00C ;;      # MultiPlus-II rev A9
     VMPA) echo C00F ;;      # MultiPlus-II rev A10
     VEPG) echo C011 ;;      # PayGo
+    VEKR) echo C013 ;;      # Ekrano GX
     *)    echo C003 ;;
 esac

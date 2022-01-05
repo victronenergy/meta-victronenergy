@@ -17,11 +17,9 @@ SRC_URI += " \
     file://machine-conf.sh \
 "
 SRC_URI:append:ccgx = " file://get-unique-id.c"
-SRC_URI:append:einstein = "\
+SRC_URI:append:sunxi = "\
     file://backlight_device.in \
     file://blank_display_device.in \
-"
-SRC_URI:append:sunxi = "\
     file://pwm_buzzer.in \
 "
 
