@@ -38,3 +38,4 @@ btmgmt -i $HCI le on
 btmgmt -i $HCI bredr off
 
 svc -u /service/vesmart-server
+svc -u /service/dbus-ble-sensors

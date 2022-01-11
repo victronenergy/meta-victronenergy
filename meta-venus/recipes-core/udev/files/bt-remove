@@ -2,4 +2,5 @@
 
 if [ -z "$(ls /sys/class/bluetooth)" ]; then
     svc -d /service/vesmart-server
+    svc -d /service/dbus-ble-sensors
 fi
