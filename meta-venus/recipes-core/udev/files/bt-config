@@ -38,4 +38,7 @@ btmgmt -i $HCI le on
 btmgmt -i $HCI bredr off
 
 svc -u /service/vesmart-server
+
+# start dbus-ble-sensors, or restart it if already running
+svc -t /service/dbus-ble-sensors
 svc -u /service/dbus-ble-sensors
