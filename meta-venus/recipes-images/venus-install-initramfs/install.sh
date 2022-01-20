@@ -54,6 +54,12 @@ BOARD_ID_SIZE=16
 # file containing board id to program
 BOARD_ID_FILE=${CARD}/board_id
 
+# name of edid nvmem device
+#EDID_DEV=
+
+# file containing edid to program
+EDID_FILE=${CARD}/edid.bin
+
 # location of firmware files
 FIRMWARE_DIR=/opt/victronenergy/firmware
 
@@ -274,6 +280,26 @@ setup_board_id() {
     fi
 }
 
+setup_edid() {
+    test -n "$EDID_DEV" || return 0
+    test -f "$EDID_FILE" || return 0
+
+    msg "Writing EDID..."
+
+    edid_mem=/sys/bus/nvmem/devices/$EDID_DEV/nvmem
+    edid_size=$(stat -c %s $EDID_FILE)
+
+    # write to nvmem
+    dd if=$EDID_FILE of=$edid_mem bs=16
+
+    # read back and verify
+    dd if=$edid_mem of=/tmp/edid.bin bs=1 count=$edid_size
+
+    if ! cmp -s $EDID_FILE /tmp/edid.bin; then
+        error "Failed to write EDID"
+    fi
+}
+
 cleanup() {
     eval $HOOK_cleanup
     test -n "$UBIPART" && ubidetach -m $UBIPART
@@ -301,6 +327,7 @@ do_install() {
     install_swu
     install_firmware
     setup_board_id
+    setup_edid
 
     eval $HOOK_postinst
 
