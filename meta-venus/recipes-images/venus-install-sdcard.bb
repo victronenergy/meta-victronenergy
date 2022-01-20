@@ -1,16 +1,9 @@
-inherit image_types uboot-config
-
 DESCRIPTION = "Live image to program the rootfs"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-DEPENDS += "\
-    dosfstools-native \
-    mtools-native \
-    parted-native \
-    zip-native \
-"
+inherit deploy
 
 INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.cpio.gz.u-boot"
 DTB = "${KERNEL_DEVICETREE}"
@@ -44,14 +37,18 @@ INSTALL_FILES = "\
     ${SWU}-${MACHINE}.swu:venus.swu \
 "
 
-do_install[depends] += " \
+do_deploy[depends] += " \
     virtual/bootloader:do_deploy \
     virtual/kernel:do_deploy \
     venus-install-initramfs:do_image_complete \
     ${SWU}:do_swuimage \
+    dosfstools-native:do_populate_sysroot \
+    mtools-native:do_populate_sysroot \
+    parted-native:do_populate_sysroot \
+    zip-native:do_populate_sysroot \
 "
 
-do_install () {
+do_deploy () {
     SDCARD="${WORKDIR}/sdcard"
 
     if [ -d ${SDCARD} ]; then
@@ -68,8 +65,8 @@ do_install () {
 
     find ${WORKDIR} -name "board_id_*" -exec cp {} ${SDCARD} \;
 
-    zip -rj ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
-    ln -sf ${IMAGE_NAME}.sdcard.zip ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.sdcard.zip
+    zip -rj ${DEPLOYDIR}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
+    ln -sf ${IMAGE_NAME}.sdcard.zip ${DEPLOYDIR}/${IMAGE_LINK_NAME}.sdcard.zip
 
     # size of card contents in MB
     SIZE=$(du -sm ${SDCARD} | sed 's/[^0-9].*//')
@@ -82,7 +79,7 @@ do_install () {
     mcopy -i ${FSIMAGE} ${SDCARD}/* ::/
 
     # create partitioned image
-    IMAGE=${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.img
+    IMAGE=${DEPLOYDIR}/${IMAGE_NAME}.img
     IMAGE_SIZE=$(expr ${FSSIZE} + 1)
     dd if=/dev/null of=${IMAGE} bs=1M seek=${IMAGE_SIZE}
     parted ${IMAGE} -- \
@@ -100,6 +97,14 @@ do_install () {
 
     zip -j ${IMAGE}.zip ${IMAGE}
     rm ${IMAGE}
-    ln -sf ${IMAGE_NAME}.img.zip ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.img.zip
+    ln -sf ${IMAGE_NAME}.img.zip ${DEPLOYDIR}/${IMAGE_LINK_NAME}.img.zip
 }
 
+addtask do_deploy before do_build
+
+do_package[noexec] = "1"
+do_package_qa[noexec] = "1"
+do_packagedata[noexec] = "1"
+do_package_write_ipk[noexec] = "1"
+do_package_write_deb[noexec] = "1"
+do_package_write_rpm[noexec] = "1"
