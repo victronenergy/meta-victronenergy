@@ -60,4 +60,5 @@ do_install_append_rpi() {
   rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.bin
   rm ${D}${nonarch_base_libdir}/firmware/brcm/BCM43430A1.hcd
   rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.txt
+  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.raspberrypi,3-model-b.txt
 }
