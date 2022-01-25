@@ -10,7 +10,13 @@ RDEPENDS_${PN} = "machine-runtime-conf"
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-characterdisplay.git;protocol=https;tag=v${PV} \
+    file://0001-prevent-keypresses-from-reaching-the-GUI.patch \
+    file://0002-Show-sensible-text-when-AC-in-not-configured.patch \
+    file://0003-handle-new-backlight-controller.patch \
+    file://0004-reduce-amount-of-light-needed-to-activate-the-backli.patch \
 "
+
+PR = "1"
 
 S = "${WORKDIR}/git"
 

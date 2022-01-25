@@ -1,0 +1,99 @@
+From 25a2af2f37b944e7f4c14616efdc8a50601899c2 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Sat, 22 Jan 2022 16:35:27 +0000
+Subject: [PATCH 3/3] handle new backlight controller
+
+New displays have a backlight controller with variable brightness and an
+ADC for sensing ambient light.  Replicate the old behaviour if such a
+controller is present.
+---
+ lcddriver.py | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+
+diff --git a/lcddriver.py b/lcddriver.py
+index c2a0fcf..e2cb887 100644
+--- a/lcddriver.py
++++ b/lcddriver.py
+@@ -1,6 +1,7 @@
+ import sys
+ import subprocess
+ import os
++import os.path
+ 
+ # commands
+ LCD_CLEARDISPLAY = '\014'
+@@ -9,15 +10,30 @@ LCD_XY = '\033[Lx%dy%d;'
+ LCD_BACKLIGHT_ON = '\033[L+'
+ LCD_BACKLIGHT_OFF = '\033[L-'
+ 
++PWM_BACKLIGHT = '/sys/class/backlight/gxdisp-0-0051'
++PWM_BRIGHTNESS_ON = 15
++PWM_BRIGHTNESS_OFF = 1
++ADC_DAYLIGHT = 5000
++
+ class Lcd(object):
+ 	#initializes objects and lcd
+ 	def __init__(self, lcd_dev):
+ 		self.lcd = os.open(lcd_dev, os.O_WRONLY)
+ 		self._backlight_on = True
++		self.pwm_backlight = os.path.exists(PWM_BACKLIGHT)
++		if self.pwm_backlight:
++			self.write_attr('auto_brightness', 0)
++			self.on_pwm(True)
++			self.on_gpio(True)
+ 
+ 	def write(self, data):
+ 		os.write(self.lcd, data)
+ 
++	def write_attr(self, attr, val):
++		f = open(PWM_BACKLIGHT + '/' + attr, 'wb')
++		f.write(str(val).encode('ascii'))
++		f.close()
++
+ 	# put string function
+ 	def display_string(self, string, line):
+ 		self.write(LCD_XY % (0, line - 1))
+@@ -36,12 +52,40 @@ class Lcd(object):
+ 		self._backlight_on = bool(v)
+ 		if v:
+ 			self.write(LCD_RETURNHOME)
++
++		if self.pwm_backlight:
++			self.on_pwm(v)
++		else:
++			self.on_gpio(v)
++
++	def on_pwm(self, v):
++		if v:
++			self.write_attr('brightness', PWM_BRIGHTNESS_ON)
++		else:
++			self.write_attr('brightness', PWM_BRIGHTNESS_OFF)
++
++	def on_gpio(self, v):
++		if v:
+ 			self.write(LCD_BACKLIGHT_ON)
+ 		else:
+ 			self.write(LCD_BACKLIGHT_OFF)
+ 
+ 	@property
+ 	def daylight(self):
++		if self.pwm_backlight:
++			return self.daylight_adc()
++		else:
++			return self.daylight_gpio()
++
++	def daylight_adc(self):
++		try:
++			v = int(open(PWM_BACKLIGHT + '/adc_value', 'rb').read().strip())
++			return v >= ADC_DAYLIGHT
++		except:
++				pass
++		return True
++
++	def daylight_gpio(self):
+ 		""" Read the light sensor and return true if high level of ambient
+ 		    light is detected. """
+ 		try:
+-- 
+2.7.4
+

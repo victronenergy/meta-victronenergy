@@ -1,0 +1,36 @@
+From 9fb819c1c2ad9160fef2e777fd9e731895721431 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Wed, 22 Dec 2021 17:17:58 +0200
+Subject: [PATCH 1/3] prevent keypresses from reaching the GUI
+
+On the GX device, the gpio_keys based keyboard is the only
+keyboard and is therefore used by the system. A key press
+on the LCD therefore also navigates the menu, and can cause
+settings to be changed or the device to be rebooted.
+
+In a hilarious bug report, entering 5813 on a paygo device
+would navigate to the reboot option and reboot the device.
+
+To prevent this, we call the EVIOCGRAB ioctl on the input
+device.
+---
+ dbus_characterdisplay.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/dbus_characterdisplay.py b/dbus_characterdisplay.py
+index ff8a515..1495b7e 100755
+--- a/dbus_characterdisplay.py
++++ b/dbus_characterdisplay.py
+@@ -88,7 +88,8 @@ def main():
+ 	# Keyboard handling
+ 	try:
+ 		kbd = InputDevice("/dev/input/by-path/platform-disp_keys-event")
+-	except OSError:
++		kbd.grab()
++	except (OSError, IOError):
+ 		kbd = None
+ 
+ 	has_four_buttons = subprocess.check_output(["/usr/bin/board-compat"]).strip() in FOUR_BUTTON_DEVICES
+-- 
+2.7.4
+

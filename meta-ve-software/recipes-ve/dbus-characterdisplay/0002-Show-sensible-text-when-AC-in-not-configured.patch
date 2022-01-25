@@ -1,0 +1,28 @@
+From 4982f73e06cc74e6426f8d7edd9e993cd1cbba7a Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Thu, 13 Jan 2022 17:27:06 +0200
+Subject: [PATCH 2/3] Show sensible text when AC-in not configured
+
+In case the AC-input is configured as "Not used" on the Menu,
+the LCD would display a confusing empty label with the AC input
+power next to it. Rather show AC-in in this case.
+---
+ pages.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pages.py b/pages.py
+index 2dc1292..c8b2106 100644
+--- a/pages.py
++++ b/pages.py
+@@ -373,7 +373,7 @@ class SolarHistoryPage(Page):
+ 		return text
+ 
+ class AcPage(Page):
+-	sources = ["", "Grid", "Genset", "Shore"]
++	sources = ["AC-in", "Grid", "Genset", "Shore"]
+ 
+ 	def __init__(self):
+ 		super(AcPage, self).__init__()
+-- 
+2.7.4
+
