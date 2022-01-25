@@ -1,0 +1,28 @@
+From 860493a392703516e7fad78aa8cfa84816111c57 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Tue, 25 Jan 2022 13:48:40 +0200
+Subject: [PATCH] reduce amount of light needed to activate the backlight
+
+The backlight would only activate at high levels of ambient
+light, leaving the impression that it isn't working. An
+analog level of 200 was empirically determined to be high enough
+that the backlight's proximity to the sensor does not keep the
+display on, but low enough that any sort of light brings the display
+up.
+---
+ lcddriver.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lcddriver.py b/lcddriver.py
+index e2cb887..07ae25b 100644
+--- a/lcddriver.py
++++ b/lcddriver.py
+@@ -13,7 +13,7 @@
+ PWM_BACKLIGHT = '/sys/class/backlight/gxdisp-0-0051'
+ PWM_BRIGHTNESS_ON = 15
+ PWM_BRIGHTNESS_OFF = 1
+-ADC_DAYLIGHT = 5000
++ADC_DAYLIGHT = 200
+ 
+ class Lcd(object):
+ 	#initializes objects and lcd
