@@ -10,9 +10,11 @@ RDEPENDS_${PN} = "machine-runtime-conf"
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-characterdisplay.git;protocol=https;tag=v${PV} \
+    file://7beba966fdbb9155731ce359dc93ff5523ddd796.patch \
 "
 
 S = "${WORKDIR}/git"
+PR = "1"
 
 RDEPENDS_${PN} = " \
     dbus-systemcalc-py \
