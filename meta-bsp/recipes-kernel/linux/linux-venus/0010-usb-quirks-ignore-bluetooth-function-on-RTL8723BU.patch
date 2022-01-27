@@ -1,0 +1,39 @@
+From 77395b7e36321e7c23f68a437adbc549cecbaa5d Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Thu, 27 Jan 2022 17:42:21 +0000
+Subject: [PATCH] usb: quirks: ignore bluetooth function on RTL8723BU
+
+---
+ drivers/usb/core/quirks.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 76ac5d6555ae..5639433cadb4 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -407,6 +407,10 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	/* Realtek hub in Dell WD19 (Type-C) */
+ 	{ USB_DEVICE(0x0bda, 0x0487), .driver_info = USB_QUIRK_NO_LPM },
+ 
++	/* Realtek RTL8723BU WLAN/Bluetooth adapter */
++	{ USB_DEVICE(0x0bda, 0xb720), .driver_info =
++			USB_QUIRK_ENDPOINT_IGNORE },
++
+ 	/* Generic RTL8153 based ethernet adapters */
+ 	{ USB_DEVICE(0x0bda, 0x8153), .driver_info = USB_QUIRK_NO_LPM },
+ 
+@@ -543,6 +547,11 @@ static const struct usb_device_id usb_endpoint_ignore[] = {
+ 	{ USB_DEVICE_INTERFACE_NUMBER(0x06f8, 0xb000, 5), .driver_info = 0x81 },
+ 	{ USB_DEVICE_INTERFACE_NUMBER(0x0926, 0x0202, 1), .driver_info = 0x85 },
+ 	{ USB_DEVICE_INTERFACE_NUMBER(0x0926, 0x0208, 1), .driver_info = 0x85 },
++	{ USB_DEVICE_INTERFACE_NUMBER(0x0bda, 0xb720, 0), .driver_info = 0x81 },
++	{ USB_DEVICE_INTERFACE_NUMBER(0x0bda, 0xb720, 0), .driver_info = 0x02 },
++	{ USB_DEVICE_INTERFACE_NUMBER(0x0bda, 0xb720, 0), .driver_info = 0x82 },
++	{ USB_DEVICE_INTERFACE_NUMBER(0x0bda, 0xb720, 1), .driver_info = 0x03 },
++	{ USB_DEVICE_INTERFACE_NUMBER(0x0bda, 0xb720, 1), .driver_info = 0x83 },
+ 	{ }
+ };
+ 
+-- 
+2.35.0
+
