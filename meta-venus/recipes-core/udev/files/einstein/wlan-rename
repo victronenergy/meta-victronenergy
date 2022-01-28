@@ -9,39 +9,24 @@ case $subsys in
         # administered bit.  The interface with this bit set becomes the
         # the access point, the other is either client or unused.
 
-        dev=/sys/class/net/$INTERFACE/device/..
-        vid=$(cat $dev/idVendor)
-        pid=$(cat $dev/idProduct)
-
         addr1=$(cut -d: -f1 /sys/class/net/$INTERFACE/address)
         local=$((0x$addr1 & 2))
 
         if [ $local -gt 0 ]; then
             echo ap0
         else
-            case $vid:$pid in
-                0bda:b720)
-                    # old device with RTL8723BU
-                    echo disabled-$INTERFACE
-                    ;;
-                *)
-                    # new device, take over from sdio adapter
-                    if [ -e /sys/class/net/wifi0 ]; then
-                        ip link set wifi0 down
-                        ip link set wifi0 name disabled-$INTERFACE
-                    fi
-                    echo wifi0
-                    ;;
-            esac
+            if [ -e /sys/bus/sdio/devices/mmc2:0001:1 ]; then
+                # sdio adapter is present, ignore this one
+                echo disabled-$INTERFACE
+            else
+                echo wifi0
+            fi
         fi
 
         ;;
 
     sdio)
-        if [ -e /sys/class/net/wifi0 ]; then
-            # another interface has been chosen as primary, ignore this one
-            echo disabled-$INTERFACE
-        elif [ $(ls /sys/class/net | grep -Ec 'wlan|^ap') -gt 3 ]; then
+        if [ $(ls /sys/class/net | grep -Ec 'wlan|^ap') -gt 3 ]; then
             # an external adapter is connected, disable this one
             echo disabled-wifi0
         else
