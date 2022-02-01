@@ -13,7 +13,7 @@ LINUX_VERSION_VENUS = "1"
 LINUX_VERSION_EXTENSION = "-venus-${LINUX_VERSION_VENUS}"
 
 PV = "${LINUX_VERSION}${LINUX_VERSION_EXTENSION}"
-PR = "5"
+PR = "6"
 
 SRC_URI = " \
     git://github.com/victronenergy/linux.git;protocol=https;branch=venus-${LINUX_VERSION};tag=v${PV} \
@@ -27,6 +27,7 @@ SRC_URI = " \
     file://0008-ARM-dts-ccgx2-add-recovery-info-for-i2c2.patch \
     file://0009-ARM-dts-ccgx2-add-regulator-for-devices-on-hdmi-i2c-.patch \
     file://0010-usb-quirks-ignore-bluetooth-function-on-RTL8723BU.patch \
+    file://0011-drm-reduce-connector-poll-interval.patch \
 "
 S = "${WORKDIR}/git"
 

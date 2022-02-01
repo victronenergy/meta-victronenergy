@@ -1,0 +1,25 @@
+From 624ef6d3a46dac18e845a8c2ec4aaa3482c163cb Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Tue, 11 Jan 2022 13:47:20 +0000
+Subject: [PATCH] drm: reduce connector poll interval
+
+---
+ drivers/gpu/drm/drm_probe_helper.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
+index d6017726cc2a..9386b25e05bf 100644
+--- a/drivers/gpu/drm/drm_probe_helper.c
++++ b/drivers/gpu/drm/drm_probe_helper.c
+@@ -223,7 +223,7 @@ drm_connector_mode_valid(struct drm_connector *connector,
+ 	return ret;
+ }
+ 
+-#define DRM_OUTPUT_POLL_PERIOD (10*HZ)
++#define DRM_OUTPUT_POLL_PERIOD (1*HZ)
+ /**
+  * drm_kms_helper_poll_enable - re-enable output polling.
+  * @dev: drm_device
+-- 
+2.35.0
+
