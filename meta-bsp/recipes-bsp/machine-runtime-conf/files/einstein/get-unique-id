@@ -2,12 +2,7 @@
 
 sdio=/sys/bus/sdio/devices/mmc2:0001:1/net
 
-inst=$(/opt/victronenergy/venus-eeprom/eeprom --check |
-           awk '/^installer-version/ { print $2 }')
-
-if [ -n "$inst" -a "$inst" -gt 20220201000000 ]; then
-    addr=/sys/class/net/eth0/address
-elif [ -e $sdio ]; then
+if [ -e $sdio ]; then
     addr=$sdio/*/address
 else
     addr=/sys/class/net/*wifi0/address
