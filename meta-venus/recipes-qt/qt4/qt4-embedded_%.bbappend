@@ -18,7 +18,7 @@ QT_CONFIG_FLAGS = " \
     -system-libjpeg -system-libpng -system-libtiff -system-zlib \
     -no-pch -stl -no-glib \
     -no-rpath -silent -no-scripttools \
-    -nomake examples -nomake demos -nomake tests -nomake doc \
+    -nomake examples -nomake demos -nomake tests -nomake docs \
     -no-multimedia -no-audio-backend -no-phonon-backend \
     -qdbus -no-openssl -no-qt3support -no-xmlpatterns \
     -no-webkit -no-phonon -no-qt3support \
