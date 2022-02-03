@@ -16,16 +16,16 @@ IMAGE_INSTALL = " \
     ${@bb.utils.contains('SWUPDATE_INIT', 'tiny', '', 'initscripts sysvinit tinylogin', d)} \
 "
 
-IMAGE_INSTALL_append_beaglebone = "e2fsprogs-mke2fs util-linux-sfdisk"
-IMAGE_INSTALL_append_canvu500 = "imx-kobs mtd-utils-ubifs kernel-module-usbserial kernel-module-ftdi-sio"
-IMAGE_INSTALL_append_ccgx = "mtd-utils-ubifs"
-IMAGE_INSTALL_append_einstein = "\
+IMAGE_INSTALL:append:beaglebone = "e2fsprogs-mke2fs util-linux-sfdisk"
+IMAGE_INSTALL:append:canvu500 = "imx-kobs mtd-utils-ubifs kernel-module-usbserial kernel-module-ftdi-sio"
+IMAGE_INSTALL:append:ccgx = "mtd-utils-ubifs"
+IMAGE_INSTALL:append:einstein = "\
     kernel-module-sun4i-backend \
     kernel-module-sun4i-drm \
     kernel-module-sun4i-drm-hdmi \
     kernel-module-victron-gxdisp-bl \
 "
-IMAGE_INSTALL_append_sunxi = "e2fsprogs-mke2fs util-linux-sfdisk"
+IMAGE_INSTALL:append:sunxi = "e2fsprogs-mke2fs util-linux-sfdisk"
 
 IMAGE_LINGUAS = " "
 

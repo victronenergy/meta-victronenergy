@@ -6,8 +6,8 @@ PROVIDES = "virtual/bootloader"
 DEPENDS = "mtd-utils"
 
 # just for parsing
-RPROVIDES_${PN} += "u-boot-default-env"
-ALLOW_EMPTY_u-boot-default-env = "1"
+RPROVIDES:${PN} += "u-boot-default-env"
+ALLOW_EMPTY:u-boot-default-env = "1"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 # gcc 4.9.2 has a BUG cause false array out bound warnings.. (which is in fido)
@@ -45,7 +45,7 @@ do_deploy () {
     fi
 }
 
-FILES_${PN} = "/boot ${sysconfdir}"
+FILES:${PN} = "/boot ${sysconfdir}"
 # no gnu_hash in uboot.bin, by design, so skip QA
-INSANE_SKIP_${PN} = "1"
+INSANE_SKIP:${PN} = "1"
 

@@ -13,7 +13,7 @@ TOOLCHAIN_HOST_TASK += "nativesdk-packagegroup-qt6-toolchain-host"
 # so they work from Qt Creator without having to source the envirmental script.
 # The script below runs after extracting the SDK so its installed location
 # is known.
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 inherit populate_sdk populate_sdk_qt6_base
 

@@ -2,7 +2,7 @@ inherit image_types
 
 IMAGE_TYPES += "live-img.gz"
 
-IMAGE_TYPEDEP_live-img = "ext3"
+IMAGE_TYPEDEP:live-img = "ext3"
 
 do_image_live_img[depends] += "\
     dosfstools-native:do_populate_sysroot \
@@ -12,7 +12,7 @@ do_image_live_img[depends] += "\
     virtual/kernel:do_deploy \
 "
 
-IMAGE_CMD_live-img () {
+IMAGE_CMD:live-img () {
     BOOTIMG=${WORKDIR}/boot.img
     LIVE_IMAGE=${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.live-img
 

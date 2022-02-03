@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
 inherit daemontools
 
@@ -9,7 +9,7 @@ DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/sshd"
 
 SRC_URI += "file://start-sshd.sh"
 
-do_install_append() {
+do_install:append() {
     install -m 755 ${WORKDIR}/start-sshd.sh ${D}${bindir}
 }
 

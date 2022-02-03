@@ -16,4 +16,4 @@ do_install () {
     install -m 644 version ${D}${vedir}
 }
 
-FILES_${PN} += "${vedir}"
+FILES:${PN} += "${vedir}"

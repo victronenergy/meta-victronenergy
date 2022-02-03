@@ -9,4 +9,4 @@ do_install() {
     install -m 0644 ${WORKDIR}/volatiles ${D}${sysconfdir}/default/volatiles/30_${PN}
 }
 
-FILES_${PN} = "${sysconfdir}"
+FILES:${PN} = "${sysconfdir}"

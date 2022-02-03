@@ -1,7 +1,7 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI += "file://nanorc"
 
-do_install_append () {
+do_install:append () {
     mkdir -p ${D}${sysconfdir}
     install -m 0644 ${WORKDIR}/nanorc ${D}${sysconfdir}
 }

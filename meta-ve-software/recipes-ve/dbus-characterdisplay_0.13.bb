@@ -6,7 +6,7 @@ inherit gmakevelib
 inherit daemontools
 inherit python-compile
 
-RDEPENDS_${PN} = "machine-runtime-conf"
+RDEPENDS:${PN} = "machine-runtime-conf"
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-characterdisplay.git;protocol=https;tag=v${PV} \
@@ -14,7 +14,7 @@ SRC_URI = " \
 
 S = "${WORKDIR}/git"
 
-RDEPENDS_${PN} = " \
+RDEPENDS:${PN} = " \
     dbus-systemcalc-py \
     localsettings \
     python3-core \

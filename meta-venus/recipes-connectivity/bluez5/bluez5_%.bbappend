@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 PACKAGECONFIG = "deprecated readline tools"
 
@@ -13,7 +13,7 @@ EXTRA_OECONF += "\
     --localstatedir=/data/var \
 "
 
-do_install_append() {
+do_install:append() {
     install -m 0644 ${WORKDIR}/ble.conf ${D}${sysconfdir}/bluetooth
 
     install -d ${D}${sysconfdir}/default

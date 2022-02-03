@@ -17,4 +17,4 @@ do_install() {
     install -m 0644 bin/${BLOB} ${dest}
 }
 
-FILES_${PN} = "${FIRMWARE_DIR}"
+FILES:${PN} = "${FIRMWARE_DIR}"

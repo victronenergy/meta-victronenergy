@@ -5,7 +5,7 @@ DESCRIPTION = "Make console available on tty port"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
-RDEPENDS_${PN} = "machine-runtime-conf"
+RDEPENDS:${PN} = "machine-runtime-conf"
 
 inherit ve_package
 inherit daemontools

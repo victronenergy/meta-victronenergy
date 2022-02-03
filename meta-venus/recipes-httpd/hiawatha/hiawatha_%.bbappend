@@ -1,11 +1,11 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 inherit www
 
 SRC_URI += " \
     file://hiawatha.conf \
 "
-RDEPENDS_${PN} += "php-fpm"
+RDEPENDS:${PN} += "php-fpm"
 
 EXTRA_OECMAKE = " -DENABLE_IPV6=OFF \
                   -DENABLE_CACHE=OFF \
@@ -25,12 +25,12 @@ EXTRA_OECMAKE = " -DENABLE_IPV6=OFF \
                   -DWEBROOT_DIR=/var/www/hiawatha \
                   -DWORK_DIR=/var/lib/hiawatha "
 
-do_configure_append() {
+do_configure:append() {
     sed -i 's:^WebsiteRoot\>.*:WebsiteRoot = ${WWW_ROOT}:' \
         ${WORKDIR}/hiawatha.conf
 }
 
-do_install_append() {
+do_install:append() {
     install -m 0644 ${WORKDIR}/hiawatha.conf ${D}${sysconfdir}/hiawatha/hiawatha.conf
     install -d ${D}${sysconfdir}/hiawatha/sites-enabled
     install -d ${D}${sysconfdir}/default/volatiles

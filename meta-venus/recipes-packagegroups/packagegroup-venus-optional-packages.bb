@@ -30,6 +30,6 @@ DEPENDS += "\
     x11vnc \
 "
 
-RDEPENDS_${PN} += " \
+RDEPENDS:${PN} += " \
     ${QT6_PACKAGES} \
 "

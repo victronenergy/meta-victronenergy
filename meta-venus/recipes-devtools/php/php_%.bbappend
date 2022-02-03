@@ -1,3 +1,3 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-PACKAGECONFIG_remove = "mysql imap"
+PACKAGECONFIG:remove = "mysql imap"

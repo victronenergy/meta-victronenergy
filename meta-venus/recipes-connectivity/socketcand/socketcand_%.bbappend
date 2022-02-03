@@ -1,13 +1,13 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI += "file://start-socketcand"
 
-do_install_append() {
+do_install:append() {
     install -d ${D}${sbindir}
     install -m 0755 ${WORKDIR}/start-socketcand ${D}${sbindir}
 }
 
-FILES_${PN} += "${sbindir}/start-socketcand"
+FILES:${PN} += "${sbindir}/start-socketcand"
 
 DAEMONTOOLS_RUN = "${sbindir}/start-socketcand"
 DAEMONTOOLS_DOWN = "1"

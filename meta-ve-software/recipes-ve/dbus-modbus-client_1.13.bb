@@ -6,7 +6,7 @@ inherit ve_package
 inherit daemontools
 inherit python-compile
 
-RDEPENDS_${PN} = "\
+RDEPENDS:${PN} = "\
     bash \
     python3-core \
     python3-dbus \
@@ -50,4 +50,4 @@ do_install () {
     chmod 755 ${SERVICE}/log/run
 }
 
-FILES_${PN} += "${DAEMONTOOLS_SERVICE_DIR_SERIAL}"
+FILES:${PN} += "${DAEMONTOOLS_SERVICE_DIR_SERIAL}"

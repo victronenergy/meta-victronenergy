@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/qtbase:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/qtbase:"
 
 PACKAGECONFIG:append:class-target = "kms"
 PACKAGECONFIG:remove:class-target = "libinput"

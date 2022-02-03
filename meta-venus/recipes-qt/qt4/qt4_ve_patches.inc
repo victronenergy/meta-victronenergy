@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 # https://github.com/victronenergy/qt/compare/v4.8.7_oe...victronenergy:v4.8.7_ve
 SRC_URI += " \

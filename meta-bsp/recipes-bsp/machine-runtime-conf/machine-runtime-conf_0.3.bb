@@ -17,16 +17,16 @@ SRC_URI += " \
     file://product-name \
     file://machine-conf.sh \
 "
-SRC_URI_append_ccgx += "file://get-unique-id.c"
-SRC_URI_append_einstein += "\
+SRC_URI:append:ccgx += "file://get-unique-id.c"
+SRC_URI:append:einstein += "\
     file://backlight_device.in \
     file://blank_display_device.in \
 "
-SRC_URI_append_sunxi += "file://canbus_ports.in"
+SRC_URI:append:sunxi += "file://canbus_ports.in"
 
 inherit update-rc.d
 
-RDEPENDS_${PN} += "bash"
+RDEPENDS:${PN} += "bash"
 
 INITSCRIPT_NAME = "machine-conf.sh"
 INITSCRIPT_PARAMS = "start 90 S ."
@@ -56,7 +56,7 @@ python () {
         d.setVarFlag(v, "export", 1)
 }
 
-do_install_append() {
+do_install:append() {
     conf=${D}${sysconfdir}/venus
     mkdir -p $conf
 

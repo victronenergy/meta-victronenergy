@@ -8,7 +8,7 @@ DESCRIPTION = " \
     As in not X / wayland depend, since not all targets have a X server \
 "
 
-RDEPENDS_${PN} += " \
+RDEPENDS:${PN} += " \
     dbus-generator-starter \
     dbus-mqtt \
     dbus-pump \
@@ -20,7 +20,7 @@ RDEPENDS_${PN} += " \
     localsettings \
 "
 
-RDEPENDS_${PN}_append_nanopi += " \
+RDEPENDS:${PN}:append:nanopi += " \
     dbus-characterdisplay \
 "
 

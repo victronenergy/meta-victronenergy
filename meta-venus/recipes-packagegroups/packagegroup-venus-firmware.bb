@@ -4,10 +4,10 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 
-RDEPENDS_${PN} = "\
+RDEPENDS:${PN} = "\
     venus-firmware-update \
 "
 
-RDEPENDS_${PN}_append_einstein = "\
+RDEPENDS:${PN}:append:einstein = "\
     atmel-adc-slcan \
 "

@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += " \
@@ -16,20 +16,20 @@ SRC_URI += " \
     file://simcom.rules \
 "
 
-SRC_URI_append_beaglebone += "\
+SRC_URI:append:beaglebone += "\
     file://wlan.rules \
     file://wlan-rename \
     file://wlan-update \
 "
 
-SRC_URI_append_sunxi += "\
+SRC_URI:append:sunxi += "\
     file://slcan.rules \
     file://wlan.rules \
     file://wlan-rename \
     file://wlan-update \
 "
 
-do_install_append() {
+do_install:append() {
     install -m 0755 ${WORKDIR}/mount.sh ${D}${sysconfdir}/udev/scripts
 
     install -d ${D}/${sysconfdir}/udev/mount.blacklist.d
@@ -49,18 +49,18 @@ do_install_append() {
     install -m 0644 ${WORKDIR}/simcom.rules ${D}/${sysconfdir}/udev/rules.d
 }
 
-do_install_append_beaglebone() {
+do_install:append:beaglebone() {
     install -m 0644 ${WORKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
 
     install -m 0755 ${WORKDIR}/wlan-rename ${D}${base_libdir}/udev
     install -m 0755 ${WORKDIR}/wlan-update ${D}${base_libdir}/udev
 }
 
-do_install_append_ccgx() {
+do_install:append:ccgx() {
     install -m 0644 ${WORKDIR}/rtl8192cu.rules ${D}${sysconfdir}/udev/rules.d
 }
 
-do_install_append_sunxi() {
+do_install:append:sunxi() {
     install -m 0644 ${WORKDIR}/slcan.rules ${D}${sysconfdir}/udev/rules.d
     install -m 0644 ${WORKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
 
@@ -68,4 +68,4 @@ do_install_append_sunxi() {
     install -m 0755 ${WORKDIR}/wlan-update ${D}${base_libdir}/udev
 }
 
-FILES_${PN} += "${base_libdir}"
+FILES:${PN} += "${base_libdir}"

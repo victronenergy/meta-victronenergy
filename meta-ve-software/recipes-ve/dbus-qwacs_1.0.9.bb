@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 inherit qmakeve
 inherit daemontools
 
-RDEPENDS_${PN} = "dbus"
+RDEPENDS:${PN} = "dbus"
 PR = "r0"
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus_qwacs.git;protocol=https;tag=v${PV} \

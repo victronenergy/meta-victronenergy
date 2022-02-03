@@ -16,11 +16,11 @@ INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.cpio.gz.u-boot"
 DTB = "${KERNEL_DEVICETREE}"
 SCR = "install-${MACHINE}.scr"
 
-SRC_URI_beaglebone += "file://board_id_octogx"
-SRC_URI_einstein += "\
+SRC_URI:beaglebone += "file://board_id_octogx"
+SRC_URI:einstein += "\
     file://board_id_cerbogx \
 "
-SRC_URI_nanopi += "\
+SRC_URI:nanopi += "\
     file://board_id_easysolar \
     file://board_id_easysolar_a9 \
     file://board_id_easysolar_a10 \

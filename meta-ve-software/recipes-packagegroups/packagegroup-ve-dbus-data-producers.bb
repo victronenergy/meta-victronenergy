@@ -16,7 +16,7 @@ inherit packagegroup
 # List of application which provide data on the dbus in a VBusItem interface.
 # These are RRECOMMENDS so the are only included when available.
 
-RRECOMMENDS_${PN} += " \
+RRECOMMENDS:${PN} += " \
     can-bus-bms \
     dbus-adc \
     dbus-ble-sensors \

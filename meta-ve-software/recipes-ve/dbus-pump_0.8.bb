@@ -6,13 +6,13 @@ inherit daemontools
 inherit python-compile
 
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus_pump.git;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/dbus_pump.git;protocol=https;tag=v${PV};branch=master \
     file://com.victronenergy.pump.conf \
 "
 PR = "r1"
 S = "${WORKDIR}/git"
 
-RDEPENDS_${PN} = " \
+RDEPENDS:${PN} = " \
     localsettings \
     python3-core \
     python3-datetime \

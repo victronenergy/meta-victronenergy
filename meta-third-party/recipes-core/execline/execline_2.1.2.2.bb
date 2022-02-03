@@ -10,7 +10,7 @@ PR = "r4"
 
 S = "${WORKDIR}/${PN}-${PV}"
 DEPENDS = "skalibs make-native"
-RDEPENDS_${PN} = "skalibs"
+RDEPENDS:${PN} = "skalibs"
 
 do_configure() {
     ./configure --with-sysdeps=${PKG_CONFIG_SYSROOT_DIR}/usr/lib/skalibs/sysdeps --libdir=${libdir} --dynlibdir=${libdir} --with-lib=${PKG_CONFIG_SYSROOT_DIR}/usr/lib

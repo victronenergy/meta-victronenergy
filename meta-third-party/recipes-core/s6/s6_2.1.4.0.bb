@@ -13,7 +13,7 @@ SRC_URI[sha256sum] = "e81853ecedb8280842de16e096c0a0170c5ceb8af7ce60824237588c9a
 PR = "r8"
 S = "${WORKDIR}/${PN}-${PV}"
 DEPENDS = "execline skalibs make-native"
-RDEPENDS_${PN} = "execline skalibs"
+RDEPENDS:${PN} = "execline skalibs"
 
 do_configure() {
     ./configure --with-sysdeps=${PKG_CONFIG_SYSROOT_DIR}/usr/lib/skalibs/sysdeps --with-lib=${PKG_CONFIG_SYSROOT_DIR}/usr/lib --libexecdir=${libexecdir}

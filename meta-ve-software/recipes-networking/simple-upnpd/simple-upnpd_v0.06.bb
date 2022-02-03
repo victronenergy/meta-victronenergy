@@ -13,8 +13,8 @@ S = "${WORKDIR}/git"
 inherit daemontools useradd
 
 USERADD_PACKAGES = "${PN}"
-GROUPADD_PARAM_${PN} = "simple-upnpd"
-USERADD_PARAM_${PN} = "--no-create-home --shell /bin/false -g simple-upnpd simple-upnpd"
+GROUPADD_PARAM:${PN} = "simple-upnpd"
+USERADD_PARAM:${PN} = "--no-create-home --shell /bin/false -g simple-upnpd simple-upnpd"
 
 DAEMONTOOLS_RUN = "${base_bindir}/start-simple-upnpd"
 

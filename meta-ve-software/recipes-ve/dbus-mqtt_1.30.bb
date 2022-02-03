@@ -5,7 +5,7 @@ inherit gmakevelib
 inherit daemontools
 inherit python-compile
 
-RDEPENDS_${PN} = " \
+RDEPENDS:${PN} = " \
     mosquitto \
     python3-core \
     python3-lxml \

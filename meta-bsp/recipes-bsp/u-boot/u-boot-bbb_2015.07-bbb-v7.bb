@@ -17,12 +17,12 @@ SRC_URI = " \
 SRC_URI[md5sum] = "1524766c623a229e984bc97a7bdea2f0"
 SRC_URI[sha256sum] = "c7dd35420d7925c1443a0001a64a35f56593683f93612537617a18d60300398c"
 
-do_compile_append () {
+do_compile:append () {
     mkimage -A arm -T script -C none -n 'Install Script' \
         -d ${WORKDIR}/install.cmds ${WORKDIR}/install.scr
 }
 
-do_deploy_append () {
+do_deploy:append () {
     install -d ${DEPLOYDIR}
     install -m 0644 ${WORKDIR}/uEnv.txt ${DEPLOYDIR}/uEnv.txt
     install -m 0644 ${WORKDIR}/install.scr ${DEPLOYDIR}/install-${MACHINE}.scr

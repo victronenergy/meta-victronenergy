@@ -6,7 +6,7 @@ inherit ve_package
 inherit daemontools
 inherit python-compile
 
-RDEPENDS_${PN} = "\
+RDEPENDS:${PN} = "\
     python3-core \
     python3-dbus \
     python3-evdev \

@@ -1,7 +1,7 @@
 require venus-swu.inc
 
-SRC_URI_append_canvu500 += "\
+SRC_URI:append:canvu500 += "\
     file://ubi-install.sh \
 "
 
-ROOT_FSTYPE_canvu500 = "tar.gz"
+ROOT_FSTYPE:canvu500 = "tar.gz"

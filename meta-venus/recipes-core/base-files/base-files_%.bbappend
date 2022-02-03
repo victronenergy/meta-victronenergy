@@ -1,7 +1,7 @@
 VELIB_DEFAULT_DIRS = "1"
 inherit ve_package
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI += "\
     file://fstab.mmc1 \
@@ -12,16 +12,16 @@ SRC_URI += "\
 dirs755 += " ${permanentdir}"
 
 # mount point for u-boot FAT partition on raspberrypi2.
-dirs755_append_rpi += "/u-boot"
+dirs755:append:rpi += "/u-boot"
 
-do_compile_append() {
+do_compile:append() {
     for f in ${FSTAB}; do
         cat fstab.${FSTAB} >>fstab
     done
 }
 
 # Replace home dir with symlink to persistent volume
-do_install_append() {
+do_install:append() {
     if [ -d ${D}/home/root ]; then
         rmdir ${D}/home/root
         ln -s ${permanentdir}/home/root ${D}/home/root

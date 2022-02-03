@@ -15,18 +15,18 @@ inherit allarch
 inherit update-rc.d
 
 INITSCRIPT_PACKAGES = "${PN}-early ${PN}-late"
-INITSCRIPT_NAME_${PN}-early = "custom-rc-early.sh"
-INITSCRIPT_PARAMS_${PN}-early = "start 99 S ."
-INITSCRIPT_NAME_${PN}-late = "custom-rc-late.sh"
-INITSCRIPT_PARAMS_${PN}-late = "start 99 5 . stop 1 6 ."
+INITSCRIPT_NAME:${PN}-early = "custom-rc-early.sh"
+INITSCRIPT_PARAMS:${PN}-early = "start 99 S ."
+INITSCRIPT_NAME:${PN}-late = "custom-rc-late.sh"
+INITSCRIPT_PARAMS:${PN}-late = "start 99 5 . stop 1 6 ."
 
 PACKAGES =+ "${PN}-early ${PN}-late"
 
-FILES_${PN}-early = "/etc/init.d/custom-rc-early.sh"
-FILES_${PN}-late = "/etc/init.d/custom-rc-late.sh"
+FILES:${PN}-early = "/etc/init.d/custom-rc-early.sh"
+FILES:${PN}-late = "/etc/init.d/custom-rc-late.sh"
 
-RDEPENDS_${PN} += "${PN}-early ${PN}-late"
-ALLOW_EMPTY_${PN} = "1"
+RDEPENDS:${PN} += "${PN}-early ${PN}-late"
+ALLOW_EMPTY:${PN} = "1"
 
 do_install () {
     install -d ${D}${sysconfdir}/rcS.d

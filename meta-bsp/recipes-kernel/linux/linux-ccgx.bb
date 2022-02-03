@@ -16,4 +16,4 @@ uboot_prep_kimage() {
     linux_comp=none
 }
 
-RDEPENDS_${KERNEL_PACKAGE_NAME}-base = ""
+RDEPENDS:${KERNEL_PACKAGE_NAME}-base = ""

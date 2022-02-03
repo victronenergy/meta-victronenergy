@@ -27,7 +27,7 @@ DESCRIPTION = " \
 inherit packagegroup
 LICENSE = "MIT"
 
-RDEPENDS_${PN} += "\
+RDEPENDS:${PN} += "\
     avahi-autoipd \
     bash \
     bluez5 \

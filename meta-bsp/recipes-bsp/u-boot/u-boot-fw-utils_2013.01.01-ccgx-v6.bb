@@ -38,4 +38,4 @@ do_install () {
     install ${WORKDIR}/u-boot.env ${D}${datadir}/u-boot
 }
 
-FILES_${PN} += "${datadir}"
+FILES:${PN} += "${datadir}"

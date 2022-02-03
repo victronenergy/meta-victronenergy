@@ -1,9 +1,9 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI += "\
     file://can-set-rate \
 "
 
-do_install_append() {
+do_install:append() {
     install -m 0755 ${WORKDIR}/can-set-rate ${D}${bindir}
 }

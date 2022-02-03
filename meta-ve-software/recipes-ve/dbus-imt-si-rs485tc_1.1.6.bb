@@ -20,7 +20,7 @@ DAEMONTOOLS_SERVICE_SYMLINK = "0"
 DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}.TTY"
 DAEMONTOOLS_SERVICE_DIR = "${DAEMONTOOLS_TEMPLATE_DIR}"
 
-RDEPENDS_${PN} = " \
+RDEPENDS:${PN} = " \
     bash \
     localsettings \
     python3-core \
@@ -29,6 +29,6 @@ RDEPENDS_${PN} = " \
     python3-pyserial \
 "
 
-do_install_append () {
+do_install:append () {
     install -m 755 ${WORKDIR}/start.sh ${D}${bindir}
 }

@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 inherit daemontools
 
@@ -10,7 +10,7 @@ SRC_URI += "\
 DAEMONTOOLS_RUN = "${sbindir}/pppd call provider nodetach"
 DAEMONTOOLS_DOWN = "1"
 
-do_install_append() {
+do_install:append() {
     # remove useless files
     rm -fr ${D}${sysconfdir}/chatscripts
     rm -f ${D}${sysconfdir}/ppp/chap-secrets

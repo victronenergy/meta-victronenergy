@@ -1,7 +1,7 @@
 inherit packagegroup
 LICENSE = "MIT"
 
-RDEPENDS_${PN} += "\
+RDEPENDS:${PN} += "\
     binutils \
     coreutils \
     cpio \

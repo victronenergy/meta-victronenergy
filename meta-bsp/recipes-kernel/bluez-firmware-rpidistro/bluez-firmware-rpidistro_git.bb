@@ -58,26 +58,26 @@ PACKAGES = "\
     ${PN}-bcm4345c0-hcd \
 "
 
-LICENSE_${PN}-bcm43430a1-hcd = "Firmware-cypress-rpidistro"
-LICENSE_${PN}-bcm4345c0-hcd = "Firmware-cypress-rpidistro"
-LICENSE_${PN}-cypress-license = "Firmware-cypress-rpidistro"
+LICENSE:${PN}-bcm43430a1-hcd = "Firmware-cypress-rpidistro"
+LICENSE:${PN}-bcm4345c0-hcd = "Firmware-cypress-rpidistro"
+LICENSE:${PN}-cypress-license = "Firmware-cypress-rpidistro"
 
-FILES_${PN}-cypress-license = "\
+FILES:${PN}-cypress-license = "\
     ${nonarch_base_libdir}/firmware/LICENCE.cypress-rpidistro \
 "
-FILES_${PN}-bcm43430a1-hcd = "\
+FILES:${PN}-bcm43430a1-hcd = "\
     ${nonarch_base_libdir}/firmware/brcm/BCM43430A1.hcd \
 "
-FILES_${PN}-bcm4345c0-hcd = "\
+FILES:${PN}-bcm4345c0-hcd = "\
     ${nonarch_base_libdir}/firmware/brcm/BCM4345C0.hcd \
 "
 
-RDEPENDS_${PN}-bcm43430a1-hcd += "${PN}-cypress-license"
-RDEPENDS_${PN}-bcm4345c0-hcd += "${PN}-cypress-license"
-RCONFLICTS_${PN}-bcm43430a1-hcd = "linux-firmware-bcm43430a1-hcd"
-RREPLACES_${PN}-bcm43430a1-hcd = "linux-firmware-bcm43430a1-hcd"
-RCONFLICTS_${PN}-bcm43435c0-hcd = "linux-firmware-bcm4345c0-hcd"
-RREPLACES_${PN}-bcm43435c0-hcd = "linux-firmware-bcm4345c0-hcd"
+RDEPENDS:${PN}-bcm43430a1-hcd += "${PN}-cypress-license"
+RDEPENDS:${PN}-bcm4345c0-hcd += "${PN}-cypress-license"
+RCONFLICTS:${PN}-bcm43430a1-hcd = "linux-firmware-bcm43430a1-hcd"
+RREPLACES:${PN}-bcm43430a1-hcd = "linux-firmware-bcm43430a1-hcd"
+RCONFLICTS:${PN}-bcm43435c0-hcd = "linux-firmware-bcm4345c0-hcd"
+RREPLACES:${PN}-bcm43435c0-hcd = "linux-firmware-bcm4345c0-hcd"
 
 # Firmware files are generally not run on the CPU, so they can be
 # allarch despite being architecture specific

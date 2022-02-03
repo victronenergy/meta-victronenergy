@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 inherit ve_package
 inherit python-compile
 
-RDEPENDS_${PN} = "bash python3-core python3-dbus"
+RDEPENDS:${PN} = "bash python3-core python3-dbus"
 
 SRC_URI = "git://github.com/victronenergy/dbus-recorder.git;protocol=https;tag=${PV}"
 S = "${WORKDIR}/git"

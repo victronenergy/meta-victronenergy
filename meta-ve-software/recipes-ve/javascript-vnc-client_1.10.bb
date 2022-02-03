@@ -6,7 +6,7 @@ inherit www
 
 # base-passwd is needed for www user
 DEPENDS = "base-passwd"
-RDEPENDS_${PN} = "hiawatha"
+RDEPENDS:${PN} = "hiawatha"
 
 SRC_URI = " \
     file://javascript-vnc-client.conf \

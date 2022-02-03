@@ -22,7 +22,7 @@ DEPENDS  = "dbus glib-2.0 ppp iptables gnutls \
 INC_PR = "r2"
 
 TIST = ""
-TIST_powerpc = ""
+TIST:powerpc = ""
 
 EXTRA_OECONF += "\
     ac_cv_path_WPASUPPLICANT=${sbindir}/wpa_supplicant \
@@ -45,7 +45,7 @@ INITSCRIPT_PARAMS = "start 70 5 2 3 . stop 22 0 1 6 ."
 # IMPORTANT: because xuser is shared with rootless X, please make sure the
 # USERADD_PARAM is in sync with the one in xserver-nodm-init.bb
 USERADD_PACKAGES = "${PN}"
-USERADD_PARAM_${PN} = "--create-home \
+USERADD_PARAM:${PN} = "--create-home \
                        --groups video,tty,audio \
                        --user-group xuser"
 
@@ -54,11 +54,11 @@ inherit autotools pkgconfig update-rc.d useradd
 # This allows *everyone* to access ConnMan over DBus, without any access
 # control.  Really the at_console flag should work, which would mean that
 # both this and the xuser patch can be dropped.
-do_compile_append() {
+do_compile:append() {
     sed -i -e s:deny:allow:g ${S}/src/connman-dbus.conf
 }
 
-do_install_append() {
+do_install:append() {
     install -d ${D}${sysconfdir}/init.d
     install -m 0755 ${WORKDIR}/connman ${D}${sysconfdir}/init.d/connman
 
@@ -76,14 +76,14 @@ do_install_append() {
 }
 
 # These used to be plugins, but now they are core
-RPROVIDES_${PN} = "\
+RPROVIDES:${PN} = "\
     connman-plugin-loopback \
     connman-plugin-ethernet \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wifi','connman-plugin-wifi', '', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', '3g','connman-plugin-ofono', '', d)} \
     "
 
-RDEPENDS_${PN} = "\
+RDEPENDS:${PN} = "\
     dbus \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wifi','wpa-supplicant', '', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', '3g','ofono', '', d)} \
@@ -91,7 +91,7 @@ RDEPENDS_${PN} = "\
 
 PACKAGES_DYNAMIC = "${PN}-plugin-*"
 
-python populate_packages_prepend() {
+python populate_packages:prepend() {
     depmap = dict(pppd="ppp")
     packages = []
     multilib_prefix = (d.getVar("MLPREFIX", True) or "")
@@ -104,23 +104,23 @@ python populate_packages_prepend() {
         if plugintype in depmap:
             rdepends = map(lambda x: multilib_prefix + x,  depmap[plugintype].split())
             bb.note( "Adding rdependency on %s to %s" % ( rdepends, package ) )
-            d.setVar("RDEPENDS_%s" % package, " ".join(rdepends))
+            d.setVar("RDEPENDS:%s" % package, " ".join(rdepends))
 }
 
 PACKAGES =+ "${PN}-tools ${PN}-tests"
 
-#FILES_${PN}-tools = "${bindir}/wispr ${bindir}/connmanctl"
-FILES_${PN}-tools = "${bindir}/connmanctl"
+#FILES:${PN}-tools = "${bindir}/wispr ${bindir}/connmanctl"
+FILES:${PN}-tools = "${bindir}/connmanctl"
 
-FILES_${PN}-tests = "${bindir}/*-test ${libdir}/${BPN}/test/*"
-RDEPENDS_${PN}-tests = "python3-core python3-dbus python3-pygobject python3-fcntl python3-netclient"
+FILES:${PN}-tests = "${bindir}/*-test ${libdir}/${BPN}/test/*"
+RDEPENDS:${PN}-tests = "python3-core python3-dbus python3-pygobject python3-fcntl python3-netclient"
 
-FILES_${PN} = "${bindir}/* ${sbindir}/* ${libexecdir}/* ${libdir}/lib*.so.* \
+FILES:${PN} = "${bindir}/* ${sbindir}/* ${libexecdir}/* ${libdir}/lib*.so.* \
             ${libdir}/connman/plugins \
             ${sysconfdir} ${sharedstatedir} ${localstatedir} \
             ${base_bindir}/* ${base_sbindir}/* ${base_libdir}/*.so* ${datadir}/${PN} \
             ${datadir}/dbus-1/system-services/*"
 
-FILES_${PN}-dbg += "${libdir}/connman/*/.debug"
+FILES:${PN}-dbg += "${libdir}/connman/*/.debug"
 
-FILES_${PN}-dev += "${libdir}/connman/*/*.la"
+FILES:${PN}-dev += "${libdir}/connman/*/*.la"

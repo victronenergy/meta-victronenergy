@@ -5,10 +5,10 @@ INITSCRIPT_NAME = "svscanboot.sh"
 INITSCRIPT_PARAMS = "start 95 5 2 . stop 15 6 ."
 inherit update-rc.d
 
-RPROVIDES_${PN} += "virtual/daemontools-run"
+RPROVIDES:${PN} += "virtual/daemontools-run"
 
 S = "${WORKDIR}"
-RDEPENDS_${PN} += "daemontools"
+RDEPENDS:${PN} += "daemontools"
 
 SRC_URI += "file://svscanboot.sh"
 

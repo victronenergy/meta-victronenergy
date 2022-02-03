@@ -1,8 +1,8 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}-${PV}:"
 
 KBUILD_DEFCONFIG_raspberrypi ?= "bcmrpi_defconfig"
-KBUILD_DEFCONFIG_raspberrypi2 ?= "bcm2709_defconfig"
-KBUILD_DEFCONFIG_raspberrypi4 ?= "bcm2711_defconfig"
+KBUILD_DEFCONFIG:raspberrypi2 ?= "bcm2709_defconfig"
+KBUILD_DEFCONFIG:raspberrypi4 ?= "bcm2711_defconfig"
 
 SECTION = "kernel"
 LICENSE = "GPLv2"
@@ -28,14 +28,14 @@ DEPENDS += "openssl-native"
 
 # NOTE: the regular dtb handling flattens the overlays with the
 # normal dtbs. So handle dtb seperately.
-do_compile_append() {
+do_compile:append() {
     for DTB in ${RPI_KERNEL_DEVICETREE}; do
         DTB=`normalize_dtb "${DTB}"`
         oe_runmake ${DTB}
     done
 }
 
-do_install_append() {
+do_install:append() {
     for DTB in ${RPI_KERNEL_DEVICETREE}; do
         DIR="$(dirname ${DTB})"
         DTB=`normalize_dtb "${DTB}"`
@@ -47,7 +47,7 @@ do_install_append() {
     done
 }
 
-do_deploy_append() {
+do_deploy:append() {
     for DTB in ${RPI_KERNEL_DEVICETREE}; do
         DIR="$(dirname ${DTB})"
         install -d ${DEPLOYDIR}/${DIR}
@@ -56,4 +56,4 @@ do_deploy_append() {
     done
 }
 
-FILES_${KERNEL_PACKAGE_NAME}-devicetree += "/boot/overlays"
+FILES:${KERNEL_PACKAGE_NAME}-devicetree += "/boot/overlays"

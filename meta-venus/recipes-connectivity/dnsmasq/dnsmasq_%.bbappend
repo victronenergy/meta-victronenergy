@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 DEPENDS += "update-rc.d-native"
 
@@ -15,12 +15,12 @@ SRC_URI += "\
 "
 
 hostap = ""
-hostap_beaglebone = "1"
+hostap:beaglebone = "1"
 hostap_sunxi = "1"
 
 RW_INITSCRIPT_PARAMS="start 80 5 . stop 10 0 1 6 ."
 
-do_install_append() {
+do_install:append() {
     install -m 644 ${WORKDIR}/resolv.conf ${D}${sysconfdir}
 
     install -d ${D}${sbindir}

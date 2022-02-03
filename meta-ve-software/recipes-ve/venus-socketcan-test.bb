@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=7c0ad2b90776f126b453c5f96c0da11a"
 S = "${WORKDIR}/git"
 
-RDEPENDS_${PN} += " \
+RDEPENDS:${PN} += " \
     canutils \
     can-utils \
     python3-core \

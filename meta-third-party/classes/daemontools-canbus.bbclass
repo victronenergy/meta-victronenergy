@@ -34,4 +34,4 @@ do_per_canbus_service() {
 addtask per_canbus_service after do_install before do_package
 do_per_canbus_service[fakeroot] = "1"
 
-FILES_${PN} += "${DEAMONTOOLS_COMMON_SERVICES_DIR}"
+FILES:${PN} += "${DEAMONTOOLS_COMMON_SERVICES_DIR}"

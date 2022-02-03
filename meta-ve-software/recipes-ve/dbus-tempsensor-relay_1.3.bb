@@ -12,7 +12,7 @@ SRC_URI = " \
 "
 S = "${WORKDIR}/git"
 
-RDEPENDS_${PN} = " \
+RDEPENDS:${PN} = " \
     localsettings \
     python3-core \
     python3-datetime \
@@ -23,7 +23,7 @@ RDEPENDS_${PN} = " \
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_tempsensor_relay.py"
 DAEMONTOOLS_DOWN = "1"
 
-do_install_append () {
+do_install:append () {
     install -d ${D}/${sysconfdir}/dbus-1/system.d
     install -m 644 ${WORKDIR}/com.victronenergy.temprelay.conf ${D}/${sysconfdir}/dbus-1/system.d
 }

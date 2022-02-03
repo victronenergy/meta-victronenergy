@@ -17,7 +17,7 @@ SRC_URI = " \
 SRCREV = "0f4daf1e70ab0048e04ea0dfb7fba7aa72a9f861"
 S = "${WORKDIR}/git"
 
-do_configure_prepend () {
+do_configure:prepend () {
     if ! ./autogen.sh; then
         echo "Failed to run autogen.sh!"
         exit 1

@@ -2,7 +2,7 @@ DAEMON_PN ?= "${PN}"
 
 # venus gets daemontools-run-venus and all other distro's daemontools-run
 DAEMONTOOLS = "daemontools-run"
-DAEMONTOOLS_venus = "daemontools-run-venus"
+DAEMONTOOLS:venus = "daemontools-run-venus"
 
 DAEMONTOOLS_virtclass-cross = ""
 DAEMONTOOLS_virtclass-native = ""
@@ -25,8 +25,8 @@ DAEMONTOOLS_TEMPLATE_DIR ?= "${DEAMONTOOLS_COMMON_TEMPLATES_DIR}/${PN}"
 
 python () {
     pkg = d.getVar('DAEMON_PN', True)
-    d.appendVar('RDEPENDS_' + pkg, ' ${DAEMONTOOLS}')
-    d.appendVar('FILES_' + pkg, ' ${DAEMONTOOLS_SERVICES_DIR} ${DAEMONTOOLS_SERVICE_DIR}')
+    d.appendVar('RDEPENDS:' + pkg, ' ${DAEMONTOOLS}')
+    d.appendVar('FILES:' + pkg, ' ${DAEMONTOOLS_SERVICES_DIR} ${DAEMONTOOLS_SERVICE_DIR}')
 }
 
 DAEMONTOOLS_preinst() {
@@ -72,7 +72,7 @@ python __anonymous() {
     daemontools_after_parse(d)
 }
 
-python populate_packages_prepend () {
+python populate_packages:prepend () {
     def update_rcd_package(pkg):
         bb.debug(1, 'adding update-rc.d calls to postinst/postrm for %s' % pkg)
         localdata = bb.data.createCopy(d)
@@ -89,25 +89,25 @@ python populate_packages_prepend () {
         if not preinst:
             preinst = '#!/bin/sh\n'
         preinst += localdata.getVar('DAEMONTOOLS_preinst', True)
-        d.setVar('pkg_preinst_%s' % pkg, preinst)
+        d.setVar('pkg_preinst:%s' % pkg, preinst)
 
         postinst = localdata.getVar('pkg_postinst', True)
         if not postinst:
             postinst = '#!/bin/sh\n'
         postinst += localdata.getVar('DAEMONTOOLS_postinst', True)
-        d.setVar('pkg_postinst_%s' % pkg, postinst)
+        d.setVar('pkg_postinst:%s' % pkg, postinst)
 
         prerm = localdata.getVar('pkg_prerm', True)
         if not prerm:
             prerm = '#!/bin/sh\n'
         prerm += localdata.getVar('DAEMONTOOLS_prerm', True)
-        d.setVar('pkg_prerm_%s' % pkg, prerm)
+        d.setVar('pkg_prerm:%s' % pkg, prerm)
 
         postrm = localdata.getVar('pkg_postrm', True)
         if not postrm:
                 postrm = '#!/bin/sh\n'
         postrm += localdata.getVar('DAEMONTOOLS_postrm', True)
-        d.setVar('pkg_postrm_%s' % pkg, postrm)
+        d.setVar('pkg_postrm:%s' % pkg, postrm)
 
     pkgs = d.getVar('DAEMONTOOLS_SERVICES', True)
     if pkgs == None:
@@ -120,7 +120,7 @@ python populate_packages_prepend () {
 }
 
 
-do_install_append() {
+do_install:append() {
     SERVICE="${D}${DAEMONTOOLS_SERVICE_DIR}"
 
     install -d ${SERVICE}

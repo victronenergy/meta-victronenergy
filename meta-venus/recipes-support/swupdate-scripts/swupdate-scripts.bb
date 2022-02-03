@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 
 inherit allarch
 
-RDEPENDS_${PN} = "bash e2fsprogs-resize2fs swupdate"
+RDEPENDS:${PN} = "bash e2fsprogs-resize2fs swupdate"
 
 SRC_URI = " \
     file://check-updates.init \
@@ -48,5 +48,5 @@ do_install () {
     ln -sf ../init.d/check-updates.sh ${DEST}/S99check-updates.sh
 }
 
-FILES_${PN} += "${SCRIPTDIR}"
+FILES:${PN} += "${SCRIPTDIR}"
 

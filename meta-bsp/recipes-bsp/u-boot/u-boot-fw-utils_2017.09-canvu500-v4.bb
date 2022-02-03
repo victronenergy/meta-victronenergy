@@ -25,4 +25,4 @@ do_install () {
 
 do_deploy[noexec] = "1"
 
-FILES_${PN} = "${base_sbindir} ${libdir} ${sysconfdir}"
+FILES:${PN} = "${base_sbindir} ${libdir} ${sysconfdir}"

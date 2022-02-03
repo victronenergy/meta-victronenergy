@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI += " \
     file://mosquitto.conf \
@@ -10,7 +10,7 @@ INHIBIT_UPDATERCD_BBCLASS = "1"
 MOSQUITTO_D = "/run/mosquitto"
 PACKAGECONFIG = "ssl websockets"
 
-do_install_append() {
+do_install:append() {
     install -m 0755 ${WORKDIR}/start-mosquitto ${D}${sbindir}
 
     install -d ${D}${sysconfdir}/mosquitto
@@ -21,7 +21,7 @@ do_install_append() {
     echo "d root root 0755 ${MOSQUITTO_D} none" > ${D}${sysconfdir}/default/volatiles/50_${PN}
 }
 
-FILES_${PN} += "\
+FILES:${PN} += "\
     ${sbindir}/start-mosquitto \
     ${sysconfdir}/default \
 "

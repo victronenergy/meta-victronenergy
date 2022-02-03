@@ -28,4 +28,4 @@ do_install() {
     install -m 0644 ${WORKDIR}/${PN}.conf ${dest}
 }
 
-FILES_${PN} += "${sysconfdir}"
+FILES:${PN} += "${sysconfdir}"

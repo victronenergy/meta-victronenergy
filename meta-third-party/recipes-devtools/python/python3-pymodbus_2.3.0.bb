@@ -12,4 +12,4 @@ S = "${WORKDIR}/git"
 
 inherit setuptools3
 
-RDEPENDS_${PN} = "python3-pyserial python3-six"
+RDEPENDS:${PN} = "python3-pyserial python3-six"

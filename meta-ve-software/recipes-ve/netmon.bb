@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 inherit ve_package
 inherit daemontools
 
-RDEPENDS_${PN} = "\
+RDEPENDS:${PN} = "\
     python3-core \
     python3-pyroute2 \
 "

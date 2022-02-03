@@ -11,7 +11,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
-do_install_append() {
+do_install:append() {
     mkdir -p ${D}/${sysconfdir}/profile.d
     install ${WORKDIR}/qt4.sh ${D}/${sysconfdir}/profile.d
 }

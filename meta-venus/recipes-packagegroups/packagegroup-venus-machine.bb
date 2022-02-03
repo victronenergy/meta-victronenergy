@@ -7,11 +7,11 @@ LICENSE = "MIT"
 
 include qt6-packages.inc
 
-RDEPENDS_${PN} += "\
+RDEPENDS:${PN} += "\
     simple-upnpd \
 "
 
-RDEPENDS_${PN}_append_canvu500 += "\
+RDEPENDS:${PN}:append:canvu500 += "\
     evtest \
     gpio-export \
     imx-kobs \
@@ -22,7 +22,7 @@ RDEPENDS_${PN}_append_canvu500 += "\
     swupdate-scripts \
 "
 
-RDEPENDS_${PN}_append_ccgx += "\
+RDEPENDS:${PN}:append:ccgx += "\
     gpio-export \
     mtd-utils \
     mtd-utils-ubifs \
@@ -31,7 +31,7 @@ RDEPENDS_${PN}_append_ccgx += "\
     technexion-serial \
 "
 
-RDEPENDS_${PN}_append_beaglebone += "\
+RDEPENDS:${PN}:append:beaglebone += "\
     gpio-export \
     hostapd \
     i2c-tools \
@@ -43,7 +43,7 @@ RDEPENDS_${PN}_append_beaglebone += "\
     venus-button-handler \
 "
 
-RDEPENDS_${PN}_append_einstein += "\
+RDEPENDS:${PN}:append:einstein += "\
     linux-firmware-bcm20702a1 \
     linux-firmware-bcm43362 \
     linux-firmware-bcm43430 \
@@ -52,7 +52,7 @@ RDEPENDS_${PN}_append_einstein += "\
     venus-button-handler \
 "
 
-RDEPENDS_${PN}_append_sunxi += "\
+RDEPENDS:${PN}:append:sunxi += "\
     cpufrequtils \
     gpio-export \
     hostapd \
@@ -63,7 +63,7 @@ RDEPENDS_${PN}_append_sunxi += "\
     swupdate-scripts \
 "
 
-RDEPENDS_${PN}_append_rpi += "\
+RDEPENDS:${PN}:append:rpi += "\
     bluez-firmware-rpidistro-bcm43430a1-hcd \
     bluez-firmware-rpidistro-bcm4345c0-hcd \
     gpio-export \

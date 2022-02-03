@@ -4,7 +4,7 @@ LICENSE = "MIT"
 inherit packagegroup
 
 # note: these end up in the target sysroot of the SDK!
-RDEPENDS_packagegroup-sdk-packages += " \
+RDEPENDS:packagegroup-sdk-packages += " \
     boost-staticdev \
     connman \
     dbus \
@@ -22,4 +22,4 @@ RDEPENDS_packagegroup-sdk-packages += " \
 "
 
 # swu related builds with NAND env
-RDEPENDS_packagegroup-sdk-packages_append_ccgx += "u-boot-fw-utils-staticdev"
+RDEPENDS:packagegroup-sdk-packages:append:ccgx += "u-boot-fw-utils-staticdev"

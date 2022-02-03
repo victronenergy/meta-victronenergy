@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
 DEPENDS += "readline"
 
@@ -30,11 +30,11 @@ SRC_URI += "\
     file://connmand-watch.sh \
 "
 
-do_configure_append() {
+do_configure:append() {
     sed -i -e 's:\$(localstatedir)/lib:${permanentlocalstatedir}/lib:' ${B}/Makefile
 }
 
-do_install_append() {
+do_install:append() {
     install -d ${D}${sysconfdir}/connman
     install -m 0644 ${WORKDIR}/main.conf ${D}${sysconfdir}/connman/main.conf
     install -m 0755 ${WORKDIR}/connmand-watch.sh ${D}${sbindir}/connmand-watch.sh

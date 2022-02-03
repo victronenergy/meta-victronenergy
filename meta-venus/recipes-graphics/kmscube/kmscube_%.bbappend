@@ -1,1 +1,1 @@
-DEPENDS_remove = "gstreamer1.0 gstreamer1.0-plugins-base"
+DEPENDS:remove = "gstreamer1.0 gstreamer1.0-plugins-base"
