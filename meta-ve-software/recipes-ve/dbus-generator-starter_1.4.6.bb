@@ -6,7 +6,7 @@ inherit daemontools
 inherit python-compile
 
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus_generator.git;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/dbus_generator.git;branch=master;protocol=https;tag=v${PV} \
     file://com.victronenergy.generator-starter.conf \
 "
 S = "${WORKDIR}/git"

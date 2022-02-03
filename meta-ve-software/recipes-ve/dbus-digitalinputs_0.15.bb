@@ -7,7 +7,7 @@ inherit daemontools
 inherit python-compile
 
 SRC_URI = "\
-    gitsm://github.com/victronenergy/dbus-digitalinputs.git;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/dbus-digitalinputs.git;branch=master;protocol=https;tag=v${PV} \
     file://start-digitalinputs.sh \
 "
 S = "${WORKDIR}/git"

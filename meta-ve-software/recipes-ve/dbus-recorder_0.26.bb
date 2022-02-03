@@ -7,7 +7,7 @@ inherit python-compile
 
 RDEPENDS:${PN} = "bash python3-core python3-dbus"
 
-SRC_URI = "git://github.com/victronenergy/dbus-recorder.git;protocol=https;tag=${PV}"
+SRC_URI = "git://github.com/victronenergy/dbus-recorder.git;branch=master;protocol=https;tag=${PV}"
 S = "${WORKDIR}/git"
 
 do_install () {

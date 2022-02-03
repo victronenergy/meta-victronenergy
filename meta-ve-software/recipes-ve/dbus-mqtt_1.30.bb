@@ -14,7 +14,7 @@ RDEPENDS:${PN} = " \
 "
 
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus-mqtt.git;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/dbus-mqtt.git;branch=master;protocol=https;tag=v${PV} \
 "
 S = "${WORKDIR}/git"
 

@@ -7,7 +7,7 @@ inherit daemontools
 inherit python-compile
 
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
+    gitsm://github.com/victronenergy/dbus-systemcalc-py.git;branch=master;protocol=https;tag=${PV} \
     file://com.victronenergy.system.conf \
 "
 S = "${WORKDIR}/git"

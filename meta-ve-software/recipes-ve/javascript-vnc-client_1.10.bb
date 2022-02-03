@@ -10,7 +10,7 @@ RDEPENDS:${PN} = "hiawatha"
 
 SRC_URI = " \
     file://javascript-vnc-client.conf \
-    gitsm://github.com/victronenergy/javascript-vnc-client.git;protocol=https;tag=${PV} \
+    gitsm://github.com/victronenergy/javascript-vnc-client.git;branch=master;protocol=https;tag=${PV} \
 "
 
 S = "${WORKDIR}/git"

@@ -9,7 +9,7 @@ inherit daemontools
 
 
 SRC_URI = " \
-    git://github.com/kanaka/websockify.git;protocol=https;rev=f0bdb0a621a4f3fb328d1410adfeaff76f088bfd \
+    git://github.com/kanaka/websockify.git;branch=master;protocol=https;rev=f0bdb0a621a4f3fb328d1410adfeaff76f088bfd \
 "
 
 S = "${WORKDIR}/git/other"

@@ -8,7 +8,7 @@ inherit daemontools
 inherit python-compile
 
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus-imt-si-rs485tc.git;protocol=https;tag=${PV} \
+    gitsm://github.com/victronenergy/dbus-imt-si-rs485tc.git;branch=master;protocol=https;tag=${PV} \
     file://start.sh \
 "
 

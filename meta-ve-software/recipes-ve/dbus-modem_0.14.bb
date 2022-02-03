@@ -15,7 +15,7 @@ RDEPENDS:${PN} = "\
 "
 
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus-modem.git;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/dbus-modem.git;branch=master;protocol=https;tag=v${PV} \
     file://start-modem.sh \
     file://reset-modem.sh \
 "

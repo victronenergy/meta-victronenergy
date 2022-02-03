@@ -8,7 +8,7 @@ inherit daemontools
 RDEPENDS:${PN} = "dbus"
 PR = "r0"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus_qwacs.git;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/dbus_qwacs.git;branch=master;protocol=https;tag=v${PV} \
 "
 
 S = "${WORKDIR}/git"

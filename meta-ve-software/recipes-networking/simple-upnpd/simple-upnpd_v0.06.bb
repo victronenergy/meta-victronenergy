@@ -19,7 +19,7 @@ USERADD_PARAM:${PN} = "--no-create-home --shell /bin/false -g simple-upnpd simpl
 DAEMONTOOLS_RUN = "${base_bindir}/start-simple-upnpd"
 
 SRC_URI = " \
-    git://github.com/victronenergy/simple-upnpd.git;protocol=https;tag=${PV} \
+    git://github.com/victronenergy/simple-upnpd.git;branch=master;protocol=https;tag=${PV} \
     file://start-simple-upnpd \
     file://simple-upnpd.skeleton.xml \
 "

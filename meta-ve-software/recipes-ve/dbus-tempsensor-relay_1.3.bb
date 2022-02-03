@@ -7,7 +7,7 @@ inherit python-compile
 inherit gmakevelib
 
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus-tempsensor-relay.git;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/dbus-tempsensor-relay.git;branch=master;protocol=https;tag=v${PV} \
     file://com.victronenergy.temprelay.conf \
 "
 S = "${WORKDIR}/git"

@@ -9,7 +9,7 @@ inherit python-compile
 RDEPENDS:${PN} = "machine-runtime-conf"
 
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus-characterdisplay.git;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/dbus-characterdisplay.git;branch=master;protocol=https;tag=v${PV} \
 "
 
 S = "${WORKDIR}/git"

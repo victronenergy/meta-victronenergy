@@ -14,7 +14,7 @@ RDEPENDS:${PN} = "\
 "
 
 SRC_URI = "\
-    gitsm://github.com/victronenergy/${BPN}.git;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https;tag=v${PV} \
 "
 S = "${WORKDIR}/git"
 
