@@ -20,7 +20,7 @@ RDEPENDS:${PN} += " \
     localsettings \
 "
 
-RDEPENDS:${PN}:append:nanopi += " \
+RDEPENDS:${PN}:append:nanopi = " \
     dbus-characterdisplay \
 "
 

@@ -24,13 +24,13 @@ LICENSE = "MIT"
 DEPENDS = "packagegroup-venus-optional-packages venus-swu"
 
 # installer images
-DEPENDS:append:beaglebone += " venus-install-sdcard"
-DEPENDS:append:ccgx += "venus-install-sdcard"
-DEPENDS:append:canvu500 += "venus-install-sdcard venus-swu-1"
-DEPENDS:append:sunxi += "venus-install-sdcard"
+DEPENDS:append:beaglebone = " venus-install-sdcard"
+DEPENDS:append:ccgx = " venus-install-sdcard"
+DEPENDS:append:canvu500 = " venus-install-sdcard venus-swu-1"
+DEPENDS:append:sunxi = " venus-install-sdcard"
 
 # "live" initial image
-DEPENDS:append:rpi += "venus-image"
+DEPENDS:append:rpi = " venus-image"
 
 python () {
     deps = d.getVar('DEPENDS').split()

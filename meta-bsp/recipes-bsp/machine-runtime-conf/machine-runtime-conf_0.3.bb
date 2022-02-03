@@ -17,12 +17,12 @@ SRC_URI += " \
     file://product-name \
     file://machine-conf.sh \
 "
-SRC_URI:append:ccgx += "file://get-unique-id.c"
-SRC_URI:append:einstein += "\
+SRC_URI:append:ccgx = " file://get-unique-id.c"
+SRC_URI:append:einstein = "\
     file://backlight_device.in \
     file://blank_display_device.in \
 "
-SRC_URI:append:sunxi += "file://canbus_ports.in"
+SRC_URI:append:sunxi = " file://canbus_ports.in"
 
 inherit update-rc.d
 

@@ -11,7 +11,7 @@ RDEPENDS:${PN} += "\
     simple-upnpd \
 "
 
-RDEPENDS:${PN}:append:canvu500 += "\
+RDEPENDS:${PN}:append:canvu500 = "\
     evtest \
     gpio-export \
     imx-kobs \
@@ -22,7 +22,7 @@ RDEPENDS:${PN}:append:canvu500 += "\
     swupdate-scripts \
 "
 
-RDEPENDS:${PN}:append:ccgx += "\
+RDEPENDS:${PN}:append:ccgx = "\
     gpio-export \
     mtd-utils \
     mtd-utils-ubifs \
@@ -31,7 +31,7 @@ RDEPENDS:${PN}:append:ccgx += "\
     technexion-serial \
 "
 
-RDEPENDS:${PN}:append:beaglebone += "\
+RDEPENDS:${PN}:append:beaglebone = "\
     gpio-export \
     hostapd \
     i2c-tools \
@@ -43,7 +43,7 @@ RDEPENDS:${PN}:append:beaglebone += "\
     venus-button-handler \
 "
 
-RDEPENDS:${PN}:append:einstein += "\
+RDEPENDS:${PN}:append:einstein = "\
     linux-firmware-bcm20702a1 \
     linux-firmware-bcm43362 \
     linux-firmware-bcm43430 \
@@ -52,7 +52,7 @@ RDEPENDS:${PN}:append:einstein += "\
     venus-button-handler \
 "
 
-RDEPENDS:${PN}:append:sunxi += "\
+RDEPENDS:${PN}:append:sunxi = "\
     cpufrequtils \
     gpio-export \
     hostapd \
@@ -63,7 +63,7 @@ RDEPENDS:${PN}:append:sunxi += "\
     swupdate-scripts \
 "
 
-RDEPENDS:${PN}:append:rpi += "\
+RDEPENDS:${PN}:append:rpi = "\
     bluez-firmware-rpidistro-bcm43430a1-hcd \
     bluez-firmware-rpidistro-bcm4345c0-hcd \
     gpio-export \

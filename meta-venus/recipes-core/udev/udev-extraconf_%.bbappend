@@ -16,13 +16,13 @@ SRC_URI += " \
     file://simcom.rules \
 "
 
-SRC_URI:append:beaglebone += "\
+SRC_URI:append:beaglebone = "\
     file://wlan.rules \
     file://wlan-rename \
     file://wlan-update \
 "
 
-SRC_URI:append:sunxi += "\
+SRC_URI:append:sunxi = "\
     file://slcan.rules \
     file://wlan.rules \
     file://wlan-rename \
