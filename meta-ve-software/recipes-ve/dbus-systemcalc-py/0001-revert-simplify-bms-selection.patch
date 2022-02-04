@@ -1,0 +1,279 @@
+From fea823664a08979fee11a80ceaa8644294fb06a5 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Fri, 4 Feb 2022 08:45:31 +0200
+Subject: [PATCH] Revert "simplify bms selection"
+
+This reverts commit 3eb6307483a47ca6106a1ac44819b3900e0a2fab.
+
+This restores the previous under-the-water BMS selection
+in systems that use a non-BMS battery monitor as the
+main system battery monitor.
+
+A few additional changes for python3 included.
+---
+ delegates/dvcc.py |  27 ++++++----
+ tests/hub_test.py | 127 ++++++++++++++++++++++++++--------------------
+ 2 files changed, 87 insertions(+), 67 deletions(-)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index 19589f5..ebe133e 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -563,9 +563,6 @@ def __len__(self):
+ 	def __contains__(self, k):
+ 		return k in self._battery_services
+ 
+-	def __getitem__(self, k):
+-		return self._battery_services[k]
+-
+ 	def add_battery(self, service):
+ 		self._battery_services[service] = battery = Battery(self.monitor, service)
+ 		return battery
+@@ -573,6 +570,12 @@ def add_battery(self, service):
+ 	def remove_battery(self, service):
+ 		del self._battery_services[service]
+ 
++	@property
++	def bmses(self):
++		""" Returns the battery services with a BMS. """
++		return list(filter(lambda b: b.is_bms,
++			self._battery_services.values()))
++
+ class BatteryOperationalLimits(object):
+ 	""" Only used to encapsulate this part of the Multi's functionality.
+ 	"""
+@@ -774,6 +777,7 @@ def set_sources(self, dbusmonitor, settings, dbusservice):
+ 		self._dbusservice.add_path('/Debug/BatteryOperationalLimits/VebusVoltageOffset', value=0, writeable=True)
+ 		self._dbusservice.add_path('/Debug/BatteryOperationalLimits/CurrentOffset', value=0, writeable=True)
+ 		self._dbusservice.add_path('/Dvcc/Alarms/FirmwareInsufficient', value=0)
++		self._dbusservice.add_path('/Dvcc/Alarms/MultipleBatteries', value=0)
+ 
+ 	def device_added(self, service, instance, do_service_change=True):
+ 		service_type = service.split('.')[2]
+@@ -860,14 +864,12 @@ def has_dvcc(self):
+ 
+ 	@property
+ 	def bms(self):
+-		if self.systemcalc.batteryservice is not None:
+-			try:
+-				battery = self._batterysystem[self.systemcalc.batteryservice]
+-			except KeyError:
+-				pass
+-			else:
+-				if battery.is_bms:
+-					return battery
++		bmses = sorted(self._batterysystem.bmses,
++			key=lambda b: (b.service != self.systemcalc._batteryservice, b.device_instance))
++		try:
++			return bmses[0]
++		except IndexError:
++			pass
+ 		return None
+ 
+ 	def _on_timer(self):
+@@ -889,6 +891,7 @@ def update_solarcharger_control_flags(voltage_written, current_written, chargevo
+ 			self._dbusservice['/Control/MaxChargeCurrent'] = 0
+ 			self._dbusservice['/Control/Dvcc'] = 0
+ 			self._dbusservice['/Dvcc/Alarms/FirmwareInsufficient'] = 0
++			self._dbusservice['/Dvcc/Alarms/MultipleBatteries'] = 0
+ 			return True
+ 
+ 
+@@ -896,6 +899,8 @@ def update_solarcharger_control_flags(voltage_written, current_written, chargevo
+ 		self._dbusservice['/Dvcc/Alarms/FirmwareInsufficient'] = int(
+ 			not self._solarsystem.has_externalcontrol_support or (
+ 			self._multi.firmwareversion is not None and self._multi.firmwareversion < VEBUS_FIRMWARE_REQUIRED))
++		self._dbusservice['/Dvcc/Alarms/MultipleBatteries'] = int(
++			len(self._batterysystem.bmses) > 1)
+ 
+ 		# Update subsystems
+ 		self._solarsystem.update_values()
+diff --git a/tests/hub_test.py b/tests/hub_test.py
+index 1aca944..af3b9c5 100644
+--- a/tests/hub_test.py
++++ b/tests/hub_test.py
+@@ -866,25 +866,24 @@ def test_solar_subsys_distribution(self):
+ 		self._monitor.set_value('com.victronenergy.battery.socketcan_can0_di0_uc30688', '/Info/MaxChargeCurrent', 100)
+ 
+ 	def test_battery_subsys_no_bms(self):
+-		from delegates.dvcc import Dvcc
++		from delegates.dvcc import BatterySubsystem
+ 		self._add_device('com.victronenergy.battery.socketcan_can0_di0_uc30688', {
+ 			'/Dc/0/Voltage': 12.6,
+ 			'/Dc/0/Current': 9.3
+ 		}, connection='VE.Can')
+ 
+-		system = Dvcc.instance._batterysystem
++		system = BatterySubsystem(self._system_calc._dbusmonitor)
++		system.add_battery('com.victronenergy.battery.socketcan_can0_di0_uc30688')
++		self.assertEqual(system.bmses, [])
+ 
+ 		# Test magic methods
+ 		self.assertTrue('com.victronenergy.battery.socketcan_can0_di0_uc30688' in system)
+ 		self.assertTrue(len(system)==1)
+ 		batteries = list(system)
+ 		self.assertTrue(batteries[0].service == 'com.victronenergy.battery.socketcan_can0_di0_uc30688')
+-		self.assertTrue(system['com.victronenergy.battery.socketcan_can0_di0_uc30688'] is not None)
+-		self.assertFalse(batteries[0].is_bms)
+-		self.assertEqual(Dvcc.instance.bms, None)
+ 
+ 	def test_battery_subsys_bms(self):
+-		from delegates.dvcc import Dvcc
++		from delegates.dvcc import BatterySubsystem
+ 		self._add_device('com.victronenergy.battery.socketcan_can0_di0_uc30688', {
+ 			'/Dc/0/Voltage': 12.6,
+ 			'/Dc/0/Current': 9.3,
+@@ -893,9 +892,9 @@ def test_battery_subsys_bms(self):
+ 			'/Info/MaxDischargeCurrent': 100
+ 		}, connection='VE.Can')
+ 
+-		system = Dvcc.instance._batterysystem
+-		battery = system['com.victronenergy.battery.socketcan_can0_di0_uc30688']
+-		self.assertTrue(Dvcc.instance.bms is battery)
++		system = BatterySubsystem(self._system_calc._dbusmonitor)
++		battery = system.add_battery('com.victronenergy.battery.socketcan_can0_di0_uc30688')
++		self.assertTrue(system.bmses[0] is battery)
+ 		self.assertTrue(battery.maxchargecurrent == 100)
+ 		self.assertTrue(battery.chargevoltage == 15)
+ 		self.assertEqual(battery.voltage, 12.6)
+@@ -1352,50 +1351,43 @@ def test_bms_selection(self):
+ 				'/Info/MaxDischargeCurrent': 25,
+ 				'/ProductId': 0xB009})
+ 		self._check_values({'/ActiveBatteryService': 'com.victronenergy.battery/1'})
++		self.assertEqual(len(Dvcc.instance._batterysystem.bmses), 2)
+ 
+ 		# Check that the selected battery is chosen, as both here have BMSes
+ 		self.assertEqual(Dvcc.instance.bms.service, 'com.victronenergy.battery.ttyO2')
+ 
+-	def test_bms_selection_no_bms(self):
+-		""" Test that delegate shows no BMS if none is available. """
+-		from delegates.dvcc import Dvcc
+-
+-		self._add_device('com.victronenergy.battery.ttyO1',
+-			product_name='battery',
+-			values={
+-				'/Dc/0/Voltage': 51.8,
+-				'/Dc/0/Current': 3,
+-				'/Dc/0/Power': 155.4,
+-				'/Soc': 95,
+-				'/DeviceInstance': 0})
+-		self.assertEqual(Dvcc.instance.bms, None)
+-
+-	def test_bms_not_selected(self):
++	def test_bms_selection_lowest_deviceinstance(self):
++		""" Test that if there is more than one BMS in the system,
++		    the lowest device instance """
+ 		from delegates.dvcc import Dvcc
+ 
+-		# No battery monitor
+-		self._set_setting('/Settings/SystemSetup/BatteryService', 'nobattery')
++		# Select a non-existent battery service to ensure that none is active
++		self._set_setting('/Settings/SystemSetup/BatteryService', 'com.victronenergy.battery/111')
++
++		for did in (1, 0, 2):
++			self._add_device('com.victronenergy.battery.ttyO{}'.format(did),
++				product_name='battery',
++				values={
++					'/Dc/0/Voltage': 51.8,
++					'/Dc/0/Current': 3,
++					'/Dc/0/Power': 155.4,
++					'/Soc': 95,
++					'/DeviceInstance': did,
++					'/Info/BatteryLowVoltage': None,
++					'/Info/MaxChargeCurrent': 25,
++					'/Info/MaxChargeVoltage': 53.2,
++					'/Info/MaxDischargeCurrent': 25,
++					'/ProductId': 0xB009})
++		self._check_values({'/ActiveBatteryService': None})
++		self.assertEqual(len(Dvcc.instance._batterysystem.bmses), 3)
+ 
+-		self._add_device('com.victronenergy.battery.ttyO1',
+-			product_name='battery',
+-			values={
+-				'/Dc/0/Voltage': 51.8,
+-				'/Dc/0/Current': 3,
+-				'/Dc/0/Power': 155.4,
+-				'/Info/BatteryLowVoltage': None,
+-				'/Info/MaxChargeCurrent': 25,
+-				'/Info/MaxChargeVoltage': 53.2,
+-				'/Info/MaxDischargeCurrent': 25,
+-				'/Soc': 95,
+-				'/DeviceInstance': 0})
+-		self.assertEqual(Dvcc.instance.bms, None)
++		# Check that the lowest deviceinstante is chosen, as all here have BMSes
++		self.assertEqual(Dvcc.instance.bms.service, 'com.victronenergy.battery.ttyO0')
+ 
+-	def test_bms_not_selected2(self):
++	def test_bms_selection_no_bms(self):
++		""" Test that delegate shows no BMS if none is available. """
+ 		from delegates.dvcc import Dvcc
+ 
+-		# No battery monitor
+-		self._set_setting('/Settings/SystemSetup/BatteryService', 'com.victronenergy.battery/0')
+-
+ 		self._add_device('com.victronenergy.battery.ttyO1',
+ 			product_name='battery',
+ 			values={
+@@ -1404,19 +1396,6 @@ def test_bms_not_selected2(self):
+ 				'/Dc/0/Power': 155.4,
+ 				'/Soc': 95,
+ 				'/DeviceInstance': 0})
+-
+-		self._add_device('com.victronenergy.battery.ttyO2',
+-			product_name='battery',
+-			values={
+-				'/Dc/0/Voltage': 51.8,
+-				'/Dc/0/Current': 3,
+-				'/Dc/0/Power': 155.4,
+-				'/Info/BatteryLowVoltage': None,
+-				'/Info/MaxChargeCurrent': 25,
+-				'/Info/MaxChargeVoltage': 53.2,
+-				'/Info/MaxDischargeCurrent': 25,
+-				'/Soc': 95,
+-				'/DeviceInstance': 1})
+ 		self.assertEqual(Dvcc.instance.bms, None)
+ 
+ 	def test_firmware_warning(self):
+@@ -1511,6 +1490,42 @@ def test_flapping_firmware(self):
+ 		self._update_values(3000)
+ 		self._check_values({'/Dvcc/Alarms/FirmwareInsufficient': 1})
+ 
++	def test_multiple_battery_warning(self):
++		self._check_values({'/Dvcc/Alarms/MultipleBatteries': 0})
++		self._add_device('com.victronenergy.battery.ttyO1',
++			product_name='battery',
++			values={
++				'/Dc/0/Voltage': 58.1,
++				'/Dc/0/Current': 5.3,
++				'/Dc/0/Power': 65,
++				'/Soc': 15.3,
++				'/DeviceInstance': 2,
++				'/Info/MaxChargeVoltage': 55})
++		self._update_values(3000)
++		self._check_values({'/Dvcc/Alarms/MultipleBatteries': 0})
++		self._add_device('com.victronenergy.battery.ttyO2',
++			product_name='battery',
++			values={
++				'/Dc/0/Voltage': 58.1,
++				'/Dc/0/Current': 5.3,
++				'/Dc/0/Power': 65,
++				'/Soc': 15.3,
++				'/DeviceInstance': 3})
++		self._update_values(3000)
++		self._check_values({'/Dvcc/Alarms/MultipleBatteries': 0})
++
++		self._add_device('com.victronenergy.battery.ttyO3',
++			product_name='battery',
++			values={
++				'/Dc/0/Voltage': 58.1,
++				'/Dc/0/Current': 5.3,
++				'/Dc/0/Power': 65,
++				'/Soc': 15.3,
++				'/DeviceInstance': 4,
++				'/Info/MaxChargeVoltage': 54})
++		self._update_values(3000)
++		self._check_values({'/Dvcc/Alarms/MultipleBatteries': 1})
++
+ 	def test_only_forward_charge_current_to_n2k_zero(self):
+ 		self._monitor.add_value('com.victronenergy.vebus.ttyO1', '/Hub/ChargeVoltage', 55.2)
+ 		self._monitor.add_value('com.victronenergy.settings', '/Settings/CGwacs/OvervoltageFeedIn', 0)
