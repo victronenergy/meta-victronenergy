@@ -8,26 +8,13 @@ inherit deploy nopackages
 INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.cpio.gz.u-boot"
 SCR = "install.scr"
 
-BOARD_IDS = ""
-BOARD_IDS:beaglebone = "file://board_id_octogx"
-BOARD_IDS:einstein = "\
-    file://board_id_cerbogx \
-    file://board_id_cerbogx_b1 \
-"
-BOARD_IDS:cerbosgx = "file://board_id_cerbogx_s"
-BOARD_IDS:ekrano = "file://board_id_ekrano"
-BOARD_IDS:nanopi = "\
-    file://board_id_easysolar \
-    file://board_id_easysolar_a9 \
-    file://board_id_easysolar_a10 \
-    file://board_id_maxigx \
-    file://board_id_maxigx_a10 \
-    file://board_id_multiplus2 \
-    file://board_id_multiplus2_a10 \
-    file://board_id_paygo \
-"
+BOARD_IDS ?= ""
 
-SRC_URI += "${BOARD_IDS}"
+python () {
+    board_ids = d.getVar('BOARD_IDS').split()
+    for b in board_ids:
+        d.appendVar('SRC_URI', ' file://board_id_' + b)
+}
 
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
 IMAGE_NAME[vardepsexclude] += "DATETIME"
@@ -73,10 +60,8 @@ do_deploy () {
         cp ${DEPLOY_DIR_IMAGE}/${src} ${SDCARD}/${dst}
     done
 
-    for board_id in ${BOARD_IDS}
-    do
-        board_id="$(echo $board_id | sed 's,file://,,g')"
-        cp "${WORKDIR}/$board_id" ${SDCARD}
+    for b in ${BOARD_IDS}; do
+        cp ${WORKDIR}/board_id_${b} ${SDCARD}
     done
 
     zip -rj ${DEPLOYDIR}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
