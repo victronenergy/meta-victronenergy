@@ -15,9 +15,7 @@ SRC_URI += "\
 "
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-hostap = ""
-hostap:beaglebone = "1"
-hostap:sunxi = "1"
+HAVE_WLAN_AP ?= ""
 
 RW_INITSCRIPT_PARAMS="start 80 5 . stop 10 0 1 6 ."
 
@@ -29,7 +27,7 @@ do_install:append() {
     install -m 755 ${WORKDIR}/rw-init ${D}${sysconfdir}/init.d/resolv-watch
     update-rc.d -r ${D} resolv-watch ${RW_INITSCRIPT_PARAMS}
 
-    if [ -n "${hostap}" ]; then
+    if [ "${HAVE_WLAN_AP}" = 1 ]; then
         install -m 644 ${WORKDIR}/dnsmasq.ap.conf ${D}${sysconfdir}
         ln -s dnsmasq ${D}${sysconfdir}/init.d/dnsmasq.ap
         update-rc.d -r ${D} dnsmasq.ap ${INITSCRIPT_PARAMS}
