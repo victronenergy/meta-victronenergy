@@ -8,13 +8,10 @@ inherit python-compile
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;protocol=https;tag=${PV} \
-    file://0001-revert-simplify-bms-selection.patch \
     file://com.victronenergy.system.conf \
 "
 
 S = "${WORKDIR}/git"
-
-PR = "1"
 
 RDEPENDS_${PN} = " \
     localsettings \
