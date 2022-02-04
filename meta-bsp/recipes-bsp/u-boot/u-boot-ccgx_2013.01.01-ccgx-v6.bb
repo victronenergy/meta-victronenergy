@@ -24,7 +24,7 @@ do_compile:append () {
 
 do_deploy:append () {
     install -d ${DEPLOYDIR}
-    install -m 0644 ${WORKDIR}/install.scr ${DEPLOYDIR}/install-${MACHINE}.scr
+    install -m 0644 ${WORKDIR}/install.scr ${DEPLOYDIR}/install.scr
     install ${WORKDIR}/live.scr ${DEPLOYDIR}
     install ${WORKDIR}/splash.bgra ${DEPLOYDIR}
 }

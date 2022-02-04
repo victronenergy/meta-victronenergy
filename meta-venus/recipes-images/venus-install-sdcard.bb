@@ -7,7 +7,7 @@ inherit deploy nopackages
 
 INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.cpio.gz.u-boot"
 DTB = "${KERNEL_DEVICETREE}"
-SCR = "install-${MACHINE}.scr"
+SCR = "install.scr"
 
 SRC_URI:beaglebone += "file://board_id_octogx"
 SRC_URI:einstein += "\
