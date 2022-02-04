@@ -8,7 +8,7 @@ inherit autotools-brokensep pkgconfig
 DEPENDS = "libftdi"
 
 SRC_URI = " \
-    git://github.com/aehparta/ftdi-bitbang.git;branch=master \
+    git://github.com/aehparta/ftdi-bitbang.git;branch=master;protocol=https \
     file://0001-use-LDADD-LIBADD-instead-of-LDFLAGS-for-the-librarie.patch \
     file://0002-print-the-usbid-of-the-usb-device.patch \
     file://0003-prevent-leaking-memory.patch \
