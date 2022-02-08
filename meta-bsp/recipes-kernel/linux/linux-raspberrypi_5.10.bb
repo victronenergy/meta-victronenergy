@@ -6,7 +6,7 @@ KBUILD_DEFCONFIG:raspberrypi4 ?= "bcm2711_defconfig"
 
 SECTION = "kernel"
 LICENSE = "GPLv2"
-LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
+LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
 inherit kernel
 
@@ -17,11 +17,14 @@ KERNEL_CONFIG_COMMAND = "oe_runmake -C ${S} O=${B} ${KBUILD_DEFCONFIG}"
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
-SRCREV = "6ff6f0c970199071c79176ec6147fda82fb28530"
-SRC_URI = "git://github.com/victronenergy/linux.git;protocol=git;branch=rpi_4.19.81"
+#SRCREV = "6ff6f0c970199071c79176ec6147fda82fb28530"
+#SRC_URI = "git://github.com/victronenergy/linux.git;protocol=git;branch=rpi_4.19.81"
+
+SRCREV = "1375d5eac7a0fd578b49c8dd272425053c322f9c"
+SRC_URI = "git://github.com/nmbath/linux.git;protocol=git;branch=rpi-5.10.y"
 
 # needed for building newer perf
-SRC_URI += "file://0001-perf-Make-perf-able-to-build-with-latest-libbfd.patch"
+#SRC_URI += "file://0001-perf-Make-perf-able-to-build-with-latest-libbfd.patch"
 
 # fix make[3]: *** [scripts/extract-cert] Error 1
 DEPENDS += "openssl-native"
