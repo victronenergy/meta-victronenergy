@@ -1,15 +1,12 @@
 DESCRIPTION = "dbus services which provide measurements / data on the dbus"
 
-PR = "r5"
-
 # To make sure all packages needed by vrmlogger, gui etc get correctly installed
 # all these recipes need to RDEPEND on all services they listen too. And if another
 # is added all recipes must then be altered to include the new one. By rdepending
 # on this packagegroup instead there is only one location where new packages which
 # provide data on the dbus need to be added.
 
-PACKAGES = "packagegroup-ve-dbus-data-producers"
-LICENSE = "MIT"
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 

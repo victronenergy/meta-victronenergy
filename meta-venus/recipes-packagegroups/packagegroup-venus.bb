@@ -18,8 +18,8 @@ DESCRIPTION = " \
 "
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+
 inherit packagegroup
-LICENSE = "MIT"
 
 DEPENDS = "packagegroup-venus-optional-packages venus-swu"
 

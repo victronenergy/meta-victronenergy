@@ -1,5 +1,4 @@
-PR = "r0"
-LICENSE = "MIT"
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 

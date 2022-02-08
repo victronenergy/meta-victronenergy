@@ -1,5 +1,6 @@
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
 inherit packagegroup
-LICENSE = "MIT"
 
 RDEPENDS:${PN} += "\
     binutils \

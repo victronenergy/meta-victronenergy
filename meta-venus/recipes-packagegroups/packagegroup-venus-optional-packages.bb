@@ -1,8 +1,9 @@
 # build but not installed in the image
 include qt6-packages.inc
 
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
 inherit packagegroup
-LICENSE = "MIT"
 
 DEPENDS += "\
     devmem2 \

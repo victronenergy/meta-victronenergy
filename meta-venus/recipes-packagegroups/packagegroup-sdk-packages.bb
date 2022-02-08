@@ -1,5 +1,5 @@
 DESCRIPTION = "packages for the SDK"
-LICENSE = "MIT"
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 

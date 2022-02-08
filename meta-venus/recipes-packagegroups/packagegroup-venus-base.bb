@@ -24,8 +24,11 @@ DESCRIPTION = " \
     packagegroup-venus-machine and depend on a MACHINE feature. \
 "
 
+# See commit 5bf3e447, packagegroups with dynamic package, like dbus, should be
+# tune specific.
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
 inherit packagegroup
-LICENSE = "MIT"
 
 RDEPENDS:${PN} += "\
     avahi-autoipd \
