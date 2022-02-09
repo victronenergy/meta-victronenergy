@@ -3,7 +3,7 @@ DESCRIPTION = "Make console available on tty port"
 # VE.Direct port 1. Standard disabled, can be enabled from the menu
 
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 RDEPENDS:${PN} = "machine-runtime-conf"
 
