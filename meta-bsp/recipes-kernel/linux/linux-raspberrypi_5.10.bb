@@ -20,7 +20,7 @@ B = "${WORKDIR}/build"
 #SRCREV = "6ff6f0c970199071c79176ec6147fda82fb28530"
 #SRC_URI = "git://github.com/victronenergy/linux.git;protocol=git;branch=rpi_4.19.81"
 
-SRCREV = "6c16243d2dafc5ba413922a8fd45b5eca1ce335c"
+SRCREV = "efa3d4d9283a8c761ee45d1f179ba255c3e69148"
 SRC_URI = "git://github.com/nmbath/linux.git;protocol=git;branch=rpi-5.10.y"
 
 # needed for building newer perf
