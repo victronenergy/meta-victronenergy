@@ -17,6 +17,7 @@ RPI_KERNEL_DEVICETREE_OVERLAYS = " \
     overlays/mcp2515-can0-overlay.dtb \
     overlays/mcp2515-can1-overlay.dtb \
     overlays/mcp251xfd-overlay.dtb \
+    overlays/2xMCP2517FD-overlay.dtb \
     overlays/rpi-ft5406-overlay.dtb \
 "
 
