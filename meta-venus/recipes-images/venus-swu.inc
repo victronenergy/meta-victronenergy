@@ -32,11 +32,13 @@ VENUS_IMAGE = "venus-image"
 VENUS_IMAGE_FILE = "${VENUS_IMAGE}-${MACHINE}.${ROOT_FSTYPE}"
 VENUS_VERSION = "${BUILDNAME} ${DISTRO_VERSION}"
 
-BOOT_IMAGE = ""
-BOOT_IMAGE:beaglebone = "venus-boot-image"
+BOOT_IMAGE ?= ""
 
-BOOT_IMAGE_FILE = \
-    "${@'${BOOT_IMAGE}-${MACHINE}.${BOOT_FSTYPE}' if '${BOOT_IMAGE}' else ''}"
+python () {
+    bi = d.getVar('BOOT_IMAGE')
+    bif = '${BOOT_IMAGE}-${MACHINE}.${BOOT_FSTYPE}' if bi else ''
+    d.setVar('BOOT_IMAGE_FILE', bif)
+}
 
 # IMAGE_DEPENDS: list of images that contains a root filesystem
 # it will be ensured they are built before creating swupdate image
@@ -48,8 +50,6 @@ ROOT_FSTYPE = "ubifs"
 ROOT_FSTYPE:beaglebone = "ext4.gz"
 ROOT_FSTYPE:rpi = "ext4.gz"
 ROOT_FSTYPE:sunxi = "ext4.gz"
-
-BOOT_FSTYPE = "vfat.gz"
 
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}-${DISTRO_VERSION}"
 
