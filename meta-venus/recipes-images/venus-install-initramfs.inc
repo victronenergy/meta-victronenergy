@@ -15,9 +15,25 @@ IMAGE_INSTALL = " \
     ${@bb.utils.contains('SWUPDATE_INIT', 'tiny', '', 'initscripts sysvinit tinylogin', d)} \
 "
 
-IMAGE_INSTALL:append:beaglebone = "e2fsprogs-mke2fs util-linux-sfdisk"
-IMAGE_INSTALL:append:canvu500 = "imx-kobs mtd-utils-ubifs kernel-module-usbserial kernel-module-ftdi-sio"
-IMAGE_INSTALL:append:ccgx = "mtd-utils-ubifs"
+MMC_TOOLS = "e2fsprogs-mke2fs util-linux-sfdisk"
+UBI_TOOLS = "mtd-utils-ubifs"
+
+python () {
+    fs = d.getVar('FSTAB') or 'mmc'
+
+    if fs.startswith('mmc'):
+        d.appendVar('IMAGE_INSTALL', ' ${MMC_TOOLS}')
+    elif fs == 'ubi':
+        d.appendVar('IMAGE_INSTALL', ' ${UBI_TOOLS}')
+    else:
+        raise Exception('Unknown rootfs device type')
+}
+
+IMAGE_INSTALL:append:canvu500 = "\
+    imx-kobs \
+    kernel-module-usbserial \
+    kernel-module-ftdi-sio \
+"
 IMAGE_INSTALL:append:einstein = "\
     kernel-module-sun4i-backend \
     kernel-module-sun4i-drm \
@@ -30,7 +46,6 @@ IMAGE_INSTALL:append:nanopi = "\
     kernel-module-sun8i-mixer \
     kernel-module-victron-gxdisp-bl \
 "
-IMAGE_INSTALL:append:sunxi = "e2fsprogs-mke2fs util-linux-sfdisk"
 
 IMAGE_LINGUAS = " "
 
