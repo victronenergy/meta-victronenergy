@@ -17,8 +17,8 @@ do_compile[noexec] = "1"
 do_install[noexec] = "1"
 
 do_deploy () {
-    BOOT_IMAGE=${IMAGE_NAME}.vfat
-    BOOTIMG=${DEPLOYDIR}/${BOOT_IMAGE}
+    BOOT_IMAGE_FILE=${IMAGE_NAME}.vfat
+    BOOTIMG=${DEPLOYDIR}/${BOOT_IMAGE_FILE}
 
     mkfs.vfat -S 512 -C ${BOOTIMG} ${BOOT_IMAGE_SIZE}
 
@@ -27,7 +27,7 @@ do_deploy () {
     done
 
     gzip ${BOOTIMG}
-    ln -sf ${BOOT_IMAGE}.gz ${DEPLOYDIR}/${IMAGE_LINK_NAME}.vfat.gz
+    ln -sf ${BOOT_IMAGE_FILE}.gz ${DEPLOYDIR}/${IMAGE_LINK_NAME}.vfat.gz
 }
 
 addtask do_deploy before do_build
