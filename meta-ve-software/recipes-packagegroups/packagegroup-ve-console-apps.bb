@@ -18,8 +18,3 @@ RDEPENDS:${PN} += " \
     javascript-vnc-client \
     localsettings \
 "
-
-RDEPENDS:${PN}:append:nanopi = " \
-    dbus-characterdisplay \
-"
-

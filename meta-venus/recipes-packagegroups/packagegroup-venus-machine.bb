@@ -58,6 +58,10 @@ RDEPENDS:${PN}:append:einstein = "\
     venus-button-handler \
 "
 
+RDEPENDS:${PN}:append:nanopi = " \
+    dbus-characterdisplay \
+"
+
 RDEPENDS:${PN}:append:sunxi = "\
     cpufrequtils \
     gpio-export \
