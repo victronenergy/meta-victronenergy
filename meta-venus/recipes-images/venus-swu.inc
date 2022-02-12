@@ -46,11 +46,6 @@ IMAGE_DEPENDS = "${VENUS_IMAGE} ${BOOT_IMAGE}"
 
 do_swuimage[depends] += "virtual/bootloader:do_deploy"
 
-ROOT_FSTYPE = "ubifs"
-ROOT_FSTYPE:beaglebone = "ext4.gz"
-ROOT_FSTYPE:rpi = "ext4.gz"
-ROOT_FSTYPE:sunxi = "ext4.gz"
-
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}-${DISTRO_VERSION}"
 
 # SWUPDATE_IMAGES: list of images that will be part of the compound image

@@ -41,6 +41,7 @@ UBOOT_SUFFIX ?= "bin"
 UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
 
 IMAGE_FSTYPES ?= "wic ext4.gz"
+ROOT_FSTYPE = "ext4.gz"
 
 MACHINE_FEATURES += "apm usbhost keyboard vfat ext2 screen touchscreen alsa bluetooth wifi sdio ${@bb.utils.contains('DISABLE_VC4GRAPHICS', '1', '', 'vc4graphics', d)}"
 
