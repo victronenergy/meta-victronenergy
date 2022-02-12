@@ -50,10 +50,13 @@ IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}-${DISTRO_VERSION}"
 
 # SWUPDATE_IMAGES: list of images that will be part of the compound image
 # the list can have any binaries - images must be in the DEPLOY directory
-SWUPDATE_IMAGES = "${VENUS_IMAGE_FILE} ${BOOT_IMAGE_FILE}"
-SWUPDATE_IMAGES:append:canvu500 = " u-boot.imx splash.bmp.gz"
-SWUPDATE_IMAGES:append:ccgx = " uImage u-boot.img MLO splash.bgra"
-SWUPDATE_IMAGES:append:sunxi = " u-boot-sunxi-with-spl.bin"
+SWUPDATE_IMAGES = "\
+    ${VENUS_IMAGE_FILE} \
+    ${BOOT_IMAGE_FILE} \
+    ${SWU_EXTRA_IMAGES} \
+"
+
+SWU_EXTRA_IMAGES ?= ""
 
 python () {
     for n in d.getVar('SWUPDATE_IMAGES').split():
