@@ -27,24 +27,23 @@ python () {
         d.appendVar('IMAGE_INSTALL', ' ${UBI_TOOLS}')
     else:
         raise Exception('Unknown rootfs device type')
+
+    import re
+
+    path = bb.utils.which(d.getVar('FILESPATH'), 'swupdate')
+    f = open(path)
+    s = f.read()
+    f.close()
+
+    m = re.search(r'^\s*MODULES="(.*?[^\\])"', s, re.M)
+    if m is not None:
+        for mod in m.group(1).split():
+            if re.match(r'[0-9a-z_-]+$', mod):
+                d.appendVar('IMAGE_INSTALL', ' kernel-module-' + mod)
 }
 
 IMAGE_INSTALL:append:canvu500 = "\
     imx-kobs \
-    kernel-module-usbserial \
-    kernel-module-ftdi-sio \
-"
-IMAGE_INSTALL:append:einstein = "\
-    kernel-module-sun4i-backend \
-    kernel-module-sun4i-drm \
-    kernel-module-sun4i-drm-hdmi \
-    kernel-module-victron-gxdisp-bl \
-"
-IMAGE_INSTALL:append:nanopi = "\
-    kernel-module-sun4i-drm \
-    kernel-module-sun8i-drm-hdmi \
-    kernel-module-sun8i-mixer \
-    kernel-module-victron-gxdisp-bl \
 "
 
 IMAGE_LINGUAS = " "
