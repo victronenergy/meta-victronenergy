@@ -1,4 +1,6 @@
 #!/bin/sh
 
-echo forced-canbus-bms
-
+case $(board-compat) in
+    victronenergy,*-a10)    echo any ;;
+    *)                      echo forced-canbus-bms ;;
+esac
