@@ -22,7 +22,10 @@ SRC_URI:append:einstein = "\
     file://backlight_device.in \
     file://blank_display_device.in \
 "
-SRC_URI:append:sunxi = " file://canbus_ports.in"
+SRC_URI:append:sunxi = "\
+    file://can_names.in \
+    file://canbus_ports.in \
+"
 
 inherit update-rc.d
 
