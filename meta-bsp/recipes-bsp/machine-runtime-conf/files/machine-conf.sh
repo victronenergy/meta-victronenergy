@@ -27,6 +27,7 @@ gen_config() (
 CONFIGS="
     backlight_device
     blank_display_device
+    can_names
     canbus_ports
 "
 
