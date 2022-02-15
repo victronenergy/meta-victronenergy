@@ -15,7 +15,7 @@ DAEMONTOOLS_SERVICE_SYMLINK ?= "1"
 # to allow the rootfs to be readonly in venus, /service might be overlayed
 # with /opt/victronenergy/service.
 DAEMONTOOLS_OVERLAYFS = "0"
-DAEMONTOOLS_OVERLAYFS_venus = "1"
+DAEMONTOOLS_OVERLAYFS:venus = "1"
 
 DEAMONTOOLS_COMMON_SERVICES_DIR = "/opt/victronenergy/service"
 DAEMONTOOLS_SERVICE_DIR ?= "${DEAMONTOOLS_COMMON_SERVICES_DIR}/${PN}"
