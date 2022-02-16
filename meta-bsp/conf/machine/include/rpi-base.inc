@@ -9,13 +9,13 @@ MACHINE_FEATURES += "headless"
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-raspberrypi"
 
 RPI_KERNEL_DEVICETREE_OVERLAYS = " \
-    overlays/ads7846-overlay.dtb \
-    overlays/pitft28-capacitive-overlay.dtb \
-    overlays/pitft35-resistive-overlay.dtb \
-    overlays/rpi-display-overlay.dtb \
-    overlays/mcp2515-can0-overlay.dtb \
-    overlays/mcp2515-can1-overlay.dtb \
-    overlays/rpi-ft5406-overlay.dtb \
+    overlays/ads7846.dtbo \
+    overlays/pitft28-capacitive.dtbo \
+    overlays/pitft35-resistive.dtbo \
+    overlays/rpi-display.dtbo \
+    overlays/mcp2515-can0.dtbo \
+    overlays/mcp2515-can1.dtbo \
+    overlays/rpi-ft5406.dtbo \
 "
 
 KERNEL_PACKAGES ?= "kernel-image kernel-modules"
