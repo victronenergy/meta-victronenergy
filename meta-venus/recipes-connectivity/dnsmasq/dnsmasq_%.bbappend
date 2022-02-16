@@ -14,6 +14,7 @@ SRC_URI += "\
     file://rw-init \
 "
 
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 hostap = ""
 hostap:beaglebone = "1"
 hostap:sunxi = "1"
