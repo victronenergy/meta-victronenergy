@@ -1,5 +1,10 @@
 DEPENDS = "freetype jpeg libpng zlib dbus tiff tslib"
-RDEPENDS:libqt-embeddedcore4 += "qt4-machine-conf"
+
+# NOTE: don't add this RDEPENDS here, since it will make the package
+# machine specific and dependent tasks. Instead it is added to
+# packagegroup-venus-machine.
+#
+# RDEPENDS:libqt-embeddedcore4 += "qt4-machine-conf"
 
 require qt4_ve_patches.inc
 

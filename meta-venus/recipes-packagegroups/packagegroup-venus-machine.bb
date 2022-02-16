@@ -7,7 +7,11 @@ LICENSE = "MIT"
 
 include qt6-packages.inc
 
+# NOTE: some machine runtime dependency are added here, since adding them to the package
+# themselves causes the task signatures to change and that propagates to all dependent
+# tasks. E.g. qt4-machine-conf will cause the packaging of qt4 to become machine specific.
 RDEPENDS:${PN} += "\
+    qt4-machine-conf \
     simple-upnpd \
 "
 
