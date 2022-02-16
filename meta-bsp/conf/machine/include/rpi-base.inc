@@ -10,12 +10,20 @@ PREFERRED_PROVIDER_virtual/kernel ?= "linux-raspberrypi"
 
 RPI_KERNEL_DEVICETREE_OVERLAYS = " \
     overlays/ads7846.dtbo \
+    overlays/disable-bt.dtbo \
+    overlays/disable-wifi.dtbo \
+    overlays/gpio-fan.dtbo \
     overlays/pitft28-capacitive.dtbo \
     overlays/pitft35-resistive.dtbo \
     overlays/rpi-display.dtbo \
     overlays/mcp2515-can0.dtbo \
     overlays/mcp2515-can1.dtbo \
+    overlays/mcp251xfd.dtbo \
+    overlays/rpi-backlight.dtbo \
     overlays/rpi-ft5406.dtbo \
+    overlays/spi1-3cs.dtbo \
+    overlays/waveshare-can-fd-hat-mode-a.dtbo \
+    overlays/waveshare-can-fd-hat-mode-b.dtbo \
 "
 
 KERNEL_PACKAGES ?= "kernel-image kernel-modules"
