@@ -1,6 +1,9 @@
 PACKAGES =+ "${PN}-rt2800 ${PN}-rt73"
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
+# Note: only as long a the rpi has conflicting firmware files...
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
 #LICENSE:${PN}-rt2800 = "LICENCE.ralink-firmware.txt"
 FILES:${PN}-rt2800 = " \
   /lib/firmware/rt2870.bin \
