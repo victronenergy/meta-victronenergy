@@ -2,6 +2,8 @@ inherit localsettings
 inherit update-rc.d
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+# get_boot_type is MACHINE specific
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += "\
     file://get_boot_type.c \
