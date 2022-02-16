@@ -7,6 +7,9 @@ DAEMONTOOLS_SERVICE_DIR = "${DAEMONTOOLS_TEMPLATE_DIR}"
 
 inherit daemontools
 
+# note: this can be dropped once CAN-bus handling is no longer static.
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
 do_per_canbus_service() {
     # make sure the service dir exists and is empty
     if [ -e "${D}${DAEMONTOOLS_SERVICES_DIR}" ]; then
