@@ -5,6 +5,7 @@ IMAGE_INSTALL = "\
     packagegroup-base \
     packagegroup-venus-base \
     packagegroup-venus-machine \
+    venus-version \
     ${CORE_IMAGE_EXTRA_INSTALL} \
     ${KERNEL_PACKAGES} \
 "

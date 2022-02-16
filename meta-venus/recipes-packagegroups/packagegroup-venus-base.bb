@@ -95,7 +95,6 @@ RDEPENDS:${PN} += "\
     venus-dbus-tools \
     venus-feed-configs \
     venus-html5-app \
-    venus-version \
     watchdog \
     websockify-c \
     wget \
