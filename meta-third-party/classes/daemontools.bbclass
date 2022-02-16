@@ -72,19 +72,21 @@ python __anonymous() {
     daemontools_after_parse(d)
 }
 
-python populate_packages:prepend () {
+PACKAGESPLITFUNCS:prepend = "populate_packages_daemontools "
+
+# NOTE: since OVERRIDES depends on MACHINEOVERRIDES which depends on MACHINE,
+# then all stamps become machine specific and as a consequence any depending
+# task as well, so exclude OVERRIDES.
+populate_packages_daemontools[vardepsexclude] += "OVERRIDES"
+
+python populate_packages_daemontools () {
     def update_rcd_package(pkg):
-        bb.debug(1, 'adding update-rc.d calls to postinst/postrm for %s' % pkg)
+        bb.debug(1, 'adding daemontools calls to postinst/postrm for %s' % pkg)
         localdata = bb.data.createCopy(d)
         overrides = localdata.getVar("OVERRIDES", True)
         localdata.setVar("OVERRIDES", "%s:%s" % (pkg, overrides))
         bb.data.update_data(localdata)
 
-        """
-        update_rc.d postinst is appended here because pkg_postinst may require to
-        execute on the target. Not doing so may cause update_rc.d postinst invoked
-        twice to cause unwanted warnings.
-        """ 
         preinst = localdata.getVar('pkg_preinst', True)
         if not preinst:
             preinst = '#!/bin/sh\n'
