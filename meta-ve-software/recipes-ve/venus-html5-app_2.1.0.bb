@@ -22,8 +22,6 @@ INHIBIT_DEFAULT_DEPS = "1"
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
-inherit allarch
-
 do_install () {
     for f in $( find ${S}/dist -type f -printf "%P\n" ); do
         install -D "${S}/dist/$f" "${D}${BASE_DIR}/$f"
