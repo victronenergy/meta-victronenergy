@@ -1,9 +1,12 @@
 DESCRIPTION = "Boot partition image"
 LICENSE = "MIT"
 
-BOOT_IMAGE_SIZE = "8192"
+inherit deploy
 
-do_rootfs[depends] += "\
+BOOT_IMAGE_SIZE = "8192"
+IMAGE_NAME = "${PN}-${MACHINE}"
+
+do_deploy[depends] += "\
     dosfstools-native:do_populate_sysroot \
     mtools-native:do_populate_sysroot \
     virtual/bootloader:do_deploy \
@@ -20,11 +23,10 @@ do_package_write_ipk[noexec] = "1"
 do_package_write_deb[noexec] = "1"
 do_package_write_rpm[noexec] = "1"
 
-do_rootfs () {
+do_deploy () {
     BOOT_IMAGE=${IMAGE_NAME}.vfat
-    BOOTIMG=${DEPLOY_DIR_IMAGE}/${BOOT_IMAGE}
+    BOOTIMG=${DEPLOYDIR}/${BOOT_IMAGE}
 
-    rm -f ${BOOTIMG}
     mkfs.vfat -S 512 -C ${BOOTIMG} ${BOOT_IMAGE_SIZE}
 
     for file in ${IMAGE_BOOT_FILES}; do
@@ -32,7 +34,6 @@ do_rootfs () {
     done
 
     gzip ${BOOTIMG}
-    ln -sf ${BOOT_IMAGE}.gz ${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.vfat.gz
 }
 
-addtask do_rootfs before do_build
+addtask do_deploy before do_build
