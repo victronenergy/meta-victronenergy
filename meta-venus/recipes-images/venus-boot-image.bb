@@ -1,7 +1,7 @@
 DESCRIPTION = "Boot partition image"
 LICENSE = "MIT"
 
-inherit deploy
+inherit deploy nopackages
 
 BOOT_IMAGE_SIZE = "8192"
 IMAGE_NAME = "${PN}-${MACHINE}"
@@ -16,12 +16,6 @@ do_deploy[depends] += "\
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 do_install[noexec] = "1"
-do_package[noexec] = "1"
-do_package_qa[noexec] = "1"
-do_packagedata[noexec] = "1"
-do_package_write_ipk[noexec] = "1"
-do_package_write_deb[noexec] = "1"
-do_package_write_rpm[noexec] = "1"
 
 do_deploy () {
     BOOT_IMAGE=${IMAGE_NAME}.vfat

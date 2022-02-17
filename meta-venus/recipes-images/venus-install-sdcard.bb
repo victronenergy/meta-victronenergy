@@ -3,7 +3,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-inherit deploy
+inherit deploy nopackages
 
 INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.cpio.gz.u-boot"
 DTB = "${KERNEL_DEVICETREE}"
@@ -102,9 +102,3 @@ do_deploy () {
 
 addtask do_deploy before do_build
 
-do_package[noexec] = "1"
-do_package_qa[noexec] = "1"
-do_packagedata[noexec] = "1"
-do_package_write_ipk[noexec] = "1"
-do_package_write_deb[noexec] = "1"
-do_package_write_rpm[noexec] = "1"
