@@ -4,7 +4,6 @@ LICENSE = "MIT"
 inherit deploy nopackages
 
 BOOT_IMAGE_SIZE = "8192"
-IMAGE_NAME = "${PN}-${MACHINE}"
 
 do_deploy[depends] += "\
     dosfstools-native:do_populate_sysroot \
@@ -28,6 +27,7 @@ do_deploy () {
     done
 
     gzip ${BOOTIMG}
+    ln -sf ${BOOT_IMAGE}.gz ${DEPLOYDIR}/${IMAGE_LINK_NAME}.vfat.gz
 }
 
 addtask do_deploy before do_build
