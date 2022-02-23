@@ -8,6 +8,7 @@
 + out modem_rst
 
 + out digital_output_1
++ out digital_output_2
 
 + out usb_vbus
 
