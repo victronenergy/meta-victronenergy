@@ -39,9 +39,6 @@ TTYS="console"
 # size of root partitions in MB
 ROOT_SIZE=1280
 
-# size of data partition in MB
-DATA_SIZE=512
-
 # name of board id nvmem device
 #BOARD_ID_DEV=
 
