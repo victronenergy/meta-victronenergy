@@ -11,6 +11,7 @@ inherit python-compile
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-characterdisplay.git;branch=master;protocol=https;tag=v${PV} \
+    file://start-characterdisplay.sh \
 "
 
 S = "${WORKDIR}/git"
@@ -23,4 +24,9 @@ RDEPENDS:${PN} = " \
     python3-evdev \
 "
 
-DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_characterdisplay.py"
+DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/start-characterdisplay.sh"
+
+do_install:append () {
+    install -d ${D}${bindir}
+    install -m 0755 ${WORKDIR}/start-characterdisplay.sh ${D}${bindir}
+}
