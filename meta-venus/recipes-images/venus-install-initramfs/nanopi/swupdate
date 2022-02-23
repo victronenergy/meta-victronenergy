@@ -6,16 +6,19 @@ SWUDEV=mmcblk0p1
 MMCDEV=mmcblk1
 ROOT_SIZE=
 BOARD_ID_DEV=0-00500
-TTYS="$TTYS lcd"
 TESTMODE_TTYS="ttyS2"
 
-clearlcd() {
-    printf '\f' >/dev/lcd
-}
+if [ -e /dev/lcd ]; then
+    TTYS="$TTYS lcd"
 
-HOOK_msg=clearlcd
+    clearlcd() {
+        printf '\f' >/dev/lcd
+    }
 
-# initialise LCD
-printf '\f\e[Lb\e[Lc\e[LD\e[L+' >/dev/lcd
+    HOOK_msg=clearlcd
+
+    # initialise LCD
+    printf '\f\e[Lb\e[Lc\e[LD\e[L+' >/dev/lcd
+fi
 
 do_install
