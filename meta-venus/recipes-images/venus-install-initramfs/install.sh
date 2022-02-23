@@ -36,8 +36,14 @@ TTYS="console"
 # Most SOM with emmc seem to be at least 4GB, but the available size seem to be
 # less then that, so by default reserve less then that.
 
+# default root partition size for mmc devices up to 4 GB
+SMALL_ROOT_SIZE=1280
+
+# default root partition size for mmc devices larger than 4 GB
+LARGE_ROOT_SIZE=2048
+
 # size of root partitions in MB
-ROOT_SIZE=1280
+ROOT_SIZE=$SMALL_ROOT_SIZE
 
 # name of board id nvmem device
 #BOARD_ID_DEV=
@@ -145,6 +151,15 @@ do_testmode() {
 
 format_mmc() {
     mmc=$1
+
+    if [ -z "$ROOT_SIZE" ]; then
+        mmc_size=$(cat /sys/block/$mmc/size)
+        if [ $mmc_size -gt $((4 * 1024 * 1024 * 2)) ]; then
+            ROOT_SIZE=$LARGE_ROOT_SIZE
+        else
+            ROOT_SIZE=$SMALL_ROOT_SIZE
+        fi
+    fi
 
     root_blocks=$((ROOT_SIZE * 1024 * 2))
 
