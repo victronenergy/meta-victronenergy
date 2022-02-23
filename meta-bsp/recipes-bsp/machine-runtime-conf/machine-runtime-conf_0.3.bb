@@ -21,6 +21,9 @@ SRC_URI:append:einstein = "\
     file://backlight_device.in \
     file://blank_display_device.in \
 "
+SRC_URI:append:sunxi = "\
+    file://pwm_buzzer.in \
+"
 
 inherit update-rc.d
 

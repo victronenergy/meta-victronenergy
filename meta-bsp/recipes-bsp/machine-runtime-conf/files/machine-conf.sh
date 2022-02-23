@@ -29,6 +29,7 @@ CONFIGS="
     blank_display_device
     can_names
     canbus_ports
+    pwm_buzzer
 "
 
 mkdir -p /run/venus
