@@ -8,6 +8,14 @@ ROOT_SIZE=
 BOARD_ID_DEV=0-00500
 TESTMODE_TTYS="ttyS2"
 
+do_mounts
+
+if [ -e /sys/firmware/devicetree/base/hdmi-connector ]; then
+    EDID_DEV=1-00501
+    MODULES="sun4i-drm sun8i-drm-hdmi sun8i-mixer victron-gxdisp-bl"
+    TTYS="$TTYS tty0"
+fi
+
 if [ -e /dev/lcd ]; then
     TTYS="$TTYS lcd"
 
