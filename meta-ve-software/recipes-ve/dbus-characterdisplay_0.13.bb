@@ -6,7 +6,8 @@ inherit gmakevelib
 inherit daemontools
 inherit python-compile
 
-RDEPENDS:${PN} = "machine-runtime-conf"
+# omitted since machine-runtime is machine specific.
+# RDEPENDS:${PN} = "machine-runtime-conf"
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-characterdisplay.git;branch=master;protocol=https;tag=v${PV} \
