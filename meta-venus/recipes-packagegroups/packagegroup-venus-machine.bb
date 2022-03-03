@@ -11,6 +11,7 @@ include qt6-packages.inc
 # themselves causes the task signatures to change and that propagates to all dependent
 # tasks. E.g. qt4-machine-conf will cause the packaging of qt4 to become machine specific.
 RDEPENDS:${PN} += "\
+    machine-runtime-conf \
     qt4-machine-conf \
     simple-upnpd \
 "
