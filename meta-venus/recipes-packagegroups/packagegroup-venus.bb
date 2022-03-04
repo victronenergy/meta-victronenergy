@@ -19,7 +19,7 @@ DESCRIPTION = " \
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-inherit packagegroup
+inherit nopackages packagegroup
 
 DEPENDS = "packagegroup-venus-optional-packages venus-swu"
 
