@@ -13,6 +13,7 @@ include qt6-packages.inc
 RDEPENDS:${PN} += "\
     machine-runtime-conf \
     qt4-machine-conf \
+    qtplatform \
     simple-upnpd \
 "
 
