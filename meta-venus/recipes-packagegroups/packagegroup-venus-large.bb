@@ -4,4 +4,5 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 
 RDEPENDS:${PN} = " \
+    node-red-venus \
 "
