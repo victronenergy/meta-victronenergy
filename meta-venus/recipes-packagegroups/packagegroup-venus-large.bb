@@ -7,3 +7,9 @@ RDEPENDS:${PN} = " \
     node-red-venus \
     signalk-server \
 "
+
+# npm needs this to update signalk-venus-plugin
+RDEPENDS:${PN} += " \
+    dbus-dev \
+    packagegroup-core-buildessential \
+"
