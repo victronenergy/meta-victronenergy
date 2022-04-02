@@ -8,3 +8,4 @@ maxfail 0
 defaultroute
 defaultroute-metric 2000
 usepeerdns
+file /run/ppp/auth
