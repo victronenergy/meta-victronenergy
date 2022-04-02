@@ -24,3 +24,7 @@ do_compile() {
         "$tar"
 }
 do_compile[network] = "1"
+
+do_install:append () {
+    rm ${D}/${nonarch_libdir}/node
+}
