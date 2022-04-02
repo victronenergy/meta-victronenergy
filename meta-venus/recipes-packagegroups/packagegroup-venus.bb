@@ -24,10 +24,10 @@ inherit nopackages packagegroup
 DEPENDS = "packagegroup-venus-optional-packages venus-swu"
 
 # large image
-DEPENDS:append:beaglebone += "venus-swu-large"
-DEPENDS:append:sunxi += "venus-swu-large"
-DEPENDS:append:raspberrypi2 += "venus-swu-large"
-DEPENDS:append:raspberrypi4 += "venus-swu-large"
+DEPENDS:append:beaglebone = " venus-swu-large"
+DEPENDS:append:sunxi = " venus-swu-large"
+DEPENDS:append:raspberrypi2 = " venus-swu-large"
+DEPENDS:append:raspberrypi4 = " venus-swu-large"
 
 # installer images
 DEPENDS:append:beaglebone = " venus-install-sdcard"
