@@ -18,8 +18,9 @@ DESCRIPTION = " \
 "
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+LICENSE = "MIT"
 
-inherit nopackages packagegroup
+inherit nopackages
 
 DEPENDS = "packagegroup-venus-optional-packages venus-swu"
 
@@ -42,5 +43,5 @@ python () {
     deps = d.getVar('DEPENDS').split()
     for pkg in deps:
         if pkg.startswith('venus-swu'):
-            d.appendVarFlag('do_package', 'depends', ' %s:do_swuimage' % pkg)
+            d.appendVarFlag('do_prepare_recipe_sysroot', 'depends', ' %s:do_swuimage' % pkg)
 }
