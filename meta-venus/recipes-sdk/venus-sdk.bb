@@ -30,7 +30,7 @@ QT4_NAME = "qte"
 QT4_DIR_NAME = "qtopia"
 QT4_TOOLS_PREFIX = "$OECORE_NATIVE_SYSROOT${bindir_nativesdk}"
 
-create_sdk_files_append() {
+create_sdk_files:append() {
     mkdir -p ${SDK_OUTPUT}${SDKPATHNATIVE}/environment-setup.d/
     script=${SDK_OUTPUT}${SDKPATHNATIVE}/environment-setup.d/${QT4_DIR_NAME}.sh
 

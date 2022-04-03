@@ -14,7 +14,7 @@ RDEPENDS:${PN} = "nodejs-npm"
 
 inherit npm-online-install
 
-do_install_append() {
+do_install:append() {
     # Remove hardware specific files
     rm ${D}${NPM_INSTALLDIR}${nonarch_libdir}/node_modules/${PN}/bin/node-red-pi
     rm ${D}${bindir}/node-red-pi
