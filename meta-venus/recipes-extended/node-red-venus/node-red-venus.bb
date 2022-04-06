@@ -19,7 +19,7 @@ DAEMONTOOLS_SCRIPT = "export HOME=/data/home/nodered && ${bindir}/prepare-node-r
 DAEMONTOOLS_DOWN = "1"
 
 USERADD_PACKAGES = "${PN}"
-USERADD_PARAM:${PN} = "-d /data/home/nodered -r -p '*' -s /bin/false nodered"
+USERADD_PARAM:${PN} = "-d /data/home/nodered -r -p '*' -s /bin/false -G dialout nodered"
 
 # Note: installed in node-red otherwise more copies of the dependencies need to be installed.
 do_install:append() {
