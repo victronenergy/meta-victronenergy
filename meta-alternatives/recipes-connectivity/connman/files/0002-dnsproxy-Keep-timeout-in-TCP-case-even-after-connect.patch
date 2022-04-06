@@ -1,0 +1,35 @@
+From 943965bf0d82bddc819bfea6d10289144717971b Mon Sep 17 00:00:00 2001
+From: Matthias Gerstner <mgerstner@suse.de>
+Date: Tue, 25 Jan 2022 10:00:26 +0100
+Subject: [PATCH 2/2] dnsproxy: Keep timeout in TCP case even after connection
+ is established
+
+If an outgoing TCP connection succeeds but the remote server never sends
+back any data then currently the TCP connection will never be
+terminated by connmand.
+
+To prevent this keep the connection timeout of 30 seconds active even
+after the connection has been established.
+---
+ src/dnsproxy.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/src/dnsproxy.c b/src/dnsproxy.c
+index df5d2125..1e556e59 100644
+--- a/src/dnsproxy.c
++++ b/src/dnsproxy.c
+@@ -2360,11 +2360,6 @@ hangup:
+ 		server->connected = true;
+ 		server_list = g_slist_append(server_list, server);
+ 
+-		if (server->timeout > 0) {
+-			g_source_remove(server->timeout);
+-			server->timeout = 0;
+-		}
+-
+ 		for (list = request_list; list; ) {
+ 			struct request_data *req = list->data;
+ 			int status;
+-- 
+2.25.1
+
