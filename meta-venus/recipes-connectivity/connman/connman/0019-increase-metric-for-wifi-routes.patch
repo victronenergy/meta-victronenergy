@@ -1,0 +1,77 @@
+From a3a1c9bc36f081c1daf5deb05cd078f1415d42ab Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Wed, 6 Apr 2022 14:32:30 +0100
+Subject: [PATCH 19/19] increase metric for wifi routes
+
+In order to make routing predictable when both wired and wireless
+connections are active, give wifi routes a higher metric.
+---
+ src/inet.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/src/inet.c b/src/inet.c
+index 69ded19d23a5..c072cb7fd861 100644
+--- a/src/inet.c
++++ b/src/inet.c
+@@ -92,6 +92,8 @@ int __connman_inet_modify_address(int cmd, int flags,
+ 	struct ifaddrmsg *ifaddrmsg;
+ 	struct in6_addr ipv6_addr;
+ 	struct in_addr ipv4_addr, ipv4_dest, ipv4_bcast;
++	uint32_t metric = 0;
++	char *ifname;
+ 	int sk, err;
+ 
+ 	DBG("cmd %#x flags %#x index %d family %d address %s peer %s "
+@@ -104,6 +106,15 @@ int __connman_inet_modify_address(int cmd, int flags,
+ 	if (family != AF_INET && family != AF_INET6)
+ 		return -EINVAL;
+ 
++	ifname = connman_inet_ifname(index);
++	if (!ifname)
++		return -EINVAL;
++
++	if (ifname[0] == 'w')
++		metric = 100;
++
++	g_free(ifname);
++
+ 	memset(&request, 0, sizeof(request));
+ 
+ 	header = (struct nlmsghdr *)request;
+@@ -158,6 +169,13 @@ int __connman_inet_modify_address(int cmd, int flags,
+ 		if (err < 0)
+ 			return err;
+ 
++		err = __connman_inet_rtnl_addattr_l(header,
++						sizeof(request),
++						IFA_RT_PRIORITY,
++						&metric,
++						sizeof(metric));
++		if (err < 0)
++			return err;
+ 	} else if (family == AF_INET6) {
+ 		if (inet_pton(AF_INET6, address, &ipv6_addr) < 1)
+ 			return -1;
+@@ -507,6 +525,9 @@ int connman_inet_add_network_route(int index, const char *host,
+ 
+ 	rt.rt_dev = ifr.ifr_name;
+ 
++	if (ifr.ifr_name[0] == 'w')
++		rt.rt_metric = 100;
++
+ 	if (ioctl(sk, SIOCADDRT, &rt) < 0 && errno != EEXIST)
+ 		err = -errno;
+ 
+@@ -754,6 +775,9 @@ int connman_inet_set_gateway_interface(int index)
+ 
+ 	rt.rt_dev = ifr.ifr_name;
+ 
++	if (ifr.ifr_name[0] == 'w')
++		rt.rt_metric = 100;
++
+ 	if (ioctl(sk, SIOCADDRT, &rt) < 0 && errno != EEXIST)
+ 		err = -errno;
+ 
+-- 
+2.35.1
+
