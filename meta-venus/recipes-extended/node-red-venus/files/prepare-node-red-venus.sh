@@ -11,7 +11,7 @@ if [ ! -d /data/home/nodered ]; then
 fi
 
 if [ ! -d $NODE_RED ] && [ -d $NODE_RED_ROOT ]; then
-	chown -R nodered:nodered -d $NODE_RED_ROOT
+	chown -R nodered:nodered $NODE_RED_ROOT
 	mv $NODE_RED_ROOT $NODE_RED
 	sync
 fi
