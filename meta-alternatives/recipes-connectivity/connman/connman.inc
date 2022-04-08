@@ -21,6 +21,8 @@ DEPENDS  = "dbus glib-2.0 ppp iptables gnutls \
 
 INC_PR = "r2"
 
+CVE_PRODUCT = "connman connection_manager"
+
 TIST = ""
 TIST:powerpc = ""
 
