@@ -2,6 +2,12 @@
 
 installer_version="$(sed -n '3p' /data/venus/installer-version 2>/dev/null)"
 
+# Cerbo's produced with installer version released after 01/04/2012,
+# have unique ethernet mac-addresses and hence no bad-unique-id.
+if [ ${installer_version:-0} -ge 20220401000000 ]; then
+    exit
+fi
+
 # Cerbos produced from 01/02/2022 used the Victron MAC address as
 # unique id.  Unfortunately, there were some duplicates.  Report this
 # as the bad unique id.
