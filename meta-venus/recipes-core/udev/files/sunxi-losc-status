@@ -1,0 +1,11 @@
+#! /bin/sh
+
+losc=$1
+
+drv=/sys/bus/platform/drivers/dw-apb-uart
+dev=1c28800.serial
+
+case $losc in
+    ok)    test -e $drv/$dev || echo $dev >$drv/bind   ;;
+    error) test -e $drv/$dev && echo $dev >$drv/unbind ;;
+esac

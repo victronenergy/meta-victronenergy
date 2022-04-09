@@ -22,6 +22,10 @@ SRC_URI:append:beaglebone = "\
     file://wlan-update \
 "
 
+SRC_URI:append:einstein = "\
+    file://sunxi-losc-status \
+"
+
 SRC_URI:append:sunxi = "\
     file://slcan.rules \
     file://wlan.rules \
@@ -58,6 +62,10 @@ do_install:append:beaglebone() {
 
 do_install:append:ccgx() {
     install -m 0644 ${WORKDIR}/rtl8192cu.rules ${D}${sysconfdir}/udev/rules.d
+}
+
+do_install:append:einstein() {
+    install -m 0755 ${WORKDIR}/sunxi-losc-status ${D}${base_libdir}/udev
 }
 
 do_install:append:sunxi() {
