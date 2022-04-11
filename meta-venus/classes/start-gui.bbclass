@@ -19,10 +19,10 @@ GUIS = "start-gui-v1 start-fingerpaint"
 
 
 # Make sure there can be only 1 and they replace eachother.
-RPROVIDES_${DAEMON_PN} += "virtual/start-gui"
-GUIS_remove = "${DAEMON_PN}"
-RREPLACES_${DAEMON_PN} = "${GUIS}"
-RCONFLICTS_${DAEMON_PN} = "${GUIS}"
+RPROVIDES:${DAEMON_PN} += "virtual/start-gui"
+GUIS:remove = "${DAEMON_PN}"
+RREPLACES:${DAEMON_PN} = "${GUIS}"
+RCONFLICTS:${DAEMON_PN} = "${GUIS}"
 
 # NOTE: PREFERRED_RPROVIDER_virtual/start-gui determines which gui
 # to start by default.
