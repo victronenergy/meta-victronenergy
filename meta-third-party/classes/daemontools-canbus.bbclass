@@ -16,12 +16,12 @@ do_per_canbus_service() {
         rm -rf "${D}${DAEMONTOOLS_SERVICES_DIR}"
     fi
     install -d ${D}${DAEMONTOOLS_SERVICES_DIR}
-    install -d ${D}${DEAMONTOOLS_COMMON_SERVICES_DIR}
+    install -d ${D}${DAEMONTOOLS_COMMON_SERVICES_DIR}
 
     # make a service per CAN bus interface
     for dev in ${VE_CAN_PORTS}
     do
-        SERVICE="${D}${DEAMONTOOLS_COMMON_SERVICES_DIR}/${PN}.$dev"
+        SERVICE="${D}${DAEMONTOOLS_COMMON_SERVICES_DIR}/${PN}.$dev"
         cp -r ${D}${DAEMONTOOLS_SERVICE_DIR} "$SERVICE"
 
         # patch run files for CAN-bus device
@@ -29,7 +29,7 @@ do_per_canbus_service() {
         sed -i "s:DEV:$dev:" "$SERVICE/log/run"
 
         if [ ${DAEMONTOOLS_OVERLAYFS} = "0" ]; then
-            ln -s "${DEAMONTOOLS_COMMON_SERVICES_DIR}/${PN}.$dev" "${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}.$dev"
+            ln -s "${DAEMONTOOLS_COMMON_SERVICES_DIR}/${PN}.$dev" "${D}${DAEMONTOOLS_SERVICES_DIR}/${PN}.$dev"
         fi
     done
 }
@@ -37,4 +37,4 @@ do_per_canbus_service() {
 addtask per_canbus_service after do_install before do_package
 do_per_canbus_service[fakeroot] = "1"
 
-FILES:${PN} += "${DEAMONTOOLS_COMMON_SERVICES_DIR}"
+FILES:${PN} += "${DAEMONTOOLS_COMMON_SERVICES_DIR}"
