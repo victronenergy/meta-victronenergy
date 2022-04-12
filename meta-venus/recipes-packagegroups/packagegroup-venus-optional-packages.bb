@@ -23,6 +23,7 @@ DEPENDS += "\
     python3-spidev \
     s6 \
     start-fingerpaint \
+    start-sway \
     tcpdump \
     tinymembench \
     tmux \
