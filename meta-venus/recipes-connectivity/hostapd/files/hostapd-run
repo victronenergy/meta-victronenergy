@@ -24,13 +24,36 @@ gen_config() {
 
 	serial=$(cat /data/venus/serial-number)
 	psk=$(cat /data/venus/wpa-psk)
-	vrm=$(sed 's/.*\(...\)$/\1/' /data/venus/unique-id)
 
-	test -n "$serial" -a -n "$psk" -a -n "$vrm" || return 1
+	apd_id=""
+	bad_id=$(bad-unique-id)
+	if [ "$bad_id" != "" ]; then
+		# If there is a bad-unique-id, use that, since it is printed on the device and
+		# included in the QR-code.
+		apd_id="$bad_id"
+
+		# But not for early Cerbo's, while they do have bad-unique-id's, they did
+		# use the unique-id for the hostapd. That behaviour shouldn't suddenly change
+		# after years.
+		if [ "$(product-id)" = "C00A" ]; then
+			installer_version="$(sed -n '3p' /data/venus/installer-version 2>/dev/null)"
+			if [ ${installer_version:-0} -lt 20200706000000 ]; then
+				apd_id=""
+			fi
+		fi
+	fi
+
+	if [ "$apd_id" = "" ]; then
+		apd_id=$(cat /data/venus/unique-id)
+	fi
+
+	apd_id=${apd_id: -3}
+
+	test -n "$serial" -a -n "$psk" -a -n "$apd_id" || return 1
 
 	echo "Creating /run/hostapd.conf"
 	cat /etc/hostapd.conf - <<-EOF >/run/hostapd.conf || return 1
-	ssid=venus-${serial}-${vrm}
+	ssid=venus-${serial}-${apd_id}
 	wpa_passphrase=${psk}
 EOF
 }
