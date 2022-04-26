@@ -23,6 +23,25 @@ TOOLCHAIN_HOST_TASK += " \
     nativesdk-qtbase-tools \
 "
 
+# note: arm32 linux builds might require gcc-plugins to work.
+# That requires the host-gcc to be of the same version as the cross-gcc,
+# so ship the host-gcc as well (and some required dev packages).
+TOOLCHAIN_HOST_TASK += " \
+    nativesdk-binutils \
+    nativesdk-binutils-symlinks \
+    nativesdk-cpp \
+    nativesdk-cpp-symlinks \
+    nativesdk-gcc \
+    nativesdk-gcc-plugins \
+    nativesdk-gcc-symlinks \
+    nativesdk-g++ \
+    nativesdk-g++-symlinks \
+    nativesdk-gmp-dev \
+    nativesdk-libmpc-dev \
+    nativesdk-ncurses-dev \
+    nativesdk-openssl-dev \
+"
+
 # qt4 paths, copied from meta-qt4 / meta-toolchain-qte.bb to prevent
 # their additional includes.
 
