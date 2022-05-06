@@ -198,13 +198,17 @@ else
 
     case $imgtype in
         0) imgtype=       ;;
-        1) imgtype=-large ;;
+        1) imgtype=large  ;;
         *) echo "Invalid image type."
            exit 1
            ;;
     esac
 
-    swu_base=${swu_name}${imgtype}-${machine}
+    if [ ${imgtype:-normal} != $(cat /etc/venus/image-type) ]; then
+        force=y;
+    fi
+
+    swu_base=${swu_name}${imgtype:+-}${imgtype}-${machine}
 
     if [ -z "$swubase" ]; then
         swubase=https://updates.victronenergy.com/feeds/venus/${feed}/
