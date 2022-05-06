@@ -12,7 +12,7 @@ SRC_URI = " \
     file://localsettings \
  \
 "
-SRC_URI[sha256sum] = "e6542a81cf74cc296be8dfc7ddb9c275bfa7121a201fa335bbafa94c4d8cecb0"
+SRC_URI[sha256sum] = "6b5cfa075cd9b01415cf553a82f0b9914892367b6f544f72e35570445f45582c"
 
 S = "${WORKDIR}"
 BASE_DIR = "${WWW_ROOT}/default/app"
