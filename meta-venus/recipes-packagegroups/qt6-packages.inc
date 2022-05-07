@@ -6,5 +6,6 @@ QT6_PACKAGES = " \
     qtplatform \
     qtserialport \
     qtsvg-plugins \
+    qtvirtualkeyboard \
 "
 
