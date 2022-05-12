@@ -15,5 +15,6 @@ mmcargs=setenv bootargs console=${console} ${optargs} root=${mmcroot} rw rootfst
 loadfdt=load mmc ${bootpart} ${fdtaddr} ${bootdir}/${fdtfile}
 loadimage=load mmc ${bootpart} ${loadaddr} ${bootdir}/${bootfile}
 setroot=if test ${version} = 2; then setenv bootpart 1:3; setenv mmcroot /dev/mmcblk1p3; fi
-findfdt=if test $board_rev = SE0A; then setenv fdtfile bbe-venus.dtb; fi; if test $board_rev = OCTO; then setenv fdtfile bbb-octo-venus.dtb; fi;
+findfdt=if test $board_rev = SE0A; then run findfdt_bbe; fi; if test $board_rev = OCTO; then setenv fdtfile bbb-octo-venus.dtb; fi;
+findfdt_bbe=if test $board_subrev = A; then setenv fdtsuf ""; fi; if test $board_subrev = B; then setenv fdtsuf -smscphy; fi; if test $board_subrev = C; then setenv fdtsuf -smscphy-nopmic; fi; setenv fdtfile bbe${fdtsuf}-venus.dtb
 uenvcmd=run setroot; run findfdt; if run loadfdt; then echo Loaded ${fdtfile}; if run loadimage; then run mmcargs; bootz ${loadaddr} - ${fdtaddr}; fi; fi;
