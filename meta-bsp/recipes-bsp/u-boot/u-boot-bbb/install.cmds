@@ -1,11 +1,20 @@
 if gpio in 72; then
-	env default -a
 	setenv bootpart 0:1
-	setenv bootdir /
 	setenv bootfile zImage
 	setenv ramdiskfile initramfs
 	setenv fdtfile bbb-venus.dtb
-	setenv loadramdisk 'load mmc ${mmcdev} ${rdaddr} ${ramdiskfile}'
-	setenv ramargs ${ramargs} ramdisk_size=32768
-	run loadimage loadramdisk loadfdt ramboot
+	if test $board_rev = SE0A; then
+		if test $board_subrev = A; then setenv fdtfile bbe-venus.dtb; fi
+		if test $board_subrev = B; then setenv fdtfile bbe-smscphy-venus.dtb; fi
+		if test $board_subrev = C; then setenv fdtfile bbe-smscphy-nopmic-venus.dtb; fi
+	fi
+	setenv loadaddr 0x82000000
+	setenv rdaddr   0x88080000
+	setenv fdtaddr  0x88000000
+	setenv console ttyO0,115200n8
+	setenv bootargs console=${console} rw
+	load mmc ${bootpart} ${loadaddr} ${bootfile}
+	load mmc ${bootpart} ${rdaddr}   ${ramdiskfile}
+	load mmc ${bootpart} ${fdtaddr}  ${fdtfile}
+	bootz ${loadaddr} ${rdaddr} ${fdtaddr}
 fi

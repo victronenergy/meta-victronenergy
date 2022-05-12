@@ -14,8 +14,8 @@ SRC_URI = " \
     file://uEnv.txt \
     file://install.cmds \
 "
-SRC_URI[md5sum] = "1524766c623a229e984bc97a7bdea2f0"
-SRC_URI[sha256sum] = "c7dd35420d7925c1443a0001a64a35f56593683f93612537617a18d60300398c"
+SRC_URI[md5sum] = "fb05e7fafaa3e2f4be7a17e2552bf50e"
+SRC_URI[sha256sum] = "35f2d883ec2a0f839811fc97a735e087e626370bca41ba0c0e4f97a46adbc626"
 
 do_compile_append () {
     mkimage -A arm -T script -C none -n 'Install Script' \
