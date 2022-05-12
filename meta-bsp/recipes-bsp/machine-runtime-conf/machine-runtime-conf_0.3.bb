@@ -41,6 +41,8 @@ do_compile () {
     fi
 }
 
+VE_LARGE_IMAGE_SUPPORT ?= "1"
+
 CONF_FILES = "\
     SWU:swu-name \
     VE_BACKLIGHT:backlight_device \
@@ -48,6 +50,7 @@ CONF_FILES = "\
     VE_BUZZER:buzzer \
     VE_CAN_PORTS:canbus_ports \
     VE_CAN_NAMES:can_names \
+    VE_LARGE_IMAGE_SUPPORT:large_image_support \
     VE_MKX_PORT:mkx_port \
     VE_PWM_BUZZER:pwm_buzzer \
     VE_VEDIRECT_AND_CONSOLE_PORT:vedirect_and_console_port \
