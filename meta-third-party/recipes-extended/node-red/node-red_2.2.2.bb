@@ -1,7 +1,7 @@
 DESCRIPTION = "Node-RED"
 HOMEPAGE = "http://nodered.org"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=d6f37569f5013072e9490d2194d10ae6"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=014f1a23c3da49aa929b21a96808ab22"
 
 SRC_URI = "\
     npm://registry.npmjs.org;package=${PN};version=${PV} \
