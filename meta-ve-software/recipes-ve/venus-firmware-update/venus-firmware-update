@@ -28,7 +28,7 @@ case $(board-compat) in
         ;;
     *)
         echo "Unknown board"
-        exit 1
+        exit 0
         ;;
 esac
 
