@@ -2,7 +2,7 @@ DESCRIPTION = "Node-RED with venus integration"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-RDEPENDS:${PN} += "bash node-red node-red-contrib-victron"
+RDEPENDS:${PN} += "bash node-red node-red-contrib-victron util-linux-setpriv"
 
 SRC_URI = "\
     file://node-red-venus.sh \
@@ -15,7 +15,7 @@ SRC_URI[sha256sum] = "e840fa1c7d7b25b0565551ad3582e24214cefb772a9af0238a9f7dac94
 
 inherit daemontools useradd
 
-DAEMONTOOLS_SCRIPT = "export HOME=/data/home/nodered && ${bindir}/prepare-node-red-venus.sh && exec setuidgid nodered ${bindir}/node-red-venus.sh"
+DAEMONTOOLS_SCRIPT = "export HOME=/data/home/nodered && ${bindir}/prepare-node-red-venus.sh && exec setpriv --init-groups --reuid nodered --regid nodered ${bindir}/node-red-venus.sh"
 DAEMONTOOLS_DOWN = "1"
 
 USERADD_PACKAGES = "${PN}"
