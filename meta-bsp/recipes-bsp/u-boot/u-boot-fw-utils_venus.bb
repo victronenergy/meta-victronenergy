@@ -27,7 +27,7 @@ do_install () {
     install -m 0644 ${WORKDIR}/fw_env.config ${D}${sysconfdir}/fw_env.config
 
     install -d ${D}${libdir}
-    install -m 644 ${S}/tools/env/lib.a ${D}${libdir}/libubootenv.a
+    install -m 644 ${S}/tools/env/libubootenv.a ${D}${libdir}/libubootenv.a
 }
 
 do_install:class-cross () {
