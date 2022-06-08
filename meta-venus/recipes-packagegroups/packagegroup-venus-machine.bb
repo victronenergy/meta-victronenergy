@@ -79,6 +79,7 @@ RDEPENDS:${PN}:append:rpi = "\
     gpio-export \
     linux-firmware-rpidistro-bcm43430 \
     linux-firmware-rpidistro-bcm43455 \
+    linux-firmware-rpidistro-bcm43436s \
     resize-sdcard \
     swupdate \
     swupdate-scripts \

@@ -15,5 +15,11 @@ dtoverlay=miniuart-bt
 core_freq=400
 core_freq_min=400
 
+[pi02]
+device_tree=bcm2710-rpi-zero-2-w.dtb
+dtoverlay=miniuart-bt,krnbt=on
+core_freq=400
+core_freq_min=400
+
 [all]
 dtparam=spi=on
