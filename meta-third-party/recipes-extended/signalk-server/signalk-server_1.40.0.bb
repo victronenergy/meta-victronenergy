@@ -3,7 +3,7 @@ HOMEPAGE = "https://signalk.org/"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=34f8c1142fd6208a8be89399cb521df9"
 
-RDEPENDS:${PN} += "bash nodejs-npm"
+RDEPENDS:${PN} += "bash nodejs-npm util-linux-setpriv"
 
 SRC_URI = "\
     npm://registry.npmjs.org;package=${PN};version=${PV} \
@@ -20,7 +20,7 @@ S = "${WORKDIR}/npm"
 
 inherit daemontools npm-online-install useradd
 
-DAEMONTOOLS_SCRIPT = "${bindir}/prepare-signalk.sh && exec setuidgid signalk ${bindir}/start-signalk.sh"
+DAEMONTOOLS_SCRIPT = "${bindir}/prepare-signalk.sh && exec setpriv --init-groups --reuid signalk --regid signalk ${bindir}/start-signalk.sh"
 DAEMONTOOLS_DOWN = "1"
 
 USERADD_PACKAGES = "${PN}"
