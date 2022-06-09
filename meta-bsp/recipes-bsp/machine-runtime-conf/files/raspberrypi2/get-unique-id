@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Most raspberrypi's have a onboard ethernet. So use its MAC address as
+# unique-id, since it is worldwide unique. The raspberrypi zero wifi models
+# lack an onboard ethernet though. So use the wifi from them instead.
+#
+# NOTE: to keep this deterministic, don't base this on the presence of an
+# interface. An usb dongle being plugged in, might provide a wlan or ethernet
+# interface, that should _not_ change the unique-id.
+
+case $(board-compat) in
+    raspberrypi,model-zero-w | raspberrypi,model-zero-2-w)
+         if="wlan0"
+         ;;
+    *)
+         if="eth0"
+         ;;
+esac
+
+sed -e 's,:,,g' "/sys/class/net/$if/address"
