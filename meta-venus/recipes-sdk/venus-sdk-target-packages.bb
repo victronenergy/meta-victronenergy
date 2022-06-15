@@ -10,6 +10,7 @@ INSANE_SKIP:${PN} = "dev-deps"
 RDEPENDS:${PN} += " \
 	dbus-dev \
 	libevent-dev \
+	eudev-dev \
 "
 
 # qt4
