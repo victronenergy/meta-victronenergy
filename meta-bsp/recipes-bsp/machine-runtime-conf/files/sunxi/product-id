@@ -11,6 +11,7 @@ fi
 
 case $id in
     VECB) echo C00A ;;      # Cerbo GX
+    VECL) echo C014 ;;      # Cerbo GX Light
     VEES) echo C007 ;;      # EasySolar-II
     VES9) echo C00B ;;      # EasySolar-II rev A9
     VESA) echo C00E ;;      # EasySolar-II rev A10
