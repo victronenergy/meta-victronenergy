@@ -1,16 +1,12 @@
 # Cerbo GX
 ENV{BASE_COMPATIBLE}!="victronenergy,cerbo-gx|victronenergy,cerbo-gx-light", GOTO="end-cerbo-gx"
 
-# The rs485 driver is not placed.... so ignore it instead of assigning rs485 as a service
-ACTION=="add", KERNEL=="ttyS1", ENV{VE_PRODUCT}="builtin-rs485", ENV{VE_SERVICE}="ignore"
-
 ACTION=="add", KERNEL=="ttyS4", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="mkx"
 ACTION=="add", KERNEL=="ttyS[5-7]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
 ACTION=="add", SUBSYSTEM=="iio", ATTR{name}=="cerbo-gx-adc", SYMLINK+="adc/builtin0"
 ACTION=="change", SUBSYSTEM=="drm", ENV{HOTPLUG}=="1", RUN+="display-hotplug %p HDMI-A-1 i2c-2"
 
-# The second CAN is not available on the Cerbo GX Light, ignore it.
-ENV{BASE_COMPATIBLE}=="victronenergy,cerbo-gx", ACTION=="add", KERNEL=="ttyS3", ENV{VE_SERVICE}="ignore", SYMLINK+="ttycan1"
-ENV{BASE_COMPATIBLE}=="victronenergy,cerbo-gx-light", ACTION=="add", KERNEL=="ttyS3", ENV{VE_SERVICE}="ignore"
+# The second CAN is not available on the Cerbo GX Light, and hence will not be discovered.
+ACTION=="add", KERNEL=="ttyS3", ENV{VE_SERVICE}="ignore", SYMLINK+="ttycan1"
 
 LABEL="end-cerbo-gx"
