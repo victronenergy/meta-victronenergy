@@ -12,7 +12,7 @@ SCR = "install.scr"
 SRC_URI:beaglebone += "file://board_id_octogx"
 SRC_URI:einstein += "\
     file://board_id_cerbogx \
-    file://board_id_cerbogx_light \
+    file://board_id_cerbogx_s \
 "
 SRC_URI:nanopi += "\
     file://board_id_easysolar \
