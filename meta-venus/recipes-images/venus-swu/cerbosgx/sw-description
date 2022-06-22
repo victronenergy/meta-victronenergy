@@ -1,0 +1,58 @@
+software =
+{
+	venus-version = "0";
+
+	version = "0.1.0";
+
+	stable: {
+		bootloader: {
+			images: (
+				{
+					filename = "u-boot-sunxi-with-spl.bin";
+					device = "/dev/mmcblk1";
+					offset = "8k";
+				}
+			);
+		};
+		copy1: {
+			images: (
+				{
+					filename = "venus-image-cerbosgx.ext4.gz";
+					device = "/dev/mmcblk1p2";
+					compressed = true;
+					installed-directly = true;
+				}
+			);
+			uboot: (
+				{
+					name = "version";
+					value = "1";
+				},
+				{
+					name = "video-mode";
+					value = "none:1024x768-24@60,monitor=none";
+				}
+			);
+		};
+		copy2: {
+			images: (
+				{
+					filename = "venus-image-cerbosgx.ext4.gz";
+					device = "/dev/mmcblk1p3";
+					compressed = true;
+					installed-directly = true;
+				}
+			);
+			uboot: (
+				{
+					name = "version";
+					value = "2";
+				},
+				{
+					name = "video-mode";
+					value = "none:1024x768-24@60,monitor=none";
+				}
+			);
+		};
+	};
+}
