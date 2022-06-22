@@ -19,8 +19,9 @@ SCR = "install-${MACHINE}.scr"
 SRC_URI_beaglebone += "file://board_id_octogx"
 SRC_URI_einstein += "\
     file://board_id_cerbogx \
-    file://board_id_cerbogx_s \
 "
+SRC_URI_cerbosgx += "file://board_id_cerbogx_s"
+SRC_URI_remove_cerbosgx = "file://board_id_cerbogx"
 SRC_URI_nanopi += "\
     file://board_id_easysolar \
     file://board_id_easysolar_a9 \
