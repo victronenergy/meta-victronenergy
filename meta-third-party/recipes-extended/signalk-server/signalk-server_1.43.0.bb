@@ -15,7 +15,7 @@ SRC_URI = "\
     file://start-signalk.sh \
     file://venus.json \
 "
-SRC_URI[sha256sum] = "dce512ccce4f5ddc35aa9799240f180977f1c48592ccd69f7634e296ac91ad54"
+SRC_URI[sha256sum] = "45bf603599a4d9c3fcd6676d4ddd1ed765879d0abf643deff0b73e8ec9b1fa57"
 S = "${WORKDIR}/npm"
 
 inherit daemontools npm-online-install useradd
@@ -33,7 +33,7 @@ do_compile:append() {
         --target_arch=${NPM_ARCH} \
         --production \
         --no-bin-links \
-        signalk-venus-plugin@1.25
+        signalk-venus-plugin@1.28.4
 }
 
 DEFAULTS = "${D}${nonarch_libdir}/node_modules/${PN}/defaults"
