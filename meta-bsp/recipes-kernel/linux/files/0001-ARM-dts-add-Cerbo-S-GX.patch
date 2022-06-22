@@ -1,0 +1,61 @@
+From d056507ba1dfe76ba3dcc09c128b6effd33a5353 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 15 Jun 2022 14:33:58 +0200
+Subject: [PATCH] ARM: dts: add Cerbo-S GX
+
+---
+ .../arm/boot/dts/sun7i-a20-einstein-ccgx2.dts |  3 ++-
+ .../dts/sun7i-a20-einstein-cerbo-gx-s.dts     | 23 +++++++++++++++++++
+ 2 files changed, 25 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/sun7i-a20-einstein-cerbo-gx-s.dts
+
+diff --git a/arch/arm/boot/dts/sun7i-a20-einstein-ccgx2.dts b/arch/arm/boot/dts/sun7i-a20-einstein-ccgx2.dts
+index ea16322d8045..91e0e83f9a4a 100644
+--- a/arch/arm/boot/dts/sun7i-a20-einstein-ccgx2.dts
++++ b/arch/arm/boot/dts/sun7i-a20-einstein-ccgx2.dts
+@@ -288,11 +288,12 @@ &pwm {
+ 	status = "okay";
+ };
+ 
++// The rs485 driver is not placed, so disable the uart.
+ &uart1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&uart1_pa_pins>;
+ 	rts-gpios = <&pio 0 9 GPIO_ACTIVE_HIGH>; /* PA9 */
+-	status = "okay";
++	status = "disabled";
+ };
+ 
+ &uart3 {
+diff --git a/arch/arm/boot/dts/sun7i-a20-einstein-cerbo-gx-s.dts b/arch/arm/boot/dts/sun7i-a20-einstein-cerbo-gx-s.dts
+new file mode 100644
+index 000000000000..699ab3ea007f
+--- /dev/null
++++ b/arch/arm/boot/dts/sun7i-a20-einstein-cerbo-gx-s.dts
+@@ -0,0 +1,23 @@
++// SPDX-License-Identifier: GPL-2.0 OR X11
++
++/dts-v1/;
++
++#include "sun7i-a20-einstein-ccgx2.dts"
++
++/ {
++        model = "Cerbo-S GX";
++        compatible = "victronenergy,cerbo-gx-s",
++                     "cubietech,einstein",
++                     "allwinner,sun7i-a20";
++};
++
++// The atmel chip is not avialable on a Cerbo-S GX, so the second
++// CAN-bus on uart3 is not available, nor the ADC on i2c3.
++
++&uart3 {
++	status = "disabled";
++};
++
++&i2c3 {
++	status = "disabled";
++};
+-- 
+2.25.1
+

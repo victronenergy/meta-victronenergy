@@ -16,7 +16,7 @@ PV = "${LINUX_VERSION}${LINUX_VERSION_EXTENSION}"
 PR="1"
 
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=venus-${LINUX_VERSION};tag=v${PV}"
-SRC_URI += "file://0001-ARM-dts-add-Cerbo-GX-Light.patch"
+SRC_URI += "file://0001-ARM-dts-add-Cerbo-S-GX.patch"
 S = "${WORKDIR}/git"
 
 do_configure_append() {
