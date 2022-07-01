@@ -8,6 +8,7 @@ ACTION=="change", SUBSYSTEM=="drm", ENV{HOTPLUG}=="1", RUN+="display-hotplug %p 
 ACTION=="change", KERNEL=="*.rtc", ENV{LOSC}=="1", RUN+="sunxi-losc-status %s{losc_status}"
 
 # The second CAN is not available on the Cerbo-S GX, and hence will not be discovered.
-ACTION=="add", KERNEL=="ttyS3", ENV{VE_SERVICE}="ignore", SYMLINK+="ttycan1"
+# NOTE: a new / patched linux is needed to be able to set the bitrate later with ip.
+ACTION=="add", KERNEL=="ttyS3", ENV{VE_SERVICE}="ignore", RUN+="/usr/bin/slcand -o -f -t hw -S 1500000 /dev/ttyS3 can1"
 
 LABEL="end-cerbo-gx"

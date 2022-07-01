@@ -2,9 +2,6 @@
 
 dev=$1
 rate=$2
-tty=/dev/tty$dev
-
-test -e $tty && is_slcan=y
 
 # Preferably the tx queue is not increased, but many programs
 # fail to work properly without it.
@@ -12,33 +9,7 @@ test -e $tty && is_slcan=y
 # See e.g. https://rtime.felk.cvut.cz/can/socketcan-qdisc-final.pdf
 # "3.4.  Blocking the application when the queue is full"
 
-up_slcan() {
-    case ${rate%000} in
-        0)               ;;
-        10)   rate_idx=0 ;;
-        20)   rate_idx=1 ;;
-        50)   rate_idx=2 ;;
-        100)  rate_idx=3 ;;
-        125)  rate_idx=4 ;;
-        250)  rate_idx=5 ;;
-        500)  rate_idx=6 ;;
-        800)  rate_idx=7 ;;
-        1000) rate_idx=8 ;;
-        *)
-            echo "Invalid rate $rate"
-            exit 1
-            ;;
-    esac
-
-    slcand -o -f -t hw -s $rate_idx -S 1500000 $tty $dev
-    ip link set $dev up txqueuelen 100
-}
-
-down_slcan() {
-    fuser -s -k $tty
-}
-
-up_ip() {
+up() {
     # note: the can driver depends on the can_dev module, but not on the can module.
     # As a consequence the frames received between the time the device is up and
     # actually used are counted as dropped. Since can-busses shouldn't drop frames,
@@ -48,24 +19,8 @@ up_ip() {
     ip link set $dev up txqueuelen 100 type can bitrate $rate restart-ms 100
 }
 
-down_ip() {
-    ip link set $dev down
-}
-
 down() {
-    if [ "$is_slcan" = y ]; then
-        down_slcan
-    else
-        down_ip
-    fi
-}
-
-up() {
-    if [ "$is_slcan" = y ]; then
-        up_slcan
-    else
-        up_ip
-    fi
+    ip link set $dev down
 }
 
 down
