@@ -29,5 +29,6 @@ RDEPENDS:${PN} += " \
     qtconnectivity-dev \
     qtdeclarative-dev \
     qtimageformats-dev \
+    qtmqtt-dev \
     qtserialport-dev \
 "

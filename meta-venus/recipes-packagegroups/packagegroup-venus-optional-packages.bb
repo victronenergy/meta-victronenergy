@@ -21,6 +21,7 @@ DEPENDS += "\
     python3-pip \
     python3-pylint \
     python3-spidev \
+    qtmqtt \
     s6 \
     start-fingerpaint \
     start-sway \
