@@ -15,6 +15,7 @@ TOOLCHAIN_HOST_TASK += " \
     nativesdk-cmake \
     nativesdk-libtool \
     nativesdk-meson \
+    nativesdk-ninja \
     nativesdk-pkgconfig \
 "
 
