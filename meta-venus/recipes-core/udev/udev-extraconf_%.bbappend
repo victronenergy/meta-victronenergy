@@ -14,6 +14,7 @@ SRC_URI += " \
     file://rfkill.rules \
     file://rtl8192cu.rules \
     file://simcom.rules \
+    file://slcan \
 "
 
 SRC_URI:append:beaglebone = "\
@@ -27,7 +28,6 @@ SRC_URI:append:einstein = "\
 "
 
 SRC_URI:append:sunxi = "\
-    file://slcan.rules \
     file://wlan.rules \
     file://wlan-rename \
     file://wlan-update \
@@ -44,6 +44,7 @@ do_install:append() {
     install -m 0755 ${WORKDIR}/bt-config ${D}${base_libdir}/udev
     install -m 0755 ${WORKDIR}/bt-remove ${D}${base_libdir}/udev
     install -m 0755 ${WORKDIR}/display-hotplug ${D}${base_libdir}/udev
+    install -m 0755 ${WORKDIR}/slcan ${D}${base_libdir}/udev
 
     install -m 0644 ${WORKDIR}/bluetooth.rules ${D}/${sysconfdir}/udev/rules.d
     install -m 0644 ${WORKDIR}/ether.rules ${D}/${sysconfdir}/udev/rules.d
@@ -69,7 +70,6 @@ do_install:append:einstein() {
 }
 
 do_install:append:sunxi() {
-    install -m 0644 ${WORKDIR}/slcan.rules ${D}${sysconfdir}/udev/rules.d
     install -m 0644 ${WORKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
 
     install -m 0755 ${WORKDIR}/wlan-rename ${D}${base_libdir}/udev

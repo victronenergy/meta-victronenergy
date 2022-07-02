@@ -1,1 +1,0 @@
-ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", ATTRS{product}=="VE SLCAN Interface", ENV{VE_SERVICE}="ignore"
