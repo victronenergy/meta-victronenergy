@@ -3,6 +3,7 @@ ENV{BASE_COMPATIBLE}!="victronenergy,easysolar", GOTO="end-easysolar"
 ACTION=="add", KERNEL=="ttyS[12]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
 ACTION=="add", KERNEL=="ttyS3", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="mkx"
 ACTION=="add", SUBSYSTEM=="tty", ENV{ID_MODEL}=="VE_SLCAN_Interface", ENV{VE_SERVICE}="ignore", RUN+="slcan $devnode can0"
+ACTION=="add|move", SUBSYSTEM=="net", KERNEL=="can0", ENV{VE_NAME}="BMS-Can port", ENV{VE_CAN_CONFIG}="bms-only"
 LABEL="end-easysolar"
 
 # EasySolar A9 devices
@@ -15,12 +16,14 @@ LABEL="end-easysolar-a9"
 ENV{BASE_COMPATIBLE}!="victronenergy,easysolar-a10", GOTO="end-easysolar-a10"
 ACTION=="add", KERNEL=="ttyS[12]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
 ACTION=="add", KERNEL=="ttyS3", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="mkx"
+ACTION=="add", SUBSYSTEM=="net", KERNEL=="can0", ENV{VE_NAME}="VE.Can port"
 LABEL="end-easysolar-a10"
 
 # Maxi GX devices
 ENV{BASE_COMPATIBLE}!="victronenergy,maxi-gx", GOTO="end-maxi-gx"
 ACTION=="add", KERNEL=="ttyS2", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
 ACTION=="add", SUBSYSTEM=="tty", ENV{ID_MODEL}=="VE_SLCAN_Interface", ENV{VE_SERVICE}="ignore", RUN+="slcan $devnode can0"
+ACTION=="add|move", SUBSYSTEM=="net", KERNEL=="can0", ENV{VE_NAME}="BMS-Can port", ENV{VE_CAN_CONFIG}="bms-only"
 LABEL="end-maxi-gx"
 
 # Maxi GX A9 devices
@@ -31,6 +34,7 @@ LABEL="end-maxi-gx-a9"
 # Maxi GX A10 devices
 ENV{BASE_COMPATIBLE}!="victronenergy,maxi-gx-a10", GOTO="end-maxi-gx-a10"
 ACTION=="add", KERNEL=="ttyS2", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
+ACTION=="add", SUBSYSTEM=="net", KERNEL=="can0", ENV{VE_NAME}="VE.Can port"
 LABEL="end-maxi-gx-a10"
 
 # PayGo devices

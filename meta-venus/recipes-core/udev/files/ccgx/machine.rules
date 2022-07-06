@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="net", KERNEL=="can0", ENV{VE_NAME}="VE.Can port"
