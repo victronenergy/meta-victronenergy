@@ -9,7 +9,6 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 SRC_URI += " \
     file://bad-unique-id \
     file://board-compat \
-    file://canbus-config \
     file://get-unique-id \
     file://hw-revision \
     file://installation-name \
@@ -21,10 +20,6 @@ SRC_URI:append:ccgx = " file://get-unique-id.c"
 SRC_URI:append:einstein = "\
     file://backlight_device.in \
     file://blank_display_device.in \
-"
-SRC_URI:append:sunxi = "\
-    file://can_names.in \
-    file://canbus_ports.in \
 "
 
 inherit update-rc.d
@@ -48,8 +43,6 @@ CONF_FILES = "\
     VE_BACKLIGHT:backlight_device \
     VE_BLANK_DISPLAY:blank_display_device \
     VE_BUZZER:buzzer \
-    VE_CAN_PORTS:canbus_ports \
-    VE_CAN_NAMES:can_names \
     VE_LARGE_IMAGE_SUPPORT:large_image_support \
     VE_MKX_PORT:mkx_port \
     VE_PWM_BUZZER:pwm_buzzer \
@@ -91,7 +84,6 @@ do_install:append() {
     install -d ${D}/${bindir}
     install -m 755 ${WORKDIR}/bad-unique-id ${D}/${bindir}
     install -m 755 ${WORKDIR}/board-compat ${D}/${bindir}
-    install -m 755 ${WORKDIR}/canbus-config ${D}/${bindir}
     install -m 755 ${WORKDIR}/hw-revision ${D}/${bindir}
     install -m 755 ${WORKDIR}/installation-name ${D}/${bindir}
     install -m 755 ${WORKDIR}/product-id ${D}/${bindir}
