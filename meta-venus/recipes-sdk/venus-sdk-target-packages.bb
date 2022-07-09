@@ -31,4 +31,5 @@ RDEPENDS:${PN} += " \
     qtimageformats-dev \
     qtmqtt-dev \
     qtserialport-dev \
+    qtsvg-dev \
 "

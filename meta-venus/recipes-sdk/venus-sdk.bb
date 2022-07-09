@@ -22,6 +22,9 @@ TOOLCHAIN_HOST_TASK += " \
 TOOLCHAIN_HOST_TASK += " \
     nativesdk-qt4-tools \
     nativesdk-qtbase-tools \
+    nativesdk-qtdeclarative-tools \
+    nativesdk-qttools-dev \
+    nativesdk-qttools-tools \
 "
 
 # note: arm32 linux builds might require gcc-plugins to work.
