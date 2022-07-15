@@ -10,7 +10,9 @@ RDEPENDS_${PN} = "machine-runtime-conf"
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-characterdisplay.git;protocol=https;tag=v${PV} \
+    file://fix_backlight_dimming.patch \
 "
+PR = "1"
 
 S = "${WORKDIR}/git"
 

@@ -1,0 +1,24 @@
+From 3e925943d6de51fedc50b581e55f3b9e0df90053 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Thu, 14 Jul 2022 13:27:21 +0200
+Subject: [PATCH] Fix backlight dimming with older display
+
+Older display that use the GPIO method to read the daylight
+sensor was permanently dimmed.
+---
+ lcddriver.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lcddriver.py b/lcddriver.py
+index 3d0c8c0..92817a3 100644
+--- a/lcddriver.py
++++ b/lcddriver.py
+@@ -93,7 +93,7 @@ def daylight_gpio(self):
+ 		    light is detected. """
+ 		try:
+ 			return open(
+-				'/dev/gpio/display_sensor/value', 'rb').read().strip() == '0'
++				'/dev/gpio/display_sensor/value', 'rb').read().strip() == b'0'
+ 		except IOError:
+ 			pass
+ 		return True
