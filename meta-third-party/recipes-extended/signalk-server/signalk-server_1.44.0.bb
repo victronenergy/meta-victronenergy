@@ -15,7 +15,7 @@ SRC_URI = "\
     file://start-signalk.sh \
     file://venus.json \
 "
-SRC_URI[sha256sum] = "45bf603599a4d9c3fcd6676d4ddd1ed765879d0abf643deff0b73e8ec9b1fa57"
+SRC_URI[sha256sum] = "6a9d340b831105f0e68a62978d9aa226c1e146590e3aa5b0e1baa6966c0d9372"
 S = "${WORKDIR}/npm"
 
 inherit daemontools npm-online-install useradd
