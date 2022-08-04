@@ -90,7 +90,7 @@ index 0000000000..6a47aacd62
 +
 +Then start up debugging. To do that, compile the CCGX GUI against the same Qt version, and deploy that to the CCGX.
 +Not perse necessary, but I'd then stop that again, optionally close the gui project in Qt, and configure the
-+VNC plugin project to run /opt/color-control/gui/gui.
++VNC plugin project to run /opt/victronenergy/gui/gui.
 +
 +Start debugging, pause the file, and issue this command every time in the gdb command input:
 +set solib-search-path /home/matthijs/dev/qt/plugins/gfxdrivers
