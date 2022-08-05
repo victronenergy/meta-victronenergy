@@ -1,9 +1,13 @@
 #!/bin/sh
 
-interfaces=$(sed -e 's/ /,/g' /etc/venus/canbus_ports)
+interfaces=$(ip -o link show type can | awk -F': ' '{print $2}' | tr '\n' ',' | sed -e 's/,$//')
 if [ "$interfaces" = "" ]; then
 	svc -d .
 	exit 1
 fi
 
-socketcand -i $interfaces -v
+# If ethernet is not connected, binding will fail. Lets not hog the
+# cpu and simply add a delay here.
+if ! socketcand -i $interfaces -v; then
+	sleep 60
+fi

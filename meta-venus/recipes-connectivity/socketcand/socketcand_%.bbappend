@@ -10,6 +10,5 @@ do_install:append() {
 FILES:${PN} += "${sbindir}/start-socketcand"
 
 DAEMONTOOLS_RUN = "${sbindir}/start-socketcand"
-DAEMONTOOLS_DOWN = "1"
 
-inherit daemontools
+inherit daemontools-template
