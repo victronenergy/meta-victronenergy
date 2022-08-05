@@ -10,8 +10,8 @@ do_ipt() {
 
     case $opt in
         -A)
-            $cmd -C "$@" 2>/dev/null && return
-            $cmd -A "$@"
+            $cmd -w 30 -C "$@" 2>/dev/null && return
+            $cmd -w 30 -A "$@"
             ;;
         -D)
             while $cmd -D "$@" 2>/dev/null; do true; done
