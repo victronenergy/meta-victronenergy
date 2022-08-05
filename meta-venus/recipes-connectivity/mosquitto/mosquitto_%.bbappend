@@ -27,6 +27,5 @@ FILES:${PN} += "\
 "
 
 DAEMONTOOLS_RUN = "${sbindir}/start-mosquitto"
-DAEMONTOOLS_DOWN = "1"
 
-inherit daemontools
+inherit daemontools-template
