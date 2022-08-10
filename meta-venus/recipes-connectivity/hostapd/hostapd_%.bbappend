@@ -5,10 +5,9 @@ SRC_URI += "\
     file://hostapd-run \
 "
 
-inherit daemontools
+inherit daemontools-template
 
 DAEMONTOOLS_RUN = "/usr/sbin/hostapd-run"
-DAEMONTOOLS_DOWN = "1"
 
 # disable rc.d start/stop
 INHIBIT_UPDATERCD_BBCLASS = "1"
