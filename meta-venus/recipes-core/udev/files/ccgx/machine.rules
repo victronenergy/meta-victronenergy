@@ -1,1 +1,4 @@
 ACTION=="add", SUBSYSTEM=="net", KERNEL=="can0", ENV{VE_NAME}="VE.Can port"
+ACTION=="add", KERNEL=="ttyO0", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect-or-vegetty", SYMLINK+="ttyconsole"
+ACTION=="add", KERNEL=="ttyO1", ENV{VE_PRODUCT}="builtin-mkx-no-settings-suffix", ENV{VE_SERVICE}="mkx"
+ACTION=="add", KERNEL=="ttyO2", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
