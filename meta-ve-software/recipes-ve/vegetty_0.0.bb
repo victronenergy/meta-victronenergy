@@ -9,7 +9,6 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 # RDEPENDS:${PN} = "machine-runtime-conf"
 
 inherit ve_package
-inherit daemontools
+inherit daemontools-template
 
 DAEMONTOOLS_RUN = "/sbin/getty -l /sbin/autologin -n 115200 /dev/ttyconsole linux"
-DAEMONTOOLS_DOWN = "1"
