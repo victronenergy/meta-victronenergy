@@ -20,7 +20,7 @@ up() {
     # note: this is not done at once on purpose; some drivers don't support some
     # properties, e.g. the vcan will bail out when trying to set the bitrate.
     ip link set $dev type can bitrate $rate
-    ip link set $dev type can bitrate restart-ms 100
+    ip link set $dev type can restart-ms 100
     ip link set $dev up txqueuelen 100
 }
 
