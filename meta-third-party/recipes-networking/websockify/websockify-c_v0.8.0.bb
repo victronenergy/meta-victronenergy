@@ -5,8 +5,7 @@ DEPENDS += "openssl"
 RDEPENDS:${PN} += "openssl"
 
 inherit ve_package
-inherit daemontools
-
+inherit daemontools-template
 
 SRC_URI = " \
     git://github.com/kanaka/websockify.git;branch=master;protocol=https;rev=f0bdb0a621a4f3fb328d1410adfeaff76f088bfd \
@@ -18,7 +17,6 @@ DEST_DIR = "${D}${bindir}"
 # Note: used softlimits are arbitrary, no idea what they mean and what they should be
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/websockify 0.0.0.0:81 127.0.0.1:5900"
-DAEMONTOOLS_DOWN = "1"
 
 do_install () {
     install -d ${D}${bindir}
