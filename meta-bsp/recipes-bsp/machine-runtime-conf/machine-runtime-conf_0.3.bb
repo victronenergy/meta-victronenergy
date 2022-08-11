@@ -44,10 +44,7 @@ CONF_FILES = "\
     VE_BLANK_DISPLAY:blank_display_device \
     VE_BUZZER:buzzer \
     VE_LARGE_IMAGE_SUPPORT:large_image_support \
-    VE_MKX_PORT:mkx_port \
     VE_PWM_BUZZER:pwm_buzzer \
-    VE_VEDIRECT_AND_CONSOLE_PORT:vedirect_and_console_port \
-    VE_VEDIRECT_PORTS:vedirect_ports \
 "
 
 python () {
