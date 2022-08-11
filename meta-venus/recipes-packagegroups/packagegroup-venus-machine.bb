@@ -35,6 +35,7 @@ RDEPENDS:${PN}:append:ccgx = "\
     swupdate \
     swupdate-scripts \
     technexion-serial \
+    vegetty \
 "
 
 RDEPENDS:${PN}:append:beaglebone = "\
