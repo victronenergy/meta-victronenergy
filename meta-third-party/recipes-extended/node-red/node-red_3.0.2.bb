@@ -7,7 +7,7 @@ SRC_URI = "\
     npm://registry.npmjs.org;package=${PN};version=${PV} \
     file://npm-shrinkwrap.json;subdir=${S} \
 "
-SRC_URI[sha256sum] = "c827277ae6792aab03defad4494255396bba9f82147d763d04493124c489af24"
+SRC_URI[sha256sum] = "5803053d74fabf328ef20e7712ce35532f7efe571a2d11fb063d0db69fb5d8d2"
 S = "${WORKDIR}/npm"
 
 RDEPENDS:${PN} = "nodejs-npm"
