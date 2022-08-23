@@ -15,6 +15,7 @@ SRC_URI += " \
     file://rtl8192cu.rules \
     file://simcom.rules \
     file://slcan \
+    file://slcan-stop \
 "
 
 SRC_URI:append:beaglebone = "\
@@ -45,6 +46,7 @@ do_install:append() {
     install -m 0755 ${WORKDIR}/bt-remove ${D}${base_libdir}/udev
     install -m 0755 ${WORKDIR}/display-hotplug ${D}${base_libdir}/udev
     install -m 0755 ${WORKDIR}/slcan ${D}${base_libdir}/udev
+    install -m 0755 ${WORKDIR}/slcan-stop ${D}${base_libdir}/udev
 
     install -m 0644 ${WORKDIR}/bluetooth.rules ${D}/${sysconfdir}/udev/rules.d
     install -m 0644 ${WORKDIR}/ether.rules ${D}/${sysconfdir}/udev/rules.d
