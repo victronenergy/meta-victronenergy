@@ -33,7 +33,7 @@ do_compile:append() {
         --target_arch=${NPM_ARCH} \
         --production \
         --no-bin-links \
-        signalk-venus-plugin@1.28.4
+        signalk-venus-plugin@1.29.0
 }
 
 DEFAULTS = "${D}${nonarch_libdir}/node_modules/${PN}/defaults"
