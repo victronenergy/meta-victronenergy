@@ -8,6 +8,7 @@ inherit packagegroup
 DEPENDS += "\
     devmem2 \
     gdb \
+    dfu-util \
     gpsd \
     git \
     kmscube \
