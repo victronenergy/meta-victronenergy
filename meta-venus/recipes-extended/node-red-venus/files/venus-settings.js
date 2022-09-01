@@ -21,6 +21,16 @@
  *
  **/
 
+function try_require(file)
+{
+    try {
+        return require(file);
+    } catch (e) {
+        console.log("[info]: loading " + file + " failed")
+        return {}
+    }
+}
+
 module.exports = {
 
 /*******************************************************************************
@@ -42,7 +52,7 @@ module.exports = {
      * node-red from being able to decrypt your existing credentials and they will be
      * lost.
      */
-    credentialSecret: "a-secret-key",
+    // credentialSecret: "a-secret-key",
 
     /** By default, the flow JSON will be formatted over multiple lines making
      * it easier to compare changes when using version control.
@@ -490,4 +500,10 @@ module.exports = {
     //    *   - reason: if result is false, the HTTP reason string to return
     //    */
     //},
+
+    // Load the venus settings which must survice a firmware update.
+    ...try_require("/data/home/nodered/.node-red/settings-venus.js"),
+
+    // Load optional tweaks of the user.
+    ...try_require("/data/home/nodered/.node-red/settings-user.js"),
 }

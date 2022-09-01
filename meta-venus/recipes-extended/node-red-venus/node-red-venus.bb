@@ -8,7 +8,7 @@ SRC_URI = "\
     file://node-red-venus.sh \
     file://prepare-node-red-venus.sh \
     file://user-authentication.js \
-    file://venus-default-settings.js \
+    file://venus-settings.js \
 "
 
 SRC_URI[sha256sum] = "e840fa1c7d7b25b0565551ad3582e24214cefb772a9af0238a9f7dac94f4dabb"
@@ -23,10 +23,8 @@ USERADD_PARAM:${PN} = "-d /data/home/nodered -r -p '*' -s /bin/false -G dialout 
 
 # Note: installed in node-red otherwise more copies of the dependencies need to be installed.
 do_install:append() {
-    # this folder keeps the default settings. start-node-red.sh copies them
-    # to the data partition on first boot.
     install -d ${D}${nonarch_libdir}/node_modules/node-red
-    install -m 0644 ${WORKDIR}/venus-default-settings.js ${D}${nonarch_libdir}/node_modules/node-red
+    install -m 0644 ${WORKDIR}/venus-settings.js ${D}${nonarch_libdir}/node_modules/node-red
     install -m 0644 ${WORKDIR}/user-authentication.js ${D}${nonarch_libdir}/node_modules/node-red
 
     # Startup script
