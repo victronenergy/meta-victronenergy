@@ -22,21 +22,21 @@ done
 
 case $mode in
     0)
-	echo "*** Node-RED disabled in settings, starting anyway"
-	safe=
-	;;
+        echo "*** Node-RED disabled in settings, starting anyway"
+        safe=
+        ;;
     1)
-	echo "*** Starting in normal mode"
-	safe=
-	;;
+        echo "*** Starting in normal mode"
+        safe=
+        ;;
     2)
-	echo "*** Starting in safe mode"
-	safe=--safe
-	;;
+        echo "*** Starting in safe mode"
+        safe=--safe
+        ;;
     *)
-	echo "*** Invalid setting $mode"
-	exit 1
-	;;
+        echo "*** Invalid setting $mode"
+        exit 1
+        ;;
 esac
 
 if [ ! -d $NODE_RED ]; then
