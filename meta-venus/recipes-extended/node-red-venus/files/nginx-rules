@@ -1,0 +1,19 @@
+server {
+    listen                  1881 ssl;
+    server_name             _;
+    ssl_certificate         /data/etc/ssl/venus.local.crt;
+    ssl_certificate_key     /data/etc/ssl/venus.local.key;
+    access_log off;
+
+    location / {
+        proxy_pass           http://127.0.0.1:1880;
+    }
+
+    location /comm {
+        proxy_pass           http://127.0.0.1:1880;
+        proxy_http_version   1.1;
+        proxy_set_header     Upgrade $http_upgrade;
+        proxy_set_header     Connection "Upgrade";
+        proxy_set_header     Host $host;
+    }
+}

@@ -2,9 +2,10 @@ DESCRIPTION = "Node-RED with venus integration"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-RDEPENDS:${PN} += "bash node-red node-red-contrib-victron util-linux-setpriv"
+RDEPENDS:${PN} += "bash node-red nginx node-red-contrib-victron util-linux-setpriv"
 
 SRC_URI = "\
+    file://nginx-rules \
     file://node-red-venus.sh \
     file://prepare-node-red-venus.sh \
     file://user-authentication.js \
@@ -31,6 +32,12 @@ do_install:append() {
     mkdir -p ${D}${bindir}
     install -m 0755 ${WORKDIR}/node-red-venus.sh ${D}${bindir}
     install -m 0755 ${WORKDIR}/prepare-node-red-venus.sh ${D}${bindir}
+
+    # https support
+    install -d ${D}${sysconfdir}/nginx/sites-available
+    install ${WORKDIR}/nginx-rules ${D}${sysconfdir}/nginx/sites-available/node-red
+    install -d ${D}${sysconfdir}/nginx/sites-enabled
+    ln -s ${sysconfdir}/nginx/sites-available/node-red ${D}${sysconfdir}/nginx/sites-enabled
 }
 
 FILES:${PN} += "${nonarch_libdir}/node_modules/node-red"
