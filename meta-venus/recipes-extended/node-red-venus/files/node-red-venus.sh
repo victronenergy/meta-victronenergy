@@ -37,6 +37,40 @@ EOF
     fi
 }
 
+rename_flows() {
+    flows="$NODE_RED/flows.json"
+
+    # never overwrite an existing flow file. Note: it will only exists after a user
+    # deployed it.
+    if [ -e "$flows" ]; then
+        return
+    fi
+
+    host="$(hostname)"
+    flows_old="$NODE_RED/flows_${host}.json"
+    cred="$NODE_RED/flows_cred.json"
+    cred_old="$NODE_RED/flows_${host}_cred.json"
+
+    # rename flow file which contains the hostname, if it exists..
+    if [ -f "$flows_old" ]; then
+
+        # and its credentials
+        if [ -f "$cred_old" ]; then
+            cp "$cred_old" "$cred"
+        fi
+
+        cp "$flows_old" "$flows"
+        sync
+
+        # move the original files, so they don't replace a non-existing flows.json again.
+        if [ -f "$cred_old" ]; then
+            mv "$cred_old" "$cred_old.renamed"
+        fi
+        mv "$flows_old" "$flows_old.renamed"
+        sync
+    fi
+}
+
 echo "*** Waiting for localsettings..."
 
 while true; do
@@ -77,6 +111,7 @@ if [ ! -f $VICTRON_MODULES ]; then
 fi
 
 move_secret
+rename_flows
 
 export TZ=$(get_setting /Settings/System/TimeZone)
 
