@@ -53,7 +53,7 @@ def do_link(ip, msg):
     if stat == 'UP':
         changes['link_up'] = 1
     else:
-        changes['lind_down'] = 1
+        changes['link_down'] = 1
 
 def do_addr(ip, msg):
     name, ityp = get_iface(ip, msg['index'])
