@@ -5,13 +5,16 @@ SYSTEMD_SERVICE:${PN} = ""
 INITSCRIPT_PARAMS = "disable"
 DAEMONTOOLS_RUN = "${sbindir}/start-nginx.sh"
 
-SRC_URI += "file://start-nginx.sh"
+SRC_URI += " \
+	file://default_server.site \
+	file://start-nginx.sh \
+"
 
 inherit daemontools
 
-do_install:append() {
-	rm ${D}${sysconfdir}/nginx/sites-enabled/default_server
+RDEPENDS:${PN} += "php-fpm"
 
+do_install:append() {
 	sed -i 's,/var/log/nginx,/var/volatile/log/nginx,g' ${D}${sysconfdir}/default/volatiles/99_nginx
 
 cat - ${WORKDIR}/nginx.conf << EOF > ${D}${sysconfdir}/nginx/nginx.conf

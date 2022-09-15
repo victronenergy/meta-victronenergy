@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 inherit www
 inherit localsettings
 
-RDEPENDS:${PN} = "venus-html5-logger"
+RDEPENDS:${PN} = "nginx venus-html5-logger"
 
 SRC_URI = " \
     https://github.com/victronenergy/venus-html5-app/releases/download/${PV}/venus-html5-app.tar.gz;downloadfilename=venus-html5-app-${PV}.tar.gz \

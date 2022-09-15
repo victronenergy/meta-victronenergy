@@ -1,0 +1,17 @@
+# Default server configuration
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+    root /var/www/venus;
+
+    index index.html index.php;
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_pass unix:/var/run/php5-fpm.socket;
+        include fastcgi.conf;
+    }
+}
+

@@ -6,6 +6,7 @@ inherit www
 
 # base-passwd is needed for www user
 DEPENDS = "base-passwd"
+RDEPENDS:${PN} = "nginx"
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/javascript-vnc-client.git;branch=master;protocol=https;tag=${PV} \
