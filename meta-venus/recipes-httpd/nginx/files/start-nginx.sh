@@ -1,47 +1,4 @@
-SSL_ETC="/data/etc/ssl"
-KEY="${SSL_ETC}/venus.local.key"
-CRT="${SSL_ETC}/venus.local.crt"
-
-function check_cert() {
-    if [ ! -e "$KEY" ] || [ ! -e "$CRT" ]; then
-        return 1
-    fi
-
-    KEY_PUB=$(openssl pkey -pubout -in "$KEY")
-    if [ $? -ne 0 ]; then
-        return 1
-    fi
-
-    CRT_PUB=$(openssl x509 -pubkey -in "$CRT" -noout)
-    if [ $? -ne 0 ]; then
-        return 1
-    fi
-
-    if [ "$KEY_PUB" != "$CRT_PUB" ]; then
-        return 1
-    fi
-
-    return 0
-}
-
-function gen_cert() {
-    openssl req -x509 -newkey rsa:2048 -nodes -keyout "$KEY" -out "$CRT" -days 365000 -subj \
-            "/C=NL/ST=Flevoland/L=Almere/O=Victron Energy/OU=Venus OS/CN=venus.local"
-    chown root:www-data "$KEY"
-    chmod 640 "$KEY"
-    sync
-}
-
-if [ ! -d "$SSL_ETC" ]; then
-	mkdir -p "$SSL_ETC"
-fi
-
-if ! check_cert; then
-    echo "no valid https certificated, generating a new one"
-    rm -f "$CRT"
-    rm -f "$KEY"
-    gen_cert
-fi
+#!/bin/sh
 
 for i in /etc/venus/www.d/*; do
 	[ ! -f "$i" ] && continue
