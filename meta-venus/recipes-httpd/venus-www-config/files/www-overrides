@@ -1,0 +1,19 @@
+#!/bin/sh
+
+WWW_BASE=/var/www/venus
+OVERRIDE_BASE=/data/www
+
+install_overrides() {
+	mkdir -p /run/www
+
+	for d in $(ls $WWW_BASE/default); do
+		if [ -d $OVERRIDE_BASE/$d ]; then
+			ln -sf $OVERRIDE_BASE/$d /run/www/
+		else
+			ln -sf $WWW_BASE/default/$d /run/www/
+		fi
+	done
+}
+
+install_overrides
+
