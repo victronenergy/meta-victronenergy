@@ -6,10 +6,8 @@ inherit www
 
 # base-passwd is needed for www user
 DEPENDS = "base-passwd"
-RDEPENDS:${PN} = "hiawatha"
 
 SRC_URI = " \
-    file://javascript-vnc-client.conf \
     gitsm://github.com/victronenergy/javascript-vnc-client.git;branch=master;protocol=https;tag=${PV} \
 "
 
@@ -23,7 +21,5 @@ do_compile[noexec] = "1"
 do_install () {
     install -d ${DEST_DIR}/
     oe_runmake DESTDIR=${DEST_DIR} install
-    install -d ${D}${sysconfdir}/hiawatha/sites-enabled
-    install -m 0644 ${WORKDIR}/javascript-vnc-client.conf ${D}${sysconfdir}/hiawatha/sites-enabled/javascript-vnc-client.conf
 }
 
