@@ -2,11 +2,14 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 NGINX_USER = "www-data"
 SYSTEMD_SERVICE:${PN} = ""
-INITSCRIPT_PARAMS = "disable"
+# only start nginx from init.d in testmode (no https, php etc)
+INITSCRIPT_PARAMS = "start 99 4 . stop 20 0 1 6 ."
+# Full nginx runs from daemontools
 DAEMONTOOLS_RUN = "${sbindir}/start-nginx.sh"
 
 SRC_URI += " \
 	file://default_server.site \
+	file://nginx-testmode.conf \
 	file://start-nginx.sh \
 "
 
@@ -28,5 +31,8 @@ EOF
 
     install -d ${D}${sbindir}
     install -m 755 ${WORKDIR}/start-nginx.sh ${D}${sbindir}
+
+    install -m 644 ${WORKDIR}/nginx-testmode.conf ${D}${sysconfdir}/nginx
+    echo 'DAEMON_OPTS="-c ${sysconfdir}/nginx/nginx-testmode.conf"' > "${D}${sysconfdir}/default/nginx"
 }
 
