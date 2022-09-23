@@ -12,6 +12,7 @@ SRC_URI = " \
     file://FreedomWON.patch \
 "
 S = "${WORKDIR}/git"
+PR = "1"
 
 RDEPENDS:${PN} = " \
     localsettings \
