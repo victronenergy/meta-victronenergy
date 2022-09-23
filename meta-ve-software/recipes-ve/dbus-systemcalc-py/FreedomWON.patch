@@ -1,0 +1,79 @@
+From 45ef59ab50730d22f9a0ec9ad8340a107163365f Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Tue, 20 Sep 2022 18:40:06 +0200
+Subject: [PATCH] don't force SVS off for FreedomWON batteries
+
+FreedomWON requested the ability back to enable
+SVS on certain systems.
+
+https://github.com/victronenergy/venus/issues/984
+---
+ delegates/batterysettings.py |  9 +++++++--
+ tests/batterysense_test.py   | 24 ++++++++++++++++++++++--
+ 2 files changed, 29 insertions(+), 4 deletions(-)
+
+diff --git a/delegates/batterysettings.py b/delegates/batterysettings.py
+index c1215f6..7c0384c 100644
+--- a/delegates/batterysettings.py
++++ b/delegates/batterysettings.py
+@@ -37,11 +37,16 @@ def apply_battery_settings(self, service):
+ 		# Set good settings for known batteries. Force SVS off and DVCC on
+ 		# for some batteries.
+ 		if pid in (BATTERY_PYLONTECH, BATTERY_BYD, BATTERY_BYD_L, BATTERY_BYD_PREMIUM,
+-				BATTERY_DISCOVER_AES, BATTERY_FREEDOMWON, BATTERY_BLUENOVA,
+-				BATTERY_BSLBATT, BATTERY_BMZ, BATTERY_ETOWER, BATTERY_CEGASA):
++				BATTERY_DISCOVER_AES, BATTERY_BLUENOVA,
++				BATTERY_BSLBATT, BATTERY_BMZ, BATTERY_CEGASA):
+ 			self._settings['vsense'] = 2 # Forced Off
+ 			self._settings['tsense'] = 2 # Forced Off
+ 			self._settings['bol'] = 3 # Forced on
++		elif pid in (BATTERY_FREEDOMWON, BATTERY_ETOWER):
++			if self._settings['vsense'] & 2:
++				self._settings['vsense'] &= 1 # Remove setting if it was forced
++			self._settings['tsense'] = 2 # Forced Off
++			self._settings['bol'] = 3 # Forced on
+ 		elif pid in (BATTERY_LYNX_SMART_BMS_500, BATTERY_LYNX_SMART_BMS_1000):
+ 			self._settings['vsense'] = 3 # Forced on
+ 			self._settings['tsense'] = 2 # Forced Off
+diff --git a/tests/batterysense_test.py b/tests/batterysense_test.py
+index 13948cb..22a7723 100644
+--- a/tests/batterysense_test.py
++++ b/tests/batterysense_test.py
+@@ -657,8 +657,8 @@ def test_forced_settings(self):
+ 
+ 		# Pylontech, BYD, FreedomWON, Discover AES, BlueNova, BSL-BATT, BMZ,
+ 		# eTower, Cegasa
+-		for product_id in (0xB009, 0xB00A, 0xB014, 0xB015, 0xB016, 0xB019,
+-				0xB020, 0xB021, 0xB005, 0xB024, 0xB028):
++		for product_id in (0xB009, 0xB00A, 0xB015, 0xB016, 0xB019,
++				0xB020, 0xB021, 0xB005, 0xB028):
+ 			self._add_device('com.victronenergy.battery.ttyO2',
+ 				product_name='battery',
+ 				values={
+@@ -678,6 +678,26 @@ def test_forced_settings(self):
+ 			self.assertTrue(Dvcc.instance.has_dvcc)
+ 			self._remove_device('com.victronenergy.battery.ttyO2')
+ 
++		# FreedomWON forces bol, but not SVS
++		for product_id in (0xB014, 0xB024):
++			self._add_device('com.victronenergy.battery.ttyO2',
++				product_name='battery',
++				values={
++					'/Dc/0/Voltage': 12.15,
++					'/Dc/0/Current': 5.3,
++					'/Dc/0/Power': 65,
++					'/Soc': 50,
++					'/DeviceInstance': 0,
++					'/ProductId': product_id})
++			self._update_values()
++			self._check_settings({
++				'vsense': 0, # Not forced
++				'tsense': 2, # Forced OFF
++				'bol': 3 # Forced ON
++			})
++			self.assertFalse(BatterySense.instance.has_vsense)
++			self.assertTrue(Dvcc.instance.has_dvcc)
++			self._remove_device('com.victronenergy.battery.ttyO2')
+ 
+ 		# Lynx Smart wants SVS on
+ 		for product_id in (0xA3E5, 0xA3E6):

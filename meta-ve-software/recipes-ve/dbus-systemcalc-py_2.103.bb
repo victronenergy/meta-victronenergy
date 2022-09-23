@@ -9,6 +9,7 @@ inherit python-compile
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;branch=master;protocol=https;tag=${PV} \
     file://com.victronenergy.system.conf \
+    file://FreedomWON.patch \
 "
 S = "${WORKDIR}/git"
 
