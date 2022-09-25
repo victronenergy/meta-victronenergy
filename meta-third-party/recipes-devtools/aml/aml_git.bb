@@ -7,7 +7,7 @@ DEPENDS += "libjpeg-turbo pixman"
 inherit meson
 
 SRC_URI = " \
-    git://github.com/any1/aml;protocol=https;rev=d1783ccb26ad094858633401095085c9de683841 \
+    git://github.com/any1/aml;protocol=https;rev=3afc3aacce6d0342bdff71c38cc477d6e23b9be3 \
 "
 
 S = "${WORKDIR}/git/"
