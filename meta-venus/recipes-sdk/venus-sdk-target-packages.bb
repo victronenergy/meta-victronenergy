@@ -26,6 +26,7 @@ RDEPENDS:${PN} += " \
 
 # qt6
 RDEPENDS:${PN} += " \
+    qt5compat-dev \
     qtbase-dev \
     qtconnectivity-dev \
     qtdeclarative-dev \
