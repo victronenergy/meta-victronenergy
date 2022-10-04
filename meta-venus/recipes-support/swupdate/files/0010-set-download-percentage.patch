@@ -1,0 +1,59 @@
+From aae123366ed9418c6a77c99104b987420288d4e4 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Fri, 30 Sep 2022 08:52:59 +0000
+Subject: [PATCH] set download percentage
+
+---
+ corelib/downloader.c      | 3 +++
+ corelib/progress_thread.c | 8 ++++++++
+ include/progress.h        | 1 +
+ 3 files changed, 12 insertions(+)
+
+diff --git a/corelib/downloader.c b/corelib/downloader.c
+index 16df71b..5e51cda 100644
+--- a/corelib/downloader.c
++++ b/corelib/downloader.c
+@@ -64,6 +64,9 @@ static int download_info(void *p,
+ 		dlp->lastruntime = curtime;
+ 		INFO("Received : %" CURL_FORMAT_CURL_OFF_T " / %"
+ 		     CURL_FORMAT_CURL_OFF_T, dlnow, dltotal);
++
++		if (dltotal)
++			swupdate_progress_dowload_perc((dlnow * 100 + dltotal / 2) / dltotal);
+ 	}
+ 
+ 	return 0;
+diff --git a/corelib/progress_thread.c b/corelib/progress_thread.c
+index 6b51ec9..94607a5 100644
+--- a/corelib/progress_thread.c
++++ b/corelib/progress_thread.c
+@@ -105,6 +105,14 @@ void swupdate_progress_init(unsigned int nsteps) {
+ 	pthread_mutex_unlock(&prbar->lock);
+ }
+ 
++void swupdate_progress_dowload_perc(unsigned int perc)
++{
++	struct swupdate_progress *prbar = &progress;
++	pthread_mutex_lock(&prbar->lock);
++	prbar->msg.dwl_percent = perc;
++	pthread_mutex_unlock(&prbar->lock);
++}
++
+ void swupdate_progress_update(unsigned int perc)
+ {
+ 	struct swupdate_progress *prbar = &progress;
+diff --git a/include/progress.h b/include/progress.h
+index 5035b58..f00714d 100644
+--- a/include/progress.h
++++ b/include/progress.h
+@@ -44,6 +44,7 @@ struct progress_msg {
+ void swupdate_progress_init(unsigned int nsteps);
+ void swupdate_progress_update(unsigned int perc);
+ void swupdate_progress_inc_step(char *image);
++void swupdate_progress_dowload_perc(unsigned int perc);
+ void swupdate_progress_step_completed(void);
+ void swupdate_progress_end(RECOVERY_STATUS status);
+ void swupdate_progress_done(void);
+-- 
+2.25.1
+

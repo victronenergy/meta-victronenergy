@@ -15,4 +15,5 @@ SRC_URI += "\
     file://0007-corelib-add-function-to-get-the-mtd-from-the-name.patch \
     file://0008-flash-handler-add-support-for-specifying-mtd-name-in.patch \
     file://0009-handlers-add-pipe-handler.patch \
+    file://0010-set-download-percentage.patch \
 "
