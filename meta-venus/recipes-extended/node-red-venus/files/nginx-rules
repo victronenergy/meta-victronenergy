@@ -6,6 +6,12 @@ server {
     access_log off;
     client_max_body_size     10M;
 
+    error_page 500 502 503 504 /50x-node-red.html;
+    location = /50x-node-red.html {
+            root /var/www/localhost/html;
+            internal;
+    }
+
     location / {
         proxy_pass           http://127.0.0.1:1880;
     }
