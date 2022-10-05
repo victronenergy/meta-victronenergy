@@ -4,6 +4,7 @@ server {
     ssl_certificate         /data/etc/ssl/venus.local.crt;
     ssl_certificate_key     /data/etc/ssl/venus.local.key;
     access_log off;
+    client_max_body_size     10M;
 
     location / {
         proxy_pass           http://127.0.0.1:1880;
