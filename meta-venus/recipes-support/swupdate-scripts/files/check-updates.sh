@@ -62,7 +62,11 @@ get_swu_version() {
 }
 
 swu_status() {
-    printf '%s\n' "$1" ${offline:+""} "$2" >$status_file
+    if [ "$offline" = y ]; then
+        printf '%s\n' "$1" "" "$2" >$status_file
+    else
+        printf '%s\n' "$1" "$2" "" >$status_file
+    fi
 }
 
 status_file=/var/run/swupdate-status
