@@ -147,9 +147,7 @@ do_testmode() {
     eval $HOOK_testmode
 
     for tty in $TESTMODE_TTYS; do
-        if [ ! -c /dev/$tty ]; then
-            error "Console $tty not available"
-        fi
+        test -c /dev/$tty || continue
         stty -F /dev/$tty 115200
         TTYS="$TTYS $tty"
     done
