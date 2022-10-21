@@ -6,7 +6,7 @@ SWUDEV=mmcblk0p1
 MMCDEV=mmcblk1
 ROOT_SIZE=
 BOARD_ID_DEV=0-00500
-TESTMODE_TTYS="ttyS2"
+TESTMODE_TTYS="ttyS2 ttyS3"
 
 do_mounts
 
