@@ -9,24 +9,26 @@ INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.cpio.gz.u-boot"
 DTB = "${KERNEL_DEVICETREE}"
 SCR = "install.scr"
 
-SRC_URI:beaglebone += "file://board_id_octogx"
-SRC_URI:einstein += "\
+BOARD_IDS = ""
+BOARD_IDS:beaglebone = "file://board_id_octogx"
+BOARD_IDS:einstein = "\
     file://board_id_cerbogx \
     file://board_id_cerbogx_b1 \
 "
-SRC_URI:cerbosgx += "file://board_id_cerbogx_s"
-SRC_URI:remove:cerbosgx = "file://board_id_cerbogx file://board_id_cerbogx_b1"
-SRC_URI:nanopi += "\
+BOARD_IDS:cerbosgx = "file://board_id_cerbogx_s"
+BOARD_IDS:ekrano = "file://board_id_ekrano"
+BOARD_IDS:nanopi = "\
     file://board_id_easysolar \
     file://board_id_easysolar_a9 \
     file://board_id_easysolar_a10 \
-    file://board_id_ekrano \
     file://board_id_maxigx \
     file://board_id_maxigx_a10 \
     file://board_id_multiplus2 \
     file://board_id_multiplus2_a10 \
     file://board_id_paygo \
 "
+
+SRC_URI += "${BOARD_IDS}"
 
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
 IMAGE_NAME[vardepsexclude] += "DATETIME"
@@ -67,7 +69,11 @@ do_deploy () {
         cp ${DEPLOY_DIR_IMAGE}/${src} ${SDCARD}/${dst}
     done
 
-    find ${WORKDIR} -name "board_id_*" -exec cp {} ${SDCARD} \;
+    for board_id in ${BOARD_IDS}
+    do
+        board_id="$(echo $board_id | sed 's,file://,,g')"
+        cp "${WORKDIR}/$board_id" ${SDCARD}
+    done
 
     zip -rj ${DEPLOYDIR}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
     ln -sf ${IMAGE_NAME}.sdcard.zip ${DEPLOYDIR}/${IMAGE_LINK_NAME}.sdcard.zip
@@ -104,5 +110,5 @@ do_deploy () {
     ln -sf ${IMAGE_NAME}.img.zip ${DEPLOYDIR}/${IMAGE_LINK_NAME}.img.zip
 }
 
-addtask do_deploy before do_build
+addtask do_deploy after do_install
 
