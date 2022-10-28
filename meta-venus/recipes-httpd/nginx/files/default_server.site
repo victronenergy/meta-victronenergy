@@ -5,6 +5,8 @@ server {
 
     server_name _;
     root /var/www/venus;
+    access_log off;
+    error_log /dev/null;
 
     index index.html index.php;
 
