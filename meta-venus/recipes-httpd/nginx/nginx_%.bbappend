@@ -16,6 +16,7 @@ SRC_URI += " \
 inherit daemontools
 
 RDEPENDS:${PN} += "php-fpm venus-www-config"
+EXTRA_OECONF = "--error-log-path=/var/volatile/log/nginx/error.log"
 
 do_install:append() {
 	sed -i 's,/var/log/nginx,/var/volatile/log/nginx,g' ${D}${sysconfdir}/default/volatiles/99_nginx
