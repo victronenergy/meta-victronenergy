@@ -1,18 +1,18 @@
-From f85d17a1482d3c403eed0ef7f0de9e98b74d60ac Mon Sep 17 00:00:00 2001
+From ef10e5969e5d8c2015c8fb2ec8540fe70354eb3f Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Mon, 16 Sep 2013 17:05:12 +0200
-Subject: [PATCH 01/14] add insert/remove/append/clear to the VisualItemModel
+Subject: [PATCH 01/17] add insert/remove/append/clear to the VisualItemModel
 
 ---
- .../qdeclarativevisualitemmodel.cpp           | 74 +++++++++++++++++++
+ .../qdeclarativevisualitemmodel.cpp           | 71 +++++++++++++++++++
  .../qdeclarativevisualitemmodel_p.h           |  5 ++
- 2 files changed, 79 insertions(+)
+ 2 files changed, 76 insertions(+)
 
 diff --git a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
-index 80d796f416..5c9bbd38d1 100644
+index 80d796f416..d5825e5edb 100644
 --- a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
 +++ b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
-@@ -93,10 +93,57 @@ public:
+@@ -93,10 +93,54 @@ public:
  
      void itemAppended() {
          Q_Q(QDeclarativeVisualItemModel);
@@ -64,13 +64,10 @@ index 80d796f416..5c9bbd38d1 100644
 +        emit q->countChanged();
 +        emit q->itemsRemoved(i, 1);
 +        emit q->childrenChanged();
-+        emit q->destroyingItem(item.item);
-+
-+        delete item.item;
      }
  
      void emitChildrenChanged() {
-@@ -249,6 +296,33 @@ QDeclarativeVisualItemModelAttached *QDeclarativeVisualItemModel::qmlAttachedPro
+@@ -249,6 +293,33 @@ QDeclarativeVisualItemModelAttached *QDeclarativeVisualItemModel::qmlAttachedPro
      return QDeclarativeVisualItemModelAttached::properties(obj);
  }
  
@@ -121,5 +118,5 @@ index 5487977667..84b3853d79 100644
      void childrenChanged();
  
 -- 
-2.17.1
+2.25.1
 

@@ -1,7 +1,7 @@
-From d977efccb180d8f14e1c6475fd079f36d6bc9028 Mon Sep 17 00:00:00 2001
+From dc8546717650fd9d1e2e7278c75df6c9917c9fdf Mon Sep 17 00:00:00 2001
 From: mpvader <mvader@victronenergy.com>
 Date: Mon, 5 Oct 2015 06:57:16 +0000
-Subject: [PATCH 04/14] qws vncserver: bind to localhost instead of all
+Subject: [PATCH 03/17] qws vncserver: bind to localhost instead of all
  interfaces
 
 ---
@@ -22,5 +22,5 @@ index 7e4ca20377..540d243bf6 100644
      else
          qDebug("QVNCServer created on port %d", port);
 -- 
-2.17.1
+2.25.1
 

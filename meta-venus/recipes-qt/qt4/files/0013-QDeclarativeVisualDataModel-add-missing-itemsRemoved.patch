@@ -1,7 +1,7 @@
-From 5009116ff9bc0fcd1e392b097ff26a1f885c9b5a Mon Sep 17 00:00:00 2001
+From 63daf8bc31778f5213e781b794026224e600b3e8 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Thu, 7 May 2020 16:55:11 +0200
-Subject: [PATCH 14/14] QDeclarativeVisualDataModel: add missing itemsRemoved
+Subject: [PATCH 13/17] QDeclarativeVisualDataModel: add missing itemsRemoved
  signal
 
 When a model is reassigned, it should be signalled that the old rows
@@ -11,10 +11,10 @@ are no longer there.
  1 file changed, 5 insertions(+)
 
 diff --git a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
-index 80f551924d..a85beebf1a 100644
+index 9d8bf0017a..a80b8660fa 100644
 --- a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
 +++ b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
-@@ -779,6 +779,11 @@ QVariant QDeclarativeVisualDataModel::model() const
+@@ -776,6 +776,11 @@ QVariant QDeclarativeVisualDataModel::model() const
  void QDeclarativeVisualDataModel::setModel(const QVariant &model)
  {
      Q_D(QDeclarativeVisualDataModel);
@@ -27,5 +27,5 @@ index 80f551924d..a85beebf1a 100644
      d->m_listAccessor = 0;
      d->m_modelVariant = model;
 -- 
-2.17.1
+2.25.1
 

@@ -1,7 +1,7 @@
-From ab6958da2c1dea4a0068ee3dc3c94571b87bf2bb Mon Sep 17 00:00:00 2001
+From 5d9fe791907d92b75e3d2b4213376507cfd1d965 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Sun, 25 Apr 2021 17:42:40 +0200
-Subject: [PATCH 17/17] QSortFilterProxyModel does not sort in some cases
+Subject: [PATCH 15/17] QSortFilterProxyModel does not sort in some cases
 
 If the model is empty and new rows are inserted thereafter, they were not
 sorted correctly. This fixes that.
@@ -25,5 +25,5 @@ index da444a1b33..acc7b68063 100644
  }
  
 -- 
-2.17.1
+2.25.1
 

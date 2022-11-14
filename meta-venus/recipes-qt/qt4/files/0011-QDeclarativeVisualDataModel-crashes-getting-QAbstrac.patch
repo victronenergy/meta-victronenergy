@@ -1,7 +1,7 @@
-From 41c7f51227796f3f51a3c657c0477e7274ec00d6 Mon Sep 17 00:00:00 2001
+From b36c5e9096e476665b0b17d4998b38aec0960f8f Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Tue, 5 May 2020 13:25:18 +0200
-Subject: [PATCH 12/14] QDeclarativeVisualDataModel crashes getting
+Subject: [PATCH 11/17] QDeclarativeVisualDataModel crashes getting
  QAbstractItemModel roles.
 
 Don't iterate over a temporary.
@@ -14,10 +14,10 @@ Reviewed-by: Andrew den Exter <andrew.den-exter@nokia.com>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
-index 6cb7a14051..8554809748 100644
+index fccb899a49..ab10c5f664 100644
 --- a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
 +++ b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
-@@ -362,8 +362,9 @@ public:
+@@ -359,8 +359,9 @@ public:
                  for (int ii = 0; ii < m_roles.count(); ++ii)
                      m_roleNames.insert(m_listModelInterface->toString(m_roles.at(ii)).toUtf8(), m_roles.at(ii));
              } else if (m_abstractItemModel) {
@@ -30,5 +30,5 @@ index 6cb7a14051..8554809748 100644
                      m_roleNames.insert(*it, it.key());
                  }
 -- 
-2.17.1
+2.25.1
 

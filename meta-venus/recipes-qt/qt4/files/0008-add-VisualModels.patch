@@ -1,7 +1,7 @@
-From fc0cd6c3db32e938ddc2859624bf12d0fe6ba574 Mon Sep 17 00:00:00 2001
+From b33a1fb44a7a6b7268155d6508ec6af7cf82e884 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Tue, 28 Apr 2020 20:50:27 +0200
-Subject: [PATCH 09/14] add VisualModels
+Subject: [PATCH 08/17] add VisualModels
 
 The VisualModels makes it possible to concatenate multiple VisualModel
 derived ones. It is intended for (mostly) static models like menus in
@@ -33,10 +33,10 @@ index 58096a4235..2baab5db88 100644
      qmlRegisterType<QGraphicsWidget>("Qt",4,7,"QGraphicsWidget");
      qmlRegisterExtendedType<QGraphicsWidget,QDeclarativeGraphicsWidget>("Qt",4,7,"QGraphicsWidget");
 diff --git a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
-index 5c9bbd38d1..6cb7a14051 100644
+index d5825e5edb..fccb899a49 100644
 --- a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
 +++ b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
-@@ -1494,6 +1494,188 @@ void QDeclarativeVisualDataModel::_q_destroyingPackage(QDeclarativePackage *pack
+@@ -1491,6 +1491,188 @@ void QDeclarativeVisualDataModel::_q_destroyingPackage(QDeclarativePackage *pack
      emit destroyingItem(qobject_cast<QDeclarativeItem*>(package->part(d->m_part)));
  }
  
@@ -287,5 +287,5 @@ index 84b3853d79..ade771a0f0 100644
  QML_DECLARE_TYPE(QDeclarativeVisualDataModel)
  
 -- 
-2.17.1
+2.25.1
 

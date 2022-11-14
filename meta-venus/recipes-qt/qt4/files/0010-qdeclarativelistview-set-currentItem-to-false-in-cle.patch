@@ -1,17 +1,17 @@
-From 35cb19b7063ea028f307305d960378d7a5d5608c Mon Sep 17 00:00:00 2001
+From d8e7b6113cd40a1595531fdef1c93a2e47cd347c Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Sat, 2 May 2020 11:22:29 +0200
-Subject: [PATCH 11/14] qdeclarativelistview: set currentItem to false in clear
+Subject: [PATCH 10/17] qdeclarativelistview: set currentItem to false in clear
 
 ---
  src/declarative/graphicsitems/qdeclarativelistview.cpp | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/src/declarative/graphicsitems/qdeclarativelistview.cpp b/src/declarative/graphicsitems/qdeclarativelistview.cpp
-index 797fe30a53..96311f0daa 100644
+index 6a94c9b359..c666045666 100644
 --- a/src/declarative/graphicsitems/qdeclarativelistview.cpp
 +++ b/src/declarative/graphicsitems/qdeclarativelistview.cpp
-@@ -641,6 +641,8 @@ void QDeclarativeListViewPrivate::clear()
+@@ -622,6 +622,8 @@ void QDeclarativeListViewPrivate::clear()
      }
      visiblePos = header ? header->size() : 0;
      visibleIndex = 0;
@@ -21,5 +21,5 @@ index 797fe30a53..96311f0daa 100644
      currentItem = 0;
      createHighlight();
 -- 
-2.17.1
+2.25.1
 

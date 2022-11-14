@@ -1,0 +1,107 @@
+From 8872916cc399d8eeefee0676d03583b2d75f0360 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Tue, 27 Jul 2021 14:43:45 +0200
+Subject: [PATCH 16/17] drop the register storage specifier
+
+warning: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+---
+ src/corelib/arch/qatomic_armv6.h | 34 ++++++++++++++++----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/src/corelib/arch/qatomic_armv6.h b/src/corelib/arch/qatomic_armv6.h
+index 42aa62a8ba..9125fd6240 100644
+--- a/src/corelib/arch/qatomic_armv6.h
++++ b/src/corelib/arch/qatomic_armv6.h
+@@ -112,8 +112,8 @@ Q_INLINE_TEMPLATE bool QBasicAtomicPointer<T>::isFetchAndAddWaitFree()
+ 
+ inline bool QBasicAtomicInt::ref()
+ {
+-    register int newValue;
+-    register int result;
++    int newValue;
++    int result;
+     asm volatile("0:\n"
+                  "ldrex %[newValue], [%[_q_value]]\n"
+                  "add %[newValue], %[newValue], #1\n"
+@@ -130,8 +130,8 @@ inline bool QBasicAtomicInt::ref()
+ 
+ inline bool QBasicAtomicInt::deref()
+ {
+-    register int newValue;
+-    register int result;
++    int newValue;
++    int result;
+     asm volatile("0:\n"
+                  "ldrex %[newValue], [%[_q_value]]\n"
+                  "sub %[newValue], %[newValue], #1\n"
+@@ -167,8 +167,8 @@ inline bool QBasicAtomicInt::testAndSetRelaxed(int expectedValue, int newValue)
+ 
+ inline int QBasicAtomicInt::fetchAndStoreRelaxed(int newValue)
+ {
+-    register int originalValue;
+-    register int result;
++    int originalValue;
++    int result;
+     asm volatile("0:\n"
+                  "ldrex %[originalValue], [%[_q_value]]\n"
+                  "strex %[result], %[newValue], [%[_q_value]]\n"
+@@ -185,9 +185,9 @@ inline int QBasicAtomicInt::fetchAndStoreRelaxed(int newValue)
+ 
+ inline int QBasicAtomicInt::fetchAndAddRelaxed(int valueToAdd)
+ {
+-    register int originalValue;
+-    register int newValue;
+-    register int result;
++    int originalValue;
++    int newValue;
++    int result;
+     asm volatile("0:\n"
+                  "ldrex %[originalValue], [%[_q_value]]\n"
+                  "add %[newValue], %[originalValue], %[valueToAdd]\n"
+@@ -207,7 +207,7 @@ inline int QBasicAtomicInt::fetchAndAddRelaxed(int valueToAdd)
+ template <typename T>
+ Q_INLINE_TEMPLATE bool QBasicAtomicPointer<T>::testAndSetRelaxed(T *expectedValue, T *newValue)
+ {
+-    register T *result;
++    T *result;
+     asm volatile("0:\n"
+                  "ldrex %[result], [%[_q_value]]\n"
+                  "eors %[result], %[result], %[expectedValue]\n"
+@@ -227,8 +227,8 @@ Q_INLINE_TEMPLATE bool QBasicAtomicPointer<T>::testAndSetRelaxed(T *expectedValu
+ template <typename T>
+ Q_INLINE_TEMPLATE T *QBasicAtomicPointer<T>::fetchAndStoreRelaxed(T *newValue)
+ {
+-    register T *originalValue;
+-    register int result;
++    T *originalValue;
++    int result;
+     asm volatile("0:\n"
+                  "ldrex %[originalValue], [%[_q_value]]\n"
+                  "strex %[result], %[newValue], [%[_q_value]]\n"
+@@ -246,9 +246,9 @@ Q_INLINE_TEMPLATE T *QBasicAtomicPointer<T>::fetchAndStoreRelaxed(T *newValue)
+ template <typename T>
+ Q_INLINE_TEMPLATE T *QBasicAtomicPointer<T>::fetchAndAddRelaxed(qptrdiff valueToAdd)
+ {
+-    register T *originalValue;
+-    register T *newValue;
+-    register int result;
++    T *originalValue;
++    T *newValue;
++    int result;
+     asm volatile("0:\n"
+                  "ldrex %[originalValue], [%[_q_value]]\n"
+                  "add %[newValue], %[originalValue], %[valueToAdd]\n"
+@@ -288,8 +288,8 @@ Q_INLINE_TEMPLATE T *QBasicAtomicPointer<T>::fetchAndAddRelaxed(qptrdiff valueTo
+ 
+ inline bool QBasicAtomicInt::ref()
+ {
+-    register int newValue;
+-    register int result;
++    int newValue;
++    int result;
+     retry:
+     __asm {
+         ldrex   newValue, [&_q_value]
+-- 
+2.25.1
+

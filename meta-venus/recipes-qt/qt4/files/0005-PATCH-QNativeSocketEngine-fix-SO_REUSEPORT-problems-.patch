@@ -1,7 +1,7 @@
-From 5d4da43b5c968013b127aabe8f415c275532fef4 Mon Sep 17 00:00:00 2001
+From fdb9ee2f43a8617fdea87b38778de4f4e36970ae Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Tue, 2 May 2017 23:18:57 +0200
-Subject: [PATCH 06/14] [PATCH] QNativeSocketEngine: fix SO_REUSEPORT problems
+Subject: [PATCH 05/17] [PATCH] QNativeSocketEngine: fix SO_REUSEPORT problems
  on Linux
 
 backport from qt5, https://bugreports.qt.io/browse/QTBUG-47011
@@ -37,5 +37,5 @@ index 4bd9f98ad8..ef2ce1e72a 100644
          // same port (which is useful for multicast UDP). SO_REUSEPORT is, but
          // we most definitely do not want to use this for TCP. See QTBUG-6305.
 -- 
-2.17.1
+2.25.1
 

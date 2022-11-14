@@ -1,7 +1,7 @@
-From 3a2893117387c6448a7af744a92c2c2a20dc11af Mon Sep 17 00:00:00 2001
+From 0ec699d1a0700f18a6cb09df9b0719752e298aec Mon Sep 17 00:00:00 2001
 From: mpvader <mvader@victronenergy.com>
 Date: Mon, 12 Oct 2015 11:56:00 +0000
-Subject: [PATCH 05/14] qws vncserver: add vnc authentication
+Subject: [PATCH 04/17] qws vncserver: add vnc authentication
 
 the filename is passed via the commandline. Advantage of doing it
 like this is that you don't have to restart the application every-
@@ -90,7 +90,7 @@ index 0000000000..6a47aacd62
 +
 +Then start up debugging. To do that, compile the CCGX GUI against the same Qt version, and deploy that to the CCGX.
 +Not perse necessary, but I'd then stop that again, optionally close the gui project in Qt, and configure the
-+VNC plugin project to run /opt/victronenergy/gui/gui.
++VNC plugin project to run /opt/color-control/gui/gui.
 +
 +Start debugging, pause the file, and issue this command every time in the gdb command input:
 +set solib-search-path /home/matthijs/dev/qt/plugins/gfxdrivers
@@ -854,5 +854,5 @@ index 31da2f404e..69fbd36943 100644
 +OTHER_FILES += \
 +	README.txt
 -- 
-2.17.1
+2.25.1
 

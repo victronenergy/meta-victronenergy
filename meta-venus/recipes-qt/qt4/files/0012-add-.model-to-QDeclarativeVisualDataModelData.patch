@@ -1,7 +1,7 @@
-From 5aee9dabb55eb93c31b8f81c9fbf1481a4eb0c96 Mon Sep 17 00:00:00 2001
+From ede99ad88df8aa35b22302c9b22fae89226e774d Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Wed, 6 May 2020 12:51:33 +0200
-Subject: [PATCH 13/14] add .model to QDeclarativeVisualDataModelData
+Subject: [PATCH 12/17] add .model to QDeclarativeVisualDataModelData
 
 This allows to get the QDeclarativeVisualDataModel itself back in the
 delegate. The QDeclarativeVisualDataModelData seems to lack a qml
@@ -11,10 +11,10 @@ context.
  1 file changed, 4 insertions(+)
 
 diff --git a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
-index 8554809748..80f551924d 100644
+index ab10c5f664..9d8bf0017a 100644
 --- a/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
 +++ b/src/declarative/graphicsitems/qdeclarativevisualitemmodel.cpp
-@@ -503,6 +503,8 @@ public:
+@@ -500,6 +500,8 @@ public:
      ~QDeclarativeVisualDataModelData();
  
      Q_PROPERTY(int index READ index NOTIFY indexChanged)
@@ -23,7 +23,7 @@ index 8554809748..80f551924d 100644
      int index() const;
      void setIndex(int index);
  
-@@ -519,6 +521,8 @@ public:
+@@ -516,6 +518,8 @@ public:
  
      void ensureProperties();
  
@@ -33,5 +33,5 @@ index 8554809748..80f551924d 100644
      void indexChanged();
  
 -- 
-2.17.1
+2.25.1
 

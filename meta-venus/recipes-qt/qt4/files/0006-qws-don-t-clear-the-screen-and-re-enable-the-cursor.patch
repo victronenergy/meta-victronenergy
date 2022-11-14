@@ -1,7 +1,7 @@
-From e2033ce1b674154fb439092de387d60887c46250 Mon Sep 17 00:00:00 2001
+From 74340b1beadbcad6a1ee3049bb7dacc6370ea17f Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Thu, 7 Mar 2019 13:13:00 +0100
-Subject: [PATCH 07/14] qws: don't clear the screen and re-enable the cursor
+Subject: [PATCH 06/17] qws: don't clear the screen and re-enable the cursor
 
 ---
  src/gui/embedded/qscreenlinuxfb_qws.cpp | 2 ++
@@ -27,5 +27,5 @@ index a86687d8e4..ce82fdf2fb 100644
      QT_CLOSE(ttyfd);
      ttyfd = -1;
 -- 
-2.17.1
+2.25.1
 

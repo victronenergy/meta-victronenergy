@@ -1,7 +1,7 @@
-From 191df3f752bc0752286d415e4b7c7b980ab07195 Mon Sep 17 00:00:00 2001
+From bf498ad30bd45ed92fd6154a68d7e80fcbaa6ae7 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Thu, 7 Nov 2019 16:46:19 +0100
-Subject: [PATCH 08/14] ignore multitouch events
+Subject: [PATCH 07/17] ignore multitouch events
 
 ---
  src/gui/embedded/qmouselinuxinput_qws.cpp | 3 +++
@@ -22,5 +22,5 @@ index 306a3a09a8..ce08053d6b 100644
                  unknown = true;
              }
 -- 
-2.17.1
+2.25.1
 
