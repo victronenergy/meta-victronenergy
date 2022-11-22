@@ -8,6 +8,7 @@ INSANE_SKIP:${PN} = "dev-deps"
 
 # c and friends
 RDEPENDS:${PN} += " \
+	avahi-dev \
 	dbus-dev \
 	libevent-dev \
 	libusb1-dev \
