@@ -38,6 +38,7 @@ QT_CONFIG_FLAGS = " \
     ${QT_DISTRO_FLAGS} \
     ${QT_GLFLAGS}"
 
-
-
+do_install:append() {
+    rm -rf ${D}/${libdir}/fonts
+}
 
