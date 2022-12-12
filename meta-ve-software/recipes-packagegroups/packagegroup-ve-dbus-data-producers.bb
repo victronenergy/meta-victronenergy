@@ -27,6 +27,7 @@ RRECOMMENDS:${PN} += " \
     dbus-motordrive \
     dbus-qwacs \
     dbus-rv-c \
+    dbus-shelly \
     dbus-systemcalc-py \
     dbus-valence \
     dbus-vebus-to-pvinverter \
