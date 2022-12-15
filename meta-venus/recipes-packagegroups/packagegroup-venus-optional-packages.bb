@@ -6,6 +6,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 
 DEPENDS += "\
+    bc \
     devmem2 \
     gdb \
     dfu-util \
