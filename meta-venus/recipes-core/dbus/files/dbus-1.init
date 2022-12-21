@@ -48,9 +48,14 @@ start_it_up()
   dbus-uuidgen --ensure  
 
   echo -n "Starting $DESC: "
+  if [ $(xml select --template --value-of /Settings/Services/InsecureDbusOverTcp /data/conf/settings.xml) = "1" ]; then
+    arg="--config-file=/etc/dbus-1/system-insecure.conf"
+  else
+    arg="--system"
+  fi
   # note dbus-daemon-watch.sh start dbus-daemon to catch crashes
   start-stop-daemon -o --start --quiet --pidfile $PIDFILE \
-    --user $DAEMONUSER --exec /usr/bin/dbus-daemon-watch.sh -- --system
+    --user $DAEMONUSER --exec /usr/bin/dbus-daemon-watch.sh -- $arg
   # wait for the socket creation
   inotifywait -e create /var/run/dbus --timeout 10
 }
