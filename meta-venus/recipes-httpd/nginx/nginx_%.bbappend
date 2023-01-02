@@ -29,6 +29,7 @@ EOF
     sed -i 's,/var/,${localstatedir}/,g' ${D}${sysconfdir}/nginx/nginx.conf
     sed -i 's/^user.*/user ${NGINX_USER};/g' ${D}${sysconfdir}/nginx/nginx.conf
     sed -i 's,/var/log/nginx/,/var/volatile/log/nginx/,g' ${D}${sysconfdir}/nginx/nginx.conf
+    sed -i '/vnd.wap.wmlc/a \ \ \ \ application/wasm                                 wasm;' ${D}${sysconfdir}/nginx/mime.types
 
     install -d ${D}${sbindir}
     install -m 755 ${WORKDIR}/start-nginx.sh ${D}${sbindir}
