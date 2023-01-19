@@ -11,7 +11,7 @@ check_key() (
 	a=$(ssh-keygen -y -f $key 2>/dev/null | cut -d ' ' -f -2) || return
 	b=$(cut -d ' ' -f -2 $key.pub 2>/dev/null) || return
 
-	test "$a" = "$b"
+	test -n "$a" -a "$a" = "$b"
 )
 
 gen_key() {
