@@ -9,10 +9,10 @@
     <deviceType>urn:schemas-upnp-org:device:Basic:1</deviceType>
     <friendlyName>:::name::: (:::unique:::)</friendlyName>
     <manufacturer>Victron Energy</manufacturer>
-    <manufacturerURL>http://www.victronenergy.com</manufacturerURL>
-    <modelName>CCGX</modelName>
+    <manufacturerURL>https://www.victronenergy.com</manufacturerURL>
+    <modelName>:::name:::</modelName>
     <modelNumber>:::productid:::</modelNumber>
-    <modelURL>http://www.victronenergy.com/live/ccgx:start</modelURL>
+    <modelURL>https://www.victronenergy.com/panel-systems-remote-monitoring</modelURL>
     <serialNumber>:::serialnr:::</serialNumber>
     <presentationURL>/</presentationURL>
     <UDN>uuid:com.victronenergy.ccgx.:::UNIQUE:::</UDN>
