@@ -10,9 +10,11 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;branch=master;protocol=https;tag=${PV} \
     file://com.victronenergy.system.conf \
     file://FreedomWON.patch \
+    file://0001-display-external-control-state-w-managed-battery.patch \
 "
+
 S = "${WORKDIR}/git"
-PR = "1"
+PR = "2"
 
 RDEPENDS:${PN} = " \
     localsettings \

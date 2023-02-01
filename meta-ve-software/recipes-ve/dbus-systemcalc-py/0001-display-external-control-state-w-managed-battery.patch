@@ -1,0 +1,74 @@
+From 17faf79d50bab9924117e7bca5e0ee40906ca0e6 Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Fri, 16 Dec 2022 08:35:44 +0200
+Subject: [PATCH] display external control state w/ managed battery
+
+This used to be implemented in mk2-dbus, but it turns out that
+the information in com.victronenergy.vebus/State carries useful
+information that is now lost when it is simply set to External
+Control with a managed battery. Since this was meant to avoid
+confusion about the state shown on the Overviews, it is
+sufficient to move that to the SystemState instead.
+
+(cherry picked from commit 3f39582d79cc04d36332ac4cf3279361049b51d5)
+---
+ delegates/systemstate.py | 13 +++++++++++--
+ tests/ess_state_test.py  |  4 ++++
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/delegates/systemstate.py b/delegates/systemstate.py
+index 268f8a8..9db1145 100644
+--- a/delegates/systemstate.py
++++ b/delegates/systemstate.py
+@@ -29,6 +29,7 @@ class SystemState(SystemCalcDelegate):
+ 	# vebus states are passed right through, and range from 0x00 (Off) to 0x0b (psu). Let's start ESS
+ 	# states at 0x20.
+ 	UNKNOWN = 0x00
++	EXTERNALCONTROL = 0xFC
+ 	DISCHARGING = 0x100
+ 	SUSTAIN = 0x101
+ 	RECHARGE = 0x102
+@@ -53,6 +54,7 @@ class SystemState(SystemCalcDelegate):
+ 				'/Hub4/Sustain',
+ 				'/State',
+ 				'/VebusMainState',
++				'/BatteryOperationalLimits/MaxChargeVoltage',
+ 				'/BatteryOperationalLimits/MaxChargeCurrent',
+ 				'/BatteryOperationalLimits/MaxDischargeCurrent',
+ 				'/Bms/AllowToDischarge',
+@@ -135,8 +137,15 @@ class SystemState(SystemCalcDelegate):
+ 
+ 			return (ss, flags)
+ 
+-		# VEBUS is available
+-		ss = self._dbusmonitor.get_value(vebus, '/State')
++		# VEBUS is available. If a managed battery is present, then the
++		# system state is "External Control". Otherwise it is whatever
++		# the Multi's charge state may be.
++		if self._dbusmonitor.get_value(vebus,
++				'/BatteryOperationalLimits/MaxChargeVoltage') is not None:
++			ss = SystemState.EXTERNALCONTROL
++		else:
++			ss = self._dbusmonitor.get_value(vebus, '/State')
++
+ 		assistant_id  = self._dbusmonitor.get_value(vebus, '/Hub4/AssistantId')
+ 		if assistant_id is None:
+ 			# ESS not installed. Return vebus state
+diff --git a/tests/ess_state_test.py b/tests/ess_state_test.py
+index 3e75a89..39174ee 100644
+--- a/tests/ess_state_test.py
++++ b/tests/ess_state_test.py
+@@ -78,6 +78,10 @@ class TestEssStates(TestSystemCalcBase):
+         self._update_values()
+         self._check_values({'/SystemState/State': 0x101}) # Sustain
+ 
++    def test_external_control_state(self):
++        self._monitor.set_value(self.vebus, '/BatteryOperationalLimits/MaxChargeVoltage', 13.5)
++        self._update_values()
++        self._check_values({'/SystemState/State': 0xFC}) # External Control
+ 
+     def test_no_flags(self):
+         # Check that all flags are cleared when in good state
+-- 
+2.7.4
+
