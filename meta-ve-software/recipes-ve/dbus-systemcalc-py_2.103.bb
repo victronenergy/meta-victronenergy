@@ -11,10 +11,11 @@ SRC_URI = " \
     file://com.victronenergy.system.conf \
     file://FreedomWON.patch \
     file://0001-display-external-control-state-w-managed-battery.patch \
+    file://0001-correctly-set-new-timezone-if-it-changes.patch \
 "
 
 S = "${WORKDIR}/git"
-PR = "2"
+PR = "3"
 
 RDEPENDS:${PN} = " \
     localsettings \

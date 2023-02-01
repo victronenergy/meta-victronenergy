@@ -1,0 +1,30 @@
+From 784230ac8e26f96e5b544340b494ce90122804de Mon Sep 17 00:00:00 2001
+From: Izak Burger <isburger@gmail.com>
+Date: Wed, 1 Feb 2023 11:14:52 +0200
+Subject: [PATCH] correctly set new timezone if it changes
+
+Since python3, you need to call tzset() to make a timezone change work.
+This was correctly done for the initial startup, in 1146d0eb, but not on a
+timezone change happening later.
+
+This meant that systemcalc could get stuck in the wrong timezone until
+the first reboot.
+---
+ dbus_systemcalc.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dbus_systemcalc.py b/dbus_systemcalc.py
+index 21c59da..27a130f 100755
+--- a/dbus_systemcalc.py
++++ b/dbus_systemcalc.py
+@@ -1077,6 +1077,7 @@ class SystemCalc:
+ 			tz = changes.get('Value')
+ 			if tz is not None:
+ 				os.environ['TZ'] = tz
++				time.tzset()
+ 
+ 	def _device_added(self, service, instance, do_service_change=True):
+ 		if do_service_change:
+-- 
+2.7.4
+
