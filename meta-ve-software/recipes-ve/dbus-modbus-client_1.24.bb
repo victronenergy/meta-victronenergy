@@ -18,7 +18,10 @@ RDEPENDS:${PN} = "\
 SRC_URI = " \
     gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https;tag=v${PV} \
     file://start-serial.sh \
+    file://0001-evcharger-Update-enumerations-for-status-and-mode.patch \
 "
+
+PR = "1"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${bindir}/${PN}.py"
