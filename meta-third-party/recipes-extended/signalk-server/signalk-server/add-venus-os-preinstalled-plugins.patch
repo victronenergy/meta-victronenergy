@@ -1,0 +1,26 @@
+From 96a480cbdec1a97296abdfc4d32f114fb820b5e0 Mon Sep 17 00:00:00 2001
+From: mpvader <mvader@victronenergy.com>
+Date: Mon, 13 Mar 2023 20:39:13 +0100
+Subject: package.json: add plugins
+
+---
+ package.json | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package.json b/package.json
+index 751704b..d30f0bb 100644
+--- a/package.json
++++ b/package.json
+@@ -129,7 +129,8 @@
+     "swagger-ui-express": "^4.5.0",
+     "unzipper": "^0.10.10",
+     "uuid": "^8.1.0",
+-    "ws": "^7.0.0"
++    "ws": "^7.0.0",
++    "signalk-venus-plugin": "1.29.0"
+   },
+   "optionalDependencies": {
+     "@signalk/freeboard-sk": "^1.0.0",
+-- 
+2.34.1
+

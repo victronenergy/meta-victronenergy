@@ -7,6 +7,7 @@ RDEPENDS:${PN} += "bash nodejs-npm util-linux-setpriv"
 
 SRC_URI = "\
     npm://registry.npmjs.org;package=${PN};version=${PV} \
+    file://add-venus-os-preinstalled-plugins.patch \
     file://npm-shrinkwrap.json;subdir=${S} \
     file://defaults.json \
     file://logo.svg \
@@ -25,16 +26,6 @@ DAEMONTOOLS_DOWN = "1"
 
 USERADD_PACKAGES = "${PN}"
 USERADD_PARAM:${PN} = "-d /data/conf/signalk -r -p '*' -s /bin/false -G dialout signalk"
-
-do_compile:append() {
-    npm install \
-        --prefix="${NPM_BUILD}" \
-        --arch=${NPM_ARCH} \
-        --target_arch=${NPM_ARCH} \
-        --production \
-        --no-bin-links \
-        signalk-venus-plugin@1.29.0
-}
 
 DEFAULTS = "${D}${nonarch_libdir}/node_modules/${PN}/defaults"
 
