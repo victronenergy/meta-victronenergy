@@ -14,8 +14,11 @@ SRC_URI = "\
     file://prepare-signalk.sh \
     file://settings.json \
     file://start-signalk.sh \
+    file://signalk-n2kais-to-nmea0183.json \
+    file://sk-to-nmea0183.json \
     file://venus.json \
 "
+
 SRC_URI[sha256sum] = "f331f2c7a1cbc06a583e169661ee466c157f3065ee2bdef684c04d93c019b077"
 S = "${WORKDIR}/npm"
 
@@ -36,6 +39,8 @@ do_install:append() {
     install -m 0644 ${WORKDIR}/defaults.json ${DEFAULTS}
     install -m 0644 ${WORKDIR}/logo.svg ${DEFAULTS}
     install -m 0644 ${WORKDIR}/settings.json ${DEFAULTS}
+    install -m 0644 ${WORKDIR}/signalk-n2kais-to-nmea0183.json ${DEFAULTS}
+    install -m 0644 ${WORKDIR}/sk-to-nmea0183.json ${DEFAULTS}
     install -m 0644 ${WORKDIR}/venus.json ${DEFAULTS}
 
     mkdir -p ${D}${bindir}

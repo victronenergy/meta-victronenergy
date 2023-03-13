@@ -1,0 +1,6 @@
+{
+  "configuration": {
+    "events": "nmea0183out"
+  },
+  "enabled": true
+}

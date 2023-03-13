@@ -13,10 +13,6 @@ if [ ! -f "$CONF/settings.json" ]; then
     cp "$DEFAULTCONF/settings.json" "$CONF"
 fi
 
-if [ ! -f "$PLUGINCONF/venus.json" ]; then
-    cp "$DEFAULTCONF/venus.json" "$PLUGINCONF"
-fi
-
 if [ ! -f "$CONF/defaults.json" ]; then
     cp "$DEFAULTCONF/defaults.json" "$CONF"
 fi
@@ -25,7 +21,19 @@ if [ ! -f "$CONF/logo.svg" ]; then
     cp "$DEFAULTCONF/logo.svg" "$CONF"
 fi
 
-export PLUGINS_WITH_UPDATE_DISABLED="signalk-venus-plugin"
+if [ ! -f "$PLUGINCONF/signalk-n2kais-to-nmea0183.json" ]; then
+    cp "$DEFAULTCONF/signalk-n2kais-to-nmea0183.json" "$PLUGINCONF"
+fi
+
+if [ ! -f "$PLUGINCONF/sk-to-nmea0183.json" ]; then
+    cp "$DEFAULTCONF/sk-to-nmea0183.json" "$PLUGINCONF"
+fi
+
+if [ ! -f "$PLUGINCONF/venus.json" ]; then
+    cp "$DEFAULTCONF/venus.json" "$PLUGINCONF"
+fi
+
+export PLUGINS_WITH_UPDATE_DISABLED="signalk-venus-plugin,signalk-n2kais-to-nmea0183,sk-to-nmea0183.json"
 export SIGNALK_DISABLE_SERVER_UPDATES=true
 export PRESERIALCOMMAND="/opt/victronenergy/serial-starter/stop-tty.sh"
 # export DEBUG=*
