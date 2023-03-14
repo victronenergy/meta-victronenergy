@@ -25,7 +25,7 @@ if [ ! -f "$CONF/logo.svg" ]; then
     cp "$DEFAULTCONF/logo.svg" "$CONF"
 fi
 
-export DISABLED_PLUGIN_UPDATES="signalk-venus-plugin"
+export PLUGINS_WITH_UPDATE_DISABLED="signalk-venus-plugin"
 export SIGNALK_DISABLE_SERVER_UPDATES=true
 export PRESERIALCOMMAND="/opt/victronenergy/serial-starter/stop-tty.sh"
 # export DEBUG=*
