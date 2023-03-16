@@ -7,6 +7,7 @@ RDEPENDS:${PN} = " \
     node-red-venus \
     signalk-server \
     sudo \
+    influxdb \
 "
 
 # npm needs this to update signalk-venus-plugin
