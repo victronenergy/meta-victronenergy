@@ -1,0 +1,13 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    uid: datasource-influxdb
+    type: influxdb
+    access: proxy
+    url: ${VGS_INFLUXDB_URL}
+    basicAuth: true
+    basicAuthUser: ${VGS_INFLUXDB_USERNAME} 
+    database: venus
+    secureJsonData:
+      basicAuthPassword: ${VGS_INFLUXDB_PASSWORD}

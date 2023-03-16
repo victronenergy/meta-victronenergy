@@ -8,6 +8,7 @@ RDEPENDS:${PN} = " \
     signalk-server \
     sudo \
     influxdb \
+    grafana \
 "
 
 # npm needs this to update signalk-venus-plugin
