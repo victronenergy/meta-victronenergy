@@ -55,4 +55,5 @@ crontab:x:999:
 xuser:x:1000:
 simple-upnpd:x:1001:
 influxdb:x:1010:
+grafana:x:1011:
 nogroup:x:65534:
