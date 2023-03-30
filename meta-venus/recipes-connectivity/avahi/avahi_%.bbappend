@@ -5,6 +5,7 @@ SRC_URI += "\
     file://avahi-autoipd.action \
     file://avahi-daemon.conf \
     file://0001-do-not-copy-etc-localtime.patch \
+    file://0002-patch-service-files-on-start.patch \
 "
 
 INITSCRIPT_PACKAGES += "avahi-autoipd"

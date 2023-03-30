@@ -1,0 +1,35 @@
+From b7f4034c680d62831e55d0671a35c62d40002010 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Thu, 30 Mar 2023 13:15:49 +0100
+Subject: [PATCH 2/2] patch service files on start
+
+---
+ initscript/debian/avahi-daemon.in | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/initscript/debian/avahi-daemon.in b/initscript/debian/avahi-daemon.in
+index 30e8319f49e3..0d4611a11233 100755
+--- a/initscript/debian/avahi-daemon.in
++++ b/initscript/debian/avahi-daemon.in
+@@ -112,7 +112,17 @@ d_start() {
+     modprobe capability >/dev/null 2>&1 || true
+ 
+     $DAEMON -c && return 0
+-    $DAEMON -D
++
++    serial=$(cat /data/venus/serial-number)
++    mkdir -p /run/avahi/services
++
++    for srv in /etc/avahi/services/*.service; do
++	if [ -e $srv.in ]; then
++	    sed -e "s/:::SERIAL:::/${serial}/g" <$srv.in >$srv
++	fi
++    done
++
++    $DAEMON -D --no-chroot
+ }
+ 
+ #
+-- 
+2.38.1
+
