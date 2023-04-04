@@ -3,6 +3,7 @@ HOMEPAGE = "https://signalk.org/"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=34f8c1142fd6208a8be89399cb521df9"
 
+DEPENDS += "avahi"
 RDEPENDS:${PN} += "bash nodejs-npm util-linux-setpriv"
 
 SRC_URI = "\
