@@ -1,5 +1,7 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
+PACKAGECONFIG += "libdns_sd"
+
 SRC_URI += "\
     file://avahi-autoipd \
     file://avahi-autoipd.action \
@@ -17,6 +19,9 @@ do_install:append() {
     install -m 0644 ${WORKDIR}/avahi-daemon.conf ${D}${sysconfdir}/avahi
     install -m 0755 ${WORKDIR}/avahi-autoipd ${D}${INIT_D_DIR}
     install -m 0755 ${WORKDIR}/avahi-autoipd.action ${D}${sysconfdir}/avahi
+
+    # move the header file so other things can find it
+    mv ${D}${includedir}/avahi-compat-libdns_sd/dns_sd.h ${D}${includedir}
 }
 
 FILES:avahi-autoipd += "${INIT_D_DIR}/avahi-autoipd"
