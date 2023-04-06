@@ -1,4 +1,4 @@
-From b7f4034c680d62831e55d0671a35c62d40002010 Mon Sep 17 00:00:00 2001
+From 25dd884f27cb06132a6d7397b0433b6487f7ffff Mon Sep 17 00:00:00 2001
 From: Mans Rullgard <mans@mansr.com>
 Date: Thu, 30 Mar 2023 13:15:49 +0100
 Subject: [PATCH 2/2] patch service files on start
@@ -8,7 +8,7 @@ Subject: [PATCH 2/2] patch service files on start
  1 file changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/initscript/debian/avahi-daemon.in b/initscript/debian/avahi-daemon.in
-index 30e8319f49e3..0d4611a11233 100755
+index 30e8319f49e3..108aae329959 100755
 --- a/initscript/debian/avahi-daemon.in
 +++ b/initscript/debian/avahi-daemon.in
 @@ -112,7 +112,17 @@ d_start() {
@@ -22,7 +22,7 @@ index 30e8319f49e3..0d4611a11233 100755
 +
 +    for srv in /etc/avahi/services/*.service; do
 +	if [ -e $srv.in ]; then
-+	    sed -e "s/:::SERIAL:::/${serial}/g" <$srv.in >$srv
++	    sed -e "s/:::SERIAL:::/${serial:-NONE}/g" <$srv.in >$srv
 +	fi
 +    done
 +
