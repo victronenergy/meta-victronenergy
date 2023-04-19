@@ -8,6 +8,16 @@ DEPENDS += "python3-native"
 
 CFLAGS += "${TOOLCHAIN_OPTIONS} ${TARGET_CC_ARCH} ${LDFLAGS}"
 
+# Note: while not velib specific, pseudo will abort if source file are used which are
+# not below ${S} in do_install when a project is rebuild, see:
+# https://lists.yoctoproject.org/g/yocto/topic/question_about_psuedo_abort/91650136?p=
+#
+# Since the submodules are typically above the ${S} directory for velib projects, this
+# issue does affect them. Either all ${S} directory should be changed and make should
+# be invoked in a subdirectory, or the more simply approach, the complete source directory
+# is added to the pseudo ignore paths (assuming it is a git checkout).
+PSEUDO_IGNORE_PATHS .= ",${WORKDIR}/git"
+
 oe_runconf () {
     cfgscript="${S}/configure"
     if [ -x "$cfgscript" ] ; then
