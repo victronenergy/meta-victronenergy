@@ -42,7 +42,6 @@ RDEPENDS:${PN}:append:beaglebone = "\
     gpio-export \
     hostapd \
     i2c-tools \
-    linux-firmware-rtl-bt \
     rtl8723bu \
     rtl8723du \
     swupdate \
@@ -67,7 +66,6 @@ RDEPENDS:${PN}:append:sunxi = "\
     cpufrequtils \
     gpio-export \
     hostapd \
-    linux-firmware-rtl-bt \
     rtl8723bu \
     rtl8723du \
     swupdate \
