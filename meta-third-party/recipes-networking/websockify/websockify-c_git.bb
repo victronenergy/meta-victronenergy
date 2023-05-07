@@ -11,13 +11,12 @@ SRC_URI = " \
 "
 
 S = "${WORKDIR}/git"
+B = "${WORKDIR}/git/c"
 DEST_DIR = "${D}${bindir}"
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/websockify 0.0.0.0:81 127.0.0.1:5900"
 
-EXTRA_OEMAKE = "-C ${S}/c"
-
 do_install () {
     install -d ${D}${bindir}
-    install -m 0755 ${S}/c/websockify ${DEST_DIR}/websockify
+    install -m 0755 ${B}/websockify ${DEST_DIR}/websockify
 }
