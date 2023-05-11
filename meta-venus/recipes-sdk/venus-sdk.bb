@@ -44,6 +44,8 @@ TOOLCHAIN_HOST_TASK += " \
     nativesdk-libmpc-dev \
     nativesdk-ncurses-dev \
     nativesdk-openssl-dev \
+    nativesdk-go \
+    nativesdk-rust \
 "
 
 # qt4 paths, copied from meta-qt4 / meta-toolchain-qte.bb to prevent
