@@ -48,10 +48,14 @@ unpack() {
         sh "$pre" || return
     fi
 
-    $cmd "$archive" "$dest" $exclude "$rc"
+    if $cmd "$archive" "$dest" $exclude "$rc"; then
+        arg="success"
+    else
+        arg="extraction-failed"
+    fi
 
     if [ -f "$post" ]; then
-        sh "$post"
+        sh "$post" "$arg"
     fi
 }
 
