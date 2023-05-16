@@ -57,20 +57,28 @@ unpack() {
     if [ -f "$post" ]; then
         sh "$post" "$arg"
     fi
+
+    rm -rf $tmp
+    trap - EXIT
 }
 
 update_data() {
+    found=0
     for dir in /media/*; do
         for suf in $ARCHIVE_SUF; do
-            archive=$dir/$ARCHIVE_NAME.$suf
-            if [ -f "$archive" ]; then
+            for archive in $(ls $dir/$ARCHIVE_NAME-*.$suf $dir/$ARCHIVE_NAME.$suf 2> /dev/null); do
                 echo "Updating /data with $archive"
                 unpack "$archive" /data
-                return 0
-            fi
+                found=1
+             done
         done
     done
 
+    if [ $found -eq 1 ]; then
+        return 0
+    fi
+
+    # Note: this triggers a delayed check, to support slow mounting media.
     return 1
 }
 
