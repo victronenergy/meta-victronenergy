@@ -22,8 +22,8 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 do_install () {
-    for f in $( find ${S}/dist -type f -printf "%P\n" ); do
-        install -D "${S}/dist/$f" "${D}${BASE_DIR}/$f"
+    for f in $( find ${S}/www/app -type f -printf "%P\n" ); do
+        install -D "${S}/www/app/$f" "${D}${BASE_DIR}/$f"
     done
 
     ln -s /run/www/app ${D}${WWW_ROOT}/app
