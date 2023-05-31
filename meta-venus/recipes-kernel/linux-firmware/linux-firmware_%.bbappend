@@ -54,21 +54,3 @@ do_install:append() {
   ln -s brcmfmac43430-sdio.AP6212.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.txt
 }
 
-do_install:append:rpi() {
-  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.bin
-  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.AP6212.txt
-  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.Hampoo-D2D3_Vi8A1.txt
-  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.MUR1DX.txt
-  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.clm_blob
-  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.bin
-  rm ${D}${nonarch_base_libdir}/firmware/brcm/BCM43430A1.hcd
-  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.txt
-  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.raspberrypi,3-model-a-plus.txt
-  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.raspberrypi,3-model-b.txt
-  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.raspberrypi,3-model-b-plus.txt
-  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-model-b.txt
-  rm ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.raspberrypi,model-zero-w.txt
-  rm ${D}${nonarch_base_libdir}/firmware/cypress/cyfmac43430-sdio.bin
-  rm ${D}${nonarch_base_libdir}/firmware/cypress/cyfmac43455-sdio.bin
-  rm ${D}${nonarch_base_libdir}/firmware/cypress/cyfmac43455-sdio.clm_blob
-}
