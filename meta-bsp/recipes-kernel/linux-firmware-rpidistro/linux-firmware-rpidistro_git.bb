@@ -5,15 +5,22 @@ to linux-firmware for general use."
 HOMEPAGE = "https://github.com/RPi-Distro/firmware-nonfree"
 SECTION = "kernel"
 
-LICENSE = "GPL-2.0-only & binary-redist-Cypress-rpidistro & Synaptics-rpidistro"
+LICENSE = "GPL-2.0 & binary-redist-Cypress-rpidistro & Synaptics-rpidistro"
 LIC_FILES_CHKSUM = "\
     file://debian/config/brcm80211/copyright;md5=b0630b02d90e3da72206c909b6aecc8c \
+    file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6 \
 "
 # Where these are no common licenses, set NO_GENERIC_LICENSE so that the
 # license files will be copied from the fetched source.
 NO_GENERIC_LICENSE[binary-redist-Cypress-rpidistro] = "debian/config/brcm80211/copyright"
 NO_GENERIC_LICENSE[Synaptics-rpidistro] = "debian/config/brcm80211/copyright"
-LICENSE_FLAGS = "synaptics-killswitch"
+
+# dunfell: Rather than adding LICENSE_FLAGS_ACCEPTED as documented in
+# https://github.com/agherzan/meta-raspberrypi/blob/master/docs/ipcompliance.md, which
+# in versions pre kirkstone is actually LICENSE_FLAGS_WHITELIST[1], to a config file
+# consciously remove from the recipe.
+# [1] https://docs.yoctoproject.org/migration-guides/migration-4.0.html
+#LICENSE_FLAGS = "synaptics-killswitch"
 
 SRC_URI = "git://github.com/RPi-Distro/firmware-nonfree;branch=bullseye;protocol=https \
     file://0001-Default-43455-firmware-to-standard-variant.patch \
@@ -70,7 +77,8 @@ LICENSE:${PN}-bcm43436 = "Synaptics-rpidistro"
 LICENSE:${PN}-bcm43436s = "Synaptics-rpidistro"
 LICENSE:${PN}-bcm43455 = "binary-redist-Cypress-rpidistro"
 LICENSE:${PN}-bcm43456 = "Synaptics-rpidistro"
-LICENSE:${PN}-license = "GPL-2.0-only"
+# dunfell: GPL-2.0 got renamed to GPL-2.0-only later on
+LICENSE:${PN}-license = "GPL-2.0"
 
 FILES:${PN}-bcm43430 = " \
     ${nonarch_base_libdir}/firmware/brcm/brcmfmac43430* \
