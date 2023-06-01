@@ -100,7 +100,7 @@ RDEPENDS:${PN}-bcm43436s += "${PN}-license"
 RDEPENDS:${PN}-bcm43455 += "${PN}-license"
 RDEPENDS:${PN}-bcm43456 += "${PN}-license"
 
-RCONFLICTS:${PN}-bcm43430 = "linux-firmware-raspbian-bcm43430"
+RCONFLICTS:${PN}-bcm43430 = "linux-firmware-bcm43430"
 RCONFLICTS:${PN}-bcm43436 = "linux-firmware-bcm43436"
 RCONFLICTS:${PN}-bcm43436s = "linux-firmware-bcm43436s"
 RCONFLICTS:${PN}-bcm43455 = "linux-firmware-bcm43455"
