@@ -5,7 +5,7 @@ sdio=/sys/bus/sdio/devices/mmc2:0001:1/net
 inst=$(/opt/victronenergy/venus-eeprom/eeprom --check |
            awk '/^installer-version/ { print $2 }')
 
-# Cerbo's produced with installer version released after 01/04/2012
+# Cerbo's produced with installer version released after 01/04/2022
 # do have an unique ethernet mac addresses again; there is a gap
 # between 01/02/2022 and 01/04/2022.
 if [ -n "$inst" -a "$inst" -gt 20220401000000 ]; then
