@@ -75,10 +75,14 @@ RDEPENDS:${PN}:append:sunxi = "\
 RDEPENDS:${PN}:append:rpi = "\
     bluez-firmware-rpidistro-bcm43430a1-hcd \
     bluez-firmware-rpidistro-bcm4345c0-hcd \
+    bluez-firmware-rpidistro-bcm43430b0-hcd \
+    bluez-firmware-rpidistro-bcm4345c5-hcd \
     gpio-export \
     linux-firmware-rpidistro-bcm43430 \
     linux-firmware-rpidistro-bcm43455 \
     linux-firmware-rpidistro-bcm43436s \
+    linux-firmware-rpidistro-bcm43456 \
+    linux-firmware-rpidistro-bcm43436 \
     resize-sdcard \
     swupdate \
     swupdate-scripts \
