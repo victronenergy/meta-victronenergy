@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# There are some non-unique mac-addresses assigned to LAN in early 2023,
+# use the wifi mac for them instead. bad-unique-id must report it as well.
+
+mac="$(cat /sys/class/net/eth0/address)"
+if grep -q "$mac" /etc/venus/bad-mac-addrs 2>/dev/null; then
+    mac="$(cat /sys/class/net/*wifi0/address)"
+fi
+
+echo "$mac" | sed -e 's,:,,g'
+
