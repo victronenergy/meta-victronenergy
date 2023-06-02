@@ -1,0 +1,3 @@
+#!/bin/sh
+
+grep -F -f /sys/class/net/eth0/address /etc/venus/bad-mac-addrs 2>/dev/null | sed -e 's,:,,g'
