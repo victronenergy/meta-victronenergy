@@ -21,4 +21,5 @@ do_install:append() {
 
     rm ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bcrypt/build-tmp-napi-v3/Release/nothing.a
     rm ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bcrypt/build-tmp-napi-v3/Release/node-addon-api/nothing.a
+    rm -r ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bcrypt/build-tmp-napi-v3/node_gyp_bins
 }
