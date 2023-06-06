@@ -22,9 +22,10 @@ SRC_URI = "\
     file://venus.json \
 "
 
+SRC_URI[sha256sum] = "4598fc19600673a80d8593db1f6314e86fbfd76b6b35fe7fbb852e714542ef89"
+
 PR = "1"
 
-SRC_URI[sha256sum] = "f331f2c7a1cbc06a583e169661ee466c157f3065ee2bdef684c04d93c019b077"
 S = "${WORKDIR}/npm"
 
 inherit daemontools npm-online-install useradd

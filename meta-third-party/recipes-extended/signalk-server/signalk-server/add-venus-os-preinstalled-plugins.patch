@@ -1,14 +1,14 @@
-From 96a480cbdec1a97296abdfc4d32f114fb820b5e0 Mon Sep 17 00:00:00 2001
-From: mpvader <mvader@victronenergy.com>
-Date: Mon, 13 Mar 2023 20:39:13 +0100
-Subject: package.json: add plugins
+From 1ac187b4c16d514ba08021f57339b8e8273d8614 Mon Sep 17 00:00:00 2001
+From: Dirk-Jan Faber <dfaber@victronenergy.com>
+Date: Tue, 6 Jun 2023 15:28:56 +0200
+Subject: [PATCH] package.json: add plugins
 
 ---
- package.json | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package.json | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/package.json b/package.json
-index 751704b..d30f0bb 100644
+index 29e510f..dd18f36 100644
 --- a/package.json
 +++ b/package.json
 @@ -129,7 +129,9 @@
@@ -18,7 +18,7 @@ index 751704b..d30f0bb 100644
 -    "ws": "^7.0.0"
 +    "ws": "^7.0.0",
 +    "signalk-n2kais-to-nmea0183": "1.3.1",
-+    "signalk-venus-plugin": "1.29.0"
++    "signalk-venus-plugin": "1.30.2"
    },
    "optionalDependencies": {
      "@signalk/freeboard-sk": "^1.0.0",
