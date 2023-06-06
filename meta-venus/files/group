@@ -40,6 +40,7 @@ games:x:60:
 shutdown:x:70:
 vnctunnel:x:99:
 users:x:100:
+weston:x:988:
 flashmq:x:989:
 weston-launch:x:990
 ntp:x:991:
