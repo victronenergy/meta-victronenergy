@@ -8,7 +8,7 @@ inherit meson
 
 SRC_URI = "git://github.com/any1/wayvnc;protocol=https"
 SRCREV = "8038e655971144af29962cdbf76a7b17be6dfb26"
-S = "${WORKDIR}/git/"
+S = "${WORKDIR}/git"
 
 do_install:append() {
     mkdir -p ${D}${sysconfdir}/sway/config.d

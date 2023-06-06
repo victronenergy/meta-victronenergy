@@ -8,5 +8,5 @@ inherit meson
 
 SRC_URI = "git://github.com/any1/neatvnc;protocol=https"
 SRCREV = "6ad4aba374153d36c99ea5073b747697774f4e3e"
-S = "${WORKDIR}/git/"
+S = "${WORKDIR}/git"
 
