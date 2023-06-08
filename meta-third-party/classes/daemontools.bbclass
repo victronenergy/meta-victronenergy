@@ -86,7 +86,6 @@ python populate_packages_daemontools () {
         localdata = bb.data.createCopy(d)
         overrides = localdata.getVar("OVERRIDES", True)
         localdata.setVar("OVERRIDES", "%s:%s" % (pkg, overrides))
-        bb.data.update_data(localdata)
 
         preinst = localdata.getVar('pkg_preinst', True)
         if not preinst:
