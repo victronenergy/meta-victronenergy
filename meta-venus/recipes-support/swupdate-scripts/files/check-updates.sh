@@ -65,6 +65,21 @@ get_swu_version() {
         }'
 }
 
+is_compatible() {
+    hwcompat="$(get_swu_description "$1" | tr '\n' ' ' | sed -n 's/.*hardware-compatibility\s*:\s*\[\([^]]*\).*/\1/p')"
+
+    # if no hardware-compatibility is set, assume it is compatible
+    if [ -z "$hwcompat" ]; then
+        return 0
+    fi
+
+    if echo "$hwcompat" | grep -Fq "\"$(board-compat)\"" ; then
+        return 0
+    fi
+
+    return 1
+}
+
 swu_status() {
     if [ "$offline" = y ]; then
         printf '%s\n' "$1" "" "$2" >$status_file
@@ -186,7 +201,7 @@ elif [ "$offline" = y ]; then
         # venus-swu-${machine}*.swu so don't make an incompatible ccgxv2 or
         # beaglebone-new MACHINE, since they are also accepted by the old ones.
         SWU=$(ls -r $dev/${swu_base}-*.swu $dev/${swu_base}.swu 2>/dev/null | head -n1)
-        test -f "$SWU" && break
+        test -f "$SWU" && is_compatible "$SWU" && break
     done
 
     if [ -f "$SWU" ]; then
