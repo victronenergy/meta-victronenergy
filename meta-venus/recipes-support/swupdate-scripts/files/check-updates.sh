@@ -319,7 +319,8 @@ else
     swupdate_flags="-t 30 -r 3 -d"
 fi
 
-if do_swupdate -v $swupdate_flags "$SWU" -e "stable,copy$altroot"; then
+hw_rev="$machine:$(board-compat)"
+if do_swupdate -H "$hw_rev" -v $swupdate_flags "$SWU" -e "stable,copy$altroot"; then
     echo "do_swupdate completed OK. Rebooting"
     swu_status 3 "$swu_version"
     reboot
