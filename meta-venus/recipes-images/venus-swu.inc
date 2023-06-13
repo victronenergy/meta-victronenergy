@@ -65,8 +65,6 @@ python () {
         d.setVarFlag('SWUPDATE_IMAGES_NOAPPEND_MACHINE', n, '1')
 }
 
-DEPENDS += "dtc-native"
-
 def set_compatible_machines(d):
     import subprocess
 
