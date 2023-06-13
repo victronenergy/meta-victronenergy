@@ -1,0 +1,27 @@
+From 1ee44b09e27eef8b75912ea9ab21fb1e7f32d63c Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Tue, 13 Jun 2023 18:06:09 +0200
+Subject: [PATCH] continue if hardware-compatibility is not set
+
+---
+ core/util.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/core/util.c b/core/util.c
+index 3497b49..468636f 100644
+--- a/core/util.c
++++ b/core/util.c
+@@ -220,6 +220,10 @@ int check_hw_compatibility(struct swupdate_cfg *cfg)
+ 	struct hw_type *hw;
+ 	int ret;
+ 
++	/* allow swu files without hardware-compatibility property to be installed */
++	if (LIST_EMPTY(&cfg->hardware))
++		return 0;
++
+ 	ret = get_hw_revision(&cfg->hw);
+ 	if (ret < 0)
+ 		return -1;
+-- 
+2.34.1
+
