@@ -65,6 +65,25 @@ get_swu_version() {
         }'
 }
 
+get_swu_compat() {
+    get_swu_description "$1" |
+        sed -n '/hardware-compatibility/ {
+            s/.*\[\(.*\)\].*/\1/
+            p
+            q
+        }'
+}
+
+is_compatible() {
+    hwcompat=$(get_swu_compat "$1")
+
+    if echo "$hwcompat" | grep -Fq "\"$(board-compat)\"" ; then
+        return 0
+    fi
+
+    return 1
+}
+
 swu_status() {
     if [ "$offline" = y ]; then
         printf '%s\n' "$1" "" "$2" >$status_file
@@ -195,7 +214,11 @@ elif [ "$offline" = y ]; then
     echo "Searching for update on SD/USB..."
 
     SWU="$(find_swu $machine)"
-    if [ -f "$SWU" ]; then
+    if [ -n "$SWU" ]; then
+        is_compatible "$SWU" || SWU=""
+    fi
+
+    if [ -n "$SWU" ]; then
         echo "Update found on $dev"
         feed="$dev"
     else
