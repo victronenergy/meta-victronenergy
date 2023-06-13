@@ -34,6 +34,9 @@ RPI_KERNEL_DEVICETREE ?= " \
     ${RPI_KERNEL_DEVICETREE_OVERLAYS} \
 "
 
+# swupdate uses this to figure out which boards are compatible
+KERNEL_DEVICETREE = "${RPI_KERNEL_DEVICETREE_DTB}"
+
 PREFERRED_PROVIDER_virtual/bootloader ?= "u-boot-venus"
 PREFERRED_VERSION_u-boot-fw-utils ?= "venus"
 UBOOT_SRC_URI ?= "git://github.com/victronenergy/u-boot.git;branch=rpi_v2022.01;tag=37cacbb7c8ecf8f620d75d957ad3640862f5bfd3;protocol=https"

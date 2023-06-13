@@ -1,6 +1,7 @@
 software =
 {
 	venus-version =~ "${VENUS_VERSION}";
+	hardware-compatibility:~ [ ${HARDWARE_COMPATIBLE} ];
 
 	version = "0.1.0";
 
