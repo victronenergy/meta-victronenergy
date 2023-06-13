@@ -43,7 +43,7 @@ get_setting() {
         awk '{ print $3 }'
 }
 
-get_swu_version() {
+get_swu_description() {
     if [ -f "$1" ]; then
         # local file
         cmd="head -n 10"
@@ -53,7 +53,11 @@ get_swu_version() {
     fi
 
     $cmd "$1" |
-        cpio --quiet -i --to-stdout sw-description 2>/dev/null |
+        cpio --quiet -i --to-stdout sw-description 2>/dev/null
+}
+
+get_swu_version() {
+    get_swu_description "$1" |
         sed -n '/venus-version/ {
             s/.*"\(.*\)".*/\1/
             p
