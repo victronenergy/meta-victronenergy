@@ -65,16 +65,31 @@ python () {
         d.setVarFlag('SWUPDATE_IMAGES_NOAPPEND_MACHINE', n, '1')
 }
 
+DEPENDS += "dtc-native"
+
+def set_compatible_machines(d):
+    import subprocess
+
+    deploy_dir = d.getVar("DEPLOY_DIR_IMAGE")
+    boards = set()
+    for dtb in d.getVar("KERNEL_DEVICETREE").split():
+        compatible = subprocess.check_output(["fdtget", os.path.join(deploy_dir, dtb), "/", "compatible"]).decode("utf-8")
+        board = compatible.split()[0]
+        boards.add('"' + board + '"')
+    d.setVar("HARDWARE_COMPATIBLE", ", ".join(sorted(boards)))
+
 python do_subst() {
     import fileinput
     import re
     import sys
 
+    set_compatible_machines(d)
+
     swd = os.path.join(d.getVar('WORKDIR'), 'sw-description')
     f = fileinput.input(files=(swd), inplace=True)
 
     for line in f:
-        line, n = re.subn(r'(\s*\w+)\s*=~\s*', r'\1 = ', line)
+        line, n = re.subn(r'(\s*\w+)(\s*[=:])~\s*', r'\1\2 ', line)
         if n:
             line = re.sub(r'\$\{(\w+)\}', lambda m: d.getVar(m.group(1)), line)
         sys.stdout.write(line)
@@ -83,6 +98,7 @@ python do_subst() {
 }
 
 addtask do_subst after do_unpack before do_swuimage
+do_subst[depends] += "virtual/kernel:do_deploy"
 
 do_unpack[nostamp] = "1"
 do_subst[nostamp] = "1"
