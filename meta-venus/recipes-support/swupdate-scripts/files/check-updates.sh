@@ -43,6 +43,17 @@ get_setting() {
         awk '{ print $3 }'
 }
 
+get_machine_compat() {
+    board=$(board-compat)
+
+    while read compat machine; do
+        if [ "$board" = "$compat" ]; then
+            echo "$machine"
+            return
+        fi
+    done <$(dirname $0)/machines.conf
+}
+
 get_swu_description() {
     if [ -f "$1" ]; then
         # local file
@@ -68,9 +79,16 @@ get_swu_version() {
 is_compatible() {
     hwcompat="$(get_swu_description "$1" | tr '\n' ' ' | sed -n 's/.*hardware-compatibility\s*:\s*\[\([^]]*\).*/\1/p')"
 
-    # if no hardware-compatibility is set, assume it is compatible
+    # if no hardware-compatibility is set, check filename
     if [ -z "$hwcompat" ]; then
-        return 0
+        mcompat=$(get_machine_compat)
+        test -z "$mcompat" && return 1
+
+        if echo "$1" | grep -q -e "-${mcompat}[.-]"; then
+            return 0
+        fi
+
+        return 1
     fi
 
     if echo "$hwcompat" | grep -Fq "\"$(board-compat)\"" ; then
@@ -200,8 +218,11 @@ elif [ "$offline" = y ]; then
         # MIND IT: There are ccgx and venusgx around which only check for
         # venus-swu-${machine}*.swu so don't make an incompatible ccgxv2 or
         # beaglebone-new MACHINE, since they are also accepted by the old ones.
-        SWU=$(ls -r $dev/${swu_base}-*.swu $dev/${swu_base}.swu 2>/dev/null | head -n1)
-        test -f "$SWU" && is_compatible "$SWU" && break
+        tryswu=$(ls -r $dev/${swu_base}-*.swu $dev/${swu_base}.swu 2>/dev/null | head -n1)
+        if [ -f "$tryswu" && is_compatible "$tryswu" ]; then
+            SWU=$tryswu
+            break
+        fi
     done
 
     if [ -f "$SWU" ]; then
