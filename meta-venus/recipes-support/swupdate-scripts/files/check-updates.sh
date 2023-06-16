@@ -228,6 +228,14 @@ elif [ "$offline" = y ]; then
     echo "Searching for update on SD/USB..."
 
     SWU="$(find_swu $machine)"
+    if [ -z "$SWU" ]; then
+        compat="$(get_machine_compat)"
+        if [ "$machine" != "$compat" ]; then
+            echo "Searching for backwards compatible update on SD/USB... ${compat}"
+            SWU="$(find_swu $compat)"
+        fi
+    fi
+
     if [ -f "$SWU" ]; then
         echo "Update found on $dev"
         feed="$dev"
