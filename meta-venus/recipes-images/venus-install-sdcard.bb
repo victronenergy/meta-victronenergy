@@ -14,8 +14,8 @@ BOARD_IDS:beaglebone = "file://board_id_octogx"
 BOARD_IDS:einstein = "\
     file://board_id_cerbogx \
     file://board_id_cerbogx_b1 \
+    file://board_id_cerbogx_s \
 "
-BOARD_IDS:cerbosgx = "file://board_id_cerbogx_s"
 BOARD_IDS:ekrano = "file://board_id_ekrano"
 BOARD_IDS:nanopi = "\
     file://board_id_easysolar \
