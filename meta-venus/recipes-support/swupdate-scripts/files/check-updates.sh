@@ -165,17 +165,9 @@ machine=$(cat /etc/venus/machine)
 swu_name=$(cat /etc/venus/swu-name)
 swu_base=${swu_name}-${machine}
 
-if [[ $forceswu ]]; then
-    echo "Updating to $forceswu"
-    SWU="$forceswu"
-    # The version is not known, since the stream might not support seeking,
-    # like stdin for example. So as a best effort, use the url instead.
-    swu_version="$forceswu"
-elif [ "$offline" = y ]; then
-    echo "Searching for update on SD/USB..."
-
+find_swu() {
     # use wildcard to allow image variants such as -large
-    swu_base="${swu_name}*-${machine}"
+    swu_base="${swu_name}*-$1"
 
     for dev in /media/*; do
         # reverse order gives preference to an unversioned file
@@ -185,10 +177,24 @@ elif [ "$offline" = y ]; then
         # MIND IT: There are ccgx and venusgx around which only check for
         # venus-swu-${machine}*.swu so don't make an incompatible ccgxv2 or
         # beaglebone-new MACHINE, since they are also accepted by the old ones.
-        SWU=$(ls -r $dev/${swu_base}-*.swu $dev/${swu_base}.swu 2>/dev/null | head -n1)
-        test -f "$SWU" && break
+        tryswu=$(ls -r $dev/${swu_base}-*.swu $dev/${swu_base}.swu 2>/dev/null | head -n1)
+        if [ -f "$tryswu" ]; then
+            echo "$tryswu"
+            break
+        fi
     done
+}
 
+if [[ $forceswu ]]; then
+    echo "Updating to $forceswu"
+    SWU="$forceswu"
+    # The version is not known, since the stream might not support seeking,
+    # like stdin for example. So as a best effort, use the url instead.
+    swu_version="$forceswu"
+elif [ "$offline" = y ]; then
+    echo "Searching for update on SD/USB..."
+
+    SWU="$(find_swu $machine)"
     if [ -f "$SWU" ]; then
         echo "Update found on $dev"
         feed="$dev"
