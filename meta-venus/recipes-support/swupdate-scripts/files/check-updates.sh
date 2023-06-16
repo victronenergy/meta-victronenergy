@@ -219,7 +219,7 @@ elif [ "$offline" = y ]; then
         # venus-swu-${machine}*.swu so don't make an incompatible ccgxv2 or
         # beaglebone-new MACHINE, since they are also accepted by the old ones.
         tryswu=$(ls -r $dev/${swu_base}-*.swu $dev/${swu_base}.swu 2>/dev/null | head -n1)
-        if [ -f "$tryswu" && is_compatible "$tryswu" ]; then
+        if [ -f "$tryswu" ] && is_compatible "$tryswu"; then
             SWU=$tryswu
             break
         fi
