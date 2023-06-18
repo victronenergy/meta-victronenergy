@@ -1,3 +1,7 @@
 #!/bin/bash
 
-echo $(($(cat /sys/class/gpio/gpio96/value) * 4 + $(cat /sys/class/gpio/gpio98/value) * 2 + $(cat /sys/class/gpio/gpio94/value) ))
+r0=$(cat /dev/gpio/hwrev_0/value)
+r1=$(cat /dev/gpio/hwrev_1/value)
+r2=$(cat /dev/gpio/hwrev_2/value)
+
+echo $((4 * r2 + 2 * r1 + r0))
