@@ -8,7 +8,7 @@ SRC_URI = " \
     file://0001-disable-roaming.patch \
     file://be-less-verbose.patch \
 "
-SRCREV = "c849078a5209767d19321b7dded6a21d71619b2c"
+SRCREV = "92c19318cb54ef96c2cfb4a22b2c98eb512812d8"
 
 S = "${WORKDIR}/git"
 
