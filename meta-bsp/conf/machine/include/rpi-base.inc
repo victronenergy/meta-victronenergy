@@ -24,6 +24,7 @@ RPI_KERNEL_DEVICETREE_OVERLAYS = " \
     overlays/spi1-3cs.dtbo \
     overlays/waveshare-can-fd-hat-mode-a.dtbo \
     overlays/waveshare-can-fd-hat-mode-b.dtbo \
+    overlays/sc16is752-spi1.dtbo \
 "
 
 KERNEL_PACKAGES ?= "kernel-image kernel-modules"
