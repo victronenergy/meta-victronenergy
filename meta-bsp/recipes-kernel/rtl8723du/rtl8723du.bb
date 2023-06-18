@@ -6,7 +6,7 @@ SRC_URI = " \
     git://github.com/lwfinger/rtl8723du.git;protocol=https;branch=v5.13.4 \
     file://${PN}.conf \
 "
-SRCREV = "cfcb42ad6f9bc9bc987ef2f2841f15ce5fb4bbdb"
+SRCREV = "47f5f90b797d3f8848285a369dcfa6ff5819607c"
 
 S = "${WORKDIR}/git"
 
