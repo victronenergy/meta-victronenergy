@@ -3,10 +3,10 @@ LICENSE = "GPL-2.0-only"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0-only;md5=801f80980d171dd6425610833a22dbe6"
 
 SRC_URI = " \
-    git://github.com/lwfinger/rtl8723du.git;protocol=https;branch=v5.13.4 \
+    git://github.com/mansr/rtl8723du.git;protocol=https;branch=v5.13.4 \
     file://${BPN}.conf \
 "
-SRCREV = "cfcb42ad6f9bc9bc987ef2f2841f15ce5fb4bbdb"
+SRCREV = "99b21a8c3eda2551535ecea8eaff3c70e1708df8"
 
 S = "${WORKDIR}/git"
 
