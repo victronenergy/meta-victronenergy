@@ -43,6 +43,17 @@ get_setting() {
         awk '{ print $3 }'
 }
 
+get_machine_compat() {
+    board=$(board-compat)
+
+    while read compat machine; do
+        if [ "$board" = "$compat" ]; then
+            echo "$machine"
+            return
+        fi
+    done <$(dirname $0)/machines.conf
+}
+
 get_swu_description() {
     if [ -f "$1" ]; then
         # local file
@@ -215,7 +226,22 @@ elif [ "$offline" = y ]; then
 
     SWU="$(find_swu $machine)"
     if [ -n "$SWU" ]; then
-        is_compatible "$SWU" || SWU=""
+        if ! is_compatible "$SWU"; then
+            # Found a swu file that is not marked as compatible with
+            # this board.
+
+            # Check if this board is supported by old swu files
+            # without hw compat tag.
+            mcompat=$(get_machine_compat)
+
+            if [ -z "$mcompat" ]; then
+                # Old swu files not supported, abort
+                SWU=""
+            elif [ "$mcompat" != "$machine" ]; then
+                # Old swu files have a different name, search for one
+                SWU=$(find_swu $mcompat)
+            fi
+        fi
     fi
 
     if [ -n "$SWU" ]; then
