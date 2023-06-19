@@ -11,6 +11,7 @@ SRC_URI = " \
     file://check-updates.sh \
     file://functions.sh \
     file://machine.sh \
+    file://machines.conf \
     file://remount-rw.sh \
     file://resize2fs.sh \
     file://scan-versions.init \
@@ -30,6 +31,7 @@ do_install () {
     install -m 0755 ${UNPACKDIR}/check-updates.sh ${DEST}/check-updates.sh
     install -m 0644 ${UNPACKDIR}/functions.sh     ${DEST}/functions.sh
     install -m 0644 ${UNPACKDIR}/machine.sh       ${DEST}/machine.sh
+    install -m 0644 ${UNPACKDIR}/machines.conf    ${DEST}/machines.conf
     install -m 0755 ${UNPACKDIR}/remount-rw.sh    ${DEST}/remount-rw.sh
     install -m 0755 ${UNPACKDIR}/resize2fs.sh     ${DEST}/resize2fs.sh
     install -m 0755 ${UNPACKDIR}/scan-versions.sh ${DEST}/scan-versions.sh
