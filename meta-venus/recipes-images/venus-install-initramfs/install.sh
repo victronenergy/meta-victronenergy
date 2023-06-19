@@ -226,7 +226,9 @@ ubiblacklist() {
 }
 
 install_swu() {
-    set -- -i ${SWU}
+    board=$(tr '\0' '\n' </sys/firmware/devicetree/base/compatible | head -n1)
+
+    set -- -v -H "venus:${board}" -i ${SWU}
     test -n "$UBIPART" && set -- "$@" -b "$(ubiblacklist)"
 
     msg "Installing rootfs1..."
