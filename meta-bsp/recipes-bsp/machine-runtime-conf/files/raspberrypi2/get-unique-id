@@ -9,7 +9,7 @@
 # interface, that should _not_ change the unique-id.
 
 case $(board-compat) in
-    raspberrypi,model-zero-w | raspberrypi,model-zero-2-w)
+    raspberrypi,model-zero-w | raspberrypi,model-zero-2-w | raspberrypi,3-model-a-plus)
          if="wlan0"
          ;;
     *)
