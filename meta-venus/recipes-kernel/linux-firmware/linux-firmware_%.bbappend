@@ -19,6 +19,10 @@ FILES:${PN}-rtl-bt = " \
   /lib/firmware/rtl_bt \
 "
 
+FILES:${PN}-rtl8723 += "\
+  /lib/firmware/rtw88/rtw8723d*.bin \
+"
+
 # Wifi NVRAM file for AP6210 module
 SRC_URI += "file://brcm/brcmfmac43362-sdio.txt"
 FILES:${PN}-bcm43362 += "\
