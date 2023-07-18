@@ -9,10 +9,11 @@ DEPENDS = "dbus iptables udev"
 RDEPENDS:${PN} += "flashmq"
 
 SRC_URI = " \
-    gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git;tag=v${PV} \
+    gitsm://github.com/victronenergy/venus-platform.git;branch=mbath/grafana;protocol=ssh;user=git \
     file://can.inc \
     file://0001-start-flashmq-for-testing-purposes.patch \
 "
+SRCREV = "7452d88b9049ee1374f568fb3d68293a56c7d276"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/venus-platform"
