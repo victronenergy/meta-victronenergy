@@ -1,0 +1,28 @@
+{
+  "upnp": {
+    "enabled": false,
+    "enabledPortalIds": []
+  },
+  "vrm": {
+    "enabled": false,
+    "enabledPortalIds": [],
+    "hasToken": false
+  },
+  "manual": {
+    "enabled": true,
+    "hosts": [
+      {
+        "hostName": "10.100.5.66",
+        "enabled": true
+      }
+    ]
+  },
+  "influxdb": {
+    "host": "127.0.0.1",
+    "port": "8086",
+    "username": "",
+    "password": "",
+    "database": "venus",
+    "retention": "30d"
+  }
+}
