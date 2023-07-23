@@ -51,5 +51,6 @@ sync
 export PLUGINS_WITH_UPDATE_DISABLED="signalk-venus-plugin,signalk-n2kais-to-nmea0183,sk-to-nmea0183.json"
 export SIGNALK_DISABLE_SERVER_UPDATES=true
 export PRESERIALCOMMAND="/opt/victronenergy/serial-starter/stop-tty.sh"
+export MFD_ADDRESS_SCRIPT="/usr/lib/node_modules/signalk-server/get-mfd-announce-address.sh"
 # export DEBUG=*
 exec /usr/lib/node_modules/signalk-server/bin/signalk-server -c /data/conf/signalk

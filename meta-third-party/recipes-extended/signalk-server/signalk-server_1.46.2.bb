@@ -9,8 +9,10 @@ RDEPENDS:${PN} += "bash nodejs-npm util-linux-setpriv"
 SRC_URI = "\
     npm://registry.npmjs.org;package=${PN};version=${PV} \
     file://add-venus-os-preinstalled-plugins.patch \
+    file://feature-override-for-mfd-addresses-js.patch;patchdir=${S} \
     file://npm-shrinkwrap.json;subdir=${S} \
     file://defaults.json \
+    file://get-mfd-announce-address.sh \
     file://logo.svg \
     file://prepare-signalk.sh \
     file://settings.json \
@@ -19,6 +21,8 @@ SRC_URI = "\
     file://sk-to-nmea0183.json \
     file://venus.json \
 "
+
+PR = "1"
 
 SRC_URI[sha256sum] = "f331f2c7a1cbc06a583e169661ee466c157f3065ee2bdef684c04d93c019b077"
 S = "${WORKDIR}/npm"
@@ -43,6 +47,7 @@ do_install:append() {
     install -m 0644 ${WORKDIR}/signalk-n2kais-to-nmea0183.json ${DEFAULTS}
     install -m 0644 ${WORKDIR}/sk-to-nmea0183.json ${DEFAULTS}
     install -m 0644 ${WORKDIR}/venus.json ${DEFAULTS}
+    install -m 0755 ${WORKDIR}/get-mfd-announce-address.sh ${D}${nonarch_libdir}/node_modules/${PN}/
 
     mkdir -p ${D}${bindir}
     install -m 0755 ${WORKDIR}/prepare-signalk.sh ${D}${bindir}
