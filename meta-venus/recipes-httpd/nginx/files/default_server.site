@@ -14,6 +14,9 @@ server {
 
     index index.html index.php;
 
+    # Browsers still cache, but will always revalidate.
+    add_header Cache-Control "no-cache";
+
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_pass unix:/var/run/php5-fpm.socket;
