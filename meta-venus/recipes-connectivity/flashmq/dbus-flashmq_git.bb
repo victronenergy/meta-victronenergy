@@ -7,7 +7,7 @@ DEPENDS = "dbus"
 inherit cmake
 
 SRC_URI = "git://github.com/victronenergy/dbus-flashmq.git;protocol=https"
-SRCREV = "1fccae05883be1b5f007c4cb49d7f7b6ba82b424"
+SRCREV = "b9daf6fc0256cc17fd10a32a12095fb583af5462"
 S = "${WORKDIR}/git"
 EXTRA_OECMAKE = "-DCMAKE_BUILD_TYPE=Release"
 
