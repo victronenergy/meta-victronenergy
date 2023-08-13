@@ -39,6 +39,19 @@ USERADD_PARAM:${PN} = "-d /data/conf/signalk -r -p '*' -s /bin/false -G dialout 
 DEFAULTS = "${D}${nonarch_libdir}/node_modules/${PN}/defaults"
 
 do_install:append() {
+    # remove hardware specific files, fixes error like this:
+    # ERROR: signalk-server-1.46.3-1 do_package_qa: QA Issue:
+    # Architecture did not match (AArch64, expected ARM) on
+    # /work/ [..] /prebuilds/linux-arm64/node.napi.armv8.node
+
+    rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/android-arm
+    rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/android-arm64
+    rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/darwin-x64+arm64
+    rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/linux-arm64
+    rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/linux-x64
+    rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/win32-ia32
+    rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/win32-x64
+
     # this folder keeps the default settings. start-signalk.sh copies them
     # to the data partition on first boot.
     install -d ${DEFAULTS}
