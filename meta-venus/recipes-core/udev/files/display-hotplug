@@ -17,7 +17,16 @@ connected() {
     for d in $(get_devices $bus); do
         echo $d >/sys/bus/i2c/drivers_probe
     done
-    mode=$(head -n1 $disp/modes)
+
+    edid_size=$(wc -c $disp/edid | cut -d' ' -f1)
+
+    if [ $edid_size -lt 128 ]; then
+        # Bad EDID, use resolution of GX Touch 50
+        mode=800x480
+    else
+        mode=$(head -n1 $disp/modes)
+    fi
+
     fbset -xres ${mode%x*} -yres ${mode#*x}
     cat /dev/zero >/dev/fb0
 }
