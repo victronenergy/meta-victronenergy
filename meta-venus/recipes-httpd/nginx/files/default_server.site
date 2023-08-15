@@ -17,6 +17,14 @@ server {
     # Browsers still cache, but will always revalidate.
     add_header Cache-Control "no-cache";
 
+    # This is needed because the wasm is downloaded as XHR. The proxying system
+    # VRM uses, which also ends up here, has stricter rules and doesn't just
+    # return 'origin', so add them here.
+    location /gui {
+        add_header Access-Control-Allow-Origin "$http_origin";
+        add_header Access-Control-Allow-Credentials true;
+    }
+
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_pass unix:/var/run/php5-fpm.socket;
