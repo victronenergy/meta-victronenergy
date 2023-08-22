@@ -9,7 +9,6 @@ RDEPENDS:${PN} += "bash nodejs-npm util-linux-setpriv"
 SRC_URI = "\
     npm://registry.npmjs.org;package=${PN};version=${PV} \
     file://add-venus-os-preinstalled-plugins.patch \
-    file://feature-override-for-mfd-addresses-js.patch;patchdir=${S} \
     file://npm-shrinkwrap.json;subdir=${S} \
     file://defaults.json \
     file://get-mfd-announce-address.sh \
@@ -22,7 +21,7 @@ SRC_URI = "\
     file://venus.json \
 "
 
-SRC_URI[sha256sum] = "4598fc19600673a80d8593db1f6314e86fbfd76b6b35fe7fbb852e714542ef89"
+SRC_URI[sha256sum] = "35e33f688ab0aade1853b92804292f0992088ccd940a18871f1b60e0d5967675"
 
 PR = "1"
 
