@@ -6,12 +6,13 @@ inherit qmakeve
 inherit daemontools
 
 DEPENDS = "dbus iptables udev"
-RDEPENDS:${PN} += "flashmq"
+#file://0001-start-flashmq-for-testing-purposes.patch
+#RDEPENDS:${PN} += "flashmq"
+PR = "1"
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git;tag=v${PV} \
     file://can.inc \
-    file://0001-start-flashmq-for-testing-purposes.patch \
 "
 S = "${WORKDIR}/git"
 
