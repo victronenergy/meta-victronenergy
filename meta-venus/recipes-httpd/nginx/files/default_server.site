@@ -2,10 +2,6 @@
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    listen 443 ssl;
-    listen [::]:443 ssl;
-    ssl_certificate /data/etc/ssl/venus.local.crt;
-    ssl_certificate_key /data/etc/ssl/venus.local.key;
 
     server_name _;
     root /var/www/venus;
@@ -30,6 +26,23 @@ server {
         fastcgi_pass unix:/var/run/php5-fpm.socket;
         include fastcgi.conf;
     }
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    ssl_certificate /data/etc/ssl/venus.local.crt;
+    ssl_certificate_key /data/etc/ssl/venus.local.key;
+
+    server_name _;
+    root /var/www/venus;
+    access_log off;
+    error_log /dev/null;
+
+    index index.html index.php;
+
+    # Browsers still cache, but will always revalidate.
+    add_header Cache-Control "no-cache";
 
     # proxy the websockify over https, so accepting the certficate for https makes sure
     # it can be reused for wss as well.
@@ -40,5 +53,14 @@ server {
         proxy_set_header Connection "Upgrade";
         proxy_set_header Host $host;
     }
-}
 
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_pass unix:/var/run/php5-fpm.socket;
+        include fastcgi.conf;
+    }
+
+    location ~ /app {
+         rewrite ^/app(.*)$ http://$host$request_uri;
+    }
+}
