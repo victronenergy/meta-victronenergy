@@ -38,6 +38,12 @@ USERADD_PARAM:${PN} = "-d /data/conf/signalk -r -p '*' -s /bin/false -G dialout 
 
 DEFAULTS = "${D}${nonarch_libdir}/node_modules/${PN}/defaults"
 
+# This shouldn't be here, for some reason both the cerbogxs and the einstein will
+# trigger a build, while both are einstein SOMs. Anyway, since those images will
+# be merged soon, make it machine specific for now, so at least a parrallel build
+# will succeed.
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
 do_install:append() {
     # remove hardware specific files, fixes error like this:
     # ERROR: signalk-server-1.46.3-1 do_package_qa: QA Issue:
