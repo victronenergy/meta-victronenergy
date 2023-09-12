@@ -44,8 +44,8 @@ server {
     # Browsers still cache, but will always revalidate.
     add_header Cache-Control "no-cache";
 
-    # proxy the websockify over https, so accepting the certficate for https makes sure
-    # it can be reused for wss as well.
+    # proxy the websockify for VNC / remote console over https, so accepting the
+    # certficate for https makes sure it can be reused for wss as well.
     location ~ ^/websockify$ {
         proxy_pass http://127.0.0.1:81;
         proxy_http_version 1.1;
