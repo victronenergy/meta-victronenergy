@@ -26,6 +26,10 @@ server {
         fastcgi_pass unix:/var/run/php5-fpm.socket;
         include fastcgi.conf;
     }
+
+    location ~ \.wasm$ {
+        gzip_static on;
+    }
 }
 
 server {
@@ -62,5 +66,9 @@ server {
 
     location ~ /app {
          rewrite ^/app(.*)$ http://$host$request_uri;
+    }
+
+    location ~ \.wasm$ {
+        gzip_static on;
     }
 }
