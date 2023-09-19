@@ -5,8 +5,8 @@ inherit qt6-qmake
 SUMMARY = "qt6 example to check touch support"
 DEPENDS = "qtbase"
 
-LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://main.cpp;endline=49;md5=aeafed859c0c994cc23debcc70f81fdd"
+LICENSE = "BSD-3-Clause"
+LIC_FILES_CHKSUM = "file://main.cpp;endline=49;md5=e0c1dea774f102c041d4f7f00053bd5f"
 
 QT_MODULE = "qtbase"
 S = "${WORKDIR}/fingerpaint"
