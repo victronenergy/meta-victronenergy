@@ -1,4 +1,4 @@
-From 12d1c2eaee36beab8cc900c9bda1c55cde02be2a Mon Sep 17 00:00:00 2001
+From 0f689cc00f47f93bc139c8caf3aa1ecab04a069b Mon Sep 17 00:00:00 2001
 From: Thiemo van Engelen <tvanengelen@victronenergy.com>
 Date: Mon, 19 Jul 2021 11:15:19 +0200
 Subject: [PATCH 2/2] Wait for start/stopDiscovery call to finish
@@ -11,16 +11,17 @@ waiting for the response of the startDiscovery, we can be sure that it
 is fully processed in Bluez and that a stopDiscovery will do what it is
 supposed to do.
 
-Change-Id: Ie0fdc118e4b8f585258e1b523127304751b08939
+This is usefull for Venus system that are used as CI runner for our BLE
+products. It is not used in regular Venus functionality.
 ---
  src/bluetooth/bluez/bluez5_helper.cpp | 10 +++++++---
  1 file changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/src/bluetooth/bluez/bluez5_helper.cpp b/src/bluetooth/bluez/bluez5_helper.cpp
-index 58da1ed3..a1e04dd7 100644
+index 3b74ee64..61f84252 100644
 --- a/src/bluetooth/bluez/bluez5_helper.cpp
 +++ b/src/bluetooth/bluez/bluez5_helper.cpp
-@@ -390,8 +390,11 @@ bool QtBluezDiscoveryManager::registerDiscoveryInterest(const QString &adapterPa
+@@ -347,8 +347,11 @@ bool QtBluezDiscoveryManager::registerDiscoveryInterest(const QString &adapterPa
  
      d->references[adapterPath] = data;
  
@@ -34,7 +35,7 @@ index 58da1ed3..a1e04dd7 100644
  
      return true;
  }
-@@ -411,7 +414,8 @@ void QtBluezDiscoveryManager::unregisterDiscoveryInterest(const QString &adapter
+@@ -368,7 +371,8 @@ void QtBluezDiscoveryManager::unregisterDiscoveryInterest(const QString &adapter
      if (!data->wasListeningAlready) { // Qt turned discovery mode on, Qt has to turn it off again
          OrgBluezAdapter1Interface iface(QStringLiteral("org.bluez"), adapterPath,
                                          QDBusConnection::systemBus());
@@ -45,5 +46,5 @@ index 58da1ed3..a1e04dd7 100644
  
      delete data->propteryListener;
 -- 
-2.30.2
+2.40.0.windows.1
 
