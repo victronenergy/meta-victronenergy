@@ -6,8 +6,7 @@ inherit qmakeve
 inherit daemontools
 
 DEPENDS = "dbus iptables udev"
-RDEPENDS:${PN} += "flashmq"
-PR = "2"
+RDEPENDS:${PN} += "flashmq velib-python"
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git;tag=v${PV} \
