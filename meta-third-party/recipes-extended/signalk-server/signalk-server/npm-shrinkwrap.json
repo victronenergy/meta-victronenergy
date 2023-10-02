@@ -1,31 +1,34 @@
 {
   "name": "signalk-server",
-  "version": "1.46.3",
+  "version": "2.3.0",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "signalk-server",
-      "version": "1.46.3",
+      "version": "2.3.0",
       "license": "Apache-2.0",
       "workspaces": [
         "packages/server-admin-ui-dependencies",
         "packages/server-admin-ui",
         "packages/streams",
-        "packages/server-api"
+        "packages/server-api",
+        "packages/resources-provider-plugin"
       ],
       "dependencies": {
-        "@signalk/n2k-signalk": "^2.0.0",
+        "@signalk/course-provider": "^1.0.0",
+        "@signalk/n2k-signalk": "^3.0.0",
         "@signalk/nmea0183-signalk": "^3.0.0",
-        "@signalk/server-admin-ui": "1.46.x",
-        "@signalk/server-api": "1.39.x",
-        "@signalk/signalk-schema": "1.5.1",
-        "@signalk/streams": "2.x",
-        "@types/debug": "^4.1.5",
+        "@signalk/resources-provider": "^1.0.0",
+        "@signalk/server-admin-ui": "2.3.x",
+        "@signalk/server-api": "2.3.x",
+        "@signalk/signalk-schema": "^1.7.1",
+        "@signalk/streams": "^4.0.0",
+        "api-schema-builder": "^2.0.11",
         "baconjs": "^1.0.1",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.14.1",
-        "busboy": "^0.3.1",
+        "busboy": "^1.6.0",
         "chalk": "^3.0.0",
         "clear": "^0.1.0",
         "command-exists": "^1.2.8",
@@ -35,8 +38,6 @@
         "cookie-parser": "^1.4.3",
         "cors": "^2.5.2",
         "debug": "^4.3.3",
-        "deep-get-set": "^1.1.0",
-        "dev-null-stream": "0.0.1",
         "devcert": "^1.2.2",
         "dnssd2": "1.0.0",
         "errorhandler": "^1.3.0",
@@ -50,7 +51,7 @@
         "get-installed-path": "^4.0.8",
         "inquirer": "^7.0.0",
         "json-patch": "^0.7.0",
-        "jsonwebtoken": "^8.1.1",
+        "jsonwebtoken": "^9.0.0",
         "listr": "^0.14.1",
         "lodash": "^4.17.4",
         "mdns-js": "^1.0.3",
@@ -61,9 +62,8 @@
         "ncp": "^2.0.0",
         "node-fetch": "^2.6.0",
         "primus": "^7.0.0",
-        "semver": "^7.1.1",
-        "signalk-n2kais-to-nmea0183": "1.3.1",
-        "signalk-venus-plugin": "1.32.0",
+        "semver": "^7.5.4",
+        "signalk-venus-plugin": "1.33.1",
         "split": "^1.0.0",
         "stat-mode": "^1.0.0",
         "swagger-ui-express": "^4.5.0",
@@ -81,13 +81,15 @@
         "@types/chai": "^4.2.15",
         "@types/command-exists": "^1.2.0",
         "@types/cors": "^2.8.12",
+        "@types/debug": "^4.1.5",
         "@types/express": "^4.17.1",
         "@types/lodash": "^4.14.139",
-        "@types/mocha": "^8.2.0",
+        "@types/mocha": "^10.0.1",
         "@types/ncp": "^2.0.5",
         "@types/node-fetch": "^2.5.3",
+        "@types/rmfr": "^2.0.1",
         "@types/semver": "^7.1.0",
-        "@types/serialport": "^8.0.1",
+        "@types/serialport": "^8.0.2",
         "@types/split": "^1.0.0",
         "@types/swagger-ui-express": "^4.1.3",
         "@types/unzipper": "^0.10.5",
@@ -99,33 +101,36 @@
         "chai-things": "^0.2.0",
         "eslint": "^8.24.0",
         "eslint-config-prettier": "^8.5.0",
-        "eslint-plugin-jsdoc": "^39.3.6",
         "eslint-plugin-prefer-arrow": "^1.2.3",
         "eslint-plugin-react": "^7.31.8",
         "freeport-promise": "^1.0.0",
         "lint-staged": "^10.0.3",
-        "mocha": "^7.0.1",
+        "mocha": "^10.2.0",
         "prettier": "^2.7.1",
         "rimraf": "^3.0.2",
+        "rmfr": "^2.0.0",
         "ts-node": "^10.9.1",
-        "typedoc": "^0.17.3",
+        "typedoc": "^0.23.23",
         "typescript": "^4.8.3"
       },
       "engines": {
-        "node": ">=10"
+        "node": ">=16"
       },
       "funding": {
         "url": "https://opencollective.com/signalk"
       },
       "optionalDependencies": {
-        "@signalk/freeboard-sk": "^1.0.0",
+        "@signalk/freeboard-sk": "^2.0.0-beta.3",
         "@signalk/instrumentpanel": "0.x",
         "@signalk/set-system-time": "^1.2.0",
         "@signalk/signalk-to-nmea0183": "^1.0.0",
+        "@signalk/udp-nmea-plugin": "^2.0.0",
         "@signalk/vesselpositions": "^1.0.0",
         "@signalk/zones": "^1.0.0",
         "mdns": "^2.5.1",
-        "serialport": "^9.0.1"
+        "serialport": "^11.0.0",
+        "signalk-n2kais-to-nmea0183": "^1.3.1",
+        "signalk-to-nmea2000": "^2.16.0"
       }
     },
     "node_modules/@apidevtools/json-schema-ref-parser": {
@@ -152,13 +157,23 @@
         "js-yaml": "bin/js-yaml.js"
       }
     },
+    "node_modules/@apidevtools/openapi-schemas": {
+      "version": "2.1.0",
+      "license": "MIT",
+      "engines": {
+        "node": ">=10"
+      }
+    },
+    "node_modules/@apidevtools/swagger-methods": {
+      "version": "3.0.2",
+      "license": "MIT"
+    },
     "node_modules/@canboat/canboatjs": {
-      "version": "1.28.4",
+      "version": "2.5.4",
       "license": "Apache-2.0",
       "dependencies": {
-        "@canboat/pgns": "^1.4.0",
+        "@canboat/pgns": "3.x.x",
         "bit-buffer": "0.2.3",
-        "date-fns": "2.0.0-alpha.27",
         "debug": "^4.3.4",
         "dnssd": "^0.4.1",
         "int64-buffer": "^0.1.10",
@@ -178,150 +193,16 @@
         "to-pgn": "bin/to-pgn"
       },
       "optionalDependencies": {
-        "serialport": "^11.0.1",
+        "serialport": "11.x.x",
         "socketcan": "^4.0.3"
-      }
-    },
-    "node_modules/@canboat/canboatjs/node_modules/@serialport/binding-mock": {
-      "version": "10.2.2",
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "@serialport/bindings-interface": "^1.2.1",
-        "debug": "^4.3.3"
-      },
-      "engines": {
-        "node": ">=12.0.0"
-      }
-    },
-    "node_modules/@canboat/canboatjs/node_modules/@serialport/parser-byte-length": {
-      "version": "11.0.1",
-      "license": "MIT",
-      "optional": true,
-      "engines": {
-        "node": ">=12.0.0"
-      },
-      "funding": {
-        "url": "https://opencollective.com/serialport/donate"
-      }
-    },
-    "node_modules/@canboat/canboatjs/node_modules/@serialport/parser-cctalk": {
-      "version": "11.0.1",
-      "license": "MIT",
-      "optional": true,
-      "engines": {
-        "node": ">=12.0.0"
-      },
-      "funding": {
-        "url": "https://opencollective.com/serialport/donate"
-      }
-    },
-    "node_modules/@canboat/canboatjs/node_modules/@serialport/parser-delimiter": {
-      "version": "11.0.1",
-      "license": "MIT",
-      "optional": true,
-      "engines": {
-        "node": ">=12.0.0"
-      },
-      "funding": {
-        "url": "https://opencollective.com/serialport/donate"
-      }
-    },
-    "node_modules/@canboat/canboatjs/node_modules/@serialport/parser-inter-byte-timeout": {
-      "version": "11.0.1",
-      "license": "MIT",
-      "optional": true,
-      "engines": {
-        "node": ">=12.0.0"
-      },
-      "funding": {
-        "url": "https://opencollective.com/serialport/donate"
-      }
-    },
-    "node_modules/@canboat/canboatjs/node_modules/@serialport/parser-readline": {
-      "version": "11.0.1",
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "@serialport/parser-delimiter": "11.0.1"
-      },
-      "engines": {
-        "node": ">=12.0.0"
-      },
-      "funding": {
-        "url": "https://opencollective.com/serialport/donate"
-      }
-    },
-    "node_modules/@canboat/canboatjs/node_modules/@serialport/parser-ready": {
-      "version": "11.0.1",
-      "license": "MIT",
-      "optional": true,
-      "engines": {
-        "node": ">=12.0.0"
-      },
-      "funding": {
-        "url": "https://opencollective.com/serialport/donate"
-      }
-    },
-    "node_modules/@canboat/canboatjs/node_modules/@serialport/parser-regex": {
-      "version": "11.0.1",
-      "license": "MIT",
-      "optional": true,
-      "engines": {
-        "node": ">=12.0.0"
-      },
-      "funding": {
-        "url": "https://opencollective.com/serialport/donate"
-      }
-    },
-    "node_modules/@canboat/canboatjs/node_modules/@serialport/stream": {
-      "version": "11.0.1",
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "@serialport/bindings-interface": "1.2.2",
-        "debug": "4.3.4"
-      },
-      "engines": {
-        "node": ">=12.0.0"
-      },
-      "funding": {
-        "url": "https://opencollective.com/serialport/donate"
       }
     },
     "node_modules/@canboat/canboatjs/node_modules/int64-buffer": {
       "version": "0.1.10",
       "license": "MIT"
     },
-    "node_modules/@canboat/canboatjs/node_modules/serialport": {
-      "version": "11.0.1",
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "@serialport/binding-mock": "10.2.2",
-        "@serialport/bindings-cpp": "11.0.3",
-        "@serialport/parser-byte-length": "11.0.1",
-        "@serialport/parser-cctalk": "11.0.1",
-        "@serialport/parser-delimiter": "11.0.1",
-        "@serialport/parser-inter-byte-timeout": "11.0.1",
-        "@serialport/parser-packet-length": "11.0.1",
-        "@serialport/parser-readline": "11.0.1",
-        "@serialport/parser-ready": "11.0.1",
-        "@serialport/parser-regex": "11.0.1",
-        "@serialport/parser-slip-encoder": "11.0.1",
-        "@serialport/parser-spacepacket": "11.0.1",
-        "@serialport/stream": "11.0.1",
-        "debug": "4.3.4"
-      },
-      "engines": {
-        "node": ">=12.0.0"
-      },
-      "funding": {
-        "url": "https://opencollective.com/serialport/donate"
-      }
-    },
     "node_modules/@canboat/pgns": {
-      "version": "1.4.2",
+      "version": "3.1.0",
       "license": "Apache-2.0"
     },
     "node_modules/@discoveryjs/json-ext": {
@@ -487,6 +368,365 @@
         "node": "^14.17.0 || ^16.13.0 || >=18.0.0"
       }
     },
+    "node_modules/@octokit/auth-token": {
+      "version": "2.5.0",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@octokit/types": "^6.0.3"
+      }
+    },
+    "node_modules/@octokit/core": {
+      "version": "5.0.1",
+      "license": "MIT",
+      "optional": true,
+      "peer": true,
+      "dependencies": {
+        "@octokit/auth-token": "^4.0.0",
+        "@octokit/graphql": "^7.0.0",
+        "@octokit/request": "^8.0.2",
+        "@octokit/request-error": "^5.0.0",
+        "@octokit/types": "^12.0.0",
+        "before-after-hook": "^2.2.0",
+        "universal-user-agent": "^6.0.0"
+      },
+      "engines": {
+        "node": ">= 18"
+      }
+    },
+    "node_modules/@octokit/core/node_modules/@octokit/auth-token": {
+      "version": "4.0.0",
+      "license": "MIT",
+      "optional": true,
+      "peer": true,
+      "engines": {
+        "node": ">= 18"
+      }
+    },
+    "node_modules/@octokit/core/node_modules/@octokit/endpoint": {
+      "version": "9.0.1",
+      "license": "MIT",
+      "optional": true,
+      "peer": true,
+      "dependencies": {
+        "@octokit/types": "^12.0.0",
+        "is-plain-object": "^5.0.0",
+        "universal-user-agent": "^6.0.0"
+      },
+      "engines": {
+        "node": ">= 18"
+      }
+    },
+    "node_modules/@octokit/core/node_modules/@octokit/openapi-types": {
+      "version": "19.0.0",
+      "license": "MIT",
+      "optional": true,
+      "peer": true
+    },
+    "node_modules/@octokit/core/node_modules/@octokit/request": {
+      "version": "8.1.2",
+      "license": "MIT",
+      "optional": true,
+      "peer": true,
+      "dependencies": {
+        "@octokit/endpoint": "^9.0.0",
+        "@octokit/request-error": "^5.0.0",
+        "@octokit/types": "^12.0.0",
+        "is-plain-object": "^5.0.0",
+        "universal-user-agent": "^6.0.0"
+      },
+      "engines": {
+        "node": ">= 18"
+      }
+    },
+    "node_modules/@octokit/core/node_modules/@octokit/request-error": {
+      "version": "5.0.1",
+      "license": "MIT",
+      "optional": true,
+      "peer": true,
+      "dependencies": {
+        "@octokit/types": "^12.0.0",
+        "deprecation": "^2.0.0",
+        "once": "^1.4.0"
+      },
+      "engines": {
+        "node": ">= 18"
+      }
+    },
+    "node_modules/@octokit/core/node_modules/@octokit/types": {
+      "version": "12.0.0",
+      "license": "MIT",
+      "optional": true,
+      "peer": true,
+      "dependencies": {
+        "@octokit/openapi-types": "^19.0.0"
+      }
+    },
+    "node_modules/@octokit/core/node_modules/is-plain-object": {
+      "version": "5.0.0",
+      "license": "MIT",
+      "optional": true,
+      "peer": true,
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/@octokit/core/node_modules/universal-user-agent": {
+      "version": "6.0.0",
+      "license": "ISC",
+      "optional": true,
+      "peer": true
+    },
+    "node_modules/@octokit/endpoint": {
+      "version": "6.0.12",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@octokit/types": "^6.0.3",
+        "is-plain-object": "^5.0.0",
+        "universal-user-agent": "^6.0.0"
+      }
+    },
+    "node_modules/@octokit/endpoint/node_modules/is-plain-object": {
+      "version": "5.0.0",
+      "license": "MIT",
+      "optional": true,
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/@octokit/endpoint/node_modules/universal-user-agent": {
+      "version": "6.0.0",
+      "license": "ISC",
+      "optional": true
+    },
+    "node_modules/@octokit/graphql": {
+      "version": "7.0.2",
+      "license": "MIT",
+      "optional": true,
+      "peer": true,
+      "dependencies": {
+        "@octokit/request": "^8.0.1",
+        "@octokit/types": "^12.0.0",
+        "universal-user-agent": "^6.0.0"
+      },
+      "engines": {
+        "node": ">= 18"
+      }
+    },
+    "node_modules/@octokit/graphql/node_modules/@octokit/endpoint": {
+      "version": "9.0.1",
+      "license": "MIT",
+      "optional": true,
+      "peer": true,
+      "dependencies": {
+        "@octokit/types": "^12.0.0",
+        "is-plain-object": "^5.0.0",
+        "universal-user-agent": "^6.0.0"
+      },
+      "engines": {
+        "node": ">= 18"
+      }
+    },
+    "node_modules/@octokit/graphql/node_modules/@octokit/openapi-types": {
+      "version": "19.0.0",
+      "license": "MIT",
+      "optional": true,
+      "peer": true
+    },
+    "node_modules/@octokit/graphql/node_modules/@octokit/request": {
+      "version": "8.1.2",
+      "license": "MIT",
+      "optional": true,
+      "peer": true,
+      "dependencies": {
+        "@octokit/endpoint": "^9.0.0",
+        "@octokit/request-error": "^5.0.0",
+        "@octokit/types": "^12.0.0",
+        "is-plain-object": "^5.0.0",
+        "universal-user-agent": "^6.0.0"
+      },
+      "engines": {
+        "node": ">= 18"
+      }
+    },
+    "node_modules/@octokit/graphql/node_modules/@octokit/request-error": {
+      "version": "5.0.1",
+      "license": "MIT",
+      "optional": true,
+      "peer": true,
+      "dependencies": {
+        "@octokit/types": "^12.0.0",
+        "deprecation": "^2.0.0",
+        "once": "^1.4.0"
+      },
+      "engines": {
+        "node": ">= 18"
+      }
+    },
+    "node_modules/@octokit/graphql/node_modules/@octokit/types": {
+      "version": "12.0.0",
+      "license": "MIT",
+      "optional": true,
+      "peer": true,
+      "dependencies": {
+        "@octokit/openapi-types": "^19.0.0"
+      }
+    },
+    "node_modules/@octokit/graphql/node_modules/is-plain-object": {
+      "version": "5.0.0",
+      "license": "MIT",
+      "optional": true,
+      "peer": true,
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/@octokit/graphql/node_modules/universal-user-agent": {
+      "version": "6.0.0",
+      "license": "ISC",
+      "optional": true,
+      "peer": true
+    },
+    "node_modules/@octokit/openapi-types": {
+      "version": "12.11.0",
+      "license": "MIT",
+      "optional": true
+    },
+    "node_modules/@octokit/plugin-paginate-rest": {
+      "version": "1.1.2",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@octokit/types": "^2.0.1"
+      }
+    },
+    "node_modules/@octokit/plugin-paginate-rest/node_modules/@octokit/types": {
+      "version": "2.16.2",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@types/node": ">= 8"
+      }
+    },
+    "node_modules/@octokit/plugin-request-log": {
+      "version": "1.0.4",
+      "license": "MIT",
+      "optional": true,
+      "peerDependencies": {
+        "@octokit/core": ">=3"
+      }
+    },
+    "node_modules/@octokit/plugin-rest-endpoint-methods": {
+      "version": "2.4.0",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@octokit/types": "^2.0.1",
+        "deprecation": "^2.3.1"
+      }
+    },
+    "node_modules/@octokit/plugin-rest-endpoint-methods/node_modules/@octokit/types": {
+      "version": "2.16.2",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@types/node": ">= 8"
+      }
+    },
+    "node_modules/@octokit/plugin-throttling": {
+      "version": "2.7.1",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "bottleneck": "^2.15.3"
+      }
+    },
+    "node_modules/@octokit/request": {
+      "version": "5.6.3",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@octokit/endpoint": "^6.0.1",
+        "@octokit/request-error": "^2.1.0",
+        "@octokit/types": "^6.16.1",
+        "is-plain-object": "^5.0.0",
+        "node-fetch": "^2.6.7",
+        "universal-user-agent": "^6.0.0"
+      }
+    },
+    "node_modules/@octokit/request-error": {
+      "version": "1.2.1",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@octokit/types": "^2.0.0",
+        "deprecation": "^2.0.0",
+        "once": "^1.4.0"
+      }
+    },
+    "node_modules/@octokit/request-error/node_modules/@octokit/types": {
+      "version": "2.16.2",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@types/node": ">= 8"
+      }
+    },
+    "node_modules/@octokit/request/node_modules/@octokit/request-error": {
+      "version": "2.1.0",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@octokit/types": "^6.0.3",
+        "deprecation": "^2.0.0",
+        "once": "^1.4.0"
+      }
+    },
+    "node_modules/@octokit/request/node_modules/is-plain-object": {
+      "version": "5.0.0",
+      "license": "MIT",
+      "optional": true,
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/@octokit/request/node_modules/universal-user-agent": {
+      "version": "6.0.0",
+      "license": "ISC",
+      "optional": true
+    },
+    "node_modules/@octokit/rest": {
+      "version": "16.43.2",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@octokit/auth-token": "^2.4.0",
+        "@octokit/plugin-paginate-rest": "^1.1.1",
+        "@octokit/plugin-request-log": "^1.0.0",
+        "@octokit/plugin-rest-endpoint-methods": "2.4.0",
+        "@octokit/request": "^5.2.0",
+        "@octokit/request-error": "^1.0.2",
+        "atob-lite": "^2.0.0",
+        "before-after-hook": "^2.0.0",
+        "btoa-lite": "^1.0.0",
+        "deprecation": "^2.0.0",
+        "lodash.get": "^4.4.2",
+        "lodash.set": "^4.3.2",
+        "lodash.uniq": "^4.5.0",
+        "octokit-pagination-methods": "^1.1.0",
+        "once": "^1.4.0",
+        "universal-user-agent": "^4.0.0"
+      }
+    },
+    "node_modules/@octokit/types": {
+      "version": "6.41.0",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@octokit/openapi-types": "^12.11.0"
+      }
+    },
     "node_modules/@pkgjs/parseargs": {
       "version": "0.11.0",
       "license": "MIT",
@@ -513,53 +753,16 @@
         }
       }
     },
-    "node_modules/@serialport/binding-abstract": {
-      "version": "9.2.3",
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "debug": "^4.3.2"
-      },
-      "engines": {
-        "node": ">=10.0.0"
-      },
-      "funding": {
-        "url": "https://opencollective.com/serialport/donate"
-      }
-    },
     "node_modules/@serialport/binding-mock": {
-      "version": "9.2.4",
+      "version": "10.2.2",
       "license": "MIT",
       "optional": true,
       "dependencies": {
-        "@serialport/binding-abstract": "9.2.3",
-        "debug": "^4.3.2"
+        "@serialport/bindings-interface": "^1.2.1",
+        "debug": "^4.3.3"
       },
       "engines": {
-        "node": ">=10.0.0"
-      },
-      "funding": {
-        "url": "https://opencollective.com/serialport/donate"
-      }
-    },
-    "node_modules/@serialport/bindings": {
-      "version": "9.2.8",
-      "hasInstallScript": true,
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "@serialport/binding-abstract": "9.2.3",
-        "@serialport/parser-readline": "9.2.4",
-        "bindings": "^1.5.0",
-        "debug": "^4.3.2",
-        "nan": "^2.15.0",
-        "prebuild-install": "^7.0.0"
-      },
-      "engines": {
-        "node": ">=10.0.0"
-      },
-      "funding": {
-        "url": "https://opencollective.com/serialport/donate"
+        "node": ">=12.0.0"
       }
     },
     "node_modules/@serialport/bindings-cpp": {
@@ -614,53 +817,45 @@
         "node": "^12.22 || ^14.13 || >=16"
       }
     },
-    "node_modules/@serialport/bindings/node_modules/bindings": {
-      "version": "1.5.0",
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "file-uri-to-path": "1.0.0"
-      }
-    },
     "node_modules/@serialport/parser-byte-length": {
-      "version": "9.2.4",
+      "version": "11.0.1",
       "license": "MIT",
       "optional": true,
       "engines": {
-        "node": ">=10.0.0"
+        "node": ">=12.0.0"
       },
       "funding": {
         "url": "https://opencollective.com/serialport/donate"
       }
     },
     "node_modules/@serialport/parser-cctalk": {
-      "version": "9.2.4",
+      "version": "11.0.1",
       "license": "MIT",
       "optional": true,
       "engines": {
-        "node": ">=10.0.0"
+        "node": ">=12.0.0"
       },
       "funding": {
         "url": "https://opencollective.com/serialport/donate"
       }
     },
     "node_modules/@serialport/parser-delimiter": {
-      "version": "9.2.4",
+      "version": "11.0.1",
       "license": "MIT",
       "optional": true,
       "engines": {
-        "node": ">=10.0.0"
+        "node": ">=12.0.0"
       },
       "funding": {
         "url": "https://opencollective.com/serialport/donate"
       }
     },
     "node_modules/@serialport/parser-inter-byte-timeout": {
-      "version": "9.2.4",
+      "version": "11.0.1",
       "license": "MIT",
       "optional": true,
       "engines": {
-        "node": ">=10.0.0"
+        "node": ">=12.0.0"
       },
       "funding": {
         "url": "https://opencollective.com/serialport/donate"
@@ -675,36 +870,36 @@
       }
     },
     "node_modules/@serialport/parser-readline": {
-      "version": "9.2.4",
+      "version": "11.0.1",
       "license": "MIT",
       "optional": true,
       "dependencies": {
-        "@serialport/parser-delimiter": "9.2.4"
+        "@serialport/parser-delimiter": "11.0.1"
       },
       "engines": {
-        "node": ">=10.0.0"
+        "node": ">=12.0.0"
       },
       "funding": {
         "url": "https://opencollective.com/serialport/donate"
       }
     },
     "node_modules/@serialport/parser-ready": {
-      "version": "9.2.4",
+      "version": "11.0.1",
       "license": "MIT",
       "optional": true,
       "engines": {
-        "node": ">=10.0.0"
+        "node": ">=12.0.0"
       },
       "funding": {
         "url": "https://opencollective.com/serialport/donate"
       }
     },
     "node_modules/@serialport/parser-regex": {
-      "version": "9.2.4",
+      "version": "11.0.1",
       "license": "MIT",
       "optional": true,
       "engines": {
-        "node": ">=10.0.0"
+        "node": ">=12.0.0"
       },
       "funding": {
         "url": "https://opencollective.com/serialport/donate"
@@ -733,14 +928,15 @@
       }
     },
     "node_modules/@serialport/stream": {
-      "version": "9.2.4",
+      "version": "11.0.1",
       "license": "MIT",
       "optional": true,
       "dependencies": {
-        "debug": "^4.3.2"
+        "@serialport/bindings-interface": "1.2.2",
+        "debug": "4.3.4"
       },
       "engines": {
-        "node": ">=10.0.0"
+        "node": ">=12.0.0"
       },
       "funding": {
         "url": "https://opencollective.com/serialport/donate"
@@ -758,10 +954,60 @@
         "uuid": "^8.1.0"
       }
     },
+    "node_modules/@signalk/course-provider": {
+      "version": "1.0.0",
+      "license": "Apache-2.0",
+      "dependencies": {
+        "rxjs": "^7.5.2"
+      }
+    },
+    "node_modules/@signalk/course-provider/node_modules/rxjs": {
+      "version": "7.8.1",
+      "license": "Apache-2.0",
+      "dependencies": {
+        "tslib": "^2.1.0"
+      }
+    },
+    "node_modules/@signalk/course-provider/node_modules/tslib": {
+      "version": "2.6.2",
+      "license": "0BSD"
+    },
     "node_modules/@signalk/freeboard-sk": {
-      "version": "1.22.1",
+      "version": "2.2.5",
       "license": "Apache-v2",
+      "optional": true,
+      "dependencies": {
+        "socket.io-client": "^4.6.0",
+        "tslib": "^2.0.0"
+      }
+    },
+    "node_modules/@signalk/freeboard-sk/node_modules/tslib": {
+      "version": "2.6.2",
+      "license": "0BSD",
       "optional": true
+    },
+    "node_modules/@signalk/github-create-release": {
+      "version": "1.2.1",
+      "license": "Aapche 2.0",
+      "optional": true,
+      "dependencies": {
+        "@octokit/plugin-throttling": "^2.4.0",
+        "@octokit/rest": "^16.23.2",
+        "debug": "^3.1.0",
+        "lodash": "^4.17.4",
+        "minimist": "^1.2.0"
+      },
+      "bin": {
+        "github-create-release": "bin/index.js"
+      }
+    },
+    "node_modules/@signalk/github-create-release/node_modules/debug": {
+      "version": "3.2.7",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "ms": "^2.1.1"
+      }
     },
     "node_modules/@signalk/instrumentpanel": {
       "version": "0.24.0",
@@ -769,10 +1015,10 @@
       "optional": true
     },
     "node_modules/@signalk/n2k-signalk": {
-      "version": "2.7.0",
+      "version": "3.0.0",
       "license": "Apache-2.0",
       "dependencies": {
-        "@canboat/canboatjs": "^1.13.1",
+        "@canboat/canboatjs": "^2.1.0",
         "debug": "^4.0.0",
         "int64-buffer": "^0.99.1007",
         "JSONStream": "~1.3.0",
@@ -795,7 +1041,40 @@
         "nmea2signalk": "bin/nmea0183-signalk"
       }
     },
-    "node_modules/@signalk/nmea0183-signalk/node_modules/@signalk/signalk-schema": {
+    "node_modules/@signalk/nmea0183-utilities": {
+      "version": "0.8.1",
+      "license": "Apache-2.0"
+    },
+    "node_modules/@signalk/resources-provider": {
+      "version": "1.1.1",
+      "license": "Apache-20",
+      "dependencies": {
+        "geojson-validation": "^0.2.0",
+        "geolib": "^3.3.3",
+        "ngeohash": "^0.6.3"
+      }
+    },
+    "node_modules/@signalk/resources-provider/node_modules/geolib": {
+      "version": "3.3.4",
+      "license": "MIT"
+    },
+    "node_modules/@signalk/server-admin-ui": {
+      "version": "2.3.0",
+      "license": "MIT"
+    },
+    "node_modules/@signalk/server-api": {
+      "version": "2.3.0",
+      "license": "Apache-2.0",
+      "peerDependencies": {
+        "baconjs": "^1.0.1"
+      }
+    },
+    "node_modules/@signalk/set-system-time": {
+      "version": "1.3.1",
+      "license": "Apache-2.0",
+      "optional": true
+    },
+    "node_modules/@signalk/signalk-schema": {
       "version": "1.7.1",
       "license": "CC-BY-SA-2.0",
       "dependencies": {
@@ -811,65 +1090,6 @@
       },
       "funding": {
         "url": "https://opencollective.com/signalk"
-      }
-    },
-    "node_modules/@signalk/nmea0183-signalk/node_modules/jsonparse": {
-      "version": "0.0.5",
-      "engines": [
-        "node >= 0.2.0"
-      ],
-      "license": "MIT"
-    },
-    "node_modules/@signalk/nmea0183-signalk/node_modules/JSONStream": {
-      "version": "0.7.4",
-      "dependencies": {
-        "jsonparse": "0.0.5",
-        "through": ">=2.2.7 <3"
-      },
-      "engines": {
-        "node": "*"
-      }
-    },
-    "node_modules/@signalk/nmea0183-utilities": {
-      "version": "0.8.1",
-      "license": "Apache-2.0"
-    },
-    "node_modules/@signalk/server-admin-ui": {
-      "version": "1.46.0",
-      "license": "MIT"
-    },
-    "node_modules/@signalk/server-api": {
-      "version": "1.39.0",
-      "license": "Apache-2.0",
-      "peerDependencies": {
-        "baconjs": "^1.0.1"
-      }
-    },
-    "node_modules/@signalk/set-system-time": {
-      "version": "1.3.1",
-      "license": "Apache-2.0",
-      "optional": true
-    },
-    "node_modules/@signalk/signalk-schema": {
-      "version": "1.5.1",
-      "license": "CC-BY-SA-2.0",
-      "dependencies": {
-        "debug": "^2.2.0",
-        "json-schema-ref-parser": "^3.1.2",
-        "JSONStream": "^0.7.4",
-        "lodash": "^4.17.11",
-        "tv4": "^1.2.7",
-        "tv4-formats": "^3.0.3"
-      },
-      "bin": {
-        "signalk-validate-full": "bin/validate.js"
-      }
-    },
-    "node_modules/@signalk/signalk-schema/node_modules/debug": {
-      "version": "2.6.9",
-      "license": "MIT",
-      "dependencies": {
-        "ms": "2.0.0"
       }
     },
     "node_modules/@signalk/signalk-schema/node_modules/jsonparse": {
@@ -889,10 +1109,6 @@
         "node": "*"
       }
     },
-    "node_modules/@signalk/signalk-schema/node_modules/ms": {
-      "version": "2.0.0",
-      "license": "MIT"
-    },
     "node_modules/@signalk/signalk-to-nmea0183": {
       "version": "1.10.0",
       "license": "ISC",
@@ -907,12 +1123,12 @@
       "optional": true
     },
     "node_modules/@signalk/streams": {
-      "version": "2.3.0",
+      "version": "4.0.0",
       "license": "Apache-2.0",
       "dependencies": {
-        "@canboat/canboatjs": "^1.4.0",
+        "@canboat/canboatjs": "^2.0.0",
         "@signalk/client": "^2.3.0",
-        "@signalk/n2k-signalk": "^2.0.0",
+        "@signalk/n2k-signalk": "^3.0.0",
         "@signalk/nmea0183-signalk": "^3.0.0",
         "@signalk/nmea0183-utilities": "^0.8.0",
         "@signalk/signalk-schema": "^1.5.0",
@@ -920,12 +1136,20 @@
         "file-timestamp-stream": "^2.1.2",
         "lodash": "^4.17.4",
         "moment": "^2.24.0",
-        "node-gpsd": "^0.3.0",
+        "node-gpsd-client": "^1.4.1",
         "reconnect-core": "^1.3.0",
         "stream-throttle": "^0.1.3"
       },
       "optionalDependencies": {
-        "serialport": "^9.0.1"
+        "serialport": "^11.0.0"
+      }
+    },
+    "node_modules/@signalk/udp-nmea-plugin": {
+      "version": "2.0.0",
+      "license": "Apache-2.0",
+      "optional": true,
+      "dependencies": {
+        "netmask": "^2.0.1"
       }
     },
     "node_modules/@signalk/vesselpositions": {
@@ -946,6 +1170,11 @@
       "license": "MIT",
       "optional": true
     },
+    "node_modules/@socket.io/component-emitter": {
+      "version": "3.1.0",
+      "license": "MIT",
+      "optional": true
+    },
     "node_modules/@tootallnate/once": {
       "version": "2.0.0",
       "license": "MIT",
@@ -957,13 +1186,6 @@
     "node_modules/@types/configstore": {
       "version": "2.1.1",
       "license": "MIT"
-    },
-    "node_modules/@types/debug": {
-      "version": "4.1.8",
-      "license": "MIT",
-      "dependencies": {
-        "@types/ms": "*"
-      }
     },
     "node_modules/@types/eslint": {
       "version": "8.44.2",
@@ -1018,10 +1240,6 @@
       "dependencies": {
         "@types/node": "*"
       }
-    },
-    "node_modules/@types/ms": {
-      "version": "0.7.31",
-      "license": "MIT"
     },
     "node_modules/@types/node": {
       "version": "8.10.66",
@@ -1322,7 +1540,6 @@
     "node_modules/ajv": {
       "version": "6.12.6",
       "license": "MIT",
-      "peer": true,
       "dependencies": {
         "fast-deep-equal": "^3.1.1",
         "fast-json-stable-stringify": "^2.0.0",
@@ -1385,6 +1602,23 @@
     "node_modules/any-shell-escape": {
       "version": "0.1.1",
       "license": "MIT"
+    },
+    "node_modules/api-schema-builder": {
+      "version": "2.0.11",
+      "license": "Apache-2.0",
+      "dependencies": {
+        "ajv": "^6.12.6",
+        "clone-deep": "^4.0.1",
+        "decimal.js": "^10.3.1",
+        "js-yaml": "^3.14.1",
+        "json-schema-deref-sync": "^0.14.0",
+        "lodash.get": "^4.4.2",
+        "openapi-schema-validator": "^3.0.3",
+        "swagger-parser": "^10.0.3"
+      },
+      "engines": {
+        "node": ">=8"
+      }
     },
     "node_modules/application-config-path": {
       "version": "0.1.1",
@@ -1457,6 +1691,11 @@
         "eventemitter3": ">=1.1.0"
       }
     },
+    "node_modules/atob-lite": {
+      "version": "2.0.0",
+      "license": "MIT",
+      "optional": true
+    },
     "node_modules/backoff": {
       "version": "2.5.0",
       "license": "MIT",
@@ -1506,6 +1745,11 @@
     "node_modules/bcryptjs": {
       "version": "2.4.3",
       "license": "MIT"
+    },
+    "node_modules/before-after-hook": {
+      "version": "2.2.3",
+      "license": "Apache-2.0",
+      "optional": true
     },
     "node_modules/big-integer": {
       "version": "1.6.51",
@@ -1576,6 +1820,11 @@
       "version": "2.0.0",
       "license": "MIT"
     },
+    "node_modules/bottleneck": {
+      "version": "2.19.5",
+      "license": "MIT",
+      "optional": true
+    },
     "node_modules/brace-expansion": {
       "version": "1.1.11",
       "license": "MIT",
@@ -1614,6 +1863,11 @@
       "engines": {
         "node": "^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7"
       }
+    },
+    "node_modules/btoa-lite": {
+      "version": "1.0.0",
+      "license": "MIT",
+      "optional": true
     },
     "node_modules/buffer": {
       "version": "5.7.1",
@@ -1666,12 +1920,12 @@
       }
     },
     "node_modules/busboy": {
-      "version": "0.3.1",
+      "version": "1.6.0",
       "dependencies": {
-        "dicer": "0.3.0"
+        "streamsearch": "^1.1.0"
       },
       "engines": {
-        "node": ">=4.5.0"
+        "node": ">=10.16.0"
       }
     },
     "node_modules/bytes": {
@@ -1712,18 +1966,18 @@
       }
     },
     "node_modules/cacache/node_modules/glob": {
-      "version": "10.3.3",
+      "version": "10.3.10",
       "license": "ISC",
       "optional": true,
       "dependencies": {
         "foreground-child": "^3.1.0",
-        "jackspeak": "^2.0.3",
+        "jackspeak": "^2.3.5",
         "minimatch": "^9.0.1",
         "minipass": "^5.0.0 || ^6.0.2 || ^7.0.0",
         "path-scurry": "^1.10.1"
       },
       "bin": {
-        "glob": "dist/cjs/src/bin.js"
+        "glob": "dist/esm/bin.mjs"
       },
       "engines": {
         "node": ">=16 || 14 >=14.17"
@@ -1755,7 +2009,7 @@
       }
     },
     "node_modules/cacache/node_modules/minipass": {
-      "version": "7.0.3",
+      "version": "7.0.4",
       "license": "ISC",
       "optional": true,
       "engines": {
@@ -1799,6 +2053,16 @@
         "readable-stream": "> 1.0.0 < 3.0.0"
       }
     },
+    "node_modules/camelcase": {
+      "version": "6.3.0",
+      "license": "MIT",
+      "engines": {
+        "node": ">=10"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
     "node_modules/caniuse-lite": {
       "version": "1.0.30001524",
       "funding": [
@@ -1839,6 +2103,13 @@
     "node_modules/chardet": {
       "version": "0.7.0",
       "license": "MIT"
+    },
+    "node_modules/charenc": {
+      "version": "0.0.2",
+      "license": "BSD-3-Clause",
+      "engines": {
+        "node": "*"
+      }
     },
     "node_modules/chownr": {
       "version": "2.0.0",
@@ -1935,6 +2206,13 @@
       "license": "ISC",
       "engines": {
         "node": ">= 10"
+      }
+    },
+    "node_modules/clone": {
+      "version": "2.1.2",
+      "license": "MIT",
+      "engines": {
+        "node": ">=0.8"
       }
     },
     "node_modules/clone-deep": {
@@ -2269,6 +2547,13 @@
         "node": ">= 8"
       }
     },
+    "node_modules/crypt": {
+      "version": "0.0.2",
+      "license": "BSD-3-Clause",
+      "engines": {
+        "node": "*"
+      }
+    },
     "node_modules/d": {
       "version": "1.0.1",
       "license": "ISC",
@@ -2277,10 +2562,15 @@
         "type": "^1.0.1"
       }
     },
+    "node_modules/dag-map": {
+      "version": "1.0.2",
+      "license": "MIT"
+    },
     "node_modules/date-fns": {
       "version": "2.0.0-alpha.27",
       "hasInstallScript": true,
-      "license": "MIT"
+      "license": "MIT",
+      "optional": true
     },
     "node_modules/dbus-native": {
       "version": "0.2.5",
@@ -2320,36 +2610,27 @@
       "version": "2.1.2",
       "license": "MIT"
     },
-    "node_modules/decompress-response": {
-      "version": "6.0.0",
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "mimic-response": "^3.1.0"
-      },
-      "engines": {
-        "node": ">=10"
-      },
-      "funding": {
-        "url": "https://github.com/sponsors/sindresorhus"
-      }
-    },
-    "node_modules/deep-extend": {
-      "version": "0.6.0",
-      "license": "MIT",
-      "optional": true,
-      "engines": {
-        "node": ">=4.0.0"
-      }
-    },
-    "node_modules/deep-get-set": {
-      "version": "1.1.1",
+    "node_modules/decimal.js": {
+      "version": "10.4.3",
       "license": "MIT"
     },
-    "node_modules/define-properties": {
-      "version": "1.2.0",
+    "node_modules/define-data-property": {
+      "version": "1.1.0",
       "license": "MIT",
       "dependencies": {
+        "get-intrinsic": "^1.2.1",
+        "gopd": "^1.0.1",
+        "has-property-descriptors": "^1.0.0"
+      },
+      "engines": {
+        "node": ">= 0.4"
+      }
+    },
+    "node_modules/define-properties": {
+      "version": "1.2.1",
+      "license": "MIT",
+      "dependencies": {
+        "define-data-property": "^1.0.1",
         "has-property-descriptors": "^1.0.0",
         "object-keys": "^1.1.1"
       },
@@ -2372,6 +2653,11 @@
         "node": ">= 0.8"
       }
     },
+    "node_modules/deprecation": {
+      "version": "2.3.1",
+      "license": "ISC",
+      "optional": true
+    },
     "node_modules/destroy": {
       "version": "1.2.0",
       "license": "MIT",
@@ -2379,18 +2665,6 @@
         "node": ">= 0.8",
         "npm": "1.2.8000 || >= 1.4.16"
       }
-    },
-    "node_modules/detect-libc": {
-      "version": "2.0.2",
-      "license": "Apache-2.0",
-      "optional": true,
-      "engines": {
-        "node": ">=8"
-      }
-    },
-    "node_modules/dev-null-stream": {
-      "version": "0.0.1",
-      "license": "ISC"
     },
     "node_modules/devcert": {
       "version": "1.2.2",
@@ -2432,6 +2706,16 @@
         "ms": "^2.1.1"
       }
     },
+    "node_modules/devcert/node_modules/rimraf": {
+      "version": "2.7.1",
+      "license": "ISC",
+      "dependencies": {
+        "glob": "^7.1.3"
+      },
+      "bin": {
+        "rimraf": "bin.js"
+      }
+    },
     "node_modules/diagnostics": {
       "version": "2.0.2",
       "license": "MIT",
@@ -2440,15 +2724,6 @@
         "enabled": "2.0.x",
         "kuler": "^2.0.0",
         "storage-engine": "3.0.x"
-      }
-    },
-    "node_modules/dicer": {
-      "version": "0.3.0",
-      "dependencies": {
-        "streamsearch": "0.1.2"
-      },
-      "engines": {
-        "node": ">=4.5.0"
       }
     },
     "node_modules/dns-js": {
@@ -2579,6 +2854,46 @@
       "license": "MIT",
       "dependencies": {
         "once": "^1.4.0"
+      }
+    },
+    "node_modules/engine.io-client": {
+      "version": "6.5.2",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@socket.io/component-emitter": "~3.1.0",
+        "debug": "~4.3.1",
+        "engine.io-parser": "~5.2.1",
+        "ws": "~8.11.0",
+        "xmlhttprequest-ssl": "~2.0.0"
+      }
+    },
+    "node_modules/engine.io-client/node_modules/ws": {
+      "version": "8.11.0",
+      "license": "MIT",
+      "optional": true,
+      "engines": {
+        "node": ">=10.0.0"
+      },
+      "peerDependencies": {
+        "bufferutil": "^4.0.1",
+        "utf-8-validate": "^5.0.2"
+      },
+      "peerDependenciesMeta": {
+        "bufferutil": {
+          "optional": true
+        },
+        "utf-8-validate": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/engine.io-parser": {
+      "version": "5.2.1",
+      "license": "MIT",
+      "optional": true,
+      "engines": {
+        "node": ">=10.0.0"
       }
     },
     "node_modules/enhanced-resolve": {
@@ -2813,14 +3128,6 @@
         "node": ">=0.8.x"
       }
     },
-    "node_modules/expand-template": {
-      "version": "2.0.3",
-      "license": "(MIT OR WTFPL)",
-      "optional": true,
-      "engines": {
-        "node": ">=6"
-      }
-    },
     "node_modules/expand-tilde": {
       "version": "2.0.2",
       "license": "MIT",
@@ -3004,13 +3311,11 @@
     },
     "node_modules/fast-deep-equal": {
       "version": "3.1.3",
-      "license": "MIT",
-      "peer": true
+      "license": "MIT"
     },
     "node_modules/fast-json-stable-stringify": {
       "version": "2.1.0",
-      "license": "MIT",
-      "peer": true
+      "license": "MIT"
     },
     "node_modules/fastest-levenshtein": {
       "version": "1.0.16",
@@ -3060,11 +3365,6 @@
       "engines": {
         "node": ">=6.0.0"
       }
-    },
-    "node_modules/file-uri-to-path": {
-      "version": "1.0.0",
-      "license": "MIT",
-      "optional": true
     },
     "node_modules/finalhandler": {
       "version": "1.2.0",
@@ -3134,10 +3434,6 @@
         "url": "https://github.com/sponsors/isaacs"
       }
     },
-    "node_modules/format-util": {
-      "version": "1.0.5",
-      "license": "MIT"
-    },
     "node_modules/forwarded": {
       "version": "0.2.0",
       "license": "MIT",
@@ -3160,11 +3456,6 @@
       "version": "0.1.7",
       "license": "MIT"
     },
-    "node_modules/fs-constants": {
-      "version": "1.0.0",
-      "license": "MIT",
-      "optional": true
-    },
     "node_modules/fs-minipass": {
       "version": "3.0.3",
       "license": "ISC",
@@ -3177,7 +3468,7 @@
       }
     },
     "node_modules/fs-minipass/node_modules/minipass": {
-      "version": "7.0.3",
+      "version": "7.0.4",
       "license": "ISC",
       "optional": true,
       "engines": {
@@ -3203,6 +3494,16 @@
       },
       "engines": {
         "node": ">=0.6"
+      }
+    },
+    "node_modules/fstream/node_modules/rimraf": {
+      "version": "2.7.1",
+      "license": "ISC",
+      "dependencies": {
+        "glob": "^7.1.3"
+      },
+      "bin": {
+        "rimraf": "bin.js"
       }
     },
     "node_modules/function-bind": {
@@ -3233,6 +3534,13 @@
       },
       "engines": {
         "node": "^12.13.0 || ^14.15.0 || >=16.0.0"
+      }
+    },
+    "node_modules/geojson-validation": {
+      "version": "0.2.1",
+      "license": "LGPL-3",
+      "bin": {
+        "gjv": "bin/gjv"
       }
     },
     "node_modules/geolib": {
@@ -3278,11 +3586,6 @@
         "Ais2JsonClient": "bin/Ais2JsonClient.js"
       }
     },
-    "node_modules/github-from-package": {
-      "version": "0.0.0",
-      "license": "MIT",
-      "optional": true
-    },
     "node_modules/glob": {
       "version": "7.2.3",
       "license": "ISC",
@@ -3299,14 +3602,6 @@
       },
       "funding": {
         "url": "https://github.com/sponsors/isaacs"
-      }
-    },
-    "node_modules/glob-parent": {
-      "version": "3.1.0",
-      "license": "ISC",
-      "dependencies": {
-        "is-glob": "^3.1.0",
-        "path-dirname": "^1.0.0"
       }
     },
     "node_modules/glob-stream": {
@@ -3326,6 +3621,24 @@
       },
       "engines": {
         "node": ">= 0.10"
+      }
+    },
+    "node_modules/glob-stream/node_modules/glob-parent": {
+      "version": "3.1.0",
+      "license": "ISC",
+      "dependencies": {
+        "is-glob": "^3.1.0",
+        "path-dirname": "^1.0.0"
+      }
+    },
+    "node_modules/glob-stream/node_modules/is-glob": {
+      "version": "3.1.0",
+      "license": "MIT",
+      "dependencies": {
+        "is-extglob": "^2.1.0"
+      },
+      "engines": {
+        "node": ">=0.10.0"
       }
     },
     "node_modules/glob-to-regexp": {
@@ -3357,6 +3670,16 @@
       },
       "engines": {
         "node": ">=0.10.0"
+      }
+    },
+    "node_modules/gopd": {
+      "version": "1.0.1",
+      "license": "MIT",
+      "dependencies": {
+        "get-intrinsic": "^1.1.3"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/ljharb"
       }
     },
     "node_modules/graceful-fs": {
@@ -3664,6 +3987,10 @@
       "version": "0.3.2",
       "license": "MIT"
     },
+    "node_modules/is-buffer": {
+      "version": "1.1.6",
+      "license": "MIT"
+    },
     "node_modules/is-core-module": {
       "version": "2.13.0",
       "license": "MIT",
@@ -3688,11 +4015,28 @@
         "node": ">=8"
       }
     },
-    "node_modules/is-glob": {
-      "version": "3.1.0",
+    "node_modules/is-invalid-path": {
+      "version": "0.1.0",
       "license": "MIT",
       "dependencies": {
-        "is-extglob": "^2.1.0"
+        "is-glob": "^2.0.0"
+      },
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/is-invalid-path/node_modules/is-extglob": {
+      "version": "1.0.0",
+      "license": "MIT",
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/is-invalid-path/node_modules/is-glob": {
+      "version": "2.0.1",
+      "license": "MIT",
+      "dependencies": {
+        "is-extglob": "^1.0.0"
       },
       "engines": {
         "node": ">=0.10.0"
@@ -3768,6 +4112,16 @@
         "punycode": "^2.1.1"
       }
     },
+    "node_modules/is-valid-path": {
+      "version": "0.1.1",
+      "license": "MIT",
+      "dependencies": {
+        "is-invalid-path": "^0.1.0"
+      },
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
     "node_modules/is-windows": {
       "version": "1.0.2",
       "license": "MIT",
@@ -3798,7 +4152,7 @@
       }
     },
     "node_modules/jackspeak": {
-      "version": "2.3.0",
+      "version": "2.3.6",
       "license": "BlueOak-1.0.0",
       "optional": true,
       "dependencies": {
@@ -3869,33 +4223,33 @@
       "version": "0.7.0",
       "license": "BSD"
     },
-    "node_modules/json-schema-ref-parser": {
-      "version": "3.3.1",
+    "node_modules/json-schema-deref-sync": {
+      "version": "0.14.0",
       "license": "MIT",
       "dependencies": {
-        "call-me-maybe": "^1.0.1",
-        "debug": "^3.0.0",
-        "es6-promise": "^4.1.1",
-        "js-yaml": "^3.9.1",
-        "ono": "^4.0.2",
-        "z-schema": "^3.18.2"
+        "clone": "^2.1.2",
+        "dag-map": "~1.0.0",
+        "is-valid-path": "^0.1.1",
+        "lodash": "^4.17.13",
+        "md5": "~2.2.0",
+        "memory-cache": "~0.2.0",
+        "traverse": "~0.6.6",
+        "valid-url": "~1.0.9"
+      },
+      "engines": {
+        "node": ">=6.0.0"
       }
     },
-    "node_modules/json-schema-ref-parser/node_modules/debug": {
-      "version": "3.2.7",
+    "node_modules/json-schema-deref-sync/node_modules/traverse": {
+      "version": "0.6.7",
       "license": "MIT",
-      "dependencies": {
-        "ms": "^2.1.1"
+      "funding": {
+        "url": "https://github.com/sponsors/ljharb"
       }
-    },
-    "node_modules/json-schema-ref-parser/node_modules/es6-promise": {
-      "version": "4.2.8",
-      "license": "MIT"
     },
     "node_modules/json-schema-traverse": {
       "version": "0.4.1",
-      "license": "MIT",
-      "peer": true
+      "license": "MIT"
     },
     "node_modules/json-stable-stringify-without-jsonify": {
       "version": "1.0.1",
@@ -3923,7 +4277,7 @@
       }
     },
     "node_modules/jsonwebtoken": {
-      "version": "8.5.1",
+      "version": "9.0.2",
       "license": "MIT",
       "dependencies": {
         "jws": "^3.2.2",
@@ -3935,18 +4289,11 @@
         "lodash.isstring": "^4.0.1",
         "lodash.once": "^4.0.0",
         "ms": "^2.1.1",
-        "semver": "^5.6.0"
+        "semver": "^7.5.4"
       },
       "engines": {
-        "node": ">=4",
-        "npm": ">=1.4.28"
-      }
-    },
-    "node_modules/jsonwebtoken/node_modules/semver": {
-      "version": "5.7.2",
-      "license": "ISC",
-      "bin": {
-        "semver": "bin/semver"
+        "node": ">=12",
+        "npm": ">=6"
       }
     },
     "node_modules/jwa": {
@@ -4271,9 +4618,23 @@
       "version": "4.0.1",
       "license": "MIT"
     },
+    "node_modules/lodash.merge": {
+      "version": "4.6.2",
+      "license": "MIT"
+    },
     "node_modules/lodash.once": {
       "version": "4.1.1",
       "license": "MIT"
+    },
+    "node_modules/lodash.set": {
+      "version": "4.3.2",
+      "license": "MIT",
+      "optional": true
+    },
+    "node_modules/lodash.uniq": {
+      "version": "4.5.0",
+      "license": "MIT",
+      "optional": true
     },
     "node_modules/log-symbols": {
       "version": "1.0.2",
@@ -4404,6 +4765,17 @@
         "node": ">=10"
       }
     },
+    "node_modules/macos-release": {
+      "version": "2.5.1",
+      "license": "MIT",
+      "optional": true,
+      "engines": {
+        "node": ">=6"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
     "node_modules/make-fetch-happen": {
       "version": "11.1.1",
       "license": "ISC",
@@ -4466,6 +4838,15 @@
       "version": "0.0.7",
       "license": "MIT"
     },
+    "node_modules/md5": {
+      "version": "2.2.1",
+      "license": "BSD-3-Clause",
+      "dependencies": {
+        "charenc": "~0.0.1",
+        "crypt": "~0.0.1",
+        "is-buffer": "~1.1.1"
+      }
+    },
     "node_modules/mdns": {
       "version": "2.7.2",
       "optional": true,
@@ -4510,6 +4891,10 @@
       "engines": {
         "node": ">= 0.6"
       }
+    },
+    "node_modules/memory-cache": {
+      "version": "0.2.0",
+      "license": "BSD-2-Clause"
     },
     "node_modules/merge-descriptors": {
       "version": "1.0.1",
@@ -4563,17 +4948,6 @@
       "license": "MIT",
       "engines": {
         "node": ">=6"
-      }
-    },
-    "node_modules/mimic-response": {
-      "version": "3.1.0",
-      "license": "MIT",
-      "optional": true,
-      "engines": {
-        "node": ">=10"
-      },
-      "funding": {
-        "url": "https://github.com/sponsors/sindresorhus"
       }
     },
     "node_modules/minimatch": {
@@ -4640,7 +5014,7 @@
       }
     },
     "node_modules/minipass-fetch/node_modules/minipass": {
-      "version": "7.0.3",
+      "version": "7.0.4",
       "license": "ISC",
       "optional": true,
       "engines": {
@@ -4745,11 +5119,6 @@
       "bin": {
         "mkdirp": "bin/cmd.js"
       }
-    },
-    "node_modules/mkdirp-classic": {
-      "version": "0.5.3",
-      "license": "MIT",
-      "optional": true
     },
     "node_modules/moment": {
       "version": "2.29.4",
@@ -4864,11 +5233,6 @@
         "node": "^10 || ^12 || ^13.7 || ^14 || >=15.0.1"
       }
     },
-    "node_modules/napi-build-utils": {
-      "version": "1.0.2",
-      "license": "MIT",
-      "optional": true
-    },
     "node_modules/ncp": {
       "version": "2.0.0",
       "license": "MIT",
@@ -4888,20 +5252,29 @@
       "license": "MIT",
       "peer": true
     },
+    "node_modules/netmask": {
+      "version": "2.0.2",
+      "license": "MIT",
+      "optional": true,
+      "engines": {
+        "node": ">= 0.4.0"
+      }
+    },
     "node_modules/next-tick": {
       "version": "1.1.0",
       "license": "ISC"
     },
-    "node_modules/node-abi": {
-      "version": "3.47.0",
+    "node_modules/ngeohash": {
+      "version": "0.6.3",
       "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "semver": "^7.3.5"
-      },
       "engines": {
-        "node": ">=10"
+        "node": ">=v0.2.0"
       }
+    },
+    "node_modules/nice-try": {
+      "version": "1.0.5",
+      "license": "MIT",
+      "optional": true
     },
     "node_modules/node-addon-api": {
       "version": "6.1.0",
@@ -4926,11 +5299,9 @@
         }
       }
     },
-    "node_modules/node-gpsd": {
-      "version": "0.3.4",
-      "engines": {
-        "node": ">=v0.8.0"
-      }
+    "node_modules/node-gpsd-client": {
+      "version": "1.4.1",
+      "license": "MIT"
     },
     "node_modules/node-gyp": {
       "version": "9.4.0",
@@ -4964,20 +5335,6 @@
         "node-gyp-build": "bin.js",
         "node-gyp-build-optional": "optional.js",
         "node-gyp-build-test": "build-test.js"
-      }
-    },
-    "node_modules/node-gyp/node_modules/rimraf": {
-      "version": "3.0.2",
-      "license": "ISC",
-      "optional": true,
-      "dependencies": {
-        "glob": "^7.1.3"
-      },
-      "bin": {
-        "rimraf": "bin.js"
-      },
-      "funding": {
-        "url": "https://github.com/sponsors/isaacs"
       }
     },
     "node_modules/node-gyp/node_modules/which": {
@@ -5073,6 +5430,11 @@
         "node": ">= 0.4"
       }
     },
+    "node_modules/octokit-pagination-methods": {
+      "version": "1.1.0",
+      "license": "MIT",
+      "optional": true
+    },
     "node_modules/on-finished": {
       "version": "2.4.1",
       "license": "MIT",
@@ -5110,12 +5472,19 @@
         "url": "https://github.com/sponsors/sindresorhus"
       }
     },
-    "node_modules/ono": {
-      "version": "4.0.11",
+    "node_modules/openapi-schema-validator": {
+      "version": "3.0.3",
       "license": "MIT",
       "dependencies": {
-        "format-util": "^1.0.3"
+        "ajv": "^6.5.2",
+        "lodash.merge": "^4.6.1",
+        "openapi-types": "1.3.4",
+        "swagger-schema-official": "2.0.0-bab6bed"
       }
+    },
+    "node_modules/openapi-types": {
+      "version": "1.3.4",
+      "license": "MIT"
     },
     "node_modules/optimist": {
       "version": "0.6.1",
@@ -5136,11 +5505,31 @@
         "readable-stream": "^2.0.1"
       }
     },
+    "node_modules/os-name": {
+      "version": "3.1.0",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "macos-release": "^2.2.0",
+        "windows-release": "^3.1.0"
+      },
+      "engines": {
+        "node": ">=6"
+      }
+    },
     "node_modules/os-tmpdir": {
       "version": "1.0.2",
       "license": "MIT",
       "engines": {
         "node": ">=0.10.0"
+      }
+    },
+    "node_modules/p-finally": {
+      "version": "1.0.0",
+      "license": "MIT",
+      "optional": true,
+      "engines": {
+        "node": ">=4"
       }
     },
     "node_modules/p-limit": {
@@ -5281,31 +5670,6 @@
       },
       "engines": {
         "node": ">=8"
-      }
-    },
-    "node_modules/prebuild-install": {
-      "version": "7.1.1",
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "detect-libc": "^2.0.0",
-        "expand-template": "^2.0.3",
-        "github-from-package": "0.0.0",
-        "minimist": "^1.2.3",
-        "mkdirp-classic": "^0.5.3",
-        "napi-build-utils": "^1.0.1",
-        "node-abi": "^3.3.0",
-        "pump": "^3.0.0",
-        "rc": "^1.2.7",
-        "simple-get": "^4.0.0",
-        "tar-fs": "^2.0.0",
-        "tunnel-agent": "^0.6.0"
-      },
-      "bin": {
-        "prebuild-install": "bin.js"
-      },
-      "engines": {
-        "node": ">=10"
       }
     },
     "node_modules/precond": {
@@ -5450,20 +5814,6 @@
         "node": ">= 0.8"
       }
     },
-    "node_modules/rc": {
-      "version": "1.2.8",
-      "license": "(BSD-2-Clause OR MIT OR Apache-2.0)",
-      "optional": true,
-      "dependencies": {
-        "deep-extend": "^0.6.0",
-        "ini": "~1.3.0",
-        "minimist": "^1.2.0",
-        "strip-json-comments": "~2.0.1"
-      },
-      "bin": {
-        "rc": "cli.js"
-      }
-    },
     "node_modules/readable-stream": {
       "version": "2.3.8",
       "license": "MIT",
@@ -5568,13 +5918,17 @@
       "license": "MIT"
     },
     "node_modules/rimraf": {
-      "version": "2.7.1",
+      "version": "3.0.2",
+      "devOptional": true,
       "license": "ISC",
       "dependencies": {
         "glob": "^7.1.3"
       },
       "bin": {
         "rimraf": "bin.js"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/isaacs"
       }
     },
     "node_modules/run-async": {
@@ -5678,24 +6032,27 @@
       }
     },
     "node_modules/serialport": {
-      "version": "9.2.8",
+      "version": "11.0.1",
       "license": "MIT",
       "optional": true,
       "dependencies": {
-        "@serialport/binding-mock": "9.2.4",
-        "@serialport/bindings": "9.2.8",
-        "@serialport/parser-byte-length": "9.2.4",
-        "@serialport/parser-cctalk": "9.2.4",
-        "@serialport/parser-delimiter": "9.2.4",
-        "@serialport/parser-inter-byte-timeout": "9.2.4",
-        "@serialport/parser-readline": "9.2.4",
-        "@serialport/parser-ready": "9.2.4",
-        "@serialport/parser-regex": "9.2.4",
-        "@serialport/stream": "9.2.4",
-        "debug": "^4.3.2"
+        "@serialport/binding-mock": "10.2.2",
+        "@serialport/bindings-cpp": "11.0.3",
+        "@serialport/parser-byte-length": "11.0.1",
+        "@serialport/parser-cctalk": "11.0.1",
+        "@serialport/parser-delimiter": "11.0.1",
+        "@serialport/parser-inter-byte-timeout": "11.0.1",
+        "@serialport/parser-packet-length": "11.0.1",
+        "@serialport/parser-readline": "11.0.1",
+        "@serialport/parser-ready": "11.0.1",
+        "@serialport/parser-regex": "11.0.1",
+        "@serialport/parser-slip-encoder": "11.0.1",
+        "@serialport/parser-spacepacket": "11.0.1",
+        "@serialport/stream": "11.0.1",
+        "debug": "4.3.4"
       },
       "engines": {
-        "node": ">=10.0.0"
+        "node": ">=12.0.0"
       },
       "funding": {
         "url": "https://opencollective.com/serialport/donate"
@@ -5803,6 +6160,7 @@
     "node_modules/signalk-n2kais-to-nmea0183": {
       "version": "1.3.1",
       "license": "ISC",
+      "optional": true,
       "dependencies": {
         "ggencoder": "^0.1.18"
       }
@@ -5810,14 +6168,106 @@
     "node_modules/signalk-n2kais-to-nmea0183/node_modules/ggencoder": {
       "version": "0.1.21",
       "license": "apache20",
+      "optional": true,
       "bin": {
         "Ais2JsonClient": "bin/Ais2JsonClient.js"
       }
     },
+    "node_modules/signalk-to-nmea2000": {
+      "version": "2.16.0",
+      "license": "ISC",
+      "optional": true,
+      "dependencies": {
+        "@canboat/canboatjs": "1.x",
+        "@signalk/github-create-release": "^1.2.1",
+        "baconjs": "^0.7.88",
+        "debug": "^3.1.0",
+        "lodash": "^4.17.4"
+      },
+      "engines": {
+        "node": ">=10"
+      }
+    },
+    "node_modules/signalk-to-nmea2000/node_modules/@canboat/canboatjs": {
+      "version": "1.28.4",
+      "license": "Apache-2.0",
+      "optional": true,
+      "dependencies": {
+        "@canboat/pgns": "^1.4.0",
+        "bit-buffer": "0.2.3",
+        "date-fns": "2.0.0-alpha.27",
+        "debug": "^4.3.4",
+        "dnssd": "^0.4.1",
+        "int64-buffer": "^0.1.10",
+        "lodash": "^4.17.4",
+        "minimist": "^1.2.0",
+        "mqtt": "^2.18.8",
+        "split": "^1.0.1"
+      },
+      "bin": {
+        "actisense-file": "bin/actisense-file",
+        "actisense-n2k-tcp": "bin/actisense-n2k-tcp",
+        "actisense-serialjs": "bin/actisense-serialjs",
+        "analyzerjs": "bin/analyzerjs",
+        "candumpanalyzerjs": "bin/candumpanalyzerjs",
+        "candumpjs": "bin/candumpjs",
+        "ikonvert-serial": "bin/ikonvert-serial",
+        "to-pgn": "bin/to-pgn"
+      },
+      "optionalDependencies": {
+        "serialport": "^11.0.1",
+        "socketcan": "^4.0.3"
+      }
+    },
+    "node_modules/signalk-to-nmea2000/node_modules/@canboat/canboatjs/node_modules/debug": {
+      "version": "4.3.4",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "ms": "2.1.2"
+      },
+      "engines": {
+        "node": ">=6.0"
+      },
+      "peerDependenciesMeta": {
+        "supports-color": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/signalk-to-nmea2000/node_modules/@canboat/pgns": {
+      "version": "1.4.2",
+      "license": "Apache-2.0",
+      "optional": true
+    },
+    "node_modules/signalk-to-nmea2000/node_modules/baconjs": {
+      "version": "0.7.95",
+      "license": "MIT",
+      "optional": true
+    },
+    "node_modules/signalk-to-nmea2000/node_modules/debug": {
+      "version": "3.2.7",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "ms": "^2.1.1"
+      }
+    },
+    "node_modules/signalk-to-nmea2000/node_modules/int64-buffer": {
+      "version": "0.1.10",
+      "license": "MIT",
+      "optional": true
+    },
+    "node_modules/signalk-to-nmea2000/node_modules/ms": {
+      "version": "2.1.2",
+      "license": "MIT",
+      "optional": true
+    },
     "node_modules/signalk-venus-plugin": {
-      "version": "1.32.0",
+      "version": "1.33.1",
       "license": "MIT",
       "dependencies": {
+        "camelcase": "^6.3.0",
         "dbus-native": "^0.2.5",
         "debug": "^3.1.0",
         "lodash": "^4.17.4",
@@ -5966,49 +6416,6 @@
         "readable-stream": "^3.0.0"
       }
     },
-    "node_modules/simple-concat": {
-      "version": "1.0.1",
-      "funding": [
-        {
-          "type": "github",
-          "url": "https://github.com/sponsors/feross"
-        },
-        {
-          "type": "patreon",
-          "url": "https://www.patreon.com/feross"
-        },
-        {
-          "type": "consulting",
-          "url": "https://feross.org/support"
-        }
-      ],
-      "license": "MIT",
-      "optional": true
-    },
-    "node_modules/simple-get": {
-      "version": "4.0.1",
-      "funding": [
-        {
-          "type": "github",
-          "url": "https://github.com/sponsors/feross"
-        },
-        {
-          "type": "patreon",
-          "url": "https://www.patreon.com/feross"
-        },
-        {
-          "type": "consulting",
-          "url": "https://feross.org/support"
-        }
-      ],
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "decompress-response": "^6.0.0",
-        "once": "^1.3.1",
-        "simple-concat": "^1.0.0"
-      }
-    },
     "node_modules/simple-swizzle": {
       "version": "0.2.2",
       "license": "MIT",
@@ -6032,8 +6439,34 @@
         "npm": ">= 3.0.0"
       }
     },
+    "node_modules/socket.io-client": {
+      "version": "4.7.2",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@socket.io/component-emitter": "~3.1.0",
+        "debug": "~4.3.2",
+        "engine.io-client": "~6.5.2",
+        "socket.io-parser": "~4.2.4"
+      },
+      "engines": {
+        "node": ">=10.0.0"
+      }
+    },
+    "node_modules/socket.io-parser": {
+      "version": "4.2.4",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "@socket.io/component-emitter": "~3.1.0",
+        "debug": "~4.3.1"
+      },
+      "engines": {
+        "node": ">=10.0.0"
+      }
+    },
     "node_modules/socketcan": {
-      "version": "4.0.3",
+      "version": "4.0.4",
       "hasInstallScript": true,
       "license": "MIT",
       "optional": true,
@@ -6134,7 +6567,7 @@
       }
     },
     "node_modules/ssri/node_modules/minipass": {
-      "version": "7.0.3",
+      "version": "7.0.4",
       "license": "ISC",
       "optional": true,
       "engines": {
@@ -6199,9 +6632,9 @@
       }
     },
     "node_modules/streamsearch": {
-      "version": "0.1.2",
+      "version": "1.1.0",
       "engines": {
-        "node": ">=0.8.0"
+        "node": ">=10.0.0"
       }
     },
     "node_modules/string_decoder": {
@@ -6259,8 +6692,8 @@
         "node": ">=8"
       }
     },
-    "node_modules/strip-json-comments": {
-      "version": "2.0.1",
+    "node_modules/strip-eof": {
+      "version": "1.0.0",
       "license": "MIT",
       "optional": true,
       "engines": {
@@ -6290,6 +6723,40 @@
       "funding": {
         "url": "https://github.com/sponsors/ljharb"
       }
+    },
+    "node_modules/swagger-parser": {
+      "version": "10.0.3",
+      "license": "MIT",
+      "dependencies": {
+        "@apidevtools/swagger-parser": "10.0.3"
+      },
+      "engines": {
+        "node": ">=10"
+      }
+    },
+    "node_modules/swagger-parser/node_modules/@apidevtools/swagger-parser": {
+      "version": "10.0.3",
+      "license": "MIT",
+      "dependencies": {
+        "@apidevtools/json-schema-ref-parser": "^9.0.6",
+        "@apidevtools/openapi-schemas": "^2.0.4",
+        "@apidevtools/swagger-methods": "^3.0.2",
+        "@jsdevtools/ono": "^7.1.3",
+        "call-me-maybe": "^1.0.1",
+        "z-schema": "^5.0.1"
+      },
+      "peerDependencies": {
+        "openapi-types": ">=7"
+      }
+    },
+    "node_modules/swagger-parser/node_modules/openapi-types": {
+      "version": "12.1.3",
+      "license": "MIT",
+      "peer": true
+    },
+    "node_modules/swagger-schema-official": {
+      "version": "2.0.0-bab6bed",
+      "license": "ISC"
     },
     "node_modules/swagger-ui-dist": {
       "version": "5.4.2",
@@ -6324,7 +6791,7 @@
       }
     },
     "node_modules/tar": {
-      "version": "6.1.15",
+      "version": "6.2.0",
       "license": "ISC",
       "optional": true,
       "dependencies": {
@@ -6337,60 +6804,6 @@
       },
       "engines": {
         "node": ">=10"
-      }
-    },
-    "node_modules/tar-fs": {
-      "version": "2.1.1",
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "chownr": "^1.1.1",
-        "mkdirp-classic": "^0.5.2",
-        "pump": "^3.0.0",
-        "tar-stream": "^2.1.4"
-      }
-    },
-    "node_modules/tar-fs/node_modules/chownr": {
-      "version": "1.1.4",
-      "license": "ISC",
-      "optional": true
-    },
-    "node_modules/tar-stream": {
-      "version": "2.2.0",
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "bl": "^4.0.3",
-        "end-of-stream": "^1.4.1",
-        "fs-constants": "^1.0.0",
-        "inherits": "^2.0.3",
-        "readable-stream": "^3.1.1"
-      },
-      "engines": {
-        "node": ">=6"
-      }
-    },
-    "node_modules/tar-stream/node_modules/bl": {
-      "version": "4.1.0",
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "buffer": "^5.5.0",
-        "inherits": "^2.0.4",
-        "readable-stream": "^3.4.0"
-      }
-    },
-    "node_modules/tar-stream/node_modules/readable-stream": {
-      "version": "3.6.2",
-      "license": "MIT",
-      "optional": true,
-      "dependencies": {
-        "inherits": "^2.0.3",
-        "string_decoder": "^1.1.1",
-        "util-deprecate": "^1.0.1"
-      },
-      "engines": {
-        "node": ">= 6"
       }
     },
     "node_modules/tar/node_modules/fs-minipass": {
@@ -6540,17 +6953,6 @@
       "version": "1.14.1",
       "license": "0BSD"
     },
-    "node_modules/tunnel-agent": {
-      "version": "0.6.0",
-      "license": "Apache-2.0",
-      "optional": true,
-      "dependencies": {
-        "safe-buffer": "^5.0.1"
-      },
-      "engines": {
-        "node": "*"
-      }
-    },
     "node_modules/tv4": {
       "version": "1.3.0",
       "license": [
@@ -6649,6 +7051,14 @@
         "through2-filter": "^3.0.0"
       }
     },
+    "node_modules/universal-user-agent": {
+      "version": "4.0.1",
+      "license": "ISC",
+      "optional": true,
+      "dependencies": {
+        "os-name": "^3.1.0"
+      }
+    },
     "node_modules/unpipe": {
       "version": "1.0.0",
       "license": "MIT",
@@ -6704,7 +7114,6 @@
     "node_modules/uri-js": {
       "version": "4.4.1",
       "license": "BSD-2-Clause",
-      "peer": true,
       "dependencies": {
         "punycode": "^2.1.0"
       }
@@ -6726,6 +7135,9 @@
       "bin": {
         "uuid": "dist/bin/uuid"
       }
+    },
+    "node_modules/valid-url": {
+      "version": "1.0.9"
     },
     "node_modules/validator": {
       "version": "13.11.0",
@@ -6937,6 +7349,109 @@
       "version": "2.0.1",
       "license": "MIT"
     },
+    "node_modules/windows-release": {
+      "version": "3.3.3",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "execa": "^1.0.0"
+      },
+      "engines": {
+        "node": ">=6"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/windows-release/node_modules/cross-spawn": {
+      "version": "6.0.5",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "nice-try": "^1.0.4",
+        "path-key": "^2.0.1",
+        "semver": "^5.5.0",
+        "shebang-command": "^1.2.0",
+        "which": "^1.2.9"
+      },
+      "engines": {
+        "node": ">=4.8"
+      }
+    },
+    "node_modules/windows-release/node_modules/execa": {
+      "version": "1.0.0",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "cross-spawn": "^6.0.0",
+        "get-stream": "^4.0.0",
+        "is-stream": "^1.1.0",
+        "npm-run-path": "^2.0.0",
+        "p-finally": "^1.0.0",
+        "signal-exit": "^3.0.0",
+        "strip-eof": "^1.0.0"
+      },
+      "engines": {
+        "node": ">=6"
+      }
+    },
+    "node_modules/windows-release/node_modules/get-stream": {
+      "version": "4.1.0",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "pump": "^3.0.0"
+      },
+      "engines": {
+        "node": ">=6"
+      }
+    },
+    "node_modules/windows-release/node_modules/npm-run-path": {
+      "version": "2.0.2",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "path-key": "^2.0.0"
+      },
+      "engines": {
+        "node": ">=4"
+      }
+    },
+    "node_modules/windows-release/node_modules/path-key": {
+      "version": "2.0.1",
+      "license": "MIT",
+      "optional": true,
+      "engines": {
+        "node": ">=4"
+      }
+    },
+    "node_modules/windows-release/node_modules/semver": {
+      "version": "5.7.2",
+      "license": "ISC",
+      "optional": true,
+      "bin": {
+        "semver": "bin/semver"
+      }
+    },
+    "node_modules/windows-release/node_modules/shebang-command": {
+      "version": "1.2.0",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "shebang-regex": "^1.0.0"
+      },
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/windows-release/node_modules/shebang-regex": {
+      "version": "1.0.0",
+      "license": "MIT",
+      "optional": true,
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
     "node_modules/wordwrap": {
       "version": "0.0.3",
       "license": "MIT",
@@ -7044,6 +7559,13 @@
         "node": ">=4.0"
       }
     },
+    "node_modules/xmlhttprequest-ssl": {
+      "version": "2.0.0",
+      "optional": true,
+      "engines": {
+        "node": ">=0.4.0"
+      }
+    },
     "node_modules/xtend": {
       "version": "4.0.2",
       "license": "MIT",
@@ -7056,31 +7578,29 @@
       "license": "ISC"
     },
     "node_modules/z-schema": {
-      "version": "3.25.1",
+      "version": "5.0.5",
       "license": "MIT",
       "dependencies": {
-        "core-js": "^2.5.7",
-        "lodash.get": "^4.0.0",
-        "lodash.isequal": "^4.0.0",
-        "validator": "^10.0.0"
+        "lodash.get": "^4.4.2",
+        "lodash.isequal": "^4.5.0",
+        "validator": "^13.7.0"
       },
       "bin": {
         "z-schema": "bin/z-schema"
       },
+      "engines": {
+        "node": ">=8.0.0"
+      },
       "optionalDependencies": {
-        "commander": "^2.7.1"
+        "commander": "^9.4.1"
       }
     },
-    "node_modules/z-schema/node_modules/core-js": {
-      "version": "2.6.12",
-      "hasInstallScript": true,
-      "license": "MIT"
-    },
-    "node_modules/z-schema/node_modules/validator": {
-      "version": "10.11.0",
+    "node_modules/z-schema/node_modules/commander": {
+      "version": "9.5.0",
       "license": "MIT",
+      "optional": true,
       "engines": {
-        "node": ">= 0.10"
+        "node": "^12.20.0 || >=14"
       }
     },
     "node_modules/zip-stream": {
