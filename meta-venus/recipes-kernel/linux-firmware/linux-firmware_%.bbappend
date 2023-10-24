@@ -42,6 +42,8 @@ FILES:${PN}-bcm43430a1 = "\
 # For mediatek mt7662
 PACKAGES =+ "${PN}-mt7662"
 FILES:${PN}-mt7662 = " \
+  ${nonarch_base_libdir}/firmware/mediatek/mt7662_rom_patch.bin \
+  ${nonarch_base_libdir}/firmware/mediatek/mt7662.bin \
   ${nonarch_base_libdir}/firmware/mt7662_rom_patch.bin \
   ${nonarch_base_libdir}/firmware/mt7662.bin \
 "
