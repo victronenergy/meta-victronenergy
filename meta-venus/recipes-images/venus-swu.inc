@@ -71,6 +71,7 @@ def set_compatible_machines(d):
     deploy_dir = d.getVar("DEPLOY_DIR_IMAGE")
     boards = set()
     for dtb in d.getVar("KERNEL_DEVICETREE").split():
+        dtb = os.path.basename(dtb)
         compatible = subprocess.check_output(["fdtget", os.path.join(deploy_dir, dtb), "/", "compatible"]).decode("utf-8")
         board = compatible.split()[0]
         boards.add('"' + board + '"')
