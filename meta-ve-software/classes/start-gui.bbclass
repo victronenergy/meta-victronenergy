@@ -12,7 +12,7 @@
 inherit daemontools
 
 # and adding it to the list of all known gui's below
-GUIS = "start-gui-v1 start-fingerpaint start-sway"
+GUIS = "start-gui start-gui-v1 start-gui-v2 start-fingerpaint start-sway"
 
 # Not setting DAEMON_PN to something different will remove the whole
 # gui instead of only the daemontools service.
