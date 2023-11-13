@@ -19,7 +19,7 @@ server {
     location /gui {
         add_header Access-Control-Allow-Origin "$http_origin";
         add_header Access-Control-Allow-Credentials true;
-        gzip_static on;
+        gzip_static always;
     }
 
     location ~ \.php$ {
