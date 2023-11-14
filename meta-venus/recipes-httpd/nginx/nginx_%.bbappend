@@ -12,6 +12,7 @@ SRC_URI += " \
 	file://nginx-testmode.conf \
 	file://start-nginx.sh \
 "
+PR = "1"
 
 inherit daemontools
 
