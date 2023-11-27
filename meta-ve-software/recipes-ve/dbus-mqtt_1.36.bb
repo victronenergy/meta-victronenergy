@@ -6,7 +6,7 @@ inherit daemontools-template
 inherit python-compile
 
 RDEPENDS:${PN} = " \
-    mosquitto \
+    flashmq \
     python3-core \
     python3-lxml \
     python3-paho-mqtt \

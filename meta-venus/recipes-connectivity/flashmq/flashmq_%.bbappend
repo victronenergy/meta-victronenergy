@@ -1,16 +1,27 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/flashmq:"
-SRC_URI += "file://flashmq.conf"
+SRC_URI += " \
+    file://flashmq.conf \
+    file://start-flashmq \
+"
 
-inherit daemontools useradd
+inherit daemontools-template useradd
 
 USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM:${PN} = "flashmq"
 USERADD_PARAM:${PN} = "--no-create-home --shell /bin/false -g flashmq flashmq"
 
-DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 10000000 -a 100000000 setuidgid flashmq ${bindir}/flashmq"
+DAEMONTOOLS_RUN = "${sbindir}/start-flashmq"
 
 RDEPENDS:${PN} += "dbus-flashmq"
 
 do_install:append() {
 	install ${WORKDIR}/flashmq.conf ${D}/${sysconfdir}/flashmq/flashmq.conf
+
+    install -d ${D}${sbindir}
+    install -m 0755 ${WORKDIR}/start-flashmq ${D}${sbindir}
+
+    install -d ${D}${sysconfdir}/default/volatiles
+    echo "d root root 0755 /run/flashmq none" > ${D}${sysconfdir}/default/volatiles/50_${PN}
 }
+
+FILES:${PN} += "${sysconfdir}/default"
