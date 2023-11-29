@@ -1,0 +1,28 @@
+From 0a3fba18648474fc4bec9334948fedfe3c6c9fc2 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Thu, 9 Nov 2023 14:43:52 +0000
+Subject: [PATCH 1/2] main: start watchdog earlier
+
+(cherry picked from commit 17104dee8ad0aa59d917c85e113c5e479d03c424)
+---
+ dbus-modbus-client.py | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/dbus-modbus-client.py b/dbus-modbus-client.py
+index 23339fe06126..eabb198c66ec 100755
+--- a/dbus-modbus-client.py
++++ b/dbus-modbus-client.py
+@@ -207,9 +207,8 @@ class Client:
+         if scan:
+             self.start_scan(force_scan)
+ 
+-        self.watchdog.start()
+-
+     def init(self, force_scan):
++        self.watchdog.start()
+         self.init_settings()
+         self.init_devices(force_scan)
+ 
+-- 
+2.43.0
+

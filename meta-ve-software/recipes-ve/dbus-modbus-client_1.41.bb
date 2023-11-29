@@ -15,9 +15,13 @@ RDEPENDS:${PN} = "\
     python3-pymodbus \
 "
 
+PR = "1"
 SRC_URI = " \
     gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https;tag=v${PV} \
     file://start-serial.sh \
+    file://0001-main-start-watchdog-earlier.patch \
+    file://0002-dse-fix-DSE72xx_73xx_61xx_74xx_MkII_Generator.patch \
+    file://0003-comap-Fix-engine-runtime-register-scale-factor.patch \
 "
 S = "${WORKDIR}/git"
 
