@@ -6,7 +6,6 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit deploy image-artifact-names nopackages
 
 INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.cpio.gz.u-boot"
-DTB = "${KERNEL_DEVICETREE}"
 SCR = "install.scr"
 
 BOARD_IDS = ""
@@ -32,6 +31,11 @@ SRC_URI += "${BOARD_IDS}"
 
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
 IMAGE_NAME[vardepsexclude] += "DATETIME"
+
+python () {
+    dtb = d.getVar('KERNEL_DEVICETREE') or ''
+    d.setVar('DTB', ' '.join(map(os.path.basename, dtb.split())))
+}
 
 INSTALL_FILES = "\
     ${SPL_BINARY} \
