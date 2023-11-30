@@ -46,6 +46,13 @@ ACTION=="add", KERNEL=="ttyS2", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVI
 ACTION=="add", SUBSYSTEM=="net", KERNEL=="can0", ENV{VE_NAME}="VE.Can port"
 LABEL="end-maxi-gx-a10"
 
+# Nucleo GX
+ENV{BASE_COMPATIBLE}!="victronenergy,nucleo-gx", GOTO="end-nucleo-gx"
+ACTION=="add", KERNEL=="ttyS[12]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
+ACTION=="add", SUBSYSTEM=="net", ATTR{type}=="280", KERNELS=="1c69000.spi", NAME="vecan0", ENV{VE_NAME}="VE.Can port 1"
+ACTION=="add", SUBSYSTEM=="net", ATTR{type}=="280", KERNELS=="1c68000.spi", NAME="vecan1", ENV{VE_NAME}="VE.Can port 2"
+LABEL="end-nucleo-gx"
+
 # PayGo devices
 ENV{BASE_COMPATIBLE}!="victronenergy,paygo", GOTO="end-paygo"
 ACTION=="add", KERNEL=="ttyS[12]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
