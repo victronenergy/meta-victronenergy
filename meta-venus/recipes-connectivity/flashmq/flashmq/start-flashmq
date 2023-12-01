@@ -14,6 +14,11 @@ get_setting() {
         awk '/int32/ { print $3 }'
 }
 
+if [ ! -f $bridge_conf ]; then
+    mkdir -p $(dirname $bridge_conf)
+    touch $bridge_conf
+fi
+
 if [ "$(get_setting /Settings/Services/MqttVrm)" = 1 ]; then
     ln -sf $bridge_conf $bridge_link
 else
