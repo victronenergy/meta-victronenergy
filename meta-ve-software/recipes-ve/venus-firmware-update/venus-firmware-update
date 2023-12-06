@@ -35,14 +35,30 @@ mod_reload() {
     test -n "$MODULES" && modprobe -a $MODULES || true
 }
 
+do_cerbo_adc() {
+    file=$1
+
+    oldver=$(cat /sys/bus/i2c/devices/3-0012/fwversion 2>/dev/null || echo 0)
+    newver=$(hexdump -s 0xd0 -n 1 -e '/1 "%u"' $file)
+
+    if [ $oldver -ge $newver ]; then
+        echo "ADC/CAN firmware $oldver up to date"
+        return
+    fi
+
+    echo "Installing ADC/CAN firmware $newver"
+
+    mod_unload victron_cerbogx_adc
+    do_openocd cerbogx-samc21-can-adc.cfg "$file"
+    mod_reload
+}
+
 do_cerbo() {
     file=$1
 
     case $(basename "$file") in
         samc21_slcan_adc*.bin)
-            mod_unload victron_cerbogx_adc
-            do_openocd cerbogx-samc21-can-adc.cfg "$file"
-            mod_reload
+            do_cerbo_adc "$file"
             return
             ;;
         default)
