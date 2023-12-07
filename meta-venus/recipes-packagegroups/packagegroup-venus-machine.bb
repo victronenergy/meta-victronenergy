@@ -50,12 +50,14 @@ RDEPENDS:${PN}:append:beaglebone = "\
 "
 
 RDEPENDS:${PN}:append:einstein = "\
+    atmel-adc-slcan \
     linux-firmware-bcm20702a1 \
     linux-firmware-bcm43362 \
     linux-firmware-bcm43430 \
     linux-firmware-bcm43430a1 \
     read-edid \
     venus-button-handler \
+    venus-firmware-update \
 "
 
 RDEPENDS:${PN}:append:nanopi = " \
