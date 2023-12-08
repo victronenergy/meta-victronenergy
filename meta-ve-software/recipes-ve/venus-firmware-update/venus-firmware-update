@@ -45,7 +45,8 @@ do_cerbo() {
             ;;
         default)
             echo "Unknown firmware file $file"
-            return 1
+            return
+            ;;
     esac
 }
 
