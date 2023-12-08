@@ -1,0 +1,11 @@
+#! /bin/sh
+
+case "$1" in
+    start)
+        /opt/victronenergy/venus-firmware-update/venus-firmware-update
+        ;;
+    *)
+        echo "Unsupported action $1"
+        exit 1
+        ;;
+esac
