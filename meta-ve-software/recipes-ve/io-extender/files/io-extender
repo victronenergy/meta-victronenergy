@@ -1,0 +1,105 @@
+#! /bin/sh
+
+set -e
+
+NAME=$1
+
+DIR=/run/io-ext/$NAME
+CONF=$DIR/pins.conf
+
+R0_PINS="relay_1 2:in 5:set 6:res"
+R1_PINS="relay_2 1:in 3:set 4:res"
+SSR_PINS="ssr_1 0:"
+
+G0_PINS="9 0:1 1:2 2:3 3:4"
+G1_PINS="8 11:5 12:6 13:7 14:8"
+
+setup_group() (
+    gpio_base=$1
+    dirpin=$2
+    shift 2
+
+    dirgpio=$((gpio_base + dirpin))
+    echo $dirgpio >/sys/class/gpio/export
+    dir=/sys/class/gpio/gpio$dirgpio
+    echo in >$dir/direction
+    dirval=$(cat $dir/value)
+
+    if [ $dirval = 0 ]; then
+        direction=low
+        label=output
+    else
+        direction=in
+        label=input
+    fi
+
+    for pin; do
+        p=${pin%:*}
+        n=${pin#*:}
+        gpio=$((gpio_base + p))
+        echo $gpio >/sys/class/gpio/export
+        echo $direction >/sys/class/gpio/gpio$gpio/direction
+        link=$DIR/${label}_$n
+        ln -s /sys/class/gpio/gpio$gpio $link
+        echo "$label	$link \"GX I/O $serial $label $n\"" >>$CONF
+    done
+)
+
+setup_relay() {
+    gpio_base=$1
+    label=$2
+    shift 2
+
+    for pin; do
+        p=${pin%:*}
+        n=${pin#*:}
+        gpio=$((gpio_base + p))
+
+        case $n in
+            in) direction=in  ;;
+            *)  direction=low ;;
+        esac
+
+        echo $gpio >/sys/class/gpio/export
+        echo $direction >/sys/class/gpio/gpio$gpio/direction
+        link=$DIR/$label${n:+_$n}
+        ln -s /sys/class/gpio/gpio$gpio $link
+    done
+}
+
+setup_dio() {
+    dev=$(realpath /sys/$DEVPATH/../../../..)
+    serial=$(cat $dev/serial)
+    gpio_base=$(cat $dev/gpio/*/base)
+    gpio_base_i2c=$(cat $dev/i2c-*/*-0020/gpio/*/base)
+
+    mkdir -p $DIR
+
+    cat >>$CONF <<EOF
+tag	gxio_$serial
+EOF
+
+    setup_group $gpio_base_i2c $G0_PINS
+    setup_group $gpio_base_i2c $G1_PINS
+    setup_relay $gpio_base $R0_PINS
+    setup_relay $gpio_base $R1_PINS
+    setup_relay $gpio_base $SSR_PINS
+}
+
+case $ACTION in
+    add)
+        setup_dio
+        need_restart=1
+        ;;
+    remove)
+        if [ -e "$DIR" ]; then
+            rm -rf "$DIR"
+            need_restart=1
+        fi
+        ;;
+esac
+
+if [ "$need_restart" = 1 ]; then
+    svc -t /service/dbus-digitalinputs
+    svc -u /service/dbus-digitalinputs
+fi
