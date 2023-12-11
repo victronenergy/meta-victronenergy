@@ -1,0 +1,87 @@
+#! /bin/sh
+
+set -e
+
+NAME=$1
+
+DIR=/run/io-ext/$NAME
+CONF=$DIR/pins.conf
+
+RELAY_PINS="2:relay_1 3:ssr 4:relay_2"
+
+G0_PINS="9 0:1 1:2 2:3 3:4"
+G1_PINS="8 11:5 12:6 13:7 14:8"
+
+setup_group() (
+    gpio_base=$1
+    dirpin=$2
+    shift 2
+
+    dirgpio=$((gpio_base + dirpin))
+    echo $dirgpio >/sys/class/gpio/export
+    dir=/sys/class/gpio/gpio$dirgpio
+    echo in >$dir/direction
+    dirval=$(cat $dir/value)
+
+    if [ $dirval = 0 ]; then
+        direction=low
+        label=output
+    else
+        direction=in
+        label=input
+    fi
+
+    for pin; do
+        p=${pin%:*}
+        n=${pin#*:}
+        gpio=$((gpio_base + p))
+        echo $gpio >/sys/class/gpio/export
+        echo $direction >/sys/class/gpio/gpio$gpio/direction
+        link=$DIR/${label}_$n
+        ln -s /sys/class/gpio/gpio$gpio $link
+        echo "$label	$link \"GX I/O $serial $label $n\"" >>$CONF
+    done
+)
+
+setup_dio() {
+    dev=$(realpath /sys/$DEVPATH/../../../..)
+    serial=$(cat $dev/serial)
+    gpio_base=$(cat $dev/gpio/*/base)
+    gpio_base_i2c=$(cat $dev/i2c-*/*-0020/gpio/*/base)
+
+    mkdir -p $DIR
+
+    cat >>$CONF <<EOF
+tag	ioext_$serial
+EOF
+
+    for pin in $RELAY_PINS; do
+        p=${pin%:*}
+        n=${pin#*:}
+        gpio=$((gpio_base + p))
+        echo $gpio >/sys/class/gpio/export
+        echo low >/sys/class/gpio/gpio$gpio/direction
+        ln -s /sys/class/gpio/gpio$gpio $DIR/$n
+    done
+
+    setup_group $gpio_base_i2c $G0_PINS
+    setup_group $gpio_base_i2c $G1_PINS
+}
+
+case $ACTION in
+    add)
+        setup_dio
+        need_restart=1
+        ;;
+    remove)
+        if [ -e "$DIR" ]; then
+            rm -rf "$DIR"
+            need_restart=1
+        fi
+        ;;
+esac
+
+if [ "$need_restart" = 1 ]; then
+    svc -t /service/dbus-digitalinputs
+    svc -u /service/dbus-digitalinputs
+fi
