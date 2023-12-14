@@ -23,6 +23,7 @@ TOOLCHAIN_HOST_TASK += " \
     nativesdk-qt4-tools \
     nativesdk-qtbase-tools \
     nativesdk-qtdeclarative-tools \
+    nativesdk-qtshadertools-tools \
     nativesdk-qttools-dev \
     nativesdk-qttools-tools \
 "
