@@ -15,13 +15,16 @@ RDEPENDS:${PN} = "\
     python3-pymodbus \
 "
 
-PR = "1"
+PR = "2"
 SRC_URI = " \
     gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https;tag=v${PV} \
     file://start-serial.sh \
     file://0001-main-start-watchdog-earlier.patch \
     file://0002-dse-fix-DSE72xx_73xx_61xx_74xx_MkII_Generator.patch \
     file://0003-comap-Fix-engine-runtime-register-scale-factor.patch \
+    file://0004-device-fix-dbus-updates-sometimes-not-seen-by-client.patch \
+    file://0005-device-conditionally-add-position-setting.patch \
+    file://0006-victron_em-get-position-setting-from-meter.patch \
 "
 S = "${WORKDIR}/git"
 

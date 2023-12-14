@@ -1,0 +1,28 @@
+From ffd91be46377564f9d00d0a735ed7b2547347143 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Wed, 6 Dec 2023 16:16:47 +0000
+Subject: [PATCH 4/6] device: fix dbus updates sometimes not seen by clients
+
+For some reason, creating the dbus item with the register object
+as value prevents future updates being seen in some cases.  Using
+a copy instead, as in read_data_regs(), somehow makes it work.
+---
+ device.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/device.py b/device.py
+index 4d6a033abb3a..01f6d9fbc772 100644
+--- a/device.py
++++ b/device.py
+@@ -229,7 +229,7 @@ class ModbusDevice:
+     def dbus_add_register(self, r):
+         if r.name in self.dbus:
+             del self.dbus[r.name]
+-        v = r if r.isvalid() else None
++        v = copy(r) if r.isvalid() else None
+         if r.write:
+             cb = partial(self.dbus_write_register, r)
+             self.dbus.add_path(r.name, v, writeable=True, onchangecallback=cb)
+-- 
+2.43.0
+

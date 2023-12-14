@@ -1,0 +1,31 @@
+From 706e08e90d1ad358164b58bfe14e6595e0f61b18 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Wed, 6 Dec 2023 16:17:39 +0000
+Subject: [PATCH 6/6] victron_em: get position setting from meter
+
+---
+ victron_em.py | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/victron_em.py b/victron_em.py
+index 5ea26c1f26d7..269184549a99 100644
+--- a/victron_em.py
++++ b/victron_em.py
+@@ -73,6 +73,14 @@ class VE_Meter_A1B1(vreglink.VregLink, device.EnergyMeter):
+         for n in phases:
+             self.data_regs += self.phase_regs(n)
+ 
++        if ver < (0, 1, 5, 255):
++            return
++
++        if self.role == 'pvinverter':
++            posreg = Reg_u16(0x2022, '/Position')
++            self.position = self.read_register(posreg)
++            self.data_regs.append(posreg)
++
+     def set_name(self, val):
+         self.vreglink_set(0x10c, bytes(val, encoding='utf-8'))
+         return True
+-- 
+2.43.0
+
