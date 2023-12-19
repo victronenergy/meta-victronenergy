@@ -6185,7 +6185,7 @@
       "license": "ISC"
     },
     "node_modules/signalk-n2kais-to-nmea0183": {
-      "version": "1.3.1",
+      "version": "1.4.0",
       "license": "ISC",
       "optional": true,
       "dependencies": {
