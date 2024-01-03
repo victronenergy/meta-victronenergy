@@ -11,3 +11,16 @@
  
  # ARM AMBA SoCs
  ttyAM0
+@@ -151,6 +155,12 @@
+ pts/1
+ pts/2
+ pts/3
++pts/4
++pts/5
++pts/6
++pts/7
++pts/8
++pts/9
+
+ # Embedded Freescale i.MX ports
+ ttymxc0
