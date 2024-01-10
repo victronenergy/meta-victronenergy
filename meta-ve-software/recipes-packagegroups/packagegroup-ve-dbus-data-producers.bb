@@ -25,7 +25,6 @@ RRECOMMENDS:${PN} += " \
     dbus-modbus-client \
     dbus-modem \
     dbus-motordrive \
-    dbus-qwacs \
     dbus-rv-c \
     dbus-shelly \
     dbus-systemcalc-py \
