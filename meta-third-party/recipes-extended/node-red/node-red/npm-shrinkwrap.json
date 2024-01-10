@@ -1,23 +1,23 @@
 {
   "name": "node-red",
-  "version": "3.1.0",
+  "version": "3.1.3",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "node-red",
-      "version": "3.1.0",
+      "version": "3.1.3",
       "license": "Apache-2.0",
       "dependencies": {
-        "@node-red/editor-api": "3.1.0",
-        "@node-red/nodes": "3.1.0",
-        "@node-red/runtime": "3.1.0",
-        "@node-red/util": "3.1.0",
+        "@node-red/editor-api": "3.1.3",
+        "@node-red/nodes": "3.1.3",
+        "@node-red/runtime": "3.1.3",
+        "@node-red/util": "3.1.3",
         "basic-auth": "2.0.1",
         "bcryptjs": "2.4.3",
         "express": "4.18.2",
         "fs-extra": "11.1.1",
-        "node-red-admin": "^3.1.0",
+        "node-red-admin": "^3.1.1",
         "nopt": "5.0.0",
         "semver": "7.5.4"
       },
@@ -33,7 +33,7 @@
       }
     },
     "node_modules/@babel/runtime": {
-      "version": "7.22.15",
+      "version": "7.23.8",
       "license": "MIT",
       "dependencies": {
         "regenerator-runtime": "^0.14.0"
@@ -62,11 +62,11 @@
       }
     },
     "node_modules/@node-red/editor-api": {
-      "version": "3.1.0",
+      "version": "3.1.3",
       "license": "Apache-2.0",
       "dependencies": {
-        "@node-red/editor-client": "3.1.0",
-        "@node-red/util": "3.1.0",
+        "@node-red/editor-client": "3.1.3",
+        "@node-red/util": "3.1.3",
         "bcryptjs": "2.4.3",
         "body-parser": "1.20.2",
         "clone": "2.1.2",
@@ -325,11 +325,11 @@
       }
     },
     "node_modules/@node-red/editor-client": {
-      "version": "3.1.0",
+      "version": "3.1.3",
       "license": "Apache-2.0"
     },
     "node_modules/@node-red/nodes": {
-      "version": "3.1.0",
+      "version": "3.1.3",
       "license": "Apache-2.0",
       "dependencies": {
         "acorn": "8.8.2",
@@ -598,10 +598,10 @@
       "license": "ISC"
     },
     "node_modules/@node-red/registry": {
-      "version": "3.1.0",
+      "version": "3.1.3",
       "license": "Apache-2.0",
       "dependencies": {
-        "@node-red/util": "3.1.0",
+        "@node-red/util": "3.1.3",
         "clone": "2.1.2",
         "fs-extra": "11.1.1",
         "semver": "7.5.4",
@@ -610,11 +610,11 @@
       }
     },
     "node_modules/@node-red/runtime": {
-      "version": "3.1.0",
+      "version": "3.1.3",
       "license": "Apache-2.0",
       "dependencies": {
-        "@node-red/registry": "3.1.0",
-        "@node-red/util": "3.1.0",
+        "@node-red/registry": "3.1.3",
+        "@node-red/util": "3.1.3",
         "async-mutex": "0.4.0",
         "clone": "2.1.2",
         "express": "4.18.2",
@@ -623,7 +623,7 @@
       }
     },
     "node_modules/@node-red/util": {
-      "version": "3.1.0",
+      "version": "3.1.3",
       "license": "Apache-2.0",
       "dependencies": {
         "fs-extra": "11.1.1",
@@ -777,6 +777,15 @@
     "node_modules/asynckit": {
       "version": "0.4.0",
       "license": "MIT"
+    },
+    "node_modules/axios": {
+      "version": "1.6.5",
+      "license": "MIT",
+      "dependencies": {
+        "follow-redirects": "^1.15.4",
+        "form-data": "^4.0.0",
+        "proxy-from-env": "^1.1.0"
+      }
     },
     "node_modules/balanced-match": {
       "version": "1.0.2",
@@ -1410,6 +1419,24 @@
       },
       "engines": {
         "node": ">= 0.8"
+      }
+    },
+    "node_modules/follow-redirects": {
+      "version": "1.15.4",
+      "funding": [
+        {
+          "type": "individual",
+          "url": "https://github.com/sponsors/RubenVerborgh"
+        }
+      ],
+      "license": "MIT",
+      "engines": {
+        "node": ">=4.0"
+      },
+      "peerDependenciesMeta": {
+        "debug": {
+          "optional": true
+        }
       }
     },
     "node_modules/form-data": {
@@ -2077,11 +2104,11 @@
       }
     },
     "node_modules/node-red-admin": {
-      "version": "3.1.0",
+      "version": "3.1.1",
       "license": "Apache-2.0",
       "dependencies": {
         "ansi-colors": "^4.1.3",
-        "axios": "0.27.2",
+        "axios": "^1.6.1",
         "bcryptjs": "^2.4.3",
         "cli-table": "^0.3.11",
         "enquirer": "^2.3.6",
@@ -2097,14 +2124,6 @@
       },
       "optionalDependencies": {
         "bcrypt": "5.1.1"
-      }
-    },
-    "node_modules/node-red-admin/node_modules/axios": {
-      "version": "0.27.2",
-      "license": "MIT",
-      "dependencies": {
-        "follow-redirects": "^1.14.9",
-        "form-data": "^4.0.0"
       }
     },
     "node_modules/node-red-admin/node_modules/bcrypt": {
@@ -2127,24 +2146,6 @@
       },
       "engines": {
         "node": ">= 0.2.0"
-      }
-    },
-    "node_modules/node-red-admin/node_modules/follow-redirects": {
-      "version": "1.15.1",
-      "funding": [
-        {
-          "type": "individual",
-          "url": "https://github.com/sponsors/RubenVerborgh"
-        }
-      ],
-      "license": "MIT",
-      "engines": {
-        "node": ">=4.0"
-      },
-      "peerDependenciesMeta": {
-        "debug": {
-          "optional": true
-        }
       }
     },
     "node_modules/node-watch": {
@@ -2341,6 +2342,10 @@
         "node": ">= 0.10"
       }
     },
+    "node_modules/proxy-from-env": {
+      "version": "1.1.0",
+      "license": "MIT"
+    },
     "node_modules/pseudomap": {
       "version": "1.0.2",
       "license": "ISC"
@@ -2451,7 +2456,7 @@
       }
     },
     "node_modules/regenerator-runtime": {
-      "version": "0.14.0",
+      "version": "0.14.1",
       "license": "MIT"
     },
     "node_modules/reinterval": {
