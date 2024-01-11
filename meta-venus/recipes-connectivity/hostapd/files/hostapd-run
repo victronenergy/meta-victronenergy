@@ -15,7 +15,12 @@ set_leds() {
 	for led; do
 		name=${led%=*}
 		trig=${led#*=}
-		echo $trig >/sys/class/leds/$name/trigger
+
+		# Write LED settings to temporary files, venus-platform watches
+		# these files and copies the contents to /sys/class/leds/../
+		# depending on whether the LEDs are enabled.
+		mkdir -p /run/leds/$name/
+		echo $trig >/run/leds/$name/trigger
 	done
 }
 
