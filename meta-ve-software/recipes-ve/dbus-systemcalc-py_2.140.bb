@@ -9,7 +9,11 @@ inherit python-compile
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;branch=master;protocol=https;tag=${PV} \
     file://com.victronenergy.system.conf \
+    file://0001-always-write-max-discharge-power-to-inverter-multi-rs.patch \
 "
+
+PR = "1"
+
 S = "${WORKDIR}/git"
 
 RDEPENDS:${PN} = " \

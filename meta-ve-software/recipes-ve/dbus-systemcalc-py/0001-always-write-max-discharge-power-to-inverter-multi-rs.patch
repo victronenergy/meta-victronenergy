@@ -1,0 +1,29 @@
+From c6b5a542746e4914d0765a2326375a8b006b9e2c Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Wed, 17 Jan 2024 23:20:46 +0200
+Subject: [PATCH] always write max discharge power to inv/multi-RS
+
+Discharge current limit writing to Inverter and Multi RS would
+only be performed if the value changed. This caused a timeout,
+which caused the inverter to oscillate on/off when DCL=0 is sent
+and there is no grid.
+
+https://github.com/victronenergy/venus/issues/1186
+---
+ delegates/dvcc.py | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index 9d9c358..2423b0f 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -335,8 +335,7 @@ def maxdischargecurrent(self, limit):
+ 	def set_maxdischargecurrent(self, limit):
+ 		""" Write the maximum discharge limit across. The firmware
+ 		    already handles a zero by turning off. """
+-		if self.maxdischargecurrent != limit:
+-			self.maxdischargecurrent = limit
++		self.maxdischargecurrent = limit
+ 
+ class InverterSubsystem(object):
+ 	""" Encapsulate collection of inverters. """
