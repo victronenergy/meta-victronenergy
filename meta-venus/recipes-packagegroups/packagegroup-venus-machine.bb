@@ -60,6 +60,10 @@ RDEPENDS:${PN}:append:einstein = "\
     venus-firmware-update \
 "
 
+RDEPENDS:${PN}:append:ekrano = "\
+    edid-ekrano \
+"
+
 RDEPENDS:${PN}:append:nanopi = " \
     dbus-characterdisplay \
 "
