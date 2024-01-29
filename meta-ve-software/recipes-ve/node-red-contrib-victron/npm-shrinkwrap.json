@@ -1,12 +1,12 @@
 {
   "name": "@victronenergy/node-red-contrib-victron",
-  "version": "1.5.9",
+  "version": "1.5.10",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "@victronenergy/node-red-contrib-victron",
-      "version": "1.5.9",
+      "version": "1.5.10",
       "license": "MIT",
       "dependencies": {
         "dbus-native": "^0.4.0",
@@ -16,10 +16,9 @@
         "standard": "^17.1.0"
       },
       "devDependencies": {
-        "@babel/eslint-parser": "^7.23.3",
-        "@signalk/github-create-release": "^1.2.1",
+        "@babel/eslint-parser": "^7.23.9",
         "csv-parse": "^5.5.3",
-        "eslint": "^8.55.0",
+        "eslint": "^8.56.0",
         "eslint-config-google": "^0.14.0",
         "gar": "^1.0.4"
       },
@@ -109,7 +108,7 @@
       }
     },
     "node_modules/@eslint/js": {
-      "version": "8.55.0",
+      "version": "8.56.0",
       "license": "MIT",
       "engines": {
         "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
@@ -645,13 +644,13 @@
       }
     },
     "node_modules/eslint": {
-      "version": "8.55.0",
+      "version": "8.56.0",
       "license": "MIT",
       "dependencies": {
         "@eslint-community/eslint-utils": "^4.2.0",
         "@eslint-community/regexpp": "^4.6.1",
         "@eslint/eslintrc": "^2.1.4",
-        "@eslint/js": "8.55.0",
+        "@eslint/js": "8.56.0",
         "@humanwhocodes/config-array": "^0.11.13",
         "@humanwhocodes/module-importer": "^1.0.1",
         "@nodelib/fs.walk": "^1.2.8",
