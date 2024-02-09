@@ -1,0 +1,24 @@
+From dd66a806bd5637a7db9eb3496d040b8c458ea73e Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Fri, 9 Feb 2024 11:44:52 +0200
+Subject: [PATCH] dess drop self-consumption strategy capability bit
+
+For the Venus 3.20 release, drop the self-consumption capability
+bit, since we're still not sure if it works as well as we want it to.
+---
+ delegates/dynamicess.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/delegates/dynamicess.py b/delegates/dynamicess.py
+index 7c95155..e850839 100644
+--- a/delegates/dynamicess.py
++++ b/delegates/dynamicess.py
+@@ -69,7 +69,7 @@ def set_sources(self, dbusmonitor, settings, dbusservice):
+ 		super(DynamicEss, self).set_sources(dbusmonitor, settings, dbusservice)
+ 		# Capabilities, 1 = supports charge/discharge restrictions
+ 		#               2 = supports self-consumption strategy
+-		self._dbusservice.add_path('/DynamicEss/Capabilities', value=3)
++		self._dbusservice.add_path('/DynamicEss/Capabilities', value=1)
+ 		self._dbusservice.add_path('/DynamicEss/Available', value=None)
+ 		self._dbusservice.add_path('/DynamicEss/Active', value=0,
+ 			gettextcallback=lambda p, v: MODES.get(v, 'Unknown'))
