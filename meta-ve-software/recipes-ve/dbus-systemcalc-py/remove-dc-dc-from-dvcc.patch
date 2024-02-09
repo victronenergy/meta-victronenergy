@@ -1,0 +1,134 @@
+From e42ba78017baf879111e58967e72a9434d35af19 Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Thu, 8 Feb 2024 14:49:29 +0200
+Subject: [PATCH] dvcc: Remove dcdc converter from dvcc control
+
+This includes SVS, STS and SCS, and acting as a temperature
+service.
+
+The decision was made that a DC/DC converter that is a charger
+will be considered an alternator, and has the battery on the
+output of the converter. This should be DVCC controlled. A DC/DC
+converter that is a power supply (for some downstream equipment)
+has the battery on the input and should not be controlled by DVCC.
+
+https://github.com/victronenergy/venus-private/issues/310
+---
+ delegates/batterysense.py  |  9 +--------
+ delegates/dvcc.py          | 15 +--------------
+ tests/batterysense_test.py |  6 +++---
+ 3 files changed, 5 insertions(+), 25 deletions(-)
+
+diff --git a/delegates/batterysense.py b/delegates/batterysense.py
+index 34dc4e0..b6ea9dc 100644
+--- a/delegates/batterysense.py
++++ b/delegates/batterysense.py
+@@ -88,9 +88,6 @@ def get_input(self):
+ 				'/Dc/0/Temperature']),
+ 			('com.victronenergy.temperature', [
+ 				'/Temperature', '/TemperatureType']),
+-			('com.victronenergy.dcdc', [
+-				'/Dc/0/Temperature', '/Link/TemperatureSense',
+-				'/Link/VoltageSense', '/Link/BatteryCurrent']),
+ 			('com.victronenergy.alternator', [
+ 				'/Dc/0/Temperature', '/Link/TemperatureSense',
+ 				'/Link/VoltageSense', '/Link/BatteryCurrent'])
+@@ -214,7 +211,6 @@ def device_added(self, service, instance, *args):
+ 				service.startswith('com.victronenergy.solarcharger.') or \
+ 				service.startswith('com.victronenergy.inverter.') or \
+ 				service.startswith('com.victronenergy.multi.') or \
+-				service.startswith('com.victronenergy.dcdc.') or \
+ 				service.startswith('com.victronenergy.alternator'):
+ 			self.temperaturesensors[service] = TemperatureSensor(service,
+ 				'/Dc/0/Temperature', instance,
+@@ -291,11 +287,10 @@ def _distribute_sense_voltage(self, has_vsense):
+ 		elif not has_vsense:
+ 			return multi_written, charger_written
+ 
+-		# Forward voltage sense to solarchargers, dcdc converters, alternators
++		# Forward voltage sense to solarchargers, alternators
+ 		# and supporting inverters.
+ 		for service in chain(self._dbusmonitor.get_service_list('com.victronenergy.solarcharger'),
+ 			self._dbusmonitor.get_service_list('com.victronenergy.inverter'),
+-			self._dbusmonitor.get_service_list('com.victronenergy.dcdc'),
+ 			self._dbusmonitor.get_service_list('com.victronenergy.alternator')):
+ 			if service == sense_voltage_service:
+ 				continue
+@@ -337,7 +332,6 @@ def _distribute_battery_current(self):
+ 		for service in chain(self._dbusmonitor.get_service_list(
+ 			'com.victronenergy.solarcharger').keys(), self._dbusmonitor.get_service_list(
+ 			'com.victronenergy.inverter').keys(), self._dbusmonitor.get_service_list(
+-			'com.victronenergy.dcdc').keys(), self._dbusmonitor.get_service_list(
+ 			'com.victronenergy.alternator').keys()):
+ 			# Skip for old firmware versions to save some dbus traffic
+ 			if not self._dbusmonitor.seen(service, '/Link/BatteryCurrent'):
+@@ -383,7 +377,6 @@ def _distribute_sense_temperature(self):
+ 		# Write to supporting inverters
+ 		for charger in chain(
+ 				self._dbusmonitor.get_service_list('com.victronenergy.inverter'),
+-				self._dbusmonitor.get_service_list('com.victronenergy.dcdc'),
+ 				self._dbusmonitor.get_service_list('com.victronenergy.alternator')):
+ 
+ 			# Don't write the temperature back to its source
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index 939db93..7681cf5 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -796,19 +796,6 @@ def get_input(self):
+ 				'/N2kDeviceInstance',
+ 				'/Mgmt/Connection',
+ 				'/Settings/BmsPresent']),
+-			('com.victronenergy.dcdc', [
+-				'/ProductId',
+-				'/Dc/0/Voltage',
+-				'/Dc/0/Current',
+-				'/Link/NetworkMode',
+-				'/Link/ChargeVoltage',
+-				'/Link/ChargeCurrent',
+-				'/Settings/ChargeCurrentLimit',
+-				'/State',
+-				'/FirmwareVersion',
+-				'/N2kDeviceInstance',
+-				'/Mgmt/Connection',
+-				'/Settings/BmsPresent']),
+ 			('com.victronenergy.inverter', [
+ 				'/ProductId',
+ 				'/Dc/0/Current',
+@@ -878,7 +865,7 @@ def device_added(self, service, instance, do_service_change=True):
+ 					self._chargesystem.add_invertercharger(service))
+ 		elif service_type == 'vecan':
+ 			self._vecan_services.append(service)
+-		elif service_type in ('dcdc', 'alternator'):
++		elif service_type == 'alternator':
+ 			self._chargesystem.add_alternator(service)
+ 		elif service_type == 'battery':
+ 			pass # install timer below
+diff --git a/tests/batterysense_test.py b/tests/batterysense_test.py
+index 11906d2..b6aff54 100644
+--- a/tests/batterysense_test.py
++++ b/tests/batterysense_test.py
+@@ -1002,7 +1002,7 @@ def test_can_bms_sense_data(self):
+ 				'/Sense/Temperature': 25.3,
+ 				'/Sense/Soc': 50}})
+ 
+-	def test_distribute_current_to_dcdc_and_alternator(self):
++	def test_distribute_current_to_alternator(self):
+ 		self._add_device('com.victronenergy.battery.ttyO2',
+ 			product_name='battery',
+ 			values={
+@@ -1014,7 +1014,7 @@ def test_distribute_current_to_dcdc_and_alternator(self):
+ 				'/Info/MaxChargeVoltage': None,
+ 				'/DeviceInstance': 2})
+ 
+-		self._add_device('com.victronenergy.dcdc.ttyO1', {
++		self._add_device('com.victronenergy.alternator.ttyO1', {
+ 			'/State': 1,
+ 			'/Link/NetworkMode': 0,
+ 			'/Link/VoltageSense': None,
+@@ -1033,5 +1033,5 @@ def test_distribute_current_to_dcdc_and_alternator(self):
+ 			'/Control/BatteryCurrentSense': 4 # enabled
+ 		})
+ 		self._check_external_values({
+-			'com.victronenergy.dcdc.ttyO1': {
++			'com.victronenergy.alternator.ttyO1': {
+ 				'/Link/BatteryCurrent': 5.3}})
