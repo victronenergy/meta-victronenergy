@@ -34,5 +34,4 @@ if ! openssl rsa -check -noout -in $key ||
             -keyout $key -x509 -days 36524 -out $cert
 fi
 
-exec softlimit -d 100000000 -s 10000000 -a 100000000 /usr/bin/flashmq
-
+exec softlimit -d 150000000 -s 10000000 -a 150000000 /usr/bin/flashmq
