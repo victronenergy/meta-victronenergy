@@ -15,7 +15,7 @@ DAEMONTOOLS_RUN = "${sbindir}/start-flashmq"
 RDEPENDS:${PN} += "dbus-flashmq"
 
 do_install:append() {
-	install ${WORKDIR}/flashmq.conf ${D}/${sysconfdir}/flashmq/flashmq.conf
+    install ${WORKDIR}/flashmq.conf ${D}/${sysconfdir}/flashmq/flashmq.conf
 
     install -d ${D}${sbindir}
     install -m 0755 ${WORKDIR}/start-flashmq ${D}${sbindir}
