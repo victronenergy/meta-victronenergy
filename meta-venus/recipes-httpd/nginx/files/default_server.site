@@ -2,34 +2,6 @@
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-
-    server_name _;
-    root /var/www/venus;
-    access_log off;
-    error_log /dev/null;
-
-    index index.html index.php;
-
-    # Browsers still cache, but will always revalidate.
-    add_header Cache-Control "no-cache";
-
-    # This is needed because the wasm is downloaded as XHR. The proxying system
-    # VRM uses, which also ends up here, has stricter rules and doesn't just
-    # return 'origin', so add them here.
-    location /gui {
-        add_header Access-Control-Allow-Origin "$http_origin";
-        add_header Access-Control-Allow-Credentials true;
-        gzip_static always;
-    }
-
-    location ~ \.php$ {
-        try_files $uri =404;
-        fastcgi_pass unix:/var/run/php5-fpm.socket;
-        include fastcgi.conf;
-    }
-}
-
-server {
     listen 443 ssl;
     listen [::]:443 ssl;
     ssl_certificate /data/etc/ssl/venus.local.crt;
@@ -55,13 +27,25 @@ server {
         proxy_set_header Host $host;
     }
 
+    # This is needed because the wasm is downloaded as XHR. The proxying system
+    # VRM uses, which also ends up here, has stricter rules and doesn't just
+    # return 'origin', so add them here.
+    location /gui {
+        add_header Access-Control-Allow-Origin "$http_origin";
+        add_header Access-Control-Allow-Credentials true;
+        gzip_static always;
+    }
+
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_pass unix:/var/run/php5-fpm.socket;
         include fastcgi.conf;
     }
 
+    # FIXME: the html-app doesn't work over https at the moment, so force http.
     location ~ /app {
-         rewrite ^/app(.*)$ http://$host$request_uri;
+        if ($scheme = "https") {
+            rewrite ^/app(.*)$ http://$host$request_uri;
+        }
     }
 }
