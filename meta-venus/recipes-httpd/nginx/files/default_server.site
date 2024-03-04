@@ -27,6 +27,14 @@ server {
         proxy_set_header Host $host;
     }
 
+    location ~ ^/websockify-mqtt$ {
+        proxy_pass http://127.0.0.1:9001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+    }
+
     # This is needed because the wasm is downloaded as XHR. The proxying system
     # VRM uses, which also ends up here, has stricter rules and doesn't just
     # return 'origin', so add them here.
