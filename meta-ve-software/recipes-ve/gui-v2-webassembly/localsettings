@@ -1,0 +1,12 @@
+# 0 = Dark, 1 = Light, 2 = Auto
+Gui/ColorScheme 0 i 0 2
+
+# 0 = Power, 1 = Current
+Gui/ElectricalPowerIndicator 0 i 0 1
+
+# Configures the central gauges on the Brief page.
+Gui/BriefView/Level/0 1000 i 0 1000
+Gui/BriefView/Level/1 0 i 0 1000
+Gui/BriefView/Level/2 1 i 0 1000
+Gui/BriefView/Level/3 5 i 0 1000
+Gui/BriefView/ShowPercentages 0 i 0 1

@@ -1,0 +1,3 @@
+PV = "0.2.11"
+WASM_SHA256SUM = "546d31f0bdd3033a565712e1a1090b30b66bb3c253c050e85c3482029edefa12"
+LICENSE = "Victron-Energy-OS-license-v1"
