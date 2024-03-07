@@ -3,7 +3,12 @@
 ID_FILE=/data/venus/unique-id
 
 mkdir -p $(dirname ${ID_FILE})
-get-unique-id >${ID_FILE}
+id="$(get-unique-id)"
+if [ "$id" != "" ]; then
+    echo "$id" >${ID_FILE}
+else
+    echo "ERROR: failed to get an unique-id of the device"
+fi
 
 check_compat() {
     tr '\0' '\n' </sys/firmware/devicetree/base/compatible |
