@@ -40,7 +40,7 @@ disconnected() {
 case $stat in
     connected|disconnected)
         $stat
-        svc -t /service/gui
+        svc -t /service/start-gui
         ;;
     *)
         logger "Unknown display status: $stat"
