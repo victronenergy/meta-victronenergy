@@ -16,7 +16,6 @@ DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec softlimit -d 768000000 -s 
 
 SRC_URI = " \
 	gitsm://github.com/victronenergy/gui-v2.git;branch=main;protocol=ssh;user=git;tag=v${PV} \
-    file://0001-fix-building-with-OpenEmbedded-Debian-rules.patch \
 "
 S = "${WORKDIR}/git"
 EXTRA_OECMAKE = "-DNO_CACHEGEN=true -DLOAD_QML_FROM_FILESYSTEM=true"
