@@ -1,23 +1,23 @@
 {
   "name": "node-red",
-  "version": "3.1.7",
+  "version": "3.1.8",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "node-red",
-      "version": "3.1.7",
+      "version": "3.1.8",
       "license": "Apache-2.0",
       "dependencies": {
-        "@node-red/editor-api": "3.1.7",
-        "@node-red/nodes": "3.1.7",
-        "@node-red/runtime": "3.1.7",
-        "@node-red/util": "3.1.7",
+        "@node-red/editor-api": "3.1.8",
+        "@node-red/nodes": "3.1.8",
+        "@node-red/runtime": "3.1.8",
+        "@node-red/util": "3.1.8",
         "basic-auth": "2.0.1",
         "bcryptjs": "2.4.3",
-        "express": "4.18.2",
+        "express": "4.19.2",
         "fs-extra": "11.1.1",
-        "node-red-admin": "^3.1.2",
+        "node-red-admin": "^3.1.3",
         "nopt": "5.0.0",
         "semver": "7.5.4"
       },
@@ -62,16 +62,16 @@
       }
     },
     "node_modules/@node-red/editor-api": {
-      "version": "3.1.7",
+      "version": "3.1.8",
       "license": "Apache-2.0",
       "dependencies": {
-        "@node-red/editor-client": "3.1.7",
-        "@node-red/util": "3.1.7",
+        "@node-red/editor-client": "3.1.8",
+        "@node-red/util": "3.1.8",
         "bcryptjs": "2.4.3",
         "body-parser": "1.20.2",
         "clone": "2.1.2",
         "cors": "2.8.5",
-        "express": "4.18.2",
+        "express": "4.19.2",
         "express-session": "1.17.3",
         "memorystore": "1.6.7",
         "mime": "3.0.0",
@@ -85,28 +85,6 @@
       },
       "optionalDependencies": {
         "bcrypt": "5.1.0"
-      }
-    },
-    "node_modules/@node-red/editor-api/node_modules/body-parser": {
-      "version": "1.20.2",
-      "license": "MIT",
-      "dependencies": {
-        "bytes": "3.1.2",
-        "content-type": "~1.0.5",
-        "debug": "2.6.9",
-        "depd": "2.0.0",
-        "destroy": "1.2.0",
-        "http-errors": "2.0.0",
-        "iconv-lite": "0.4.24",
-        "on-finished": "2.4.1",
-        "qs": "6.11.0",
-        "raw-body": "2.5.2",
-        "type-is": "~1.6.18",
-        "unpipe": "1.0.0"
-      },
-      "engines": {
-        "node": ">= 0.8",
-        "npm": "1.2.8000 || >= 1.4.16"
       }
     },
     "node_modules/@node-red/editor-api/node_modules/busboy": {
@@ -153,16 +131,6 @@
       },
       "engines": {
         "node": ">= 0.8.0"
-      }
-    },
-    "node_modules/@node-red/editor-api/node_modules/iconv-lite": {
-      "version": "0.4.24",
-      "license": "MIT",
-      "dependencies": {
-        "safer-buffer": ">= 2.1.2 < 3"
-      },
-      "engines": {
-        "node": ">=0.10.0"
       }
     },
     "node_modules/@node-red/editor-api/node_modules/memorystore": {
@@ -325,11 +293,11 @@
       }
     },
     "node_modules/@node-red/editor-client": {
-      "version": "3.1.7",
+      "version": "3.1.8",
       "license": "Apache-2.0"
     },
     "node_modules/@node-red/nodes": {
-      "version": "3.1.7",
+      "version": "3.1.8",
       "license": "Apache-2.0",
       "dependencies": {
         "acorn": "8.8.2",
@@ -375,38 +343,6 @@
     "node_modules/@node-red/nodes/node_modules/argparse": {
       "version": "2.0.1",
       "license": "Python-2.0"
-    },
-    "node_modules/@node-red/nodes/node_modules/body-parser": {
-      "version": "1.20.2",
-      "license": "MIT",
-      "dependencies": {
-        "bytes": "3.1.2",
-        "content-type": "~1.0.5",
-        "debug": "2.6.9",
-        "depd": "2.0.0",
-        "destroy": "1.2.0",
-        "http-errors": "2.0.0",
-        "iconv-lite": "0.4.24",
-        "on-finished": "2.4.1",
-        "qs": "6.11.0",
-        "raw-body": "2.5.2",
-        "type-is": "~1.6.18",
-        "unpipe": "1.0.0"
-      },
-      "engines": {
-        "node": ">= 0.8",
-        "npm": "1.2.8000 || >= 1.4.16"
-      }
-    },
-    "node_modules/@node-red/nodes/node_modules/body-parser/node_modules/iconv-lite": {
-      "version": "0.4.24",
-      "license": "MIT",
-      "dependencies": {
-        "safer-buffer": ">= 2.1.2 < 3"
-      },
-      "engines": {
-        "node": ">=0.10.0"
-      }
     },
     "node_modules/@node-red/nodes/node_modules/busboy": {
       "version": "1.6.0",
@@ -598,10 +534,10 @@
       "license": "ISC"
     },
     "node_modules/@node-red/registry": {
-      "version": "3.1.7",
+      "version": "3.1.8",
       "license": "Apache-2.0",
       "dependencies": {
-        "@node-red/util": "3.1.7",
+        "@node-red/util": "3.1.8",
         "clone": "2.1.2",
         "fs-extra": "11.1.1",
         "semver": "7.5.4",
@@ -610,20 +546,20 @@
       }
     },
     "node_modules/@node-red/runtime": {
-      "version": "3.1.7",
+      "version": "3.1.8",
       "license": "Apache-2.0",
       "dependencies": {
-        "@node-red/registry": "3.1.7",
-        "@node-red/util": "3.1.7",
+        "@node-red/registry": "3.1.8",
+        "@node-red/util": "3.1.8",
         "async-mutex": "0.4.0",
         "clone": "2.1.2",
-        "express": "4.18.2",
+        "express": "4.19.2",
         "fs-extra": "11.1.1",
         "json-stringify-safe": "5.0.1"
       }
     },
     "node_modules/@node-red/util": {
-      "version": "3.1.7",
+      "version": "3.1.8",
       "license": "Apache-2.0",
       "dependencies": {
         "fs-extra": "11.1.1",
@@ -779,10 +715,10 @@
       "license": "MIT"
     },
     "node_modules/axios": {
-      "version": "1.6.7",
+      "version": "1.6.8",
       "license": "MIT",
       "dependencies": {
-        "follow-redirects": "^1.15.4",
+        "follow-redirects": "^1.15.6",
         "form-data": "^4.0.0",
         "proxy-from-env": "^1.1.0"
       }
@@ -846,11 +782,11 @@
       }
     },
     "node_modules/body-parser": {
-      "version": "1.20.1",
+      "version": "1.20.2",
       "license": "MIT",
       "dependencies": {
         "bytes": "3.1.2",
-        "content-type": "~1.0.4",
+        "content-type": "~1.0.5",
         "debug": "2.6.9",
         "depd": "2.0.0",
         "destroy": "1.2.0",
@@ -858,7 +794,7 @@
         "iconv-lite": "0.4.24",
         "on-finished": "2.4.1",
         "qs": "6.11.0",
-        "raw-body": "2.5.1",
+        "raw-body": "2.5.2",
         "type-is": "~1.6.18",
         "unpipe": "1.0.0"
       },
@@ -875,19 +811,6 @@
       },
       "engines": {
         "node": ">=0.10.0"
-      }
-    },
-    "node_modules/body-parser/node_modules/raw-body": {
-      "version": "2.5.1",
-      "license": "MIT",
-      "dependencies": {
-        "bytes": "3.1.2",
-        "http-errors": "2.0.0",
-        "iconv-lite": "0.4.24",
-        "unpipe": "1.0.0"
-      },
-      "engines": {
-        "node": ">= 0.8"
       }
     },
     "node_modules/boolbase": {
@@ -1101,6 +1024,13 @@
     },
     "node_modules/content-type": {
       "version": "1.0.5",
+      "license": "MIT",
+      "engines": {
+        "node": ">= 0.6"
+      }
+    },
+    "node_modules/cookie": {
+      "version": "0.6.0",
       "license": "MIT",
       "engines": {
         "node": ">= 0.6"
@@ -1337,15 +1267,15 @@
       }
     },
     "node_modules/express": {
-      "version": "4.18.2",
+      "version": "4.19.2",
       "license": "MIT",
       "dependencies": {
         "accepts": "~1.3.8",
         "array-flatten": "1.1.1",
-        "body-parser": "1.20.1",
+        "body-parser": "1.20.2",
         "content-disposition": "0.5.4",
         "content-type": "~1.0.4",
-        "cookie": "0.5.0",
+        "cookie": "0.6.0",
         "cookie-signature": "1.0.6",
         "debug": "2.6.9",
         "depd": "2.0.0",
@@ -1374,13 +1304,6 @@
       },
       "engines": {
         "node": ">= 0.10.0"
-      }
-    },
-    "node_modules/express/node_modules/cookie": {
-      "version": "0.5.0",
-      "license": "MIT",
-      "engines": {
-        "node": ">= 0.6"
       }
     },
     "node_modules/express/node_modules/safe-buffer": {
@@ -1422,7 +1345,7 @@
       }
     },
     "node_modules/follow-redirects": {
-      "version": "1.15.5",
+      "version": "1.15.6",
       "funding": [
         {
           "type": "individual",
@@ -1926,6 +1849,16 @@
         "node": ">= 0.6"
       }
     },
+    "node_modules/mime": {
+      "version": "1.6.0",
+      "license": "MIT",
+      "bin": {
+        "mime": "cli.js"
+      },
+      "engines": {
+        "node": ">=4"
+      }
+    },
     "node_modules/mime-db": {
       "version": "1.52.0",
       "license": "MIT",
@@ -2104,11 +2037,11 @@
       }
     },
     "node_modules/node-red-admin": {
-      "version": "3.1.2",
+      "version": "3.1.3",
       "license": "Apache-2.0",
       "dependencies": {
         "ansi-colors": "^4.1.3",
-        "axios": "^1.6.7",
+        "axios": "^1.6.8",
         "bcryptjs": "^2.4.3",
         "cli-table": "^0.3.11",
         "enquirer": "^2.3.6",
@@ -2568,16 +2501,6 @@
       },
       "engines": {
         "node": ">= 0.8.0"
-      }
-    },
-    "node_modules/send/node_modules/mime": {
-      "version": "1.6.0",
-      "license": "MIT",
-      "bin": {
-        "mime": "cli.js"
-      },
-      "engines": {
-        "node": ">=4"
       }
     },
     "node_modules/send/node_modules/ms": {
