@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# See meta-victronenergy  'add initscripts bbappend with volatiles (but not for bpp3)'
+# Mon May 23 11:43:35 2016 +0000 -> 'redirect /var/log to /data/log instead of /var/volatiles/log
+# Installer-version is far older. So set an Epoch on 1/1/2017, that is old enough..
+installer_version="$(sed -n '3p' /data/venus/installer-version 2>/dev/null)"
+if [ ${installer_version:-0} -lt 20170101000000 ]; then
+	echo 1483228800
+	exit
+fi
+
+find /var/log/ -name "lock" -exec stat -c "%Y" {} \; | sort | head -n1

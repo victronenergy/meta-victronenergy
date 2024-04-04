@@ -11,6 +11,7 @@ SRC_URI += " \
     file://board-compat \
     file://get-unique-id \
     file://hw-revision \
+    file://installation-date \
     file://installation-name \
     file://product-id \
     file://product-name \
@@ -83,6 +84,7 @@ do_install:append() {
     install -m 755 ${WORKDIR}/bad-unique-id ${D}/${bindir}
     install -m 755 ${WORKDIR}/board-compat ${D}/${bindir}
     install -m 755 ${WORKDIR}/hw-revision ${D}/${bindir}
+    install -m 755 ${WORKDIR}/installation-date ${D}/${bindir}
     install -m 755 ${WORKDIR}/installation-name ${D}/${bindir}
     install -m 755 ${WORKDIR}/product-id ${D}/${bindir}
     install -m 755 ${WORKDIR}/product-name ${D}/${bindir}
