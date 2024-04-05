@@ -1,12 +1,30 @@
 #!/bin/sh
 
-# See meta-victronenergy  'add initscripts bbappend with volatiles (but not for bpp3)'
-# Mon May 23 11:43:35 2016 +0000 -> 'redirect /var/log to /data/log instead of /var/volatiles/log
-# Installer-version is far older. So set an Epoch on 1/1/2017, that is old enough..
-installer_version="$(sed -n '3p' /data/venus/installer-version 2>/dev/null)"
-if [ ${installer_version:-0} -lt 20170101000000 ]; then
-	echo 1483228800
-	exit
+if [ "$1" = "-h" ]; then
+	echo usage: $(basename "$0")
+	echo
+	echo "  Reports the timestamp when the device was first booted outside of the factory."
+	echo "  It might not be accurate, e.g. it won't work before 2017. It might be usefull"
+	echo "  though if you want to detect that older devices are booting for the first time."
+
+	exit 0
 fi
 
-find /var/log/ -name "lock" -exec stat -c "%Y" {} \; | sort | head -n1
+first_user_boot() {
+	# See meta-victronenergy  'add initscripts bbappend with volatiles (but not for bpp3)'
+	# Mon May 23 11:43:35 2016 +0000 -> 'redirect /var/log to /data/log instead of /var/volatiles/log
+	# Installer-version is far older. So set an Epoch on 1/1/2017, that is old enough..
+	installer_version="$(sed -n '3p' /data/venus/installer-version 2>/dev/null)"
+	if [ ${installer_version:-0} -lt 20170101000000 ]; then
+		echo 1483228800
+		exit
+	fi
+
+	find /var/log/ -name "lock" -exec stat -c "%Y" {} \; | sort | head -n1
+}
+
+# The first line is the timestamp so it can be passed to head -n1, the second line
+# is readable.
+firstboot="$(first_user_boot)"
+echo "$firstboot"
+echo "$(date -d @$firstboot)"
