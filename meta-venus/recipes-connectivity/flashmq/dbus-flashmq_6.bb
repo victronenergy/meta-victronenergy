@@ -6,7 +6,9 @@ DEPENDS = "dbus"
 
 inherit cmake pkgconfig
 
-SRC_URI = "git://github.com/victronenergy/dbus-flashmq.git;branch=master;protocol=https;tag=v${PV}"
+SRC_URI = "git://github.com/victronenergy/dbus-flashmq.git;branch=feat-auth-with-vncpassword-from-file;protocol=https;tag=f62ef731c4803d0cf399c79dd3856a5589fda224"
+SRC_URI += "file://0001-decline-authentication-when-the-password-file-doesn-.patch"
+
 S = "${WORKDIR}/git"
 EXTRA_OECMAKE = "-DCMAKE_BUILD_TYPE=Release"
 

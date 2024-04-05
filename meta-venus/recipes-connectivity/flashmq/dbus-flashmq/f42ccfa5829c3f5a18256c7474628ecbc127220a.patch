@@ -1,0 +1,530 @@
+From f42ccfa5829c3f5a18256c7474628ecbc127220a Mon Sep 17 00:00:00 2001
+From: Wiebe Cazemier <wiebe@ytec.nl>
+Date: Fri, 25 Aug 2023 10:36:11 +0200
+Subject: [PATCH] Use vncpassword.txt for authentication
+
+If it doesn't exist or is empty or empty-ish: it approves logins.
+
+Logins from the loopback are also approved, for the local Venus services.
+
+If the file becomes unreadable at some point, because of permissions for
+instance, it will give an error and deny access.
+---
+ CMakeLists.txt                      |   6 +-
+ src/flashmq-dbus-plugin-tests.cpp   |   6 ++
+ src/flashmq-dbus-plugin.cpp         |  54 +++++++++-
+ src/flashmqfunctionreplacements.cpp |  40 ++++++++
+ src/network.cpp                     | 154 ++++++++++++++++++++++++++++
+ src/network.h                       |  55 ++++++++++
+ src/state.cpp                       |   8 ++
+ src/state.h                         |   5 +
+ src/utils.cpp                       |  18 ++++
+ src/utils.h                         |   2 +
+ 10 files changed, 345 insertions(+), 3 deletions(-)
+ create mode 100644 src/network.cpp
+ create mode 100644 src/network.h
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 00754a7..3a9a6ab 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -38,6 +38,7 @@ add_library(flashmq-dbus-plugin SHARED
+   src/fdguard.h src/fdguard.cpp
+   src/serviceidentifier.h src/serviceidentifier.cpp
+   src/dbuspendingmessagecallguard.h src/dbuspendingmessagecallguard.cpp
++  src/network.h src/network.cpp
+ )
+ 
+ add_executable(flashmq-dbus-plugin-tests
+@@ -68,14 +69,15 @@ add_executable(flashmq-dbus-plugin-tests
+   src/fdguard.h src/fdguard.cpp
+   src/serviceidentifier.h src/serviceidentifier.cpp
+   src/dbuspendingmessagecallguard.h src/dbuspendingmessagecallguard.cpp
++  src/network.h src/network.cpp
+ )
+ 
+ target_include_directories(flashmq-dbus-plugin PUBLIC ${DBUS_INCLUDE_DIRS} .)
+ target_include_directories(flashmq-dbus-plugin-tests PUBLIC ${DBUS_INCLUDE_DIRS} .)
+ 
+-target_link_libraries(flashmq-dbus-plugin pthread dbus-1)
++target_link_libraries(flashmq-dbus-plugin pthread dbus-1 resolv crypt)
+ 
+-target_link_libraries(flashmq-dbus-plugin-tests pthread dbus-1)
++target_link_libraries(flashmq-dbus-plugin-tests pthread dbus-1 resolv crypt)
+ 
+ install(TARGETS flashmq-dbus-plugin-tests RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ install(TARGETS flashmq-dbus-plugin DESTINATION "${CMAKE_INSTALL_LIBEXECDIR}/flashmq")
+diff --git a/src/flashmq-dbus-plugin-tests.cpp b/src/flashmq-dbus-plugin-tests.cpp
+index d3bb807..d3ff406 100644
+--- a/src/flashmq-dbus-plugin-tests.cpp
++++ b/src/flashmq-dbus-plugin-tests.cpp
+@@ -4,11 +4,17 @@
+ #include "flashmq-dbus-plugin-tests.h"
+ #include "vendor/flashmq_plugin.h"
+ #include "testerglobals.h"
++#include "utils.h"
+ 
+ #define MAX_EVENTS 25
+ 
+ int main(int argc, char **argv)
+ {
++    if (!crypt_match("hallo", "$2a$08$LBfjL0PfMBbjWxCzLBfjLurkA7K0tuDn44rNUXDBvatSgSqHvwaHS"))
++    {
++        throw std::runtime_error("crypt test failed.");
++    }
++
+     std::unordered_map<std::string, std::string> pluginOpts;
+ 
+     TesterGlobals *globals = TesterGlobals::getInstance();
+diff --git a/src/flashmq-dbus-plugin.cpp b/src/flashmq-dbus-plugin.cpp
+index 42d2037..bc1395d 100644
+--- a/src/flashmq-dbus-plugin.cpp
++++ b/src/flashmq-dbus-plugin.cpp
+@@ -6,6 +6,7 @@
+ #include <unistd.h>
+ #include <string.h>
+ #include <thread>
++#include <fstream>
+ 
+ #include "state.h"
+ #include "utils.h"
+@@ -69,7 +70,58 @@ void flashmq_plugin_deinit(void *thread_data, std::unordered_map<std::string, st
+ AuthResult flashmq_plugin_login_check(void *thread_data, const std::string &clientid, const std::string &username, const std::string &password,
+                                       const std::vector<std::pair<std::string, std::string>> *userProperties, const std::weak_ptr<Client> &client)
+ {
+-    return AuthResult::success;
++    State *state = static_cast<State*>(thread_data);
++
++    FlashMQSockAddr addr;
++    memset(&addr, 0, sizeof(FlashMQSockAddr));
++    flashmq_get_client_address(client, nullptr, &addr);
++
++    if (state->match_local_net(addr.getAddr()))
++    {
++        return AuthResult::success;
++    }
++
++    const static std::string vnc_password_file_path = "/data/conf/vncpassword.txt";
++
++    try
++    {
++        if (!std::filesystem::exists(vnc_password_file_path))
++            return AuthResult::success;
++
++        if (std::filesystem::file_size(vnc_password_file_path) == 0)
++            return AuthResult::success;
++
++        std::fstream vnc_password_file(vnc_password_file_path, std::ios::in);
++
++        if (!vnc_password_file)
++        {
++            std::string error_str(strerror(errno));
++            throw std::runtime_error(error_str);
++        }
++
++        std::string vnc_password_crypt;
++
++        if (!getline(vnc_password_file, vnc_password_crypt))
++        {
++            std::string error_str(strerror(errno));
++            throw std::runtime_error(error_str);
++        }
++
++        trim(vnc_password_crypt);
++
++        // The file is normally 0 bytes, but disabling it again makes it 1 byte, with a newline. This is also approved.
++        if (vnc_password_crypt.empty())
++            return AuthResult::success;
++
++        if (crypt_match(password, vnc_password_crypt))
++            return AuthResult::success;
++    }
++    catch (std::exception &ex)
++    {
++        flashmq_logf(LOG_ERR, "Error in trying to read '%s': %s", vnc_password_file_path.c_str(), ex.what());
++    }
++
++    return AuthResult::login_denied;
+ }
+ 
+ bool flashmq_plugin_alter_publish(void *thread_data, const std::string &clientid, std::string &topic, const std::vector<std::string> &subtopics,
+diff --git a/src/flashmqfunctionreplacements.cpp b/src/flashmqfunctionreplacements.cpp
+index 0ce7c12..778f930 100644
+--- a/src/flashmqfunctionreplacements.cpp
++++ b/src/flashmqfunctionreplacements.cpp
+@@ -8,6 +8,7 @@
+ #include <iomanip>
+ #include <stdio.h>
+ #include <stdarg.h>
++#include <string.h>
+ 
+ #include "testerglobals.h"
+ 
+@@ -99,3 +100,42 @@ void flashmq_publish_message(const std::string &topic, const uint8_t qos, const
+ {
+     std::cout << "DUMMY: " << topic << ": " << payload << std::endl;
+ }
++
++/**
++ * @brief flashmq_get_client_address is normally provided by FlashMQ, but for out test binary, we need to mock it, because we have no network clients.
++ * @param client
++ * @param text
++ * @param addr
++ */
++void flashmq_get_client_address(const std::weak_ptr<Client> &client, std::string *text, FlashMQSockAddr *addr)
++{
++    std::shared_ptr<Client> c = client.lock();
++
++    if (!c)
++        return;
++
++    if (text)
++        *text = "dummy-we-dont-know";
++
++    if (addr)
++    {
++        struct sockaddr_in dummy_addr;
++        memset(&dummy_addr, 0, sizeof(struct sockaddr_in));
++
++        inet_pton(AF_INET, "127.0.0.1", &dummy_addr.sin_addr);
++        dummy_addr.sin_family = AF_INET;
++        dummy_addr.sin_port = htons(666);
++
++        memcpy(addr->getAddr(), &dummy_addr, addr->getLen());
++    }
++}
++
++sockaddr *FlashMQSockAddr::getAddr()
++{
++    return reinterpret_cast<struct sockaddr*>(&this->addr_in6);
++}
++
++constexpr int FlashMQSockAddr::getLen()
++{
++    return sizeof(struct sockaddr_in6);
++}
+diff --git a/src/network.cpp b/src/network.cpp
+new file mode 100644
+index 0000000..6b28d08
+--- /dev/null
++++ b/src/network.cpp
+@@ -0,0 +1,154 @@
++/*
++This file is part of FlashMQ (https://www.flashmq.org)
++Copyright (C) 2021-2023 Wiebe Cazemier
++
++Relicensed by copyright holder for Victron Energy BV, dbus-flashmq:
++
++MIT License
++
++Permission is hereby granted, free of charge, to any person obtaining a copy
++of this software and associated documentation files (the "Software"), to deal
++in the Software without restriction, including without limitation the rights
++to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++copies of the Software, and to permit persons to whom the Software is
++furnished to do so, subject to the following conditions:
++
++The above copyright notice and this permission notice shall be included in all
++copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++SOFTWARE.
++
++*/
++#include "network.h"
++
++#include <arpa/inet.h>
++#include <string.h>
++#include <stdexcept>
++
++#include "utils.h"
++
++
++Network::Network(const std::string &network)
++{
++    memset(&this->data, 0, sizeof (struct sockaddr_in6));
++
++    if (network.find(".") != std::string::npos)
++    {
++        struct sockaddr_in *_sockaddr_in = reinterpret_cast<struct sockaddr_in*>(&this->data);
++
++        _sockaddr_in->sin_family = AF_INET;
++
++        int maskbits = inet_net_pton(AF_INET, network.c_str(), &_sockaddr_in->sin_addr, sizeof(struct in_addr));
++
++        if (maskbits < 0)
++            throw std::runtime_error("Network '" + network + "' is not a valid network notation.");
++
++        uint32_t _netmask = (uint64_t)0xFFFFFFFFu << (32 - maskbits);
++        this->in_mask = htonl(_netmask);
++    }
++    else if (network.find(":") != std::string::npos)
++    {
++        // Why does inet_net_pton not support AF_INET6...?
++
++        struct sockaddr_in6 *_sockaddr_in6 = reinterpret_cast<struct sockaddr_in6*>(&this->data);
++
++        _sockaddr_in6->sin6_family = AF_INET6;
++
++        std::vector<std::string> parts = splitToVector(network, '/', 2, false);
++        std::string &addrPart = parts[0];
++        int maskbits = 128;
++
++        if (parts.size() == 2)
++        {
++            const std::string &maskstring = parts[1];
++
++            const bool invalid_chars = std::any_of(maskstring.begin(), maskstring.end(), [](const char &c) { return c < '0' || c > '9'; });
++            if (invalid_chars || maskstring.length() > 3)
++                throw std::runtime_error("Mask '" + maskstring + "' is not valid");
++
++            maskbits = std::stoi(maskstring);
++        }
++
++        if (inet_pton(AF_INET6, addrPart.c_str(), &_sockaddr_in6->sin6_addr) != 1)
++        {
++            throw std::runtime_error("Network '" + network + "' is not a valid network notation.");
++        }
++
++        if (maskbits > 128 || maskbits < 0)
++        {
++            throw std::runtime_error("Network '" + network + "' is not a valid network notation.");
++        }
++
++        int m = maskbits;
++        memset(in6_mask, 0, 16);
++        int i = 0;
++        const uint64_t x = 0xFFFFFFFF00000000;
++
++        while (m >= 0)
++        {
++            int shift_remainder = std::min<int>(m, 32);
++            uint32_t b = x >> shift_remainder;
++            in6_mask[i++] = htonl(b);
++            m -= 32;
++        }
++
++        for (int i = 0; i < 4; i++)
++        {
++            network_addr_relevant_bits.__in6_u.__u6_addr32[i] = _sockaddr_in6->sin6_addr.__in6_u.__u6_addr32[i] & in6_mask[i];
++        }
++    }
++    else
++    {
++        throw std::runtime_error("Network '" + network + "' is not a valid network notation.");
++    }
++}
++
++bool Network::match(const sockaddr *addr) const
++{
++    const struct sockaddr* _sockaddr = reinterpret_cast<const struct sockaddr*>(&this->data);
++
++    if (_sockaddr->sa_family == AF_INET)
++    {
++        const struct sockaddr_in *_sockaddr_in = reinterpret_cast<const struct sockaddr_in*>(&this->data);
++        const struct sockaddr_in *_addr = reinterpret_cast<const struct sockaddr_in*>(addr);
++        return _sockaddr->sa_family == addr->sa_family && ((_sockaddr_in->sin_addr.s_addr & this->in_mask) == (_addr->sin_addr.s_addr & this->in_mask));
++    }
++    else if (_sockaddr->sa_family == AF_INET6)
++    {
++        const struct sockaddr_in6 *arg_addr = reinterpret_cast<const struct sockaddr_in6*>(addr);
++
++        struct in6_addr arg_addr_relevant_bits;
++        for (int i = 0; i < 4; i++)
++        {
++            arg_addr_relevant_bits.__in6_u.__u6_addr32[i] = arg_addr->sin6_addr.__in6_u.__u6_addr32[i] & in6_mask[i];
++        }
++
++        uint8_t matches[4];
++        for (int i = 0; i < 4; i++)
++        {
++            matches[i] = arg_addr_relevant_bits.__in6_u.__u6_addr32[i] == network_addr_relevant_bits.__in6_u.__u6_addr32[i];
++        }
++
++        return (_sockaddr->sa_family == addr->sa_family) & (matches[0] & matches[1] & matches[2] & matches[3]);
++    }
++
++    return false;
++}
++
++bool Network::match(const sockaddr_in *addr) const
++{
++    const struct sockaddr *_addr = reinterpret_cast<const struct sockaddr*>(addr);
++    return match(_addr);
++}
++
++bool Network::match(const sockaddr_in6 *addr) const
++{
++    const struct sockaddr *_addr = reinterpret_cast<const struct sockaddr*>(addr);
++    return match(_addr);
++}
+diff --git a/src/network.h b/src/network.h
+new file mode 100644
+index 0000000..9425b0c
+--- /dev/null
++++ b/src/network.h
+@@ -0,0 +1,55 @@
++/*
++This file is part of FlashMQ (https://www.flashmq.org)
++Copyright (C) 2021-2023 Wiebe Cazemier
++
++Relicensed by copyright holder for Victron Energy BV, dbus-flashmq:
++
++MIT License
++
++Permission is hereby granted, free of charge, to any person obtaining a copy
++of this software and associated documentation files (the "Software"), to deal
++in the Software without restriction, including without limitation the rights
++to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++copies of the Software, and to permit persons to whom the Software is
++furnished to do so, subject to the following conditions:
++
++The above copyright notice and this permission notice shall be included in all
++copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++SOFTWARE.
++
++*/
++
++#ifndef NETWORK_H
++#define NETWORK_H
++
++#include <arpa/inet.h>
++#include <string>
++#include <memory>
++
++/**
++ * @brief The Network class is taken from FlashMQ main.
++ */
++class Network
++{
++    sockaddr_in6 data;
++
++    uint32_t in_mask = 0;
++
++    uint32_t in6_mask[4];
++    struct in6_addr network_addr_relevant_bits;
++
++public:
++    Network(const std::string &network);
++    bool match(const struct sockaddr *addr) const ;
++    bool match(const struct sockaddr_in *addr) const ;
++    bool match(const struct sockaddr_in6 *addr) const;
++};
++
++#endif // NETWORK_H
+diff --git a/src/state.cpp b/src/state.cpp
+index 6fc59d5..468236c 100644
+--- a/src/state.cpp
++++ b/src/state.cpp
+@@ -43,6 +43,9 @@ State::State()
+         throw std::runtime_error("Set thread_count to 1 in FlashMQ's config.");
+     }
+ 
++    local_nets.emplace_back("127.0.0.0/8");
++    local_nets.emplace_back("::1/128");
++
+     dispatch_event_fd = eventfd(0, EFD_NONBLOCK);
+     flashmq_poll_add_fd(dispatch_event_fd, EPOLLIN, std::weak_ptr<void>());
+ }
+@@ -560,6 +563,11 @@ void State::initiate_broker_registration(uint32_t delay)
+     register_pending_id = flashmq_add_task(f, delay);
+ }
+ 
++bool State::match_local_net(const sockaddr *addr) const
++{
++    return std::any_of(local_nets.begin(), local_nets.end(), [addr](const Network &net){ return net.match(addr);});
++}
++
+ void State::scan_all_dbus_services()
+ {
+     auto list_names_handler = [](State *state, DBusMessage *msg) {
+diff --git a/src/state.h b/src/state.h
+index df2efb3..b4e2dca 100644
+--- a/src/state.h
++++ b/src/state.h
+@@ -11,6 +11,7 @@
+ #include "types.h"
+ #include <thread>
+ #include "serviceidentifier.h"
++#include "network.h"
+ 
+ /**
+  * @brief The Watch class is not an owner of the watches. DBus itself is.
+@@ -81,6 +82,8 @@ struct State
+     std::unordered_map<std::string, std::unordered_map<std::string, Item>> dbus_service_items; // keyed by service, then by dbus path, without instance.
+     std::vector<QueuedChangedItem> delayed_changed_values;
+ 
++    std::vector<Network> local_nets;
++
+     State();
+     ~State();
+     void add_dbus_to_mqtt_mapping(const std::string &serivce, std::unordered_map<std::string, Item> &items, bool instance_must_be_known, bool force_publish=false);
+@@ -109,6 +112,8 @@ struct State
+     void remove_id_to_owner(const std::string &owner);
+     void handle_read(const std::string &topic);
+     void initiate_broker_registration(uint32_t delay);
++
++    bool match_local_net(const struct sockaddr *addr) const;
+ };
+ 
+ #endif // STATE_H
+diff --git a/src/utils.cpp b/src/utils.cpp
+index 36dec9d..0472594 100644
+--- a/src/utils.cpp
++++ b/src/utils.cpp
+@@ -8,6 +8,7 @@
+ #include <sys/wait.h>
+ #include <iostream>
+ #include <sys/resource.h>
++#include <crypt.h>
+ 
+ #include "exceptions.h"
+ #include "fdguard.h"
+@@ -261,7 +262,24 @@ std::string dbus_message_get_error_name_safe(DBusMessage *msg)
+     return result;
+ }
+ 
++/**
++ * @brief crypt_match uses the system crypt function to match hashed passwords.
++ * @param phrase like 'hallo'
++ * @param crypted like '$2a$08$LBfjL0PfMBbjWxCzLBfjLurkA7K0tuDn44rNUXDBvatSgSqHvwaHS'
++ * @return
++ *
++ * Password 'hallo' yields this:
++ * $2a$08$LBfjL0PfMBbjWxCzLBfjLurkA7K0tuDn44rNUXDBvatSgSqHvwaHS
++ */
++bool crypt_match(const std::string &phrase, const std::string &crypted)
++{
++    struct crypt_data data;
++    memset(&data, 0, sizeof(struct crypt_data));
++    crypt_r(phrase.c_str(), crypted.c_str(), &data);
+ 
++    const std::string new_crypt(data.output);
++    return crypted == new_crypt;
++}
+ 
+ 
+ 
+diff --git a/src/utils.h b/src/utils.h
+index d9cd19c..ae7a196 100644
+--- a/src/utils.h
++++ b/src/utils.h
+@@ -36,4 +36,6 @@ T get_random()
+     return val;
+ }
+ 
++bool crypt_match(const std::string &phrase, const std::string &crypted);
++
+ #endif // UTILS_H
