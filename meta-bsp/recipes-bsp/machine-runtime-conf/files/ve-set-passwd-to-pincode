@@ -1,0 +1,44 @@
+#!/usr/bin/python3
+
+import argparse
+import bcrypt
+import glob
+import os
+import subprocess
+
+from datetime import datetime
+
+parser = argparse.ArgumentParser(
+		description='Set the default password to the BlueTooth pincode as read from the EEPROM.',
+		epilog='Victron Energy B.V.'
+	)
+parser.add_argument('--allow-default', action='store_true', help='Assume a default 000000 pincode if reading from the EEPROM failed');
+
+args = parser.parse_args()
+
+pin = "000000"
+try:
+	pin = subprocess.check_output(['/opt/victronenergy/venus-eeprom/eeprom', '--show', 'bluetooth-pin'], encoding="utf-8").strip()
+except:
+	if not args.allow_default:
+		print("Reading the pincode from the EEPROM failed, giving up!", file=sys.stderr)
+		os.exit(1)
+	pass
+
+# Check randomness, since this might run during boot.
+hash = bcrypt.hashpw(pin.encode('utf-8'), bcrypt.gensalt(prefix=b"2a", rounds=8))
+
+# syncs -> make sure it is actually on the storage medium, so it is still there if power is cut.
+passwd_file = "/data/conf/vncpassword.txt"
+with open(passwd_file + ".tmp", "w") as f:
+	f.write(hash.decode('utf-8'))
+	f.flush()
+	os.fsync(f.fileno())
+
+os.rename(passwd_file + ".tmp", passwd_file);
+
+dst_dir = os.path.dirname(passwd_file)
+fd = os.open(dst_dir, 0)
+os.fsync(fd)
+os.close(fd)
+

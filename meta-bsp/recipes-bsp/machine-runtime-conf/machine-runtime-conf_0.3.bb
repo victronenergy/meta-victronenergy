@@ -16,6 +16,9 @@ SRC_URI += " \
     file://product-id \
     file://product-name \
     file://machine-conf.sh \
+    file://ve-is-password-set-by-default \
+    file://ve-password-as-in-factory \
+    file://ve-set-passwd-to-pincode \
 "
 SRC_URI:append:ccgx = " file://get-unique-id.c"
 SRC_URI:append:sunxi = "\
@@ -26,7 +29,7 @@ SRC_URI:append:sunxi = "\
 
 inherit update-rc.d
 
-RDEPENDS:${PN} += "bash"
+RDEPENDS:${PN} += "bash python3-core"
 
 INITSCRIPT_NAME = "machine-conf.sh"
 INITSCRIPT_PARAMS = "start 90 S ."
@@ -79,6 +82,9 @@ do_install:append() {
 
     install -d ${D}/${base_sbindir}
     install -m 755 ${WORKDIR}/get-unique-id ${D}/${base_sbindir}
+    install -m 755 ${WORKDIR}/ve-is-password-set-by-default ${D}/${base_sbindir}
+    install -m 755 ${WORKDIR}/ve-password-as-in-factory ${D}/${base_sbindir}
+    install -m 755 ${WORKDIR}/ve-set-passwd-to-pincode ${D}/${base_sbindir}
 
     install -d ${D}/${bindir}
     install -m 755 ${WORKDIR}/bad-unique-id ${D}/${bindir}
