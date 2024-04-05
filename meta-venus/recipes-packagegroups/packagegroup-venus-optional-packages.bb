@@ -26,7 +26,6 @@ DEPENDS += "\
     python3-spidev \
     qtmqtt \
     s6 \
-    start-fingerpaint \
     start-sway \
     tcpdump \
     tinymembench \
