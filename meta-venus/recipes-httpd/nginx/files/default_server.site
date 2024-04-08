@@ -40,6 +40,7 @@ server {
     # VRM uses, which also ends up here, has stricter rules and doesn't just
     # return 'origin', so add them here.
     location /gui {
+        add_header Cache-Control "no-cache";
         add_header Access-Control-Allow-Origin "$http_origin";
         add_header Access-Control-Allow-Credentials true;
     }
