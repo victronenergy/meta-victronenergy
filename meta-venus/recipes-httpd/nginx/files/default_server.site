@@ -51,7 +51,8 @@ server {
         include fastcgi.conf;
     }
 
-    # FIXME: the html-app doesn't work over https at the moment, so force http.
+    # The html-app doesn't work over https at the moment, so force http.
+    # The MFDs don't seem to support https, so this remains http.
     location ~ /app {
         if ($scheme = "https") {
             rewrite ^/app(.*)$ http://$host$request_uri;
