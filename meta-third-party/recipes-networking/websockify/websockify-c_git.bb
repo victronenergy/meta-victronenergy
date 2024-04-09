@@ -14,7 +14,7 @@ S = "${WORKDIR}/git"
 B = "${WORKDIR}/git/c"
 DEST_DIR = "${D}${bindir}"
 
-DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/websockify 0.0.0.0:81 127.0.0.1:5900"
+DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/websockify 127.0.0.1:81 127.0.0.1:5900"
 
 do_install () {
     install -d ${D}${bindir}
