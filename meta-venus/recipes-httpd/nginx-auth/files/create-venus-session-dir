@@ -1,0 +1,7 @@
+#!/bin/sh
+
+dir="/data/var/lib/venus-www-sessions"
+if [ ! -d "$dir" ]; then
+	mkdir -p "$dir"
+fi
+chown -R php-fpm:php-fpm "$dir"
