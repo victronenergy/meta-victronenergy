@@ -5,6 +5,7 @@ import bcrypt
 import glob
 import os
 import subprocess
+import sys
 
 from datetime import datetime
 
@@ -18,11 +19,14 @@ args = parser.parse_args()
 
 pin = "000000"
 try:
-	pin = subprocess.check_output(['/opt/victronenergy/venus-eeprom/eeprom', '--show', 'bluetooth-pin'], encoding="utf-8").strip()
+	eeprom_pin = subprocess.check_output(['/opt/victronenergy/venus-eeprom/eeprom', '--show', 'bluetooth-pin'], encoding="utf-8").strip()
+	if eeprom_pin == "":
+		raise ValueError
+	pin = eeprom_pin
 except:
 	if not args.allow_default:
 		print("Reading the pincode from the EEPROM failed, giving up!", file=sys.stderr)
-		os.exit(1)
+		os._exit(1)
 	pass
 
 # Check randomness, since this might run during boot.
