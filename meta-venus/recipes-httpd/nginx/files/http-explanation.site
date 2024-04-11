@@ -1,0 +1,30 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+    root /var/www/venus/auth;
+    index cert-explanation.html
+    access_log off;
+    error_log /dev/null;
+
+    # redirect to the explanation since the page is likely on https...
+    error_page 404 $scheme://$host/?page=$request_uri;
+
+    # NOTE: VRM downloads the wasm over http, so it is also included here. It is
+    # not intended for use over the LAN.
+    #
+    # This is needed because the wasm is downloaded as XHR. The proxying system
+    # VRM uses, which also ends up here, has stricter rules and doesn't just
+    # return 'origin', so add them here.
+    location /gui-beta/venus-gui-v2 {
+        root /var/www/venus/;
+
+        gzip_static always;
+
+        add_header Cache-Control "no-cache";
+        add_header Access-Control-Allow-Origin "$http_origin";
+        add_header Access-Control-Allow-Credentials true;
+        add_header Vary "Content-Encoding, Access-Control-Allow-Origin, Access-Control-Allow-Credentials";
+    }
+}
