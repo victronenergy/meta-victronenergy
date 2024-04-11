@@ -8,15 +8,18 @@ INITSCRIPT_PARAMS = "start 99 4 . stop 20 0 1 6 ."
 DAEMONTOOLS_RUN = "${sbindir}/start-nginx.sh"
 
 SRC_URI += " \
-	file://default_server.site \
-	file://nginx-testmode.conf \
-	file://start-nginx.sh \
+    file://localsettings \
+    file://http.site \
+    file://http-explanation.site \
+    file://https.site \
+    file://nginx-testmode.conf \
+    file://start-nginx.sh \
 "
 PR = "1"
 
-inherit daemontools
+inherit daemontools localsettings
 
-RDEPENDS:${PN} += "php-fpm venus-www-config"
+RDEPENDS:${PN} += "php-fpm nginx-auth venus-www-config"
 EXTRA_OECONF = "--error-log-path=/var/volatile/log/nginx/error.log"
 PACKAGECONFIG:append = " http-auth-request"
 
@@ -36,11 +39,18 @@ EOF
     sed -i '/vnd.wap.wmlc/a \ \ \ \ application/wasm                                 wasm;' ${D}${sysconfdir}/nginx/mime.types
 
     sed -i 's,\(gzip_types[^;]*\);,\1 application/wasm;,' ${D}${sysconfdir}/nginx/nginx.conf
+    sed -i 's,include /etc/nginx/sites-enabled/\*;,include /run/nginx/sites-enabled/\*;,' ${D}${sysconfdir}/nginx/nginx.conf
 
     install -d ${D}${sbindir}
     install -m 755 ${WORKDIR}/start-nginx.sh ${D}${sbindir}
 
     install -m 644 ${WORKDIR}/nginx-testmode.conf ${D}${sysconfdir}/nginx
     echo 'DAEMON_OPTS="-c ${sysconfdir}/nginx/nginx-testmode.conf"' > "${D}${sysconfdir}/default/nginx"
+
+    rm ${D}${sysconfdir}/nginx/sites-available/default_server
+    rm ${D}${sysconfdir}/nginx/sites-enabled/default_server
+    install -m 644 ${WORKDIR}/http.site ${D}${sysconfdir}/nginx/sites-available
+    install -m 644 ${WORKDIR}/http-explanation.site ${D}${sysconfdir}/nginx/sites-available
+    install -m 644 ${WORKDIR}/https.site ${D}${sysconfdir}/nginx/sites-available
 }
 
