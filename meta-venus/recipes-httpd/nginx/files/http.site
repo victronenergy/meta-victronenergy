@@ -1,11 +1,6 @@
-# Default server configuration
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    listen 443 ssl;
-    listen [::]:443 ssl;
-    ssl_certificate /data/etc/ssl/venus.local.crt;
-    ssl_certificate_key /data/etc/ssl/venus.local.key;
 
     server_name _;
     root /var/www/venus;
@@ -14,6 +9,28 @@ server {
     gzip_static always;
 
     index index.html index.php;
+    error_page 401 403 =200 http://$host/auth/login.php?page=$request_uri;
+
+    location ~ ^/auth/ {
+        auth_request off;
+
+        location ~ \.php$ {
+            try_files $uri =404;
+            fastcgi_pass unix:/var/run/php5-fpm.socket;
+            include fastcgi.conf;
+        }
+    }
+
+    location = @remoteconsole-authproxy {
+        internal;
+        auth_request off;
+
+        proxy_pass http://localhost/auth/test.php?user=remoteconsole;
+        proxy_pass_request_body off;
+        proxy_set_header Content-Length "";
+    }
+
+    auth_request @remoteconsole-authproxy;
 
     # Browsers still cache, but will always revalidate.
     add_header Cache-Control "no-cache";
@@ -43,19 +60,12 @@ server {
         add_header Cache-Control "no-cache";
         add_header Access-Control-Allow-Origin "$http_origin";
         add_header Access-Control-Allow-Credentials true;
+        add_header Vary "Content-Encoding, Access-Control-Allow-Origin, Access-Control-Allow-Credentials";
     }
 
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_pass unix:/var/run/php5-fpm.socket;
         include fastcgi.conf;
-    }
-
-    # The html-app doesn't work over https at the moment, so force http.
-    # The MFDs don't seem to support https, so this remains http.
-    location ~ /app {
-        if ($scheme = "https") {
-            rewrite ^/app(.*)$ http://$host$request_uri;
-        }
     }
 }
