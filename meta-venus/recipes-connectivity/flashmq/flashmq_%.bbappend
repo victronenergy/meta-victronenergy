@@ -12,7 +12,7 @@ USERADD_PARAM:${PN} = "--no-create-home --shell /bin/false -g flashmq flashmq"
 
 DAEMONTOOLS_RUN = "${sbindir}/start-flashmq"
 
-RDEPENDS:${PN} += "dbus-flashmq"
+RDEPENDS:${PN} += "dbus-flashmq mosquitto-clients"
 
 do_install:append() {
     install ${WORKDIR}/flashmq.conf ${D}/${sysconfdir}/flashmq/flashmq.conf
