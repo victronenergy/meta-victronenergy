@@ -8,9 +8,11 @@ inherit python-compile
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;branch=master;protocol=https;tag=${PV} \
+    file://0001-dess-consider-acpv-on-output-if-charge-restricted.patch \
     file://com.victronenergy.system.conf \
 "
 S = "${WORKDIR}/git"
+PR = "1"
 
 RDEPENDS:${PN} = " \
     localsettings \

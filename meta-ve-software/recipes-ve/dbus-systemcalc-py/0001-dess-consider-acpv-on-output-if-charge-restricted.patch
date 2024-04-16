@@ -1,0 +1,31 @@
+From cc2879a0739ecef5490ac8cadaa194535c39eee8 Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Tue, 9 Apr 2024 14:21:14 +0200
+Subject: [PATCH] dess: consider acpv on output if charge restricted
+
+When charging from the grid is restricted, the system is in
+self-consumption strategy, and there is AC-coupled PV on the
+output this was sold to the grid instead of used for charging.
+This bug crept in in Venus 3.30 when switching (back) to using
+DC charge current control to control charging instead of the AC
+setpoint (since that caused full speed charging in many cases).
+---
+ delegates/dynamicess.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/delegates/dynamicess.py b/delegates/dynamicess.py
+index 85cdd4c..17b64d9 100644
+--- a/delegates/dynamicess.py
++++ b/delegates/dynamicess.py
+@@ -217,7 +217,10 @@ def consumption(self):
+ 	def acpv(self):
+ 		return (self._dbusservice['/Ac/PvOnGrid/L1/Power'] or 0) + \
+ 			(self._dbusservice['/Ac/PvOnGrid/L2/Power'] or 0) + \
+-			(self._dbusservice['/Ac/PvOnGrid/L3/Power'] or 0)
++			(self._dbusservice['/Ac/PvOnGrid/L3/Power'] or 0) + \
++			(self._dbusservice['/Ac/PvOnOutput/L1/Power'] or 0) + \
++			(self._dbusservice['/Ac/PvOnOutput/L2/Power'] or 0) + \
++			(self._dbusservice['/Ac/PvOnOutput/L3/Power'] or 0)
+ 
+ 	@property
+ 	def capacity(self):
