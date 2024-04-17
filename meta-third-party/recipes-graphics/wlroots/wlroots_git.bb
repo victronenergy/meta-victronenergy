@@ -4,11 +4,12 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=7578fad101710ea2d289ff5411f1b818"
 
 DEPENDS += "libinput libxkbcommon pixman virtual/egl wayland wayland-native wayland-protocols"
 
-inherit meson
+inherit meson pkgconfig
 
 SRC_URI = " \
-    git://github.com/swaywm/wlroots;protocol=https \
+    git://github.com/swaywm/wlroots;branch=master;protocol=https \
     file://0001-don-t-check-for-graphics-mode.patch \
+    file://0001-don-t-error-on-warnings-in-a-release-build.patch \
 "
 SRCREV = "8ad2cc39eb420c22dde7e49c01bde916b7bc58cc"
 S = "${WORKDIR}/git"

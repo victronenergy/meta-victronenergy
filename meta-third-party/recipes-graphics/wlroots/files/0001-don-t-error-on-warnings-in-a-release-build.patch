@@ -1,0 +1,24 @@
+From b47fb37d1af6872c94bf4f4be3095d80c805ef5e Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Sun, 21 Apr 2024 11:30:26 +0200
+Subject: [PATCH] don't error on warnings in a release build
+
+---
+ meson.build | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index ca26391e..0a35579c 100644
+--- a/meson.build
++++ b/meson.build
+@@ -7,7 +7,6 @@ project(
+ 	default_options: [
+ 		'c_std=c11',
+ 		'warning_level=2',
+-		'werror=true',
+ 	],
+ )
+ 
+-- 
+2.34.1
+

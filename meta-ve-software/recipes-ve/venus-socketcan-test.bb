@@ -1,4 +1,4 @@
-SRC_URI = "git://github.com/victronenergy/venus-socketcan-test"
+SRC_URI = "git://github.com/victronenergy/venus-socketcan-test;branch=master;protocol=https"
 SRCREV = "1004bfef93267002e919f2c8b8e8b16977ae3059"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=7c0ad2b90776f126b453c5f96c0da11a"
