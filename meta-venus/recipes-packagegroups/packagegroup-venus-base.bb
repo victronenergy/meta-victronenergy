@@ -45,6 +45,8 @@ RDEPENDS:${PN} += "\
     curl \
     custom-rc.d \
     dbus \
+    dbus-common \
+    dbus-tools \
     default-locale \
     dnsmasq \
     dpkg-start-stop \
