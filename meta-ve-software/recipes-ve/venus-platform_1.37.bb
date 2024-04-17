@@ -10,9 +10,11 @@ RDEPENDS:${PN} += "flashmq velib-python"
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git;tag=v${PV} \
+    file://0001-Don-t-restart-gui-v1-during-startup.patch \
     file://can.inc \
 "
 S = "${WORKDIR}/git"
+PR = "1"
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/venus-platform"
 

@@ -1,0 +1,29 @@
+From c2dd18b93049217d40c4dc9a532d2d33b4eec6ad Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 17 Apr 2024 09:57:43 +0200
+Subject: [PATCH] Don't restart gui-v1 during startup
+
+For current releases there is no need to switch between guiv1 / v2.
+So don't restart gui-v1 during boot, since perhaps? it might get stuck
+at times.
+---
+ src/application.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/application.cpp b/src/application.cpp
+index d74a105..d28b999 100644
+--- a/src/application.cpp
++++ b/src/application.cpp
+@@ -273,7 +273,8 @@ void Application::demoSettingChanged(QVariant var)
+ 
+ void Application::manageDaemontoolsServices()
+ {
+-	new DaemonToolsService(mSettings, "/service/start-gui", "Settings/Gui/RunningVersion", QList<int>() << 1 << 2, this);
++	// don't restart the gui-v1 during initial boot..
++	// new DaemonToolsService(mSettings, "/service/start-gui", "Settings/Gui/RunningVersion", QList<int>() << 1 << 2, this);
+ 
+ 	new DaemonToolsService(mSettings, "/service/dbus-ble-sensors", "Settings/Services/BleSensors", this);
+ 
+-- 
+2.34.1
+
