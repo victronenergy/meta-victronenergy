@@ -16,8 +16,10 @@ SRC_URI += " \
     file://product-id \
     file://product-name \
     file://machine-conf.sh \
+    file://ve-hash-passwd.c \
     file://ve-is-passwd-set-by-default \
     file://ve-passwd-as-in-factory \
+    file://ve-set-passwd \
     file://ve-set-passwd-to-pincode \
 "
 SRC_URI:append:ccgx = " file://get-unique-id.c"
@@ -29,6 +31,7 @@ SRC_URI:append:sunxi = "\
 
 inherit update-rc.d
 
+DEPENDS = "virtual/crypt"
 RDEPENDS:${PN} += "bash python3-core"
 
 INITSCRIPT_NAME = "machine-conf.sh"
@@ -39,6 +42,7 @@ do_compile () {
         ${CC} ${CFLAGS} ${LDFLAGS} \
             ${WORKDIR}/get-unique-id.c -o ${WORKDIR}/get-unique-id
     fi
+    ${CC} ${CFLAGS} ${LDFLAGS} ${WORKDIR}/ve-hash-passwd.c -o ${WORKDIR}/ve-hash-passwd -lcrypt
 }
 
 VE_LARGE_IMAGE_SUPPORT ?= "1"
@@ -82,8 +86,10 @@ do_install:append() {
 
     install -d ${D}/${base_sbindir}
     install -m 755 ${WORKDIR}/get-unique-id ${D}/${base_sbindir}
+    install -m 755 ${WORKDIR}/ve-hash-passwd ${D}/${base_sbindir}
     install -m 755 ${WORKDIR}/ve-is-passwd-set-by-default ${D}/${base_sbindir}
     install -m 755 ${WORKDIR}/ve-passwd-as-in-factory ${D}/${base_sbindir}
+    install -m 755 ${WORKDIR}/ve-set-passwd ${D}/${base_sbindir}
     install -m 755 ${WORKDIR}/ve-set-passwd-to-pincode ${D}/${base_sbindir}
 
     install -d ${D}/${bindir}

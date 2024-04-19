@@ -1,48 +1,45 @@
-#!/usr/bin/python3
+#!/bin/sh
 
-import argparse
-import bcrypt
-import glob
-import os
-import subprocess
-import sys
+allow_default=0
 
-from datetime import datetime
+usage() {
+    echo "usage: $0"
+    echo
+    echo "Set the default password to the BlueTooth pincode as read from the EEPROM."
+    echo
+    echo "-h --help: this help"
+    echo "--allow-default: Assume a default 000000 pincode if reading from the EEPROM failed."
+    echo
+    echo "Victron Energy B.V."
+}
 
-parser = argparse.ArgumentParser(
-		description='Set the default password to the BlueTooth pincode as read from the EEPROM.',
-		epilog='Victron Energy B.V.'
-	)
-parser.add_argument('--allow-default', action='store_true', help='Assume a default 000000 pincode if reading from the EEPROM failed');
+while [ "$#" -ne 0 ]; do
+	case $1 in
+	-h|--help)
+        usage "$0"
+        exit
+	    ;;
+	--allow-default)
+        allow_default=1
+	    ;;
+	*)
+		usage "$0"
+		exit 1
+	esac
 
-args = parser.parse_args()
+	shift
+done
 
-pin = "000000"
-try:
-	eeprom_pin = subprocess.check_output(['/opt/victronenergy/venus-eeprom/eeprom', '--show', 'bluetooth-pin'], encoding="utf-8").strip()
-	if eeprom_pin == "":
-		raise ValueError
-	pin = eeprom_pin
-except:
-	if not args.allow_default:
-		print("Reading the pincode from the EEPROM failed, giving up!", file=sys.stderr)
-		os._exit(1)
-	pass
+pin="$(/opt/victronenergy/venus-eeprom/eeprom --show bluetooth-pin 2>/dev/null)"
+if [ "$pin" = "" ]; then
+    if [ "$allow_default" -eq 0 ]; then
+        echo 'Error: could not read bluetooth pincode, giving up. See --allow-default.' >&2
+        exit 1
+    fi
+    echo "Could not read pincode, using default instead."
+    pin="000000"
+fi
 
-# Check randomness, since this might run during boot.
-hash = bcrypt.hashpw(pin.encode('utf-8'), bcrypt.gensalt(prefix=b"2a", rounds=8))
-
-# syncs -> make sure it is actually on the storage medium, so it is still there if power is cut.
-passwd_file = "/data/conf/vncpassword.txt"
-with open(passwd_file + ".tmp", "w") as f:
-	f.write(hash.decode('utf-8'))
-	f.flush()
-	os.fsync(f.fileno())
-
-os.rename(passwd_file + ".tmp", passwd_file);
-
-dst_dir = os.path.dirname(passwd_file)
-fd = os.open(dst_dir, 0)
-os.fsync(fd)
-os.close(fd)
+ve-set-passwd "$pin"
+exit $?
 

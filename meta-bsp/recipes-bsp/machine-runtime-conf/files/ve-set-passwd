@@ -1,0 +1,46 @@
+#!/bin/sh
+
+usage() {
+    echo "usage: $0 password"
+    echo
+    echo "Set the VNC password to password with salt derived from the uniqueid"
+    echo "in such a way that is compatible with VRM."
+}
+
+if [ "$1" = "-h" ]; then
+	usage "$0"
+	exit
+fi
+
+unique_id="$(get-unique-id 2>/dev/null)"
+if [ -z "$unique_id" ]; then
+     echo "could not read unique-id"
+     exit 1
+fi
+
+passwd="$1"
+hash="$(ve-hash-passwd $unique_id $passwd)"
+if [ -z "$hash" ]; then
+    echo "could not create password hash"
+    exit 1
+fi
+
+echo "$hash" > /data/conf/vncpassword.txt.tmp
+if [ $? -ne 0 ]; then
+    echo "could not save password hash"
+    exit 1
+fi
+
+sync
+if [ $? -ne 0 ]; then
+    echo "could not sync"
+    exit 1
+fi
+
+mv /data/conf/vncpassword.txt.tmp /data/conf/vncpassword.txt
+if [ $? -ne 0 ]; then
+    echo "could not replace password hash file"
+    exit 1
+fi
+sync
+
