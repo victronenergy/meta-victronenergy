@@ -16,8 +16,8 @@ SRC_URI += " \
     file://product-id \
     file://product-name \
     file://machine-conf.sh \
-    file://ve-is-password-set-by-default \
-    file://ve-password-as-in-factory \
+    file://ve-is-passwd-set-by-default \
+    file://ve-passwd-as-in-factory \
     file://ve-set-passwd-to-pincode \
 "
 SRC_URI:append:ccgx = " file://get-unique-id.c"
@@ -82,8 +82,8 @@ do_install:append() {
 
     install -d ${D}/${base_sbindir}
     install -m 755 ${WORKDIR}/get-unique-id ${D}/${base_sbindir}
-    install -m 755 ${WORKDIR}/ve-is-password-set-by-default ${D}/${base_sbindir}
-    install -m 755 ${WORKDIR}/ve-password-as-in-factory ${D}/${base_sbindir}
+    install -m 755 ${WORKDIR}/ve-is-passwd-set-by-default ${D}/${base_sbindir}
+    install -m 755 ${WORKDIR}/ve-passwd-as-in-factory ${D}/${base_sbindir}
     install -m 755 ${WORKDIR}/ve-set-passwd-to-pincode ${D}/${base_sbindir}
 
     install -d ${D}/${bindir}
