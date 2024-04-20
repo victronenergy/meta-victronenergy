@@ -1,3 +1,8 @@
+/*
+ * Copied from U-boot.
+ * SPDX-License-Identifier:     GPL-2.0-or-later
+ */
+
 #include <stdio.h>
 
 #define TAM3517_sequence_number(info) \

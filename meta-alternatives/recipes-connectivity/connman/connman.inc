@@ -9,7 +9,7 @@ configuration methods, like DHCP and domain name resolving, are \
 implemented using plug-ins."
 HOMEPAGE = "http://connman.net/"
 BUGTRACKER = "http://bugs.meego.com/buglist.cgi?quicksearch=connman"
-LICENSE  = "GPLv2"
+LICENSE  = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://COPYING;md5=12f884d2ae1ff87c09e5b7ccc2c4ca7e \
                     file://src/main.c;beginline=1;endline=20;md5=486a279a6ab0c8d152bcda3a5b5edc36"
 

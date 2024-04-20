@@ -1,5 +1,5 @@
 SUMMARY = "Socketcand, socketcan over tcp/ip"
-LICENSE = "GPLv2 | BSD"
+LICENSE = "GPL-2.0-only | BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://${S}/socketcand.h;md5=abaa92ce5821533fe88fd4c645e9b494;endline=1"
 
 SRC_URI = "git://github.com/linux-can/socketcand;branch=master;protocol=https"

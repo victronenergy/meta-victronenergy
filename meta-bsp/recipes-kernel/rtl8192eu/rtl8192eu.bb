@@ -1,6 +1,6 @@
 SUMMARY = "RTL8192AU kernel driver (wifi)"
 DESCRIPTION = "RTL8192AU kernel driver"
-LICENSE = "GPLv2"
+LICENSE = "GPL-2.0-only"
 LIC_FILES_CHKSUM = "file://hal/hal_com_c2h.h;md5=d1415c223f48d77507154f01e7fa002f;endline=14"
 
 SRC_URI = " \

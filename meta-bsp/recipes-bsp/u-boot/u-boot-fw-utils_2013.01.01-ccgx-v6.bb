@@ -1,6 +1,6 @@
 SUMMARY = "U-Boot environment tools"
 DESCRIPTION = "install fw_setenv and fw_printenv"
-LICENSE = "GPLv2+"
+LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
 
 COMPATIBLE_MACHINE = "ccgx"

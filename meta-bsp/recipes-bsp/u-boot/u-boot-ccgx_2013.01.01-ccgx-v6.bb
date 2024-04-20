@@ -1,6 +1,6 @@
 require u-boot.inc
 
-LICENSE = "GPLv2+"
+LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
 SRC_URI += "https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz"
 SRC_URI[md5sum] = "5523944a5f4595f9e22c861247b727f2"

@@ -1,5 +1,5 @@
 SUMMARY = "daemon implementing the Link-Local Multicast Name Resolution (LLMNR) protocol"
-LICENSE = "GPLv2"
+LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://COPYING;md5=05a4c5604b9126dcb84dcc6f1a84a7bb"
 
 SRC_URI = " \

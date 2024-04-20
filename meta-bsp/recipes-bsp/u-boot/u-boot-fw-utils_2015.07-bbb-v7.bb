@@ -1,6 +1,6 @@
 require ${COREBASE}/meta/recipes-bsp/u-boot/u-boot.inc
 
-LICENSE = "GPLv2+"
+LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=0507cd7da8e7ad6d6701926ec9b84c95"
 
 COMPATIBLE_MACHINE = "beaglebone"

@@ -1,6 +1,6 @@
 SUMMARY = "Driver for RTL8723DU wifi module"
-LICENSE = "GPLv2"
-LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
+LICENSE = "GPL-2.0-only"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0-only;md5=801f80980d171dd6425610833a22dbe6"
 
 SRC_URI = " \
     git://github.com/lwfinger/rtl8723du.git;protocol=https;branch=v5.13.4 \

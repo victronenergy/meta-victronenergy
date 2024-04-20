@@ -1,7 +1,7 @@
 DESCRIPTION = "SSH2 protocol library"
 HOMEPAGE = "https://github.com/paramiko/paramiko/"
 SECTION = "devel/python"
-LICENSE = "LGPLv2.1"
+LICENSE = "LGPL-2.1"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=fd0120fc2e9f841c73ac707a30389af5"
 
 SRC_URI[md5sum] = "f729a45c9122bf975b9177ec5aaa3791"
