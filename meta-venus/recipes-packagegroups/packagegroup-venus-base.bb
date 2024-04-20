@@ -77,7 +77,6 @@ RDEPENDS:${PN} += "\
     pointercal \
     ppp \
     python-symlink \
-    python3-bcrypt \
     rsync \
     rtl8192eu \
     screen \
