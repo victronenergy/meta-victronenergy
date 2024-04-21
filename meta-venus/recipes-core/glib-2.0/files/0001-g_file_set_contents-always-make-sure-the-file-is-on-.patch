@@ -1,0 +1,32 @@
+From bd4ed9f35aa7488636c72a9f61c0e93afec347b5 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Sat, 16 Nov 2024 20:49:12 +0000
+Subject: [PATCH] g_file_set_contents: always make sure the file is on the disk
+
+The upstream g_file_set_contents didn't fully guarantee the file is
+actually on the disc and for performance reasons didn't want to alter
+the function, but added g_file_set_contents_full instead. Since venus
+guaranteed it was on disc, lets alter g_file_set_contents to make sure
+it does. As far as I remember conmann is/was the only user of it.
+
+Upstream-Status: Inappropriate [Venus specific]
+---
+ glib/gfileutils.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/glib/gfileutils.c b/glib/gfileutils.c
+index 0918a65..0828c28 100644
+--- a/glib/gfileutils.c
++++ b/glib/gfileutils.c
+@@ -1267,7 +1267,7 @@ g_file_set_contents (const gchar  *filename,
+ {
+   return g_file_set_contents_full (filename, contents, length,
+                                    G_FILE_SET_CONTENTS_CONSISTENT |
+-                                   G_FILE_SET_CONTENTS_ONLY_EXISTING,
++                                   G_FILE_SET_CONTENTS_DURABLE,
+                                    0666, error);
+ }
+ 
+-- 
+2.43.0
+
