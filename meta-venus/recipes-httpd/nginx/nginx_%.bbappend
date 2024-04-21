@@ -21,7 +21,9 @@ EXTRA_OECONF = "--error-log-path=/var/volatile/log/nginx/error.log"
 PACKAGECONFIG:append = " http-auth-request"
 
 do_install:append() {
-	sed -i 's,/var/log/nginx,/var/volatile/log/nginx,g' ${D}${sysconfdir}/default/volatiles/99_nginx
+    # don't package the logdir, create it as volatile storage instead
+    rm -rf ${D}/var/volatile
+    sed -i 's,/var/log/nginx,/var/volatile/log/nginx,g' ${D}${sysconfdir}/default/volatiles/99_nginx
 
 cat - ${WORKDIR}/nginx.conf << EOF > ${D}${sysconfdir}/nginx/nginx.conf
 daemon off;
