@@ -1,6 +1,6 @@
-From e38da4eb088c2562e1d073a0ad83346e4ad2525a Mon Sep 17 00:00:00 2001
+From 0213a99b03ad99ed304a50d7836904dfa061b46a Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
-Date: Fri, 9 Dec 2016 14:36:06 +0100
+Date: Sun, 21 Apr 2024 19:54:00 +0000
 Subject: [PATCH 1/2] Use MemAvailable instead of MemFree
 
 MemFree does not include cached pages and hence underestimates the
@@ -13,12 +13,14 @@ See https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=34
 Note: This patch blindly assumes MemAvailable is present!!!
 Completely unsuitable for general use, since the device ends up in a
 reboot loop in such a case...
+
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/memory.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/memory.c b/src/memory.c
-index ff2489ac1d8c..6b9b99c225a0 100644
+index 3de8af5..d380637 100644
 --- a/src/memory.c
 +++ b/src/memory.c
 @@ -28,7 +28,7 @@
@@ -28,8 +30,8 @@ index ff2489ac1d8c..6b9b99c225a0 100644
 -#define FREEMEM		"MemFree:"
 +#define FREEMEM		"MemAvailable:"
  #define FREESWAP	"SwapFree:"
- 
- static int mem_fd = -1;
+ #define TOTALSWAP	"SwapTotal:"
+ #define USED_BUFFER	"Buffers:"
 -- 
-2.26.2
+2.34.1
 
