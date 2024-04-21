@@ -1,9 +1,11 @@
-From cf40809bd808cc9dfdd37d7086bcdebabf8320b3 Mon Sep 17 00:00:00 2001
+From 1f56a3ff64ef910fc956258716cbc6632318f3c6 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
-Date: Thu, 14 Mar 2019 13:24:29 +0000
+Date: Sun, 21 Apr 2024 20:04:07 +0000
 Subject: [PATCH 2/2] add test-prescaler to run test less often
 
 When set in the config file, test are only run every n intervals.
+
+Upstream-Status: Inappropriate [Venus specific]
 ---
  include/extern.h  | 3 ++-
  src/configfile.c  | 3 +++
@@ -12,10 +14,10 @@ When set in the config file, test are only run every n intervals.
  4 files changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/include/extern.h b/include/extern.h
-index f00e4cfa253e..e09119ec7a2d 100644
+index 81bc620..bf2a5b3 100644
 --- a/include/extern.h
 +++ b/include/extern.h
-@@ -82,6 +82,7 @@ extern char *devname;
+@@ -96,6 +96,7 @@ extern char *devname;
  extern char *admin;
  
  extern int	test_timeout;		/* test-binary time out value. */
@@ -23,7 +25,7 @@ index f00e4cfa253e..e09119ec7a2d 100644
  extern int	repair_timeout;		/* repair-binary time out value. */
  extern int	dev_timeout;		/* Watchdog hardware time-out. */
  extern int	retry_timeout;		/* Retry on non-critical errors. */
-@@ -152,7 +153,7 @@ int check_temp(struct list *act);
+@@ -172,7 +173,7 @@ int check_temp(struct list *act);
  int close_tempcheck(void);
  
  /** test_binary.c **/
@@ -33,10 +35,10 @@ index f00e4cfa253e..e09119ec7a2d 100644
  
  /** pidfile.c **/
 diff --git a/src/configfile.c b/src/configfile.c
-index a0996e228c78..248b9d90d0a2 100644
+index d971d44..9b49c4d 100644
 --- a/src/configfile.c
 +++ b/src/configfile.c
-@@ -51,6 +51,7 @@ static void add_test_binaries(const char *path);
+@@ -56,6 +56,7 @@ static void parse_arg_val(char *arg, char *val, int linecount);
  #define TEMPPOWEROFF   		"temp-power-off"
  #define TESTBIN			"test-binary"
  #define TESTTIMEOUT		"test-timeout"
@@ -44,7 +46,7 @@ index a0996e228c78..248b9d90d0a2 100644
  #define HEARTBEAT		"heartbeat-file"
  #define HBSTAMPS		"heartbeat-stamps"
  #define LOGDIR			"log-dir"
-@@ -86,6 +87,7 @@ char *devname = NULL;
+@@ -93,6 +94,7 @@ char *devname = NULL;
  char *admin = "root";
  
  int test_timeout = TIMER_MARGIN;   /* test-binary time out value. */
@@ -52,19 +54,19 @@ index a0996e228c78..248b9d90d0a2 100644
  int repair_timeout = TIMER_MARGIN; /* repair-binary time out value. */
  int dev_timeout = TIMER_MARGIN;    /* Watchdog hardware time-out. */
  int retry_timeout = TIMER_MARGIN;  /* Retry on non-critical errors. */
-@@ -199,6 +201,7 @@ void read_config(char *configfile)
- 		} else if (READ_INT(REPAIRTIMEOUT, &repair_timeout) == 0) {
- 		} else if (READ_LIST(TESTBIN, &tr_bin_list) == 0) {
- 		} else if (READ_INT(TESTTIMEOUT, &test_timeout) == 0) {
-+        } else if (READ_INT(TESTPRESCALER, &test_prescaler) == 0) {
- 		} else if (READ_STRING(HEARTBEAT, &heartbeat) == 0) {
- 		} else if (READ_INT(HBSTAMPS, &hbstamps) == 0) {
- 		} else if (READ_STRING(ADMIN, &admin) == 0) {
+@@ -268,6 +270,7 @@ static void parse_arg_val(char *arg, char *val, int linecount)
+ 	READ_INT(REPAIRTIMEOUT, &repair_timeout);
+ 	READ_LIST(TESTBIN, &tr_bin_list);
+ 	READ_INT(TESTTIMEOUT, &test_timeout);
++	READ_INT(TESTPRESCALER, &test_prescaler);
+ 	READ_STRING(HEARTBEAT, &heartbeat);
+ 	READ_INT(HBSTAMPS, &hbstamps);
+ 	READ_STRING(ADMIN, &admin);
 diff --git a/src/test_binary.c b/src/test_binary.c
-index 2211f9e9db77..74064fe56d56 100644
+index 8fa5154..f22b38b 100644
 --- a/src/test_binary.c
 +++ b/src/test_binary.c
-@@ -235,7 +235,7 @@ static int check_processes(const char *name, int *ecode)
+@@ -237,7 +237,7 @@ static int check_processes(const char *name, int *ecode)
   * A time-out of zero will disable the time-out checking, but in that case a blocked child
   * will simply persist indefinitely and no error will be found.
   */
@@ -73,7 +75,7 @@ index 2211f9e9db77..74064fe56d56 100644
  {
  	pid_t child_pid;
  	int ecode = EDONTKNOW;
-@@ -256,6 +256,9 @@ int check_bin(char *tbinary, int timeout, int version)
+@@ -258,6 +258,9 @@ int check_bin(char *tbinary, int timeout, int version)
  		return EDONTKNOW;
  	}
  
@@ -82,12 +84,12 @@ index 2211f9e9db77..74064fe56d56 100644
 +
  	child_pid = fork();
  	if (!child_pid) {
- 
+ 		/* Don't want the stdout and stderr of our test program
 diff --git a/src/watchdog.c b/src/watchdog.c
-index 486384aec113..869dee94b812 100644
+index 6a8a173..a951f44 100644
 --- a/src/watchdog.c
 +++ b/src/watchdog.c
-@@ -550,11 +550,11 @@ int main(int argc, char *const argv[])
+@@ -523,11 +523,11 @@ int main(int argc, char *const argv[])
  
  		/* test, or test/repair binaries in the watchdog.d directory */
  		for (act = tr_bin_list; act != NULL; act = act->next)
@@ -95,12 +97,12 @@ index 486384aec113..869dee94b812 100644
 +			do_check(check_bin(act->name, test_timeout, act->version, (count % test_prescaler) == 0), repair_bin, act);
  
  		/* in case test binaries return quickly */
- 		usleep(swait);
+ 		xusleep(swait);
 -		check_bin(NULL, test_timeout, 0);
 +		check_bin(NULL, test_timeout, 0, 0);
  
  		/* finally sleep for a full cycle */
  		/* we have just triggered the device with the last check */
 -- 
-2.26.2
+2.34.1
 
