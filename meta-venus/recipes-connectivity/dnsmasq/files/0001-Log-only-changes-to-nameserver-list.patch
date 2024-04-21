@@ -1,0 +1,116 @@
+From b2d9199e7057ab19fa4edcac046068eac7b025f6 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 29 Jan 2025 18:01:50 +0100
+Subject: [PATCH] Log only changes to nameserver list
+
+original patch by Mans Rullgard
+
+Upstream-Status: Inappropriate [Venus specific]
+---
+ src/dnsmasq.h      | 13 +++++++++----
+ src/domain-match.c |  8 ++++++++
+ src/network.c      |  5 +++++
+ 3 files changed, 22 insertions(+), 4 deletions(-)
+
+diff --git a/src/dnsmasq.h b/src/dnsmasq.h
+index e455c3f..03af213 100644
+--- a/src/dnsmasq.h
++++ b/src/dnsmasq.h
+@@ -566,6 +566,7 @@ union mysockaddr {
+ #define SERV_LOOP            8192  /* server causes forwarding loop */
+ #define SERV_DO_DNSSEC      16384  /* Validate DNSSEC when using this server */
+ #define SERV_GOT_TCP        32768  /* Got some data from the TCP connection */
++#define SERV_NEW            65536  /* server was just added */
+ 
+ struct serverfd {
+   int fd;
+@@ -588,7 +589,8 @@ struct randfd_list {
+ 
+ 
+ struct server {
+-  u16 flags, domain_len;
++  u32 flags;
++  u16 domain_len;
+   char *domain;
+   struct server *next;
+   int serial, arrayposn;
+@@ -610,21 +612,24 @@ struct server {
+ 
+ /* First four fields must match struct server in next three definitions.. */
+ struct serv_addr4 {
+-  u16 flags, domain_len;
++  u32 flags;
++  u16 domain_len;
+   char *domain;
+   struct server *next;
+   struct in_addr addr;
+ };
+ 
+ struct serv_addr6 {
+-  u16 flags, domain_len;
++  u32 flags;
++  u16 domain_len;
+   char *domain;
+   struct server *next;
+   struct in6_addr addr;
+ };
+ 
+ struct serv_local {
+-  u16 flags, domain_len;
++  u32 flags;
++  u16 domain_len;
+   char *domain;
+   struct server *next;
+ };
+diff --git a/src/domain-match.c b/src/domain-match.c
+index cf2da77..a35ae56 100644
+--- a/src/domain-match.c
++++ b/src/domain-match.c
+@@ -596,6 +596,12 @@ void mark_servers(int flag)
+       }
+ }
+ 
++static void log_gone(struct server *serv)
++{
++  int port = prettyprint_addr(&serv->addr, daemon->namebuff);
++  my_syslog(LOG_INFO, _("stopped using nameserver %s#%d"), daemon->namebuff, port);
++}
++
+ void cleanup_servers(void)
+ {
+   struct server *serv, *tmp, **up;
+@@ -607,6 +613,7 @@ void cleanup_servers(void)
+       if (serv->flags & SERV_MARK)
+        {
+          server_gone(serv);
++         log_gone(serv);
+          *up = serv->next;
+ 	 free(serv->domain);
+ 	 free(serv);
+@@ -720,6 +727,7 @@ int add_update_server(int flags,
+ 	    }
+ 	  
+ 	  memset(serv, 0, sizeof(struct server));
++	  flags |= SERV_NEW;
+ 	  
+ 	  /* Add to the end of the chain, for order */
+ 	  if (daemon->servers_tail)
+diff --git a/src/network.c b/src/network.c
+index b061833..d015fec 100644
+--- a/src/network.c
++++ b/src/network.c
+@@ -1653,6 +1653,11 @@ void check_servers(int no_loop_check)
+       if (serv->sfd)
+ 	serv->sfd->used = 1;
+       
++      if (!(serv->flags & SERV_NEW))
++         continue;
++
++      serv->flags &= ~SERV_NEW;
++
+       if (count == SERVERS_LOGGED)
+ 	my_syslog(LOG_INFO, _("more servers are defined but not logged"));
+       
+-- 
+2.43.0
+
