@@ -4,9 +4,10 @@ DEPENDS += "update-rc.d-native"
 
 inherit localsettings
 
+# file://0002-Log-only-changes-to-nameserver-list.patch
+
 SRC_URI += "\
     file://0001-Don-t-spam-syslog-on-reload-and-not-using-hosts-file.patch \
-    file://0002-Log-only-changes-to-nameserver-list.patch \
     file://dnsmasq.ap.conf \
     file://localsettings \
     file://resolv.conf \
