@@ -8,6 +8,7 @@ DESCRIPTION = " \
 "
 
 RDEPENDS:${PN} += " \
+    dbus-acsystem \
     dbus-generator-starter \
     dbus-mqtt \
     dbus-pump \
