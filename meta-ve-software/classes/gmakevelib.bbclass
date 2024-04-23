@@ -45,7 +45,11 @@ gmakevelib_do_configure() {
     else
         bbnote "nothing to configure"
     fi
-    make distclean
+
+    # if distclean fails, try clean instead.
+    if ! make distclean; then
+        make clean
+    fi
 }
 
 gmakevelib_do_install() {
