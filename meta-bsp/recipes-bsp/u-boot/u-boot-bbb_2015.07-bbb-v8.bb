@@ -14,7 +14,6 @@ SRC_URI = " \
     file://uEnv.txt \
     file://install.cmds \
 "
-SRC_URI[md5sum] = "fb05e7fafaa3e2f4be7a17e2552bf50e"
 SRC_URI[sha256sum] = "35f2d883ec2a0f839811fc97a735e087e626370bca41ba0c0e4f97a46adbc626"
 
 do_compile:append () {

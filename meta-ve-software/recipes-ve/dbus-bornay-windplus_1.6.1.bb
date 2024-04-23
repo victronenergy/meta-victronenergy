@@ -7,7 +7,6 @@ SRC_URI = "\
     gitsm://github.com/victronenergy/${BPN}.git;protocol=http;branch=master;tag=v${PV} \
 "
 
-SRC_URI[md5sum] = "29b173fd5fa572ec0764d1fd7b527260"
 SRC_URI[sha256sum] = "398a3db6d61899d25fd4a06c6ca12051b0ce171d705decd7ed5511517b4bb93d"
 
 S = "${WORKDIR}/git"

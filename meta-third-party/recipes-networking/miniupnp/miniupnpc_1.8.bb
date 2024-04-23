@@ -6,7 +6,6 @@ PR = "r0"
 SRC_URI = "http://miniupnp.free.fr/files/download.php?file=miniupnpc-${PV}.tar.gz"
 
 
-SRC_URI[md5sum] = "065bf20a20ebe605c675b7a5aaef340a"
 SRC_URI[sha256sum] = "bc5f73c7b0056252c1888a80e6075787a1e1e9112b808f863a245483ff79859c"
 
 CFLAGS += "-D_BSD_SOURCE -D_POSIX_C_SOURCE=1 -fPIC"
