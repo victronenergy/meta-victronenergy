@@ -7,8 +7,6 @@ SRC_URI = "\
     gitsm://github.com/victronenergy/${BPN}.git;protocol=http;branch=master;tag=v${PV} \
 "
 
-SRC_URI[sha256sum] = "398a3db6d61899d25fd4a06c6ca12051b0ce171d705decd7ed5511517b4bb93d"
-
 S = "${WORKDIR}/git"
 
 inherit gmakevelib
