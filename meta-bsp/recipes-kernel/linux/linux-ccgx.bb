@@ -2,9 +2,7 @@ require linux-venus.bb
 
 COMPATIBLE_MACHINE = "ccgx"
 
-KERNEL_CONFIG = "ccgx_defconfig"
 KERNEL_EXTRA_ARGS = "zImage"
-KERNEL_DEVICETREE = "am3517-ccgx.dtb"
 KEEPUIMAGE = "no"
 
 # To be compatible with the deployed u-boot, a uImage containing a
