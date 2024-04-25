@@ -31,6 +31,7 @@ RRECOMMENDS:${PN} += " \
     dbus-valence \
     dbus-vebus-to-pvinverter \
     gps-dbus \
+    hv-can-bus \
     mk2-dbus \
     vecan-dbus \
     vedirect-interface \
