@@ -27,7 +27,7 @@ ACTION=="add", KERNEL=="ttyUSB0", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SER
 ACTION=="add", SUBSYSTEM=="iio", ATTR{name}=="tla2024", KERNELS=="0-0048" SYMLINK+="adc/builtin-tank"
 ACTION=="add", SUBSYSTEM=="iio", ATTR{name}=="tla2024", KERNELS=="0-0049" SYMLINK+="adc/builtin-temp"
 ACTION=="add", SUBSYSTEM=="net", ATTR{type}=="280", KERNELS=="1c69000.spi", NAME="vecan0", ENV{VE_NAME}="VE.Can port 1"
-ACTION=="add", SUBSYSTEM=="net", ATTR{type}=="280", KERNELS=="1c68000.spi", NAME="vecan1", ENV{VE_NAME}="VE.Can port 2"
+ACTION=="add", SUBSYSTEM=="net", ATTR{type}=="280", KERNELS=="1c68000.spi", NAME="vecan1", ENV{VE_NAME}="VE.Can port 2", ENV{VE_CAN_CONFIG}="classic-and-hv"
 LABEL="end-ekrano-gx"
 
 # Maxi GX devices
