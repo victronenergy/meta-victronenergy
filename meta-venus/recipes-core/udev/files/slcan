@@ -1,3 +1,0 @@
-#!/bin/sh
-
-/usr/bin/slcand -o -f -t hw -S 1500000 $1 $2
