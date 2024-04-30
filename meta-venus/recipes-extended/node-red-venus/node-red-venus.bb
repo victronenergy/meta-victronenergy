@@ -2,7 +2,7 @@ DESCRIPTION = "Node-RED with venus integration"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-RDEPENDS:${PN} += "bash node-red nginx node-red-contrib-victron util-linux-setpriv"
+RDEPENDS:${PN} += "bash node-red nginx node-red-contrib-victron util-linux-setpriv victron-vrm-api"
 
 SRC_URI = "\
 	file://50x-node-red.html \

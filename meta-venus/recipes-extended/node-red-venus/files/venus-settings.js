@@ -310,7 +310,7 @@ module.exports = {
          //     allowList: ['*'],
          //     denyList: [],
          //     allowUpdateList: ['*'],
-                denyUpdateList: [ '@victronenergy/node-red-contrib-victron' ]
+                denyUpdateList: [ '@victronenergy/node-red-contrib-victron', 'victron-vrm-api' ]
          // },
          // modules: {              /** Configuration for node-specified modules */
          //     allowInstall: true,
