@@ -12,8 +12,7 @@ LABEL="end-cerbo-gx"
 ENV{BASE_COMPATIBLE}!="victronenergy,cerbo-gx", GOTO="end-cerbo-gx-only"
 # The second CAN is not available on the Cerbo-S GX.
 # NOTE: a new / patched linux is needed to be able to set the bitrate later with ip.
-ACTION=="add", KERNEL=="ttyS3", ENV{VE_SERVICE}="ignore", RUN+="slcan $devnode can1"
-ACTION=="add|move", SUBSYSTEM=="net", KERNEL=="can1", ENV{VE_NAME}="BMS-Can port", ENV{VE_CAN_CONFIG}="bms-only"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="1c28c00.serial", NAME="can1", ENV{VE_NAME}="BMS-Can port", ENV{VE_CAN_CONFIG}="bms-only"
 LABEL="end-cerbo-gx-only"
 
 # Cerbo GX B1
