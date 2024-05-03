@@ -63,7 +63,7 @@
         "primus": "^7.0.0",
         "selfsigned": "^2.4.1",
         "semver": "^7.5.4",
-        "signalk-venus-plugin": "1.34.1",
+        "signalk-venus-plugin": "1.35.0",
         "split": "^1.0.0",
         "stat-mode": "^1.0.0",
         "swagger-ui-express": "^4.5.0",
@@ -6234,7 +6234,7 @@
       "optional": true
     },
     "node_modules/signalk-venus-plugin": {
-      "version": "1.34.1",
+      "version": "1.35.0",
       "license": "MIT",
       "dependencies": {
         "camelcase": "^6.3.0",
