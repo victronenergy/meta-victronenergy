@@ -3,6 +3,28 @@
 dev=$1
 rate=$2
 
+bitrate_easysolar() {
+    case $dev:$1 in
+        can0:500000)
+            echo tq 200 prop-seg 3 phase-seg1 4 phase-seg2 2
+            return
+        ;;
+    esac
+
+    echo bitrate $1
+}
+
+bitrate() {
+    case $(board-compat) in
+        victronenergy,easysolar-a10)
+            bitrate_easysolar "$@"
+            return
+        ;;
+    esac
+
+    echo bitrate $1
+}
+
 # Preferably the tx queue is not increased, but many programs
 # fail to work properly without it.
 #
@@ -19,7 +41,7 @@ up() {
 
     # note: this is not done at once on purpose; some drivers don't support some
     # properties, e.g. the vcan will bail out when trying to set the bitrate.
-    ip link set $dev type can bitrate $rate
+    ip link set $dev type can $(bitrate $rate)
     ip link set $dev type can restart-ms 100
     ip link set $dev up txqueuelen 100
 }
