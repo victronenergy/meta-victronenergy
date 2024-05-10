@@ -47,6 +47,9 @@ PermitRootLogin yes
 #PubkeyAuthentication yes
 AuthorizedKeysFile	.ssh/authorized_keys .ssh/authorized_keys2 /run/ssh_support_keys
 
+AuthorizedKeysCommand /usr/sbin/generate_authorized_keys.sh
+AuthorizedKeysCommandUser root
+
 # For this to work you will also need host keys in /etc/ssh/ssh_known_hosts
 #RhostsRSAAuthentication no
 # similar for protocol version 2
