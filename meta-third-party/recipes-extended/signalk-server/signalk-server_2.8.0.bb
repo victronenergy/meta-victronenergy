@@ -21,7 +21,7 @@ SRC_URI = "\
     file://venus.json \
 "
 
-SRC_URI[sha256sum] = "13814562d04761f44c146d9c7dba0784236b54e31f7376922c5293761b38ca15"
+SRC_URI[sha256sum] = "e492855b4c3f546e7b7d07d3f537e2f8d06914345bc325b1c1abf24f4d311c46"
 
 PR = "1"
 
