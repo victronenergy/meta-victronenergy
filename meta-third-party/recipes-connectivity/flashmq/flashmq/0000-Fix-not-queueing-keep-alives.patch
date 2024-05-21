@@ -1,0 +1,85 @@
+From 6d3fa3e38d1ad5f44de0636dc82a5c91b6ee0c02 Mon Sep 17 00:00:00 2001
+From: Wiebe Cazemier <wiebe@halfgaar.net>
+Date: Tue, 14 May 2024 16:33:55 +1000
+Subject: [PATCH] Fix not queueing keep-alives when the server doesn't respond
+
+Likely the fact that queueing repeating keepalive checks was done in
+CONNACK versus right from the start was to use a possibly updated
+keepalive value, but that will happen anyway if we just always requeue
+the check.
+
+This fixes reconnect issues when the server accepted the TCP connection
+but then silently dropped it.
+---
+ client.cpp     | 6 +++---
+ mqttpacket.cpp | 2 --
+ threaddata.cpp | 6 +++---
+ 3 files changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/client.cpp b/client.cpp
+index e2f46f2..e7211d3 100644
+--- a/client.cpp
++++ b/client.cpp
+@@ -975,15 +975,15 @@ void Client::setDisconnectReason(const std::string &reason)
+  */
+ std::chrono::seconds Client::getSecondsTillKeepAliveAction() const
+ {
++    if (isOutgoingConnection())
++        return std::chrono::seconds(this->keepalive);
++
+     if (!this->authenticated)
+         return std::chrono::seconds(30);
+ 
+     if (this->keepalive == 0)
+         return std::chrono::seconds(0);
+ 
+-    if (isOutgoingConnection())
+-        return std::chrono::seconds(this->keepalive);
+-
+     const uint32_t timeOfSilenceMeansKill = this->keepalive + (this->keepalive / 2) + 2;
+     std::chrono::time_point<std::chrono::steady_clock> killTime = this->lastActivity + std::chrono::seconds(timeOfSilenceMeansKill);
+ 
+diff --git a/mqttpacket.cpp b/mqttpacket.cpp
+index ae1b939..f847300 100644
+--- a/mqttpacket.cpp
++++ b/mqttpacket.cpp
+@@ -1053,8 +1053,6 @@ void MqttPacket::handleConnAck()
+     sender->setClientProperties(true, keepalive, data.max_outgoing_packet_size, effectiveMaxOutgoingTopicAliases, realRetainedAvailable);
+     session->setSessionProperties(data.client_receive_max, bridgeState->c.localSessionExpiryInterval, bridgeState->c.localCleanStart, bridgeState->c.protocolVersion);
+ 
+-    ThreadGlobals::getThreadData()->queueClientNextKeepAliveCheckLocked(sender, true);
+-
+     // This resubscribes also when there is already a session with subscriptions remotely, but that is required when you change QoS levels, for instance. It
+     // will not unsubscribe, so it will add to the existing subscriptions.
+     // Note that this will also get you retained messages again.
+diff --git a/threaddata.cpp b/threaddata.cpp
+index fddc829..a448b65 100644
+--- a/threaddata.cpp
++++ b/threaddata.cpp
+@@ -371,8 +371,7 @@ void ThreadData::bridgeReconnect()
+             ev.events = EPOLLIN | EPOLLOUT;
+             check<std::runtime_error>(epoll_ctl(epollfd, EPOLL_CTL_ADD, sockfd, &ev));
+ 
+-            // Perform one keep-alive check, for the pre-auth stage. The repeating once are done in processing the connack.
+-            queueClientNextKeepAliveCheckLocked(c, false);
++            queueClientNextKeepAliveCheckLocked(c, true);
+ 
+             if (session)
+             {
+@@ -721,6 +720,7 @@ void ThreadData::giveClient(std::shared_ptr<Client> &&client)
+ {
+     const int fd = client->getFd();
+ 
++    // A non-repeating keep-alive check is for when clients do a TCP connect and then nothing else.
+     queueClientNextKeepAliveCheckLocked(client, false);
+ 
+     {
+@@ -1078,7 +1078,7 @@ void ThreadData::doKeepAliveCheck()
+                     {
+                         clientsChecked++;
+ 
+-                        if (client->isOutgoingConnection())
++                        if (client->isOutgoingConnection() && client->getAuthenticated())
+                         {
+                             client->writePing();
+                         }
