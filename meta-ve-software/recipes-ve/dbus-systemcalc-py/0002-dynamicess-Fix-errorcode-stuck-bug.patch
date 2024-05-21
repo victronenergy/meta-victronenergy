@@ -1,0 +1,41 @@
+From d1e1f736434a5d3843493a0f798ce3b11f56a344 Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Tue, 30 Apr 2024 14:27:46 +0200
+Subject: [PATCH] dynamicess: Fix errorcode stuck bug
+
+The errorcode can get stuck in "No schedule" or "No ESS" if the
+system immediately matches a self-consumption slot while in this
+error condition. Even if the error goes away, the errorcode is
+stuck.
+---
+ delegates/dynamicess.py | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/delegates/dynamicess.py b/delegates/dynamicess.py
+index 17b64d9..8276719 100644
+--- a/delegates/dynamicess.py
++++ b/delegates/dynamicess.py
+@@ -327,6 +327,7 @@ def _on_timer(self):
+ 		for w in windows:
+ 			if now in w and self.acquire_control():
+ 				self.active = 1 # Auto
++				self.errorcode = 0 # No error
+ 
+ 				# If schedule allows for feed-in, enable that now.
+ 				self._dbusmonitor.set_value_async(HUB4_SERVICE, '/Overrides/FeedInExcess',
+@@ -361,7 +362,6 @@ def _on_timer(self):
+ 				if self.soc + self.charge_hysteresis < w.soc or w.soc >= 100: # Charge
+ 					self.charge_hysteresis = 0
+ 					self.discharge_hysteresis = 1
+-					self.errorcode = 0 # No error
+ 					self._dbusmonitor.set_value_async(HUB4_SERVICE, '/Overrides/Setpoint', None)
+ 					self._dbusmonitor.set_value_async(HUB4_SERVICE, '/Overrides/ForceCharge', 1)
+ 					self._dbusmonitor.set_value_async(HUB4_SERVICE, '/Overrides/MaxDischargePower', -1.0)
+@@ -379,7 +379,6 @@ def _on_timer(self):
+ 					self.set_charge_power(None)
+ 					self._dbusmonitor.set_value_async(HUB4_SERVICE, '/Overrides/ForceCharge', 0)
+ 
+-					self.errorcode = 0 # No error
+ 					if self.soc - self.discharge_hysteresis > max(w.soc, self.minsoc): # Discharge
+ 						self.discharge_hysteresis = 0
+ 
