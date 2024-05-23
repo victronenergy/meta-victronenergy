@@ -3,8 +3,10 @@ HOMEPAGE = "http://skarnet.org/software/skalibs"
 LICENSE = "ISC"
 LIC_FILES_CHKSUM = "file://COPYING;md5=1500f33d86c4956999052c0e137cd652"
 
+# original source is skarnet.org. Copied to our server since thats offline
+# http://skarnet.org/software/skalibs/skalibs-2.3.5.1.tar.gz
 SRC_URI = " \
-    http://skarnet.org/software/skalibs/skalibs-2.3.5.1.tar.gz \
+    https://updates.victronenergy.com/feeds/venus/oe/skalibs-2.3.5.1.tar.gz \
     file://sysdeps.cfg \
 "
 
