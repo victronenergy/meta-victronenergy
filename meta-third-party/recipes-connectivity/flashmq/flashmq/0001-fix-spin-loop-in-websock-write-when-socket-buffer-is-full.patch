@@ -1,0 +1,26 @@
+From 4281d2819ca4af71d992aae9f38f107d5f1f47e8 Mon Sep 17 00:00:00 2001
+From: Wiebe Cazemier <wiebe@halfgaar.net>
+Date: Sun, 26 May 2024 18:17:55 +1000
+Subject: [PATCH] Fix spin-loop in websocket write when socket buffer is full
+
+If the socket buffer is (almost) full and can hold some of the websocket
+frame we made, a return value of 0 bytes written would make it try
+forever (calling the write() syscall), until either the socket buffer
+was drained, or until it errored out with ETIMEDOUT.
+---
+ iowrapper.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/iowrapper.cpp b/iowrapper.cpp
+index 8551967..6412a76 100644
+--- a/iowrapper.cpp
++++ b/iowrapper.cpp
+@@ -999,7 +999,7 @@ ssize_t IoWrapper::writeWebsocketAndOrSsl(int fd, const void *buf, size_t nbytes
+ 
+             if (n > 0)
+                 websocketWriteRemainder.advanceTail(n);
+-            if (n < 0)
++            else
+                 break;
+         }
+ 

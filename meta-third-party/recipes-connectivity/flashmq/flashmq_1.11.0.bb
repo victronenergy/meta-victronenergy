@@ -9,9 +9,10 @@ inherit cmake
 SRC_URI = " \
     git://github.com/halfgaar/FlashMQ.git;branch=master;protocol=https;tag=v${PV} \
     file://0000-Fix-not-queueing-keep-alives.patch \
+    file://0001-fix-spin-loop-in-websock-write-when-socket-buffer-is-full.patch \
 "
 
-PR = "1"
+PR = "2"
 
 S = "${WORKDIR}/git"
 EXTRA_OECMAKE = "-DCMAKE_BUILD_TYPE=Release"
