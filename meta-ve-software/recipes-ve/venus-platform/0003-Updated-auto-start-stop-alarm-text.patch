@@ -1,0 +1,25 @@
+From c720e4175e3ef9da5df897750c1ae525a3d1d011 Mon Sep 17 00:00:00 2001
+From: ReinvdZee <rvanderzee@victronenergy.com>
+Date: Wed, 29 May 2024 15:04:26 +0200
+Subject: [PATCH 5/6] Updated auto start/stop alarm text
+
+---
+ src/alarm_item.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/alarm_item.cpp b/src/alarm_item.cpp
+index bddd2ad..9765927 100644
+--- a/src/alarm_item.cpp
++++ b/src/alarm_item.cpp
+@@ -46,7 +46,7 @@ DeviceAlarms *DeviceAlarms::createGeneratorStartStopAlarms(VenusService *service
+ 
+ 	alarms->addTripplet(tr("Generator not detected at AC input"), "/Alarms/NoGeneratorAtAcIn", nullptr, "");
+ 	alarms->addTripplet(tr("Service interval exceeded"), "/Alarms/ServiceIntervalExceeded", nullptr);
+-	alarms->addTripplet(tr("Auto start/stop is disabled"), "/Alarms/AutoStartDisabled", nullptr);
++	alarms->addTripplet(tr("GX Auto start/stop is disabled"), "/Alarms/AutoStartDisabled", nullptr);
+ 	alarms->addTripplet(tr("Remote start is disabled on the genset"), "/Alarms/RemoteStartModeDisabled", nullptr);
+ 
+ 	return alarms;
+-- 
+2.34.1
+

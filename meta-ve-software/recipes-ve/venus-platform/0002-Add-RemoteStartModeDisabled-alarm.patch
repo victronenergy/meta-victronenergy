@@ -1,0 +1,26 @@
+From 5f529adfd5c2a2d78beb7796a7252931a46d556c Mon Sep 17 00:00:00 2001
+From: ReinvdZee <rvanderzee@victronenergy.com>
+Date: Mon, 27 May 2024 15:00:57 +0200
+Subject: [PATCH 3/6] Add RemoteStartModeDisabled alarm
+
+---
+ src/alarm_item.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/alarm_item.cpp b/src/alarm_item.cpp
+index e4b6008..bddd2ad 100644
+--- a/src/alarm_item.cpp
++++ b/src/alarm_item.cpp
+@@ -46,7 +46,8 @@ DeviceAlarms *DeviceAlarms::createGeneratorStartStopAlarms(VenusService *service
+ 
+ 	alarms->addTripplet(tr("Generator not detected at AC input"), "/Alarms/NoGeneratorAtAcIn", nullptr, "");
+ 	alarms->addTripplet(tr("Service interval exceeded"), "/Alarms/ServiceIntervalExceeded", nullptr);
+-	alarms->addTripplet(tr("Auto start function is disabled"), "/Alarms/AutoStartDisabled", nullptr);
++	alarms->addTripplet(tr("Auto start/stop is disabled"), "/Alarms/AutoStartDisabled", nullptr);
++	alarms->addTripplet(tr("Remote start is disabled on the genset"), "/Alarms/RemoteStartModeDisabled", nullptr);
+ 
+ 	return alarms;
+ }
+-- 
+2.34.1
+
