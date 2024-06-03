@@ -1,0 +1,39 @@
+From 89492ff74751e8a22bd85423305bd4298b0f3798 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 14 Jun 2024 13:49:03 +0100
+Subject: [PATCH] kconfig: venus: enable netfilter modules for tailscale
+
+---
+ Kconfig.venus | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/Kconfig.venus b/Kconfig.venus
+index e27c303b39e5..f13acf7fd760 100644
+--- a/Kconfig.venus
++++ b/Kconfig.venus
+@@ -207,14 +207,22 @@ config VENUS_MODULES
+ 
+ 	# netfilter
+ 	select NF_CONNTRACK
++	select NF_NAT
++	select NETFILTER_NETLINK
++	select NETFILTER_XT_CONNMARK
++	select NETFILTER_XT_MARK
+ 	select NETFILTER_XT_MATCH_COMMENT
+ 	select NETFILTER_XT_MATCH_CONNTRACK
+ 	select NETFILTER_XT_MATCH_MULTIPORT
++	select NETFILTER_XT_TARGET_MASQUERADE
+ 	select IP_NF_IPTABLES
+ 	select IP_NF_FILTER
++	select IP_NF_MANGLE
++	select IP_NF_NAT
+ 	select IP_NF_TARGET_REJECT
+ 	select IP6_NF_IPTABLES
+ 	select IP6_NF_FILTER
++	select IP6_NF_NAT
+ 	select IP6_NF_TARGET_REJECT
+ 
+ 	# canbus
+-- 
+2.45.2
+

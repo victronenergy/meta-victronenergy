@@ -2,6 +2,8 @@ SECTION = "kernel"
 LICENSE = "GPL-2.0-only"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
+FILESEXTRAPATHS:prepend := "${THISDIR}/linux-venus:"
+
 inherit kernel
 
 RDEPENDS:${KERNEL_PACKAGE_NAME}-base += "kernel-devicetree"
@@ -17,6 +19,9 @@ PV = "${LINUX_VERSION}${LINUX_VERSION_EXTENSION}"
 GIT_BRANCH = "venus-${LINUX_VERSION}"
 
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=${GIT_BRANCH};tag=v${PV}"
+SRC_URI += "\
+    file://0001-kconfig-venus-enable-netfilter-modules-for-tailscale.patch \
+"
 S = "${WORKDIR}/git"
 
 do_configure:append() {
