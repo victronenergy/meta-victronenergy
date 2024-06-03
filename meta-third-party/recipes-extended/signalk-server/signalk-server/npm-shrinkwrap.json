@@ -1,12 +1,12 @@
 {
   "name": "signalk-server",
-  "version": "2.8.0",
+  "version": "2.8.2",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "signalk-server",
-      "version": "2.8.0",
+      "version": "2.8.2",
       "license": "Apache-2.0",
       "workspaces": [
         "packages/server-admin-ui-dependencies",
@@ -63,7 +63,7 @@
         "primus": "^7.0.0",
         "selfsigned": "^2.4.1",
         "semver": "^7.5.4",
-        "signalk-venus-plugin": "1.35.0",
+        "signalk-venus-plugin": "1.37.0",
         "split": "^1.0.0",
         "stat-mode": "^1.0.0",
         "swagger-ui-express": "^4.5.0",
@@ -6220,7 +6220,7 @@
       "optional": true
     },
     "node_modules/signalk-venus-plugin": {
-      "version": "1.35.0",
+      "version": "1.37.0",
       "license": "MIT",
       "dependencies": {
         "camelcase": "^6.3.0",
