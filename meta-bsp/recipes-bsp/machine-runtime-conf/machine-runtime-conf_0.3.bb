@@ -88,9 +88,9 @@ do_install:append() {
     install -m 755 ${WORKDIR}/get-unique-id ${D}/${base_sbindir}
     install -m 755 ${WORKDIR}/ve-hash-passwd ${D}/${base_sbindir}
     install -m 755 ${WORKDIR}/ve-is-passwd-set-by-default ${D}/${base_sbindir}
-    install -m 755 ${WORKDIR}/ve-passwd-as-in-factory ${D}/${base_sbindir}
-    install -m 755 ${WORKDIR}/ve-set-passwd ${D}/${base_sbindir}
-    install -m 755 ${WORKDIR}/ve-set-passwd-to-pincode ${D}/${base_sbindir}
+    install -m 744 ${WORKDIR}/ve-passwd-as-in-factory ${D}/${base_sbindir}
+    install -m 744 ${WORKDIR}/ve-set-passwd ${D}/${base_sbindir}
+    install -m 744 ${WORKDIR}/ve-set-passwd-to-pincode ${D}/${base_sbindir}
 
     install -d ${D}/${bindir}
     install -m 755 ${WORKDIR}/bad-unique-id ${D}/${bindir}
