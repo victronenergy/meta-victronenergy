@@ -19,10 +19,14 @@ if [ -z "$unique_id" ]; then
 fi
 
 passwd="$1"
-hash="$(ve-hash-passwd $unique_id $passwd)"
-if [ -z "$hash" ]; then
-    echo "could not create password hash"
-    exit 1
+if [ "$passwd" = "" ]; then
+    hash=""
+else
+    hash="$(ve-hash-passwd $unique_id $passwd)"
+    if [ -z "$hash" ]; then
+        echo "could not create password hash"
+        exit 1
+    fi
 fi
 
 echo "$hash" > /data/conf/vncpassword.txt.tmp
