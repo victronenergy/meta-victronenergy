@@ -1,0 +1,25 @@
+From a14790b0957fb57bd061b5b4e6c64703764dc793 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Fri, 31 May 2024 13:40:14 +0200
+Subject: [PATCH] don't trigger a gui restart from venus-platform
+
+---
+ src/application.cpp | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/src/application.cpp b/src/application.cpp
+index e066016..0b40f30 100644
+--- a/src/application.cpp
++++ b/src/application.cpp
+@@ -274,8 +274,6 @@ void Application::onDemoSettingChanged(QVariant var)
+ 
+ void Application::manageDaemontoolsServices()
+ {
+-	new DaemonToolsService(mSettings, "/service/start-gui", "Settings/Gui/RunningVersion", QList<int>() << 1 << 2, this);
+-
+ 	new DaemonToolsService(mSettings, "/service/dbus-ble-sensors", "Settings/Services/BleSensors", this);
+ 
+ 	new DaemonToolsService(mSettings, "/service/dbus-pump", "Settings/Relay/Function", 3, this);
+-- 
+2.34.1
+

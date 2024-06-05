@@ -9,10 +9,13 @@ DEPENDS = "dbus iptables udev"
 RDEPENDS:${PN} += "flashmq velib-python"
 
 SRC_URI = " \
-    gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git;tag=v${PV} \
+    gitsm://github.com/victronenergy/venus-platform.git;branch=setup-remote-tunnel2;protocol=ssh;user=git \
     file://can.inc \
 "
+SRCREV = "75b7ee91be246d25366161499f27bbd7f6a51902"
 S = "${WORKDIR}/git"
+
+#SRC_URI += "file://0001-don-t-trigger-a-gui-restart-from-venus-platform.patch"
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/venus-platform"
 
