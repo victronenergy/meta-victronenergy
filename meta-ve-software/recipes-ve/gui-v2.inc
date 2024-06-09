@@ -1,4 +1,4 @@
-PV = "0.3.2"
-WASM_SHA256SUM = "aabcd9db7a19edcca5b1d0dba1ae94e9f04c5d7fa550fe79d2f6a0ae85c54fe8"
+PV = "0.3.4"
+WASM_SHA256SUM = "e24d36701376a0b4a302c4c35d900ff50dc171b41cfc87482d704250ef822b41"
 LIC_FILES_CHKSUM = "file://${S}/LICENSE.txt;md5=2bfa2d9036ce1bc186352ff84c84a1bb"
 LICENSE = "Victron-Energy-OS-license-v1"
