@@ -1,18 +1,18 @@
 {
   "name": "node-red",
-  "version": "3.1.8",
+  "version": "3.1.10",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "node-red",
-      "version": "3.1.8",
+      "version": "3.1.10",
       "license": "Apache-2.0",
       "dependencies": {
-        "@node-red/editor-api": "3.1.8",
-        "@node-red/nodes": "3.1.8",
-        "@node-red/runtime": "3.1.8",
-        "@node-red/util": "3.1.8",
+        "@node-red/editor-api": "3.1.10",
+        "@node-red/nodes": "3.1.10",
+        "@node-red/runtime": "3.1.10",
+        "@node-red/util": "3.1.10",
         "basic-auth": "2.0.1",
         "bcryptjs": "2.4.3",
         "express": "4.19.2",
@@ -33,7 +33,7 @@
       }
     },
     "node_modules/@babel/runtime": {
-      "version": "7.24.1",
+      "version": "7.24.7",
       "license": "MIT",
       "dependencies": {
         "regenerator-runtime": "^0.14.0"
@@ -62,11 +62,11 @@
       }
     },
     "node_modules/@node-red/editor-api": {
-      "version": "3.1.8",
+      "version": "3.1.10",
       "license": "Apache-2.0",
       "dependencies": {
-        "@node-red/editor-client": "3.1.8",
-        "@node-red/util": "3.1.8",
+        "@node-red/editor-client": "3.1.10",
+        "@node-red/util": "3.1.10",
         "bcryptjs": "2.4.3",
         "body-parser": "1.20.2",
         "clone": "2.1.2",
@@ -293,11 +293,11 @@
       }
     },
     "node_modules/@node-red/editor-client": {
-      "version": "3.1.8",
+      "version": "3.1.10",
       "license": "Apache-2.0"
     },
     "node_modules/@node-red/nodes": {
-      "version": "3.1.8",
+      "version": "3.1.10",
       "license": "Apache-2.0",
       "dependencies": {
         "acorn": "8.8.2",
@@ -534,23 +534,23 @@
       "license": "ISC"
     },
     "node_modules/@node-red/registry": {
-      "version": "3.1.8",
+      "version": "3.1.10",
       "license": "Apache-2.0",
       "dependencies": {
-        "@node-red/util": "3.1.8",
+        "@node-red/util": "3.1.10",
         "clone": "2.1.2",
         "fs-extra": "11.1.1",
         "semver": "7.5.4",
-        "tar": "6.1.13",
+        "tar": "6.2.1",
         "uglify-js": "3.17.4"
       }
     },
     "node_modules/@node-red/runtime": {
-      "version": "3.1.8",
+      "version": "3.1.10",
       "license": "Apache-2.0",
       "dependencies": {
-        "@node-red/registry": "3.1.8",
-        "@node-red/util": "3.1.8",
+        "@node-red/registry": "3.1.10",
+        "@node-red/util": "3.1.10",
         "async-mutex": "0.4.0",
         "clone": "2.1.2",
         "express": "4.19.2",
@@ -559,7 +559,7 @@
       }
     },
     "node_modules/@node-red/util": {
-      "version": "3.1.8",
+      "version": "3.1.10",
       "license": "Apache-2.0",
       "dependencies": {
         "fs-extra": "11.1.1",
@@ -1904,7 +1904,7 @@
       }
     },
     "node_modules/minipass": {
-      "version": "4.2.8",
+      "version": "5.0.0",
       "license": "ISC",
       "engines": {
         "node": ">=8"
@@ -2614,12 +2614,12 @@
       }
     },
     "node_modules/tar": {
-      "version": "6.1.13",
+      "version": "6.2.1",
       "license": "ISC",
       "dependencies": {
         "chownr": "^2.0.0",
         "fs-minipass": "^2.0.0",
-        "minipass": "^4.0.0",
+        "minipass": "^5.0.0",
         "minizlib": "^2.1.1",
         "mkdirp": "^1.0.3",
         "yallist": "^4.0.0"
