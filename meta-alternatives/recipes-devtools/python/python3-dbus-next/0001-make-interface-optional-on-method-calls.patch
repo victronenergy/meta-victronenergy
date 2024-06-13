@@ -1,0 +1,34 @@
+From 24621c5c1cb6575d9c8c6a3de3dec07bbe07ae02 Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Tue, 11 Jun 2024 16:46:27 +0200
+Subject: [PATCH] make interface optional on method calls
+
+The dbus spec allows the interface to be optional on
+method calls. In that case, allow the message to match
+on any method with a matching name and signature.
+
+https://github.com/altdesktop/python-dbus-next/issues/163
+---
+ dbus_next/message_bus.py | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/dbus_next/message_bus.py b/dbus_next/message_bus.py
+index 8bb830d..a6e14ec 100644
+--- a/dbus_next/message_bus.py
++++ b/dbus_next/message_bus.py
+@@ -760,9 +760,12 @@ def _find_message_handler(self, msg):
+                 for method in ServiceInterface._get_methods(interface):
+                     if method.disabled:
+                         continue
+-                    if msg._matches(interface=interface.name,
+-                                    member=method.name,
+-                                    signature=method.in_signature):
++                    if msg.interface is None and msg._matches(
++                            member=method.name,
++                            signature=method.in_signature
++                        ) or msg._matches(interface=interface.name,
++                                          member=method.name,
++                                          signature=method.in_signature):
+                         handler = self._make_method_handler(interface, method)
+                         break
+                 if handler:
