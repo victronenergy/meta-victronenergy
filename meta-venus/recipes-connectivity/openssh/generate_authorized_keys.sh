@@ -50,15 +50,33 @@ while read -r service; do
 done <<< "$(dbus-send --print-reply --system --dest=org.freedesktop.DBus \
   /org/freedesktop/DBus org.freedesktop.DBus.ListNames | grep -Eo 'com\.victronenergy\.evcharger.\w*')"
 
-extra_permitopen=""
-for ip in "${extra_ips[@]}"; do
-  extra_permitopen="${extra_permitopen},permitopen=\"${ip}:80\",permitopen=\"${ip}:443\""
-done
+permitopen=()
 
-full_permitopen='restrict,port-forwarding,permitopen="localhost:5900",permitopen="localhost:1880",permitopen="localhost:3000",permitopen="localhost:80"'
+# only allow access to these services if VRM Portal is set to full
+vrm_portal=$(dbus-send --print-reply=literal --system --dest=com.victronenergy.settings \
+               /Settings/Network/VrmPortal com.victronenergy.BusItem.GetValue | awk '{print $3}')
 
-if [[ -n "$extra_permitopen" ]]; then
-  full_permitopen="${full_permitopen}${extra_permitopen}"
+if [ "$vrm_portal" = "2" ]; then
+  permitopen+=("localhost:80")    # webserver, needed for unreleased gui-v2 wasm
+  permitopen+=("localhost:1880")  # Node-RED
+  permitopen+=("localhost:3000")  # Signal K
+  permitopen+=("localhost:5900")  # VNC of gui-v1 for VRM
+
+  for ip in "${extra_ips[@]}"; do
+    permitopen+=("${ip}:80" "${ip}:443")
+  done
 fi
 
-echo "${full_permitopen} ${public_key_string}"
+permitopen_flat=""
+
+if [ ${#permitopen[@]} -ne 0 ]; then
+  # convert to restrict,port-forwarding,permitopen="xxx",...
+  IFS=
+  permitopen=("${permitopen[@]/#/,permitopen=\"}")
+  permitopen=("${permitopen[@]/%/\"}")
+  permitopen_flat="port-forwarding${permitopen[*]}"
+else
+  permitopen_flat="no-port-forwarding"
+fi
+
+echo "restrict,${permitopen_flat} ${public_key_string}"
