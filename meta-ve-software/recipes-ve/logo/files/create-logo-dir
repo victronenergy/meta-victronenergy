@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ ! -d /data/themes/overlay ]; then
+	mkdir -p /data/themes/overlay
+fi
+chown -R php-fpm:php-fpm /data/themes/overlay
+
