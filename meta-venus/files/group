@@ -38,6 +38,7 @@ kvm:x:47:
 staff:x:50:
 games:x:60:
 shutdown:x:70:
+php-fpm:x:98:
 vnctunnel:x:99:
 users:x:100:
 wayland:x:987:
