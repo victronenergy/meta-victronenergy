@@ -1,12 +1,12 @@
 {
   "name": "signalk-server",
-  "version": "2.8.2",
+  "version": "2.8.3",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "signalk-server",
-      "version": "2.8.2",
+      "version": "2.8.3",
       "license": "Apache-2.0",
       "workspaces": [
         "packages/server-admin-ui-dependencies",
@@ -1064,7 +1064,7 @@
       "license": "MIT"
     },
     "node_modules/@signalk/server-admin-ui": {
-      "version": "2.8.0",
+      "version": "2.8.3",
       "license": "MIT"
     },
     "node_modules/@signalk/server-api": {
@@ -1433,7 +1433,7 @@
       }
     },
     "node_modules/acorn": {
-      "version": "8.10.0",
+      "version": "8.12.0",
       "license": "MIT",
       "peer": true,
       "bin": {
