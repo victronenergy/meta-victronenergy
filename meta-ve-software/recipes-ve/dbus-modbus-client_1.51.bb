@@ -16,9 +16,10 @@ RDEPENDS:${PN} = "\
 "
 
 SRC_URI = " \
-    gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/${BPN}.git;branch=mans/dev;protocol=https \
     file://start-serial.sh \
 "
+SRCREV = "25cc2a2127380d21af05146e9d1268bbf1aaf239"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${bindir}/${PN}.py"
