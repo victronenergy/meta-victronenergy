@@ -20,6 +20,16 @@ while [ "$mqttonlan" != "0" -a "$mqttonlan" != "1" ]; do
 	sleep 1
 done
 
+# mqtt over a secured websocket is enabled by default. The only reason it
+# might not be available is that older devices aren't shipped with a password
+# by default and the user must set one or explicitly allow logins without a
+# password.
+if [ -f /data/conf/vncpassword.txt ]; then
+	mqttwssonlan="1"
+else
+	mqttwssonlan="0"
+fi
+
 sed \
 	-e "s/:::UNIQUE:::/${UNIQUE}/g" \
 	-e "s/:::unique:::/${unique}/g" \
@@ -28,6 +38,7 @@ sed \
 	-e "s/:::serialnr:::/${serialnr}/g" \
 	-e "s/:::venusversion:::/${venusversion}/g" \
 	-e "s/:::mqttonlan:::/${mqttonlan}/g" \
+	-e "s/:::mqttwssonlan:::/${mqttwssonlan}/g" \
 	 /etc/simple-upnpd.skeleton.xml > /var/run/simple-upnpd.xml
 
 exec setuidgid simple-upnpd softlimit -d 100000000 -s 1000000 -a 100000000 /bin/simple-upnpd --xml /var/run/simple-upnpd.xml -d
