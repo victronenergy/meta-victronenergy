@@ -5,6 +5,9 @@ inherit npm
 # Well plus a bit more foo, since a tarball install doesn't respect
 # the npm-shrinkwrap.json, see https://github.com/npm/cli/issues/5349
 
+# Documentation:
+# https://github.com/victronenergy/venus/wiki/npm-and-nodejs-packages
+
 do_configure() {
     :
 }
