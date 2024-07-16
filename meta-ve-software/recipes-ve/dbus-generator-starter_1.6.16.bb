@@ -8,9 +8,6 @@ inherit python-compile
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus_generator.git;branch=master;protocol=https;tag=v${PV} \
     file://com.victronenergy.generator-starter.conf \
-    file://velib-python-fix-race-condition.patch;patchdir=ext/velib_python \
-    file://velib-python-add-support-for-GetItems-in-scanning.patch;patchdir=ext/velib_python \
-    file://fix-race-condition.patch \
 "
 S = "${WORKDIR}/git"
 PR = "1"
