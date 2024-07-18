@@ -8,13 +8,14 @@ INITSCRIPT_PARAMS = "start 99 4 . stop 20 0 1 6 ."
 DAEMONTOOLS_RUN = "${sbindir}/start-nginx.sh"
 
 SRC_URI += " \
-	file://default_server.site \
-	file://nginx-testmode.conf \
-	file://start-nginx.sh \
+    file://favicon.ico \
+    file://default_server.site \
+    file://nginx-testmode.conf \
+    file://start-nginx.sh \
 "
-PR = "1"
+PR = "2"
 
-inherit daemontools
+inherit daemontools www
 
 RDEPENDS:${PN} += "php-fpm venus-www-config"
 EXTRA_OECONF = "--error-log-path=/var/volatile/log/nginx/error.log"
@@ -42,5 +43,8 @@ EOF
 
     install -m 644 ${WORKDIR}/nginx-testmode.conf ${D}${sysconfdir}/nginx
     echo 'DAEMON_OPTS="-c ${sysconfdir}/nginx/nginx-testmode.conf"' > "${D}${sysconfdir}/default/nginx"
+
+    install -d ${D}${WWW_ROOT}
+    install -m 644 ${WORKDIR}/favicon.ico ${D}${WWW_ROOT}
 }
 
