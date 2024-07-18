@@ -20,7 +20,7 @@ fi
 
 installer_version="$(sed -n '3p' /data/venus/installer-version 2>/dev/null)"
 
-if [ ${installer_version:-0} -ge 20240405000000 ]; then
+if [ ${installer_version:-0} -ge 20240718000000 ]; then
     exit 0
 else
     exit 1
