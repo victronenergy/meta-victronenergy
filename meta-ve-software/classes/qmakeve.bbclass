@@ -1,10 +1,4 @@
-inherit qt-provider
 inherit ve_package
 
-qmakeve_do_install() {
-    oe_runmake INSTALL_ROOT=${D} install
-}
-
-inherit siteconfig
-
-EXPORT_FUNCTIONS do_install
+QT_PROVIDER ?= "${@oe.utils.conditional('VENUS_QT_VERSION', '4', 'qt4venus', 'qt6venus', d)}"
+inherit ${QT_PROVIDER}

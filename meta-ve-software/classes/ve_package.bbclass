@@ -1,3 +1,6 @@
+# make sure the host tools don't change bindir, only the target bindir
+QT6_INSTALL_BINDIR := "${QT6_INSTALL_BINDIR}"
+
 # changes bindir to point to a per package location
 vedir := "/opt/victronenergy"
 bindir := "${@oe.utils.conditional('VELIB_DEFAULT_DIRS', '1', '${bindir}', '${vedir}/${PN}', d)}"
