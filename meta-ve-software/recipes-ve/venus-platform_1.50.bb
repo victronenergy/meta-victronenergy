@@ -2,10 +2,8 @@ DESCRIPTION = "Venus platform"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-inherit qmakeve
-inherit daemontools
-
 DEPENDS = "dbus iptables udev"
+QT6_DEPENDS = "qtbase"
 RDEPENDS:${PN} += "flashmq velib-python"
 
 SRC_URI = " \
@@ -15,6 +13,8 @@ SRC_URI = " \
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/venus-platform"
+
+inherit daemontools qmakeve
 
 do_install:append() {
     install -d ${D}/${DAEMONTOOLS_TEMPLATE_CONF_DIR}
