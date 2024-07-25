@@ -26,6 +26,7 @@ RDEPENDS:${PN} = " \
 "
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_generator.py"
+DAEMONTOOLS_DOWN = "1"
 
 do_install () {
     install -d ${D}${bindir}
