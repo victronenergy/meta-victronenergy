@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 DEPENDS = "dbus iptables udev"
 QT6_DEPENDS = "qtbase"
-RDEPENDS:${PN} += "flashmq velib-python"
+RDEPENDS:${PN} += "can-utils connman flashmq velib-python socketcand"
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git;tag=v${PV} \
