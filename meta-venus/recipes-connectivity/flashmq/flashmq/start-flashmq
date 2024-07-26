@@ -19,7 +19,7 @@ if [ ! -f $bridge_conf ]; then
     touch $bridge_conf
 fi
 
-if [ "$(get_setting /Settings/Services/MqttVrm)" = 1 ]; then
+if [ "$(get_setting /Settings/Network/VrmPortal)" != 0 ]; then
     ln -sf $bridge_conf $bridge_link
 else
     rm -f $bridge_link
