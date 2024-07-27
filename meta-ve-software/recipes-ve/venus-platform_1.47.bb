@@ -10,8 +10,12 @@ RDEPENDS:${PN} += "flashmq velib-python"
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git;tag=v${PV} \
+    file://0000-start-some-services-conditionally.patch \
     file://can.inc \
 "
+
+PR = "1"
+
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/venus-platform"
