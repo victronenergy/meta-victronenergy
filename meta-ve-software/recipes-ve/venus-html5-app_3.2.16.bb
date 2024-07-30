@@ -11,7 +11,7 @@ SRC_URI = " \
     https://github.com/victronenergy/venus-html5-app/releases/download/${PV}/venus-html5-app.tar.gz;downloadfilename=venus-html5-app-${PV}.tar.gz \
     file://localsettings \
 "
-SRC_URI[sha256sum] = "9fc16527b4505d920571e2f3b68727e86fdaca3d24e3a93f9a7a83687e7cc3ee"
+SRC_URI[sha256sum] = "ddfe70ec64c98ac61b7e89cd3f8d8e3277c59f14c958f526c4b81679690dd690"
 
 S = "${WORKDIR}"
 BASE_DIR = "${WWW_ROOT}/default/app"
@@ -25,8 +25,6 @@ do_install () {
     for f in $( find ${S}/dist -type f -printf "%P\n" ); do
         install -D "${S}/dist/$f" "${D}${BASE_DIR}/$f"
     done
-
-    rm "${D}${BASE_DIR}/static/js/60.e981d543.js"
 
     ln -s /run/www/app ${D}${WWW_ROOT}/app
 }
