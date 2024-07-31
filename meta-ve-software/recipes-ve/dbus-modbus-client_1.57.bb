@@ -17,9 +17,11 @@ RDEPENDS:${PN} = "\
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https;tag=v${PV} \
+    file://disable-cre.patch \
     file://start-serial.sh \
 "
 S = "${WORKDIR}/git"
+PR = "1"
 
 DAEMONTOOLS_RUN = "${bindir}/${PN}.py"
 DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}"

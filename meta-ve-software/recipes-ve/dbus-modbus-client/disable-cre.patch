@@ -1,0 +1,21 @@
+From 3e329d80f74bb359cfaf220ff72de2af1470f47d Mon Sep 17 00:00:00 2001
+From: Philipp Trenz <mail@philipptrenz.de>
+Date: Wed, 31 Jul 2024 10:08:43 +0200
+Subject: [PATCH] all: drop cre for v3.40 backport
+
+---
+ dbus-modbus-client.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/dbus-modbus-client.py b/dbus-modbus-client.py
+index 52c2c7b..2da9364 100755
+--- a/dbus-modbus-client.py
++++ b/dbus-modbus-client.py
+@@ -28,7 +28,6 @@
+ import abb
+ import carlo_gavazzi
+ import comap
+-import cre
+ import dse
+ import ev_charger
+ import smappee
