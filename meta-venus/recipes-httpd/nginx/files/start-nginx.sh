@@ -14,6 +14,11 @@ rm -f /var/run/nginx/sites-enabled/*
 # the https version is always enabled
 ln -sf /etc/nginx/sites-available/https.site /var/run/nginx/sites-enabled
 
+# if node-red is installed, enable that as well (https)
+if [ -f /etc/nginx/sites-available/node-red ]; then
+    ln -sf /etc/nginx/sites-available/node-red /var/run/nginx/sites-enabled
+fi
+
 # 0: secure, only an explanation is available
 if [ "$secure" -eq 0 ]; then
     ln -sf /etc/nginx/sites-available/http-explanation.site /var/run/nginx/sites-enabled

@@ -37,8 +37,6 @@ do_install:append() {
     # https support
     install -d ${D}${sysconfdir}/nginx/sites-available
     install ${WORKDIR}/nginx-rules ${D}${sysconfdir}/nginx/sites-available/node-red
-    install -d ${D}${sysconfdir}/nginx/sites-enabled
-    ln -s ${sysconfdir}/nginx/sites-available/node-red ${D}${sysconfdir}/nginx/sites-enabled
 
     install -d ${D}${WWW_LOCALHOST}/html
     install ${WORKDIR}/50x-node-red.html ${D}${WWW_LOCALHOST}/html
