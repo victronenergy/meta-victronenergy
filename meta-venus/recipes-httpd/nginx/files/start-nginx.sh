@@ -11,11 +11,6 @@ done
 mkdir -p /var/run/nginx/sites-enabled
 rm -f /var/run/nginx/sites-enabled/*
 
-# keep default enabled sites, e.g. Node RED
-for site in "$(ls /etc/nginx/sites-enabled/)" ; do
-    ln -s $site "/var/run/nginx/sites-enabled/$(basename $site)"
-done
-
 # the https version is always enabled
 ln -sf /etc/nginx/sites-available/https.site /var/run/nginx/sites-enabled
 
