@@ -85,6 +85,8 @@ RDEPENDS:${PN} += "\
     socat \
     strace \
     sysctl-conf \
+    tailscale \
+    tailscale-control \
     tzdata \
     tzdata-africa \
     tzdata-americas \
