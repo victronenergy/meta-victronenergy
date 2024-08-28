@@ -8,11 +8,11 @@ SRC_URI += "\
     file://0001-cmd-go-make-content-based-hash-generation-less-pedan.patch \
     file://0002-cmd-go-Allow-GOTOOLDIR-to-be-overridden-in-the-envir.patch \
     file://0003-ld-add-soname-to-shareable-objects.patch \
-    file://0004-make.bash-override-CC-when-building-dist-and-go_boot.patch \
     file://0005-cmd-dist-separate-host-and-target-builds.patch \
     file://0006-cmd-go-make-GOROOT-precious-by-default.patch \
     file://0007-exec.go-filter-out-build-specific-paths-from-linker-.patch \
     file://0008-src-cmd-dist-buildgo.go-do-not-hardcode-host-compile.patch \
     file://0009-go-Filter-build-paths-on-staticly-linked-arches.patch \
 "
-SRC_URI[main.sha256sum] = "9e48d99d519882579917d8189c17e98c373ce25abaebb98772e2927088992a51"
+#    file://0004-make.bash-override-CC-when-building-dist-and-go_boot.patch 
+SRC_URI[main.sha256sum] = "36930162a93df417d90bd22c6e14daff4705baac2b02418edda671cdfa9cd07f"
