@@ -8,9 +8,12 @@ INITSCRIPT_PARAMS = "start 99 4 . stop 20 0 1 6 ."
 DAEMONTOOLS_RUN = "${sbindir}/start-nginx.sh"
 
 SRC_URI += " \
+    file://create-gui-redirect.sh \
     file://favicon.ico \
     file://default_server.site \
     file://localsettings \
+    file://gui-v1.php \
+    file://gui-v2.php \
     file://http.site \
     file://http-explanation.site \
     file://https.site \
@@ -51,6 +54,12 @@ EOF
 
     install -d ${D}${WWW_ROOT}
     install -m 644 ${WORKDIR}/favicon.ico ${D}${WWW_ROOT}
+    install -m 644 ${WORKDIR}/gui-v1.php ${D}${WWW_ROOT}
+    install -m 644 ${WORKDIR}/gui-v2.php ${D}${WWW_ROOT}
+    ln -s /run/www/index.php ${D}${WWW_ROOT}
+
+	install -d "${D}/etc/venus/www.d"
+	install -m 755 "${WORKDIR}/create-gui-redirect.sh" "${D}/etc/venus/www.d"
 
     rm ${D}${sysconfdir}/nginx/sites-available/default_server
     rm ${D}${sysconfdir}/nginx/sites-enabled/default_server

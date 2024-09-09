@@ -13,7 +13,7 @@ SRC_URI = " \
 "
 
 S = "${WORKDIR}/git"
-BASE_DIR = "${WWW_ROOT}"
+BASE_DIR = "${WWW_ROOT}/gui-v1"
 DEST_DIR = "${D}${BASE_DIR}"
 
 do_configure[noexec] = "1"
