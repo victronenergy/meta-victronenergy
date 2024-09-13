@@ -8,6 +8,7 @@ RDEPENDS:${PN} += "can-utils connman flashmq velib-python socketcand"
 
 SRC_URI = " \
     gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git;tag=v${PV} \
+    file://tailscale.patch \
     file://can.inc \
 "
 S = "${WORKDIR}/git"
