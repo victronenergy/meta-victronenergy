@@ -9,6 +9,7 @@ RDEPENDS:${PN} += "can-utils connman flashmq velib-python socketcand"
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git \
+    file://tailscale.patch \
     file://can.inc \
 "
 SRCREV = "bda14dc76b2de4289f87b315d2c24d5857475c97"
