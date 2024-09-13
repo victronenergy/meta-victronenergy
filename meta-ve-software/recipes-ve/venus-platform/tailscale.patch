@@ -1,0 +1,76 @@
+diff --git a/src/application.cpp b/src/application.cpp
+index 1d4f109..f194bb3 100644
+--- a/src/application.cpp
++++ b/src/application.cpp
+@@ -225,6 +225,7 @@ public:
+ 		add("Services/SignalK", 0, 0, 1);
+ 		// Note: only for debugging over tcp/ip, _not_ socketcan itself...
+ 		add("Services/Socketcand", 0, 0, 1);
++		add("Services/Tailscale/Enabled", 0, 0, 1);
+ 		add("System/AccessLevel", 1, 0, 3);
+ 		add("System/AutoUpdate", 2, 0, 3);
+ 		add("System/ImageType", 0, 0, 1);
+@@ -494,9 +495,16 @@ void Application::manageDaemontoolsServices()
+ 
+ 	// An optionally service, which can be installed by e.g. a pendrive.
+ 	if (QDir("/data/evcc/service/").exists()) {
+-		VeQItem *item =	mSettings->root()->itemGetOrCreate("Settings/Services/Evcc");
++		VeQItem *item = mSettings->root()->itemGetOrCreate("Settings/Services/Evcc");
+ 		item->getValueAndChanges(this, SLOT(onEvccSettingChanged(QVariant)));
+ 	}
++
++	// Tailscale
++	mTailscaleBackend = new DaemonToolsService("/service/tailscale");
++	mTailscaleControl = new DaemonToolsService("/service/tailscale-control");
++
++	item = mSettings->root()->itemGetOrCreate("Settings/Services/Tailscale/Enabled");
++	item->getValueAndChanges(this, SLOT(onTailscaleSettingChanged(QVariant)));
+ }
+ 
+ void Application::init()
+@@ -693,6 +701,24 @@ void Application::onEvccSettingChanged(QVariant var)
+ 	}
+ }
+ 
++void Application::onTailscaleSettingChanged(QVariant var)
++{
++	if (!var.isValid())
++		return;
++
++	if (var.toBool()) {
++		qDebug() << "[Service] Enabling tailscale and tailscale-control";
++		mTailscaleBackend->start();
++		mTailscaleControl->start();
++	} else {
++		qDebug() << "[Service] Disabling tailscale and tailscale-control";
++		system("/usr/bin/tailscale down");
++		qDebug() << "[Service] executed \"/usr/bin/tailscale down\"";
++		mTailscaleBackend->stop();
++		mTailscaleControl->stop();
++	}
++}
++
+ bool Application::setRootPassword(QString password)
+ {
+ 	QProcess process;
+diff --git a/src/application.hpp b/src/application.hpp
+index 042b2d1..754696a 100644
+--- a/src/application.hpp
++++ b/src/application.hpp
+@@ -73,6 +73,7 @@ protected slots:
+ 	void onCanInterfacesChanged();
+ 	void onDemoSettingChanged(QVariant var);
+ 	void onEvccSettingChanged(QVariant var);
++	void onTailscaleSettingChanged(QVariant var);
+ 	void onLanguageChanged(QVariant var);
+ 	void onLocalSettingsStateChanged(VeQItem::State state);
+ 	void onLocalSettingsTimeout();
+@@ -119,6 +120,8 @@ private:
+ 
+ 	DaemonToolsService *mGeneratorStarter = nullptr;
+ 	DaemonToolsService *mParallelBmsStarter = nullptr;
++	DaemonToolsService *mTailscaleBackend = nullptr;
++	DaemonToolsService *mTailscaleControl = nullptr;
+ 	QList<QString> mGeneratorStarterConditions;
+ 	QList<QString> mParallelBmsConditions;
+ 
