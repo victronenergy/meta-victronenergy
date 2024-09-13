@@ -8,6 +8,7 @@ RDEPENDS:${PN} += "can-utils connman flashmq qtbase-plugin-qopensslbackend socke
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git \
+    file://tailscale.patch \
     file://can.inc \
     file://venus_dbus_bridge_template.conf \
     file://venus_rpc_bridge_template.conf \
