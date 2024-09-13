@@ -1,0 +1,72 @@
+diff --git a/src/application.cpp b/src/application.cpp
+index 14221ec..b0a3535 100644
+--- a/src/application.cpp
++++ b/src/application.cpp
+@@ -326,6 +326,7 @@ public:
+ 		add("Services/SignalK", 0, 0, 1);
+ 		// Note: only for debugging over tcp/ip, _not_ socketcan itself...
+ 		add("Services/Socketcand", 0, 0, 1);
++		add("Services/Tailscale/Enabled", 0, 0, 1);
+ 		add("System/AccessLevel", 1, 0, 3);
+ 		add("System/AutoUpdate", 2, 0, 3);
+ 		add("System/ImageType", 0, 0, 1);
+@@ -642,6 +643,13 @@ void Application::manageDaemontoolsServices()
+ 		item->getValueAndChanges(this, SLOT(onEvccSettingChanged(QVariant)));
+ 	}
+ 
++	// Tailscale
++	mTailscaleBackend = new DaemonToolsService("/service/tailscale");
++	mTailscaleControl = new DaemonToolsService("/service/tailscale-control");
++
++	item = mSettings->root()->itemGetOrCreate("Settings/Services/Tailscale/Enabled");
++	item->getValueAndChanges(this, SLOT(onTailscaleSettingChanged(QVariant)));
++
+ 	mTokenWatcher = new TokenUserWatcher(mService);
+ }
+ 
+@@ -866,6 +874,24 @@ void Application::onEvccSettingChanged(QVariant var)
+ 	}
+ }
+ 
++void Application::onTailscaleSettingChanged(QVariant var)
++{
++	if (!var.isValid())
++		return;
++
++	if (var.toBool()) {
++		qDebug() << "[Service] Enabling tailscale and tailscale-control";
++		mTailscaleBackend->start();
++		mTailscaleControl->start();
++	} else {
++		qDebug() << "[Service] Disabling tailscale and tailscale-control";
++		system("/usr/bin/tailscale down");
++		qDebug() << "[Service] executed \"/usr/bin/tailscale down\"";
++		mTailscaleBackend->stop();
++		mTailscaleControl->stop();
++	}
++}
++
+ bool Application::setRootPassword(QString password)
+ {
+ 	QProcess process;
+diff --git a/src/application.hpp b/src/application.hpp
+index aab8d44..09b96db 100644
+--- a/src/application.hpp
++++ b/src/application.hpp
+@@ -80,6 +80,7 @@ protected slots:
+ 	void onCanInterfacesChanged();
+ 	void onDemoSettingChanged(QVariant var);
+ 	void onEvccSettingChanged(QVariant var);
++	void onTailscaleSettingChanged(QVariant var);
+ 	void onLanguageChanged(QVariant var);
+ 	void onLocalSettingsStateChanged(VeQItem::State state);
+ 	void onLocalSettingsTimeout();
+@@ -134,6 +135,8 @@ private:
+ 
+ 	DaemonToolsService *mGeneratorStarter = nullptr;
+ 	DaemonToolsService *mParallelBmsStarter = nullptr;
++	DaemonToolsService *mTailscaleBackend = nullptr;
++	DaemonToolsService *mTailscaleControl = nullptr;
+ 	QList<QString> mGeneratorStarterConditions;
+ 	QList<QString> mParallelBmsConditions;
+ 
