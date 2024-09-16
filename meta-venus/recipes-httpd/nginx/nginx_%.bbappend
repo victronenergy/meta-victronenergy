@@ -58,8 +58,8 @@ EOF
     install -m 644 ${WORKDIR}/gui-v2.php ${D}${WWW_ROOT}
     ln -s /run/www/index.php ${D}${WWW_ROOT}
 
-	install -d "${D}/etc/venus/www.d"
-	install -m 755 "${WORKDIR}/create-gui-redirect.sh" "${D}/etc/venus/www.d"
+    install -d "${D}/etc/venus/www.d"
+    install -m 755 "${WORKDIR}/create-gui-redirect.sh" "${D}/etc/venus/www.d"
 
     rm ${D}${sysconfdir}/nginx/sites-available/default_server
     rm ${D}${sysconfdir}/nginx/sites-enabled/default_server
