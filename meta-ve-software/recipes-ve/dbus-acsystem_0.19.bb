@@ -17,6 +17,6 @@ RDEPENDS:${PN} = " \
     localsettings \
     python3-asyncio \
     python3-core \
-    python3-dbus-next \
+    python3-dbus-fast \
     python3-logging \
 "
