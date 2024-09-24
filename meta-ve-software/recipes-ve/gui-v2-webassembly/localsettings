@@ -13,3 +13,6 @@ Gui/BriefView/ShowPercentages 0 i 0 1
 
 # 0 = None, 1 = Absolute, 2 = Percentage
 Gui/BriefView/Unit 2 i 0 2
+
+Gui2/StartPage 0 i 0 0
+Gui2/StartPageTimeout 0 i 0 0
