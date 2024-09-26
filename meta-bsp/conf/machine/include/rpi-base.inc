@@ -102,7 +102,7 @@ MACHINE_FEATURES_BACKFILL_CONSIDERED = "rtc"
 SWU_VERSION = "3"
 
 IMAGE_BOOT_FILES ?= " \
-    bcm2835-bootfiles/* \
+    bootfiles/* \
     config.txt \
     cmdline.txt \
     ${RPI_KERNEL_DEVICETREE_OVERLAYS} \
@@ -111,7 +111,7 @@ IMAGE_BOOT_FILES ?= " \
 "
 
 do_image_wic[depends] += " \
-    bcm2835-bootfiles:do_deploy \
+    rpi-bootfiles:do_deploy \
     virtual/bootloader:do_deploy \
 "
 
