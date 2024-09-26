@@ -9,22 +9,75 @@ MACHINE_FEATURES += "headless"
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-raspberrypi"
 
 RPI_KERNEL_DEVICETREE_OVERLAYS = " \
-    overlays/ads7846.dtbo \
+    overlays/overlay_map.dtb \
+    overlays/at86rf233.dtbo \
     overlays/disable-bt.dtbo \
     overlays/disable-wifi.dtbo \
-    overlays/gpio-fan.dtbo \
-    overlays/pitft28-capacitive.dtbo \
-    overlays/pitft35-resistive.dtbo \
-    overlays/rpi-display.dtbo \
+    overlays/dwc2.dtbo \
+    overlays/gpio-ir.dtbo \
+    overlays/gpio-ir-tx.dtbo \
+    overlays/gpio-key.dtbo \
+    overlays/gpio-poweroff.dtbo \
+    overlays/gpio-shutdown.dtbo \
+    overlays/hifiberry-amp.dtbo \
+    overlays/hifiberry-amp100.dtbo \
+    overlays/hifiberry-amp3.dtbo \
+    overlays/hifiberry-amp4pro.dtbo \
+    overlays/hifiberry-dac.dtbo \
+    overlays/hifiberry-dacplus.dtbo \
+    overlays/hifiberry-dacplusadc.dtbo \
+    overlays/hifiberry-dacplusadcpro.dtbo \
+    overlays/hifiberry-dacplusdsp.dtbo \
+    overlays/hifiberry-dacplushd.dtbo \
+    overlays/hifiberry-digi-pro.dtbo \
+    overlays/hifiberry-digi.dtbo \
+    overlays/justboom-both.dtbo \
+    overlays/justboom-dac.dtbo \
+    overlays/justboom-digi.dtbo \
+    overlays/i2c-gpio.dtbo \
+    overlays/i2c-rtc.dtbo \
+    overlays/imx219.dtbo \
+    overlays/imx477.dtbo \
+    overlays/imx708.dtbo \
+    overlays/iqaudio-dac.dtbo \
+    overlays/iqaudio-dacplus.dtbo \
     overlays/mcp2515-can0.dtbo \
     overlays/mcp2515-can1.dtbo \
-    overlays/mcp251xfd.dtbo \
-    overlays/rpi-backlight.dtbo \
+    overlays/mcp3008.dtbo \
+    overlays/miniuart-bt.dtbo \
+    overlays/pitft22.dtbo \
+    overlays/pitft28-capacitive.dtbo \
+    overlays/pitft28-resistive.dtbo \
+    overlays/pitft35-resistive.dtbo \
+    overlays/pps-gpio.dtbo \
     overlays/rpi-ft5406.dtbo \
-    overlays/sc16is752-spi1.dtbo \
-    overlays/spi1-3cs.dtbo \
-    overlays/waveshare-can-fd-hat-mode-a.dtbo \
-    overlays/waveshare-can-fd-hat-mode-b.dtbo \
+    overlays/rpi-poe.dtbo \
+    overlays/uart0.dtbo \
+    overlays/uart1.dtbo \
+    overlays/uart2.dtbo \
+    overlays/uart3.dtbo \
+    overlays/uart4.dtbo \
+    overlays/uart5.dtbo \
+    overlays/vc4-fkms-v3d.dtbo \
+    overlays/vc4-fkms-v3d-pi4.dtbo \
+    overlays/vc4-kms-dsi-waveshare-panel.dtbo \
+    overlays/vc4-kms-v3d.dtbo \
+    overlays/vc4-kms-v3d-pi4.dtbo \
+    overlays/vc4-kms-dsi-7inch.dtbo \
+    overlays/w1-gpio.dtbo \
+    overlays/w1-gpio-pullup.dtbo \
+    overlays/wm8960-soundcard.dtbo \
+"
+
+RPI_KERNEL_DEVICETREE_OVERLAYS:append:raspberrypi5 = " \
+    overlays/disable-bt-pi5.dtbo \
+    overlays/disable-wifi-pi5.dtbo \
+    overlays/uart0-pi5.dtbo \
+    overlays/uart1-pi5.dtbo \
+    overlays/uart2-pi5.dtbo \
+    overlays/uart3-pi5.dtbo \
+    overlays/uart4-pi5.dtbo \
+    overlays/vc4-kms-v3d-pi5.dtbo \
 "
 
 KERNEL_PACKAGES ?= "kernel-image kernel-modules"
@@ -53,7 +106,8 @@ IMAGE_BOOT_FILES ?= " \
     bcm2835-bootfiles/* \
     config.txt \
     cmdline.txt \
-    ${RPI_KERNEL_DEVICETREE} \
+    ${RPI_KERNEL_DEVICETREE_OVERLAYS} \
+    ${@' '.join([os.path.basename(dtb) for dtb in d.getVar("RPI_KERNEL_DEVICETREE_DTB").split()])} \
     ${UBOOT_BINARY} \
 "
 
@@ -63,3 +117,7 @@ do_image_wic[depends] += " \
 "
 
 do_image_wic[recrdeps] = "do_deploy"
+
+# The kernel image is installed into the FAT32 boot partition and does not need
+# to also be installed into the rootfs.
+RDEPENDS:${KERNEL_PACKAGE_NAME}-base = ""
