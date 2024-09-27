@@ -11,6 +11,8 @@ IMAGE_INSTALL += "packagegroup-ve-console-apps"
 IMAGE_FEATURES += "package-management ssh-server-openssh"
 IMAGE_FEATURES += "read-only-rootfs"
 
+BAD_RECOMMENDATIONS += "${@'' if d.getVar('VENUS_GPU') == '1' else 'mesa-megadriver'}"
+
 IMAGE_LINGUAS = "en-us"
 
 LICENSE = "MIT"
