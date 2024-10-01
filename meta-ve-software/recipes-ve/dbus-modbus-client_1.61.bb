@@ -32,7 +32,7 @@ do_install () {
     oe_runmake DESTDIR=${D} install
 
     install -d ${D}${bindir}
-    install -m 0755 ${WORKDIR}/start-serial.sh ${D}${bindir}
+    install -m 0755 ${UNPACKDIR}/start-serial.sh ${D}${bindir}
 
     SERVICE="${D}${DAEMONTOOLS_SERVICE_DIR_SERIAL}"
 

@@ -25,18 +25,18 @@ do_install:append() {
     echo TIMESTAMP_FILE=${permanentdir}/etc/timestamp \
         >${D}${sysconfdir}/default/timestamp
 
-    install -m 0755 ${WORKDIR}/static-nodes.sh ${D}${sysconfdir}/init.d
-    install -m 0755 ${WORKDIR}/test-data-partition.sh ${D}${sysconfdir}/init.d
-    install -m 0755 ${WORKDIR}/overlays.sh ${D}${sysconfdir}/init.d
-    install -m 0755 ${WORKDIR}/clean-data.sh ${D}${sysconfdir}/init.d
+    install -m 0755 ${UNPACKDIR}/static-nodes.sh ${D}${sysconfdir}/init.d
+    install -m 0755 ${UNPACKDIR}/test-data-partition.sh ${D}${sysconfdir}/init.d
+    install -m 0755 ${UNPACKDIR}/overlays.sh ${D}${sysconfdir}/init.d
+    install -m 0755 ${UNPACKDIR}/clean-data.sh ${D}${sysconfdir}/init.d
 
     update-rc.d -r ${D} overlays.sh start 10 S .
     update-rc.d -r ${D} static-nodes.sh start 20 S .
     update-rc.d -r ${D} test-data-partition.sh start 03 S .
     update-rc.d -r ${D} clean-data.sh start 30 S .
 
-    install -m 0755 ${WORKDIR}/report-data-failure.sh ${D}${sysconfdir}/init.d
-    install -m 0755 ${WORKDIR}/update-data.sh ${D}${sysconfdir}/init.d
+    install -m 0755 ${UNPACKDIR}/report-data-failure.sh ${D}${sysconfdir}/init.d
+    install -m 0755 ${UNPACKDIR}/update-data.sh ${D}${sysconfdir}/init.d
 
     update-rc.d -r ${D} update-data.sh start 30 5 .
     update-rc.d -r ${D} report-data-failure.sh start 82 5 .
@@ -46,6 +46,6 @@ do_install:append() {
 }
 
 do_install:append:ccgx() {
-    install -m 0755 ${WORKDIR}/usbcheck.sh ${D}${sysconfdir}/init.d
+    install -m 0755 ${UNPACKDIR}/usbcheck.sh ${D}${sysconfdir}/init.d
     update-rc.d -r ${D} usbcheck.sh start 02 S .
 }

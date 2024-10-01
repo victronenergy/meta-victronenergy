@@ -22,15 +22,15 @@ hostap:sunxi = "1"
 RW_INITSCRIPT_PARAMS="start 80 5 . stop 10 0 1 6 ."
 
 do_install:append() {
-    install -m 644 ${WORKDIR}/resolv.conf ${D}${sysconfdir}
+    install -m 644 ${UNPACKDIR}/resolv.conf ${D}${sysconfdir}
 
     install -d ${D}${sbindir}
-    install -m 755 ${WORKDIR}/resolv-watch ${D}${sbindir}
-    install -m 755 ${WORKDIR}/rw-init ${D}${sysconfdir}/init.d/resolv-watch
+    install -m 755 ${UNPACKDIR}/resolv-watch ${D}${sbindir}
+    install -m 755 ${UNPACKDIR}/rw-init ${D}${sysconfdir}/init.d/resolv-watch
     update-rc.d -r ${D} resolv-watch ${RW_INITSCRIPT_PARAMS}
 
     if [ -n "${hostap}" ]; then
-        install -m 644 ${WORKDIR}/dnsmasq.ap.conf ${D}${sysconfdir}
+        install -m 644 ${UNPACKDIR}/dnsmasq.ap.conf ${D}${sysconfdir}
         ln -s dnsmasq ${D}${sysconfdir}/init.d/dnsmasq.ap
         update-rc.d -r ${D} dnsmasq.ap ${INITSCRIPT_PARAMS}
     fi

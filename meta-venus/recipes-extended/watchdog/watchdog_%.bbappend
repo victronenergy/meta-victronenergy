@@ -22,17 +22,17 @@ INITSCRIPT_PARAMS:${PN} = "start 80 S . stop 00 0 1 6 ."
 
 do_compile:append () {
     ${CC} ${CFLAGS} ${LDFLAGS} -DMACH_${MACHINE} \
-        ${WORKDIR}/get_boot_type.c -o get_boot_type
+        ${UNPACKDIR}/get_boot_type.c -o get_boot_type
 }
 
 do_install:append () {
     install -d ${D}${sysconfdir}/init.d ${D}${sbindir}
-    install -m 0755 ${WORKDIR}/init ${D}${sysconfdir}/init.d/watchdog
+    install -m 0755 ${UNPACKDIR}/init ${D}${sysconfdir}/init.d/watchdog
     install -m 0755 ${B}/get_boot_type ${D}${sbindir}
-    install -m 0755 ${WORKDIR}/store_watchdog_error.sh ${D}${sbindir}
+    install -m 0755 ${UNPACKDIR}/store_watchdog_error.sh ${D}${sbindir}
 
     install -d ${D}${sysconfdir}/watchdog.d
-    install -m 0755 ${WORKDIR}/services.sh ${D}/${sysconfdir}/watchdog.d
-    install -m 0755 ${WORKDIR}/vrm-online.sh ${D}/${sysconfdir}/watchdog.d
+    install -m 0755 ${UNPACKDIR}/services.sh ${D}/${sysconfdir}/watchdog.d
+    install -m 0755 ${UNPACKDIR}/vrm-online.sh ${D}/${sysconfdir}/watchdog.d
 }
 

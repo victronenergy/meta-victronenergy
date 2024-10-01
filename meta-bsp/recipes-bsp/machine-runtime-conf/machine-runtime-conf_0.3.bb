@@ -38,11 +38,11 @@ INITSCRIPT_NAME = "machine-conf.sh"
 INITSCRIPT_PARAMS = "start 90 S ."
 
 do_compile () {
-    if [ -f ${WORKDIR}/get-unique-id.c ]; then
+    if [ -f ${UNPACKDIR}/get-unique-id.c ]; then
         ${CC} ${CFLAGS} ${LDFLAGS} \
-            ${WORKDIR}/get-unique-id.c -o ${WORKDIR}/get-unique-id
+            ${UNPACKDIR}/get-unique-id.c -o ${UNPACKDIR}/get-unique-id
     fi
-    ${CC} ${CFLAGS} ${LDFLAGS} ${WORKDIR}/ve-hash-passwd.c -o ${WORKDIR}/ve-hash-passwd -lcrypt
+    ${CC} ${CFLAGS} ${LDFLAGS} ${UNPACKDIR}/ve-hash-passwd.c -o ${UNPACKDIR}/ve-hash-passwd -lcrypt
 }
 
 VE_LARGE_IMAGE_SUPPORT ?= "1"
@@ -73,8 +73,8 @@ do_install:append() {
         name=${cf%:*}
         file=${cf#*:}
 
-        if [ -e ${WORKDIR}/${file}.in ]; then
-            install -m 644 ${WORKDIR}/${file}.in ${conf}
+        if [ -e ${UNPACKDIR}/${file}.in ]; then
+            install -m 644 ${UNPACKDIR}/${file}.in ${conf}
             ln -s /run/venus/${file} ${conf}/${file}
         else
             eval val=\${${name}}
@@ -85,26 +85,26 @@ do_install:append() {
     done
 
     install -d ${D}/${base_sbindir}
-    install -m 755 ${WORKDIR}/get-unique-id ${D}/${base_sbindir}
-    install -m 755 ${WORKDIR}/ve-hash-passwd ${D}/${base_sbindir}
-    install -m 755 ${WORKDIR}/ve-is-passwd-set-by-default ${D}/${base_sbindir}
-    install -m 744 ${WORKDIR}/ve-passwd-as-in-factory ${D}/${base_sbindir}
-    install -m 744 ${WORKDIR}/ve-set-passwd ${D}/${base_sbindir}
-    install -m 744 ${WORKDIR}/ve-set-passwd-to-pincode ${D}/${base_sbindir}
+    install -m 755 ${UNPACKDIR}/get-unique-id ${D}/${base_sbindir}
+    install -m 755 ${UNPACKDIR}/ve-hash-passwd ${D}/${base_sbindir}
+    install -m 755 ${UNPACKDIR}/ve-is-passwd-set-by-default ${D}/${base_sbindir}
+    install -m 744 ${UNPACKDIR}/ve-passwd-as-in-factory ${D}/${base_sbindir}
+    install -m 744 ${UNPACKDIR}/ve-set-passwd ${D}/${base_sbindir}
+    install -m 744 ${UNPACKDIR}/ve-set-passwd-to-pincode ${D}/${base_sbindir}
 
     install -d ${D}/${bindir}
-    install -m 755 ${WORKDIR}/bad-unique-id ${D}/${bindir}
-    install -m 755 ${WORKDIR}/board-compat ${D}/${bindir}
-    install -m 755 ${WORKDIR}/hw-revision ${D}/${bindir}
-    install -m 755 ${WORKDIR}/installation-date ${D}/${bindir}
-    install -m 755 ${WORKDIR}/installation-name ${D}/${bindir}
-    install -m 755 ${WORKDIR}/product-id ${D}/${bindir}
-    install -m 755 ${WORKDIR}/product-name ${D}/${bindir}
+    install -m 755 ${UNPACKDIR}/bad-unique-id ${D}/${bindir}
+    install -m 755 ${UNPACKDIR}/board-compat ${D}/${bindir}
+    install -m 755 ${UNPACKDIR}/hw-revision ${D}/${bindir}
+    install -m 755 ${UNPACKDIR}/installation-date ${D}/${bindir}
+    install -m 755 ${UNPACKDIR}/installation-name ${D}/${bindir}
+    install -m 755 ${UNPACKDIR}/product-id ${D}/${bindir}
+    install -m 755 ${UNPACKDIR}/product-name ${D}/${bindir}
 
     install -d ${D}${WWW_ROOT}/venus
     ln -s /data/venus/unique-id ${D}${WWW_ROOT}/venus
     ln -s /opt/victronenergy/version ${D}${WWW_ROOT}/venus
 
     install -d ${D}${sysconfdir}/init.d
-    install -m 0755 ${WORKDIR}/machine-conf.sh ${D}${sysconfdir}/init.d
+    install -m 0755 ${UNPACKDIR}/machine-conf.sh ${D}${sysconfdir}/init.d
 }

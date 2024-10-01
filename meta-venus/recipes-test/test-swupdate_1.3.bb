@@ -7,8 +7,8 @@ INITSCRIPT_NAME = "test-swupdate.sh"
 INITSCRIPT_PARAMS = "start 99 5 2 ."
 inherit update-rc.d
 
-
-S = "${WORKDIR}"
+S = "${WORKDIR}/sources"
+UNPACKDIR = "${S}"
 
 SRC_URI = "file://test-swupdate.sh"
 

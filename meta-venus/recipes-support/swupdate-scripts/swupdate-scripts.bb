@@ -20,27 +20,28 @@ SRC_URI = " \
     file://set-version.sh \
 "
 
-S = "${WORKDIR}"
+S = "${WORKDIR}/sources"
+UNPACKDIR = "${S}"
 
 SCRIPTDIR = "/opt/victronenergy/swupdate-scripts"
 
 do_install () {
     DEST=${D}${SCRIPTDIR}
     install -d ${DEST}
-    install -m 0755 ${WORKDIR}/check-updates.sh ${DEST}/check-updates.sh
-    install -m 0644 ${WORKDIR}/functions.sh     ${DEST}/functions.sh
-    install -m 0644 ${WORKDIR}/machine.sh       ${DEST}/machine.sh
-    install -m 0755 ${WORKDIR}/remount-rw.sh    ${DEST}/remount-rw.sh
-    install -m 0755 ${WORKDIR}/resize2fs.sh     ${DEST}/resize2fs.sh
-    install -m 0755 ${WORKDIR}/scan-versions.sh ${DEST}/scan-versions.sh
-    install -m 0755 ${WORKDIR}/set-feed.sh      ${DEST}/set-feed.sh
-    install -m 0755 ${WORKDIR}/set-swu-feed.sh  ${DEST}/set-swu-feed.sh
-    install -m 0755 ${WORKDIR}/set-version.sh   ${DEST}/set-version.sh
+    install -m 0755 ${UNPACKDIR}/check-updates.sh ${DEST}/check-updates.sh
+    install -m 0644 ${UNPACKDIR}/functions.sh     ${DEST}/functions.sh
+    install -m 0644 ${UNPACKDIR}/machine.sh       ${DEST}/machine.sh
+    install -m 0755 ${UNPACKDIR}/remount-rw.sh    ${DEST}/remount-rw.sh
+    install -m 0755 ${UNPACKDIR}/resize2fs.sh     ${DEST}/resize2fs.sh
+    install -m 0755 ${UNPACKDIR}/scan-versions.sh ${DEST}/scan-versions.sh
+    install -m 0755 ${UNPACKDIR}/set-feed.sh      ${DEST}/set-feed.sh
+    install -m 0755 ${UNPACKDIR}/set-swu-feed.sh  ${DEST}/set-swu-feed.sh
+    install -m 0755 ${UNPACKDIR}/set-version.sh   ${DEST}/set-version.sh
 
     DEST=${D}${sysconfdir}/init.d
     install -d ${DEST}
-    install -m 0755 ${WORKDIR}/check-updates.init ${DEST}/check-updates.sh
-    install -m 0755 ${WORKDIR}/scan-versions.init ${DEST}/scan-versions.sh
+    install -m 0755 ${UNPACKDIR}/check-updates.init ${DEST}/check-updates.sh
+    install -m 0755 ${UNPACKDIR}/scan-versions.init ${DEST}/scan-versions.sh
 
     DEST=${D}${sysconfdir}/rc5.d
     install -d ${DEST}

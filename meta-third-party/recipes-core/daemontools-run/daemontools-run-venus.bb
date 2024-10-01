@@ -5,13 +5,14 @@ INITSCRIPT_NAME = "svscanboot.sh"
 INITSCRIPT_PARAMS = "start 95 5 2 . stop 15 6 ."
 inherit update-rc.d
 
-S = "${WORKDIR}"
 RDEPENDS:${PN} += "daemontools"
 
 SRC_URI += "file://svscanboot.sh"
+S = "${WORKDIR}/sources"
+UNPACKDIR = "${S}"
 
 do_install () {
     mkdir -p ${D}/${sysconfdir}/init.d
-    install -D ${WORKDIR}/svscanboot.sh ${D}/${sysconfdir}/init.d
+    install -D ${UNPACKDIR}/svscanboot.sh ${D}/${sysconfdir}/init.d
 }
 

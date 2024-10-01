@@ -29,5 +29,5 @@ do_install () {
     cp -r ${S}/* ${D}${bindir}
 
     install -d ${D}/${sysconfdir}/dbus-1/system.d
-    install -m 644 ${WORKDIR}/com.victronenergy.pump.conf ${D}/${sysconfdir}/dbus-1/system.d
+    install -m 644 ${UNPACKDIR}/com.victronenergy.pump.conf ${D}/${sysconfdir}/dbus-1/system.d
 }

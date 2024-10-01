@@ -37,6 +37,6 @@ do_configure:append() {
 
 do_install:append() {
     install -d ${D}${sysconfdir}/connman
-    install -m 0644 ${WORKDIR}/main.conf ${D}${sysconfdir}/connman/main.conf
-    install -m 0755 ${WORKDIR}/connmand-watch.sh ${D}${sbindir}/connmand-watch.sh
+    install -m 0644 ${UNPACKDIR}/main.conf ${D}${sysconfdir}/connman/main.conf
+    install -m 0755 ${UNPACKDIR}/connmand-watch.sh ${D}${sbindir}/connmand-watch.sh
 }

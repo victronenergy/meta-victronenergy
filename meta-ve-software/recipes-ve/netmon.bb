@@ -19,5 +19,5 @@ DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}"
 
 do_install () {
     install -d ${D}${bindir}
-    install -m 0755 ${WORKDIR}/netmon ${D}${bindir}
+    install -m 0755 ${UNPACKDIR}/netmon ${D}${bindir}
 }

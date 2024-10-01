@@ -26,7 +26,7 @@ do_install() {
 
     dest=${D}${sysconfdir}/modprobe.d
     install -d ${dest}
-    install -m 0644 ${WORKDIR}/${PN}.conf ${dest}
+    install -m 0644 ${UNPACKDIR}/${BPN}.conf ${dest}
 }
 
 FILES:${PN} += "${sysconfdir}"

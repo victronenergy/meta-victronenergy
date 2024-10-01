@@ -1,5 +1,5 @@
 SETTINGS_DIR = "${sysconfdir}/venus/settings.d"
-SETTINGS_FILE ?= "${WORKDIR}/localsettings"
+SETTINGS_FILE ?= "${UNPACKDIR}/localsettings"
 
 do_install:append () {
     install -d ${D}${SETTINGS_DIR}

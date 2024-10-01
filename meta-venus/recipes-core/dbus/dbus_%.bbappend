@@ -16,11 +16,11 @@ inherit localsettings
 # The guard is there since the OOM-killer likes to kill the dbus process itself,
 # instead of the processes causing the queues in it.
 do_install:append:venus() {
-    install ${WORKDIR}/dbus-daemon-watch.sh ${D}${bindir}/dbus-daemon-watch.sh
-    install -m 0644 ${WORKDIR}/system.conf ${D}${sysconfdir}/dbus-1/system.conf
+    install ${UNPACKDIR}/dbus-daemon-watch.sh ${D}${bindir}/dbus-daemon-watch.sh
+    install -m 0644 ${UNPACKDIR}/system.conf ${D}${sysconfdir}/dbus-1/system.conf
 
     # NOTE: only for debugging / fun. This is really not secure!
-    install -m 0644 ${WORKDIR}/system-insecure.conf ${D}${sysconfdir}/dbus-1/system-insecure.conf
+    install -m 0644 ${UNPACKDIR}/system-insecure.conf ${D}${sysconfdir}/dbus-1/system-insecure.conf
 
     # note: libexecdir differs between danny and yethro, hence sed it..
     sed -i -e "s:@libexecdir@:${libexecdir}:" ${D}${sysconfdir}/dbus-1/system.conf

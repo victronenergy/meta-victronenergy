@@ -18,7 +18,7 @@ do_install () {
     install -m 644 ${S}/tools/env/lib.a ${D}${libdir}/libubootenv.a
 
     install -d ${D}${sysconfdir}
-    install -m 644 ${WORKDIR}/fw_env.config ${D}${sysconfdir}
+    install -m 644 ${UNPACKDIR}/fw_env.config ${D}${sysconfdir}
 }
 
 do_deploy[noexec] = "1"

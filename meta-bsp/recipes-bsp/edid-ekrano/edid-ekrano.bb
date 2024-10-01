@@ -7,7 +7,8 @@ SRC_URI = "\
     file://ekrano-edid.conf \
 "
 
-S = "${WORKDIR}"
+S = "${WORKDIR}/sources"
+UNPACKDIR = "${S}"
 
 do_install() {
     fwdir=${D}${nonarch_base_libdir}/firmware

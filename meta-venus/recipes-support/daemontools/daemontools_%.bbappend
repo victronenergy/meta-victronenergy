@@ -6,5 +6,5 @@ SRC_URI += " \
 "
 
 do_install:append() {
-    install -m 755 ${WORKDIR}/svrescan ${D}/${bindir}
+    install -m 755 ${UNPACKDIR}/svrescan ${D}/${bindir}
 }

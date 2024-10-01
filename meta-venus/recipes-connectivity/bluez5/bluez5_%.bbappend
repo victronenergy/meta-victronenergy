@@ -14,8 +14,10 @@ EXTRA_OECONF += "\
 "
 
 do_install:append() {
-    install -m 0644 ${WORKDIR}/ble.conf ${D}${sysconfdir}/bluetooth
+    install -m 0644 ${UNPACKDIR}/ble.conf ${D}${sysconfdir}/bluetooth
 
     install -d ${D}${sysconfdir}/default
-    install -m 0644 ${WORKDIR}/init.default ${D}${sysconfdir}/default/bluetooth
+    install -m 0644 ${UNPACKDIR}/init.default ${D}${sysconfdir}/default/bluetooth
+
+    rm -rf ${D}/data
 }

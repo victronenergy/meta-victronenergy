@@ -6,9 +6,11 @@ SRC_URI = " \
 	file://www-overrides \
 	file://ssl-certificate \
 "
+S = "${WORKDIR}/sources"
+UNPACKDIR = "${S}"
 
 do_install() {
 	install -d "${D}/etc/venus/www.d"
-	install -m 755 "${WORKDIR}/ssl-certificate" "${D}/etc/venus/www.d"
-	install -m 755 "${WORKDIR}/www-overrides" "${D}/etc/venus/www.d"
+	install -m 755 "${UNPACKDIR}/ssl-certificate" "${D}/etc/venus/www.d"
+	install -m 755 "${UNPACKDIR}/www-overrides" "${D}/etc/venus/www.d"
 }

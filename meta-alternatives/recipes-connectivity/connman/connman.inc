@@ -62,7 +62,7 @@ do_compile:append() {
 
 do_install:append() {
     install -d ${D}${sysconfdir}/init.d
-    install -m 0755 ${WORKDIR}/connman ${D}${sysconfdir}/init.d/connman
+    install -m 0755 ${UNPACKDIR}/connman ${D}${sysconfdir}/init.d/connman
 
     install -d ${D}${bindir}
     install -m 0755 ${B}/tools/*-test ${D}${bindir}

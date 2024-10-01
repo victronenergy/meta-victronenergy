@@ -6,11 +6,13 @@ It is a seperate recipe to prevent qt4-embedded becoming MACHINE dependend. \
 "
 
 SRC_URI += "file://qt4.sh"
+S = "${WORKDIR}/sources"
+UNPACKDIR = "${S}"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 do_install:append() {
     mkdir -p ${D}/${sysconfdir}/profile.d
-    install ${WORKDIR}/qt4.sh ${D}/${sysconfdir}/profile.d
+    install ${UNPACKDIR}/qt4.sh ${D}/${sysconfdir}/profile.d
 }

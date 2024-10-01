@@ -25,5 +25,5 @@ DAEMONTOOLS_DOWN = "1"
 
 do_install:append () {
     install -d ${D}/${sysconfdir}/dbus-1/system.d
-    install -m 644 ${WORKDIR}/com.victronenergy.temprelay.conf ${D}/${sysconfdir}/dbus-1/system.d
+    install -m 644 ${UNPACKDIR}/com.victronenergy.temprelay.conf ${D}/${sysconfdir}/dbus-1/system.d
 }

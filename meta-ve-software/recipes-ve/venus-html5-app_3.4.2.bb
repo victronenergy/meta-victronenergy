@@ -13,7 +13,8 @@ SRC_URI = " \
 "
 SRC_URI[sha256sum] = "bd84112090fdff7cb18ff9893963694abff9ca3fe46235f91cc2b0bf2bb1b947"
 
-S = "${WORKDIR}"
+S = "${WORKDIR}/sources"
+UNPACKDIR = "${S}"
 BASE_DIR = "${WWW_ROOT}/default/app"
 
 INHIBIT_DEFAULT_DEPS = "1"

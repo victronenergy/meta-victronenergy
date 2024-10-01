@@ -18,7 +18,7 @@ inherit daemontools qmakeve
 
 do_install:append() {
     install -d ${D}/${DAEMONTOOLS_TEMPLATE_CONF_DIR}
-    install -m 644 ${WORKDIR}/can.inc ${D}/${DAEMONTOOLS_TEMPLATE_CONF_DIR}
+    install -m 644 ${UNPACKDIR}/can.inc ${D}/${DAEMONTOOLS_TEMPLATE_CONF_DIR}
 
     install -d "${D}/${bindir}"
     install -m 755 ${S}/svectl "${D}/${bindir}"

@@ -9,7 +9,8 @@ SRC_URI = " \
     file://custom-rc-late.sh \
 "
 
-S = "${WORKDIR}"
+S = "${WORKDIR}/sources"
+UNPACKDIR = "${S}"
 
 inherit allarch
 inherit update-rc.d
@@ -33,6 +34,6 @@ do_install () {
     install -d ${D}${sysconfdir}/rc5.d
     install -d ${D}${sysconfdir}/init.d
 
-    install -m 0755 ${WORKDIR}/custom-rc-early.sh    ${D}${sysconfdir}/init.d/custom-rc-early.sh
-    install -m 0755 ${WORKDIR}/custom-rc-late.sh    ${D}${sysconfdir}/init.d/custom-rc-late.sh
+    install -m 0755 ${UNPACKDIR}/custom-rc-early.sh ${D}${sysconfdir}/init.d/custom-rc-early.sh
+    install -m 0755 ${UNPACKDIR}/custom-rc-late.sh ${D}${sysconfdir}/init.d/custom-rc-late.sh
 }

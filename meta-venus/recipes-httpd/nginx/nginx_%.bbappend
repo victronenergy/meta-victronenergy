@@ -33,7 +33,7 @@ do_install:append() {
     rm -rf ${D}/var/volatile
     sed -i 's,/var/log/nginx,/var/volatile/log/nginx,g' ${D}${sysconfdir}/default/volatiles/99_nginx
 
-cat - ${WORKDIR}/nginx.conf << EOF > ${D}${sysconfdir}/nginx/nginx.conf
+cat - ${UNPACKDIR}/nginx.conf << EOF > ${D}${sysconfdir}/nginx/nginx.conf
 daemon off;
 EOF
 
@@ -47,24 +47,24 @@ EOF
     sed -i 's,include /etc/nginx/sites-enabled/\*;,include /run/nginx/sites-enabled/\*;,' ${D}${sysconfdir}/nginx/nginx.conf
 
     install -d ${D}${sbindir}
-    install -m 755 ${WORKDIR}/start-nginx.sh ${D}${sbindir}
+    install -m 755 ${UNPACKDIR}/start-nginx.sh ${D}${sbindir}
 
-    install -m 644 ${WORKDIR}/nginx-testmode.conf ${D}${sysconfdir}/nginx
+    install -m 644 ${UNPACKDIR}/nginx-testmode.conf ${D}${sysconfdir}/nginx
     echo 'DAEMON_OPTS="-c ${sysconfdir}/nginx/nginx-testmode.conf"' > "${D}${sysconfdir}/default/nginx"
 
     install -d ${D}${WWW_ROOT}
-    install -m 644 ${WORKDIR}/favicon.ico ${D}${WWW_ROOT}
-    install -m 644 ${WORKDIR}/gui-v1.php ${D}${WWW_ROOT}
-    install -m 644 ${WORKDIR}/gui-v2.php ${D}${WWW_ROOT}
+    install -m 644 ${UNPACKDIR}/favicon.ico ${D}${WWW_ROOT}
+    install -m 644 ${UNPACKDIR}/gui-v1.php ${D}${WWW_ROOT}
+    install -m 644 ${UNPACKDIR}/gui-v2.php ${D}${WWW_ROOT}
     ln -s /run/www/index.php ${D}${WWW_ROOT}
 
     install -d "${D}/etc/venus/www.d"
-    install -m 755 "${WORKDIR}/create-gui-redirect.sh" "${D}/etc/venus/www.d"
+    install -m 755 "${UNPACKDIR}/create-gui-redirect.sh" "${D}/etc/venus/www.d"
 
     rm ${D}${sysconfdir}/nginx/sites-available/default_server
     rm ${D}${sysconfdir}/nginx/sites-enabled/default_server
-    install -m 644 ${WORKDIR}/http.site ${D}${sysconfdir}/nginx/sites-available
-    install -m 644 ${WORKDIR}/http-explanation.site ${D}${sysconfdir}/nginx/sites-available
-    install -m 644 ${WORKDIR}/https.site ${D}${sysconfdir}/nginx/sites-available
+    install -m 644 ${UNPACKDIR}/http.site ${D}${sysconfdir}/nginx/sites-available
+    install -m 644 ${UNPACKDIR}/http-explanation.site ${D}${sysconfdir}/nginx/sites-available
+    install -m 644 ${UNPACKDIR}/https.site ${D}${sysconfdir}/nginx/sites-available
 }
 

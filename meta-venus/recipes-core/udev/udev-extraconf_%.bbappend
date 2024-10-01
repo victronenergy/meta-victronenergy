@@ -33,45 +33,45 @@ SRC_URI:append:sunxi = "\
 "
 
 do_install:append() {
-    install -m 0755 ${WORKDIR}/mount.sh ${D}${sysconfdir}/udev/scripts
+    install -m 0755 ${UNPACKDIR}/mount.sh ${D}${sysconfdir}/udev/scripts
 
     install -d ${D}/${sysconfdir}/udev/mount.blacklist.d
-    install -m 0644 ${WORKDIR}/mount.blacklist.machine \
+    install -m 0644 ${UNPACKDIR}/mount.blacklist.machine \
         ${D}/${sysconfdir}/udev/mount.blacklist.d/machine
 
     install -m 0755 -d ${D}${base_libdir}/udev
-    install -m 0755 ${WORKDIR}/bt-config ${D}${base_libdir}/udev
-    install -m 0755 ${WORKDIR}/bt-remove ${D}${base_libdir}/udev
-    install -m 0755 ${WORKDIR}/display-hotplug ${D}${base_libdir}/udev
+    install -m 0755 ${UNPACKDIR}/bt-config ${D}${base_libdir}/udev
+    install -m 0755 ${UNPACKDIR}/bt-remove ${D}${base_libdir}/udev
+    install -m 0755 ${UNPACKDIR}/display-hotplug ${D}${base_libdir}/udev
 
-    install -m 0644 ${WORKDIR}/bluetooth.rules ${D}/${sysconfdir}/udev/rules.d
-    install -m 0644 ${WORKDIR}/ether.rules ${D}/${sysconfdir}/udev/rules.d
-    install -m 0644 ${WORKDIR}/machine.rules ${D}/${sysconfdir}/udev/rules.d
-    install -m 0644 ${WORKDIR}/mtd.rules ${D}/${sysconfdir}/udev/rules.d
-    install -m 0644 ${WORKDIR}/rfkill.rules ${D}/${sysconfdir}/udev/rules.d
-    install -m 0644 ${WORKDIR}/simcom.rules ${D}/${sysconfdir}/udev/rules.d
+    install -m 0644 ${UNPACKDIR}/bluetooth.rules ${D}/${sysconfdir}/udev/rules.d
+    install -m 0644 ${UNPACKDIR}/ether.rules ${D}/${sysconfdir}/udev/rules.d
+    install -m 0644 ${UNPACKDIR}/machine.rules ${D}/${sysconfdir}/udev/rules.d
+    install -m 0644 ${UNPACKDIR}/mtd.rules ${D}/${sysconfdir}/udev/rules.d
+    install -m 0644 ${UNPACKDIR}/rfkill.rules ${D}/${sysconfdir}/udev/rules.d
+    install -m 0644 ${UNPACKDIR}/simcom.rules ${D}/${sysconfdir}/udev/rules.d
 }
 
 do_install:append:beaglebone() {
-    install -m 0644 ${WORKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
+    install -m 0644 ${UNPACKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
 
-    install -m 0755 ${WORKDIR}/wlan-rename ${D}${base_libdir}/udev
-    install -m 0755 ${WORKDIR}/wlan-update ${D}${base_libdir}/udev
+    install -m 0755 ${UNPACKDIR}/wlan-rename ${D}${base_libdir}/udev
+    install -m 0755 ${UNPACKDIR}/wlan-update ${D}${base_libdir}/udev
 }
 
 do_install:append:ccgx() {
-    install -m 0644 ${WORKDIR}/rtl8192cu.rules ${D}${sysconfdir}/udev/rules.d
+    install -m 0644 ${UNPACKDIR}/rtl8192cu.rules ${D}${sysconfdir}/udev/rules.d
 }
 
 do_install:append:einstein() {
-    install -m 0755 ${WORKDIR}/sunxi-losc-status ${D}${base_libdir}/udev
+    install -m 0755 ${UNPACKDIR}/sunxi-losc-status ${D}${base_libdir}/udev
 }
 
 do_install:append:sunxi() {
-    install -m 0644 ${WORKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
+    install -m 0644 ${UNPACKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
 
-    install -m 0755 ${WORKDIR}/wlan-rename ${D}${base_libdir}/udev
-    install -m 0755 ${WORKDIR}/wlan-update ${D}${base_libdir}/udev
+    install -m 0755 ${UNPACKDIR}/wlan-rename ${D}${base_libdir}/udev
+    install -m 0755 ${UNPACKDIR}/wlan-update ${D}${base_libdir}/udev
 }
 
 FILES:${PN} += "${base_libdir}"

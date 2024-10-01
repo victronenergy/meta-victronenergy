@@ -5,5 +5,5 @@ SRC_URI += "\
 "
 
 do_install:append() {
-    install -m 0755 ${WORKDIR}/can-set-rate ${D}${bindir}
+    install -m 0755 ${UNPACKDIR}/can-set-rate ${D}${bindir}
 }

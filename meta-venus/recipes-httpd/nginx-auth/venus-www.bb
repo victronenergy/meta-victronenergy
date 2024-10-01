@@ -26,5 +26,5 @@ do_install() {
     install -m 644 "${S}/auth/victron_logo.png" ${D}${AUTHDIR}
 
     install -d "${D}${WWW_RCD}"
-    install -m 755 "${WORKDIR}/create-venus-session-dir" "${D}${WWW_RCD}"
+    install -m 755 "${UNPACKDIR}/create-venus-session-dir" "${D}${WWW_RCD}"
 }

@@ -30,5 +30,5 @@ RDEPENDS:${PN} = " \
 "
 
 do_install:append () {
-    install -m 755 ${WORKDIR}/start.sh ${D}${bindir}
+    install -m 755 ${UNPACKDIR}/start.sh ${D}${bindir}
 }

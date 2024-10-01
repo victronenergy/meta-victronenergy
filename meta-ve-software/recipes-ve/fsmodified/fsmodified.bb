@@ -7,7 +7,7 @@ DEPENDS = "e2fsprogs"
 SRC_URI = "file://fsmodified.c"
 
 do_compile() {
-    ${CC} ${CFLAGS} ${LDFLAGS} ${WORKDIR}/${PN}.c -o ${PN} -lext2fs
+    ${CC} ${CFLAGS} ${LDFLAGS} ${UNPACKDIR}/${PN}.c -o ${PN} -lext2fs
 }
 
 do_install() {

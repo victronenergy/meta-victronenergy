@@ -15,10 +15,10 @@ DAEMONTOOLS_RUN = "${sbindir}/start-flashmq"
 RDEPENDS:${PN} += "dbus-flashmq mosquitto-clients"
 
 do_install:append() {
-    install ${WORKDIR}/flashmq.conf ${D}/${sysconfdir}/flashmq/flashmq.conf
+    install ${UNPACKDIR}/flashmq.conf ${D}/${sysconfdir}/flashmq/flashmq.conf
 
     install -d ${D}${sbindir}
-    install -m 0755 ${WORKDIR}/start-flashmq ${D}${sbindir}
+    install -m 0755 ${UNPACKDIR}/start-flashmq ${D}${sbindir}
 
     install -d ${D}${sysconfdir}/default/volatiles
     echo "d root root 0755 /run/flashmq none" > ${D}${sysconfdir}/default/volatiles/50_${PN}

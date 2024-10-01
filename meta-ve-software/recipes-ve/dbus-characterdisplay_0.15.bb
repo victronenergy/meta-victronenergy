@@ -28,5 +28,5 @@ DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/star
 
 do_install:append () {
     install -d ${D}${bindir}
-    install -m 0755 ${WORKDIR}/start-characterdisplay.sh ${D}${bindir}
+    install -m 0755 ${UNPACKDIR}/start-characterdisplay.sh ${D}${bindir}
 }

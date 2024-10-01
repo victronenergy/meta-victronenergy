@@ -7,10 +7,10 @@ SRC_URI += "file://install.cmds"
 
 do_compile:append () {
     mkimage -A arm -T script -C none -n 'Install Script' \
-        -d ${WORKDIR}/install.cmds ${WORKDIR}/install.scr
+        -d ${UNPACKDIR}/install.cmds ${UNPACKDIR}/install.scr
 }
 
 do_deploy:append () {
     install -d ${DEPLOYDIR}
-    install -m 0644 ${WORKDIR}/install.scr ${DEPLOYDIR}/install.scr
+    install -m 0644 ${UNPACKDIR}/install.scr ${DEPLOYDIR}/install.scr
 }

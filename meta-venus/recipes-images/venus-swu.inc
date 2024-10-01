@@ -70,7 +70,7 @@ python do_subst() {
     import re
     import sys
 
-    swd = os.path.join(d.getVar('WORKDIR'), 'sw-description')
+    swd = os.path.join(d.getVar('UNPACKDIR'), 'sw-description')
     f = fileinput.input(files=(swd), inplace=True)
 
     for line in f:

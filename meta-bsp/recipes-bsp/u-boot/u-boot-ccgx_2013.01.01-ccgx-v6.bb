@@ -17,13 +17,13 @@ SRC_URI += " \
 "
 
 do_compile:append () {
-    mkimage -A arm -T script -C none -n 'Install Script' -d ${WORKDIR}/install.cmds ${WORKDIR}/install.scr
-    mkimage -A arm -T script -C none -n 'Live Script' -d ${WORKDIR}/live.cmds ${WORKDIR}/live.scr
+    mkimage -A arm -T script -C none -n 'Install Script' -d ${UNPACKDIR}/install.cmds ${UNPACKDIR}/install.scr
+    mkimage -A arm -T script -C none -n 'Live Script' -d ${UNPACKDIR}/live.cmds ${UNPACKDIR}/live.scr
 }
 
 do_deploy:append () {
     install -d ${DEPLOYDIR}
-    install -m 0644 ${WORKDIR}/install.scr ${DEPLOYDIR}/install.scr
-    install ${WORKDIR}/live.scr ${DEPLOYDIR}
-    install ${WORKDIR}/splash.bgra ${DEPLOYDIR}
+    install -m 0644 ${UNPACKDIR}/install.scr ${DEPLOYDIR}/install.scr
+    install ${UNPACKDIR}/live.scr ${DEPLOYDIR}
+    install ${UNPACKDIR}/splash.bgra ${DEPLOYDIR}
 }

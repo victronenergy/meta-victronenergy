@@ -26,5 +26,5 @@ do_install () {
     install -m 755 -D ${S}/*.py ${D}${bindir}
 
     install -d ${D}/${sysconfdir}/dbus-1/system.d
-    install -m 644 ${WORKDIR}/com.victronenergy.settings.conf ${D}/${sysconfdir}/dbus-1/system.d
+    install -m 644 ${UNPACKDIR}/com.victronenergy.settings.conf ${D}/${sysconfdir}/dbus-1/system.d
 }

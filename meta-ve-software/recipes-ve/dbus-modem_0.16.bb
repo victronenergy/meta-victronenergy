@@ -30,8 +30,8 @@ DAEMONTOOLS_SERVICE_DIR = "${DAEMONTOOLS_TEMPLATE_DIR}"
 do_install () {
     install -d ${D}${bindir}
     install -m 0755 ${S}/dbus-modem.py ${D}${bindir}
-    install -m 0755 ${WORKDIR}/start-modem.sh ${D}${bindir}
-    install -m 0755 ${WORKDIR}/reset-modem.sh ${D}${bindir}
+    install -m 0755 ${UNPACKDIR}/start-modem.sh ${D}${bindir}
+    install -m 0755 ${UNPACKDIR}/reset-modem.sh ${D}${bindir}
 
     for f in settingsdevice ve_utils vedbus; do
         install -m 0644 ${S}/ext/velib_python/$f.py ${D}${bindir}

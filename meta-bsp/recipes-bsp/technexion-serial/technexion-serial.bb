@@ -1,6 +1,7 @@
 LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0-or-later;md5=fed54355545ffd980b814dab4a3b312c"
-S = "${WORKDIR}"
+S = "${WORKDIR}/sources"
+UNPACKDIR = "${S}"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += "\
@@ -8,7 +9,7 @@ SRC_URI += "\
 "
 
 do_compile () {
-    ${CC} ${CFLAGS} ${LDFLAGS} ${WORKDIR}/main.c -o technexion-serial
+    ${CC} ${CFLAGS} ${LDFLAGS} ${UNPACKDIR}/main.c -o technexion-serial
 }
 
 do_install () {

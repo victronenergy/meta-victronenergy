@@ -14,9 +14,9 @@ do_compile[noexec] = "1"
 
 do_install () {
     mkdir -p "${D}${WWW_ROOT}"
-    install -m 644 ${WORKDIR}/logo.php "${D}${WWW_ROOT}"
+    install -m 644 ${UNPACKDIR}/logo.php "${D}${WWW_ROOT}"
 
     install -d "${D}${WWW_RCD}"
-    install -m 755 "${WORKDIR}/create-logo-dir" "${D}${WWW_RCD}"
+    install -m 755 "${UNPACKDIR}/create-logo-dir" "${D}${WWW_RCD}"
 }
 

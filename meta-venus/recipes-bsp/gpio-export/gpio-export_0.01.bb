@@ -21,7 +21,8 @@ SRC_URI:append:ccgx = "\
     file://mkx_pins.sh \
 "
 
-S = "${WORKDIR}"
+S = "${WORKDIR}/sources"
+UNPACKDIR = "${S}"
 
 INITSCRIPT_NAME = "gpio_pins.sh"
 INITSCRIPT_PARAMS = "start 90 S ."
@@ -34,11 +35,11 @@ do_install () {
     install -d ${D}${sysconfdir}/init.d
 
     # Install device dependent scripts
-    install -m 0755 ${WORKDIR}/gpio_pins.sh    ${D}${sysconfdir}/init.d/gpio_pins.sh
-    install -m 0600 ${WORKDIR}/gpio_list    ${D}${sysconfdir}/venus/gpio_list
+    install -m 0755 ${UNPACKDIR}/gpio_pins.sh ${D}${sysconfdir}/init.d/gpio_pins.sh
+    install -m 0600 ${UNPACKDIR}/gpio_list ${D}${sysconfdir}/venus/gpio_list
 }
 
 do_install:append:ccgx () {
-    install -m 0755 ${WORKDIR}/mkx_pins.sh    ${D}${sysconfdir}/init.d/mkx_pins.sh
+    install -m 0755 ${UNPACKDIR}/mkx_pins.sh    ${D}${sysconfdir}/init.d/mkx_pins.sh
     update-rc.d -r ${D} mkx_pins.sh start 91 S .
 }

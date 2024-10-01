@@ -24,5 +24,5 @@ DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/star
 do_install () {
     install -d ${D}${bindir}
     cp -r ${S}/* ${D}${bindir}
-    install -m 0755 ${WORKDIR}/start-digitalinputs.sh ${D}${bindir}
+    install -m 0755 ${UNPACKDIR}/start-digitalinputs.sh ${D}${bindir}
 }
