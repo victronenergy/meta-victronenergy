@@ -8,7 +8,12 @@ DEPENDS += "qtdeclarative-native qttools-native"
 DEPENDS += "qt5compat qtbase qtdeclarative qtmqtt qtshadertools qtsvg qtvirtualkeyboard"
 RDEPENDS:${PN} = " \
     qt5compat-qmlplugins \
+    qtbase-plugin-qeglfs \
+    qtbase-plugin-qeglfs-kms-integration \
+    qtbase-plugin-qgif \
+    qtbase-plugin-qlinuxfb \
     qtdeclarative-qmlplugins \
+    qtsvg-plugin-qsvg \
     qtvirtualkeyboard-qmlplugins \
     venus-ui-themes \
 "
