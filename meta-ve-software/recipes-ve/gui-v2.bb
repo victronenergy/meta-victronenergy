@@ -10,6 +10,7 @@ RDEPENDS:${PN} = " \
     qt5compat-qmlplugins \
     qtdeclarative-qmlplugins \
     qtvirtualkeyboard-qmlplugins \
+    venus-ui-themes \
 "
 
 PACKAGES += "start-gui-v2"
