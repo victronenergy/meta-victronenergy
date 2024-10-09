@@ -5,8 +5,12 @@ include gui-v2.inc
 inherit daemontools qt6-cmake start-gui ve_package
 
 DEPENDS += "qtdeclarative-native qttools-native"
-DEPENDS += "qtbase qtdeclarative qtmqtt qtsvg"
-RDEPENDS:${PN} = "qt5compat qtvirtualkeyboard"
+DEPENDS += "qt5compat qtbase qtdeclarative qtmqtt qtshadertools qtsvg qtvirtualkeyboard"
+RDEPENDS:${PN} = " \
+    qt5compat-qmlplugins \
+    qtdeclarative-qmlplugins \
+    qtvirtualkeyboard-qmlplugins \
+"
 
 PACKAGES += "start-gui-v2"
 DAEMON_PN = "start-gui-v2"
