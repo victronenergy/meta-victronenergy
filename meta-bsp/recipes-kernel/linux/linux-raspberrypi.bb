@@ -1,5 +1,10 @@
 require linux-venus.bb
 
+GIT_BRANCH = "venus-${LINUX_VERSION}"
+
+SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=${GIT_BRANCH};tag=v${PV}"
+unset SRCREV
+
 COMPATIBLE_MACHINE = "^rpi$"
 
 LINUX_VERSION = "5.10.110"
