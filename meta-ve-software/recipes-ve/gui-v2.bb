@@ -25,3 +25,7 @@ SRC_URI = " \
 S = "${WORKDIR}/git"
 EXTRA_OECMAKE = "-DNO_CACHEGEN=true -DLOAD_QML_FROM_FILESYSTEM=true"
 
+do_install:append() {
+	rm -r ${D}/usr
+}
+
