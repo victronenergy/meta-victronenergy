@@ -84,6 +84,9 @@ EOF
     setup_relay $gpio_base $R0_PINS
     setup_relay $gpio_base $R1_PINS
     setup_relay $gpio_base $SSR_PINS
+
+    chown root:gpio $DIR/*/value
+    chmod 664 $DIR/*/value
 }
 
 case $ACTION in

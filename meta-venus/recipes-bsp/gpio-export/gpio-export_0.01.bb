@@ -25,7 +25,10 @@ S = "${WORKDIR}"
 
 INITSCRIPT_NAME = "gpio_pins.sh"
 INITSCRIPT_PARAMS = "start 90 S ."
-inherit update-rc.d
+inherit update-rc.d useradd
+USERADD_PACKAGES = "${PN}"
+USERADD_PARAM:${PN} = "--no-create-home --shell /bin/false -g gpio gpio"
+GROUPADD_PARAM:${PN} = "gpio"
 
 do_install () {
     # Create directories and install device independent scripts
