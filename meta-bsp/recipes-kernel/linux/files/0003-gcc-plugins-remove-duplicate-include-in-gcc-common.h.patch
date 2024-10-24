@@ -1,0 +1,32 @@
+From 0e8d461eb3162054daf152918801c8d5363ae9f6 Mon Sep 17 00:00:00 2001
+From: Ye Guojin <ye.guojin@zte.com.cn>
+Date: Tue, 19 Oct 2021 08:29:10 +0000
+Subject: [PATCH 3/4] gcc-plugins: remove duplicate include in gcc-common.h
+
+'tree-ssa-operands.h' included in 'gcc-common.h' is duplicated.
+it's also included at line 56.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Ye Guojin <ye.guojin@zte.com.cn>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20211019082910.998257-1-ye.guojin@zte.com.cn
+Upstream-Status: Backport
+---
+ scripts/gcc-plugins/gcc-common.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/scripts/gcc-plugins/gcc-common.h b/scripts/gcc-plugins/gcc-common.h
+index 62bf1c07b8bf..9a1895747b15 100644
+--- a/scripts/gcc-plugins/gcc-common.h
++++ b/scripts/gcc-plugins/gcc-common.h
+@@ -86,7 +86,6 @@
+ #include "stmt.h"
+ #include "gimplify.h"
+ #include "gimple.h"
+-#include "tree-ssa-operands.h"
+ #include "tree-phinodes.h"
+ #include "tree-cfg.h"
+ #include "gimple-iterator.h"
+-- 
+2.43.0
+
