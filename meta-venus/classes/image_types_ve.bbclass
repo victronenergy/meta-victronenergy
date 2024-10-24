@@ -14,7 +14,7 @@ do_image_live_img[depends] += "\
 
 IMAGE_CMD:live-img () {
     BOOTIMG=${WORKDIR}/boot.img
-    LIVE_IMAGE=${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.live-img
+    LIVE_IMAGE=${IMGDEPLOYDIR}/${IMAGE_NAME}.live-img
 
     # create live image with two partition, first to boot, second the rootfs itself
     dd if=/dev/zero of=${LIVE_IMAGE} count=1024 bs=1M
@@ -33,6 +33,6 @@ IMAGE_CMD:live-img () {
 
     # copy partitions into the image
     dd if=${BOOTIMG} of=${LIVE_IMAGE} conv=notrunc seek=1 bs=1M
-    dd if=${IMGDEPLOYDIR}/${IMAGE_NAME}.rootfs.ext3 of=${LIVE_IMAGE} bs=512 seek=194560
+    dd if=${IMGDEPLOYDIR}/${IMAGE_NAME}.ext3 of=${LIVE_IMAGE} bs=512 seek=194560
 }
 
