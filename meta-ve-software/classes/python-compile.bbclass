@@ -1,5 +1,5 @@
 DEPENDS += "python3-native"
 
 do_install:append() {
-    nativepython3 -m compileall ${D}
+	nativepython3 -s -m compileall -d / ${D} -f
 }
