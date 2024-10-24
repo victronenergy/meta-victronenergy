@@ -33,7 +33,8 @@ do_install:append() {
     fi
 
     if [ -d ${D}${localstatedir}/log ]; then
-        rmdir ${D}${localstatedir}/log
+        rm -rf ${D}${localstatedir}/log
     fi
+
     ln -sf ${permanentdir}/log ${D}${localstatedir}/log
 }
