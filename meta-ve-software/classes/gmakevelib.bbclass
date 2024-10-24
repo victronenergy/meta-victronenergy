@@ -1,4 +1,4 @@
-inherit pkgconfig siteinfo
+inherit pkgconfig
 
 # run ./configure && make && make install
 
@@ -55,7 +55,5 @@ gmakevelib_do_configure() {
 gmakevelib_do_install() {
     oe_runmake 'DESTDIR=${D}' install
 }
-
-inherit siteconfig
 
 EXPORT_FUNCTIONS do_configure do_install

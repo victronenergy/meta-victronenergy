@@ -8,6 +8,6 @@ qt4venus_do_install() {
     oe_runmake INSTALL_ROOT=${D} install
 }
 
-inherit qt4e siteconfig
+inherit qt4e
 
 EXPORT_FUNCTIONS do_install
