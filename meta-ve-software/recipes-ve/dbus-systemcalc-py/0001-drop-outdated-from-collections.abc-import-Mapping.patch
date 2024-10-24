@@ -1,0 +1,27 @@
+From 2d7750d0e8277f412fe004b57d5e8f7ae2846041 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 25 Jul 2024 15:57:41 +0200
+Subject: [PATCH] drop outdated 'from collections.abc import Mapping'
+
+This is a remnant from python 2, see:
+
+https://www.geeksforgeeks.org/python-importerror-cannot-import-name-mapping-from-collections/
+
+Upstream-Status: Inappropriate [Venus specific, reported though]
+---
+ sc_utils.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/sc_utils.py b/sc_utils.py
+index 6f6d50f..8468a08 100644
+--- a/sc_utils.py
++++ b/sc_utils.py
+@@ -1,5 +1,4 @@
+ from functools import update_wrapper
+-from collections import Mapping
+ 
+ VictronServicePrefix = 'com.victronenergy'
+ 
+-- 
+2.34.1
+
