@@ -9,7 +9,7 @@ IMAGE_INSTALL = "\
 "
 IMAGE_INSTALL += "packagegroup-ve-console-apps"
 IMAGE_FEATURES += "package-management ssh-server-openssh"
-IMAGE_FEATURES += "read-only-rootfs"
+IMAGE_FEATURES += "debug-tweaks read-only-rootfs empty-root-password"
 
 BAD_RECOMMENDATIONS += "${@'' if d.getVar('VENUS_GPU') == '1' else 'mesa-megadriver'}"
 
