@@ -9,6 +9,7 @@ inherit python-compile
 UPSTREAM_CHECK_GITTAGREGEX = "(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;branch=master;protocol=https \
+    file://0001-drop-outdated-from-collections.abc-import-Mapping.patch \
     file://com.victronenergy.system.conf \
 "
 SRCREV = "680f54f795bde25630fcc8160746d598f720029f"
