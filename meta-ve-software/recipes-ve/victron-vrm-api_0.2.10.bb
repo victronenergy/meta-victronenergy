@@ -8,7 +8,7 @@ SRC_URI = " \
 "
 
 # Careful! When updating the version, also npm-shrinkwrap.json must be updated
-SRC_URI[sha256sum] = "d40723c1e2c676d6b50456f39e7e796e80adf5fb09815e2eef2d68d3d1bf503f"
+SRC_URI[sha256sum] = "816ce75c55c4880f5640f8701d4c67f467e78450c7b0b9bc970e25e7625a9719"
 
 inherit npm-online-install
 
