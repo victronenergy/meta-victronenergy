@@ -15,9 +15,9 @@ do_test() {
         exit 0
     fi
 
-    enabled=$(get_value settings /Settings/Vrmlogger/Logmode)
+    enabled=$(get_value settings /Settings/Network/VrmPortal)
 
-    if [ "$enabled" != 1 ]; then
+    if [ "$enabled" = 0 ]; then
         # logging disabled, report success
         exit 0
     fi
