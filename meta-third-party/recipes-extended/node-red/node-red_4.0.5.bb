@@ -7,7 +7,7 @@ SRC_URI = "\
     npm://registry.npmjs.org;package=${PN};version=${PV} \
     file://npm-shrinkwrap.json;subdir=${S} \
 "
-SRC_URI[sha256sum] = "e5f19b46851a29b524967f60ebd846a3a3e5c6eefce873038a8d5a321cc957e5"
+SRC_URI[sha256sum] = "2babe48282a3cc9e9a40547e5ef0c99fcd1c77b7d2a40a12977a6559a8d29784"
 S = "${WORKDIR}/npm"
 
 RDEPENDS:${PN} = "nodejs-npm"
@@ -19,7 +19,5 @@ do_install:append() {
     rm ${D}${NPM_INSTALLDIR}${nonarch_libdir}/node_modules/${PN}/bin/node-red-pi
     rm ${D}${bindir}/node-red-pi
 
-    rm -r ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bcrypt/build-tmp-napi-v3
-    rm ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/node-red-admin/node_modules/bcrypt/node-addon-api/nothing.a
-    rm -r ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/node-red-admin/node_modules/bcrypt/build-tmp-napi-v3
+    rm -r ${D}${nonarch_libdir}/node_modules/node-red/node_modules/@node-rs/bcrypt-linux-x64-gnu
 }
