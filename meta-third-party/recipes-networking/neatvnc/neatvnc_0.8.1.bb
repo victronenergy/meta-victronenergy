@@ -6,7 +6,7 @@ DEPENDS += "aml libdrm libjpeg-turbo pixman"
 
 inherit meson pkgconfig
 
-SRC_URI = "git://github.com/any1/neatvnc;protocol=https"
-SRCREV = "6ad4aba374153d36c99ea5073b747697774f4e3e"
+SRC_URI = "git://github.com/any1/neatvnc;protocol=https;branch=v0.8"
+SRCREV = "07081567ab21a2b099ceb41ae8cab872a31cbb9a"
 S = "${WORKDIR}/git"
 
