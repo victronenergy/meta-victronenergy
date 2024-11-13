@@ -6,8 +6,8 @@ DEPENDS += "aml libdrm libxkbcommon neatvnc virtual/libgbm wayland wayland-nativ
 
 inherit meson pkgconfig
 
-SRC_URI = "git://github.com/any1/wayvnc;protocol=https"
-SRCREV = "8038e655971144af29962cdbf76a7b17be6dfb26"
+SRC_URI = "git://github.com/any1/wayvnc;protocol=https;branch=v0.8"
+SRCREV = "15d09b0f9f971792c1a09a5e53640951b8b74aac"
 S = "${WORKDIR}/git"
 
 do_install:append() {
