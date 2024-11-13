@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0-only;md5=801f80980d171d
 
 SRC_URI = " \
     git://github.com/lwfinger/rtl8723du.git;protocol=https;branch=v5.13.4 \
-    file://${PN}.conf \
+    file://${BPN}.conf \
 "
 SRCREV = "cfcb42ad6f9bc9bc987ef2f2841f15ce5fb4bbdb"
 
