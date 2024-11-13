@@ -34,7 +34,6 @@ DEPENDS += "\
     valgrind \
     venus-socketcan-test \
     vim \
-    wayvnc \
     wireguard-tools \
     x11vnc \
 "
