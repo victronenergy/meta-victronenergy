@@ -4,7 +4,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=014f1a23c3da49aa929b21a96808ab22"
 
 SRC_URI = "\
-    npm://registry.npmjs.org;package=${PN};version=${PV} \
+    npm://registry.npmjs.org;package=${BPN};version=${PV} \
     file://npm-shrinkwrap.json;subdir=${S} \
 "
 SRC_URI[sha256sum] = "e5f19b46851a29b524967f60ebd846a3a3e5c6eefce873038a8d5a321cc957e5"
