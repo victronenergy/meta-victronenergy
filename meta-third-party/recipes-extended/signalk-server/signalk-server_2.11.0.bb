@@ -7,7 +7,7 @@ DEPENDS += "avahi"
 RDEPENDS:${PN} += "bash nodejs-npm util-linux-setpriv"
 
 SRC_URI = "\
-    npm://registry.npmjs.org;package=${PN};version=${PV} \
+    npm://registry.npmjs.org;package=${BPN};version=${PV} \
     file://add-venus-os-preinstalled-plugins.patch \
     file://npm-shrinkwrap.json;subdir=${S} \
     file://defaults.json \
