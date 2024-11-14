@@ -39,6 +39,9 @@ FILES:${PN}-bcm43430a1 = "\
   ${nonarch_base_libdir}/firmware/brcm/BCM43430A1.hcd \
 "
 
+# backwards compatible symlinks
+FILES_${PN}-mt7601u += "${nonarch_base_libdir}/firmware/mt7601u.bin "
+
 # For mediatek mt7662
 PACKAGES =+ "${PN}-mt7662"
 FILES:${PN}-mt7662 = " \
