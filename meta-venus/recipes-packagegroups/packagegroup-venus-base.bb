@@ -52,7 +52,6 @@ RDEPENDS:${PN} += "\
     dpkg-start-stop \
     e2fsprogs \
     eglibc-utils \
-    ftdi-control \
     gdbserver \
     haveged \
     iproute2 \
@@ -60,12 +59,6 @@ RDEPENDS:${PN} += "\
     javascript-vnc-client \
     ldd \
     less \
-    linux-firmware-mt7601u \
-    linux-firmware-mt7662 \
-    linux-firmware-rt2800 \
-    linux-firmware-rt73 \
-    linux-firmware-rtl8192cu \
-    linux-firmware-rtl-bt \
     llmnrd \
     localedef \
     logo \
