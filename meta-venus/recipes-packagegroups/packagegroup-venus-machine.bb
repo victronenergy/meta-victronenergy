@@ -14,7 +14,6 @@ RDEPENDS:${PN} += "\
     machine-runtime-conf \
     qt4-machine-conf \
     qtplatform \
-    simple-upnpd \
 "
 
 RDEPENDS:${PN}:append:canvu500 = "\
