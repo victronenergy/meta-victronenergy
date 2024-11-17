@@ -1,4 +1,4 @@
-From 1601649c8489977d92910e1b9f775186918a3a42 Mon Sep 17 00:00:00 2001
+From 74a66abfc3c69e02d5411ef94b02e6285f42fb47 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Mon, 10 Oct 2022 14:54:43 +0200
 Subject: [PATCH] Add support for arg0namespace in add_signal_receiver
@@ -9,15 +9,17 @@ name owner changes for a group of related bus names, rather than for
 a single name or all name changes.
 
 Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
+Upstream-Status: Backport
 ---
- dbus/connection.py | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ dbus/connection.py | 24 ++++++++++++++++++++++--
+ dbus/proxies.py    |  5 +++++
+ 2 files changed, 27 insertions(+), 2 deletions(-)
 
 diff --git a/dbus/connection.py b/dbus/connection.py
-index f5c8dd9..e4a8486 100644
+index fd20800..9581d82 100644
 --- a/dbus/connection.py
 +++ b/dbus/connection.py
-@@ -58,7 +58,9 @@ class SignalMatch(object):
+@@ -55,7 +55,9 @@ class SignalMatch(object):
                '_byte_arrays', '_conn_weakref',
                '_destination_keyword', '_interface_keyword',
                '_message_keyword', '_member_keyword',
@@ -25,10 +27,10 @@ index f5c8dd9..e4a8486 100644
 +              '_sender_keyword', '_path_keyword', '_int_args_match',
 +              '_arg0namespace'
 +              ]
-     if is_py2:
-         _slots.append('_utf8_strings')
  
-@@ -69,7 +71,7 @@ class SignalMatch(object):
+     __slots__ = tuple(_slots)
+ 
+@@ -64,7 +66,7 @@ class SignalMatch(object):
                   sender_keyword=None, path_keyword=None,
                   interface_keyword=None, member_keyword=None,
                   message_keyword=None, destination_keyword=None,
@@ -37,7 +39,7 @@ index f5c8dd9..e4a8486 100644
          if member is not None:
              validate_member_name(member)
          if dbus_interface is not None:
-@@ -85,6 +87,7 @@ class SignalMatch(object):
+@@ -80,6 +82,7 @@ class SignalMatch(object):
          self._interface = dbus_interface
          self._member = member
          self._path = object_path
@@ -45,7 +47,7 @@ index f5c8dd9..e4a8486 100644
          self._handler = handler
  
          # if the connection is actually a bus, it's responsible for changing
-@@ -148,6 +151,8 @@ class SignalMatch(object):
+@@ -141,6 +144,8 @@ class SignalMatch(object):
                  rule.append("interface='%s'" % self._interface)
              if self._member is not None:
                  rule.append("member='%s'" % self._member)
@@ -54,29 +56,51 @@ index f5c8dd9..e4a8486 100644
              if self._int_args_match is not None:
                  for index, value in self._int_args_match.items():
                      rule.append("arg%d='%s'" % (index, value))
-@@ -197,6 +202,12 @@ class SignalMatch(object):
-                     or not isinstance(args[index], arg_type)
+@@ -187,6 +192,16 @@ class SignalMatch(object):
+                     or not isinstance(args[index], String)
                      or args[index] != value):
                      return False
 +        if self._arg0namespace is not None:
 +            kwargs = dict(byte_arrays=True)
 +            args = message.get_args_list(**kwargs)
-+            if len(args) == 0 or not isinstance(args[0], String) \
-+                or not args[0].startswith(self._arg0namespace):
++            namespace_len = len(self._arg0namespace)
++            if ( len(args) == 0
++                or not isinstance(args[0], String)
++                or not args[0].startswith(self._arg0namespace)
++                or args[0][namespace_len:namespace_len + 1] not in ('', '.')
++            ):
 +                return False
  
          # these have likely already been checked by the match tree
          if self._member not in (None, message.get_member()):
-@@ -396,6 +407,9 @@ class Connection(_Connection):
+@@ -382,6 +397,11 @@ class Connection(_Connection):
                  is the value given for that keyword parameter. As of this
                  time only string arguments can be matched (in particular,
                  object paths and signatures can't).
 +            `arg0namespace` : str
 +                If not None (the default) match only signals where the first
-+                argument begins with the value of the keyword parameter.
++                argument is a string that either is equal to the
++                keyword parameter, or starts with the keyword parameter
++                followed by a dot (and optionally more text).
              `named_service` : str
                  A deprecated alias for `bus_name`.
          """
+diff --git a/dbus/proxies.py b/dbus/proxies.py
+index 487976c..a31b5ea 100644
+--- a/dbus/proxies.py
++++ b/dbus/proxies.py
+@@ -361,6 +361,11 @@ class ProxyObject(object):
+                 is the value given for that keyword parameter. As of this time
+                 only string arguments can be matched (in particular,
+                 object paths and signatures can't).
++            `arg0namespace` : str
++                If not None (the default) match only signals where the first
++                argument is a string that either is equal to the
++                keyword parameter, or starts with the keyword parameter
++                followed by a dot (and optionally more text).
+         """
+         return \
+         self._bus.add_signal_receiver(handler_function,
 -- 
-2.25.1
+2.43.0
 
