@@ -12,6 +12,8 @@ stdout is piped to a log-file or -tool; due to buffering:
 Changing stdout to line buffering fixes this.
 
 [1] https://www.gnu.org/software/libc/manual/html_node/Buffering-Concepts.html
+
+Upstream-Status: Inappropriate [Venus specific]
 ---
  llmnrd.c | 2 ++
  1 file changed, 2 insertions(+)
