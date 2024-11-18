@@ -9,6 +9,7 @@ external parser.
 
 Signed-off-by: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
 Acked-by: Stefano Babic <sbabic@denx.de>
+Upstream-Status: Backport [Venus specific]
 ---
  parser/parser.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)

@@ -9,6 +9,7 @@ file descriptor is not closed.
 Signed-off-by: Stefano Babic <sbabic@denx.de>
 Reported-by: Mans Rullgard <mans@mansr.com>
 Reviewed-by: Mans Rullgard <mans@mansr.com>
+Upstream-Status: Backport [Venus specific]
 ---
  core/cpio_utils.c          | 2 ++
  corelib/stream_interface.c | 4 ++++

@@ -3,6 +3,7 @@ From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Fri, 30 Sep 2022 08:52:59 +0000
 Subject: [PATCH 10/10] set download percentage
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  corelib/downloader.c      | 4 ++++
  corelib/progress_thread.c | 8 ++++++++

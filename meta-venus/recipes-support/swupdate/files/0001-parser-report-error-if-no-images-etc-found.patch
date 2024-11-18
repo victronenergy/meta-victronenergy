@@ -12,6 +12,7 @@ Fix this by making the parser report an error if it finds nothing
 matching the requested software set.
 
 Signed-off-by: Mans Rullgard <mans@mansr.com>
+Upstream-Status: Inappropriate [Venus specific]
 ---
  parser/parser.c | 21 ++++++++++++++++-----
  1 file changed, 16 insertions(+), 5 deletions(-)

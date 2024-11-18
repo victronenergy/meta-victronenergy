@@ -8,6 +8,7 @@ This is the responsibility of the caller which might need also need it
 for further operations.
 
 Signed-off-by: Mans Rullgard <mans@mansr.com>
+Upstream-Status: Inappropriate [Venus specific]
 ---
  core/cpio_utils.c | 2 --
  1 file changed, 2 deletions(-)

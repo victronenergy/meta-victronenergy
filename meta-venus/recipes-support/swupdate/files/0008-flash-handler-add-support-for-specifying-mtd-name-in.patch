@@ -9,6 +9,7 @@ mtd device number, instead of using the mtd device name.
 
 Signed-off-by: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
 Acked-by: Stefano Babic <sbabic@denx.de>
+Upstream-Status: Backport [Venus specific]
 ---
  handlers/flash_handler.c | 7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)

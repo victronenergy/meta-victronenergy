@@ -3,6 +3,7 @@ From: Mans Rullgard <mans@mansr.com>
 Date: Thu, 1 Dec 2016 17:54:36 +0000
 Subject: [PATCH] handlers: add pipe handler
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  handlers/Config.in      |  6 ++++
  handlers/Makefile       |  1 +

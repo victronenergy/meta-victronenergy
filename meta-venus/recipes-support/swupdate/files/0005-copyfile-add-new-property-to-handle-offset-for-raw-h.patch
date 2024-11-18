@@ -41,6 +41,7 @@ hence remove it.
 
 Signed-off-by: Christian Storm <christian.storm@siemens.com>
 Reviewed-by: Stefano Babic <sbabic@denx.de>
+Upstream-Status: Backport [Venus specific]
 ---
  core/cpio_utils.c             | 19 +++++++++++++++----
  corelib/stream_interface.c    |  6 +++---

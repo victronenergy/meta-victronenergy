@@ -8,6 +8,7 @@ mtd number by the specified name.
 
 Signed-off-by: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
 Acked-by: Stefano Babic <sbabic@denx.de>
+Upstream-Status: Backport [Venus specific]
 ---
  corelib/mtd-interface.c | 16 ++++++++++++++++
  include/flash.h         |  1 +
