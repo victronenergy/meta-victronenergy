@@ -1,3 +1,4 @@
+Upstream-Status: Inappropriate [Venus specific]
 --- a/init	2021-07-14 13:30:30.019770372 +0200
 +++ b/init	2021-07-14 16:21:40.476728963 +0200
 @@ -55,6 +55,9 @@
