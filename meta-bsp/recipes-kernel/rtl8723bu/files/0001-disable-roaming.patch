@@ -3,6 +3,7 @@ From: Mans Rullgard <mans@mansr.com>
 Date: Fri, 4 Aug 2017 19:33:58 +0100
 Subject: [PATCH] disable roaming
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  include/autoconf.h | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)

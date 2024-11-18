@@ -3,6 +3,7 @@ From: dmig <dmitriy.geels@gmail.com>
 Date: Fri, 10 Nov 2017 13:47:48 +0700
 Subject: [PATCH] Produce less noise in system log
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  core/rtw_cmd.c                | 10 +++++-----
  core/rtw_ioctl_set.c          |  8 ++++----

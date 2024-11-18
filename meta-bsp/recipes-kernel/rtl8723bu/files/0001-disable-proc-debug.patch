@@ -3,6 +3,7 @@ From: Mans Rullgard <mans@mansr.com>
 Date: Thu, 30 Mar 2017 16:04:49 +0100
 Subject: [PATCH] disable /proc debug
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  core/rtw_cmd.c          |  2 ++
  hal/rtl8723b_hal_init.c |  4 ++++
