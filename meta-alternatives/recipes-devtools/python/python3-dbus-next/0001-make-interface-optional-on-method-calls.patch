@@ -8,6 +8,7 @@ method calls. In that case, allow the message to match
 on any method with a matching name and signature.
 
 https://github.com/altdesktop/python-dbus-next/issues/163
+Upstream-Status: Pending
 ---
  dbus_next/message_bus.py | 9 ++++++---
  1 file changed, 6 insertions(+), 3 deletions(-)
