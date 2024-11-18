@@ -1,0 +1,40 @@
+From f4cedb392be03bfa9da8feb0aeacbaaaa1a4fbee Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Mon, 18 Nov 2024 20:38:04 +0000
+Subject: [PATCH] add more pts entries to securetty
+
+Upstream-Status: Inappropriate [Venus specific]
+---
+ securetty | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/securetty b/securetty
+index 820728f..9ea7c8d 100644
+--- a/securetty
++++ b/securetty
+@@ -8,6 +8,9 @@ ttyS1
+ ttyS2
+ ttyS3
+ ttyS4
++ttyS5
++ttyS6
++ttyS7
+ 
+ # ARM AMBA SoCs
+ ttyAM0
+@@ -152,6 +155,12 @@ pts/0
+ pts/1
+ pts/2
+ pts/3
++pts/4
++pts/5
++pts/6
++pts/7
++pts/8
++pts/9
+ 
+ # Embedded Freescale i.MX ports
+ ttymxc0
+-- 
+2.43.0
+
