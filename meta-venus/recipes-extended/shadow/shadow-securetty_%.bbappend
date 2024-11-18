@@ -1,5 +1,5 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI += "\
-    file://securetty-add-serial-ports.patch;patchdir=${WORKDIR} \
+    file://0001-add-more-pts-entries-to-securetty.patch;patchdir=${UNPACKDIR} \
 "
