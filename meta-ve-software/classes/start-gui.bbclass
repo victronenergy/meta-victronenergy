@@ -19,13 +19,11 @@ GUIS = "start-gui start-gui-v1 start-gui-v2 start-sway"
 
 
 # Make sure there can be only 1 and they replace eachother.
-RPROVIDES:${DAEMON_PN} += "virtual/start-gui"
 GUIS:remove = "${DAEMON_PN}"
 RREPLACES:${DAEMON_PN} = "${GUIS}"
 RCONFLICTS:${DAEMON_PN} = "${GUIS}"
 
-# NOTE: PREFERRED_RPROVIDER_virtual/start-gui determines which gui
-# to start by default.
+# NOTE: START_GUI determines which gui to start by default.
 
 # just to make OE happy, its rather pointless to license a start command...
 LICENSE ?= "MIT"
