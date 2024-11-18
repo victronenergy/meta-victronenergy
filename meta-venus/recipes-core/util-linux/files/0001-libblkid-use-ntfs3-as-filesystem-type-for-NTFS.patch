@@ -3,6 +3,7 @@ From: Mans Rullgard <mans@mansr.com>
 Date: Thu, 16 Dec 2021 12:58:58 +0000
 Subject: [PATCH] libblkid: use ntfs3 as filesystem type for NTFS
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  libblkid/src/superblocks/ntfs.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
