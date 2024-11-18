@@ -3,6 +3,7 @@ From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Tue, 20 Jul 2021 17:57:59 +0200
 Subject: [PATCH] do not copy /etc/localtime
 
+Upstream-Status: Inappropriate [Venus specific, /etc is readonly]
 ---
  initscript/debian/avahi-daemon.in | 8 --------
  1 file changed, 8 deletions(-)
