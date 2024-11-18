@@ -1,19 +1,27 @@
-From aae123366ed9418c6a77c99104b987420288d4e4 Mon Sep 17 00:00:00 2001
+From 91b91da1367c61a99d1adae0b3a8f780a3bcc023 Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Fri, 30 Sep 2022 08:52:59 +0000
-Subject: [PATCH] set download percentage
+Subject: [PATCH 10/10] set download percentage
 
 ---
- corelib/downloader.c      | 3 +++
+ corelib/downloader.c      | 4 ++++
  corelib/progress_thread.c | 8 ++++++++
  include/progress.h        | 1 +
- 3 files changed, 12 insertions(+)
+ 3 files changed, 13 insertions(+)
 
 diff --git a/corelib/downloader.c b/corelib/downloader.c
-index 16df71b..5e51cda 100644
+index 16df71bf..9ee9e0a8 100644
 --- a/corelib/downloader.c
 +++ b/corelib/downloader.c
-@@ -64,6 +64,9 @@ static int download_info(void *p,
+@@ -32,6 +32,7 @@
+ 
+ #include "bsdqueue.h"
+ #include "util.h"
++#include "progress.h"
+ #include "swupdate.h"
+ #include "installer.h"
+ #include "network_ipc.h"
+@@ -64,6 +65,9 @@ static int download_info(void *p,
  		dlp->lastruntime = curtime;
  		INFO("Received : %" CURL_FORMAT_CURL_OFF_T " / %"
  		     CURL_FORMAT_CURL_OFF_T, dlnow, dltotal);
@@ -24,7 +32,7 @@ index 16df71b..5e51cda 100644
  
  	return 0;
 diff --git a/corelib/progress_thread.c b/corelib/progress_thread.c
-index 6b51ec9..94607a5 100644
+index 6b51ec9a..94607a57 100644
 --- a/corelib/progress_thread.c
 +++ b/corelib/progress_thread.c
 @@ -105,6 +105,14 @@ void swupdate_progress_init(unsigned int nsteps) {
@@ -43,7 +51,7 @@ index 6b51ec9..94607a5 100644
  {
  	struct swupdate_progress *prbar = &progress;
 diff --git a/include/progress.h b/include/progress.h
-index 5035b58..f00714d 100644
+index 5035b583..f00714d6 100644
 --- a/include/progress.h
 +++ b/include/progress.h
 @@ -44,6 +44,7 @@ struct progress_msg {
@@ -55,5 +63,5 @@ index 5035b58..f00714d 100644
  void swupdate_progress_end(RECOVERY_STATUS status);
  void swupdate_progress_done(void);
 -- 
-2.25.1
+2.43.0
 
