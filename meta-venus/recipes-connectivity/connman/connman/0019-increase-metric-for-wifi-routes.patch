@@ -5,6 +5,8 @@ Subject: [PATCH 19/19] increase metric for wifi routes
 
 In order to make routing predictable when both wired and wireless
 connections are active, give wifi routes a higher metric.
+
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/inet.c | 24 ++++++++++++++++++++++++
  1 file changed, 24 insertions(+)

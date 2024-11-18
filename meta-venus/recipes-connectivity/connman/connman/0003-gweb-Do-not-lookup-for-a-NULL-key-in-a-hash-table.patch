@@ -9,6 +9,7 @@ Reported by Marcel Mulder <mmulder@victronenergy.com>
 
 2016-10-05, patch is in upstream:
 http://git.kernel.org/cgit/network/connman/connman.git/commit/?id=22901212105055b24f73504a74f5a57eee809777
+Upstream-Status: Backport [http://git.kernel.org/cgit/network/connman/connman.git/commit/?id=22901212105055b24f73504a74f5a57eee809777]
 ---
  gweb/gweb.c | 3 +++
  1 file changed, 3 insertions(+)

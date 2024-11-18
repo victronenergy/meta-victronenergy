@@ -3,6 +3,7 @@ From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Fri, 14 Aug 2020 07:28:47 +0000
 Subject: [PATCH] test: use python3
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  test/backtrace              | 2 +-
  test/connect-provider       | 2 +-

@@ -15,6 +15,7 @@ Reported by Måns Rullgård.
 
 venus: https://github.com/victronenergy/venus/issues/100
 upstream: https://lists.01.org/pipermail/connman/2016-December/021307.html
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/service.c | 21 ++++++++++++++-------
  1 file changed, 14 insertions(+), 7 deletions(-)

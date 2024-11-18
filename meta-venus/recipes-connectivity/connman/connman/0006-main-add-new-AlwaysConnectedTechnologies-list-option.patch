@@ -8,6 +8,7 @@ by default it's empty and each element in the list depends on having
 AutoConnect=true.
 
 Signed-off-by: Daniel Wagner <daniel.wagner@bmw-carit.de>
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/main.c | 18 ++++++++++++++++++
  1 file changed, 18 insertions(+)

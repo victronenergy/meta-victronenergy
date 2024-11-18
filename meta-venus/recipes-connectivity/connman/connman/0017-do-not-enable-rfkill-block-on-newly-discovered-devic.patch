@@ -3,6 +3,7 @@ From: Mans Rullgard <mans@mansr.com>
 Date: Fri, 11 Jun 2021 15:08:23 +0100
 Subject: [PATCH 17/17] do not enable rfkill block on newly discovered devices
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/technology.c | 3 ---
  1 file changed, 3 deletions(-)

@@ -10,6 +10,8 @@ terminated by connmand.
 
 To prevent this keep the connection timeout of 30 seconds active even
 after the connection has been established.
+
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/dnsproxy.c | 5 -----
  1 file changed, 5 deletions(-)

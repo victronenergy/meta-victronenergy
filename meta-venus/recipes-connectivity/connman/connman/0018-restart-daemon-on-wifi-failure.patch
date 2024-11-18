@@ -8,6 +8,8 @@ connman daemon whenever a service remains failed for 30 seconds.
 
 This solution is simpler than tracking down and removing all checks
 throughout the code.
+
+Upstream-Status: Inappropriate [Venus specific]
 ---
  include/setting.h |  2 ++
  src/main.c        | 13 +++++++++++++

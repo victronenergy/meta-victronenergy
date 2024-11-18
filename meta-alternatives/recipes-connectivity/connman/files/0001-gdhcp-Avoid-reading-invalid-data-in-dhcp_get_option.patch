@@ -3,6 +3,7 @@ From: Colin Wee <cwee@tesla.com>
 Date: Thu, 28 Jan 2021 19:39:14 +0100
 Subject: [PATCH 1/2] gdhcp: Avoid reading invalid data in dhcp_get_option
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  gdhcp/client.c | 20 +++++++++++---------
  gdhcp/common.c | 24 +++++++++++++++++++-----

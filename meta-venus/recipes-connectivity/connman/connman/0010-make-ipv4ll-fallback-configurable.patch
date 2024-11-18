@@ -3,6 +3,7 @@ From: Mans Rullgard <mans@mansr.com>
 Date: Thu, 29 Nov 2018 19:00:08 +0000
 Subject: [PATCH] make ipv4ll fallback configurable
 
+Upstream-Status: Inappropriate [venus specific]
 ---
  src/dhcp.c |  9 ++++++---
  src/main.c | 14 ++++++++++++++

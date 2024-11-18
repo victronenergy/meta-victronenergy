@@ -9,6 +9,7 @@ auto_connect_service, so split them in their own function and add
 comments to make them easier to understand.
 
 Signed-off-by: Daniel Wagner <daniel.wagner@bmw-carit.de>
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/service.c | 36 +++++++++++++++++++++++++++++++-----
  1 file changed, 31 insertions(+), 5 deletions(-)

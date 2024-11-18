@@ -44,6 +44,7 @@ connmand[9080]: src/resolver.c:append_resolver() index 7 domain lan server (null
 connmand[9080]: src/resolver.c:__connman_resolvfile_append() index 7 domain lan server (null)
 
 (cherry picked from commit 700f5df4c6d5d5ca48ebc947bb0a11517c2eb15e)
+Upstream-Status: Backport [700f5df4c6d5d5ca48ebc947bb0a11517c2eb15e]
 ---
  src/resolver.c | 39 ++++++++++++++++++++++++++++++++++-----
  1 file changed, 34 insertions(+), 5 deletions(-)

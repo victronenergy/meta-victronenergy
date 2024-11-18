@@ -7,6 +7,7 @@ By default it's disabled and the list is empty.
 Also document the man page for this main.conf option.
 
 Signed-off-by: Daniel Wagner <daniel.wagner@bmw-carit.de>
+Upstream-Status: Inappropriate [Venus specific]
 ---
  doc/connman.conf.5.in | 6 ++++++
  src/main.conf         | 7 +++++++

@@ -9,6 +9,7 @@ the auto_connect_service function the value for the autoconnecting service
 type to ensure it always connects regardless of any preffered technologies.
 
 Signed-off-by: Daniel Wagner <daniel.wagner@bmw-carit.de>
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/service.c | 22 ++++++++++++++++++----
  1 file changed, 18 insertions(+), 4 deletions(-)

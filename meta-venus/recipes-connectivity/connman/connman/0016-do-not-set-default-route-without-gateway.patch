@@ -3,6 +3,7 @@ From: Mans Rullgard <mans@mansr.com>
 Date: Thu, 26 Nov 2020 15:44:02 +0000
 Subject: [PATCH 17/17] do not set default route without gateway
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/connection.c | 8 ++++++++
  1 file changed, 8 insertions(+)

@@ -5,6 +5,7 @@ Subject: [PATCH 12/13] resolver: Fix nameserver and search domain ordering for
  resolv.conf
 
 (cherry picked from commit 9dd23f911cfb365d207e6facf0e516ed3806b858)
+Upstream-Status: Backport [9dd23f911cfb365d207e6facf0e516ed3806b858]
 ---
  src/resolver.c | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)

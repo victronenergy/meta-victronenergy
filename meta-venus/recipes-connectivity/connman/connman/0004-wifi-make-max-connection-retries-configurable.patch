@@ -20,6 +20,7 @@ In a location with intermittent reception, allowing unlimited retries is
 useful to avoid connman permanently disabling the network.
 
 Signed-off-by: Mans Rullgard <mans@mansr.com>
+Upstream-Status: Inappropriate [Venus specific]
 ---
  doc/connman.conf.5.in |  5 +++++
  include/setting.h     |  1 +

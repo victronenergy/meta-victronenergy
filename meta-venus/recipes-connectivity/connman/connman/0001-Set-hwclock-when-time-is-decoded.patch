@@ -5,6 +5,8 @@ Subject: [PATCH 1/9] Set hwclock when time is decoded
 
 Update the RTC whenever the system time is adjusted in case an
 uncontrolled reset prevents the normal shutdown scripts doing this.
+
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/ntp.c | 3 +++
  1 file changed, 3 insertions(+)

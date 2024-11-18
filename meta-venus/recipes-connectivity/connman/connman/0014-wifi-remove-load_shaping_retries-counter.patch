@@ -3,6 +3,7 @@ From: Mans Rullgard <mans@mansr.com>
 Date: Fri, 21 Feb 2020 13:28:54 +0000
 Subject: [PATCH 14/16] wifi: remove load_shaping_retries counter
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  plugins/wifi.c | 21 ---------------------
  1 file changed, 21 deletions(-)

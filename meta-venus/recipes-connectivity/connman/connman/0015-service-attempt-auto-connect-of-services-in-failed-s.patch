@@ -4,6 +4,7 @@ Date: Tue, 28 Jan 2020 16:51:45 +0000
 Subject: [PATCH 15/16] service: attempt auto-connect of services in failed
  state
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/service.c | 3 ---
  1 file changed, 3 deletions(-)
