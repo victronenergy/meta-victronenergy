@@ -14,6 +14,7 @@ tail -F /var/log/syslog | ./gwsocket --std
 closes https://github.com/allinurl/gwsocket/issues/7
 
 todo: man page / README updates
+Upstream-Status: Backport [https://github.com/allinurl/gwsocket/commit/acfb38cc480591a172237fc922c93b0809e02b27]
 ---
  src/gwsocket.c  | 14 ++++++++++++++
  src/websocket.c | 37 +++++++++++++++++++++++++++++++------
