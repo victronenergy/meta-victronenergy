@@ -3,6 +3,7 @@ From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Sun, 26 Jun 2022 23:27:28 +0200
 Subject: [PATCH] scan on SIGALRM
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/svscan.c | 20 +++++++++++++++++++-
  1 file changed, 19 insertions(+), 1 deletion(-)
