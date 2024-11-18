@@ -4,6 +4,8 @@ Date: Tue, 4 Dec 2018 14:27:52 +0100
 Subject: [PATCH] ieee80211: use static inline
 
 This prevent errors like multiple definition of `is_broadcast_mac_addr'.
+
+Upstream-Status: Inappropriate [Venus specific]
 ---
  include/ieee80211.h | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
