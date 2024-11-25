@@ -1,12 +1,12 @@
 {
   "name": "signalk-server",
-  "version": "2.11.0",
+  "version": "2.12.0",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "signalk-server",
-      "version": "2.11.0",
+      "version": "2.12.0",
       "license": "Apache-2.0",
       "workspaces": [
         "packages/server-admin-ui-dependencies",
@@ -19,9 +19,9 @@
         "@signalk/course-provider": "^1.0.0",
         "@signalk/n2k-signalk": "^3.0.0",
         "@signalk/nmea0183-signalk": "^3.0.0",
-        "@signalk/resources-provider": "^1.0.0",
-        "@signalk/server-admin-ui": "2.10.x",
-        "@signalk/server-api": "2.4.x",
+        "@signalk/resources-provider": "^1.3.0",
+        "@signalk/server-admin-ui": "2.11.x",
+        "@signalk/server-api": "2.5.x",
         "@signalk/signalk-schema": "^1.7.1",
         "@signalk/streams": "^4.3.0",
         "api-schema-builder": "^2.0.11",
@@ -63,7 +63,7 @@
         "primus": "^7.0.0",
         "selfsigned": "^2.4.1",
         "semver": "^7.5.4",
-        "signalk-venus-plugin": "1.41.1",
+        "signalk-venus-plugin": "1.42.0",
         "split": "^1.0.0",
         "stat-mode": "^1.0.0",
         "swagger-ui-express": "^4.5.0",
@@ -1015,10 +1015,11 @@
       "integrity": "sha512-hMRVXoEXcWJLZmHNl4rAdVwiMeHJb+aV4tAUU7jKcV2c2ELK2uAjMSxq5hH9P+Il9ZH+k4QXk4qkyz5oNdSugQ=="
     },
     "node_modules/@signalk/resources-provider": {
-      "version": "1.1.2",
-      "resolved": "https://registry.npmjs.org/@signalk/resources-provider/-/resources-provider-1.1.2.tgz",
-      "integrity": "sha512-7XnBlmT5Qc6D0aLchFjVe2/5U2F0enQVT/uNnNupbJmt5ALYDJH2ImZHIv2pumjaf8erJzXKBkjmap41MRswsA==",
+      "version": "1.3.0",
+      "resolved": "https://registry.npmjs.org/@signalk/resources-provider/-/resources-provider-1.3.0.tgz",
+      "integrity": "sha512-LftsNMYkQMPy83M9QNW1NYbA6CjQcWoB8pWHdyby0RfLXfBFePH2JKIVYATgxzS88KpesaIqk1FIr3EK9Lyegg==",
       "dependencies": {
+        "@signalk/server-api": "^2.5.0",
         "geojson-validation": "^0.2.0",
         "geolib": "^3.3.3",
         "ngeohash": "^0.6.3"
@@ -1030,14 +1031,14 @@
       "integrity": "sha512-EicrlLLL3S42gE9/wde+11uiaYAaeSVDwCUIv2uMIoRBfNJCn8EsSI+6nS3r4TCKDO6+RQNM9ayLq2at+oZQWQ=="
     },
     "node_modules/@signalk/server-admin-ui": {
-      "version": "2.10.0",
-      "resolved": "https://registry.npmjs.org/@signalk/server-admin-ui/-/server-admin-ui-2.10.0.tgz",
-      "integrity": "sha512-hmG/7CVinLGA5P5oiZgEYAmVcLMol5xdbcIuEUjhdy/S/JYX2zVWB+TdMRBcA13nhn+oqVefAyGkuwBdODEyvQ=="
+      "version": "2.11.0",
+      "resolved": "https://registry.npmjs.org/@signalk/server-admin-ui/-/server-admin-ui-2.11.0.tgz",
+      "integrity": "sha512-pe5D3nPO9PW5CSgZz+AL5yWJYFM5GHv+yiw3QMobBUyIxHmjzEZx5SXzGtsty1Lo04+UcTBb4MXcLoo5GC2KEA=="
     },
     "node_modules/@signalk/server-api": {
-      "version": "2.4.0",
-      "resolved": "https://registry.npmjs.org/@signalk/server-api/-/server-api-2.4.0.tgz",
-      "integrity": "sha512-4VuqEy805v3G7tMno6Wh3bVICm2kt/qL+JWkszJh9mVNZiN3VU5Pu6unoMzYNzxf7ndeYzqZ7mudNzzU6NxKQA==",
+      "version": "2.5.0",
+      "resolved": "https://registry.npmjs.org/@signalk/server-api/-/server-api-2.5.0.tgz",
+      "integrity": "sha512-8RPb3u2hDRAH96AYtElFmNq2E7kk6Yba63HP6LS4JheK66DukJFG8TorvWcH78e8Vc3YKdazVMmQntSkx9NFDA==",
       "peerDependencies": {
         "baconjs": "^1.0.1"
       }
@@ -9798,9 +9799,9 @@
       "optional": true
     },
     "node_modules/signalk-venus-plugin": {
-      "version": "1.41.1",
-      "resolved": "https://registry.npmjs.org/signalk-venus-plugin/-/signalk-venus-plugin-1.41.1.tgz",
-      "integrity": "sha512-FijdThj1YkKEFaBMDAxqmTA6kt4TxGA1+stQdn5oq+vItvfSyWbJh9MOUygzGC8K/SGPwckhM8WSEKYlDcy1hQ==",
+      "version": "1.42.0",
+      "resolved": "https://registry.npmjs.org/signalk-venus-plugin/-/signalk-venus-plugin-1.42.0.tgz",
+      "integrity": "sha512-/SSN1lDVYNVVmX80rD8mpkyuPO9CmShf28Rs0+J19xVD3U3veEy4Xn6HYNTagzKBRP7GG/JbJq8CbLKRKyd76Q==",
       "dependencies": {
         "camelcase": "^6.3.0",
         "dbus-native": "^0.2.5",

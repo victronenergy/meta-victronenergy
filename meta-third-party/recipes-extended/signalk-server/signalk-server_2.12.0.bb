@@ -21,7 +21,7 @@ SRC_URI = "\
     file://venus.json \
 "
 
-SRC_URI[sha256sum] = "d616dd34e017a0918e168a4d44d32e4b4025c751dfe0ba5be37340052fe6e80e"
+SRC_URI[sha256sum] = "255f7220bf021c169702f03034449bb41a9da6aee2ac03e5b36dba763a633922"
 
 S = "${WORKDIR}/npm"
 
