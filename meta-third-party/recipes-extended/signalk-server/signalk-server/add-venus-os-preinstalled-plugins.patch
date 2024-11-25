@@ -1,6 +1,6 @@
-From faa081abd8bc0b2348670fb9e414ee212d1f8342 Mon Sep 17 00:00:00 2001
+From 3d27acd3651828fd24154761b738b40ad7a0ba4a Mon Sep 17 00:00:00 2001
 From: Dirk-Jan Faber <dfaber@victronenergy.com>
-Date: Fri, 25 Oct 2024 10:22:50 +0200
+Date: Mon, 25 Nov 2024 16:34:26 +0100
 Subject: [PATCH] Add plugins
 
 ---
@@ -8,7 +8,7 @@ Subject: [PATCH] Add plugins
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/package.json b/package.json
-index fa53571..403add3 100644
+index ed547ab..fc1f9cc 100644
 --- a/package.json
 +++ b/package.json
 @@ -123,7 +123,9 @@
@@ -18,7 +18,7 @@ index fa53571..403add3 100644
 -    "ws": "^7.0.0"
 +    "ws": "^7.0.0",
 +    "signalk-n2kais-to-nmea0183": "1.5.0",
-+    "signalk-venus-plugin": "1.41.1"
++    "signalk-venus-plugin": "1.42.0"
    },
    "optionalDependencies": {
      "@signalk/freeboard-sk": "^2.0.0-beta.3",
