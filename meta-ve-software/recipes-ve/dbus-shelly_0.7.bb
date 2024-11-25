@@ -6,5 +6,5 @@ S = "${WORKDIR}/git"
 
 inherit daemontools gmakevelib python-compile ve_package
 
-RDEPENDS:${PN} = "python3-core python3-dbus-next python3-websockets"
+RDEPENDS:${PN} = "python3-core python3-dbus-fast python3-websockets"
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_shelly.py"
