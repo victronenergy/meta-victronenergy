@@ -3,6 +3,7 @@ From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Sun, 21 Apr 2024 11:30:26 +0200
 Subject: [PATCH] don't error on warnings in a release build
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  meson.build | 1 -
  1 file changed, 1 deletion(-)

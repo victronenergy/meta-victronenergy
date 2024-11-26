@@ -5,6 +5,7 @@ Subject: [PATCH] C websockify: free memory after failed handshake
 
 Conflicts:
 	other/websocket.c
+Upstream-Status: Backport [Venus specific]
 ---
  other/websocket.c | 18 ++++++++++++++++--
  1 file changed, 16 insertions(+), 2 deletions(-)

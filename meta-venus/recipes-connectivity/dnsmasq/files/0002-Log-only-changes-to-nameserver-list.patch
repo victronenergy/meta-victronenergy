@@ -3,6 +3,7 @@ From: Mans Rullgard <mans@mansr.com>
 Date: Fri, 8 Feb 2019 15:11:32 +0000
 Subject: [PATCH 2/2] Log only changes to nameserver list
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/dnsmasq.h |  1 +
  src/network.c | 21 ++++++++++++++++++---

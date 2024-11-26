@@ -12,6 +12,7 @@ the reported coordinate is the screen coordinate.
 It would be nicer if the driver could simply report the correct value.
 
 Change-Id: I93ff73ea90cfcc1eccd63613b681c0756c3333a4
+Upstream-Status: Inappropriate [Venus specific]
 ---
  .../input/evdevtouch/qevdevtouchhandler.cpp   | 27 +++++++++++++------
  1 file changed, 19 insertions(+), 8 deletions(-)

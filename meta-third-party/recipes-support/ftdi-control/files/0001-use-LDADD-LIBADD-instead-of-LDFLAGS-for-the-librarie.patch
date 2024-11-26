@@ -6,6 +6,7 @@ Subject: [PATCH 1/4] use LDADD/LIBADD instead of LDFLAGS for the libraries
 Without this linking fails in OE since the non installed libraries are
 in ./libs and linking fails with "cannot find -lftdi-bitbang". Switching
 to LDADD fixes this since ./.libs/libftdi-bitbang.so is then used.
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/Makefile.am | 21 ++++++++++++++-------
  1 file changed, 14 insertions(+), 7 deletions(-)
