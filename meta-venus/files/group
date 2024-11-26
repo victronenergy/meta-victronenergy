@@ -41,6 +41,7 @@ shutdown:x:70:
 php-fpm:x:98:
 vnctunnel:x:99:
 users:x:100:
+ptest:x:985:
 render:x:986:
 wayland:x:987:
 weston:x:988:
