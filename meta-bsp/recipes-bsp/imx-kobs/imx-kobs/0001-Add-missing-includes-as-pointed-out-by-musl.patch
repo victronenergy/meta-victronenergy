@@ -7,6 +7,7 @@ These headers are indrectly included when building with
 glibc, this is exposed when compiling with musl systems
 
 Signed-off-by: Khem Raj <raj.khem@gmail.com>
+Upstream-Status: Backport [Venus specific]
 ---
  src/mtd.h | 3 +++
  1 file changed, 3 insertions(+)

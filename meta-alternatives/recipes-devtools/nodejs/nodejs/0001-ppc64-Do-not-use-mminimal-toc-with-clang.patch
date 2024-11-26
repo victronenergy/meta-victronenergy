@@ -6,6 +6,7 @@ Subject: [PATCH] ppc64: Do not use -mminimal-toc with clang
 clang does not support this option
 
 Signed-off-by: Khem Raj <raj.khem@gmail.com>
+Upstream-Status: Backport [Venus specific]
 ---
  common.gypi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)

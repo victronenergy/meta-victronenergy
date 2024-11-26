@@ -13,6 +13,7 @@ supposed to do.
 
 This is usefull for Venus system that are used as CI runner for our BLE
 products. It is not used in regular Venus functionality.
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/bluetooth/bluez/bluez5_helper.cpp | 10 +++++++---
  1 file changed, 7 insertions(+), 3 deletions(-)

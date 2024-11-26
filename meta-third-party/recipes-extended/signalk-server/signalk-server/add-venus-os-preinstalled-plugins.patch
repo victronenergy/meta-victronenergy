@@ -3,6 +3,7 @@ From: Dirk-Jan Faber <dfaber@victronenergy.com>
 Date: Mon, 25 Nov 2024 16:34:26 +0100
 Subject: [PATCH] Add plugins
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  package.json | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)

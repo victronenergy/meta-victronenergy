@@ -4,6 +4,7 @@ Date: Fri, 27 Jul 2018 14:11:26 +0200
 Subject: [PATCH 2/4] print the usbid of the usb device
 
 The format of sysfs is used, so bus-id.id.
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/cmd-common.c | 36 +++++++++++++++++++++++++++++++++++-
  1 file changed, 35 insertions(+), 1 deletion(-)

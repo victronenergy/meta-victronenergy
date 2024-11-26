@@ -6,6 +6,7 @@ Subject: [PATCH 3/4] prevent leaking memory
 By changing the list itself when finding a match, the information about
 the skipped devices is not freed with ftdi_list_free, so use a seperate
 variable instead to search for a matching device.
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/cmd-common.c | 9 +++++----
  1 file changed, 5 insertions(+), 4 deletions(-)

@@ -7,6 +7,7 @@ When the link goes down and we're not doing dial on demand, the name
 servers are no longer valid, so remove them from resolv.conf.
 
 Signed-off-by: Mans Rullgard <mans@mansr.com>
+Upstream-Status: Inappropriate [Venus specific]
 ---
  pppd/ipcp.c | 2 ++
  1 file changed, 2 insertions(+)

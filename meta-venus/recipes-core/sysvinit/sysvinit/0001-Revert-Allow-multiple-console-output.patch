@@ -4,6 +4,7 @@ Date: Fri, 23 Jul 2021 13:49:03 +0100
 Subject: [PATCH] Revert "Allow multiple console output"
 
 This reverts commit 986bee63c05ad98bea77997be7dd2bfc957cfc2f.
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/bootlogd.c | 172 +++++++++++++++++++++----------------------------
  1 file changed, 72 insertions(+), 100 deletions(-)

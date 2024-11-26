@@ -3,6 +3,7 @@ From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Tue, 12 Apr 2022 12:22:15 +0200
 Subject: [PATCH] don't check for graphics mode
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  backend/session/direct.c | 6 ------
  1 file changed, 6 deletions(-)

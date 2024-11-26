@@ -3,7 +3,7 @@ From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Mon, 18 Nov 2024 20:38:04 +0000
 Subject: [PATCH] add more pts entries to securetty
 
-UpstreamStatus: Inappropriate [Venus specific]
+Upstream-Status: Inappropriate [Venus specific]
 ---
  securetty | 9 +++++++++
  1 file changed, 9 insertions(+)

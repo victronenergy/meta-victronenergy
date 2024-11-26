@@ -6,6 +6,7 @@ Subject: [PATCH 4/4] add an option to select on usb id
 When there are multiple ftdi with the same pid/vid which are not programmed
 yet, they cannot be selected by uniquely. So add a match by usb-id so they
 be uniquely addressed.
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/cmd-common.c | 33 ++++++++++++++++++++++++++++++++-
  src/cmd-common.h |  3 ++-

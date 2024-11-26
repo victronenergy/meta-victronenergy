@@ -8,6 +8,7 @@ read or write of a characteristic value.
 
 This is usefull for Venus system that are used as CI runner for our BLE
 products. It is not used in regular Venus functionality.
+Upstream-Status: Inappropriate [Venus specific]
 ---
  src/bluetooth/qlowenergycontroller_bluezdbus.cpp | 9 +++++----
  src/bluetooth/qlowenergycontroller_bluezdbus_p.h | 1 +
