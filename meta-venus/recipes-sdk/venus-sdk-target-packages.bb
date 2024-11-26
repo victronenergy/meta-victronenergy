@@ -16,16 +16,6 @@ RDEPENDS:${PN} += " \
 	eudev-dev \
 "
 
-# qt4
-RDEPENDS:${PN} += " \
-    qt4-embedded-mkspecs \
-    libqt-embeddedcore4-dev \
-    libqt-embeddeddbus4-dev \
-    libqt-embeddeddeclarative4-dev \
-    libqt-embeddedgui4-dev \
-    libqt-embeddedsvg4-dev \
-"
-
 # qt6
 RDEPENDS:${PN} += " \
     qt5compat-dev \
