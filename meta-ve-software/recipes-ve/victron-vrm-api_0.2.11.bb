@@ -11,6 +11,3 @@ SRC_URI = " \
 SRC_URI[sha256sum] = "a4be3cda2375b6a244d54e0c2d09c92d2d19f5a6b138d00808013dd30e1ba312"
 
 inherit npm-online-install
-
-do_install:append() {
-}
