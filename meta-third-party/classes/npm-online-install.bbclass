@@ -78,8 +78,4 @@ python do_binlinks() {
 }
 addtask binlinks after do_compile before do_install
 
-do_install:append () {
-    rm ${D}/${nonarch_libdir}/node
-}
-
 INSANE_SKIP:${PN} += "already-stripped"
