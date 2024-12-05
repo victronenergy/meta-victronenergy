@@ -1,0 +1,28 @@
+From 37f90dde224ccf9bd38da483eb73a3685aea1028 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 28 Nov 2024 19:16:51 +0100
+Subject: [PATCH 1/5] configs: sunxi_victron: make spi a module
+
+This make debugging a bit easier.
+---
+ arch/arm/configs/sunxi_victron_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/configs/sunxi_victron_defconfig b/arch/arm/configs/sunxi_victron_defconfig
+index 52e0ea850bde..2afc579b4a4e 100644
+--- a/arch/arm/configs/sunxi_victron_defconfig
++++ b/arch/arm/configs/sunxi_victron_defconfig
+@@ -129,8 +129,8 @@ CONFIG_I2C=y
+ CONFIG_I2C_CHARDEV=y
+ CONFIG_I2C_MV64XXX=y
+ CONFIG_SPI=y
+-CONFIG_SPI_SUN4I=y
+-CONFIG_SPI_SUN6I=y
++CONFIG_SPI_SUN4I=m
++CONFIG_SPI_SUN6I=m
+ # CONFIG_PTP_1588_CLOCK is not set
+ CONFIG_GPIO_PCA953X=y
+ CONFIG_GPIO_PCA953X_IRQ=y
+-- 
+2.43.0
+

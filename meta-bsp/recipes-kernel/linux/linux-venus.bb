@@ -17,6 +17,11 @@ PV = "${LINUX_VERSION}${LINUX_VERSION_EXTENSION}"
 GIT_BRANCH = "venus-${LINUX_VERSION}"
 
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=${GIT_BRANCH};tag=v${PV}"
+SRC_URI += " \
+	file://0001-configs-sunxi_victron-make-spi-a-module.patch \
+	file://0002-can-dev-better-handle-do_set_mode-dev-CAN_MODE_START.patch \
+	file://0003-can-mcp251xfd-retry-later-if-spi-communication-faile.patch \
+"
 S = "${WORKDIR}/git"
 
 do_configure:append() {

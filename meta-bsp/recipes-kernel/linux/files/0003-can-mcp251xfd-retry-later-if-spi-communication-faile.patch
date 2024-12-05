@@ -1,0 +1,87 @@
+From d263b41f5f6e3df86cc5c5c401eede4a948d3339 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Tue, 3 Dec 2024 11:38:45 +0100
+Subject: [PATCH 3/5] can: mcp251xfd: retry later if spi communication failed
+
+This markes the CAN driver as offline if fatal spi comm errors occur.
+It relies on the ms-restart timer being set, to retry again after the
+given interval. Note that not all err codes are -EBADMSG, but -ETIMEOUT
+can be reported indirectly as well, so schedule a retry on any error,
+unless it is known that -EBADMSG can only be reported.
+
+NOTE: probe can still fail / give up due to CRC errors. I doubt there
+is a sane way to handle that better from within the driver itself.
+---
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 30 ++++++++++++++-----
+ 1 file changed, 23 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 13bfec021121..40038892cb9b 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -1127,12 +1127,17 @@ static int mcp251xfd_set_mode(struct net_device *ndev, enum can_mode mode)
+ 	switch (mode) {
+ 	case CAN_MODE_START:
+ 		err = mcp251xfd_chip_start(priv);
+-		if (err)
++		if (err) {
++			netdev_info(ndev, "mcp251xfd_set_mode failed, retrying later\n");
++			can_bus_off(ndev);
+ 			return err;
++		}
+ 
+ 		err = mcp251xfd_chip_interrupts_enable(priv);
+ 		if (err) {
+ 			mcp251xfd_chip_stop(priv, CAN_STATE_STOPPED);
++			netdev_info(ndev, "mcp251xfd_set_mode failed2, retrying later\n");
++			can_bus_off(priv->ndev);
+ 			return err;
+ 		}
+ 
+@@ -2279,9 +2284,15 @@ static irqreturn_t mcp251xfd_irq(int irq, void *dev_id)
+ 
+  out_fail:
+ 	priv->failed = true;
+-	netdev_err(priv->ndev, "IRQ handler returned %d (intf=0x%08x).\n",
+-		   err, priv->regs_status.intf);
+-	mcp251xfd_chip_interrupts_disable(priv);
++	if (err == -EBADMSG) {
++		netdev_info(priv->ndev, "Shutting down controller, due to excessive CRC errors\n");
++		mcp251xfd_chip_stop(priv, CAN_STATE_BUS_OFF);
++		can_bus_off(priv->ndev);
++	} else {
++		netdev_err(priv->ndev, "IRQ handler returned %d (intf=0x%08x).\n",
++			   err, priv->regs_status.intf);
++		mcp251xfd_chip_interrupts_disable(priv);
++	}
+ 
+ 	return handled;
+ }
+@@ -2494,8 +2505,13 @@ static int mcp251xfd_open(struct net_device *ndev)
+ 		goto out_mcp251xfd_ring_free;
+ 
+ 	err = mcp251xfd_chip_start(priv);
+-	if (err)
+-		goto out_transceiver_disable;
++	if (err) {
++		netdev_info(priv->ndev, "mcp251xfd_chip_start failed, trying again later\n");
++		// By marking the bus as off mcp251xfd_set_mode will be called to call
++		// mcp251xfd_chip_start again.
++		priv->failed = true;
++		can_bus_off(priv->ndev);
++	}
+ 
+ 	can_rx_offload_enable(&priv->offload);
+ 
+@@ -2517,7 +2533,7 @@ static int mcp251xfd_open(struct net_device *ndev)
+ 	free_irq(spi->irq, priv);
+  out_can_rx_offload_disable:
+ 	can_rx_offload_disable(&priv->offload);
+- out_transceiver_disable:
++ //out_transceiver_disable:
+ 	mcp251xfd_transceiver_disable(priv);
+  out_mcp251xfd_ring_free:
+ 	mcp251xfd_ring_free(priv);
+-- 
+2.43.0
+
