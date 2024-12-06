@@ -6,6 +6,7 @@ LINUX_VERSION = "5.10.110"
 LINUX_VERSION_VENUS = "5"
 LINUX_VERSION_EXTENSION =. "-rpi"
 GIT_BRANCH =. "rpi-"
+VENUS_PATCHES = ""
 
 # NOTE: the regular dtb handling flattens the overlays with the
 # normal dtbs, versions them and creates symlinks. Since that is
