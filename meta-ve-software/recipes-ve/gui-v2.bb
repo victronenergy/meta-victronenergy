@@ -17,6 +17,8 @@ RDEPENDS:${PN} = " \
     qtvirtualkeyboard-qmlplugins \
     venus-ui-themes \
 "
+# FIXME: should become an RDEPEND of qtvirtualkeyboard-qmlplugins
+RDEPENDS:${PN} += "qtvirtualkeyboard-plugin-qtvirtualkeyboardplugin"
 
 PACKAGES += "start-gui-v2"
 DAEMON_PN = "start-gui-v2"
