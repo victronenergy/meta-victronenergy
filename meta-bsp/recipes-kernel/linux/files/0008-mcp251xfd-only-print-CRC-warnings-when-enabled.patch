@@ -1,0 +1,102 @@
+From e1ab1f175f5e1a03759f1ef7cef6357e27871d06 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Tue, 10 Dec 2024 14:22:20 +0100
+Subject: [PATCH 8/8] mcp251xfd: only print CRC warnings when enabled
+
+---
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    |  5 +++++
+ .../net/can/spi/mcp251xfd/mcp251xfd-regmap.c  | 22 ++++++++++++++-----
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |  1 +
+ 3 files changed, 23 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index e1368ff3b279..26d0270ba8d7 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -27,6 +27,10 @@
+ 
+ #define DEVICE_NAME "mcp251xfd"
+ 
++static bool crc_errors;
++module_param(crc_errors, bool, 0644);
++MODULE_PARM_DESC(crc_errors, "print spi message when CRC is incorrect");
++
+ static const struct mcp251xfd_devtype_data mcp251xfd_devtype_data_mcp2517fd = {
+ 	.quirks = MCP251XFD_QUIRK_MAB_NO_WARN | MCP251XFD_QUIRK_CRC_REG |
+ 		MCP251XFD_QUIRK_CRC_RX | MCP251XFD_QUIRK_CRC_TX |
+@@ -3009,6 +3013,7 @@ static int mcp251xfd_probe(struct spi_device *spi)
+ 	priv->clk = clk;
+ 	priv->reg_vdd = reg_vdd;
+ 	priv->reg_xceiver = reg_xceiver;
++	priv->show_crc_errors = crc_errors;
+ 
+ 	match = device_get_match_data(&spi->dev);
+ 	if (match)
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+index c0f24f2784f9..1cee11c76fff 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+@@ -282,6 +282,7 @@ mcp251xfd_regmap_crc_read(void *context,
+ 	struct spi_message msg;
+ 	u16 reg = *(u16 *)reg_p;
+ 	int i, err;
++	_Bool retry = false;
+ 
+ 	BUILD_BUG_ON(sizeof(buf_rx->cmd) != sizeof(__be16) + sizeof(u8));
+ 	BUILD_BUG_ON(sizeof(buf_tx->cmd) != sizeof(__be16) + sizeof(u8));
+@@ -326,8 +327,16 @@ mcp251xfd_regmap_crc_read(void *context,
+ 	for (i = 0; i < MCP251XFD_READ_CRC_RETRIES_MAX; i++) {
+ 		priv->spi_tranfers++;
+ 		err = mcp251xfd_regmap_crc_read_one(priv, &msg, val_len);
+-		if (!err)
++		if (!err) {
++			if (retry && priv->show_crc_errors) {
++				netdev_info(priv->ndev,
++					"Data should be at address 0x%04x, cmd 0x%04x (length=%zd, data=%*ph, CRC=0x%04x).\n",
++					reg, (unsigned int) buf_tx->cmd.cmd, val_len, (int)val_len, buf_rx->data,
++					get_unaligned_be16(buf_rx->data + val_len));
++			}
+ 			goto out;
++		}
++
+ 		if (err != -EBADMSG)
+ 			return err;
+ 
+@@ -385,15 +394,18 @@ mcp251xfd_regmap_crc_read(void *context,
+ 		}
+ 
+ 		priv->spi_crc_retries++;
+-		netdev_info(priv->ndev,
+-			    "CRC read error at address 0x%04x (length=%zd, data=%*ph, CRC=0x%04x) retrying.\n",
+-			    reg, val_len, (int)val_len, buf_rx->data,
++		retry = true;
++		if (priv->show_crc_errors)
++			netdev_info(priv->ndev,
++			    "CRC read error at address 0x%04x, cmd 0x%04x (length=%zd, data=%*ph, CRC=0x%04x) retrying.\n",
++			    reg, (unsigned int) buf_tx->cmd.cmd, val_len, (int)val_len, buf_rx->data,
+ 			    get_unaligned_be16(buf_rx->data + val_len));
+ 	}
+ 
+ 	if (err) {
+ 		priv->spi_crc_errors++;
+-		netdev_err(priv->ndev,
++		if (priv->show_crc_errors)
++			netdev_err(priv->ndev,
+ 			   "CRC read error at address 0x%04x (length=%zd, data=%*ph, CRC=0x%04x).\n",
+ 			   reg, val_len, (int)val_len, buf_rx->data,
+ 			   get_unaligned_be16(buf_rx->data + val_len));
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+index 78103d278d2a..1d4d09dc10f4 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+@@ -608,6 +608,7 @@ struct mcp251xfd_priv {
+ 	u64 spi_tranfers;
+ 	u32 spi_crc_retries;
+ 	u32 spi_crc_errors;
++	bool show_crc_errors;
+ };
+ 
+ #define MCP251XFD_IS(_model) \
+-- 
+2.43.0
+

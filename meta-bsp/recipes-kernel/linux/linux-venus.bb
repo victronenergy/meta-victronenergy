@@ -20,6 +20,7 @@ VENUS_PATCHES ?= " \
 	file://0001-configs-sunxi_victron-make-spi-a-module.patch \
 	file://0002-can-dev-better-handle-do_set_mode-dev-CAN_MODE_START.patch \
 	file://0003-can-mcp251xfd-retry-later-if-spi-communication-faile.patch \
+	file://0008-mcp251xfd-only-print-CRC-warnings-when-enabled.patch \
 "
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=${GIT_BRANCH};tag=v${PV}"
 SRC_URI += "${VENUS_PATCHES}"
