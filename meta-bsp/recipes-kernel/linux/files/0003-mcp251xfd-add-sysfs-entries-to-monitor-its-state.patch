@@ -1,0 +1,134 @@
+From 8e1edd376ab9254ea8e487442d24d49d0f0a6e17 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 20 Nov 2024 13:10:41 +0100
+Subject: [PATCH 3/8] mcp251xfd: add sysfs entries to monitor its state
+
+This adds sysfs entrys to report the number of spi retries and errors
+and if the driver gave up communicating with the chip, by disabling
+interrupts.
+---
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 41 +++++++++++++++++++
+ .../net/can/spi/mcp251xfd/mcp251xfd-regmap.c  |  3 ++
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |  5 +++
+ 3 files changed, 49 insertions(+)
+
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 621d82e971e8..13bfec021121 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -2278,6 +2278,7 @@ static irqreturn_t mcp251xfd_irq(int irq, void *dev_id)
+ 	} while (1);
+ 
+  out_fail:
++	priv->failed = true;
+ 	netdev_err(priv->ndev, "IRQ handler returned %d (intf=0x%08x).\n",
+ 		   err, priv->regs_status.intf);
+ 	mcp251xfd_chip_interrupts_disable(priv);
+@@ -2469,6 +2470,11 @@ static int mcp251xfd_open(struct net_device *ndev)
+ 	const struct spi_device *spi = priv->spi;
+ 	int err;
+ 
++	priv->spi_tranfers = 0;
++	priv->spi_crc_retries = 0;
++	priv->spi_crc_errors = 0;
++	priv->failed = false;
++
+ 	err = pm_runtime_get_sync(ndev->dev.parent);
+ 	if (err < 0) {
+ 		pm_runtime_put_noidle(ndev->dev.parent);
+@@ -2817,6 +2823,39 @@ static const struct spi_device_id mcp251xfd_id_table[] = {
+ };
+ MODULE_DEVICE_TABLE(spi, mcp251xfd_id_table);
+ 
++static ssize_t mcp251x_get_spi_stats(struct device *dev,
++							struct device_attribute *attr, char *buf)
++{
++	struct net_device *ndev = to_net_dev(dev);
++	struct mcp251xfd_priv *priv = netdev_priv(ndev);
++
++	return sysfs_emit(buf, "transfers: %llu\nretries: %u\nerrors: %u\n",
++							priv->spi_tranfers, priv->spi_crc_retries,
++							priv->spi_crc_errors);
++}
++
++static ssize_t mcp251x_get_failed(struct device *dev,
++							struct device_attribute *attr, char *buf)
++{
++	struct net_device *ndev = to_net_dev(dev);
++	struct mcp251xfd_priv *priv = netdev_priv(ndev);
++
++	return sysfs_emit(buf, "%d\n", priv->failed);
++}
++
++DEVICE_ATTR(spi_stats, 0444, mcp251x_get_spi_stats, NULL);
++DEVICE_ATTR(failed, 0444, mcp251x_get_failed, NULL);
++
++static struct attribute *mcp251x_attrs[] = {
++	&dev_attr_spi_stats.attr,
++	&dev_attr_failed.attr,
++	NULL
++};
++
++static const struct attribute_group mcp251x_group = {
++	.attrs = mcp251x_attrs,
++};
++
+ static int mcp251xfd_probe(struct spi_device *spi)
+ {
+ 	const void *match;
+@@ -2888,6 +2927,8 @@ static int mcp251xfd_probe(struct spi_device *spi)
+ 	ndev->netdev_ops = &mcp251xfd_netdev_ops;
+ 	ndev->irq = spi->irq;
+ 	ndev->flags |= IFF_ECHO;
++	/* setup device-specific sysfs attributes */
++	ndev->sysfs_groups[0] = &mcp251x_group;
+ 
+ 	priv = netdev_priv(ndev);
+ 	spi_set_drvdata(spi, priv);
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+index 297491516a26..41211cd61b30 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+@@ -315,6 +315,7 @@ mcp251xfd_regmap_crc_read(void *context,
+ 	mcp251xfd_spi_cmd_read_crc(&buf_tx->cmd, reg, val_len);
+ 
+ 	for (i = 0; i < MCP251XFD_READ_CRC_RETRIES_MAX; i++) {
++		priv->spi_tranfers++;
+ 		err = mcp251xfd_regmap_crc_read_one(priv, &msg, val_len);
+ 		if (!err)
+ 			goto out;
+@@ -374,6 +375,7 @@ mcp251xfd_regmap_crc_read(void *context,
+ 			goto out;
+ 		}
+ 
++		priv->spi_crc_retries++;
+ 		netdev_info(priv->ndev,
+ 			    "CRC read error at address 0x%04x (length=%zd, data=%*ph, CRC=0x%04x) retrying.\n",
+ 			    reg, val_len, (int)val_len, buf_rx->data,
+@@ -381,6 +383,7 @@ mcp251xfd_regmap_crc_read(void *context,
+ 	}
+ 
+ 	if (err) {
++		priv->spi_crc_errors++;
+ 		netdev_err(priv->ndev,
+ 			   "CRC read error at address 0x%04x (length=%zd, data=%*ph, CRC=0x%04x).\n",
+ 			   reg, val_len, (int)val_len, buf_rx->data,
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+index cb6398c2a560..1aacf8f20ac1 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+@@ -602,6 +602,11 @@ struct mcp251xfd_priv {
+ 
+ 	struct mcp251xfd_devtype_data devtype_data;
+ 	struct can_berr_counter bec;
++
++	_Bool failed;
++	u64 spi_tranfers;
++	u32 spi_crc_retries;
++	u32 spi_crc_errors;
+ };
+ 
+ #define MCP251XFD_IS(_model) \
+-- 
+2.43.0
+

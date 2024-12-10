@@ -16,7 +16,15 @@ PV = "${LINUX_VERSION}${LINUX_VERSION_EXTENSION}"
 
 GIT_BRANCH = "venus-${LINUX_VERSION}"
 
+VENUS_PATCHES ?= " \
+	file://0003-mcp251xfd-add-sysfs-entries-to-monitor-its-state.patch \
+	file://0005-can-dev-better-handle-do_set_mode-dev-CAN_MODE_START.patch \
+	file://0006-can-mcp251xfd-retry-later-if-spi-communication-faile.patch \
+	file://0007-mcp251xfd-only-print-CRC-warnings-when-enabled.patch \
+	file://0008-mcp251xfd-change-the-definition-of-failed.patch \
+"
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=${GIT_BRANCH};tag=v${PV}"
+SRC_URI += "${VENUS_PATCHES}"
 S = "${WORKDIR}/git"
 
 do_configure:append() {
