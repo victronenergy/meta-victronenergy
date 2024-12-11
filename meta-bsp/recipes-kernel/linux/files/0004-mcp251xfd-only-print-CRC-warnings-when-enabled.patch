@@ -1,7 +1,7 @@
-From e1ab1f175f5e1a03759f1ef7cef6357e27871d06 Mon Sep 17 00:00:00 2001
+From 2eeacfffe310b92f7b292bb854f7a38e21e3adda Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Tue, 10 Dec 2024 14:22:20 +0100
-Subject: [PATCH 8/8] mcp251xfd: only print CRC warnings when enabled
+Subject: [PATCH 4/9] mcp251xfd: only print CRC warnings when enabled
 
 ---
  .../net/can/spi/mcp251xfd/mcp251xfd-core.c    |  5 +++++
@@ -10,7 +10,7 @@ Subject: [PATCH 8/8] mcp251xfd: only print CRC warnings when enabled
  3 files changed, 23 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index e1368ff3b279..26d0270ba8d7 100644
+index 428b734d806a..cca2888828ae 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
 @@ -27,6 +27,10 @@
@@ -24,7 +24,7 @@ index e1368ff3b279..26d0270ba8d7 100644
  static const struct mcp251xfd_devtype_data mcp251xfd_devtype_data_mcp2517fd = {
  	.quirks = MCP251XFD_QUIRK_MAB_NO_WARN | MCP251XFD_QUIRK_CRC_REG |
  		MCP251XFD_QUIRK_CRC_RX | MCP251XFD_QUIRK_CRC_TX |
-@@ -3009,6 +3013,7 @@ static int mcp251xfd_probe(struct spi_device *spi)
+@@ -2984,6 +2988,7 @@ static int mcp251xfd_probe(struct spi_device *spi)
  	priv->clk = clk;
  	priv->reg_vdd = reg_vdd;
  	priv->reg_xceiver = reg_xceiver;
@@ -33,7 +33,7 @@ index e1368ff3b279..26d0270ba8d7 100644
  	match = device_get_match_data(&spi->dev);
  	if (match)
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-index c0f24f2784f9..1cee11c76fff 100644
+index 41211cd61b30..9c82fc38569a 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
 @@ -282,6 +282,7 @@ mcp251xfd_regmap_crc_read(void *context,
@@ -44,7 +44,7 @@ index c0f24f2784f9..1cee11c76fff 100644
  
  	BUILD_BUG_ON(sizeof(buf_rx->cmd) != sizeof(__be16) + sizeof(u8));
  	BUILD_BUG_ON(sizeof(buf_tx->cmd) != sizeof(__be16) + sizeof(u8));
-@@ -326,8 +327,16 @@ mcp251xfd_regmap_crc_read(void *context,
+@@ -317,8 +318,16 @@ mcp251xfd_regmap_crc_read(void *context,
  	for (i = 0; i < MCP251XFD_READ_CRC_RETRIES_MAX; i++) {
  		priv->spi_tranfers++;
  		err = mcp251xfd_regmap_crc_read_one(priv, &msg, val_len);
@@ -62,7 +62,7 @@ index c0f24f2784f9..1cee11c76fff 100644
  		if (err != -EBADMSG)
  			return err;
  
-@@ -385,15 +394,18 @@ mcp251xfd_regmap_crc_read(void *context,
+@@ -376,15 +385,18 @@ mcp251xfd_regmap_crc_read(void *context,
  		}
  
  		priv->spi_crc_retries++;
@@ -86,10 +86,10 @@ index c0f24f2784f9..1cee11c76fff 100644
  			   reg, val_len, (int)val_len, buf_rx->data,
  			   get_unaligned_be16(buf_rx->data + val_len));
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-index 78103d278d2a..1d4d09dc10f4 100644
+index 1aacf8f20ac1..935426b70f2d 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-@@ -608,6 +608,7 @@ struct mcp251xfd_priv {
+@@ -607,6 +607,7 @@ struct mcp251xfd_priv {
  	u64 spi_tranfers;
  	u32 spi_crc_retries;
  	u32 spi_crc_errors;

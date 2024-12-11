@@ -1,0 +1,98 @@
+From 9a845aef7b41276116afabb096417e885c71cd18 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 11 Dec 2024 14:26:14 +0100
+Subject: [PATCH 5/9] mcp251xfd: change the definition of failed
+
+Instead of marking the driver as failed upon the first CRC communication
+failure, mark it as failed when it happened for the third time in the last
+minute. Add Set restarted if a CRC error triggers a reset of the chip.
+---
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 32 ++++++++++++++++++-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |  2 ++
+ 2 files changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index cca2888828ae..188e1dc2d346 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -202,8 +202,26 @@ static void mcp251xfd_retry_later(struct mcp251xfd_priv *priv, const char *fmt,
+ 		printk(KERN_INFO "retrying later: (NULL net_device): %pV", &vaf);
+ 	va_end(args);
+ 
+-	priv->failed = true;
++	priv->restarted = true;
+ 	can_bus_off(priv->ndev);
++
++	// If this is the 3rd time within a minute that the device needs to be restarted,
++	// report communication failure.
++	{
++		u32 now = (u32) ktime_get_seconds();
++
++		if (priv->last_retries[0] != 0 && priv->last_retries[1] != 0 &&
++			(priv->last_retries[0] - now) <= 60 &&
++			(priv->last_retries[1] - now) <= 60)
++		{
++			priv->failed = true;
++		}
++
++		if (priv->last_retries[1] < priv->last_retries[0])
++			priv->last_retries[1] = now;
++		else
++			priv->last_retries[0] = now;
++	}
+ }
+ 
+ static inline u8
+@@ -2510,6 +2528,7 @@ static int mcp251xfd_open(struct net_device *ndev)
+ 	priv->spi_tranfers = 0;
+ 	priv->spi_crc_retries = 0;
+ 	priv->spi_crc_errors = 0;
++	priv->restarted = false;
+ 	priv->failed = false;
+ 
+ 	err = pm_runtime_get_sync(ndev->dev.parent);
+@@ -2885,12 +2904,23 @@ static ssize_t mcp251x_get_failed(struct device *dev,
+ 	return sysfs_emit(buf, "%d\n", priv->failed);
+ }
+ 
++static ssize_t mcp251x_get_restarted(struct device *dev,
++							struct device_attribute *attr, char *buf)
++{
++	struct net_device *ndev = to_net_dev(dev);
++	struct mcp251xfd_priv *priv = netdev_priv(ndev);
++
++	return sysfs_emit(buf, "%d\n", priv->restarted);
++}
++
+ DEVICE_ATTR(spi_stats, 0444, mcp251x_get_spi_stats, NULL);
+ DEVICE_ATTR(failed, 0444, mcp251x_get_failed, NULL);
++DEVICE_ATTR(restarted, 0444, mcp251x_get_restarted, NULL);
+ 
+ static struct attribute *mcp251x_attrs[] = {
+ 	&dev_attr_spi_stats.attr,
+ 	&dev_attr_failed.attr,
++	&dev_attr_restarted.attr,
+ 	NULL
+ };
+ 
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+index 935426b70f2d..266c7b309cae 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+@@ -603,11 +603,13 @@ struct mcp251xfd_priv {
+ 	struct mcp251xfd_devtype_data devtype_data;
+ 	struct can_berr_counter bec;
+ 
++	_Bool restarted;
+ 	_Bool failed;
+ 	u64 spi_tranfers;
+ 	u32 spi_crc_retries;
+ 	u32 spi_crc_errors;
+ 	bool show_crc_errors;
++	u32 last_retries[2];
+ };
+ 
+ #define MCP251XFD_IS(_model) \
+-- 
+2.43.0
+
