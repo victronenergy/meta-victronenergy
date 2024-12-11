@@ -1,7 +1,7 @@
 DESCRIPTION = "Boot partition image"
 LICENSE = "MIT"
 
-inherit deploy nopackages
+inherit deploy image-artifact-names nopackages
 
 BOOT_IMAGE_SIZE = "8192"
 
