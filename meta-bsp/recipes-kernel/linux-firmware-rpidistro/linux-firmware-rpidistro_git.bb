@@ -5,10 +5,10 @@ to linux-firmware for general use."
 HOMEPAGE = "https://github.com/RPi-Distro/firmware-nonfree"
 SECTION = "kernel"
 
-LICENSE = "GPL-2.0 & binary-redist-Cypress-rpidistro & Synaptics-rpidistro"
+LICENSE = "GPL-2.0-only & binary-redist-Cypress-rpidistro & Synaptics-rpidistro"
 LIC_FILES_CHKSUM = "\
     file://debian/config/brcm80211/copyright;md5=b0630b02d90e3da72206c909b6aecc8c \
-    file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6 \
+    file://${COMMON_LICENSE_DIR}/GPL-2.0-only;md5=801f80980d171dd6425610833a22dbe6 \
 "
 # Where these are no common licenses, set NO_GENERIC_LICENSE so that the
 # license files will be copied from the fetched source.
