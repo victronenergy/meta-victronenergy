@@ -1,0 +1,27 @@
+From 1db354f341045acbb527fa6449e528038354b808 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Sun, 15 Dec 2024 19:41:00 +0000
+Subject: [PATCH] disable building _libfdt.so
+
+Depends on python2 / fails to build.
+Upstream-Status: Inappropriate [Venus specific]
+---
+ tools/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/Makefile b/tools/Makefile
+index a0db19d..f65e53f 100644
+--- a/tools/Makefile
++++ b/tools/Makefile
+@@ -234,7 +234,7 @@ always := $(hostprogs-y)
+ 
+ # Build a libfdt Python module if swig is available
+ # Use 'sudo apt-get install swig libpython-dev' to enable this
+-always += $(if $(shell which swig 2> /dev/null),_libfdt.so)
++#always += $(if $(shell which swig 2> /dev/null),_libfdt.so)
+ 
+ # Generated LCD/video logo
+ LOGO_H = $(objtree)/include/bmp_logo.h
+-- 
+2.43.0
+
