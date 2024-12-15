@@ -5,6 +5,7 @@ DEPENDS += "bc-native u-boot-mkimage-native"
 SRC_URI += "\
     file://install.cmds \
     file://splash.bmp.gz;unpack=0 \
+    file://0001-disable-building-_libfdt.so.patch \
 "
 
 do_compile:append () {
