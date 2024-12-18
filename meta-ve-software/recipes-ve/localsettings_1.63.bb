@@ -6,10 +6,12 @@ inherit ve_package
 inherit daemontools
 inherit python-compile
 
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/localsettings.git;branch=master;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/localsettings.git;branch=master;protocol=https \
     file://com.victronenergy.settings.conf \
 "
+SRCREV = "0cb7b02faf6e403f8248e7c576e8c6c0e6b25a55"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/${PN}.py --path=/data/conf"

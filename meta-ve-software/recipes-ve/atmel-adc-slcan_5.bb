@@ -4,7 +4,9 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 inherit allarch
 
-SRC_URI = "git://github.com/victronenergy/atmel-adc-and-slcan.git;branch=master;protocol=https;tag=v${PV};lfs=0"
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
+SRC_URI = "git://github.com/victronenergy/atmel-adc-and-slcan.git;branch=master;protocol=https;lfs=0"
+SRCREV = "f4ad881e55eb7fe4f75da3b9787d0714d4db4d86"
 S = "${WORKDIR}/git"
 
 FIRMWARE_DIR = "/opt/victronenergy/firmware"

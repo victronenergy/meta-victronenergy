@@ -9,7 +9,9 @@ RDEPENDS:${PN} = " \
     openssh \
     ssh-tunnel \
 "
-SRC_URI = "gitsm://github.com/victronenergy/venus-access.git;branch=master;protocol=ssh;user=git;tag=v${PV}"
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
+SRC_URI = "gitsm://github.com/victronenergy/venus-access.git;branch=master;protocol=ssh;user=git"
+SRCREV = "2bb867efa449b692ab09e7a19e271ed47da9ede0"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/venus-access"

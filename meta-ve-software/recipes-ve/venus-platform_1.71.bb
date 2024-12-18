@@ -6,10 +6,12 @@ DEPENDS = "dbus iptables udev"
 QT6_DEPENDS = "qtbase"
 RDEPENDS:${PN} += "can-utils connman flashmq velib-python socketcand"
 
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git;tag=v${PV} \
+    gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git \
     file://can.inc \
 "
+SRCREV = "400123f027a15bc59aac14f4db063e559c95d43a"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/venus-platform"

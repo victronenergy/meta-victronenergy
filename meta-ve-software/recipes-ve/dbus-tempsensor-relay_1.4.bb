@@ -6,10 +6,12 @@ inherit daemontools
 inherit python-compile
 inherit gmakevelib
 
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus-tempsensor-relay.git;branch=master;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/dbus-tempsensor-relay.git;branch=master;protocol=https \
     file://com.victronenergy.temprelay.conf \
 "
+SRCREV = "8830e0539470b1f3dc175600204559fd6ee0b8f6"
 S = "${WORKDIR}/git"
 
 RDEPENDS:${PN} = " \

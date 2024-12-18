@@ -15,10 +15,12 @@ RDEPENDS:${PN} = "\
     python3-pymodbus \
 "
 
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https \
     file://start-serial.sh \
 "
+SRCREV = "30d056aeee3dc3936f1d4afe2834b1e70936e224"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${bindir}/${PN}.py"

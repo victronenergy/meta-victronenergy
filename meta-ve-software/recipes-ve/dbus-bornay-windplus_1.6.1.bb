@@ -3,9 +3,11 @@ HOMEPAGE = "https://github.com/CarlosBornay/Bornay-venus-driver"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "\
-    gitsm://github.com/victronenergy/${BPN}.git;protocol=https;branch=master;tag=v${PV} \
+    gitsm://github.com/victronenergy/${BPN}.git;protocol=https;branch=master \
 "
+SRCREV = "c3e415c97835ae3ddff0c4cdb88bf04cfb5e1df3"
 
 S = "${WORKDIR}/git"
 

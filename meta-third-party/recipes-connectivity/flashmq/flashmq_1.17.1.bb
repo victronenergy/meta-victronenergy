@@ -6,7 +6,9 @@ DEPENDS = "openssl"
 
 inherit cmake
 
-SRC_URI = "git://github.com/halfgaar/FlashMQ.git;branch=master;protocol=https;tag=v${PV}"
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
+SRC_URI = "git://github.com/halfgaar/FlashMQ.git;branch=master;protocol=https"
+SRCREV = "65464fbd3e50fc715d583520176a34cbc95edaf9"
 
 S = "${WORKDIR}/git"
 EXTRA_OECMAKE = "-DCMAKE_BUILD_TYPE=Release"

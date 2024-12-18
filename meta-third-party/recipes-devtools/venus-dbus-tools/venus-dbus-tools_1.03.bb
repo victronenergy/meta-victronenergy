@@ -5,7 +5,9 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 inherit python-compile
 
 RDEPENDS:${PN} = "python3-core python3-dbus python3-lxml python3-pprint"
-SRC_URI = "git://github.com/victronenergy/dbus-tools.git;branch=master;protocol=https;tag=v${PV}"
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
+SRC_URI = "git://github.com/victronenergy/dbus-tools.git;branch=master;protocol=https"
+SRCREV = "53b18b055f101c74f9beb13ed2199b95e644ada1"
 S = "${WORKDIR}/git"
 
 do_install () {

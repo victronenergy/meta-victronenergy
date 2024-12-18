@@ -18,11 +18,13 @@ USERADD_PARAM:${PN} = "--no-create-home --shell /bin/false -g simple-upnpd simpl
 
 DAEMONTOOLS_RUN = "${base_bindir}/start-simple-upnpd"
 
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    git://github.com/victronenergy/simple-upnpd.git;branch=master;protocol=https;tag=${PV} \
+    git://github.com/victronenergy/simple-upnpd.git;branch=master;protocol=https \
     file://start-simple-upnpd \
     file://simple-upnpd.skeleton.xml \
 "
+SRCREV = "e1d445be8e5a1709780af2da55ced7cae719a2cf"
 
 do_install() {
     install -d ${D}/${base_bindir} ${D}${sysconfdir}

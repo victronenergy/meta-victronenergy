@@ -1,6 +1,8 @@
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
-SRC_URI = "git://github.com/victronenergy/venus-ui-themes.git;branch=master;protocol=ssh;user=git;tag=v${PV}"
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
+SRC_URI = "git://github.com/victronenergy/venus-ui-themes.git;branch=master;protocol=ssh;user=git"
+SRCREV = "9a8173d7603c98583ac01de84723821b3270e4e7"
 S = "${WORKDIR}/git"
 
 inherit allarch ve_package www

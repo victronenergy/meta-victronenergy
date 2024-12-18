@@ -9,10 +9,12 @@ inherit python-compile
 # omitted since machine-runtime is machine specific.
 # RDEPENDS:${PN} = "machine-runtime-conf"
 
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus-characterdisplay.git;branch=master;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/dbus-characterdisplay.git;branch=master;protocol=https \
     file://start-characterdisplay.sh \
 "
+SRCREV = "ec4c835b71681045100b3d28f2ea4f05a5660bd7"
 
 S = "${WORKDIR}/git"
 

@@ -13,9 +13,11 @@ RDEPENDS:${PN} = " \
     python3-requests \
 "
 
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus-mqtt.git;branch=master;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/dbus-mqtt.git;branch=master;protocol=https \
 "
+SRCREV = "00bbfd58d048b3ca805199955659f84f31754106"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_mqtt.py --init-broker"

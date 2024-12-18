@@ -14,11 +14,13 @@ RDEPENDS:${PN} = "\
     python3-pyserial \
 "
 
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus-modem.git;branch=master;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/dbus-modem.git;branch=master;protocol=https \
     file://start-modem.sh \
     file://reset-modem.sh \
 "
+SRCREV = "1d116a4bfb29b296c69d8a3a04430057c5711429"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${bindir}/start-modem.sh TTY"

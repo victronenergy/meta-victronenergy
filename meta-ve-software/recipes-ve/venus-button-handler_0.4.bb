@@ -13,9 +13,11 @@ RDEPENDS:${PN} = "\
     python3-pygobject \
 "
 
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "\
-    gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https \
 "
+SRCREV = "d554ffdac914532517267e3eb968607446ca1640"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${bindir}/${PN} -D"

@@ -8,9 +8,11 @@ inherit www
 DEPENDS = "base-passwd"
 RDEPENDS:${PN} = "nginx"
 
+UPSTREAM_CHECK_GITTAGREGEX = "(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/javascript-vnc-client.git;branch=master;protocol=https;tag=${PV} \
+    gitsm://github.com/victronenergy/javascript-vnc-client.git;branch=master;protocol=https \
 "
+SRCREV = "8618367e760bd563016da68c0fdab929c529132d"
 
 S = "${WORKDIR}/git"
 BASE_DIR = "${WWW_ROOT}/gui-v1"

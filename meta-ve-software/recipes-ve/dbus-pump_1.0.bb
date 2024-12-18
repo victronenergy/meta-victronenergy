@@ -5,10 +5,12 @@ inherit ve_package
 inherit daemontools
 inherit python-compile
 
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/dbus_pump.git;protocol=https;tag=v${PV};branch=master \
+    gitsm://github.com/victronenergy/dbus_pump.git;protocol=https;branch=master \
     file://com.victronenergy.pump.conf \
 "
+SRCREV = "caf0dbde74be1b667541a0cb9f5023f51317bc66"
 PR = "r1"
 S = "${WORKDIR}/git"
 

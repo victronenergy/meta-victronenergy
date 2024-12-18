@@ -7,7 +7,9 @@ DESCRIPTION = " \
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=db73e07aea31188dc97142d139df39f9"
 
-SRC_URI = "gitsm://github.com/victronenergy/${BPN}.git;protocol=https;branch=master;tag=v${PV}"
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
+SRC_URI = "gitsm://github.com/victronenergy/${BPN}.git;protocol=https;branch=master"
+SRCREV = "fb226e14a896152f73f40f017c40173480f52a46"
 S = "${WORKDIR}/git"
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/${PN}.py"
 
