@@ -5,6 +5,7 @@ inherit packagegroup
 
 PACKAGEGROUP_DISABLE_COMPLEMENTARY = "1"
 INSANE_SKIP:${PN} = "dev-deps"
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 # c and friends
 RDEPENDS:${PN} += " \
