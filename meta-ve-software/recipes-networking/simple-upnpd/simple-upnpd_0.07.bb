@@ -24,7 +24,7 @@ SRC_URI = " \
     file://start-simple-upnpd \
     file://simple-upnpd.skeleton.xml \
 "
-SRCREV = "e1d445be8e5a1709780af2da55ced7cae719a2cf"
+SRCREV = "704dc945e59bfcb281dbe2e9607b75ca716a21b3"
 
 do_install() {
     install -d ${D}/${base_bindir} ${D}${sysconfdir}
