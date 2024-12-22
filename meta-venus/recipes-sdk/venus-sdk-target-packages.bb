@@ -1,11 +1,11 @@
 SUMMARY = "TARGET packages for the SDK"
 LICENSE = "MIT"
 
-inherit packagegroup
-
 PACKAGEGROUP_DISABLE_COMPLEMENTARY = "1"
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 INSANE_SKIP:${PN} = "dev-deps"
-PACKAGE_ARCH = ""
+
+inherit packagegroup
 
 # c and friends
 RDEPENDS:${PN} += " \
