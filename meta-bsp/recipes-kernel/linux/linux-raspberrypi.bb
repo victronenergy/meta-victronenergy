@@ -3,7 +3,7 @@ require linux-venus.bb
 COMPATIBLE_MACHINE = "^rpi$"
 
 LINUX_VERSION = "5.10.110"
-LINUX_VERSION_VENUS = "5"
+LINUX_VERSION_VENUS = "6"
 LINUX_VERSION_EXTENSION =. "-rpi"
 GIT_BRANCH =. "rpi-"
 
