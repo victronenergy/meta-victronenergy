@@ -1,0 +1,33 @@
+From edd643b8a75b893faca573ac86bb979de429b3a4 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 8 Jan 2025 11:39:58 +0100
+Subject: [PATCH] enable cgroups
+
+---
+ Kconfig.venus | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/Kconfig.venus b/Kconfig.venus
+index d3412b5338e2..7edbd67f89fa 100644
+--- a/Kconfig.venus
++++ b/Kconfig.venus
+@@ -37,6 +37,16 @@ config VENUS
+ 	select STACKPROTECTOR_STRONG
+ 	select STACKPROTECTOR_PER_TASK if SMP
+ 
++	# tailscale might use cgroups
++	select CGROUPS
++	select CGROUP_CPUACCT
++	select CGROUP_SCHED
++	select NET_SCHED
++	select NET_CLS_ACT
++	select NET_SCH_HTB
++	select NET_SCH_INGRESS
++	select CFS_BANDWIDTH
++
+ 	# system options
+ 	select VDSO
+ 	select ARM_ERRATA_430973
+-- 
+2.43.0
+

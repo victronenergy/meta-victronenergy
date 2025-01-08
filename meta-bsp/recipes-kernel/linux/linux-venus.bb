@@ -16,6 +16,7 @@ PV = "${LINUX_VERSION}${LINUX_VERSION_EXTENSION}"
 
 GIT_BRANCH = "venus-${LINUX_VERSION}"
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=${GIT_BRANCH};tag=v${PV}"
+SRC_URI += "file://0001-enable-cgroups.patch"
 S = "${WORKDIR}/git"
 
 do_configure:append() {

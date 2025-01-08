@@ -58,6 +58,7 @@ RDEPENDS:${PN} += "\
     javascript-vnc-client \
     ldd \
     less \
+    libcgroup \
     linux-firmware-mt7601u \
     linux-firmware-mt7662 \
     linux-firmware-rt2800 \
