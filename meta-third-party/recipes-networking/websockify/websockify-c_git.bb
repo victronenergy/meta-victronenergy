@@ -8,6 +8,7 @@ inherit daemontools-template
 
 SRC_URI = " \
     git://github.com/novnc/websockify-other.git;branch=master;protocol=https;rev=05d6162e9e8ed060817c72de73ab4e7c62bb3da7 \
+    file://0001-flush-traces.patch \
 "
 
 S = "${WORKDIR}/git"
