@@ -100,7 +100,6 @@ RDEPENDS:${PN} += "\
     venus-feed-configs \
     venus-html5-app \
     watchdog \
-    websockify-c \
     wget \
     wireless-regdb-static \
     zip \
