@@ -1,0 +1,74 @@
+From 119fdb20a77d803d22bc04343de78bd8e168df6e Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Tue, 14 Jan 2025 08:43:05 +0100
+Subject: [PATCH] Revert "Only allow a curated set of modifiers"
+
+This reverts commit f3614b5540b712462f8458d71b6b05c256a8c2b6.
+
+Upstream-Status: Inappropriate [errors due to older fourcc header]
+---
+ src/pixels.c | 34 ----------------------------------
+ 1 file changed, 34 deletions(-)
+
+diff --git a/src/pixels.c b/src/pixels.c
+index 29242c6..b7cc729 100644
+--- a/src/pixels.c
++++ b/src/pixels.c
+@@ -16,7 +16,6 @@
+ 
+ #include "rfb-proto.h"
+ #include "pixels.h"
+-
+ #include <stdlib.h>
+ #include <assert.h>
+ #include <libdrm/drm_fourcc.h>
+@@ -760,36 +759,6 @@ int rfb_pixfmt_depth(const struct rfb_pixel_format *fmt)
+ 	return POPCOUNT(r) + POPCOUNT(g) + POPCOUNT(b);
+ }
+ 
+-// All AMD modifiers except DCC are allowed
+-static bool amd_format_modifier_is_allowed(uint64_t modifier)
+-{
+-	return !AMD_FMT_MOD_GET(DCC, modifier) &&
+-		!AMD_FMT_MOD_GET(DCC_RETILE, modifier);
+-}
+-
+-static const uint64_t format_modifier_allow_list[] = {
+-	DRM_FORMAT_MOD_LINEAR,
+-
+-	// Intel:
+-	I915_FORMAT_MOD_X_TILED,
+-	I915_FORMAT_MOD_Y_TILED,
+-	I915_FORMAT_MOD_Yf_TILED,
+-	// I915_FORMAT_MOD_4_TILED might work but is untested
+-};
+-
+-static bool format_modifier_is_allowed(uint64_t modifier)
+-{
+-	if (fourcc_mod_is_vendor(modifier, AMD))
+-		return amd_format_modifier_is_allowed(modifier);
+-
+-	for (size_t i = 0; i < sizeof(format_modifier_allow_list) /
+-			sizeof(format_modifier_allow_list[0]); ++i)
+-		if (modifier == format_modifier_allow_list[i])
+-			return true;
+-
+-	return false;
+-}
+-
+ double rate_pixel_format(uint32_t format, uint64_t modifier,
+ 		enum format_rating_flags flags, int target_depth)
+ {
+@@ -797,9 +766,6 @@ double rate_pixel_format(uint32_t format, uint64_t modifier,
+ 	if (depth_rating == 0)
+ 		return 0;
+ 
+-	if (!format_modifier_is_allowed(modifier))
+-		return 0;
+-
+ 	double linear_rating = modifier == DRM_FORMAT_MOD_LINEAR;
+ 
+ 	double alpha_rating;
+-- 
+2.43.0
+
