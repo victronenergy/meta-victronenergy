@@ -15,6 +15,7 @@ inherit packagegroup
 
 RRECOMMENDS:${PN} += " \
     can-bus-bms \
+    can-bus-bms-hv \
     dbus-adc \
     dbus-ble-sensors \
     dbus-bornay-windplus \
@@ -31,7 +32,6 @@ RRECOMMENDS:${PN} += " \
     dbus-valence \
     dbus-vebus-to-pvinverter \
     gps-dbus \
-    hv-can-bus \
     mk2-dbus \
     vecan-dbus \
     vedirect-interface \
