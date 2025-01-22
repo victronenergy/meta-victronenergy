@@ -62,10 +62,12 @@ get_swu_version() {
 }
 
 swu_status() {
-    if [ "$offline" = y ]; then
-        printf '%s\n' "$1" "" "$2" >$status_file
-    else
-        printf '%s\n' "$1" "$2" "" >$status_file
+    if [ "$silent" != y ]; then
+        if [ "$offline" = y ]; then
+            printf '%s\n' "$1" "" "$2" >$status_file
+        else
+            printf '%s\n' "$1" "$2" "" >$status_file
+        fi
     fi
 }
 
@@ -75,6 +77,7 @@ start_log
 
 echo "*** Checking for updates ***"
 echo "arguments: $@"
+feed=auto
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -85,6 +88,11 @@ while [[ $# -gt 0 ]]; do
         -check)  update=2    ;;
         -update) update=1    ;;
         -delay)  delay=y     ;;
+        -feed)
+                 shift
+                 feed="$1"
+        ;;
+        -silent) silent=y    ;;
         -force)  force=y     ;;
         -swu)
                  shift
@@ -117,8 +125,10 @@ if [ "$help" = y ]; then
     echo "             use this when calling from cron or after boot."
     echo "-check       (only) check if there is a new version available."
     echo "-update      check and, when necessary, update."
+    echo "-feed        set the feed to check. venus OS setting will be used if omitted."
     echo "-force       force downloading and installing the new image, even if its"
     echo "             version is older or same as already installed version."
+    echo "-silent      Do not write to /var/run/swupdate-status."
     echo "-swu url     forcefully install the swu from given url"
     echo "-swubase url use given url as a base, rather than the default:"
     echo "             https://updates.victronenergy.com/feeds/venus/[feed]/"
@@ -194,7 +204,9 @@ elif [ "$offline" = y ]; then
         exit 1
     fi
 else
-    feed=$(get_setting ReleaseType)
+    if [ "$feed" = auto ]; then
+        feed=$(get_setting ReleaseType)
+    fi
 
     case $feed in
         0) feed=release   ;;
