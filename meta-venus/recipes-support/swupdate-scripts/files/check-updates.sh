@@ -75,6 +75,7 @@ start_log
 
 echo "*** Checking for updates ***"
 echo "arguments: $@"
+feed=""
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -85,7 +86,15 @@ while [[ $# -gt 0 ]]; do
         -check)  update=2    ;;
         -update) update=1    ;;
         -delay)  delay=y     ;;
+        -feed)
+                 shift
+                 feed="$1"
+        ;;
         -force)  force=y     ;;
+        -status-file)
+                 shift
+                 status_file="$1"
+        ;;
         -swu)
                  shift
                  force=y
@@ -117,8 +126,10 @@ if [ "$help" = y ]; then
     echo "             use this when calling from cron or after boot."
     echo "-check       (only) check if there is a new version available."
     echo "-update      check and, when necessary, update."
+    echo "-feed        set the feed to check. venus OS setting will be used if omitted."
     echo "-force       force downloading and installing the new image, even if its"
     echo "             version is older or same as already installed version."
+    echo "-status-file use given file for status updates instead of /var/run/swupdate-status"
     echo "-swu url     forcefully install the swu from given url"
     echo "-swubase url use given url as a base, rather than the default:"
     echo "             https://updates.victronenergy.com/feeds/venus/[feed]/"
@@ -194,17 +205,19 @@ elif [ "$offline" = y ]; then
         exit 1
     fi
 else
-    feed=$(get_setting ReleaseType)
+    if [ -z "$feed" ]; then
+        feed=$(get_setting ReleaseType)
 
-    case $feed in
-        0) feed=release   ;;
-        1) feed=candidate ;;
-        2) feed=testing   ;;
-        3) feed=develop   ;;
-        *) echo "Invalid release type, exit."
-           exit 1
-           ;;
-    esac
+        case $feed in
+            0) feed=release   ;;
+            1) feed=candidate ;;
+            2) feed=testing   ;;
+            3) feed=develop   ;;
+            *) echo "Invalid release type, exit."
+                exit 1
+                ;;
+        esac
+    fi
 
     imgtype=$(get_setting ImageType)
 
