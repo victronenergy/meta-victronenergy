@@ -62,22 +62,26 @@ get_swu_version() {
 }
 
 swu_status() {
-    if [ "$silent" != y ]; then
-        if [ "$offline" = y ]; then
-            printf '%s\n' "$1" "" "$2" >$status_file
-        else
-            printf '%s\n' "$1" "$2" "" >$status_file
-        fi
+    if [ "$offline" = y ]; then
+        printf '%s\n' "$1" "" "$2" >$status_file
+    elif [ "$feed_set" = 0 ]; then
+        printf '%s\n' "$1" "$2" "" >$status_file
+    fi
+
+    if [ "$feed" = release ] && [ "$feed_set" = 1 ]; then
+        printf '%s\n' "$1" "$2" "" >$status_file_release
     fi
 }
 
 status_file=/var/run/swupdate-status
+status_file_release=/var/run/swupdate-status-release
 
 start_log
 
 echo "*** Checking for updates ***"
 echo "arguments: $@"
 feed=auto
+feed_set=0
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -91,8 +95,8 @@ while [[ $# -gt 0 ]]; do
         -feed)
                  shift
                  feed="$1"
+                 feed_set=1
         ;;
-        -silent) silent=y    ;;
         -force)  force=y     ;;
         -swu)
                  shift
@@ -128,7 +132,6 @@ if [ "$help" = y ]; then
     echo "-feed        set the feed to check. venus OS setting will be used if omitted."
     echo "-force       force downloading and installing the new image, even if its"
     echo "             version is older or same as already installed version."
-    echo "-silent      Do not write to /var/run/swupdate-status."
     echo "-swu url     forcefully install the swu from given url"
     echo "-swubase url use given url as a base, rather than the default:"
     echo "             https://updates.victronenergy.com/feeds/venus/[feed]/"
@@ -306,4 +309,3 @@ else
     echo "Error, do_swupdate stopped with exitcode $?, unlock and exit."
     swu_status -2 "$swu_version"
 fi
-
