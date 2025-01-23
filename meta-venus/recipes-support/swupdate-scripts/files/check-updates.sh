@@ -271,7 +271,11 @@ if [[ -z $forceswu ]]; then
 
     if [ "$force" != y -a \( "${swu_build}" = "${cur_build}" -o "$auto" = "1" -a "${swu_build}" -le "${cur_build}" \) ]; then
         echo "No newer version available, exit."
-        swu_status 0
+        if [ "$feed_set" = 0 ]; then
+            swu_status 0
+        else
+            swu_status 0 "$swu_version"
+        fi
         exit
     fi
 
