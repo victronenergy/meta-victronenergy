@@ -41,7 +41,7 @@ create_link() {
 }
 
 find_pin() {
-    gpio=$(gpiofind "$1") || return 1
+    gpio=$(gpioinfo "$1" 2>/dev/null) || return 1
     set -- $gpio
     chip=$1
     offs=$2
