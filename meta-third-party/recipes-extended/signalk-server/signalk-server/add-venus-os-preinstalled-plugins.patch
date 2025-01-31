@@ -1,15 +1,14 @@
-From 3d27acd3651828fd24154761b738b40ad7a0ba4a Mon Sep 17 00:00:00 2001
+From 9ebbef7d5bc6323f0fe2d9ecf8ff8afc8c4941b7 Mon Sep 17 00:00:00 2001
 From: Dirk-Jan Faber <dfaber@victronenergy.com>
-Date: Mon, 25 Nov 2024 16:34:26 +0100
+Date: Fri, 31 Jan 2025 10:47:04 +0100
 Subject: [PATCH] Add plugins
 
-Upstream-Status: Inappropriate [Venus specific]
 ---
  package.json | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/package.json b/package.json
-index ed547ab..fc1f9cc 100644
+index eba85a4b..00f99a1a 100644
 --- a/package.json
 +++ b/package.json
 @@ -123,7 +123,9 @@
@@ -19,7 +18,7 @@ index ed547ab..fc1f9cc 100644
 -    "ws": "^7.0.0"
 +    "ws": "^7.0.0",
 +    "signalk-n2kais-to-nmea0183": "1.5.0",
-+    "signalk-venus-plugin": "1.42.0"
++    "signalk-venus-plugin": "1.43.0"
    },
    "optionalDependencies": {
      "@signalk/freeboard-sk": "^2.0.0-beta.3",
