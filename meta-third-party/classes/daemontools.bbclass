@@ -130,6 +130,8 @@ do_install:append() {
     echo "#!/bin/sh" > ${SERVICE}/run
     echo "echo \"*** starting ${PN} ***\"" >> ${SERVICE}/run
     echo "exec 2>&1" >> ${SERVICE}/run
+    echo ". ${sysconfdir}/profile.d/profile.sh" >> ${SERVICE}/run
+
     if [ "x${DAEMONTOOLS_SCRIPT}" = "x" ]; then
         DAEMONTOOLS_SCRIPT="exec ${DAEMONTOOLS_RUN}"
     fi
