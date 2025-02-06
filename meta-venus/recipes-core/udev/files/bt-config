@@ -30,7 +30,7 @@ while hciconfig $HCI | grep -qw INIT; do
 done
 
 if hciconfig $HCI | grep -qw RAW; then
-    btmgmt -i $HCI public-addr $(get_addr $HCI)
+    yes | btmgmt -i $HCI public-addr $(get_addr $HCI)
     usleep 200000
 fi
 
