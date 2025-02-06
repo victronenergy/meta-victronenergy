@@ -56,10 +56,15 @@ server {
         proxy_set_header Host $host;
     }
 
-    # This is needed because the wasm is downloaded as XHR. The proxying system
-    # VRM uses, which also ends up here, has stricter rules and doesn't just
-    # return 'origin', so add them here.
-    location /gui {
+    # The normal auth+cookie flow when opening /gui-v2 needs to function, also
+    # to make the websocket works, but the wasm(-related) asset files need to
+    # be available without cookie, for the HttpProxyOverSshTunnels (VRM).
+    location ~ /gui-(v2|beta)/venus-gui-v2 {
+        auth_request off;
+
+        # This is needed because the wasm is downloaded as XHR. The proxying system
+        # VRM uses, which also ends up here, has stricter rules and doesn't just
+        # return 'origin', so add them here.
         add_header Cache-Control "no-cache";
         add_header Access-Control-Allow-Origin "$http_origin";
         add_header Access-Control-Allow-Credentials true;

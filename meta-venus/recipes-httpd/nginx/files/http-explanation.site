@@ -17,7 +17,7 @@ server {
     # This is needed because the wasm is downloaded as XHR. The proxying system
     # VRM uses, which also ends up here, has stricter rules and doesn't just
     # return 'origin', so add them here.
-    location /gui-beta/venus-gui-v2 {
+    location ~ /gui-(v2|beta)/venus-gui-v2 {
         root /var/www/venus/;
 
         gzip_static always;
