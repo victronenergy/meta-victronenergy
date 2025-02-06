@@ -34,8 +34,9 @@ if hciconfig $HCI | grep -qw RAW; then
     usleep 200000
 fi
 
-btmgmt -i $HCI le on
-btmgmt -i $HCI bredr off
+# btmgmt can hang when started by udev. Piping with yes prevents that.
+yes | btmgmt -i $HCI le on
+yes | btmgmt -i $HCI bredr off
 
 # start services, or restart them if already running
 services="/service/dbus-ble-sensors /service/vesmart-server"
