@@ -8,6 +8,7 @@ COMPATIBLE_MACHINE = "ccgx"
 SRC_URI += "https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz"
 SRC_URI[sha256sum] = "4c4e1158909be0a2b01f8f8c06eedecd1a3be10cd7279c5a73f87859b6ce7c62"
 S = "${WORKDIR}/u-boot-${PV}"
+INSANE_SKIP:${PN} += "src-uri-bad"
 
 inherit autotools
 
