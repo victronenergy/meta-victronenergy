@@ -13,7 +13,7 @@ SRC_URI = " \
     file://fw_env.config \
 "
 SRC_URI[sha256sum] = "c7dd35420d7925c1443a0001a64a35f56593683f93612537617a18d60300398c"
-INSANE_SKIP:${PN} += "src-uri-bad"
+INSANE_SKIP += "src-uri-bad"
 
 do_compile () {
     oe_runmake -C ${S} ${UBOOT_MACHINE}

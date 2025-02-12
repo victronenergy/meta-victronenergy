@@ -6,7 +6,7 @@ DEPENDS += "mtd-utils"
 
 SRC_URI:append = " file://fw_env.config"
 
-INSANE_SKIP:${PN} = "already-stripped"
+INSANE_SKIP:${PN} += "already-stripped"
 EXTRA_OEMAKE:class-target = 'CROSS_COMPILE=${TARGET_PREFIX} CC="${CC} ${CFLAGS} ${LDFLAGS}" HOSTCC="${BUILD_CC} ${BUILD_CFLAGS} ${BUILD_LDFLAGS}" V=1'
 EXTRA_OEMAKE:class-cross = 'HOSTCC="${CC} ${CFLAGS} ${LDFLAGS}" V=1'
 
