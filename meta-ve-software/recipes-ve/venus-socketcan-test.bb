@@ -5,7 +5,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=7c0ad2b90776f126b453c5f96c0da11a"
 S = "${WORKDIR}/git"
 
 RDEPENDS:${PN} += " \
-    canutils \
     can-utils \
     coreutils-stdbuf \
     python3-core \

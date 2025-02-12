@@ -37,7 +37,6 @@ RDEPENDS:${PN} += "\
     bluez5-noinst-tools \
     bzip2 \
     ca-certificates \
-    canutils \
     can-utils \
     connman \
     connman-tools \
