@@ -27,6 +27,7 @@ DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus
 do_install () {
     install -d ${D}${bindir}
     cp -r ${S}/* ${D}${bindir}
+    rm -rf ${D}${bindir}/tests
 
     install -d ${D}/${sysconfdir}/dbus-1/system.d
     install -m 644 ${UNPACKDIR}/com.victronenergy.system.conf ${D}/${sysconfdir}/dbus-1/system.d
