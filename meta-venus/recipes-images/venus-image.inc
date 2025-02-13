@@ -14,6 +14,7 @@ IMAGE_FEATURES += "read-only-rootfs"
 BAD_RECOMMENDATIONS += "${@'' if d.getVar('VENUS_GPU') == '1' else 'mesa-megadriver'}"
 
 IMAGE_LINGUAS = "en-us"
+COPY_LIC_DIRS = "0"
 
 LICENSE = "MIT"
 
