@@ -55,7 +55,7 @@ do_install:append() {
     rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/win32-ia32
     rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/win32-x64
 
-    # this folder keeps the default settings. start-signalk.sh copies them
+    # this directory keeps the default settings. start-signalk.sh copies them
     # to the data partition on first boot.
     install -d ${DEFAULTS}
     install -m 0644 ${WORKDIR}/defaults.json ${DEFAULTS}
@@ -72,4 +72,8 @@ do_install:append() {
 
     rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/put/test
     rm -rf ${D}/usr/node_modules
+
+    find "${D}${nonarch_libdir}" -depth -type d -name "docs" -exec rm -rf {} \;
+    find "${D}${nonarch_libdir}" -depth -type d -name "examples" -exec rm -rf {} \;
+    find "${D}${nonarch_libdir}" -depth -type d -name "samples" -exec rm -rf {} \;
 }
