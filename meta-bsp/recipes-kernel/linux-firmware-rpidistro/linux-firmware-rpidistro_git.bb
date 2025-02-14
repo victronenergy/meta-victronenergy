@@ -77,8 +77,7 @@ LICENSE:${PN}-bcm43436 = "Synaptics-rpidistro"
 LICENSE:${PN}-bcm43436s = "Synaptics-rpidistro"
 LICENSE:${PN}-bcm43455 = "binary-redist-Cypress-rpidistro"
 LICENSE:${PN}-bcm43456 = "Synaptics-rpidistro"
-# dunfell: GPL-2.0 got renamed to GPL-2.0-only later on
-LICENSE:${PN}-license = "GPL-2.0"
+LICENSE:${PN}-license = "GPL-2.0-only"
 
 FILES:${PN}-bcm43430 = " \
     ${nonarch_base_libdir}/firmware/brcm/brcmfmac43430* \
