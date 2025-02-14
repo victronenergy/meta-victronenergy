@@ -1,0 +1,49 @@
+From 5763a220b23fd83364f3c6127e18bdcd6413967e Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Fri, 14 Feb 2025 08:54:46 +0100
+Subject: [PATCH] disable stat files
+
+---
+ src/stats.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/stats.c b/src/stats.c
+index 26343b13..affbf0b2 100644
+--- a/src/stats.c
++++ b/src/stats.c
+@@ -639,6 +639,7 @@ static int stats_file_close_swap(struct stats_file *history_file,
+ 
+ static int stats_file_history_update(struct stats_file *data_file)
+ {
++/*
+ 	struct stats_file _history_file, *history_file;
+ 	struct stats_file _temp_file, *temp_file;
+ 	int err;
+@@ -666,6 +667,8 @@ static int stats_file_history_update(struct stats_file *data_file)
+ 	err = stats_file_close_swap(history_file, temp_file);
+ 
+ 	return err;
++*/
++	return 0;
+ }
+ 
+ int __connman_stats_service_register(struct connman_service *service)
+@@ -712,6 +715,7 @@ int __connman_stats_service_register(struct connman_service *service)
+ 	/* TODO: Use a global config file instead of hard coded value. */
+ 	file->account_period_offset = 1;
+ 
++/*
+ 	err = stats_open(file, name);
+ 	g_free(name);
+ 	if (err < 0)
+@@ -720,6 +724,7 @@ int __connman_stats_service_register(struct connman_service *service)
+ 	err = stats_file_setup(file);
+ 	if (err < 0)
+ 		goto err;
++*/
+ 
+ 	return 0;
+ 
+-- 
+2.43.0
+

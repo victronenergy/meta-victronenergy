@@ -27,6 +27,7 @@ SRC_URI += "\
     file://0017-do-not-enable-rfkill-block-on-newly-discovered-devic.patch \
     file://0018-restart-daemon-on-wifi-failure.patch \
     file://0019-increase-metric-for-wifi-routes.patch \
+    file://0001-disable-stat-files.patch \
     file://main.conf \
     file://connmand-watch.sh \
 "
