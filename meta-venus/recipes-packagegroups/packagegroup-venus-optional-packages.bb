@@ -10,6 +10,7 @@ DEPENDS += "\
     devmem2 \
     gdb \
     dfu-util \
+    file \
     gpsd \
     git \
     kmscube \
