@@ -1,3 +1,4 @@
-ACTION=="add", SUBSYSTEM=="i2c", KERNEL=="i2c-*", ATTRS{product}=="GX IO[ -]Extender 150", ATTR{new_device}="24c02 0x50", ATTR{new_device}="pcal6416 0x20"
+ACTION=="add", SUBSYSTEM=="i2c", KERNEL=="i2c-*", ATTRS{product}=="GX IO[ -]Extender 150", ATTR{new_device}="24c02 0x50", ATTR{new_device}="pcal6416 0x20", ATTR{new_device}="pca9632 0x62"
 ACTION=="add", SUBSYSTEM=="gpio", ATTR{label}=="*-0020", ATTRS{product}=="GX IO[ -]Extender 150", RUN+="io-extender %k"
-ACTION=="remove", SUBSYSTEM=="gpio", KERNEL=="gpiochip*", RUN+="io-extender %k"
+ACTION=="add", SUBSYSTEM=="leds", ATTRS{product}=="GX IO[ -]Extender 150", RUN+="io-extender %k"
+ACTION=="remove", SUBSYSTEM=="hid", RUN+="io-extender %k"

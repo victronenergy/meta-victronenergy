@@ -1,12 +1,6 @@
 #! /bin/sh
 
 set -e
-
-NAME=$1
-
-DIR=/run/io-ext/$NAME
-CONF=$DIR/pins.conf
-
 R0_PINS="relay_1 2:in 5:set 6:res"
 R1_PINS="relay_2 1:in 3:set 4:res"
 SSR_PINS="ssr_1 0:"
@@ -73,8 +67,6 @@ setup_dio() {
     gpio_base=$(cat $dev/gpio/*/base)
     gpio_base_i2c=$(cat $dev/i2c-*/*-0020/gpio/*/base)
 
-    mkdir -p $DIR
-
     cat >>$CONF <<EOF
 tag	gxio_$serial
 EOF
@@ -86,15 +78,35 @@ EOF
     setup_relay $gpio_base $SSR_PINS
 }
 
+setup_pwm() {
+    path=$(realpath /sys/$DEVPATH)
+    link=$DIR/pwm$(echo $NAME | cut -c 4)
+    ln -s /sys/class/leds/$NAME/brightness $link
+}
+
 case $ACTION in
     add)
-        setup_dio
-        need_restart=1
+        dev=$(realpath /sys/$DEVPATH/../../../..)
+        serial=$(cat $dev/serial)
+        DIR=/run/io-ext/$serial
+        mkdir -p $DIR
+        CONF=$DIR/pins.conf
+        NAME=$1
+
+        if [ "$SUBSYSTEM" == "gpio" ]; then
+            setup_dio
+            need_restart=1
+        elif [ "$SUBSYSTEM" == "leds" ]; then
+            setup_pwm $NAME
+        fi
         ;;
     remove)
-        if [ -e "$DIR" ]; then
-            rm -rf "$DIR"
-            need_restart=1
+        if [ "$HID_NAME" == "Victron Energy BV GX IO-Extender 150" ]; then
+            DIR=/run/io-ext/$HID_UNIQ
+            if [ -e "$DIR" ]; then
+                rm -rf "$DIR"
+                need_restart=1
+            fi
         fi
         ;;
 esac
