@@ -1,16 +1,16 @@
 {
     "name": "@victronenergy/node-red-contrib-victron",
-    "version": "1.6.15",
+    "version": "1.6.16",
     "lockfileVersion": 3,
     "requires": true,
     "packages": {
         "": {
             "name": "@victronenergy/node-red-contrib-victron",
-            "version": "1.6.15",
+            "version": "1.6.16",
             "license": "MIT",
             "dependencies": {
-                "dbus-native-victron": "^0.4.2",
-                "dbus-victron-virtual": "^0.1.8",
+                "dbus-native-victron": "^0.4.3",
+                "dbus-victron-virtual": "^0.1.11",
                 "debug": "^4.4.0",
                 "lodash": "^4.17.21",
                 "promise-retry": "^2.0.1",
@@ -1115,9 +1115,9 @@
             }
         },
         "node_modules/dbus-native-victron": {
-            "version": "0.4.2",
-            "resolved": "https://registry.npmjs.org/dbus-native-victron/-/dbus-native-victron-0.4.2.tgz",
-            "integrity": "sha512-KIO25q60OByuu86OKVnFDE+4NA5ev+XEqvH/FWkqtK2ydVNStoQs8Z6CvAfnE8YwSNFAkHWCT/07XWQK28bW7A==",
+            "version": "0.4.3",
+            "resolved": "https://registry.npmjs.org/dbus-native-victron/-/dbus-native-victron-0.4.3.tgz",
+            "integrity": "sha512-zDKiluaAH9tfAm0APp8Vdgomcbuoxih7omroCWseMoV2bBmuUsNJsMNfdOgWfIXN6hiXyiZfngiYb0RiiiNJKw==",
             "dependencies": {
                 "event-stream": "^4.0.0",
                 "hexy": "^0.2.10",
@@ -1155,11 +1155,11 @@
             }
         },
         "node_modules/dbus-victron-virtual": {
-            "version": "0.1.8",
-            "resolved": "https://registry.npmjs.org/dbus-victron-virtual/-/dbus-victron-virtual-0.1.8.tgz",
-            "integrity": "sha512-DfStrIJhGNTMO9K7YMMopWZ+lWPOLWaaYCkLnRvh/Bn3pPCC5P6vPNBaWWIcx+M/jX5fAauslfbB17z0I7D6Dw==",
+            "version": "0.1.11",
+            "resolved": "https://registry.npmjs.org/dbus-victron-virtual/-/dbus-victron-virtual-0.1.11.tgz",
+            "integrity": "sha512-eqZHJFLG05NVDT5qroAI3+Ps5lsJ1fIwR8CKb9jf8rqO+8c7oynr4u7W6FmdjanbkMVZ1N3wBgHcaE4eG/VWaA==",
             "dependencies": {
-                "dbus-native-victron": "^0.4.2",
+                "dbus-native-victron": "^0.4.3",
                 "debug": "^4.3.7"
             }
         },
