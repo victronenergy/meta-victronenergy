@@ -6,7 +6,10 @@ SECTION = "net"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://src/${GO_IMPORT}/LICENSE;md5=d995c1c44529856a0f35a5ad43e51cc5"
 
-SRC_URI = "git://github.com/tailscale/tailscale.git;protocol=https;nobranch=1;tag=v${PV};destsuffix=git/src/${GO_IMPORT}"
+SRC_URI = "\
+        git://github.com/tailscale/tailscale.git;protocol=https;nobranch=1;tag=v${PV};destsuffix=git/src/${GO_IMPORT} \
+        file://start-tailscaled.sh \
+"
 S = "${WORKDIR}/git"
 
 GO_IMPORT = "tailscale.com"
@@ -29,7 +32,7 @@ INSANE_SKIP_${PN} += "already-stripped"
 
 inherit go go-mod daemontools
 
-DAEMONTOOLS_RUN = "${sbindir}/tailscaled -no-logs-no-support -statedir /data/conf/tailscale"
+DAEMONTOOLS_RUN = "/usr/bin/start-tailscaled.sh"
 DAEMONTOOLS_DOWN = "1"
 
 do_compile[network] = "1"
@@ -37,7 +40,8 @@ do_compile[network] = "1"
 do_install() {
     install -d ${D}/${bindir}
     install -d ${D}/${sbindir}
-    install -m 755 ${B}/bin/linux_arm/tailscaled ${D}/${sbindir}/tailscaled
+    install -m 0755 ${B}/bin/linux_arm/tailscaled ${D}/${sbindir}/tailscaled
+    install -m 0755 ${WORKDIR}/start-tailscaled.sh ${D}${bindir}
     ln -s -r ${D}/${sbindir}/tailscaled ${D}/${bindir}/tailscale
 }
 
