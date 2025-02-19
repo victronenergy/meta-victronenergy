@@ -16,6 +16,7 @@ RDEPENDS:${PN} += " \
     libevent-dev \
     libusb1-dev \
     neatvnc-dev \
+    iptables-dev \
 "
 
 # qt6
