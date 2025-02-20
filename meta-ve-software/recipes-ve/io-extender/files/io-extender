@@ -1,9 +1,10 @@
 #! /bin/sh
 
 set -e
+
 R0_PINS="relay_1 2:in 5:set 6:res"
 R1_PINS="relay_2 1:in 3:set 4:res"
-SSR_PINS="ssr_1 0:"
+SSR_PINS="ssr_3 0:"
 
 G0_PINS="9 0:1 1:2 2:3 3:4"
 G1_PINS="8 11:5 12:6 13:7 14:8"
@@ -59,6 +60,10 @@ setup_relay() {
         link=$DIR/$label${n:+_$n}
         ln -s /sys/class/gpio/gpio$gpio $link
     done
+
+    link=$DIR/$label
+    n=${label#*_}
+    echo "relay	$link \"GX I/O $serial relay $n\"" >>$CONF
 }
 
 setup_dio() {
@@ -67,22 +72,25 @@ setup_dio() {
     gpio_base=$(cat $dev/gpio/*/base)
     gpio_base_i2c=$(cat $dev/i2c-*/*-0020/gpio/*/base)
 
-    cat >>$CONF <<EOF
-tag	gxio_$serial
-EOF
-
     setup_group $gpio_base_i2c $G0_PINS
     setup_group $gpio_base_i2c $G1_PINS
     setup_relay $gpio_base $R0_PINS
     setup_relay $gpio_base $R1_PINS
     setup_relay $gpio_base $SSR_PINS
+
+    # Insert tag at the first line of the conf file.
+    sed  -i "1i tag gxio_$serial" $CONF
 }
 
 setup_pwm() {
     path=$(realpath /sys/$DEVPATH)
-    link=$DIR/pwm$(echo $NAME | cut -c 4)
+    n=$(echo $NAME | cut -c 4)
+    link=$DIR/pwm$n
     ln -s /sys/class/leds/$NAME/brightness $link
+
+    echo "pwm	$link \"GX I/O $serial pwm $(($n+1))\"" >>$CONF
 }
+
 
 case $ACTION in
     add)
@@ -98,6 +106,7 @@ case $ACTION in
             need_restart=1
         elif [ "$SUBSYSTEM" == "leds" ]; then
             setup_pwm $NAME
+            need_restart=1
         fi
         ;;
     remove)
@@ -114,4 +123,6 @@ esac
 if [ "$need_restart" = 1 ]; then
     svc -t /service/dbus-digitalinputs
     svc -u /service/dbus-digitalinputs
+    svc -t /service/dbus-io
+    svc -u /service/dbus-io
 fi
