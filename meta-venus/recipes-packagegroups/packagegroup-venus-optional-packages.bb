@@ -22,6 +22,7 @@ DEPENDS += "\
     packagegroup-replace-busybox \
     perf \
     python3-can \
+    python3-cbor2 \
     python3-dbus-fast \
     python3-pip \
     python3-pylint \
