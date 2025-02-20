@@ -13,7 +13,7 @@ if [ -d /run/io-ext ]; then
 fi
 
 if [ -z "$*" ]; then
-    svd -d .
+    svc -d .
     exit 0
 fi
 
