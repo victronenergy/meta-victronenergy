@@ -1,0 +1,28 @@
+From cefd8bd3b2dd439c680710af6c75b53554636686 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Fri, 21 Feb 2025 11:55:31 +0100
+Subject: [PATCH 2/2] make use of the common lock dir
+
+Since pppd doesn't create the dir hierarchy, writing the lock files fails.
+
+Upstream-Status: Inappropriate [Venus specific]
+---
+ pppd/pathnames.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pppd/pathnames.h b/pppd/pathnames.h
+index 5f9e248..d39f633 100644
+--- a/pppd/pathnames.h
++++ b/pppd/pathnames.h
+@@ -120,7 +120,7 @@
+ #define PPP_PATH_PPPDB          PPP_PATH_VARRUN  "/pppd2.tdb"
+ 
+ #ifdef __linux__
+-#define PPP_PATH_LOCKDIR        PPP_PATH_VARRUN  "/lock"
++#define PPP_PATH_LOCKDIR        _PATH_VARRUN  "/lock"
+ #else
+ #ifdef SVR4
+ #define PPP_PATH_LOCKDIR        LOCALSTATEDIR "/spool/locks"
+-- 
+2.43.0
+

@@ -4,6 +4,8 @@ inherit daemontools
 
 SRC_URI += "\
     file://0002-pppd-clear-resolv.conf-on-link-down.patch \
+    file://0001-move-resolv.conf-to-var-run-pppd.patch \
+    file://0002-make-use-of-the-common-lock-dir.patch \
 "
 
 DAEMONTOOLS_RUN = "${sbindir}/pppd call provider nodetach"

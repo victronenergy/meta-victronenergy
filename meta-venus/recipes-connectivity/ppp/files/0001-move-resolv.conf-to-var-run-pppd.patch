@@ -1,0 +1,28 @@
+From 193b708083796b7fed96ff624565900b991daaa8 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Fri, 21 Feb 2025 11:52:37 +0100
+Subject: [PATCH 1/2] move resolv.conf to /var/run/pppd
+
+/etc/ppp can't be written to in case of a readonly rootfs.
+
+Upstream-Status: Inappropriate [Venus specific]
+---
+ pppd/pathnames.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pppd/pathnames.h b/pppd/pathnames.h
+index de2fb68..5f9e248 100644
+--- a/pppd/pathnames.h
++++ b/pppd/pathnames.h
+@@ -105,7 +105,7 @@
+ #define PPP_PATH_AUTHDOWN       PPP_PATH_CONFDIR "/auth-down"
+ #define PPP_PATH_TTYOPT         PPP_PATH_CONFDIR "/options."
+ #define PPP_PATH_PEERFILES      PPP_PATH_CONFDIR "/peers/"
+-#define PPP_PATH_RESOLV         PPP_PATH_CONFDIR "/resolv.conf"
++#define PPP_PATH_RESOLV         _PATH_VARRUN "/ppp/resolv.conf"
+ 
+ #define PPP_PATH_CONNERRS       PPP_PATH_VARLOG  "/connect-errors"
+ 
+-- 
+2.43.0
+
