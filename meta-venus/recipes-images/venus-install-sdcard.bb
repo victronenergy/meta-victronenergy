@@ -33,8 +33,9 @@ IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
 IMAGE_NAME[vardepsexclude] += "DATETIME"
 
 python () {
-    dtb = d.getVar('KERNEL_DEVICETREE').split()
-    d.setVar('DTB', ' '.join(map(os.path.basename, dtb)))
+    if d.getVar('KERNEL_DEVICETREE'):
+        dtb = d.getVar('KERNEL_DEVICETREE').split()
+        d.setVar('DTB', ' '.join(map(os.path.basename, dtb)))
 }
 
 INSTALL_FILES = "\
