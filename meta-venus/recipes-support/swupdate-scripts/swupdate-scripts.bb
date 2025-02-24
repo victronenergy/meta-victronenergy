@@ -18,6 +18,7 @@ SRC_URI = " \
     file://set-feed.sh \
     file://set-swu-feed.sh \
     file://set-version.sh \
+    file://storage-size.sh \
 "
 
 S = "${WORKDIR}/sources"
@@ -37,6 +38,7 @@ do_install () {
     install -m 0755 ${UNPACKDIR}/set-feed.sh      ${DEST}/set-feed.sh
     install -m 0755 ${UNPACKDIR}/set-swu-feed.sh  ${DEST}/set-swu-feed.sh
     install -m 0755 ${UNPACKDIR}/set-version.sh   ${DEST}/set-version.sh
+    install -m 0755 ${UNPACKDIR}/storage-size.sh  ${DEST}/storage-size.sh
 
     DEST=${D}${sysconfdir}/init.d
     install -d ${DEST}
