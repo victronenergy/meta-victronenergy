@@ -13,6 +13,10 @@ IMAGE_FEATURES += "read-only-rootfs"
 
 BAD_RECOMMENDATIONS += "${@'' if d.getVar('VENUS_GPU') == '1' else 'mesa-megadriver'}"
 
+# usbutils recommends the hwdb to print usb manufacturer names, but that db is rather
+# large so don't install it by default.
+BAD_RECOMMENDATIONS += "eudev-hwdb"
+
 IMAGE_LINGUAS = "en-us"
 COPY_LIC_DIRS = "0"
 
