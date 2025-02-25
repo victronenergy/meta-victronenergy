@@ -8,7 +8,7 @@ RDEPENDS:${PN} += "bash nodejs-npm util-linux-setpriv"
 
 SRC_URI = "\
     npm://registry.npmjs.org;package=${BPN};version=${PV} \
-    file://add-venus-os-preinstalled-plugins.patch \
+    file://modify-base-plugins-webapps.patch \
     file://npm-shrinkwrap.json;subdir=${S} \
     file://defaults.json \
     file://get-mfd-announce-address.sh \

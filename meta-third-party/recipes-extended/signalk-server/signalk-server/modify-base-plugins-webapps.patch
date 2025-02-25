@@ -1,0 +1,39 @@
+From 658e11b8ae42ec84c6eee2f957aac334dbb9d4f2 Mon Sep 17 00:00:00 2001
+From: Mark Bath <mark@baggywrinkle.co.uk>
+Date: Tue, 25 Feb 2025 13:45:52 +0000
+Subject: [PATCH] modify base plugins/webapps
+
+---
+ package.json | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/package.json b/package.json
+index 68e629ca..ad149196 100644
+--- a/package.json
++++ b/package.json
+@@ -123,18 +123,17 @@
+     "swagger-ui-express": "^4.5.0",
+     "unzipper": "^0.10.10",
+     "uuid": "^8.1.0",
+-    "ws": "^7.0.0"
++    "ws": "^7.0.0",
++    "signalk-n2kais-to-nmea0183": "1.5.0",
++    "signalk-venus-plugin": "1.43.0"
+   },
+   "optionalDependencies": {
+-    "@signalk/freeboard-sk": "^2.0.0-beta.3",
+-    "@mxtommy/kip": "^2.9.1",
+-    "@signalk/instrumentpanel": "0.x",
+     "@signalk/set-system-time": "^1.2.0",
+     "@signalk/signalk-to-nmea0183": "^1.0.0",
+     "@signalk/vesselpositions": "^1.0.0",
+     "@signalk/udp-nmea-plugin": "^2.0.0",
+     "signalk-to-nmea2000": "^2.16.0",
+-    "signalk-n2kais-to-nmea0183": "^1.3.1",
++    "signalk-n2kais-to-nmea0183": "^1.5.0",
+     "mdns": "^2.5.1",
+     "serialport": "^11.0.0"
+   },
+-- 
+2.43.0
+
