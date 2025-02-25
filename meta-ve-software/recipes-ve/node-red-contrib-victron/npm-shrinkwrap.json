@@ -1,16 +1,16 @@
 {
     "name": "@victronenergy/node-red-contrib-victron",
-    "version": "1.6.16",
+    "version": "1.6.17",
     "lockfileVersion": 3,
     "requires": true,
     "packages": {
         "": {
             "name": "@victronenergy/node-red-contrib-victron",
-            "version": "1.6.16",
+            "version": "1.6.17",
             "license": "MIT",
             "dependencies": {
                 "dbus-native-victron": "^0.4.3",
-                "dbus-victron-virtual": "^0.1.11",
+                "dbus-victron-virtual": "^0.1.12",
                 "debug": "^4.4.0",
                 "lodash": "^4.17.21",
                 "promise-retry": "^2.0.1",
@@ -1155,9 +1155,9 @@
             }
         },
         "node_modules/dbus-victron-virtual": {
-            "version": "0.1.11",
-            "resolved": "https://registry.npmjs.org/dbus-victron-virtual/-/dbus-victron-virtual-0.1.11.tgz",
-            "integrity": "sha512-eqZHJFLG05NVDT5qroAI3+Ps5lsJ1fIwR8CKb9jf8rqO+8c7oynr4u7W6FmdjanbkMVZ1N3wBgHcaE4eG/VWaA==",
+            "version": "0.1.12",
+            "resolved": "https://registry.npmjs.org/dbus-victron-virtual/-/dbus-victron-virtual-0.1.12.tgz",
+            "integrity": "sha512-et6irPH6mERcfOX8JTuBOq3SbGWKFw4l8NbBTd5cMy07o51jH/e2Nez3+x1EbXT3rD9ZWW6NUoglaKW9oriHhw==",
             "dependencies": {
                 "dbus-native-victron": "^0.4.3",
                 "debug": "^4.3.7"
