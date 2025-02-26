@@ -56,7 +56,6 @@ RDEPENDS:${PN} += "\
     haveged \
     io-extender \
     iproute2 \
-    iw \
     javascript-vnc-client \
     ldd \
     less \
@@ -83,7 +82,6 @@ RDEPENDS:${PN} += "\
     rtl8192eu \
     screen \
     socat \
-    strace \
     sysctl-conf \
     tzdata-africa \
     tzdata-americas \

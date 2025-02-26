@@ -13,6 +13,7 @@ DEPENDS += "\
     file \
     gpsd \
     git \
+    iw \
     kmscube \
     lsof \
     nodejs \
@@ -30,6 +31,7 @@ DEPENDS += "\
     qtmqtt \
     s6 \
     start-sway \
+    strace \
     tcpdump \
     tinymembench \
     tmux \
