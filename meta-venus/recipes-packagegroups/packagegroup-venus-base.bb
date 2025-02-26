@@ -85,7 +85,6 @@ RDEPENDS:${PN} += "\
     socat \
     strace \
     sysctl-conf \
-    tzdata \
     tzdata-africa \
     tzdata-americas \
     tzdata-antarctica \
@@ -93,6 +92,7 @@ RDEPENDS:${PN} += "\
     tzdata-asia \
     tzdata-atlantic \
     tzdata-australia \
+    tzdata-core \
     tzdata-europe \
     tzdata-pacific \
     usbutils \
