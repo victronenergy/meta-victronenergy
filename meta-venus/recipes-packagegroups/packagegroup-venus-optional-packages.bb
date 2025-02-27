@@ -13,6 +13,7 @@ DEPENDS += "\
     file \
     gpsd \
     git \
+    htop \
     iw \
     kmscube \
     lsof \
