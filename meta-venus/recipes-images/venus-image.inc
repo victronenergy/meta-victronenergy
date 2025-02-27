@@ -17,6 +17,9 @@ BAD_RECOMMENDATIONS += "${@'' if d.getVar('VENUS_GPU') == '1' else 'mesa-megadri
 # large so don't install it by default.
 BAD_RECOMMENDATIONS += "eudev-hwdb"
 
+# glib recommends shared-mime-info, but there is no known user of it...
+BAD_RECOMMENDATIONS += "shared-mime-info"
+
 IMAGE_LINGUAS = "en-us"
 COPY_LIC_DIRS = "0"
 
