@@ -14,7 +14,7 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-characterdisplay.git;branch=master;protocol=https \
     file://start-characterdisplay.sh \
 "
-SRCREV = "ec4c835b71681045100b3d28f2ea4f05a5660bd7"
+SRCREV = "35fb7f1db71bd05add5c38856d1fe8262b367075"
 
 S = "${WORKDIR}/git"
 
