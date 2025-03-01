@@ -29,6 +29,7 @@ RDEPENDS:${PN}:append:canvu500 = "\
 
 RDEPENDS:${PN}:append:ccgx = "\
     gpio-export \
+    haveged \
     mtd-utils \
     mtd-utils-ubifs \
     swupdate \
