@@ -74,7 +74,7 @@ finish() {
 }
 
 # make sure interface exists
-iw dev ap0 info >/dev/null 2>&1 || stop
+ip link show ap0 >/dev/null 2>&1 || stop
 
 gen_config || stop
 
