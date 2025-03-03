@@ -1,0 +1,56 @@
+From d5eb3a8aac59e936c512e0b1d5a7f9baae4d35ed Mon Sep 17 00:00:00 2001
+From: Daniel McInnes <daniel.mcinnes@qinetic.com.au>
+Date: Mon, 17 Feb 2025 09:30:44 +1000
+Subject: [PATCH] Convert dbus writes to integer values when appropriate
+
+When writing values to dbus, if the underlying dbus type is 'integer', convert
+the new value to 'integer' before sending the message to dbus.
+
+Fixes #1899
+---
+ src/qt/ve_qitems_dbus.cpp | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/src/qt/ve_qitems_dbus.cpp b/src/qt/ve_qitems_dbus.cpp
+index 6d2d3c7..f1ea890 100644
+--- a/src/qt/ve_qitems_dbus.cpp
++++ b/src/qt/ve_qitems_dbus.cpp
+@@ -439,6 +439,9 @@ QVariant VeQItemDbus::itemProperty(const char *name, bool force)
+ 
+ void VeQItemDbus::setValueDone(QDBusPendingCallWatcher *call)
+ {
++	if (call->error().type() != QDBusError::NoError) {
++		qDebug() << __PRETTY_FUNCTION__ << " call->error().name(): " << call->error().name();
++	}
+ 	call->deleteLater();
+ }
+ 
+@@ -449,16 +452,24 @@ int VeQItemDbus::setValue(const QVariant &value)
+ 		return -1;
+ 	}
+ 
++	bool newValueValid = true;
++	QVariant newValue = (getValue().typeId() == QMetaType::Int && value.typeId() != QMetaType::Int) ? value.toInt(&newValueValid) : value;
++
++	if (!newValueValid) {
++		qWarning() << "cannot convert" << value << "to integer - service may reject value update";
++		newValue = value;
++	}
++
+ 	// no need to set values to the same again
+-	if (mState == Storing && mPendingSetValue == value)
++	if (mState == Storing && mPendingSetValue == newValue)
+ 		return 0;
+ 
+-	mPendingSetValue = value;
++	mPendingSetValue = newValue;
+ 	setState(Storing);
+ 
+ 	QDBusMessage msg = QDBusMessage::createMethodCall(mDbusService->owner(), dbusPath(), "com.victronenergy.BusItem", "SetValue");
+-	if (value.isValid()) {
+-		msg << QVariant::fromValue(QDBusVariant(value));
++	if (newValue.isValid()) {
++		msg << QVariant::fromValue(QDBusVariant(newValue));
+ 	} else {
+ 		QDBusArgument invalid;
+ 		invalid.beginArray(qMetaTypeId<int>());

@@ -21,9 +21,11 @@ DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec softlimit -d 768000000 -s 
 
 SRC_URI = " \
 	gitsm://github.com/victronenergy/gui-v2.git;branch=v3.50;protocol=ssh;user=git;tag=v${PV} \
+	file://convert-dbus-writes-to-integer-values-when-appropriate.patch;patchdir=src/veutil \
 "
 S = "${WORKDIR}/git"
 EXTRA_OECMAKE = "-DNO_CACHEGEN=true -DLOAD_QML_FROM_FILESYSTEM=true"
+PR = "1"
 
 do_install:append() {
 	rm -r ${D}/usr
