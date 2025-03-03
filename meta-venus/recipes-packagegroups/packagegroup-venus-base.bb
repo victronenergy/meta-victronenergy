@@ -83,6 +83,8 @@ RDEPENDS:${PN} += "\
     screen \
     socat \
     sysctl-conf \
+    tailscale \
+    tailscale-control \
     tzdata-africa \
     tzdata-americas \
     tzdata-antarctica \
