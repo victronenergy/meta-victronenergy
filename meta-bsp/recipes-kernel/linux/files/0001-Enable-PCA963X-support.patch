@@ -1,0 +1,25 @@
+From 154e6d5dafef455ed2c3ef61ab2bc2ad0ad95535 Mon Sep 17 00:00:00 2001
+From: ReinvdZee <rvanderzee@victronenergy.com>
+Date: Tue, 11 Feb 2025 11:47:25 +0100
+Subject: [PATCH] Enable PCA963X support
+
+For the IO extender PWM outputs
+---
+ Kconfig.venus | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Kconfig.venus b/Kconfig.venus
+index d3412b5338e2..a7f27958f47c 100644
+--- a/Kconfig.venus
++++ b/Kconfig.venus
+@@ -135,6 +135,7 @@ config VENUS
+ 	select LEDS_TRIGGER_DEFAULT_ON
+ 	select LEDS_TRIGGER_TIMER
+ 	select LEDS_TRIGGER_SYNC_BLINK
++	select LEDS_PCA963X
+ 
+ 	# misc device options
+ 	select EEPROM_AT24
+-- 
+2.34.1
+
