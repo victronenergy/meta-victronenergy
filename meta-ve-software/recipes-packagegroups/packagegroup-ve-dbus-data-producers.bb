@@ -21,6 +21,7 @@ RRECOMMENDS:${PN} += " \
     dbus-bornay-windplus \
     dbus-cgwacs \
     dbus-digitalinputs \
+    dbus-switch \
     dbus-fronius \
     dbus-imt-si-rs485tc \
     dbus-modbus-client \
