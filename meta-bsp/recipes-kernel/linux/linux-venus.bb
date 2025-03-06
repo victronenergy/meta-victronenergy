@@ -17,6 +17,20 @@ PV = "${LINUX_VERSION}${LINUX_VERSION_EXTENSION}"
 GIT_BRANCH = "venus-${LINUX_VERSION}"
 
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=${GIT_BRANCH};tag=v${PV}"
+<<<<<<< HEAD
+=======
+SRC_URI += " \
+	file://0001-gcc-plugins-remove-code-for-GCC-versions-older-than-.patch \
+	file://0002-gcc-plugins-remove-support-for-GCC-4.9-and-older.patch \
+	file://0003-gcc-plugins-remove-duplicate-include-in-gcc-common.h.patch \
+	file://0004-gcc-plugins-Reorganize-gimple-includes-for-GCC-13.patch \
+	file://0001-work-around-for-too-few-arguments-to-function-init_d.patch \
+	file://0001-ata-ahci-fix-enum-constants-for-gcc-13.patch \
+	file://wifi_cfg80211_certificate.patch \
+	file://0001-Enable-PCA963X-support.patch \
+	file://0001-leds-pca9632-default-initialization.patch \
+"
+>>>>>>> 9f7bcec4 (dbus-switch v0.4)
 S = "${WORKDIR}/git"
 
 do_configure:append() {

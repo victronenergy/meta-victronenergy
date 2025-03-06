@@ -5,28 +5,17 @@ R0_PINS="relay_1 2:in 5:set 6:res"
 R1_PINS="relay_2 1:in 3:set 4:res"
 SSR_PINS="ssr_3 0:"
 
+ALL_PINS="0:1 1:2 2:3 3:4 11:5 12:6 13:7 14:8 8:g1 9:g0 15:pwm_en"
 G0_PINS="9 0:1 1:2 2:3 3:4"
 G1_PINS="8 11:5 12:6 13:7 14:8"
 PWM_EN_PIN=15
 
 setup_group() (
     gpio_base=$1
-    dirpin=$2
-    shift 2
+    shift 1
 
-    dirgpio=$((gpio_base + dirpin))
-    echo $dirgpio >/sys/class/gpio/export
-    dir=/sys/class/gpio/gpio$dirgpio
-    echo in >$dir/direction
-    dirval=$(cat $dir/value)
-
-    if [ $dirval = 0 ]; then
-        direction=low
-        label=output
-    else
-        direction=in
-        label=input
-    fi
+    direction=in
+    label=io
 
     for pin; do
         p=${pin%:*}
@@ -64,6 +53,35 @@ setup_relay() {
     link=$DIR/$label
     n=${label#*_}
     echo "relay	$link $n" >>$CONF
+
+    
+}
+
+create_relay_script()
+{
+    n=$1
+    file=$DIR/relay_$n.sh
+    cat > $file <<-EOF
+    #! /bin/sh
+    if [ \$# -lt 1 ]; then
+        echo \$(cat relay_${n}_in/value)
+        exit 0
+    fi
+    n=\$1
+    echo 0 > relay_${n}_res/value
+    echo 0 > relay_${n}_set/value
+    if [ "\$n" = 1 ]; then
+        echo 1 > relay_${n}_set/value
+    else
+        echo 1 > relay_${n}_res/value
+    fi
+    sleep 0.5
+    echo 0 > relay_${n}_res/value
+    echo 0 > relay_${n}_set/value
+    echo \$(cat relay_${n}_in/value)
+EOF
+
+    chmod +x $file
 }
 
 setup_dio() {
@@ -72,19 +90,18 @@ setup_dio() {
     gpio_base=$(cat $dev/gpio/*/base)
     gpio_base_i2c=$(cat $dev/i2c-*/*-0020/gpio/*/base)
 
-    setup_group $gpio_base_i2c $G0_PINS
-    setup_group $gpio_base_i2c $G1_PINS
+    setup_group $gpio_base_i2c $ALL_PINS
     setup_relay $gpio_base $R0_PINS
     setup_relay $gpio_base $R1_PINS
     setup_relay $gpio_base $SSR_PINS
+    create_relay_script 1
+    create_relay_script 2
 
-    # PWN enable pin
+    # PWN enable pin, set to output and set high
     gpio=$((gpio_base_i2c + PWM_EN_PIN))
-    echo $gpio >/sys/class/gpio/export
     echo out >/sys/class/gpio/gpio$gpio/direction
     # Enable PWM by default
-    echo 0 >/sys/class/gpio/gpio$gpio/value
-
+    echo 1 >/sys/class/gpio/gpio$gpio/value
 
     # Insert tag at the first line of the conf file.
     sed  -i "1i tag $serial" $CONF
