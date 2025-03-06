@@ -43,7 +43,7 @@ SMALL_ROOT_SIZE=1280
 LARGE_ROOT_SIZE=2048
 
 # size of root partitions in MB
-ROOT_SIZE=$SMALL_ROOT_SIZE
+ROOT_SIZE=
 
 # name of board id nvmem device
 #BOARD_ID_DEV=
