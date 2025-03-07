@@ -11,7 +11,7 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git \
     file://can.inc \
 "
-SRCREV = "bda14dc76b2de4289f87b315d2c24d5857475c97"
+SRCREV = "621fed2b5715e8b98c7791e24a0ae0df935f84d2"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/venus-platform"
