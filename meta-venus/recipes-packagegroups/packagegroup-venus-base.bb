@@ -69,7 +69,6 @@ RDEPENDS:${PN} += "\
     logo \
     nano \
     ncurses-tools \
-    netmon \
     openssh \
     openssh-sftp-server \
     opkg \

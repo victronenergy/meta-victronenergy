@@ -94,3 +94,12 @@ RDEPENDS:${PN}:append:rpi = "\
     swupdate-scripts \
     wireless-regdb-static \
 "
+
+# netmon provides a workaround for an problem solved years ago
+# and it is a open issue if the package shouldn't be dropped.
+# Since it requires quite some resources with the scarthgap
+# python version, drop it for the devices with little memory.
+NETMON = "netmon"
+NETMON:ccgx = ""
+NETMON:canvu500 = ""
+RDEPENDS:${PN}:append = "${NETMON}"
