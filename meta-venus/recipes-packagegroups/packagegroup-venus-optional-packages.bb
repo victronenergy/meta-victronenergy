@@ -17,7 +17,6 @@ DEPENDS += "\
     iw \
     kmscube \
     lsof \
-    nodejs \
     ntp \
     openvpn \
     packagegroup-core-buildessential \
