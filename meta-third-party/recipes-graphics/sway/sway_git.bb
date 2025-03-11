@@ -4,7 +4,9 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=dfc67e5b1fa10ebb4b70eb0c0ca67bea"
 
 DEPENDS += "cairo libpcre libevdev libinput libxkbcommon json-c pango virtual/libgles2 wayland wayland-native wayland-protocols wlroots"
 
-inherit meson
+inherit meson pkgconfig
+
+MESONOPTS += "-Dwerror=false"
 
 SRC_URI = " \
     git://github.com/swaywm/sway;protocol=https;branch=v1.5 \
