@@ -10,6 +10,7 @@ Gui/BriefView/Level/1 0 i 0 1000
 Gui/BriefView/Level/2 1 i 0 1000
 Gui/BriefView/Level/3 5 i 0 1000
 Gui/BriefView/ShowPercentages 0 i 0 1
+Gui2/BriefView/CenterService s ""
 
 # 0 = None, 1 = Absolute, 2 = Percentage
 Gui/BriefView/Unit 2 i 0 2
