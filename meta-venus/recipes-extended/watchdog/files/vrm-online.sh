@@ -3,14 +3,14 @@
 get_value() {
     dbus-send --print-reply=literal --system --type=method_call \
               --dest=com.victronenergy.$1 $2 \
-              com.victronenergy.BusItem.GetValue |
+              com.victronenergy.BusItem.GetValue 2> /dev/null |
         awk '/int32/ { print $3 }'
 }
 
 do_test() {
     timeout=$(get_value settings /Settings/Watchdog/VrmTimeout)
 
-    if [ "$timeout" = 0 ]; then
+    if [ "$timeout" = 0 ] || [ "$timeout" = "" ] ; then
         # watchdog disabled
         exit 0
     fi
