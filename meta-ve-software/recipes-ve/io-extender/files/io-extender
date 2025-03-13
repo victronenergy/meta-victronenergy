@@ -1,0 +1,137 @@
+#! /bin/sh
+
+set -e
+R0_PINS="relay_1 2:in 5:set 6:res"
+R1_PINS="relay_2 1:in 3:set 4:res"
+SSR_PINS="ssr_3 0:"
+
+G0_PINS="9 0:1 1:2 2:3 3:4"
+G1_PINS="8 11:5 12:6 13:7 14:8"
+PWM_EN_PIN=15
+
+setup_group() (
+    gpio_base=$1
+    dirpin=$2
+    shift 2
+
+    dirgpio=$((gpio_base + dirpin))
+    echo $dirgpio >/sys/class/gpio/export
+    dir=/sys/class/gpio/gpio$dirgpio
+    echo in >$dir/direction
+    dirval=$(cat $dir/value)
+
+    if [ $dirval = 0 ]; then
+        direction=low
+        label=output
+    else
+        direction=in
+        label=input
+    fi
+
+    for pin; do
+        p=${pin%:*}
+        n=${pin#*:}
+        gpio=$((gpio_base + p))
+        echo $gpio >/sys/class/gpio/export
+        echo $direction >/sys/class/gpio/gpio$gpio/direction
+        link=$DIR/${label}_$n
+        ln -s /sys/class/gpio/gpio$gpio $link
+        echo "$label	$link $n" >>$CONF
+    done
+)
+
+setup_relay() {
+    gpio_base=$1
+    label=$2
+    shift 2
+
+    for pin; do
+        p=${pin%:*}
+        n=${pin#*:}
+        gpio=$((gpio_base + p))
+
+        case $n in
+            in) direction=in  ;;
+            *)  direction=low ;;
+        esac
+
+        echo $gpio >/sys/class/gpio/export
+        echo $direction >/sys/class/gpio/gpio$gpio/direction
+        link=$DIR/$label${n:+_$n}
+        ln -s /sys/class/gpio/gpio$gpio $link
+    done
+
+    link=$DIR/$label
+    n=${label#*_}
+    echo "relay	$link $n" >>$CONF
+}
+
+setup_dio() {
+    dev=$(realpath /sys/$DEVPATH/../../../..)
+    serial=$(cat $dev/serial)
+    gpio_base=$(cat $dev/gpio/*/base)
+    gpio_base_i2c=$(cat $dev/i2c-*/*-0020/gpio/*/base)
+
+    setup_group $gpio_base_i2c $G0_PINS
+    setup_group $gpio_base_i2c $G1_PINS
+    setup_relay $gpio_base $R0_PINS
+    setup_relay $gpio_base $R1_PINS
+    setup_relay $gpio_base $SSR_PINS
+
+    # PWN enable pin
+    gpio=$((gpio_base_i2c + PWM_EN_PIN))
+    echo $gpio >/sys/class/gpio/export
+    echo out >/sys/class/gpio/gpio$gpio/direction
+    # Enable PWM by default
+    echo 0 >/sys/class/gpio/gpio$gpio/value
+
+
+    # Insert tag at the first line of the conf file.
+    sed  -i "1i tag $serial" $CONF
+}
+
+setup_pwm() {
+    path=$(realpath /sys/$DEVPATH)
+    n=$(echo $NAME | cut -c 4)
+    link=$DIR/pwm$n
+    ln -s /sys/class/leds/$NAME/brightness $link
+
+    echo "pwm	$link $(($n+1))" >>$CONF
+}
+
+case $ACTION in
+    add)
+        dev=$(realpath /sys/$DEVPATH/../../../..)
+        serial=$(cat $dev/serial)
+        DIR=/run/io-ext/$serial
+        mkdir -p $DIR
+        CONF=$DIR/pins.conf
+        NAME=$1
+
+        if [ "$SUBSYSTEM" == "gpio" ]; then
+            setup_dio
+            need_restart=1
+
+            mkdir -p /dev/io-ext/
+            ln -s $DIR /dev/io-ext
+        elif [ "$SUBSYSTEM" == "leds" ]; then
+            setup_pwm $NAME
+            need_restart=1
+        fi
+        ;;
+    remove)
+        if [ "$HID_NAME" == "Victron Energy BV GX IO-Extender 150" ]; then
+            DIR=/run/io-ext/$HID_UNIQ
+            if [ -e "$DIR" ]; then
+                rm -rf /dev/io-ext/$HID_UNIQ
+                rm -rf "$DIR"
+                need_restart=1
+            fi
+        fi
+        ;;
+esac
+
+if [ "$need_restart" = 1 ]; then
+    svc -t /service/dbus-digitalinputs
+    svc -u /service/dbus-digitalinputs
+fi
