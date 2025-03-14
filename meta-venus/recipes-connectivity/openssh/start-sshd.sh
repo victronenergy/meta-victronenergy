@@ -3,6 +3,9 @@
 if [ ! -d /data/keys ]; then
 	mkdir /data/keys
 	chmod 700 /data/keys
+else
+	rm -f /data/keys/ssh_host_dsa_key
+	rm -f /data/keys/ssh_host_dsa_key.pub
 fi
 
 check_key() (
@@ -28,7 +31,6 @@ gen_key() {
 echo "*** Create keys if necessary..."
 gen_key rsa
 gen_key ecdsa
-gen_key dsa
 
 echo "*** Create the PrivSep empty dir if necessary..."
 if [ ! -d /var/run/sshd ]; then
@@ -37,4 +39,4 @@ if [ ! -d /var/run/sshd ]; then
 fi
 
 echo "*** Starting sshd..."
-exec /usr/sbin/sshd -D -e -f /etc/ssh/sshd_config -h /data/keys/ssh_host_rsa_key -h /data/keys/ssh_host_ecdsa_key -h /data/keys/ssh_host_dsa_key
+exec /usr/sbin/sshd -D -e -f /etc/ssh/sshd_config -h /data/keys/ssh_host_rsa_key -h /data/keys/ssh_host_ecdsa_key
