@@ -5,7 +5,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 
-RDEPENDS:${PN} += "\
+DEPENDS += "\
     bc \
     devmem2 \
     gdb \
