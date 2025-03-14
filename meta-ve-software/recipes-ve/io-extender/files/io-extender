@@ -110,23 +110,24 @@ case $ACTION in
 
         if [ "$SUBSYSTEM" == "gpio" ]; then
             setup_dio
+
+            # Install service
+            /opt/victronenergy/venus-platform/svectl -s dbus-switch -D SERIAL=$serial
+            
             need_restart=1
 
-            mkdir -p /dev/io-ext/
-            ln -s $DIR /dev/io-ext
         elif [ "$SUBSYSTEM" == "leds" ]; then
             setup_pwm $NAME
             need_restart=1
         fi
+        svc -t /service/dbus-switch.$serial
         ;;
     remove)
         if [ "$HID_NAME" == "Victron Energy BV GX IO-Extender 150" ]; then
             DIR=/run/io-ext/$HID_UNIQ
             if [ -e "$DIR" ]; then
-                rm -rf /dev/io-ext/$HID_UNIQ
                 rm -rf "$DIR"
-                # Terminate the dbus-switch service from here. Serial starter will restart it when reconnected.
-                svc -d /service/dbus-switch.$HID_UNIQ &>/dev/null
+                /opt/victronenergy/venus-platform/svectl -r -s dbus-switch -D SERIAL=$HID_UNIQ
                 need_restart=1
             fi
         fi
