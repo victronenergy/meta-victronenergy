@@ -53,6 +53,7 @@ RDEPENDS:${PN} += "\
     ftdi-control \
     gdbserver \
     haveged \
+    io-extender \
     iproute2 \
     iw \
     javascript-vnc-client \

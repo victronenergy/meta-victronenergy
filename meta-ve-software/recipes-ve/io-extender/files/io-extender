@@ -54,7 +54,6 @@ setup_relay() {
     n=${label#*_}
     echo "relay	$link $n" >>$CONF
 
-    
 }
 
 create_relay_script()
@@ -97,7 +96,7 @@ setup_dio() {
     create_relay_script 1
     create_relay_script 2
 
-    # PWN enable pin, set to output and set high
+    # PWM enable pin, set to output and set high
     gpio=$((gpio_base_i2c + PWM_EN_PIN))
     echo out >/sys/class/gpio/gpio$gpio/direction
     # Enable PWM by default
@@ -127,13 +126,18 @@ case $ACTION in
 
         if [ "$SUBSYSTEM" == "gpio" ]; then
             setup_dio
-            need_restart=1
+
+            ln -sf $dev/serial $DIR/serial
+            ln -sf $dev/manufacturer $DIR/manufacturer
+            ln -sf $dev/product $DIR/product
+            ln -sf $dev/max_power $DIR/max_power
+            ln -sf $dev/product_id $DIR/product_id
+            ln -sf $dev/vendor_id $DIR/vendor_id
 
             mkdir -p /dev/io-ext/
             ln -s $DIR /dev/io-ext
         elif [ "$SUBSYSTEM" == "leds" ]; then
             setup_pwm $NAME
-            need_restart=1
         fi
         ;;
     remove)
@@ -142,13 +146,7 @@ case $ACTION in
             if [ -e "$DIR" ]; then
                 rm -rf /dev/io-ext/$HID_UNIQ
                 rm -rf "$DIR"
-                need_restart=1
             fi
         fi
         ;;
 esac
-
-if [ "$need_restart" = 1 ]; then
-    svc -t /service/dbus-digitalinputs
-    svc -u /service/dbus-digitalinputs
-fi

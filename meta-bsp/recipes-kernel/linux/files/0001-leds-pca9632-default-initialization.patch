@@ -1,17 +1,26 @@
-From 9372f0c7faee7c00d6681bfbb3568eb86510d4f7 Mon Sep 17 00:00:00 2001
+From dca28b4c62c5ed1f34e9816cbadadf62ac8ae632 Mon Sep 17 00:00:00 2001
 From: ReinvdZee <rvanderzee@victronenergy.com>
-Date: Thu, 13 Feb 2025 10:48:41 +0100
+Date: Mon, 17 Feb 2025 14:57:17 +0100
 Subject: [PATCH] leds-pca9632: default initialization
 
+https://github.com/victronenergy/venus/issues/1412
 ---
  drivers/leds/leds-pca963x.c | 43 +++++++++++++++++++++++++++++++++++--
  1 file changed, 41 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/leds/leds-pca963x.c b/drivers/leds/leds-pca963x.c
-index 00aecd67e348..ba3b5f844aa6 100644
+index 00aecd67e348..5cd2ea87e56c 100644
 --- a/drivers/leds/leds-pca963x.c
 +++ b/drivers/leds/leds-pca963x.c
-@@ -362,6 +362,40 @@ static int pca963x_register_leds(struct i2c_client *client,
+@@ -103,6 +103,7 @@ struct pca963x_led {
+ 	int led_num; /* 0 .. 15 potentially */
+ 	u8 gdc;
+ 	u8 gfrq;
++	char name[8];
+ };
+ 
+ struct pca963x {
+@@ -362,6 +363,39 @@ static int pca963x_register_leds(struct i2c_client *client,
  	return ret;
  }
  
@@ -32,13 +41,12 @@ index 00aecd67e348..ba3b5f844aa6 100644
 +		return ret;
 +
 +	for (i = 0; i < chipdef->n_leds; i++) {
-+		char default_label[32];
 +		led = &chip->leds[i];
 +		led->led_num = i;
 +		led->chip = chip;
 +		led->led_cdev.brightness_set_blocking = pca963x_led_set;
-+		led->led_cdev.name = kzalloc(8, GFP_KERNEL);
-+		sprintf(led->led_cdev.name, "led%d", i);
++		snprintf(led->name, sizeof(led->name), "led%d", i);
++		led->led_cdev.name = led->name;
 +
 +		ret = devm_led_classdev_register(dev, &led->led_cdev);
 +		if (ret) {
@@ -81,4 +89,3 @@ index 00aecd67e348..ba3b5f844aa6 100644
  static struct i2c_driver pca963x_driver = {
 -- 
 2.34.1
-
