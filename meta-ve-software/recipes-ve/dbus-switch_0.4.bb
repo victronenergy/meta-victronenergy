@@ -22,11 +22,14 @@ RDEPENDS:${PN} = " \
     python3-pygobject \
 "
 
-DAEMONTOOLS_RUN = "${bindir}/start-dbus-switch.sh TTY"
-DAEMONTOOLS_DOWN = "1"
+DAEMONTOOLS_RUN = "${bindir}/start-dbus-switch.sh SERIAL"
 DAEMONTOOLS_SERVICE_SYMLINK = "0"
-DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}.TTY"
+DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}.SERIAL"
 DAEMONTOOLS_SERVICE_DIR = "${DAEMONTOOLS_TEMPLATE_DIR}"
+DAEMONTOOLS_TEMPLATE_CONF = " \
+    PARAM = SERIAL: \
+    SERVICE_EXT = .SERIAL \
+"
 
 do_install () {
     install -d ${D}${bindir}
