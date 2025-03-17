@@ -30,7 +30,7 @@ do_install:append() {
     install -m 0755 ${UNPACKDIR}/overlays.sh ${D}${sysconfdir}/init.d
     install -m 0755 ${UNPACKDIR}/clean-data.sh ${D}${sysconfdir}/init.d
 
-    update-rc.d -r ${D} overlays.sh start 10 S .
+    update-rc.d -r ${D} overlays.sh start 03 S .
     update-rc.d -r ${D} static-nodes.sh start 20 S .
     update-rc.d -r ${D} test-data-partition.sh start 03 S .
     update-rc.d -r ${D} clean-data.sh start 30 S .
