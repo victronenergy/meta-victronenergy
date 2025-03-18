@@ -5,10 +5,10 @@ Gui/ColorScheme 0 i 0 2
 Gui/ElectricalPowerIndicator 0 i 0 1
 
 # Configures the central gauges on the Brief page.
-Gui/BriefView/Level/0 1000 i 0 1000
-Gui/BriefView/Level/1 0 i 0 1000
-Gui/BriefView/Level/2 1 i 0 1000
-Gui/BriefView/Level/3 5 i 0 1000
+Gui2/BriefView/Level/0 "" s
+Gui2/BriefView/Level/1 "" s
+Gui2/BriefView/Level/2 "" s
+Gui2/BriefView/Level/3 "" s
 Gui2/BriefView/CenterService "" s
 
 # 0 = None, 1 = Absolute, 2 = Percentage
