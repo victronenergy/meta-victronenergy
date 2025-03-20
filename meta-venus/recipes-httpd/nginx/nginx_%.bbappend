@@ -37,13 +37,8 @@ cat - ${UNPACKDIR}/nginx.conf << EOF > ${D}${sysconfdir}/nginx/nginx.conf
 daemon off;
 EOF
 
-    sed -i 's,/etc/,${sysconfdir}/,g' ${D}${sysconfdir}/nginx/nginx.conf
-    sed -i 's,/var/,${localstatedir}/,g' ${D}${sysconfdir}/nginx/nginx.conf
     sed -i 's/^user.*/user ${NGINX_USER};/g' ${D}${sysconfdir}/nginx/nginx.conf
-    sed -i 's,/var/log/nginx/,/var/volatile/log/nginx/,g' ${D}${sysconfdir}/nginx/nginx.conf
-
-    sed -i 's,\(gzip_types[^;]*\);,\1 application/wasm;,' ${D}${sysconfdir}/nginx/nginx.conf
-    sed -i 's,include /etc/nginx/sites-enabled/\*;,include /run/nginx/sites-enabled/\*;,' ${D}${sysconfdir}/nginx/nginx.conf
+	sed -i 's,%SSL_CIPHERS,${OPENSSL_CIPHERSTRING_COLONS}:OPENSSL_CIPHERSUITES_COLONS,' ${D}${sysconfdir}/nginx/nginx.conf
 
     install -d ${D}${sbindir}
     install -m 755 ${UNPACKDIR}/start-nginx.sh ${D}${sbindir}
