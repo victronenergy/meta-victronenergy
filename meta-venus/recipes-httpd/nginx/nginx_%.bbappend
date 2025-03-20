@@ -41,7 +41,6 @@ EOF
     sed -i 's,/var/,${localstatedir}/,g' ${D}${sysconfdir}/nginx/nginx.conf
     sed -i 's/^user.*/user ${NGINX_USER};/g' ${D}${sysconfdir}/nginx/nginx.conf
     sed -i 's,/var/log/nginx/,/var/volatile/log/nginx/,g' ${D}${sysconfdir}/nginx/nginx.conf
-    sed -i '/vnd.wap.wmlc/a \ \ \ \ application/wasm                                 wasm;' ${D}${sysconfdir}/nginx/mime.types
 
     sed -i 's,\(gzip_types[^;]*\);,\1 application/wasm;,' ${D}${sysconfdir}/nginx/nginx.conf
     sed -i 's,include /etc/nginx/sites-enabled/\*;,include /run/nginx/sites-enabled/\*;,' ${D}${sysconfdir}/nginx/nginx.conf
