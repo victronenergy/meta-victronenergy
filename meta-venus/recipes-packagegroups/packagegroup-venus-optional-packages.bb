@@ -45,3 +45,5 @@ RDEPENDS:${PN} += "\
 RDEPENDS:${PN} += " \
     ${QT6_PACKAGES} \
 "
+
+do_package_write_ipk[recrdeptask] += "do_package_write_ipk"
