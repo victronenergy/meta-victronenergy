@@ -55,7 +55,6 @@ RDEPENDS:${PN}:append:einstein = "\
     linux-firmware-bcm43362 \
     linux-firmware-bcm43430 \
     linux-firmware-bcm43430a1 \
-    read-edid \
     venus-firmware-update \
 "
 
@@ -71,6 +70,7 @@ RDEPENDS:${PN}:append:sunxi = "\
     cpufrequtils \
     gpio-export \
     hostapd \
+    read-edid \
     rtl8723bu \
     rtl8723du \
     swupdate \
