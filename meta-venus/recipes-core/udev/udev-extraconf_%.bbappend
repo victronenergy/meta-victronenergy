@@ -9,6 +9,7 @@ SRC_URI += " \
     file://bt-config \
     file://bt-remove \
     file://display-hotplug \
+    file://display-hotplug.rules \
     file://ether.rules \
     file://machine.rules \
     file://mtd.rules \
@@ -48,6 +49,7 @@ do_install:append() {
     install -m 0755 ${UNPACKDIR}/display-hotplug ${D}${base_libdir}/udev
 
     install -m 0644 ${UNPACKDIR}/bluetooth.rules ${D}/${sysconfdir}/udev/rules.d
+    install -m 0644 ${UNPACKDIR}/display-hotplug.rules ${D}/${sysconfdir}/udev/rules.d
     install -m 0644 ${UNPACKDIR}/ether.rules ${D}/${sysconfdir}/udev/rules.d
     install -m 0644 ${UNPACKDIR}/machine.rules ${D}/${sysconfdir}/udev/rules.d
     install -m 0644 ${UNPACKDIR}/mtd.rules ${D}/${sysconfdir}/udev/rules.d
