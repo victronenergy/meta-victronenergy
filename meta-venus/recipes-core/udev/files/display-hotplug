@@ -1,11 +1,10 @@
 #! /bin/sh
 
 dev=/sys/$1
-con=$2
-bus=$3
 
 card=$(basename $dev)
-disp=$dev/$card-$con
+disp=$(ls -d $dev/$card-*) || exit
+bus=$(basename $(realpath $disp/ddc))
 stat=$(cat $disp/status)
 
 get_devices() (
