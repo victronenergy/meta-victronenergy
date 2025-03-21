@@ -5,6 +5,7 @@ dev=/sys/$1
 card=$(basename $dev)
 disp=$(ls -d $dev/$card-*) || exit
 bus=$(basename $(realpath $disp/ddc))
+fb=/dev/$(basename $dev/device/graphics/*)
 stat=$(cat $disp/status)
 
 get_devices() (
@@ -26,8 +27,8 @@ connected() {
         mode=$(head -n1 $disp/modes)
     fi
 
-    fbset -xres ${mode%x*} -yres ${mode#*x}
-    cat /dev/zero >/dev/fb0
+    fbset -fb $fb -xres ${mode%x*} -yres ${mode#*x}
+    cat /dev/zero >$fb
 }
 
 disconnected() {
