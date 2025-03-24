@@ -7,6 +7,7 @@ inherit packagegroup
 
 RDEPENDS:${PN} += "\
     bc \
+    chrony \
     devmem2 \
     gdb \
     dfu-util \
@@ -34,6 +35,7 @@ RDEPENDS:${PN} += "\
     strace \
     tcpdump \
     tinymembench \
+    tslib \
     tmux \
     valgrind \
     venus-socketcan-test \
