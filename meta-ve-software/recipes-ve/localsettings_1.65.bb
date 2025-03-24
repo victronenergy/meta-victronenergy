@@ -10,6 +10,7 @@ UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/localsettings.git;branch=master;protocol=https \
     file://com.victronenergy.settings.conf \
+    file://get-setting \
 "
 SRCREV = "580d00d4fbe86ed8e9612d32802c6b52e6d0a695"
 S = "${WORKDIR}/git"
@@ -26,6 +27,7 @@ RDEPENDS:${PN} += " \
 do_install () {
     install -d ${D}${bindir}
     install -m 755 -D ${S}/*.py ${D}${bindir}
+    install -m 755 -D ${UNPACKDIR}/get-setting ${D}${bindir}
 
     install -d ${D}/${sysconfdir}/dbus-1/system.d
     install -m 644 ${UNPACKDIR}/com.victronenergy.settings.conf ${D}/${sysconfdir}/dbus-1/system.d

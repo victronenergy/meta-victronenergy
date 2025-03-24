@@ -1,0 +1,39 @@
+#! /bin/sh
+
+setting=$1
+shift
+
+dest=com.victronenergy.settings
+base=/Settings
+
+if [ -n "$*" ]; then
+    group=${setting%%/*}
+    name=${setting#*/}
+    def=$1
+    type=$2
+    min=$3
+    max=$4
+
+    case $type in
+        s) dtype=string ;;
+        i) dtype=int32 ;;
+        f) dtype=float ;;
+    esac
+
+    dtype=variant:$dtype
+
+    until dbus-send --system --print-reply --dest=$dest $base \
+                    com.victronenergy.Settings.AddSetting \
+                    string:"$group" string:"$name" $dtype:"$def" \
+                    string:"$type" $dtype:"$min" $dtype:"$max" >/dev/null; do
+        sleep 1
+    done
+fi
+
+dbus-send --system --print-reply --dest=$dest "$base/$setting" \
+          com.victronenergy.BusItem.GetValue | while read a b c; do
+    test "$a" = variant || continue
+    c=${c#\"}
+    c=${c%\"}
+    echo "$c"
+done
