@@ -29,6 +29,8 @@ Protocol 2
 #KeyRegenerationInterval 1h
 #ServerKeyBits 1024
 
+macs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-256,hmac-sha2-512
+
 # Logging
 # obsoletes QuietMode and FascistLogging
 #SyslogFacility AUTH
