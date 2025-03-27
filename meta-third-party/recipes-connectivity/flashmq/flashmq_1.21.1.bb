@@ -8,7 +8,7 @@ inherit cmake
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "git://github.com/halfgaar/FlashMQ.git;branch=master;protocol=https"
-SRCREV = "5b846dc3dcc176346a4728978293c71e76d07a2e"
+SRCREV = "5cb18eab8b33d3ee787e13f1904b5ec25a015a0e"
 
 S = "${WORKDIR}/git"
 EXTRA_OECMAKE = "-DCMAKE_BUILD_TYPE=Release"
