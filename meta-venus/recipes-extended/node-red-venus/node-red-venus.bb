@@ -12,6 +12,8 @@ SRC_URI = "\
     file://user-authentication.js \
     file://venus-settings.js \
 "
+S = "${WORKDIR}/sources"
+UNPACKDIR = "${S}"
 
 inherit daemontools useradd www
 
@@ -24,20 +26,20 @@ USERADD_PARAM:${PN} = "-d /data/home/nodered -r -p '*' -s /bin/false -G dialout 
 # Note: installed in node-red otherwise more copies of the dependencies need to be installed.
 do_install:append() {
     install -d ${D}${nonarch_libdir}/node_modules/node-red
-    install -m 0644 ${WORKDIR}/venus-settings.js ${D}${nonarch_libdir}/node_modules/node-red
-    install -m 0644 ${WORKDIR}/user-authentication.js ${D}${nonarch_libdir}/node_modules/node-red
+    install -m 0644 ${UNPACKDIR}/venus-settings.js ${D}${nonarch_libdir}/node_modules/node-red
+    install -m 0644 ${UNPACKDIR}/user-authentication.js ${D}${nonarch_libdir}/node_modules/node-red
 
     # Startup script
     mkdir -p ${D}${bindir}
-    install -m 0755 ${WORKDIR}/node-red-venus.sh ${D}${bindir}
-    install -m 0755 ${WORKDIR}/prepare-node-red-venus.sh ${D}${bindir}
+    install -m 0755 ${UNPACKDIR}/node-red-venus.sh ${D}${bindir}
+    install -m 0755 ${UNPACKDIR}/prepare-node-red-venus.sh ${D}${bindir}
 
     # https support
     install -d ${D}${sysconfdir}/nginx/sites-available
-    install ${WORKDIR}/nginx-rules ${D}${sysconfdir}/nginx/sites-available/node-red
+    install ${UNPACKDIR}/nginx-rules ${D}${sysconfdir}/nginx/sites-available/node-red
 
     install -d ${D}${WWW_LOCALHOST}/html
-    install ${WORKDIR}/50x-node-red.html ${D}${WWW_LOCALHOST}/html
+    install ${UNPACKDIR}/50x-node-red.html ${D}${WWW_LOCALHOST}/html
 }
 
 FILES:${PN} += "${nonarch_libdir}/node_modules/node-red"

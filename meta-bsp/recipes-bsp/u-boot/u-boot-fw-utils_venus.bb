@@ -24,7 +24,7 @@ do_install () {
     install -m 755 ${S}/tools/env/fw_printenv ${D}${base_sbindir}/fw_setenv
 
     #install -m 0644 ${S}/tools/env/fw_env.config ${D}${sysconfdir}/fw_env.config
-    install -m 0644 ${WORKDIR}/fw_env.config ${D}${sysconfdir}/fw_env.config
+    install -m 0644 ${UNPACKDIR}/fw_env.config ${D}${sysconfdir}/fw_env.config
 
     install -d ${D}${libdir}
     install -m 644 ${S}/tools/env/libubootenv.a ${D}${libdir}/libubootenv.a

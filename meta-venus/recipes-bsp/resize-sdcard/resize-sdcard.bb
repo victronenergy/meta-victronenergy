@@ -20,8 +20,8 @@ FILES:${PN}-resize2fs = "/etc/init.d/resize2fs"
 
 do_install() {
     install -d ${D}${sysconfdir}/init.d
-    install -m 755 ${WORKDIR}/resize-sdcard.sh ${D}${sysconfdir}/init.d/zzz-resize-sdcard
+    install -m 755 ${UNPACKDIR}/resize-sdcard.sh ${D}${sysconfdir}/init.d/zzz-resize-sdcard
 
-    printf "#!/bin/sh\n\n/opt/victronenergy/swupdate-scripts/resize2fs.sh" > ${WORKDIR}/resize2fs
-    install -m 755 ${WORKDIR}/resize2fs ${D}${sysconfdir}/init.d/resize2fs
+    printf "#!/bin/sh\n\n/opt/victronenergy/swupdate-scripts/resize2fs.sh" > ${UNPACKDIR}/resize2fs
+    install -m 755 ${UNPACKDIR}/resize2fs ${D}${sysconfdir}/init.d/resize2fs
 }

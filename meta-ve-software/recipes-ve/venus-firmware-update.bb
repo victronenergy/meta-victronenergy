@@ -32,13 +32,13 @@ INITSCRIPT_PARAMS = "start 95 S ."
 
 do_install() {
     install -m 0755 -d ${D}${bindir}
-    install -m 0755 ${WORKDIR}/venus-firmware-update ${D}${bindir}
+    install -m 0755 ${UNPACKDIR}/venus-firmware-update ${D}${bindir}
 
     install -d ${D}${sysconfdir}/init.d
-    install -m 0755 ${WORKDIR}/init ${D}${sysconfdir}/init.d/${PN}
+    install -m 0755 ${UNPACKDIR}/init ${D}${sysconfdir}/init.d/${PN}
 }
 
 do_install:append:einstein() {
     install -m 0755 -d ${D}${SCRIPTDIR}
-    install -m 0644 ${WORKDIR}/cerbogx-samc21-can-adc.cfg ${D}${SCRIPTDIR}
+    install -m 0644 ${UNPACKDIR}/cerbogx-samc21-can-adc.cfg ${D}${SCRIPTDIR}
 }

@@ -30,6 +30,6 @@ do_install() {
     install -d ${D}/${base_bindir} ${D}${sysconfdir}
 
     install -m 0755 ${S}/simple-upnpd ${D}/${base_bindir}
-    install -m 0755 ${WORKDIR}/simple-upnpd.skeleton.xml ${D}/${sysconfdir}
-    install -m 0755 ${WORKDIR}/start-simple-upnpd ${D}${base_bindir}
+    install -m 0755 ${UNPACKDIR}/simple-upnpd.skeleton.xml ${D}/${sysconfdir}
+    install -m 0755 ${UNPACKDIR}/start-simple-upnpd ${D}${base_bindir}
 }
