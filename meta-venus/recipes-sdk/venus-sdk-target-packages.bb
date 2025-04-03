@@ -10,6 +10,7 @@ inherit packagegroup
 # c and friends
 RDEPENDS:${PN} += " \
     avahi-dev \
+    brotli-dev \
     dbus-dev \
     eudev-dev \
     gupnp-dev \
