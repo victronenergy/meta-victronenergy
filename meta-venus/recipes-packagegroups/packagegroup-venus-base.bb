@@ -38,6 +38,8 @@ RDEPENDS:${PN} += "\
     bzip2 \
     ca-certificates \
     can-utils \
+    can-utils-access \
+    can-utils-cantest \
     connman \
     connman-tools \
     cronie \
