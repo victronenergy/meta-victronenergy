@@ -32,6 +32,11 @@ addtask getname after do_unpack before do_compile
 B = "${WORKDIR}/npm-pack"
 NPM_TMP = "${WORKDIR}/npm-tmp"
 
+DEBUG_PREFIX_MAP += " \
+    -fmacro-prefix-map=${NPM_TMP}=${TARGET_DBGSRC_DIR} \
+    -fdebug-prefix-map=${NPM_TMP}=${TARGET_DBGSRC_DIR} \
+"
+
 do_compile() {
     if [ ! -f ${S}/npm-shrinkwrap.json ]; then
         bbfatal "No npm-shrinkwrap.json found for ${PN}"
