@@ -5,15 +5,13 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 RDEPENDS:${PN} += "bash node-red nginx node-red-contrib-victron util-linux-setpriv victron-vrm-api"
 
 SRC_URI = "\
-	file://50x-node-red.html \
+    file://50x-node-red.html \
     file://nginx-rules \
     file://node-red-venus.sh \
     file://prepare-node-red-venus.sh \
     file://user-authentication.js \
     file://venus-settings.js \
 "
-
-SRC_URI[sha256sum] = "e840fa1c7d7b25b0565551ad3582e24214cefb772a9af0238a9f7dac94f4dabb"
 
 inherit daemontools useradd www
 
