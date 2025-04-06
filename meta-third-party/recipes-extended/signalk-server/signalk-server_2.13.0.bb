@@ -75,4 +75,5 @@ do_install:append() {
 
     find "${D}${nonarch_libdir}" -depth -type d -name "examples" -exec rm -rf {} \;
     find "${D}${nonarch_libdir}" -depth -type d -name "samples" -exec rm -rf {} \;
+    find "${D}${nonarch_libdir}" -depth -type d -name "__pycache__" -exec rm -rf {} \;
 }
