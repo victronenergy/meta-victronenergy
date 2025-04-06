@@ -37,12 +37,21 @@ RDEPENDS:${PN} += "bash python3-core"
 INITSCRIPT_NAME = "machine-conf.sh"
 INITSCRIPT_PARAMS = "start 90 S ."
 
-do_compile () {
+do_configure:prepend() {
     if [ -f ${UNPACKDIR}/get-unique-id.c ]; then
-        ${CC} ${CFLAGS} ${LDFLAGS} \
-            ${UNPACKDIR}/get-unique-id.c -o ${UNPACKDIR}/get-unique-id
+        cp ${UNPACKDIR}/get-unique-id.c ${S}
     fi
-    ${CC} ${CFLAGS} ${LDFLAGS} ${UNPACKDIR}/ve-hash-passwd.c -o ${UNPACKDIR}/ve-hash-passwd -lcrypt
+    cp ${UNPACKDIR}/ve-hash-passwd.c ${S}
+}
+
+do_compile () {
+    if [ -f ${S}/get-unique-id.c ]; then
+        ${CC} ${CFLAGS} ${LDFLAGS} \
+            ${S}/get-unique-id.c -o get-unique-id
+    else
+       cp ${UNPACKDIR}/get-unique-id .
+    fi
+    ${CC} ${CFLAGS} ${LDFLAGS} ${S}/ve-hash-passwd.c -o ve-hash-passwd -lcrypt
 }
 
 VE_LARGE_IMAGE_SUPPORT ?= "1"
@@ -85,8 +94,8 @@ do_install:append() {
     done
 
     install -d ${D}/${base_sbindir}
-    install -m 755 ${UNPACKDIR}/get-unique-id ${D}/${base_sbindir}
-    install -m 755 ${UNPACKDIR}/ve-hash-passwd ${D}/${base_sbindir}
+    install -m 755 ${B}/get-unique-id ${D}/${base_sbindir}
+    install -m 755 ${B}/ve-hash-passwd ${D}/${base_sbindir}
     install -m 755 ${UNPACKDIR}/ve-is-passwd-set-by-default ${D}/${base_sbindir}
     install -m 744 ${UNPACKDIR}/ve-passwd-as-in-factory ${D}/${base_sbindir}
     install -m 744 ${UNPACKDIR}/ve-set-passwd ${D}/${base_sbindir}
