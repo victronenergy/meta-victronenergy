@@ -20,9 +20,13 @@ INITSCRIPT_PACKAGES = "${PN}"
 INITSCRIPT_NAME:${PN} = "watchdog"
 INITSCRIPT_PARAMS:${PN} = "start 80 S . stop 00 0 1 6 ."
 
+do_configure:prepend() {
+    cp ${UNPACKDIR}/get_boot_type.c ${S}
+}
+
 do_compile:append () {
     ${CC} ${CFLAGS} ${LDFLAGS} -DMACH_${MACHINE} \
-        ${UNPACKDIR}/get_boot_type.c -o get_boot_type
+        ${S}/get_boot_type.c -o get_boot_type
 }
 
 do_install:append () {
