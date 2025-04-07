@@ -1,0 +1,47 @@
+From 5c5efe02ce261983ce5b1eb194fa0f1321124cad Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Mon, 7 Apr 2025 12:51:56 +0200
+Subject: [PATCH] Allow a comma separated upgrade header
+
+The upgrade header might be comma separated and FlashMQ shouldn't
+refuse to upgrade in such a case. This splits and trims the upgrade
+header first.
+
+In our case the header is actually send by accident. It used to be:
+Upgrade: websocket\r\n
+Upgrade: websocket\r\n
+
+But newer nginx proxies transform that into:
+Upgrade: websocket, websocket\r\n
+
+And hence a websocket connection could no longer be established.
+---
+ utils.cpp | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/utils.cpp b/utils.cpp
+index b419233..26d3661 100644
+--- a/utils.cpp
++++ b/utils.cpp
+@@ -315,8 +315,19 @@ bool parseHttpHeader(CirBuf &buf, std::string &websocket_key, int &websocket_ver
+         trim(value);
+         std::string value_lower = str_tolower(value);
+ 
+-        if (name == "upgrade" && value_lower == "websocket")
+-            upgradeHeaderSeen = true;
++        if (name == "upgrade")
++        {
++            std::vector<std::string> protocols = splitToVector(value_lower, ',');
++            for (std::string &prot : protocols)
++            {
++                trim(prot);
++
++                if (prot == "websocket")
++                {
++                    upgradeHeaderSeen = true;
++                }
++            }
++        }
+         else if (name == "connection" && strContains(value_lower, "upgrade"))
+             connectionHeaderSeen = true;
+         else if (name == "sec-websocket-key")

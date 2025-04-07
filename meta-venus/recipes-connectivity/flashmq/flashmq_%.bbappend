@@ -6,6 +6,8 @@ SRC_URI += " \
 
 inherit daemontools-template useradd
 
+SRC_URI += "file://allow-a-comma-separated-upgrade-header.patch"
+
 USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM:${PN} = "flashmq"
 USERADD_PARAM:${PN} = "--no-create-home --shell /bin/false -g flashmq flashmq"
