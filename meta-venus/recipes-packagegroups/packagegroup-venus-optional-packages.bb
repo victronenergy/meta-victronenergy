@@ -6,6 +6,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 
 RDEPENDS:${PN} += "\
+    aiomqtt \
     bc \
     chrony \
     devmem2 \
