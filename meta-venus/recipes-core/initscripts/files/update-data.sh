@@ -1,6 +1,10 @@
 #! /bin/sh
 
-ARCHIVE_NAME=venus-data
+if [ ! -z "$1" ] && [ $1 = "-r" ]; then
+    ARCHIVE_NAME=venus-runtime
+else
+    ARCHIVE_NAME=venus-data
+fi
 ARCHIVE_SUF="tar.gz tgz zip"
 
 do_tar() {
