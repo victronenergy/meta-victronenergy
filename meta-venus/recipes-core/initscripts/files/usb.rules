@@ -1,0 +1,1 @@
+ACTION=="add", KERNEL=="sd?[0-9]", SUBSYSTEM=="block", RUN+="/etc/init.d/update-data.sh -r"
