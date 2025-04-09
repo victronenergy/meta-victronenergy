@@ -10,6 +10,7 @@ SRC_URI += "\
     file://report-data-failure.sh \
     file://update-data.sh \
     file://clean-data.sh \
+    file://usb.rules \
 "
 
 SRC_URI:append:ccgx = "\
@@ -37,6 +38,8 @@ do_install:append() {
 
     install -m 0755 ${UNPACKDIR}/report-data-failure.sh ${D}${sysconfdir}/init.d
     install -m 0755 ${UNPACKDIR}/update-data.sh ${D}${sysconfdir}/init.d
+
+    install -m 0644 ${UNPACKDIR}/usb.rules ${D}/${sysconfdir}/udev/rules.d
 
     update-rc.d -r ${D} update-data.sh start 30 5 .
     update-rc.d -r ${D} report-data-failure.sh start 82 5 .
