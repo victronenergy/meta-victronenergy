@@ -6,7 +6,6 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 
 RDEPENDS:${PN} += "\
-    aiomqtt \
     bc \
     chrony \
     devmem2 \
@@ -24,6 +23,7 @@ RDEPENDS:${PN} += "\
     packagegroup-core-buildessential \
     packagegroup-replace-busybox \
     perf \
+    python3-aiomqtt \
     python3-can \
     python3-cbor2 \
     python3-dbus-fast \
