@@ -15,6 +15,8 @@ LINUX_VERSION_EXTENSION = "-venus-${LINUX_VERSION_VENUS}"
 PV = "${LINUX_VERSION}${LINUX_VERSION_EXTENSION}"
 
 GIT_BRANCH = "venus-${LINUX_VERSION}"
+VENUS_PATCHES = "file://0001-ARM-dts-cerbo-spi2-fix-assigned-clock-rates.patch"
+VENUS_PATCHES:rpi = ""
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=${GIT_BRANCH};tag=v${PV}"
 SRC_URI += " \
 	file://0001-gcc-plugins-remove-code-for-GCC-versions-older-than-.patch \
@@ -24,7 +26,9 @@ SRC_URI += " \
 	file://0001-work-around-for-too-few-arguments-to-function-init_d.patch \
 	file://0001-ata-ahci-fix-enum-constants-for-gcc-13.patch \
 	file://wifi_cfg80211_certificate.patch \
+	${VENUS_PATCHES} \
 "
+
 S = "${WORKDIR}/git"
 
 do_configure:append() {

@@ -1,0 +1,43 @@
+From dca2d8ddcf45992c0cef0d8d5da0a40a073b34ee Mon Sep 17 00:00:00 2001
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+Date: Sat, 12 Apr 2025 16:02:50 +0200
+Subject: [PATCH] ARM: dts: cerbo: spi2: fix assigned-clock-rates
+
+The assigned clock rate of 600 MHz appears to be too high for the SPI
+host controller in the A20. It can lead to the loss of 1..4 bytes of
+the received SPI data. In some cases, a doubling of the read data
+has been be observed.
+
+The board has an mcp2518fd connected to SPI2. Its external clock is 40
+MHz, which results in a maximum SPI frequency of 17 MHz. The SPI host
+controller only supports even clock dividers. Using 300 MHz input
+clock make no difference on the SPI clock:
+
+input Clock	divisor	SPI Clock
+---------------------------------
+600 MHz		36	16.67 MHz
+300 MHz		18	16.67 MHz
+
+Dial down the clock rate to 300 MHz to fix the problem.
+
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ arch/arm/boot/dts/sun7i-a20-einstein-cerbo-b1.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/sun7i-a20-einstein-cerbo-b1.dts b/arch/arm/boot/dts/sun7i-a20-einstein-cerbo-b1.dts
+index 5d99058e06b2..ff625d4c8b07 100644
+--- a/arch/arm/boot/dts/sun7i-a20-einstein-cerbo-b1.dts
++++ b/arch/arm/boot/dts/sun7i-a20-einstein-cerbo-b1.dts
+@@ -321,7 +321,7 @@ &spi2 {
+ 	status = "okay";
+ 
+ 	assigned-clocks = <&ccu CLK_SPI2>;
+-	assigned-clock-rates = <600000000>;
++	assigned-clock-rates = <300000000>;
+ 
+ 	can1: can@0 {
+ 		compatible = "microchip,mcp2518fd";
+-- 
+2.47.2
+
