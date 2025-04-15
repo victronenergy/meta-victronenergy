@@ -6,6 +6,7 @@ SECTION = "net"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://src/${GO_IMPORT}/LICENSE;md5=a672713a9eb730050e491c92edf7984d"
 
+SRC_URI = "git://github.com/tailscale/tailscale.git;protocol=https;nobranch=1;tag=v${PV};destsuffix=git/src/${GO_IMPORT}"
 SRC_URI = "\
         git://github.com/tailscale/tailscale.git;protocol=https;nobranch=1;tag=v${PV};destsuffix=git/src/${GO_IMPORT} \
         file://start-tailscaled.sh \
