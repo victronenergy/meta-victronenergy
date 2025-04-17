@@ -10,7 +10,7 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/dbus_pump.git;protocol=https;branch=master \
     file://com.victronenergy.pump.conf \
 "
-SRCREV = "caf0dbde74be1b667541a0cb9f5023f51317bc66"
+SRCREV = "fb30ea353fade1f17d4330bc2bb233f7f9f842df"
 PR = "r1"
 S = "${WORKDIR}/git"
 
