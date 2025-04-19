@@ -2,17 +2,19 @@ require go-common.inc
 
 FILESEXTRAPATHS:prepend := "${FILE_DIRNAME}/go:"
 
-LIC_FILES_CHKSUM = "file://LICENSE;md5=5d4950ecb7b26d2c5e4e7b4e0dd74707"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=7998cb338f82d15c0eff93b7004d272a"
 
 SRC_URI += "\
     file://0001-cmd-go-make-content-based-hash-generation-less-pedan.patch \
     file://0002-cmd-go-Allow-GOTOOLDIR-to-be-overridden-in-the-envir.patch \
     file://0003-ld-add-soname-to-shareable-objects.patch \
+    file://0004-make.bash-override-CC-when-building-dist-and-go_boot.patch \
     file://0005-cmd-dist-separate-host-and-target-builds.patch \
     file://0006-cmd-go-make-GOROOT-precious-by-default.patch \
     file://0007-exec.go-filter-out-build-specific-paths-from-linker-.patch \
     file://0008-src-cmd-dist-buildgo.go-do-not-hardcode-host-compile.patch \
     file://0009-go-Filter-build-paths-on-staticly-linked-arches.patch \
+    file://0010-cmd-go-clear-GOROOT-for-func-ldShared-when-trimpath-.patch \
+    file://6d265b008e3d106b2706645e5a88cd8e2fb98953.patch \
 "
-#    file://0004-make.bash-override-CC-when-building-dist-and-go_boot.patch 
-SRC_URI[main.sha256sum] = "36930162a93df417d90bd22c6e14daff4705baac2b02418edda671cdfa9cd07f"
+SRC_URI[main.sha256sum] = "9dc77ffadc16d837a1bf32d99c624cb4df0647cee7b119edd9e7b1bcc05f2e00"
