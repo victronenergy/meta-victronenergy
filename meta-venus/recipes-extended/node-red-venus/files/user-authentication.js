@@ -22,18 +22,29 @@ module.exports = {
       debug(`authenticate: ${username}`)
       if ( username === adminUserName ) {
         const pw = getPassword()
-        bcrypt.compare(password, pw, (err, matches) => {
-          if (err) {
-            console.error(err)
-          resolve(null)
-          } else if ( matches === true ) {
-            debug('success')
+        if (pw === '') {
+          // If password file exists but is empty, authentication passes
+          debug('empty password file, authentication passes')
           resolve({ username: username, permissions: "*" })
-          } else {
-            debug('no match')
-            resolve(null)
-          }
-        })
+        } else if (pw === null) {
+          // If password file doesn't exist, follow existing logic
+          debug('password file does not exist')
+          resolve(null)
+        } else {
+          // Normal password check with bcrypt
+          bcrypt.compare(password, pw, (err, matches) => {
+            if (err) {
+              console.error(err)
+              resolve(null)
+            } else if ( matches === true ) {
+              debug('success')
+              resolve({ username: username, permissions: "*" })
+            } else {
+              debug('no match')
+              resolve(null)
+            }
+          })
+        }
       } else {
         debug('bad username')
         resolve(null)
@@ -56,7 +67,8 @@ module.exports = {
 function getPassword() {
   try {
     const data = String(fs.readFileSync(passwordFileName)).trim()
-    return data.length > 0 ? data : null
+    // Return the actual data, even if it's an empty string
+    return data
   } catch (err) {
     if ( err.errno === -2 ) {
       debug(`${passwordFileName} does not exist (yet)`);
