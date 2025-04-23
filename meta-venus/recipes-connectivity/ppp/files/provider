@@ -7,5 +7,8 @@ persist
 maxfail 0
 defaultroute
 defaultroute-metric 2000
+defaultroute6
+defaultroute6-metric 2000
 usepeerdns
+noresolvconf
 file /run/ppp/auth

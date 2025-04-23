@@ -1,0 +1,39 @@
+#! /bin/sh
+
+SCRIPT=$(basename $0)
+
+RESOLV_CONF=/run/ppp/resolv.conf
+
+mkresolv() {
+    ip=$1
+    shift
+
+    case $ip in
+        4) sed -e '/^nameserver [0-9.]*$/d'    ;;
+        6) sed -e '/^nameserver [0-9a-f:]*$/d' ;;
+    esac
+
+    for ns; do
+        echo "nameserver ${ns}"
+    done
+}
+
+ipv6_rdns() {
+    rdisc6 -1n "$1" | sed -n 's/^ *Recursive DNS server *: *//p'
+}
+
+case ${SCRIPT} in
+    ip-*)    ip=4 ;;
+    ipv6-*)  ip=6 ;;
+esac
+
+case ${SCRIPT} in
+    ip-up)   set -- ${DNS1} ${DNS2} ;;
+    ipv6-up) set -- $(ipv6_rdns ${IFNAME}) ;;
+    *-down)  set -- ;;
+esac
+
+exec <${RESOLV_CONF}
+flock 0
+rc=$(cat)
+printf "%s${rc:+\n}" "${rc}" | mkresolv "${ip}" "$@" >${RESOLV_CONF}
