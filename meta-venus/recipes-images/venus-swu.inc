@@ -100,7 +100,7 @@ python do_subst() {
 }
 
 addtask do_subst after do_unpack before do_swuimage
-do_subst[depends] += "virtual/kernel:do_deploy"
+do_subst[depends] += "virtual/kernel:do_deploy dtc-native:do_populate_sysroot"
 
 do_unpack[nostamp] = "1"
 do_subst[nostamp] = "1"
