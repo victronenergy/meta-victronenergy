@@ -1,0 +1,26 @@
+From f358e98e65b3a1d1aca30748cc90b23a19716fd7 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Wed, 23 Apr 2025 21:55:39 +0100
+Subject: [PATCH 21/21] silence time slew log spam
+
+Upstream-Status: Inappropriate [Venus specific]
+---
+ src/ntp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/ntp.c b/src/ntp.c
+index b4725384d939..16c30c77514c 100644
+--- a/src/ntp.c
++++ b/src/ntp.c
+@@ -335,7 +335,7 @@ static void decode_msg(void *base, size_t len, struct timeval *tv,
+ 
+ 	poll_id = g_timeout_add_seconds(transmit_delay, next_poll, NULL);
+ 
+-	connman_info("ntp: time slew %+.6f s", offset);
++	DBG("ntp: time slew %+.6f s", offset);
+ 
+ 	if (offset < STEPTIME_MIN_OFFSET && offset > -STEPTIME_MIN_OFFSET) {
+ 		struct timeval adj;
+-- 
+2.49.0
+

@@ -28,6 +28,7 @@ SRC_URI += "\
     file://0018-restart-daemon-on-wifi-failure.patch \
     file://0019-increase-metric-for-wifi-routes.patch \
     file://0001-disable-stat-files.patch \
+    file://0021-silence-time-slew-log-spam.patch \
     file://main.conf \
     file://connmand-watch.sh \
 "
