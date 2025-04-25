@@ -1,0 +1,118 @@
+From a6498742dccf11f75dc1854de0b4f70d99d371c3 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 25 Apr 2025 19:12:14 +0100
+Subject: [PATCH 22/22] really ignore blacklisted and non-ethernet interfaces
+
+Upstream-Status: Inappropriate [Venus specific]
+---
+ src/rtnl.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/src/rtnl.c b/src/rtnl.c
+index d1b851fe5d7c..a62fd8d17607 100644
+--- a/src/rtnl.c
++++ b/src/rtnl.c
+@@ -29,6 +29,7 @@
+ #include <string.h>
+ #include <sys/socket.h>
+ #include <sys/ioctl.h>
++#include <sys/stat.h>
+ #include <arpa/inet.h>
+ #include <netinet/ether.h>
+ #include <netinet/icmp6.h>
+@@ -411,12 +412,22 @@ static void process_newlink(unsigned short type, int index, unsigned flags,
+ 	const char *ifname = NULL;
+ 	unsigned int mtu = 0;
+ 	char ident[13], str[18];
++	char devpath[PATH_MAX];
++	struct stat st;
+ 	GSList *list;
+ 
+ 	memset(&stats, 0, sizeof(stats));
+ 	if (!extract_link(msg, bytes, &address, &ifname, &mtu, &operstate, &stats))
+ 		return;
+ 
++	if (ether_blacklisted(ifname))
++		return;
++
++	/* Ignore interfaces without a device, e.g. macvlan  */
++	snprintf(devpath, sizeof(devpath), "/sys/class/net/%s/device", ifname);
++	if (stat(devpath, &st))
++		return;
++
+ 	snprintf(ident, 13, "%02x%02x%02x%02x%02x%02x",
+ 						address.ether_addr_octet[0],
+ 						address.ether_addr_octet[1],
+@@ -759,6 +770,9 @@ static void process_newroute(unsigned char family, unsigned char scope,
+ 	} else
+ 		return;
+ 
++	if (!__connman_rtnl_get_device_type(index))
++		return;
++
+ 	for (list = rtnl_list; list; list = list->next) {
+ 		struct connman_rtnl *rtnl = list->data;
+ 
+@@ -816,6 +830,9 @@ static void process_delroute(unsigned char family, unsigned char scope,
+ 	} else
+ 		return;
+ 
++	if (!__connman_rtnl_get_device_type(index))
++		return;
++
+ 	for (list = rtnl_list; list; list = list->next) {
+ 		struct connman_rtnl *rtnl = list->data;
+ 
+@@ -953,6 +970,9 @@ static void rtnl_newlink(struct nlmsghdr *hdr)
+ {
+ 	struct ifinfomsg *msg = (struct ifinfomsg *) NLMSG_DATA(hdr);
+ 
++	if (msg->ifi_type != ARPHRD_ETHER)
++		return;
++
+ 	rtnl_link(hdr);
+ 
+ 	if (hdr->nlmsg_type == IFLA_WIRELESS)
+@@ -966,6 +986,9 @@ static void rtnl_dellink(struct nlmsghdr *hdr)
+ {
+ 	struct ifinfomsg *msg = (struct ifinfomsg *) NLMSG_DATA(hdr);
+ 
++	if (!__connman_rtnl_get_device_type(msg->ifi_index))
++		return;
++
+ 	rtnl_link(hdr);
+ 
+ 	process_dellink(msg->ifi_type, msg->ifi_index, msg->ifi_flags,
+@@ -1018,6 +1041,9 @@ static void rtnl_newaddr(struct nlmsghdr *hdr)
+ {
+ 	struct ifaddrmsg *msg = (struct ifaddrmsg *) NLMSG_DATA(hdr);
+ 
++	if (!__connman_rtnl_get_device_type(msg->ifa_index))
++		return;
++
+ 	rtnl_addr(hdr);
+ 
+ 	process_newaddr(msg->ifa_family, msg->ifa_prefixlen, msg->ifa_index,
+@@ -1028,6 +1054,9 @@ static void rtnl_deladdr(struct nlmsghdr *hdr)
+ {
+ 	struct ifaddrmsg *msg = (struct ifaddrmsg *) NLMSG_DATA(hdr);
+ 
++	if (!__connman_rtnl_get_device_type(msg->ifa_index))
++		return;
++
+ 	rtnl_addr(hdr);
+ 
+ 	process_deladdr(msg->ifa_family, msg->ifa_prefixlen, msg->ifa_index,
+@@ -1225,6 +1254,9 @@ static void rtnl_newnduseropt(struct nlmsghdr *hdr)
+ 	if (index < 0)
+ 		return;
+ 
++	if (!__connman_rtnl_get_device_type(index))
++		return;
++
+ 	for (opt = (void *)&msg[1];
+ 			msglen > 0;
+ 			msglen -= opt->nd_opt_len * 8,
+-- 
+2.49.0
+
