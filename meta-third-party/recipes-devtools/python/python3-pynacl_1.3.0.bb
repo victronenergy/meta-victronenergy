@@ -18,4 +18,4 @@ do_compile:prepend () {
     ${S}/setup.py
 }
 
-export SODIUM_INSTALL="system"
+export SODIUM_INSTALL = "system"

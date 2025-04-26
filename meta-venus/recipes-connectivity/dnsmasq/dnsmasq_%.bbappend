@@ -19,7 +19,7 @@ hostap = ""
 hostap:beaglebone = "1"
 hostap:sunxi = "1"
 
-RW_INITSCRIPT_PARAMS="start 80 5 . stop 10 0 1 6 ."
+RW_INITSCRIPT_PARAMS = "start 80 5 . stop 10 0 1 6 ."
 
 do_install:append() {
     install -m 644 ${UNPACKDIR}/resolv.conf ${D}${sysconfdir}
