@@ -20,7 +20,7 @@ SRC_URI = " \
     file://start-modem.sh \
     file://reset-modem.sh \
 "
-SRCREV = "fa64eb6f4f1fddfdc2c51ef90f636fc70d5635d6"
+SRCREV = "cb25bf4f2ff8cba78a50ccadfc2cc1d8cf9236a4"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${bindir}/start-modem.sh TTY"
