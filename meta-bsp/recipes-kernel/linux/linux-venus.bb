@@ -16,8 +16,8 @@ PV = "${LINUX_VERSION}${LINUX_VERSION_EXTENSION}"
 
 GIT_BRANCH = "venus-${LINUX_VERSION}"
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=${GIT_BRANCH};tag=v${PV}"
-VENUS_PATCHES = ""
-VENUS_PATCHES:venus = "file://0001-ARM-dts-bbb-venus-disable-dma-on-uart2.patch"
+VENUS_PATCHES = "file://0001-ARM-dts-bbb-venus-disable-dma-on-uart2.patch"
+VENUS_PATCHES:rpi = ""
 SRC_URI += "${VENUS_PATCHES}"
 
 S = "${WORKDIR}/git"
