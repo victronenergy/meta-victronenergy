@@ -30,9 +30,11 @@ RDEPENDS_${DAEMON_PN} = "${PN}"
 
 DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec softlimit -d 768000000 -s 1000000 -a 768000000 ${bindir}/venus-gui-v2"
 
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/gui-v2.git;branch=main;protocol=ssh;user=git;tag=v${PV} \
+    gitsm://github.com/victronenergy/gui-v2.git;branch=main;protocol=ssh;user=git \
 "
+SRCREV = "1a9c4b3371518a76312455e49600a60c992789a7"
 S = "${WORKDIR}/git"
 
 do_install:append() {
