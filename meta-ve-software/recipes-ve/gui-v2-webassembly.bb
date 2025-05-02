@@ -4,7 +4,6 @@ SRC_URI = " \
 	https://github.com/victronenergy/gui-v2/releases/download/v${PV}/venus-webassembly.zip;downloadfilename=venus-webassembly-${PV}.zip \
 	file://calc-gui-v2-wasm-sha26.sh \
 	file://localsettings \
-	file://Makefile \
 "
 SRC_URI[sha256sum] = "${WASM_SHA256SUM}"
 S = "${WORKDIR}/wasm"
