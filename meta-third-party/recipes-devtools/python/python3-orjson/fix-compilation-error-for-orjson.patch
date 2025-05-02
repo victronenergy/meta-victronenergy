@@ -1,0 +1,24 @@
+From 7a929cec806e44fbd068bcfac9e4245f6ba48a86 Mon Sep 17 00:00:00 2001
+From: Tom Geelen <tom.geelen@demcon.com>
+Date: Tue, 4 Apr 2023 00:37:57 +0200
+Subject: [PATCH] Fix compilation error for orjson
+
+Signed-off-by: Tom Geelen <tom.geelen@demcon.com>
+Upstream-Status: Pending
+---
+ Cargo.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 3108d4e..534d281 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -88,7 +88,7 @@ debug = false
+ incremental = false
+ lto = "thin"
+ opt-level = 3
+-panic = "abort"
++# panic = "abort"
+ 
+ [profile.release.build-override]
+ opt-level = 0
