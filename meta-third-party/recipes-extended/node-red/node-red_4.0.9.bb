@@ -19,7 +19,8 @@ do_install:append() {
     rm ${D}${NPM_INSTALLDIR}${nonarch_libdir}/node_modules/${PN}/bin/node-red-pi
     rm ${D}${bindir}/node-red-pi
 
-    rm -r ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bcrypt/build-tmp-napi-v3
-    rm ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/node-red-admin/node_modules/bcrypt/node-addon-api/nothing.a
-    rm -r ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/node-red-admin/node_modules/bcrypt/build-tmp-napi-v3
+    rm -r ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@node-rs/bcrypt-linux-x64-gnu
+    rm -r ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/node-red-admin/node_modules/@node-rs/bcrypt-linux-x64-gnu
+    rm -r ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@node-rs/bcrypt-linux-x64-musl
+    rm -r ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/node-red-admin/node_modules/@node-rs/bcrypt-linux-x64-musl
 }
