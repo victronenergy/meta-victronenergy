@@ -8,6 +8,10 @@ UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "git://github.com/riptideio/pymodbus.git;branch=master;protocol=https"
 SRCREV = "c5772b35ae3f29d1947f3ab453d8d00df846459f"
 
+SRC_URI += "\
+    file://0001-validate-transaction-id-of-response.patch \
+"
+
 S = "${WORKDIR}/git"
 
 inherit setuptools3
