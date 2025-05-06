@@ -1,5 +1,7 @@
 # 0 = Dark, 1 = Light, 2 = Auto
 Gui/ColorScheme 0 i 0 2
+# 0 = Follow display mode, 1 = Follow system theme of individual device
+Gui/RemoteConsoleColorMode 1 i 0 1
 
 # 0 = Power, 1 = Current
 Gui/ElectricalPowerIndicator 0 i 0 1
