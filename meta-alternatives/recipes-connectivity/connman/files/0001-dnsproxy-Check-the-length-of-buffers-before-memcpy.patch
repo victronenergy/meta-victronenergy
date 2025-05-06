@@ -1,0 +1,68 @@
+From 5e4b4d690ba73dae5ee0103d7eff9ba465eaa077 Mon Sep 17 00:00:00 2001
+From: Valery Kashcheev <v.kascheev@omp.ru>
+Date: Mon, 7 Jun 2021 18:58:24 +0200
+Subject: [PATCH] dnsproxy: Check the length of buffers before memcpy
+
+Fix using a stack-based buffer overflow attack by checking the length of
+the ptr and uptr buffers.
+
+Fix debug message output.
+
+Fixes: CVE-2021-33833
+CVE: CVE-2021-33833
+Upstream-Status: Backport [cve]
+
+cherry-picked from eceb2e8d
+---
+ src/dnsproxy.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/src/dnsproxy.c b/src/dnsproxy.c
+index 1e556e59..f17eaf01 100644
+--- a/src/dnsproxy.c
++++ b/src/dnsproxy.c
+@@ -1776,17 +1776,15 @@ static char *uncompress(int16_t field_count, char *start, char *end,
+ 		 * tmp buffer.
+ 		 */
+ 
+-		DBG("pos %d ulen %d left %d name %s", pos, ulen,
+-			(int)(uncomp_len - (uptr - uncompressed)), uptr);
+-
+-		ulen = strlen(name);
+-		if ((uptr + ulen + 1) > uncomp_end) {
++		ulen = strlen(name) + 1;
++		if ((uptr + ulen) > uncomp_end)
+ 			goto out;
+-		}
+-		strncpy(uptr, name, uncomp_len - (uptr - uncompressed));
++		strncpy(uptr, name, ulen);
++
++		DBG("pos %d ulen %d left %d name %s", pos, ulen,
++			(int)(uncomp_end - (uptr + ulen)), uptr);
+ 
+ 		uptr += ulen;
+-		*uptr++ = '\0';
+ 
+ 		ptr += pos;
+ 
+@@ -1829,7 +1827,8 @@ static char *uncompress(int16_t field_count, char *start, char *end,
+ 		} else if (dns_type == ns_t_a || dns_type == ns_t_aaaa) {
+ 			dlen = uptr[-2] << 8 | uptr[-1];
+ 
+-			if (ptr + dlen > end) {
++
++			if ((ptr + dlen) > end || (uptr + dlen) > uncomp_end) {
+ 				DBG("data len %d too long", dlen);
+ 				goto out;
+ 			}
+@@ -1868,6 +1867,10 @@ static char *uncompress(int16_t field_count, char *start, char *end,
+ 			 * refresh interval, retry interval, expiration
+ 			 * limit and minimum ttl). They are 20 bytes long.
+ 			 */
++			if ((uptr + 20) > uncomp_end || (ptr + 20) > end) {
++				DBG("soa record too long");
++				goto out;
++			}
+ 			memcpy(uptr, ptr, 20);
+ 			uptr += 20;
+ 			ptr += 20;
