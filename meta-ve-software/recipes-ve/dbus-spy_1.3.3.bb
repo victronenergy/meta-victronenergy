@@ -13,6 +13,6 @@ UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-spy.git;branch=master;protocol=https \
 "
-SRCREV = "8015d34d3af403d0e0880d53d8b13f5b0da7cd50"
+SRCREV = "aab2fc8b806f50855c04301caf90f9786f833a9d"
 S = "${WORKDIR}/git/software"
 
