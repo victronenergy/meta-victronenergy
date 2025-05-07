@@ -41,6 +41,8 @@ SRC_URI[sha256sum] = "fcbdee7b4a64bea8177973299c8c824419c413ec2e3a95db63dd6a5dc3
 
 CVE_PRODUCT = "wpa_supplicant"
 
+CVE_STATUS[CVE-2024-5290] = "not-applicable-platform: this only affects Ubuntu and other platforms patching wpa-supplicant"
+
 S = "${WORKDIR}/wpa_supplicant-${PV}"
 
 PACKAGES:prepend = "wpa-supplicant-passphrase wpa-supplicant-cli "
