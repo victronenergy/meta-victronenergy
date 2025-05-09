@@ -50,6 +50,13 @@ do_install:append() {
     install -m 0644 ${UNPACKDIR}/mtd.rules ${D}/${sysconfdir}/udev/rules.d
     install -m 0644 ${UNPACKDIR}/rfkill.rules ${D}/${sysconfdir}/udev/rules.d
     install -m 0644 ${UNPACKDIR}/simcom.rules ${D}/${sysconfdir}/udev/rules.d
+
+    # Remove ifup hotplug support, this is done unconditionally and causes problems.
+    # Older OE version didn't never did this, and it is now done uncondtionally.
+    # busybox doesn't like the --hotplug support and OE doesn't like a workaround.
+    # So just remove it.
+    rm ${D}/${sysconfdir}/udev/rules.d/autonet.rules
+    rm ${D}/${sysconfdir}/udev/scripts/network.sh
 }
 
 do_install:append:beaglebone() {
