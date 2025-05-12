@@ -1,13 +1,20 @@
 #!/bin/sh
 
+# The CAN-bus interfaces
 interfaces=$(ip -o link show type can | awk -F': ' '{print $2}' | tr '\n' ',' | sed -e 's/,$//')
 if [ "$interfaces" = "" ]; then
 	svc -d .
 	exit 1
 fi
 
-# If ethernet is not connected, binding will fail. Lets not hog the
+# If a network is not connected, binding will fail. Lets not hog the
 # cpu and simply add a delay here.
-if ! socketcand -i $interfaces -v; then
+while true; do
+	def_interface=$(route | grep '^default' | grep -o '[^ ]*$')
+
+	if [ "$def_interface" != "" ]; then
+		socketcand -i $interfaces -l $def_interface -v
+	fi
+
 	sleep 60
-fi
+done
