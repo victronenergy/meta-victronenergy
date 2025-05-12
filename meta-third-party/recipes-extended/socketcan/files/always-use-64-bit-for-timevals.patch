@@ -1,0 +1,191 @@
+From f978443ce43aa3f0998b9aa3b82bf9a969bb8f78 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Mon, 12 May 2025 15:00:46 +0200
+Subject: [PATCH] always use 64-bit for timevals
+
+On 32bits platforms compiled with _TIME_BITS=64 %lu/%ld fails to
+print / read the timestamps correctly. Always use %llu/%lld with
+(un)signed long long instead. The sign follows the existing
+formatters, as in unsigned for reading, signed for writing.
+
+Upstream-Status: Submitted [https://github.com/linux-can/socketcand/pull/68]
+---
+ src/state_bcm.c   | 47 ++++++++++++++++++++++++++++++-----------------
+ src/state_isotp.c |  3 ++-
+ src/state_raw.c   |  9 ++++++---
+ 3 files changed, 38 insertions(+), 21 deletions(-)
+
+diff --git a/src/state_bcm.c b/src/state_bcm.c
+index 993e66f..84826a2 100644
+--- a/src/state_bcm.c
++++ b/src/state_bcm.c
+@@ -32,6 +32,7 @@ int sc = -1;
+ void state_bcm()
+ {
+ 	int i, j, ret;
++	unsigned long long sec, usec;
+ 	struct sockaddr_can caddr;
+ 	socklen_t caddrlen = sizeof(caddr);
+ 	struct ifreq ifr;
+@@ -106,7 +107,8 @@ void state_bcm()
+ 			if (msg.frame.can_dlc != CAN_ERR_DLC) {
+ 				PRINT_ERROR("Error frame has a wrong DLC!\n");
+ 			} else {
+-				snprintf(rxmsg, RXLEN, "< error %03X %ld.%06ld ", msg.msg_head.can_id, tv.tv_sec, tv.tv_usec);
++				snprintf(rxmsg, RXLEN, "< error %03X %lld.%06lld ", msg.msg_head.can_id,
++					 (signed long long) tv.tv_sec, (signed long long) tv.tv_usec);
+ 
+ 				for (i = 0; i < msg.frame.can_dlc; i++)
+ 					snprintf(rxmsg + strlen(rxmsg), RXLEN - strlen(rxmsg), "%02X ",
+@@ -118,11 +120,13 @@ void state_bcm()
+ 			}
+ 		} else {
+ 			if (msg.msg_head.can_id & CAN_EFF_FLAG) {
+-				snprintf(rxmsg, RXLEN, "< frame %08X %ld.%06ld ",
+-					 msg.msg_head.can_id & CAN_EFF_MASK, tv.tv_sec, tv.tv_usec);
++				snprintf(rxmsg, RXLEN, "< frame %08X %lld.%06lld ",
++					 msg.msg_head.can_id & CAN_EFF_MASK,
++					 (signed long long) tv.tv_sec, (signed long long) tv.tv_usec);
+ 			} else {
+-				snprintf(rxmsg, RXLEN, "< frame %03X %ld.%06ld ",
+-					 msg.msg_head.can_id & CAN_SFF_MASK, tv.tv_sec, tv.tv_usec);
++				snprintf(rxmsg, RXLEN, "< frame %03X %lld.%06lld ",
++					 msg.msg_head.can_id & CAN_SFF_MASK,
++					 (signed long long) tv.tv_sec, (signed long long) tv.tv_usec);
+ 			}
+ 
+ 			for (i = 0; i < msg.frame.can_dlc; i++)
+@@ -203,11 +207,12 @@ void state_bcm()
+ 			}
+ 			/* Add a send job */
+ 		} else if (!strncmp("< add ", buf, 6)) {
+-			items = sscanf(buf, "< %*s %lu %lu %x %hhu "
++
++			items = sscanf(buf, "< %*s %llu %llu %x %hhu "
+ 				       "%hhx %hhx %hhx %hhx %hhx %hhx "
+ 				       "%hhx %hhx >",
+-				       &msg.msg_head.ival2.tv_sec,
+-				       &msg.msg_head.ival2.tv_usec,
++				       &sec,
++				       &usec,
+ 				       &msg.msg_head.can_id,
+ 				       &msg.frame.can_dlc,
+ 				       &msg.frame.data[0],
+@@ -230,6 +235,8 @@ void state_bcm()
+ 			if (element_length(buf, 4) == 8)
+ 				msg.msg_head.can_id |= CAN_EFF_FLAG;
+ 
++			msg.msg_head.ival2.tv_sec = sec;
++			msg.msg_head.ival2.tv_usec = usec;
+ 			msg.msg_head.opcode = TX_SETUP;
+ 			msg.msg_head.flags |= SETTIMER | STARTTIMER;
+ 			msg.frame.can_id = msg.msg_head.can_id;
+@@ -299,11 +306,11 @@ void state_bcm()
+ 			}
+ 			/* Receive CAN ID with content matching */
+ 		} else if (!strncmp("< filter ", buf, 9)) {
+-			items = sscanf(buf, "< %*s %lu %lu %x %hhu "
++			items = sscanf(buf, "< %*s %llu %llu %x %hhu "
+ 				       "%hhx %hhx %hhx %hhx %hhx %hhx "
+ 				       "%hhx %hhx >",
+-				       &msg.msg_head.ival2.tv_sec,
+-				       &msg.msg_head.ival2.tv_usec,
++				       &sec,
++				       &usec,
+ 				       &msg.msg_head.can_id,
+ 				       &msg.frame.can_dlc,
+ 				       &msg.frame.data[0],
+@@ -326,6 +333,8 @@ void state_bcm()
+ 			if (element_length(buf, 4) == 8)
+ 				msg.msg_head.can_id |= CAN_EFF_FLAG;
+ 
++			msg.msg_head.ival2.tv_sec = sec;
++			msg.msg_head.ival2.tv_usec = usec;
+ 			msg.msg_head.opcode = RX_SETUP;
+ 			msg.msg_head.flags = SETTIMER;
+ 			msg.frame.can_id = msg.msg_head.can_id;
+@@ -342,9 +351,9 @@ void state_bcm()
+ 
+ 			memset(&muxmsg, 0, sizeof(muxmsg));
+ 
+-			items = sscanf(buf, "< %*s %lu %lu %x %u ",
+-				       &muxmsg.msg_head.ival2.tv_sec,
+-				       &muxmsg.msg_head.ival2.tv_usec,
++			items = sscanf(buf, "< %*s %llu %llu %x %u ",
++				       &sec,
++				       &usec,
+ 				       &muxmsg.msg_head.can_id,
+ 				       &muxmsg.msg_head.nframes);
+ 
+@@ -359,6 +368,8 @@ void state_bcm()
+ 			if (element_length(buf, 4) == 8)
+ 				muxmsg.msg_head.can_id |= CAN_EFF_FLAG;
+ 
++			msg.msg_head.ival2.tv_sec = sec;
++			msg.msg_head.ival2.tv_usec = usec;
+ 			muxmsg.msg_head.opcode = RX_SETUP;
+ 			muxmsg.msg_head.flags = SETTIMER;
+ 
+@@ -404,9 +415,9 @@ void state_bcm()
+ 			}
+ 			/* Add a filter */
+ 		} else if (!strncmp("< subscribe ", buf, 12)) {
+-			items = sscanf(buf, "< %*s %lu %lu %x >",
+-				       &msg.msg_head.ival2.tv_sec,
+-				       &msg.msg_head.ival2.tv_usec,
++			items = sscanf(buf, "< %*s %llu %llu %x >",
++				       &sec,
++				       &usec,
+ 				       &msg.msg_head.can_id);
+ 
+ 			if (items != 3) {
+@@ -418,6 +429,8 @@ void state_bcm()
+ 			if (element_length(buf, 4) == 8)
+ 				msg.msg_head.can_id |= CAN_EFF_FLAG;
+ 
++			msg.msg_head.ival2.tv_sec = sec;
++			msg.msg_head.ival2.tv_usec = usec;
+ 			msg.msg_head.opcode = RX_SETUP;
+ 			msg.msg_head.flags = RX_FILTER_ID | SETTIMER;
+ 			msg.frame.can_id = msg.msg_head.can_id;
+diff --git a/src/state_isotp.c b/src/state_isotp.c
+index c3c687c..1efb706 100644
+--- a/src/state_isotp.c
++++ b/src/state_isotp.c
+@@ -175,7 +175,8 @@ void state_isotp()
+ 		if (items > 0 && items <= ISOTPLEN) {
+ 			int startlen;
+ 
+-			sprintf(rxmsg, "< pdu %ld.%06ld ", tv.tv_sec, tv.tv_usec);
++			sprintf(rxmsg, "< pdu %lld.%06lld ", (signed long long) tv.tv_sec,
++				(signed long long) tv.tv_usec);
+ 			startlen = strlen(rxmsg);
+ 
+ 			for (i = 0; i < items; i++)
+diff --git a/src/state_raw.c b/src/state_raw.c
+index 8246f1f..62c4b95 100644
+--- a/src/state_raw.c
++++ b/src/state_raw.c
+@@ -118,16 +118,19 @@ void state_raw()
+ 
+ 			if (frame.can_id & CAN_ERR_FLAG) {
+ 				canid_t class = frame.can_id & CAN_EFF_MASK;
+-				ret = sprintf(buf, "< error %03X %ld.%06ld >", class, tv.tv_sec, tv.tv_usec);
++				ret = sprintf(buf, "< error %03X %lld.%06lld >", class,
++					      (signed long long) tv.tv_sec, (signed long long) tv.tv_usec);
+ 				send(client_socket, buf, strlen(buf), 0);
+ 				tcp_quickack(client_socket);
+ 			} else if (frame.can_id & CAN_RTR_FLAG) {
+ 				/* TODO implement */
+ 			} else {
+ 				if (frame.can_id & CAN_EFF_FLAG) {
+-					ret = sprintf(buf, "< frame %08X %ld.%06ld ", frame.can_id & CAN_EFF_MASK, tv.tv_sec, tv.tv_usec);
++					ret = sprintf(buf, "< frame %08X %lld.%06lld ", frame.can_id & CAN_EFF_MASK,
++						      (signed long long) tv.tv_sec, (signed long long) tv.tv_usec);
+ 				} else {
+-					ret = sprintf(buf, "< frame %03X %ld.%06ld ", frame.can_id & CAN_SFF_MASK, tv.tv_sec, tv.tv_usec);
++					ret = sprintf(buf, "< frame %03X %lld.%06lld ", frame.can_id & CAN_SFF_MASK,
++						      (signed long long) tv.tv_sec, (signed long long) tv.tv_usec);
+ 				}
+ 				for (i = 0; i < frame.can_dlc; i++) {
+ 					ret += sprintf(buf + ret, "%02X", frame.data[i]);
