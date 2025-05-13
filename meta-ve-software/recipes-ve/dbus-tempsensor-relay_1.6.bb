@@ -11,7 +11,7 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-tempsensor-relay.git;branch=master;protocol=https \
     file://com.victronenergy.temprelay.conf \
 "
-SRCREV = "6abbcd3335e7068c992db64a8a8d4492479789b2"
+SRCREV = "266032a86034cb4f47ba4d5595353d8eec23b0bf"
 S = "${WORKDIR}/git"
 
 RDEPENDS:${PN} = " \
