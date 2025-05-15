@@ -3,7 +3,7 @@
 PACKAGE_BEFORE_PN = "${PN}-bin"
 
 FILES:${PN}-bin = "${bindir} ${libdir}/gobject-introspection/giscanner"
-RDEPENDS:${PN} = ""
+RDEPENDS:${PN}:remove = "python3-pickle python3-xml python3-setuptools"
 RDEPENDS:${PN}-bin = "python3-pickle python3-xml python3-setuptools"
 RDEPENDS:${PN}:append:class-native = " python3-setuptools-native"
 
