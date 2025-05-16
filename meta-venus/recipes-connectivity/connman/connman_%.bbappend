@@ -8,6 +8,11 @@ INITSCRIPT_PARAMS = "start 70 5 2 3 4 . stop 22 0 1 6 ."
 VELIB_DEFAULT_DIRS = "1"
 inherit ve_package
 
+# Always use the util-linux version, since it tries to write to
+# /etc/adjtime which won't work with a read-only rootfs. The
+# busybox version doesn't support --noadjfile though.
+RDEPENDS:${PN} += "util-linux-hwclock"
+
 SRC_URI += "\
     file://0001-Set-hwclock-when-time-is-decoded.patch \
     file://0002-Increase-NTP-poll-interval.patch \

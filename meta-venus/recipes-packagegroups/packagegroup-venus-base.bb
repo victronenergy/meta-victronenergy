@@ -95,6 +95,7 @@ RDEPENDS:${PN} += "\
     tzdata-pacific \
     usbutils \
     udev-extraconf \
+    util-linux-hwclock \
     util-linux-mount \
     venus-dbus-tools \
     venus-feed-configs \

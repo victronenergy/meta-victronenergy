@@ -19,7 +19,7 @@ index dd246eb..01f5dc6 100644
  			connman_error("Failed to set time");
  			return;
  		}
-+		if(system("hwclock --utc --systohc")) {
++		if(system("hwclock --utc --systohc --noadjfile")) {
 +			connman_error("Failed to set hwclock");
 +		}
  
