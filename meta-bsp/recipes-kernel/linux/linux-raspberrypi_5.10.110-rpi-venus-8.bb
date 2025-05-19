@@ -2,7 +2,7 @@ require linux-venus.inc
 
 COMPATIBLE_MACHINE = "^rpi$"
 
-SRC_URI += " \
+SRC_URI = " \
     git://github.com/victronenergy/linux.git;protocol=https;nobranch=1 \
     file://0001-gcc-plugins-remove-code-for-GCC-versions-older-than-.patch \
     file://0002-gcc-plugins-remove-support-for-GCC-4.9-and-older.patch \

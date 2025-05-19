@@ -1,6 +1,5 @@
 require linux-venus.inc
 
-LINUX_VENUS_PV = "${PV}"
 SRC_URI = " \
     git://github.com/victronenergy/linux.git;protocol=https;nobranch=1 \
     file://0001-ARM-dts-bbb-venus-disable-dma-on-uart2.patch \
