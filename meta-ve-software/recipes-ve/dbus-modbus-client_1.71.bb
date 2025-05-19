@@ -20,7 +20,7 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https \
     file://start-serial.sh \
 "
-SRCREV = "4b79f31f200072ad62e4cdb583975f3e4a1d7e09"
+SRCREV = "3259f3e1d8803a09a43fd8e6860827fbd5f79c7b"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${bindir}/${PN}.py"
