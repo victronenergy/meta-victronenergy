@@ -1,6 +1,12 @@
 #! /bin/sh
 
 set -e
+
+PART=$1
+: ${SERIAL:=${HID_UNIQ}}
+DIR=/run/io-ext/$SERIAL
+CONF=$DIR/pins.conf
+
 R0_PINS="relay_1 2:in 5:set 6:res"
 R1_PINS="relay_2 1:in 3:set 4:res"
 SSR_PINS="ssr_3 0:"
@@ -68,7 +74,6 @@ setup_relay() {
 
 setup_dio() {
     dev=$(realpath /sys/$DEVPATH/../../../..)
-    serial=$(cat $dev/serial)
     gpio_base=$(cat $dev/gpio/*/base)
     gpio_base_i2c=$(cat $dev/i2c-*/*-0020/gpio/*/base)
 
@@ -84,56 +89,58 @@ setup_dio() {
     echo out >/sys/class/gpio/gpio$gpio/direction
     # Enable PWM by default
     echo 0 >/sys/class/gpio/gpio$gpio/value
-
-    # Insert tag at the first line of the conf file.
-    sed  -i "1i tag $serial" $CONF
 }
 
 setup_pwm() {
-    path=$(realpath /sys/$DEVPATH)
-    n=$(echo $NAME | cut -c 4)
-    link=$DIR/pwm$n
-    ln -s /sys/class/leds/$NAME/brightness $link
+    for led in $(ls /sys/$DEVPATH/leds); do
+        num=${led##*[!0-9]}
+        link=$DIR/pwm$num
+        ln -s /sys/class/leds/$led/brightness $link
+        echo "pwm	$link $((num+1))" >>$CONF
+    done
+}
 
-    echo "pwm	$link $(($n+1))" >>$CONF
+svc_update() {
+    case $1 in
+        add) args="" ;;
+        del) args="-r" ;;
+    esac
+
+    /opt/victronenergy/venus-platform/svectl $args -s dbus-switch -D SERIAL=$SERIAL
 }
 
 case $ACTION in
     add)
-        dev=$(realpath /sys/$DEVPATH/../../../..)
-        serial=$(cat $dev/serial)
-        DIR=/run/io-ext/$serial
         mkdir -p $DIR
-        CONF=$DIR/pins.conf
-        NAME=$1
+        exec {fd}<$DIR
+        flock $fd
 
-        if [ "$SUBSYSTEM" == "gpio" ]; then
-            setup_dio
-
-            # Install service
-            /opt/victronenergy/venus-platform/svectl -s dbus-switch -D SERIAL=$serial
-
-            need_restart=1
-
-        elif [ "$SUBSYSTEM" == "leds" ]; then
-            setup_pwm $NAME
-            need_restart=1
+        if [ ! -e $CONF ]; then
+            echo "tag	$SERIAL" >$CONF
         fi
-        svc -t /service/dbus-switch.$serial
+
+        case $PART in
+            gpio) setup_dio ;;
+            pwm)  setup_pwm ;;
+        esac
+
+        # Both parts have been configured, (re)start services
+        if [ -e $DIR/pwm0 -a -e $DIR/relay_1_in ]; then
+                svc_update add
+                restart_digitalinputs=1
+        fi
+
         ;;
     remove)
-        if [ "$HID_NAME" == "Victron Energy BV GX IO-Extender 150" ]; then
-            DIR=/run/io-ext/$HID_UNIQ
-            if [ -e "$DIR" ]; then
-                rm -rf "$DIR"
-                /opt/victronenergy/venus-platform/svectl -r -s dbus-switch -D SERIAL=$HID_UNIQ
-                need_restart=1
-            fi
+        if [ -e "$DIR" ]; then
+            rm -rf "$DIR"
+            svc_update del
+            restart_digitalinputs=1
         fi
         ;;
 esac
 
-if [ "$need_restart" = 1 ]; then
+if [ "$restart_digitalinputs" = 1 ]; then
     svc -t /service/dbus-digitalinputs
     svc -u /service/dbus-digitalinputs
 fi
