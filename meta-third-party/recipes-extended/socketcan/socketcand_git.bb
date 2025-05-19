@@ -6,8 +6,7 @@ LIC_FILES_CHKSUM = " \
 "
 
 SRC_URI = "git://github.com/linux-can/socketcand;branch=master;protocol=https"
-SRC_URI += "file://always-use-64-bit-for-timevals.patch"
-SRCREV = "30e584a5e0cc82670c11632357b6dccdf64ca98e"
+SRCREV = "7b5e91ec656b33c325db2f9136daebb9e357bb65"
 S = "${WORKDIR}/git"
 
 inherit meson pkgconfig
