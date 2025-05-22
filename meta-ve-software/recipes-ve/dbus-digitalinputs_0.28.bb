@@ -7,11 +7,11 @@ inherit daemontools
 inherit python-compile
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
-SRC_URI = "\
+SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-digitalinputs.git;branch=master;protocol=https \
     file://start-digitalinputs.sh \
 "
-SRCREV = "f23592c350ec0b2b66445b67a6adcc86990de582"
+SRCREV = "9cb2ed37c781cfcd5d71e5740d6b705a847bc134"
 S = "${WORKDIR}/git"
 
 RDEPENDS:${PN} = " \
