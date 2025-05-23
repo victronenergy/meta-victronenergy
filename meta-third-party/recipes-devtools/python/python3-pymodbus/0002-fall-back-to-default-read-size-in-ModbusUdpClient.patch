@@ -1,0 +1,25 @@
+From eaf6c1c2484e4991872a422628d50ea1e8dfdc08 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 23 May 2025 12:17:52 +0100
+Subject: [PATCH] fall back to default read size in ModbusUdpClient
+
+---
+ pymodbus/client/sync.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pymodbus/client/sync.py b/pymodbus/client/sync.py
+index 571ba0f4f0fe..2bbf2fc4eb0d 100644
+--- a/pymodbus/client/sync.py
++++ b/pymodbus/client/sync.py
+@@ -546,7 +546,7 @@ class ModbusUdpClient(BaseModbusClient):
+         """
+         if not self.socket:
+             raise ConnectionException(self.__str__())
+-        return self.socket.recvfrom(size)[0]
++        return self.socket.recvfrom(size or Defaults.ReadSize)[0]
+ 
+     def is_socket_open(self):
+         if self.socket:
+-- 
+2.49.0
+
