@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=db73e07aea31188dc97142d139df39f9"
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "gitsm://github.com/victronenergy/${BPN}.git;protocol=https;branch=master"
-SRCREV = "e4e81152944f4a76b16c75c6a4963da769e12a4d"
+SRCREV = "cbe68c9c0e5811c260116f0675879eeea68b11f8"
 S = "${WORKDIR}/git"
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/${PN}.py"
 
