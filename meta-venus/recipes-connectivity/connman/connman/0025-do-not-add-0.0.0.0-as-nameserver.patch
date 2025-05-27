@@ -1,0 +1,56 @@
+From 10dbdf54d9f8ed9c69ead4fd94e27c6a6bfeb125 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Tue, 27 May 2025 11:43:37 +0100
+Subject: [PATCH] do not add 0.0.0.0/:: as nameserver
+
+---
+ src/service.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/src/service.c b/src/service.c
+index 1e0e2ddfdc1d..bcdacc8f1637 100644
+--- a/src/service.c
++++ b/src/service.c
+@@ -942,6 +942,9 @@ static bool nameserver_available(struct connman_service *service,
+ 	family = connman_inet_check_ipaddress(ns);
+ 
+ 	if (family == AF_INET) {
++		if (g_str_equal(ns, "0.0.0.0"))
++			return false;
++
+ 		if (type == CONNMAN_IPCONFIG_TYPE_IPV6)
+ 			return false;
+ 
+@@ -949,6 +952,9 @@ static bool nameserver_available(struct connman_service *service,
+ 	}
+ 
+ 	if (family == AF_INET6) {
++		if (g_str_equal(ns, "::"))
++			return false;
++
+ 		if (type == CONNMAN_IPCONFIG_TYPE_IPV4)
+ 			return false;
+ 
+@@ -1226,6 +1232,9 @@ static void add_nameserver_route(int family, int index, char *nameserver,
+ {
+ 	switch (family) {
+ 	case AF_INET:
++		if (g_str_equal(nameserver, "0.0.0.0"))
++			break;
++
+ 		if (connman_inet_compare_subnet(index, nameserver))
+ 			break;
+ 
+@@ -1235,6 +1244,9 @@ static void add_nameserver_route(int family, int index, char *nameserver,
+ 		break;
+ 
+ 	case AF_INET6:
++		if (g_str_equal(nameserver, "::"))
++			break;
++
+ 		if (connman_inet_add_ipv6_host_route(index, nameserver,
+ 								gw) < 0)
+ 			connman_inet_add_ipv6_host_route(index, nameserver,
+-- 
+2.49.0
+
