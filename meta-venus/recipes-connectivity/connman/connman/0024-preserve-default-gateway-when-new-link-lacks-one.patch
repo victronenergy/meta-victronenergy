@@ -1,0 +1,68 @@
+From 318ecf3b4a64df545e6b23a81bd6453db8e5661e Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Tue, 27 May 2025 11:31:40 +0100
+Subject: [PATCH] preserve default gateway when new link lacks one
+
+If a wired connection is established after wifi, prevent the gateway
+provided by wifi being unset if the wired link doesn't provide one.
+---
+ src/connection.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/src/connection.c b/src/connection.c
+index d30563869188..4053c1f76aa1 100644
+--- a/src/connection.c
++++ b/src/connection.c
+@@ -989,11 +989,17 @@ bool __connman_connection_update_gateway(void)
+ 	bool updated = false;
+ 	GHashTableIter iter;
+ 	gpointer value, key;
++	bool do_ipv4, do_ipv6;
+ 
+ 	if (!gateway_hash)
+ 		return updated;
+ 
+ 	default_gateway = find_default_gateway();
++	if (!default_gateway)
++		return updated;
++
++	do_ipv4 = has_ipv4_gateway(default_gateway);
++	do_ipv6 = has_ipv6_gateway(default_gateway);
+ 
+ 	DBG("default %p", default_gateway);
+ 
+@@ -1009,7 +1015,7 @@ bool __connman_connection_update_gateway(void)
+ 		if (active_gateway == default_gateway)
+ 			continue;
+ 
+-		if (active_gateway->ipv4_gateway &&
++		if (do_ipv4 && active_gateway->ipv4_gateway &&
+ 				active_gateway->ipv4_gateway->active) {
+ 
+ 			unset_default_gateway(active_gateway,
+@@ -1017,7 +1023,7 @@ bool __connman_connection_update_gateway(void)
+ 			updated = true;
+ 		}
+ 
+-		if (active_gateway->ipv6_gateway &&
++		if (do_ipv4 && active_gateway->ipv6_gateway &&
+ 				active_gateway->ipv6_gateway->active) {
+ 
+ 			unset_default_gateway(active_gateway,
+@@ -1027,11 +1033,11 @@ bool __connman_connection_update_gateway(void)
+ 	}
+ 
+ 	if (updated && default_gateway) {
+-		if (default_gateway->ipv4_gateway)
++		if (do_ipv4)
+ 			set_default_gateway(default_gateway,
+ 					CONNMAN_IPCONFIG_TYPE_IPV4);
+ 
+-		if (default_gateway->ipv6_gateway)
++		if (do_ipv6)
+ 			set_default_gateway(default_gateway,
+ 					CONNMAN_IPCONFIG_TYPE_IPV6);
+ 	}
+-- 
+2.49.0
+

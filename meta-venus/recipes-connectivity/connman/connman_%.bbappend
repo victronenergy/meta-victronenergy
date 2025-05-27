@@ -35,6 +35,8 @@ SRC_URI += "\
     file://0001-disable-stat-files.patch \
     file://0021-silence-time-slew-log-spam.patch \
     file://0022-really-ignore-blacklisted-and-non-ethernet-interface.patch \
+    file://0023-add-has_ipv-46-_gateway-helpers.patch \
+    file://0024-preserve-default-gateway-when-new-link-lacks-one.patch \
     file://main.conf \
     file://connmand-watch.sh \
 "
