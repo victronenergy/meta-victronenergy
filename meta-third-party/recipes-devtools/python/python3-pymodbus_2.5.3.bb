@@ -10,9 +10,6 @@ SRCREV = "c5772b35ae3f29d1947f3ab453d8d00df846459f"
 
 SRC_URI += "\
     file://0001-validate-transaction-id-of-response.patch \
-    file://0002-fall-back-to-default-read-size-in-ModbusUdpClient.patch \
-    file://0003-remove-bogus-expected-response-length-for-ModbusUdpC.patch \
-    file://0004-reject-responses-that-fail-validation.patch \
 "
 
 S = "${WORKDIR}/git"
