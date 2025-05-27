@@ -1,0 +1,73 @@
+From b08cf5a7d33b06e2e106ced97cd3da0ac7e36b01 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Mon, 26 May 2025 13:49:24 +0100
+Subject: [PATCH] add has_ipv[46]_gateway helpers
+
+---
+ src/connection.c | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
+
+diff --git a/src/connection.c b/src/connection.c
+index 37cafcac69cc..d30563869188 100644
+--- a/src/connection.c
++++ b/src/connection.c
+@@ -53,6 +53,22 @@ struct gateway_data {
+ 
+ static GHashTable *gateway_hash = NULL;
+ 
++static bool has_ipv4_gateway(struct gateway_data *data)
++{
++	if (!data->ipv4_gateway)
++		return false;
++
++	return g_strcmp0(data->ipv4_gateway->gateway, "0.0.0.0") != 0;
++}
++
++static bool has_ipv6_gateway(struct gateway_data *data)
++{
++	if (!data->ipv6_gateway)
++		return false;
++
++	return g_strcmp0(data->ipv6_gateway->gateway, "::") != 0;
++}
++
+ static struct gateway_config *find_gateway(int index, const char *gateway)
+ {
+ 	GHashTableIter iter;
+@@ -423,12 +439,10 @@ static void set_default_gateway(struct gateway_data *data,
+ 	DBG("type %d gateway ipv4 %p ipv6 %p", type, data->ipv4_gateway,
+ 						data->ipv6_gateway);
+ 
+-	if (data->ipv4_gateway &&
+-	    g_strcmp0(data->ipv4_gateway->gateway, "0.0.0.0") == 0)
++	if (!has_ipv4_gateway(data))
+ 		do_ipv4 = false;
+ 
+-	if (data->ipv6_gateway &&
+-	    g_strcmp0(data->ipv6_gateway->gateway, "::") == 0)
++	if (!has_ipv6_gateway(data))
+ 		do_ipv6 = false;
+ 
+ 	if (do_ipv4 && data->ipv4_gateway &&
+@@ -538,16 +552,12 @@ static void unset_default_gateway(struct gateway_data *data,
+ 
+ 	index = __connman_service_get_index(data->service);
+ 
+-	if (do_ipv4 && data->ipv4_gateway &&
+-			g_strcmp0(data->ipv4_gateway->gateway,
+-							"0.0.0.0") == 0) {
++	if (do_ipv4 && !has_ipv4_gateway(data)) {
+ 		connman_inet_clear_gateway_interface(index);
+ 		return;
+ 	}
+ 
+-	if (do_ipv6 && data->ipv6_gateway &&
+-			g_strcmp0(data->ipv6_gateway->gateway,
+-							"::") == 0) {
++	if (do_ipv6 && !has_ipv6_gateway(data)) {
+ 		connman_inet_clear_ipv6_gateway_interface(index);
+ 		return;
+ 	}
+-- 
+2.49.0
+
