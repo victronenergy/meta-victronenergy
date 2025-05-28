@@ -1,4 +1,4 @@
-From 4db13e7abab1d72d085b1a874bd7cc230bfd7558 Mon Sep 17 00:00:00 2001
+From 795cee766b21a464900b85565118ad520de40c11 Mon Sep 17 00:00:00 2001
 From: Mans Rullgard <mans@mansr.com>
 Date: Fri, 2 May 2025 10:42:15 +0100
 Subject: [PATCH] validate transaction id of response
@@ -8,14 +8,14 @@ Subject: [PATCH] validate transaction id of response
  1 file changed, 3 insertions(+)
 
 diff --git a/pymodbus/transaction.py b/pymodbus/transaction.py
-index e9f8c68c296a..949459cb0456 100644
+index e9f8c68c296a..80e6c7e98157 100644
 --- a/pymodbus/transaction.py
 +++ b/pymodbus/transaction.py
 @@ -126,6 +126,9 @@ class ModbusTransactionManager(object):
          if mbap.get('unit') != request.unit_id or mbap.get('fcode') & 0x7F != request.function_code:
              return False
  
-+        if mbap.get('tid') != request.transaction_id:
++        if 'tid' in mbap and mbap.get('tid') != request.transaction_id:
 +            return False
 +
          if 'length' in mbap and exp_resp_len:
