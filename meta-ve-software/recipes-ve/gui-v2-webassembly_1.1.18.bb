@@ -5,7 +5,7 @@ SRC_URI = " \
 	file://calc-gui-v2-wasm-sha26.sh \
 	file://localsettings \
 "
-SRC_URI[sha256sum] = "7c5bff44707e3d99e724ca12ab805d9320663ffc7b704095af22f6d6afe0de75"
+SRC_URI[sha256sum] = "8a142899381325ba111c5406f0e157cb02d339fbddce7f1c3c17d72ecdfd777e"
 S = "${WORKDIR}/wasm"
 
 inherit allarch localsettings www
