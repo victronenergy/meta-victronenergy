@@ -5,7 +5,7 @@ DESCRIPTION = "Daemon which only announces the device its presence over upnp"
 
 inherit pkgconfig
 
-DEPENDS += "glib-2.0 gupnp libsoup-2.4"
+DEPENDS += "glib-2.0 gupnp libsoup"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 S = "${WORKDIR}/git"
