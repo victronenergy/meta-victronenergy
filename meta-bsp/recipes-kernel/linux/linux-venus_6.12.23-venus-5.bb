@@ -4,6 +4,17 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
 inherit kernel
 
+# Auto generated CVE exclusion from a db.
+# See sources/openembedded-core/meta/recipes-kernel/linux/generate-cve-exclusions.py
+LINUX_VERSION = "${@d.getVar("PV").split("-")[0] }"
+include linux-venus-cve-exclusion-generated.inc
+
+# manual known cve exclusion by OE
+include recipes-kernel/linux/cve-exclusion.inc
+
+# still unknown cve statuses
+include linux-venus-cve-exclusion.inc
+
 SRC_URI = " \
     git://github.com/victronenergy/linux.git;protocol=https;nobranch=1 \
     file://0001-ARM-dts-bbb-venus-disable-dma-on-uart2.patch \
