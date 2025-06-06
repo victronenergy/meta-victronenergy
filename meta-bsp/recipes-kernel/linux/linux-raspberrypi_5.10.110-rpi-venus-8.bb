@@ -1,4 +1,8 @@
-require linux-venus.inc
+SECTION = "kernel"
+LICENSE = "GPL-2.0-only"
+LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
+
+inherit kernel
 
 COMPATIBLE_MACHINE = "^rpi$"
 
@@ -12,8 +16,14 @@ SRC_URI = " \
     file://0001-ata-ahci-fix-enum-constants-for-gcc-13.patch \
     file://wifi_cfg80211_certificate.patch \
 "
-UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRCREV = "3859262148951d08d011c96d637383883c451739"
+S = "${WORKDIR}/git"
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
+
+KERNEL_CONFIG_COMMAND = "oe_runmake -C ${S} O=${B} ${KERNEL_CONFIG}"
+
+DEPENDS += "coreutils-native openssl-native"
+HOST_EXTRACFLAGS += "-I${STAGING_INCDIR_NATIVE}"
 
 # NOTE: the regular dtb handling flattens the overlays with the
 # normal dtbs, versions them and creates symlinks. Since that is
