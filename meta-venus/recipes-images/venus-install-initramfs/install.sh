@@ -40,7 +40,7 @@ TTYS="console"
 SMALL_ROOT_SIZE=1280
 
 # default root partition size for mmc devices larger than 4 GB
-LARGE_ROOT_SIZE=2048
+LARGE_ROOT_SIZE=3125
 
 # size of root partitions in MB
 ROOT_SIZE=
