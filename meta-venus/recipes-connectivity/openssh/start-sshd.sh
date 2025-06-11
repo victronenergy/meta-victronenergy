@@ -2,7 +2,8 @@
 
 if [ ! -d /data/keys ]; then
 	mkdir /data/keys
-	chmod 700 /data/keys
+	# note: flashmq needs directory access as well
+	chmod 755 /data/keys
 else
 	rm -f /data/keys/ssh_host_dsa_key
 	rm -f /data/keys/ssh_host_dsa_key.pub
