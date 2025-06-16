@@ -7,7 +7,7 @@ key=$keydir/mosquitto.key
 mkdir -p $keydir
 # note: older devices have 700 as permission, always change it so
 # the flashmq user can access it.
-chown 755 /data/keys
+chmod 755 /data/keys
 
 if ! openssl rsa -check -noout -in $key ||
    ! openssl verify -CAfile $cert $cert ||
