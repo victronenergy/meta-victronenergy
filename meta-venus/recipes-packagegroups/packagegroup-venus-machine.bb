@@ -94,3 +94,7 @@ RDEPENDS:${PN}:append:rpi = "\
     swupdate-scripts \
     wireless-regdb-static \
 "
+
+DBUS_SHELLY = " dbus-shelly"
+DBUS_SHELLY:ccgx = ""
+RDEPENDS:${PN}:append = "${DBUS_SHELLY}"
