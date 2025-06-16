@@ -21,3 +21,8 @@ RDEPENDS:${PN} = " \
     python3-dbus-fast \
     python3-logging \
 "
+
+# actually a packaging error in OE, crashes otherwise with ModuleNotFoundError: No module named 'dataclasses'
+RDEPENDS:${PN} += " \
+    python3-misc \
+"
