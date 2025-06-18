@@ -1,16 +1,54 @@
+#!/bin/bash
+#
 # Although FlashMQ use this key nowadays, it is still called mosquitto.
 
 keydir=/data/keys
 cert=$keydir/mosquitto.crt
 key=$keydir/mosquitto.key
+hash_file="$keydir/.mosquitto_approved_hash.md5"
 
 mkdir -m 700 -p $keydir
 
-if ! openssl rsa -check -noout -in $key ||
-   ! openssl verify -CAfile $cert $cert ||
-   ! openssl x509 -noout -checkend 31536000 -in $cert; then
-    openssl req -subj /CN=venus.local -newkey rsa:2048 -nodes \
-            -keyout $key -x509 -days 36524 -out $cert
+if [[ ! -e "$hash_file" ]]; then
+    echo "dummy" > "$hash_file"
 fi
+
+if ! command -v md5sum > /dev/null; then
+    2>&1 echo "Error: no md5sum"
+    exit 1
+fi
+
+approved_hash="$(cat "$hash_file")"
+need_recheck="true"
+
+if [[ -f "$key" && -f "$cert" && $(stat -c %s "$key") -gt 0 && $(stat -c %s "$cert") -gt 0 ]]; then
+    cur_hash=$(cat "$cert" "$key" | md5sum)
+    if [[ "$approved_hash" == "$cur_hash" ]]; then
+        need_recheck="false"
+    fi
+fi
+
+if [[ "$need_recheck" == "true" ]]; then
+    calculate_hash="true"
+    if ! openssl rsa -check -noout -in $key ||
+       ! openssl verify -CAfile $cert $cert ||
+       ! openssl x509 -noout -checkend 31536000 -in $cert; then
+        calculate_hash="false"
+        if openssl req -subj /CN=venus.local -newkey rsa:2048 -nodes \
+                -keyout $key -x509 -days 36524 -out $cert; then
+            sync --file-system "$cert" "$key"
+            calculate_hash="true"
+        fi
+    fi
+
+    if [[ "$calculate_hash" ]]; then
+        cur_hash=$(cat "$cert" "$key" | md5sum)
+        echo "$cur_hash" > "$hash_file"
+    fi
+else
+    echo "Key and cert are correct"
+fi
+
+sync --file-system "$cert" "$key" "$hash_file"
 
 exec softlimit -d 150000000 -s 10000000 -a 150000000 /usr/bin/flashmq
