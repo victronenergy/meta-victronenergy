@@ -14,7 +14,15 @@ CLOCK_TICK_RATE = 1193180
 KIOCSOUND = 0x4B2F
 
 def beep(console_fd, frequency=440):
-    if os.path.exists('/sys/class/gpio/gpio35/value') and os.uname().nodename == 'ccgx' and frequency > 0:
+    # newer Venus OS firmware might have a symlink for the buzzer
+    if os.path.exists('/dev/gpio/buzzer/value') and frequency > 0:
+       with open('/dev/gpio/buzzer/value', 'w') as beep_file:
+           beep_file.write('1')
+       time.sleep(0.2)
+       with open('/dev/gpio/buzzer/value', 'w') as beep_file:
+           beep_file.write('0')
+    # older firmware doesn't though
+    elif os.path.exists('/sys/class/gpio/gpio35/value') and os.uname().nodename == 'ccgx' and frequency > 0:
        with open('/sys/class/gpio/gpio35/value', 'w') as beep_file:
            beep_file.write('1')
        time.sleep(0.2)
