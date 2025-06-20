@@ -12,8 +12,9 @@ SRC_URI = " \
     file://com.victronenergy.system.conf \
     file://rewrite-settingsdeviceaddsettings.patch;patchdir=ext/velib_python \
     file://speed-improvement-on-addsettings.patch;patchdir=ext/velib_python \
+    file://change-the-buzzer-path-to-devgpiobuzzer.patch \
 "
-PR = "1"
+PR = "2"
 SRCREV = "371fe8688b5f364c5bf2070a220cd867c5169c4a"
 S = "${WORKDIR}/git"
 

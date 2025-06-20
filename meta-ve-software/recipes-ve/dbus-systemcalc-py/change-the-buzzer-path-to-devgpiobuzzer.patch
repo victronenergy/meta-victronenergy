@@ -1,0 +1,108 @@
+From 3d7e13866b35899790e85550ceceba47bfab290e Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 18 Jun 2025 14:09:29 +0200
+Subject: [PATCH] change the buzzer path to /dev/gpio/buzzer
+
+The gpio numbers aren't stable between linux versions, so find the
+buzzer by name instead.
+
+https://github.com/victronenergy/venus-private/issues/546
+---
+ delegates/buzzercontrol.py | 13 ++++------
+ tests/buzzer_test.py       | 52 ++++++++++++++++++--------------------
+ 2 files changed, 29 insertions(+), 36 deletions(-)
+
+diff --git a/delegates/buzzercontrol.py b/delegates/buzzercontrol.py
+index e1db6e0..cc84529 100644
+--- a/delegates/buzzercontrol.py
++++ b/delegates/buzzercontrol.py
+@@ -14,7 +14,7 @@ class BuzzerControl(SystemCalcDelegate):
+ 	CLOCK_TICK_RATE = 1193180
+ 	KIOCSOUND = 0x4B2F
+ 	TTY_PATH = '/dev/tty0'
+-	GPIO_BUZZER_PATH = '/etc/venus/buzzer'
++	GPIO_BUZZER_PATH = '/dev/gpio/buzzer'
+ 	PWM_BUZZER_PATH = '/etc/venus/pwm_buzzer'
+ 
+ 	def __init__(self):
+@@ -26,13 +26,10 @@ def __init__(self):
+ 
+ 	def set_paths(self):
+ 		# Find GPIO buzzer
+-		gpio_paths = sc_utils.gpio_paths(BuzzerControl.GPIO_BUZZER_PATH)
+-		try:
+-			self._gpio_path = os.path.join(gpio_paths[0], 'value')
+-		except IndexError:
+-			pass
+-		else:
+-			logging.info('GPIO buzzer found: {}'.format(self._gpio_path))
++		gpio_path = os.path.join(self.GPIO_BUZZER_PATH, "value")
++		if os.path.exists(gpio_path):
++			self._gpio_path = gpio_path
++			logging.info(f'GPIO buzzer found: {self._gpio_path}')
+ 
+ 		# Find PWM buzzer
+ 		self._pwm_frequency = None
+diff --git a/tests/buzzer_test.py b/tests/buzzer_test.py
+index c8d5435..cc6796d 100644
+--- a/tests/buzzer_test.py
++++ b/tests/buzzer_test.py
+@@ -16,34 +16,30 @@ def __init__(self, methodName='runTest'):
+ 		TestSystemCalcBase.__init__(self, methodName)
+ 
+ 	def test_gpio_buzzer(self):
+-		with tempfile.NamedTemporaryFile(mode='wt') as gpio_buzzer_ref_fd:
+-			gpio_dir = tempfile.mkdtemp()
+-			gpio_state = os.path.join(gpio_dir, 'value')
+-			with open(gpio_state, 'wt') as f:
+-				f.write('0')
+-			try:
+-				gpio_buzzer_ref_fd.write(gpio_dir)
+-				gpio_buzzer_ref_fd.flush()
+-				delegates.BuzzerControl.GPIO_BUZZER_PATH = gpio_buzzer_ref_fd.name
+-				bc = delegates.BuzzerControl()
+-				bc.set_sources(self._monitor, self._system_calc._settings, self._service)
+-				self.assertEqual(bc._pwm_frequency, None)
+-				self.assertEqual(bc._gpio_path, gpio_state)
+-				self._service.set_value('/Buzzer/State', 'aa')  # Invalid value, should be ignored
+-				self.assertEqual(self._service['/Buzzer/State'], 0)
+-				self.assertEqual(open(gpio_state, 'rt').read(), '0')
+-				self._service.set_value('/Buzzer/State', '1')
+-				self.assertEqual(self._service['/Buzzer/State'], 1)
+-				self.assertEqual(open(gpio_state, 'rt').read(), '1')
+-				self._update_values(interval=505)
+-				self.assertEqual(open(gpio_state, 'rt').read(), '0')
+-				self._update_values(interval=505)
+-				self.assertEqual(open(gpio_state, 'rt').read(), '1')
+-				self._service.set_value('/Buzzer/State', 0)
+-				self.assertEqual(open(gpio_state, 'rt').read(), '0')
+-			finally:
+-				os.remove(gpio_state)
+-				os.removedirs(gpio_dir)
++		gpio_dir = tempfile.mkdtemp()
++		gpio_state = os.path.join(gpio_dir, 'value')
++		with open(gpio_state, 'wt') as f:
++			f.write('0')
++		try:
++			delegates.BuzzerControl.GPIO_BUZZER_PATH = gpio_dir
++			bc = delegates.BuzzerControl()
++			bc.set_sources(self._monitor, self._system_calc._settings, self._service)
++			self.assertEqual(bc._pwm_frequency, None)
++			self._service.set_value('/Buzzer/State', 'aa')  # Invalid value, should be ignored
++			self.assertEqual(self._service['/Buzzer/State'], 0)
++			self.assertEqual(open(gpio_state, 'rt').read(), '0')
++			self._service.set_value('/Buzzer/State', '1')
++			self.assertEqual(self._service['/Buzzer/State'], 1)
++			self.assertEqual(open(gpio_state, 'rt').read(), '1')
++			self._update_values(interval=505)
++			self.assertEqual(open(gpio_state, 'rt').read(), '0')
++			self._update_values(interval=505)
++			self.assertEqual(open(gpio_state, 'rt').read(), '1')
++			self._service.set_value('/Buzzer/State', 0)
++			self.assertEqual(open(gpio_state, 'rt').read(), '0')
++		finally:
++			os.remove(gpio_state)
++			os.removedirs(gpio_dir)
+ 
+ 	def test_pwm_buzzer(self):
+ 		# This test will log an exception to the standard output, because the BuzzerControl tries to do
