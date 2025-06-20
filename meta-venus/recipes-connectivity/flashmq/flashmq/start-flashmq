@@ -1,3 +1,5 @@
+#!/bin/sh
+#
 # Although FlashMQ use this key nowadays, it is still called mosquitto.
 
 keydir=/data/keys
@@ -6,11 +8,25 @@ key=$keydir/mosquitto.key
 
 mkdir -m 700 -p $keydir
 
-if ! openssl rsa -check -noout -in $key ||
+tempconf=$(mktemp)
+
+cat > "$tempconf" << EOF
+listen {
+  port 50021
+  fullchain $cert
+  privkey $key
+}
+EOF
+
+# FlashMQ actually creates an SSL context with key and cert, so it will detect
+# it if they are invalid.
+if ! /usr/bin/flashmq --test-config --config-file "$tempconf" ||
    ! openssl verify -CAfile $cert $cert ||
    ! openssl x509 -noout -checkend 31536000 -in $cert; then
     openssl req -subj /CN=venus.local -newkey rsa:2048 -nodes \
             -keyout $key -x509 -days 36524 -out $cert
 fi
+
+rm "$tempconf"
 
 exec softlimit -d 150000000 -s 10000000 -a 150000000 /usr/bin/flashmq
