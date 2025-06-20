@@ -1,0 +1,94 @@
+From 65c92818df1772f26c1a37e21db5be8651050103 Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Sun, 15 Jun 2025 19:04:02 +0200
+Subject: [PATCH] speed improvement on AddSettings
+
+Use the value returned by AddSettings instead of doing an extra
+GetValue call.
+---
+ settingsdevice.py |  4 +++-
+ vedbus.py         | 27 +++++++++++++++++----------
+ 2 files changed, 20 insertions(+), 11 deletions(-)
+
+diff --git a/settingsdevice.py b/settingsdevice.py
+index 2c96286..75260ea 100644
+--- a/settingsdevice.py
++++ b/settingsdevice.py
+@@ -5,6 +5,7 @@
+ 
+ # Local imports
+ from vedbus import VeDbusItemImport
++from ve_utils import unwrap_dbus_value
+ 
+ ## Indexes for the setting dictonary.
+ PATH = 0
+@@ -77,7 +78,8 @@ def addSettings(self, settings):
+ 				setting = lookup[r['path']]
+ 				busitem = VeDbusItemImport(self._bus, self._dbus_name,
+ 					r["path"],
+-					eventCallback=partial(self.handleChangedSetting, setting))
++					eventCallback=partial(self.handleChangedSetting, setting),
++					initialValue = unwrap_dbus_value(r['value']))
+ 				self._settings[setting] = busitem
+ 				self._values[setting] = busitem.get_value()
+ 			else:
+diff --git a/vedbus.py b/vedbus.py
+index b57eb03..cdb1eb5 100644
+--- a/vedbus.py
++++ b/vedbus.py
+@@ -9,6 +9,8 @@
+ from collections import defaultdict
+ from ve_utils import wrap_dbus_value, unwrap_dbus_value
+ 
++notset = object()
++
+ # vedbus contains three classes:
+ # VeDbusItemImport -> use this to read data from the dbus, ie import
+ # VeDbusItemExport -> use this to export data to the dbus (one value)
+@@ -297,7 +299,7 @@ class already subscribes to the NameOwnerChanged signal, and subsequently remove
+ because that takes care of all of that for you.
+ """
+ class VeDbusItemImport(object):
+-	def __new__(cls, bus, serviceName, path, eventCallback=None, createsignal=True):
++	def __new__(cls, bus, serviceName, path, eventCallback=None, createsignal=True, initialValue=notset):
+ 		instance = object.__new__(cls)
+ 
+ 		# If signal tracking should be done, also add to root tracker
+@@ -315,7 +317,7 @@ def __new__(cls, bus, serviceName, path, eventCallback=None, createsignal=True):
+ 	# @param createSignal   only set this to False if you use this function to one time read a value. When
+ 	#						leaving it to True, make sure to also subscribe to the NameOwnerChanged signal
+ 	#						elsewhere. See also note some 15 lines up.
+-	def __init__(self, bus, serviceName, path, eventCallback=None, createsignal=True):
++	def __init__(self, bus, serviceName, path, eventCallback=None, createsignal=True, initialValue=notset):
+ 		# TODO: is it necessary to store _serviceName and _path? Isn't it
+ 		# stored in the bus_getobjectsomewhere?
+ 		self._serviceName = serviceName
+@@ -331,15 +333,20 @@ def __init__(self, bus, serviceName, path, eventCallback=None, createsignal=True
+ 				"PropertiesChanged", weak_functor(self._properties_changed_handler))
+ 			self._roots[serviceName].add(self)
+ 
+-		# store the current value in _cachedvalue. When it doesn't exists set _cachedvalue to
+-		# None, same as when a value is invalid
+-		self._cachedvalue = None
+-		try:
+-			v = self._proxy.GetValue()
+-		except dbus.exceptions.DBusException:
+-			pass
++		# store the current value in _cachedvalue. When it doesn't exists set
++		# _cachedvalue to None, same as when a value is invalid. If an
++		# initialValue is provided, used that. That allows passing in a value
++		# if already known and skip the GetValue.
++		if initialValue is notset:
++			self._cachedvalue = None
++			try:
++				v = self._proxy.GetValue()
++			except dbus.exceptions.DBusException:
++				pass
++			else:
++				self._cachedvalue = unwrap_dbus_value(v)
+ 		else:
+-			self._cachedvalue = unwrap_dbus_value(v)
++			self._cachedvalue = initialValue
+ 
+ 	def __del__(self):
+ 		if self._match is not None:
