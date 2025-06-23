@@ -500,6 +500,9 @@ module.exports = {
     //    *   - reason: if result is false, the HTTP reason string to return
     //    */
     //},
+    victronVirtual: {
+        persistLocation: '/data/home/nodered/.node-red/.victron'
+    },
 
     // Load the venus settings which must survice a firmware update.
     ...try_require("/data/home/nodered/.node-red/settings-venus.js"),
