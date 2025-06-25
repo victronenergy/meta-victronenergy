@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ -d /var/www/venus/gui-beta ]; then
+if [ -d /var/www/venus/gui-v2 ]; then
 	while : ; do
 		gui_version="$(dbus-send --system --print-reply --dest=com.victronenergy.settings /Settings/Gui/RunningVersion com.victronenergy.BusItem.GetValue 2>/dev/null | grep variant | awk '{print $3;}')"
 		if [ "$gui_version" != "" ]; then

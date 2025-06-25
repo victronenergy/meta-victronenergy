@@ -11,10 +11,9 @@ S = "${WORKDIR}/wasm"
 inherit allarch localsettings www
 
 do_install() {
-    make DESTDIR="${D}" PREFIX="${WWW_ROOT}/gui-beta" install
+    make DESTDIR="${D}" PREFIX="${WWW_ROOT}/gui-v2" install
     install -d ${D}${bindir}
     install -m 755 ${UNPACKDIR}/calc-gui-v2-wasm-sha26.sh ${D}${bindir}
-    ln -s ${WWW_ROOT}/gui-beta ${D}/${WWW_ROOT}/gui-v2
 }
 
 RDEPENDS:${PN} += "bash"

@@ -59,7 +59,7 @@ server {
     # The normal auth+cookie flow when opening /gui-v2 needs to function, also
     # to make the websocket works, but the wasm(-related) asset files need to
     # be available without cookie, for the HttpProxyOverSshTunnels (VRM).
-    location ~ /gui-(v2|beta)/venus-gui-v2 {
+    location ~ /gui-v2/venus-gui-v2 {
         auth_request off;
 
         # This is needed because the wasm is downloaded as XHR. The proxying system
