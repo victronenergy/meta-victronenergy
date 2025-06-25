@@ -4,8 +4,9 @@ case "$1" in
 'start')
 	# Log to indicate (re)start
 	boot=`cat /tmp/last_boot_type`
+	version=$(head -n1 /opt/victronenergy/version)
 	if [ "$boot" != "-3" ]; then
-		for log in `ls /var/log/*/current 2> /dev/null`; do echo "*** CCGX booted ($boot) ***" | tai64n >> $log; done
+		for log in `ls /var/log/*/current 2> /dev/null`; do echo "*** Venus OS $version booted ($boot) ***" | tai64n >> $log; done
 	fi
 	sync
 	svscanboot &
