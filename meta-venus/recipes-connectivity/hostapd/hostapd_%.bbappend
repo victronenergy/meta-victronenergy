@@ -3,9 +3,10 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI += "\
     file://hostapd.conf \
     file://hostapd-run \
+    file://localsettings \
 "
 
-inherit daemontools-template
+inherit daemontools-template localsettings
 
 DAEMONTOOLS_RUN = "/usr/sbin/hostapd-run"
 
