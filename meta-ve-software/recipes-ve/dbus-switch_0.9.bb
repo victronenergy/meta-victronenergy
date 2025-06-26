@@ -7,7 +7,7 @@ inherit daemontools-template gmakevelib python-compile ve_package
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "gitsm://github.com/victronenergy/dbus-switch.git;branch=main;protocol=https"
 
-SRCREV = "a8de0da7841666837cc9c86681c053ab6593b4d7"
+SRCREV = "f882dfa93743d0b5e2b7888346db4b0885b21c75"
 S = "${WORKDIR}/git"
 
 RDEPENDS:${PN} = " \
