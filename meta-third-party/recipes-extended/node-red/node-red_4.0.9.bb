@@ -18,4 +18,11 @@ do_install:append() {
     # Remove hardware specific files
     rm ${D}${NPM_INSTALLDIR}${nonarch_libdir}/node_modules/${PN}/bin/node-red-pi
     rm ${D}${bindir}/node-red-pi
+
+    # Remove all prebuilt bcrypt binaries not matching target architecture
+    find ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/ -type d -name 'bcrypt-linux-*' \
+        ! -name "bcrypt-linux-${TARGET_ARCH}-*" -exec rm -rf {} +
+
+    find ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/node-red-admin/node_modules/ -type d -name 'bcrypt-linux-*' \
+        ! -name "bcrypt-linux-${TARGET_ARCH}-*" -exec rm -rf {} +
 }
