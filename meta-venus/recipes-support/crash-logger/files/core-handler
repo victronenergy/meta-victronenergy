@@ -1,0 +1,39 @@
+#! /bin/sh
+
+COUNTER=/run/venus/crash-count
+LOGDIR=/var/log/crash-logger
+
+case $1 in
+    --init)
+        mkdir -p $(dirname $COUNTER)
+        echo 0 >$COUNTER
+        sysctl kernel.core_pipe_limit=1 kernel.core_pattern="|$0 %p %s"
+        exit 0
+    ;;
+    --reset)
+        sysctl kernel.core_pattern=core
+        exit 0
+    ;;
+esac
+
+PID=$1
+SIG=$2
+
+handler() {
+    comm=$(cat /proc/$PID/comm)
+    echo "Process $PID ($comm) terminated with signal $SIG ($(kill -l $SIG))"
+
+    if command -v gdb >/dev/null; then
+        core=$(mktemp)
+        cat >$core
+        gdb --batch -e /proc/$PID/exe -c $core \
+            -ex 'info registers' \
+            -ex 'thread apply all backtrace'
+        rm $core
+    fi
+
+    COUNT=$(cat $COUNTER)
+    echo $((COUNT + 1)) >$COUNTER
+}
+
+handler | multilog t s25000 n4 $LOGDIR

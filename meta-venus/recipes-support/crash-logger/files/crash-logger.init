@@ -1,0 +1,13 @@
+#! /bin/sh
+
+case $1 in
+    start)
+        /sbin/core-handler --init
+    ;;
+    stop)
+        /sbin/core-handler --reset
+    ;;
+    *)
+        echo "Unknown command $1"
+    ;;
+esac
