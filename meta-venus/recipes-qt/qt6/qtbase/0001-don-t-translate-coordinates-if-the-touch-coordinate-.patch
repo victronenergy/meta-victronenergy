@@ -1,4 +1,4 @@
-From 3e1857f23ae6bc38bf7bb6fb50e47ddf7c6d6d8c Mon Sep 17 00:00:00 2001
+From ac1b46eb07f9f9cf53a08df1f8896937666fc68b Mon Sep 17 00:00:00 2001
 From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Sat, 27 Nov 2021 10:28:07 +0100
 Subject: [PATCH] don't translate coordinates if the touch coordinate range is
@@ -12,16 +12,15 @@ the reported coordinate is the screen coordinate.
 It would be nicer if the driver could simply report the correct value.
 
 Change-Id: I93ff73ea90cfcc1eccd63613b681c0756c3333a4
-Upstream-Status: Inappropriate [Venus specific]
 ---
  .../input/evdevtouch/qevdevtouchhandler.cpp   | 27 +++++++++++++------
  1 file changed, 19 insertions(+), 8 deletions(-)
 
 diff --git a/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp b/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp
-index eb693426d9..731c01f909 100644
+index b7aa45a33e8..ee4385fa65a 100644
 --- a/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp
 +++ b/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp
-@@ -150,6 +150,7 @@ public:
+@@ -134,6 +134,7 @@ public:
      int hw_range_y_max;
      int hw_pressure_min;
      int hw_pressure_max;
@@ -29,7 +28,7 @@ index eb693426d9..731c01f909 100644
      QString hw_name;
      QString deviceNode;
      bool m_forceToActiveWindow;
-@@ -180,6 +181,7 @@ QEvdevTouchScreenData::QEvdevTouchScreenData(QEvdevTouchScreenHandler *q_ptr, co
+@@ -164,6 +165,7 @@ QEvdevTouchScreenData::QEvdevTouchScreenData(QEvdevTouchScreenHandler *q_ptr, co
        hw_range_x_min(0), hw_range_x_max(0),
        hw_range_y_min(0), hw_range_y_max(0),
        hw_pressure_min(0), hw_pressure_max(0),
@@ -37,7 +36,7 @@ index eb693426d9..731c01f909 100644
        m_forceToActiveWindow(false), m_typeB(false), m_singleTouch(false),
        m_filtered(false), m_prediction(0)
  {
-@@ -336,6 +338,13 @@ QEvdevTouchScreenHandler::QEvdevTouchScreenHandler(const QString &device, const
+@@ -326,6 +328,13 @@ QEvdevTouchScreenHandler::QEvdevTouchScreenHandler(const QString &device, const
                  d->hw_range_x_min, d->hw_range_x_max, d->hw_range_y_min, d->hw_range_y_max);
      }
  
@@ -48,10 +47,10 @@ index eb693426d9..731c01f909 100644
 +    if (d->hw_name.startsWith(QLatin1String("generic ft5x06")) && d->hw_range_x_max == 65535)
 +        d->hw_in_screen_coordinates = true;
 +
+ #if !defined(Q_OS_VXWORKS)
      bool grabSuccess = !ioctl(m_fd, EVIOCGRAB, (void *) 1);
      if (grabSuccess)
-         ioctl(m_fd, EVIOCGRAB, (void *) 0);
-@@ -778,14 +787,16 @@ void QEvdevTouchScreenData::reportPoints()
+@@ -810,14 +819,16 @@ void QEvdevTouchScreenData::reportPoints()
          // Generate a screen position that is always inside the active window
          // or the primary screen.  Even though we report this as a QRectF, internally
          // Qt uses QRect/QPoint so we need to bound the size to winRect.size() - QSize(1, 1)
@@ -77,5 +76,5 @@ index eb693426d9..731c01f909 100644
          // Calculate normalized pressure.
          if (!hw_pressure_min && !hw_pressure_max)
 -- 
-2.25.1
+2.43.0
 
