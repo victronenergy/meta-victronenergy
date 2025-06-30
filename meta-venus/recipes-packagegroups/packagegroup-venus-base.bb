@@ -42,6 +42,7 @@ RDEPENDS:${PN} += "\
     can-utils-cantest \
     connman \
     connman-tools \
+    crash-logger \
     cronie \
     curl \
     custom-rc.d \
