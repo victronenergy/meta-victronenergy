@@ -8,8 +8,10 @@ inherit cmake pkgconfig
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "git://github.com/victronenergy/dbus-flashmq.git;branch=master;protocol=https"
+SRC_URI += "file://mask-the-ap-password.patch"
 SRCREV = "b7244435b5907c62d75d25881bb797657c366369"
 S = "${WORKDIR}/git"
+PR = "1"
 EXTRA_OECMAKE = "-DCMAKE_BUILD_TYPE=Release"
 
 PACKAGES =+ "${PN}-test"
