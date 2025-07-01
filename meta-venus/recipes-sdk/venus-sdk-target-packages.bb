@@ -18,6 +18,7 @@ RDEPENDS:${PN} += " \
     libusb1-dev \
     neatvnc-dev \
     iptables-dev \
+    xorgproto-dev \
 "
 
 # qt6
