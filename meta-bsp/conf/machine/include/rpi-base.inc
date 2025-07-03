@@ -42,7 +42,7 @@ UBOOT_SRC_URI ?= "git://github.com/victronenergy/u-boot.git;branch=rpi_v2022.01;
 UBOOT_SUFFIX ?= "bin"
 UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
 
-IMAGE_FSTYPES ?= "wic ext4.gz"
+IMAGE_FSTYPES ?= "wic ext4.gz wic.bmap"
 
 MACHINE_FEATURES += "apm usbhost keyboard vfat ext2 screen touchscreen alsa bluetooth wifi sdio ${@bb.utils.contains('DISABLE_VC4GRAPHICS', '1', '', 'vc4graphics', d)}"
 
