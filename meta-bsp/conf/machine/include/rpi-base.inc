@@ -15,7 +15,6 @@ RPI_KERNEL_DEVICETREE_OVERLAYS = " \
     overlays/gpio-fan.dtbo \
     overlays/pitft28-capacitive.dtbo \
     overlays/pitft35-resistive.dtbo \
-    overlays/rpi-display.dtbo \
     overlays/mcp2515-can0.dtbo \
     overlays/mcp2515-can1.dtbo \
     overlays/mcp251xfd.dtbo \

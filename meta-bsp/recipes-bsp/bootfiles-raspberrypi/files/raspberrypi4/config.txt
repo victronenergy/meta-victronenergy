@@ -2,4 +2,4 @@ enable_uart=1
 kernel=u-boot.bin
 
 [all]
-device_tree=bcm2711-rpi-4-b.dtb
+device_tree=broadcom/bcm2711-rpi-4-b.dtb
