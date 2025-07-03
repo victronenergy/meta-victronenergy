@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = "git://github.com/victronenergy/venus-www.git;branch=master;protocol=https"
 SRC_URI += "file://create-venus-session-dir"
-SRCREV = "f3918e820c70a66280b9b96acf5942240b5f778c"
+SRCREV = "316c03e401adc0f051f93a3a128f6e9d19230e3d"
 S = "${WORKDIR}/git"
 
 inherit www
@@ -17,6 +17,7 @@ do_install() {
     install -m 644 "${S}/auth/browser_detection.js" ${D}${AUTHDIR}
     install -m 644 "${S}/auth/cert-explanation.html" ${D}${AUTHDIR}
     install -m 644 "${S}/auth/favicon.ico" "${D}${AUTHDIR}"
+    install -m 644 "${S}/auth/generate-token.php" "${D}${AUTHDIR}"
     install -m 644 "${S}/auth/info_icon.png" "${D}${AUTHDIR}"
     install -m 644 "${S}/auth/login.php" "${D}${AUTHDIR}"
     install -m 644 "${S}/auth/logout.php" "${D}${AUTHDIR}"
