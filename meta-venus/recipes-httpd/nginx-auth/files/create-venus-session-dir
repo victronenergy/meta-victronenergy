@@ -5,3 +5,7 @@ if [ ! -d "$dir" ]; then
 	mkdir -p "$dir"
 fi
 chown -R php-fpm:php-fpm "$dir"
+
+# allow tokens to be passed to venus-platform
+mkdir -p -m 700 /var/volatile/tokens
+chown php-fpm:php-fpm /var/volatile/tokens
