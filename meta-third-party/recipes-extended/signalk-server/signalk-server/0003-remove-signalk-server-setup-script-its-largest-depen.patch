@@ -1,0 +1,408 @@
+From 3cbcae690a5cf6874b38bb223d9562829d2f50f1 Mon Sep 17 00:00:00 2001
+From: mpvader <mvader@victronenergy.com>
+Date: Sat, 5 Jul 2025 13:14:54 +0200
+Subject: [PATCH 3/3] remove signalk-server-setup script + its largest
+ dependencies
+
+The signalk-server-setup script is not used within Venus OS.
+
+And it brings in some quite large dependencies:
+* figlet    <-- 7MB
+* inquirer  <-- 18MB
+* listr     <-- 17MB
+
+Hence remove it all. 7 + 18 + 17 = 42 MB, and apparently they drag in a bit
+more since after removing them, the installed size dropped by 50MB.
+
+There are some more very small dependencies that could be removed as well,
+for example chalk and clear, but rather leave them in - less risk & maintenance
+going forward.
+---
+ bin/signalk-server-setup | 354 ---------------------------------------
+ package.json             |   3 -
+ 2 files changed, 357 deletions(-)
+ delete mode 100755 bin/signalk-server-setup
+
+diff --git a/bin/signalk-server-setup b/bin/signalk-server-setup
+deleted file mode 100755
+index 55679168..00000000
+--- a/bin/signalk-server-setup
++++ /dev/null
+@@ -1,354 +0,0 @@
+-#!/usr/bin/env node
+-
+-const spawn = require('child_process').spawnSync
+-const clear = require('clear')
+-const figlet = require('figlet')
+-const chalk = require('chalk')
+-const inquirer = require('inquirer')
+-const fs = require('fs')
+-const path = require('path')
+-const _ = require('lodash')
+-const Listr = require('listr')
+-const { v4: uuidv4 } = require('uuid')
+-
+-const settingsFile = 'settings.json'
+-const defaultsFile = 'baseDeltas.json'
+-const startupFile = 'signalk-server'
+-const packageFile = 'package.json'
+-
+-const hasSystemctl = spawn('sh', ['-c', 'which systemctl']).status === 0
+-const euid = process.geteuid()
+-const thisDirName = __dirname
+-const systemdLocation = '/etc/systemd/system'
+-
+-const DeltaEditor = require('../dist/deltaeditor')
+-
+-clear()
+-console.log(
+-  chalk.blue(figlet.textSync('Signal K', { horizontalLayout: 'full' }))
+-)
+-
+-//console.log(JSON.stringify(process.env, null, 2))
+-//console.log(hasSystemctl)
+-
+-if (euid > 0) {
+-  if (hasSystemctl) {
+-    console.log()
+-    console.log(
+-      'Please run as root if you want this server configuration to run at every startup, type: "sudo signalk-server-setup"'
+-    )
+-    console.log()
+-
+-    inquirer
+-      .prompt([
+-        {
+-          name: 'notAsRoot',
+-          type: 'confirm',
+-          message: 'Are you sure you want to continue',
+-          default: false
+-        }
+-      ])
+-      .then((answers) => {
+-        if (answers.notAsRoot == false) {
+-          process.exit(1)
+-        } else {
+-          promptForConfigDir(`${process.env.HOME}/.signalk`)
+-        }
+-      })
+-  } else {
+-    promptForConfigDir(`${process.env.HOME}/.signalk`)
+-  }
+-} else {
+-  if (
+-    !process.env.SUDO_USER ||
+-    !process.env.SUDO_UID ||
+-    !process.env.SUDO_GID
+-  ) {
+-    console.log('unable to determine the sudo user')
+-    process.exit(1)
+-  }
+-
+-  console.log(
+-    `\nYOU ARE LOGGED IN AS ${process.env.SUDO_USER} AND THE SERVER WILL BE STARTED AS THIS USER\n`
+-  )
+-
+-  let res = spawn('sh', ['-c', `eval echo ~${process.env.SUDO_USER}`])
+-  if (res.status != 0 || (res.output && res.output.length < 2)) {
+-    console.log('unable to determine effecive user home directory')
+-    process.exit(1)
+-  }
+-  let dir = res.output[1].toString().trim()
+-  promptForConfigDir(`${dir}/.signalk`)
+-}
+-
+-function promptForConfigDir(defaultLocation) {
+-  inquirer
+-    .prompt([
+-      {
+-        name: 'configDirectory',
+-        type: 'input',
+-        message: 'Enter the location to store server configuration:',
+-        default: defaultLocation,
+-        validate: (input) => {
+-          if (input.length > 0) {
+-            return true
+-          } else {
+-            return 'Please enter the location to store server configuration.'
+-          }
+-        }
+-      }
+-    ])
+-    .then((answers) => {
+-      let configDirectory = answers.configDirectory
+-      if (fs.existsSync(path.join(configDirectory, settingsFile))) {
+-        inquirer
+-          .prompt([
+-            {
+-              name: 'updateExisting',
+-              type: 'list',
+-              message:
+-                'Do you want to update the existing configuration or start from scratch',
+-              choices: ['Update', 'Start from scratch']
+-            }
+-          ])
+-          .then((answers) => {
+-            promptForVesselName(
+-              configDirectory,
+-              answers.updateExisting == 'Update'
+-            )
+-          })
+-      } else {
+-        promptForVesselName(configDirectory, false)
+-      }
+-    })
+-}
+-
+-function promptForVesselName(configDirectory, updateExisting) {
+-  let settingsLocation = path.join(configDirectory, settingsFile)
+-  let defaultsLocation = path.join(configDirectory, defaultsFile)
+-  let startupLocation = path.join(configDirectory, startupFile)
+-  let packageLocation = path.join(configDirectory, packageFile)
+-  let settings = {
+-    interfaces: {},
+-    ssl: false,
+-    pipedProviders: [],
+-    security: {
+-      strategy: './tokensecurity'
+-    }
+-  }
+-  let deltaEditor = new DeltaEditor()
+-  let packageJson = {
+-    name: 'signalk-server-config',
+-    version: '0.0.1',
+-    description: 'This file is here to track your plugin and webapp installs.',
+-    repository: {},
+-    license: 'Apache-2.0'
+-  }
+-
+-  if (!fs.existsSync(configDirectory)) {
+-    fs.mkdirSync(configDirectory)
+-  }
+-
+-  if (updateExisting) {
+-    settings = JSON.parse(fs.readFileSync(settingsLocation))
+-    if (fs.existsSync(defaultsLocation)) {
+-      deltaEditor.load(defaultsLocation)
+-    }
+-    if (fs.existsSync(packageLocation)) {
+-      packageJson = JSON.parse(fs.readFileSync(packageLocation))
+-    }
+-  }
+-
+-  inquirer
+-    .prompt([
+-      {
+-        name: 'vesselName',
+-        type: 'input',
+-        message: 'Enter your vessel name:',
+-        default: deltaEditor.getSelfValue('name'),
+-        validate: (input) => {
+-          if (input.length > 0) {
+-            return true
+-          } else {
+-            return 'Please enter your vessel name.'
+-          }
+-        }
+-      },
+-      {
+-        name: 'mmsi',
+-        type: 'input',
+-        message: 'Enter your mmsi if you have one:',
+-        default: deltaEditor.getSelfValue('mmsi')
+-      }
+-    ])
+-    .then((answers) => {
+-      let mmsi = answers.mmsi
+-      let vesselName = answers.vesselName
+-
+-      var questions = []
+-      if (euid == 0) {
+-        console.log(
+-          '\nThe Signal K default port is 3000\nPort 80 does not require ":3000" in the browser and app interfaces\n'
+-        )
+-        questions.push({
+-          name: 'usePort80',
+-          type: 'confirm',
+-          message: 'Do you want to use port 80?',
+-          default: false
+-        })
+-      }
+-      questions.push({
+-        name: 'enableSSL',
+-        type: 'confirm',
+-        message: 'Do you want to enable SSL?',
+-        default: false
+-      })
+-      inquirer.prompt(questions).then((answers) => {
+-        let port = answers.usePort80 ? 80 : 3000
+-        let enableSSL = answers.enableSSL
+-
+-        let tasks = [
+-          {
+-            title: `Creating your server base deltas at ${defaultsLocation}`,
+-            task: () => {
+-              if (!mmsi || mmsi.length == 0) {
+-                if (!deltaEditor.getSelfValue('uuid')) {
+-                  deltaEditor.setSelfValue(
+-                    'uuid',
+-                    'urn:mrn:signalk:uuid:' + uuidv4()
+-                  )
+-                }
+-                deltaEditor.removeSelfValue('mmsi')
+-              } else {
+-                deltaEditor.setSelfValue('mmsi', mmsi)
+-                deltaEditor.removeSelfValue('uuid')
+-              }
+-              deltaEditor.setSelfValue('name', vesselName)
+-              deltaEditor.save(defaultsLocation)
+-            }
+-          },
+-          {
+-            title: `Creating your server settings at ${settingsLocation}`,
+-            task: () => {
+-              settings.ssl = enableSSL
+-              fs.writeFileSync(
+-                settingsLocation,
+-                JSON.stringify(settings, null, 2)
+-              )
+-            }
+-          },
+-          {
+-            title: 'Creating package.json',
+-            task: () => {
+-              fs.writeFileSync(
+-                packageLocation,
+-                JSON.stringify(packageJson, null, 2)
+-              )
+-            }
+-          },
+-          {
+-            title: `Creating your server startup script at ${startupLocation}`,
+-            task: () => {
+-              if (!updateExisting || !fs.existsSync(startupLocation)) {
+-                let script = `#!/bin/sh\n${thisDirName}/signalk-server -c ${configDirectory} \$*`
+-                fs.writeFileSync(startupLocation, script)
+-                fs.chmodSync(startupLocation, '755')
+-              }
+-            }
+-          }
+-        ]
+-
+-        if (euid == 0) {
+-          tasks.push({
+-            title: `Updating file ownership and permissions`,
+-            task: () => {
+-              ;[
+-                startupLocation,
+-                packageLocation,
+-                defaultsLocation,
+-                settingsLocation,
+-                configDirectory
+-              ].forEach((file) => {
+-                let stat = fs.statSync(file)
+-                let mode =
+-                  file === startupLocation || stat.isDirectory() ? '755' : '644'
+-
+-                fs.chownSync(
+-                  file,
+-                  Number(process.env.SUDO_UID),
+-                  Number(process.env.SUDO_GID)
+-                )
+-                fs.chmodSync(file, mode)
+-              })
+-            }
+-          })
+-          if (hasSystemctl) {
+-            tasks.push({
+-              title: `Setting up your server to start Signal K when booting up `,
+-              task: () => {
+-                let primaryPort, secondaryPort
+-                if (enableSSL) {
+-                  if (port == 80) {
+-                    primaryPort = 443
+-                    secondaryPort = 80
+-                  } else {
+-                    primaryPort = 3443
+-                    secondaryPort = 3000
+-                  }
+-                } else {
+-                  primaryPort = port
+-                }
+-
+-                let serverd = `[Service]
+-ExecStart=${startupLocation}
+-Restart=always
+-StandardOutput=syslog
+-StandardError=syslog
+-WorkingDirectory=${configDirectory}
+-User=${process.env.SUDO_USER}
+-Environment=EXTERNALPORT=${primaryPort}
+-Environment=NODE_ENV=production
+-Environment=RUN_FROM_SYSTEMD=true
+-[Install]
+-WantedBy=multi-user.target
+-`
+-                let socketd = `[Socket]
+-ListenStream=${primaryPort}
+-${typeof secondaryPort != 'undefined' ? 'ListenStream=' + secondaryPort : ''}
+-
+-[Install]
+-WantedBy=sockets.target`
+-
+-                fs.writeFileSync(
+-                  path.join(systemdLocation, 'signalk.service'),
+-                  serverd
+-                )
+-                fs.writeFileSync(
+-                  path.join(systemdLocation, 'signalk.socket'),
+-                  socketd
+-                )
+-              }
+-            })
+-            let commands = [
+-              'systemctl daemon-reload',
+-              'systemctl enable signalk.service',
+-              'systemctl enable signalk.socket',
+-              'systemctl stop signalk.service',
+-              'systemctl restart signalk.socket',
+-              'systemctl restart signalk.service'
+-            ]
+-            commands.forEach((command) => {
+-              tasks.push({
+-                title: `Running '${command}'`,
+-                task: () => {
+-                  spawn('sh', ['-c', command])
+-                }
+-              })
+-            })
+-          }
+-        }
+-
+-        new Listr(tasks).run()
+-      })
+-    })
+-}
+diff --git a/package.json b/package.json
+index 64895544..b52e00bd 100644
+--- a/package.json
++++ b/package.json
+@@ -96,15 +96,12 @@
+     "express": "^4.10.4",
+     "express-easy-zip": "^1.1.5",
+     "express-namespace": "^0.1.1",
+-    "figlet": "^1.2.0",
+     "file-timestamp-stream": "^2.1.2",
+     "flatmap": "0.0.3",
+     "geolib": "3.2.2",
+     "get-installed-path": "^4.0.8",
+-    "inquirer": "^7.0.0",
+     "json-patch": "^0.7.0",
+     "jsonwebtoken": "^9.0.0",
+-    "listr": "^0.14.1",
+     "lodash": "^4.17.4",
+     "mdns-js": "^1.0.3",
+     "minimist": "^1.1.0",
+-- 
+2.34.1
+
