@@ -9,8 +9,14 @@ software =
 		copy1: {
 			images: (
 				{
-					filename =~ "${VENUS_IMAGE_FILE}";
+					filename = "venus-boot-image-raspberrypi4.vfat.gz";
 					device = "/dev/mmcblk0p2";
+					compressed = true;
+					installed-directly = true;
+				},
+				{
+					filename =~ "${VENUS_IMAGE_FILE}";
+					device = "/dev/mmcblk0p5";
 					compressed = true;
 					installed-directly = true;
 				}
@@ -21,12 +27,27 @@ software =
 					value = "1";
 				}
 			);
+			files: (
+				{
+					filename = "boota";
+					path = "autoboot.txt";
+					device = "/dev/mmcblk0p1"
+					filesystem = "vfat";
+					properties = {create-destination = "true";}
+				}
+			);
 		};
 		copy2: {
 			images: (
 				{
-					filename =~ "${VENUS_IMAGE_FILE}";
+					filename = "venus-boot-image-raspberrypi4.vfat.gz";
 					device = "/dev/mmcblk0p3";
+					compressed = true;
+					installed-directly = true;
+				},
+				{
+					filename =~ "${VENUS_IMAGE_FILE}";
+					device = "/dev/mmcblk0p6";
 					compressed = true;
 					installed-directly = true;
 				}
@@ -35,6 +56,15 @@ software =
 				{
 					name = "version";
 					value = "2";
+				}
+			);
+			files: (
+				{
+					filename = "bootb";
+					path = "autoboot.txt";
+					device = "/dev/mmcblk0p1"
+					filesystem = "vfat";
+					properties = {create-destination = "true";}
 				}
 			);
 		};

@@ -3,5 +3,12 @@ proc                 /proc                proc       defaults              0  0
 devpts               /dev/pts             devpts     mode=0620,gid=5       0  0
 tmpfs                /run                 tmpfs      mode=0755,nodev,nosuid,strictatime 0  0
 tmpfs                /var/volatile        tmpfs      defaults              0  0
-/dev/mmcblk0p1       /u-boot              vfat       defaults              0  0
-/dev/mmcblk0p4       /data                ext4       noatime               0  2
+
+/dev/mmcblk0p1       /recover             vfat       defaults              0  0
+/dev/mmcblk0p2       /boot1               vfat       defaults              0  0
+/dev/mmcblk0p3       /boot2               vfat       defaults              0  0
+
+# /dev/mmcblk0p4     ext partition
+# /dev/mmcblk0p5     /rootfs1             ext4       noatime               0  2
+# /dev/mmcblk0p6     /rootfs2             ext4       noatime               0  2
+/dev/mmcblk0p7       /data                ext4       noatime               0  2

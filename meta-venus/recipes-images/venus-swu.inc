@@ -21,6 +21,7 @@ python () {
 SRC_URI = "file://sw-description"
 
 SRC_URI:append:canvu500 = " file://imx-kobs-update.sh"
+SRC_URI:append:rpi = " file://boota file://bootb"
 
 inherit swupdate
 
@@ -34,6 +35,7 @@ VENUS_VERSION = "${BUILDNAME} ${DISTRO_VERSION}"
 
 BOOT_IMAGE = ""
 BOOT_IMAGE:beaglebone = "venus-boot-image"
+BOOT_IMAGE:rpi = "venus-boot-image"
 
 BOOT_IMAGE_FILE = \
     "${@'${BOOT_IMAGE}-${MACHINE}.${BOOT_FSTYPE}' if '${BOOT_IMAGE}' else ''}"

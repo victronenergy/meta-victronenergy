@@ -4,8 +4,8 @@ mount -o remount,rw /
 
 LAST_PART_NUM=$(parted /dev/mmcblk0 -ms unit s p | tail -n 1 | cut -f 1 -d:)
 
-if [ $LAST_PART_NUM -ne 2 ]; then
-	echo "more then two partions already exist"
+if [ $LAST_PART_NUM -ne 5 ]; then
+	echo "more then five partions already exist"
 	exit 0
 fi
 
@@ -17,10 +17,10 @@ if [ $size -lt 1562500 ]; then
 fi
 
 echo "MIND IT: CHANGING THE MBR!!!"
-parted /dev/mmcblk0 -ms resizepart 2 33% mkpart primary ext4 33% 66% mkpart primary ext4 66% 100%
+parted /dev/mmcblk0 -ms resizepart 4 100% resizepart 5 33% mkpart logical ext4 33% 66% mkpart logical ext4 66% 100%
 echo "DONE!!!"
 
-mkfs.ext4 -F /dev/mmcblk0p3
-mkfs.ext4 -F /dev/mmcblk0p4
+mkfs.ext4 -F /dev/mmcblk0p6
+mkfs.ext4 -F /dev/mmcblk0p7
 
 update-rc.d -f zzz-resize-sdcard remove
