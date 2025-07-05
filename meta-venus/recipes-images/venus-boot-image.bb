@@ -16,18 +16,35 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 do_install[noexec] = "1"
 
-do_deploy () {
-    BOOT_IMAGE=${IMAGE_NAME}.vfat
-    BOOTIMG=${DEPLOYDIR}/${BOOT_IMAGE}
+python do_deploy () {
+    import os, subprocess
 
-    mkfs.vfat -S 512 -C ${BOOTIMG} ${BOOT_IMAGE_SIZE}
+    bootimg = d.expand("${DEPLOYDIR}/${IMAGE_NAME}.vfat")
+    cmd = d.expand(f"mkfs.vfat -S 512 -C {bootimg} ${{BOOT_IMAGE_SIZE}}")
+    if not subprocess.run(cmd, shell=True, check=True):
+        bb.fatal(f"creating {bootimg} failed")
 
-    for file in ${IMAGE_BOOT_FILES}; do
-        mcopy -i ${BOOTIMG} -s ${DEPLOY_DIR_IMAGE}/${file} ::/
-    done
+    files = d.getVar("IMAGE_BOOT_FILES")
+    for file in files.split():
+        parts = file.split(";")
+        destdir = os.path.dirname(file) if len(parts) != 2 else parts[1]
+        file = parts[0]
 
-    gzip ${BOOTIMG}
-    ln -sf ${BOOT_IMAGE}.gz ${DEPLOYDIR}/${IMAGE_LINK_NAME}.vfat.gz
+        tgfile = os.path.basename(file)
+        if tgfile == "*":
+            tgfile = ""
+
+        dest = os.path.join(destdir, tgfile)
+        if dest != "":
+            mmdcmd = f"mmd -i {bootimg} ::/{destdir}"
+            subprocess.run(mmdcmd, shell=True)
+
+        mcopy = d.expand(f"mcopy -i {bootimg} -s ${{DEPLOY_DIR_IMAGE}}/{file} ::/{dest}")
+        subprocess.run(mcopy, shell=True, check=True)
+
+    subprocess.run(f"gzip {bootimg}", shell=True, check=True)
+    tg = d.expand("${DEPLOYDIR}/${IMAGE_LINK_NAME}.vfat.gz")
+    subprocess.run(f"ln -sfr {bootimg}.gz {tg}", shell=True, check=True)
 }
 
 addtask do_deploy before do_build
