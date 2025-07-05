@@ -53,7 +53,7 @@ MACHINE_FEATURES_BACKFILL_CONSIDERED = "rtc"
 SWU_VERSION = "3"
 
 IMAGE_BOOT_FILES ?= " \
-    bcm2835-bootfiles/* \
+    bcm2835-bootfiles/*;. \
     config.txt \
     cmdline.txt \
     ${RPI_KERNEL_DEVICETREE} \
