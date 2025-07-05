@@ -3,7 +3,10 @@ LICENSE = "MIT"
 
 inherit deploy image-artifact-names nopackages
 
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
 BOOT_IMAGE_SIZE = "8192"
+BOOT_IMAGE_SIZE:rpi = "90000"
 
 do_deploy[depends] += "\
     dosfstools-native:do_populate_sysroot \

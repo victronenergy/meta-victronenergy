@@ -21,6 +21,7 @@ python () {
 SRC_URI = "file://sw-description"
 
 SRC_URI:append:canvu500 = " file://imx-kobs-update.sh"
+SRC_URI:append:rpi = " file://boota file://bootb"
 
 inherit swupdate
 
