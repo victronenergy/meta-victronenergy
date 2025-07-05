@@ -11,8 +11,8 @@ SRC_URI += "\
 # Add the mount point for the data partition
 dirs755 += " ${permanentdir}"
 
-# mount point for u-boot FAT partition on raspberrypi2.
-dirs755:append:rpi = " /u-boot"
+# mount point for u-boot FAT partitions on raspberrypis.
+dirs755:append:rpi = " /boot1 /boot2 /recover"
 
 do_compile:append() {
     for f in ${FSTAB}; do

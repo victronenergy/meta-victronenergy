@@ -11,7 +11,6 @@ B = "${WORKDIR}/build"
 
 do_compile() {
     echo "boot_partition=2" >> ${B}/autoboot.txt
-    tar -czf ${WORKDIR}/${PN}.gz -C ${B} .
 }
 
 do_deploy () {

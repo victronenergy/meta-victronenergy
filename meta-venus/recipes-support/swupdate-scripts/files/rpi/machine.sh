@@ -4,14 +4,14 @@ rootfstype=ext4
 get_rootfs() {
     dev=$(stat -c %d /)
     case $((dev & 7)) in
-        2) echo 1 ;;
-        3) echo 2 ;;
+        5) echo 1 ;;
+        6) echo 2 ;;
     esac
 }
 
 # print device name of specified rootfs number
 get_rootdev() {
-    echo /dev/mmcblk0p$(($1 + 1))
+    echo /dev/mmcblk0p$(($1 + 4))
 }
 
 do_swupdate() {

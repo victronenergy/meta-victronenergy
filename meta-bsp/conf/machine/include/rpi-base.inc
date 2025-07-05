@@ -62,6 +62,7 @@ IMAGE_BOOT_FILES ?= " \
 
 do_image_wic[depends] += " \
     bcm2835-bootfiles:do_deploy \
+    recover-partition:do_deploy \
     virtual/bootloader:do_deploy \
 "
 
