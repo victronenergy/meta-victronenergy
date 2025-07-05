@@ -1,18 +1,25 @@
-From 3498fb0825586d9bb254dd5730f42c804167eb71 Mon Sep 17 00:00:00 2001
+From 6fa5c4765d8dacfe56e27eba7040cf70618cbc83 Mon Sep 17 00:00:00 2001
 From: mpvader <mvader@victronenergy.com>
 Date: Fri, 4 Jul 2025 21:17:28 +0200
-Subject: [PATCH] package.json: no optional packages and add
+Subject: [PATCH 2/3] package.json: change optional to mandatory and add
  signalk-venus-plugin
 
+This changes nothing to the build, as they were already always installed. But
+not anymore as per the recent change to npm-online-install.bbclass.
+
+For the reasons why each package is wanted see here:
+https://docs.google.com/document/d/1oJLH7MoRAPoqlo9aaO0gnBYA05a2ruQWFsexZfqWm9E
+
+For why we don't want packages to be listed as optional, see here:
 https://github.com/victronenergy/venus/wiki/npm-and-nodejs-packages
 
-https://docs.google.com/document/d/1oJLH7MoRAPoqlo9aaO0gnBYA05a2ruQWFsexZfqWm9E
+Part of https://github.com/victronenergy/venus/issues/1304
 ---
  package.json | 7 +++----
  1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/package.json b/package.json
-index 5f35025e..9fffd137 100644
+index 22ab9330..64895544 100644
 --- a/package.json
 +++ b/package.json
 @@ -120,9 +120,7 @@
