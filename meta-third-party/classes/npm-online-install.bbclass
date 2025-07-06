@@ -55,7 +55,7 @@ do_compile() {
     cd "${NPM_TMP}" && npm install \
         --arch=${NPM_ARCH} \
         --target_arch=${NPM_ARCH} \
-        --production
+        --omit=dev
 
     # mimic a global install
     NAME="$(cat ${WORKDIR}/nodename)"
