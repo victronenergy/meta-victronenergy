@@ -38,7 +38,16 @@ DEBUG_PREFIX_MAP += " \
 "
 
 do_compile() {
-    if [ ! -f ${S}/npm-shrinkwrap.json ]; then
+    # uncomment below to let npm free, ie. have it install the most recent
+    # allowed version for each dependency. Thereafter, copy the generated
+    # shrinkwrap file from the build directory to your recipe. More details
+    # in above linked documentation wiki page.
+    # NEW_SHRINKWRAP=1
+
+    if [ -n "$NEW_SHRINKWRAP" ]; then
+        bbwarn "Generating a new npm-shrinkwrap.json. Don't do  this in real builds."
+        rm -f ${S}/npm-shrinkwrap.json
+    elif [ ! -f ${S}/npm-shrinkwrap.json ]; then
         bbfatal "No npm-shrinkwrap.json found for ${PN}"
     fi
 
@@ -57,6 +66,11 @@ do_compile() {
         --target_arch=${NPM_ARCH} \
         --omit=dev \
         --omit=optional
+
+    if [ -n "$NEW_SHRINKWRAP" ]; then
+        npm shrinkwrap
+        bbwarn "New npm-shrinkwrap.json created, get it here:\n${NPM_TMP}/npm-shrinkwrap.json"
+    fi
 
     # mimic a global install
     NAME="$(cat ${WORKDIR}/nodename)"
