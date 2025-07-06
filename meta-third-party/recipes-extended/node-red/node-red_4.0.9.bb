@@ -18,9 +18,4 @@ do_install:append() {
     # Remove hardware specific files
     rm ${D}${NPM_INSTALLDIR}${nonarch_libdir}/node_modules/${PN}/bin/node-red-pi
     rm ${D}${bindir}/node-red-pi
-
-    rm -r ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@node-rs/bcrypt-linux-x64-gnu
-    rm -r ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/node-red-admin/node_modules/@node-rs/bcrypt-linux-x64-gnu
-    rm -r ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@node-rs/bcrypt-linux-x64-musl
-    rm -r ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/node-red-admin/node_modules/@node-rs/bcrypt-linux-x64-musl
 }
