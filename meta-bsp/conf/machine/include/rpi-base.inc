@@ -9,6 +9,7 @@ MACHINE_FEATURES += "headless"
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-raspberrypi"
 
 RPI_KERNEL_DEVICETREE_OVERLAYS = " \
+    overlays/overlay_map.dtb \
     overlays/ads7846.dtbo \
     overlays/disable-bt.dtbo \
     overlays/disable-wifi.dtbo \
@@ -24,6 +25,13 @@ RPI_KERNEL_DEVICETREE_OVERLAYS = " \
     overlays/spi1-3cs.dtbo \
     overlays/waveshare-can-fd-hat-mode-a.dtbo \
     overlays/waveshare-can-fd-hat-mode-b.dtbo \
+    overlays/vc4-fkms-v3d.dtbo \
+    overlays/vc4-fkms-v3d-pi4.dtbo \
+    overlays/vc4-kms-v3d.dtbo \
+    overlays/vc4-kms-v3d-pi4.dtbo \
+    overlays/vc4-kms-v3d-pi5.dtbo \
+    overlays/vc4-kms-dsi-7inch.dtbo \
+    overlays/vc4-kms-dsi-ili9881-7inch.dtbo \
 "
 
 KERNEL_PACKAGES ?= "kernel-image kernel-modules"
