@@ -1,0 +1,11 @@
+enable_uart=1
+kernel=u-boot.bin
+
+[all]
+device_tree=broadcom/bcm2712-rpi-5-b.dtb
+
+# Enable VC4 Graphics
+dtoverlay=vc4-kms-v3d
+
+# Automatically load overlays for detected DSI displays
+display_auto_detect=1
