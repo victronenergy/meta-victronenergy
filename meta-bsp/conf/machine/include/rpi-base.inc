@@ -5,7 +5,7 @@ WKS_FILE ?= "sdimage-raspberrypi.wks"
 
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-raspberrypi"
 
-RPI_KERNEL_DEVICETREE_OVERLAYS = " \
+RPI_KERNEL_DEVICETREE_OVERLAYS ?= " \
     overlays/ads7846.dtbo \
     overlays/disable-bt.dtbo \
     overlays/disable-wifi.dtbo \
