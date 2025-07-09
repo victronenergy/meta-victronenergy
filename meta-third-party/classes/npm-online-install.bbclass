@@ -25,6 +25,25 @@ python do_getname() {
         package = json.load(f)
     with open(os.path.join(w, "nodename"), "w") as f:
         f.write(package["name"] if "name" in package else pn)
+    if "version" in package:
+        pkgv = package["version"]
+        pv = d.getVar("PV")
+        if not pv == pkgv:
+            bb.warn(f"PV {pv} doesn't match the package.json its version {pkgv}")
+
+    shrinkwrap = os.path.join(s, "npm-shrinkwrap.json")
+    if not os.path.isfile(shrinkwrap):
+        return
+
+    with open(shrinkwrap, "r") as f:
+        package = json.load(f)
+
+        if not "version" in package:
+            bb.warn(f"no version field found in {shrinkwrap}")
+            return
+
+        with open(os.path.join(w, "schrinkwrapv"), "w") as f:
+            f.write(package["version"])
 }
 
 addtask getname after do_unpack before do_compile
@@ -49,6 +68,10 @@ do_compile() {
     else
         if [ ! -f ${S}/npm-shrinkwrap.json ]; then
             bbfatal "No npm-shrinkwrap.json found for ${PN}"
+        fi
+        shrinkwrapv="$(cat ${WORKDIR}/schrinkwrapv)"
+        if [ "${PV}" != "$shrinkwrapv" ]; then
+            bbwarn "PV ${PV} doesn't match the shrinkwrap version $shrinkwrapv, run 'bitbake -c update_shrinkwrap ${PN}' first"
         fi
         npm_cmd="clean-install"
     fi
