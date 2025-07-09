@@ -37,9 +37,20 @@ DEBUG_PREFIX_MAP += " \
     -fdebug-prefix-map=${NPM_TMP}=${TARGET_DBGSRC_DIR} \
 "
 
+NPM_SHRINKMAP_SRC = "${@bb.utils.which(d.getVar('FILESPATH'), 'npm-shrinkwrap.json')}"
+
 do_compile() {
-    if [ ! -f ${S}/npm-shrinkwrap.json ]; then
-        bbfatal "No npm-shrinkwrap.json found for ${PN}"
+
+    if [ "$1" = "update_shrinkwrap" ]; then
+        if [ -f ${S}/npm-shrinkwrap.json ]; then
+            rm ${S}/npm-shrinkwrap.json
+        fi
+        npm_cmd="install"
+    else
+        if [ ! -f ${S}/npm-shrinkwrap.json ]; then
+            bbfatal "No npm-shrinkwrap.json found for ${PN}"
+        fi
+        npm_cmd="clean-install"
     fi
 
     tar=$(npm pack ${S})
@@ -52,7 +63,14 @@ do_compile() {
     # again to populate D, to end up in /usr/lib eventually)
     tar -xzf $tar -C ${WORKDIR}/npm-extracted --strip-components 1 -C "${NPM_TMP}"
 
-    cd "${NPM_TMP}" && npm install \
+    if [ "$1" != "update_shrinkwrap" ]; then
+        # make sure npm-shrinkwrap is there for a normal install. Not sure how this works,
+        # it is in the tar for node-red, but not node-red-venus-contrib.
+        # Maybe https://github.com/npm/cli/issues/6803 ?
+        cp ${S}/npm-shrinkwrap.json "${NPM_TMP}"
+    fi
+
+    cd "${NPM_TMP}" && npm $npm_cmd \
         --arch=${NPM_ARCH} \
         --target_arch=${NPM_ARCH} \
         --omit=dev \
@@ -83,5 +101,29 @@ python do_binlinks() {
             oe.path.symlink(rel, link, True)
 }
 addtask binlinks after do_compile before do_install
+
+NPM_SHRINKWRAP_SRC = "${@bb.utils.which(d.getVar('FILESPATH'), 'npm-shrinkwrap.json')}"
+
+do_update_shrinkwrap() {
+    if [ "${NPM_SHRINKWRAP_SRC}" = "" ]; then
+         bbfatal "no shrinkmap source file found"
+    fi
+
+    do_compile update_shrinkwrap
+    npm shrinkwrap
+
+    if ! diff -q ${NPM_TMP}/npm-shrinkwrap.json ${NPM_SHRINKWRAP_SRC}; then
+        bbwarn updating ${NPM_SHRINKWRAP_SRC}
+        cp ${NPM_TMP}/npm-shrinkwrap.json ${NPM_SHRINKWRAP_SRC}
+    else
+        bbwarn "shrinkwrap not changed ${S}"
+        cp ${NPM_SHRINKWRAP_SRC} ${S}/npm-shrinkwrap.json
+    fi
+}
+addtask update_shrinkwrap after do_getname do_prepare_recipe_sysroot
+do_update_shrinkwrap[cleandirs] += "${NPM_BUILD} ${NPM_TMP}"
+do_update_shrinkwrap[dirs] = "${NPM_TMP}"
+do_update_shrinkwrap[network] = "1"
+do_update_shrinkwrap[nostamp] = "1"
 
 INSANE_SKIP:${PN} += "already-stripped"
