@@ -8,13 +8,11 @@ inherit localsettings
 RDEPENDS:${PN} = "nginx venus-html5-logger"
 
 SRC_URI = " \
-    https://github.com/victronenergy/venus-html5-app/releases/download/${PV}/venus-html5-app.tar.gz;downloadfilename=venus-html5-app-${PV}.tar.gz \
+    https://github.com/victronenergy/venus-html5-app/releases/download/${PV}/venus-html5-app.tar.gz;downloadfilename=venus-html5-app-${PV}.tar.gz;subdir=${S} \
     file://localsettings \
 "
 SRC_URI[sha256sum] = "1f9277889cd2d4c296f5cc2faebfb46bbee443578fecacead32803b782c4450f"
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
 BASE_DIR = "${WWW_ROOT}/default/app"
 
 INHIBIT_DEFAULT_DEPS = "1"

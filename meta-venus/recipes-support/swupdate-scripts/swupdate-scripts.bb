@@ -21,9 +21,6 @@ SRC_URI = " \
     file://storage-size.sh \
 "
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
-
 SCRIPTDIR = "/opt/victronenergy/swupdate-scripts"
 
 do_install () {

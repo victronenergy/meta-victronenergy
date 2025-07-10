@@ -1,6 +1,4 @@
 SRC_URI += "file://qt-kms.conf file://qt6.sh"
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 LICENSE = "MIT"

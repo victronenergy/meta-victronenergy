@@ -9,9 +9,6 @@ SRC_URI = " \
     file://custom-rc-late.sh \
 "
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
-
 inherit allarch
 inherit update-rc.d
 

@@ -8,8 +8,6 @@ inherit update-rc.d
 RDEPENDS:${PN} += "daemontools"
 
 SRC_URI += "file://svscanboot.sh"
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
 
 do_install () {
     mkdir -p ${D}/${sysconfdir}/init.d

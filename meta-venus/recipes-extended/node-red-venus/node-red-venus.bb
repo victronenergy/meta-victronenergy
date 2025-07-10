@@ -12,8 +12,6 @@ SRC_URI = "\
     file://user-authentication.js \
     file://venus-settings.js \
 "
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
 
 inherit daemontools useradd www
 

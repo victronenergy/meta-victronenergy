@@ -5,7 +5,7 @@ UNPACKDIR = "${S}"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += "\
-    file://main.c \
+    file://main.c;subdir=${UNPACKDIR} \
 "
 
 do_compile () {

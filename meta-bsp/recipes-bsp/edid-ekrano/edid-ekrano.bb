@@ -7,17 +7,14 @@ SRC_URI = "\
     file://ekrano-edid.conf \
 "
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
-
 do_install() {
     fwdir=${D}${nonarch_base_libdir}/firmware
     install -d ${fwdir}
-    install -m 644 EDID_Ekrano_GX_rev_A6_48M.bin ${fwdir}
+    install -m 644 ${UNPACKDIR}/EDID_Ekrano_GX_rev_A6_48M.bin ${fwdir}
 
     etcdir=${D}${sysconfdir}/modprobe.d
     install -d ${etcdir}
-    install -m 644 ekrano-edid.conf ${etcdir}
+    install -m 644 ${UNPACKDIR}/ekrano-edid.conf ${etcdir}
 }
 
 FILES:${PN} = "${nonarch_base_libdir} ${sysconfdir}"
