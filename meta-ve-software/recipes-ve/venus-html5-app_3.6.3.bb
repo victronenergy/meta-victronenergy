@@ -12,6 +12,7 @@ SRC_URI = " \
     file://localsettings \
 "
 SRC_URI[sha256sum] = "1f9277889cd2d4c296f5cc2faebfb46bbee443578fecacead32803b782c4450f"
+S = "${UNPACKDIR}/www"
 
 BASE_DIR = "${WWW_ROOT}/default/app"
 
@@ -21,7 +22,7 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 do_install () {
-	rm -f "${S}/dist/static/media/javascript,__webpack_public_path__ = __webpack_base_uri__ = htmlWebpackPluginPublicPath;.1feff74f.bin"
+    rm -f "${S}/dist/static/media/javascript,__webpack_public_path__ = __webpack_base_uri__ = htmlWebpackPluginPublicPath;.1feff74f.bin"
 
     for f in $( find ${S}/dist -type f -printf "%P\n" ); do
         install -D "${S}/dist/$f" "${D}${BASE_DIR}/$f"
