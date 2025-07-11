@@ -27,7 +27,7 @@ SRC_URI = "\
 
 SRC_URI[sha256sum] = "4e938112cdedcc65230d9107596ba2cda923dfc88db302d27528109a96edf521"
 
-S = "${WORKDIR}/npm"
+S = "${UNPACKDIR}/npm"
 
 inherit daemontools npm-online-install useradd
 

@@ -53,9 +53,9 @@ FILES:${PN}-mt7662 = " \
 
 do_install:append() {
   install -d ${D}${nonarch_base_libdir}/firmware/brcm
-  install -m 0644 ${WORKDIR}/brcm/brcmfmac43362-sdio.txt ${D}${nonarch_base_libdir}/firmware/brcm
-  install -m 0644 ${WORKDIR}/brcm/BCM20702A1.hcd ${D}${nonarch_base_libdir}/firmware/brcm
-  install -m 0644 ${WORKDIR}/brcm/BCM43430A1.hcd ${D}${nonarch_base_libdir}/firmware/brcm
+  install -m 0644 ${UNPACKDIR}/brcm/brcmfmac43362-sdio.txt ${D}${nonarch_base_libdir}/firmware/brcm
+  install -m 0644 ${UNPACKDIR}/brcm/BCM20702A1.hcd ${D}${nonarch_base_libdir}/firmware/brcm
+  install -m 0644 ${UNPACKDIR}/brcm/BCM43430A1.hcd ${D}${nonarch_base_libdir}/firmware/brcm
   ln -s brcmfmac43430-sdio.AP6212.txt ${D}${nonarch_base_libdir}/firmware/brcm/brcmfmac43430-sdio.txt
 }
 

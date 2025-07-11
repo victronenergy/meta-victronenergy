@@ -8,7 +8,7 @@ SRC_URI = "\
     file://npm-shrinkwrap.json;subdir=${S} \
 "
 SRC_URI[sha256sum] = "a93c606f3620b4acc4900a428ad76f389508b9113d1ccd13d6c908b6c95741a6"
-S = "${WORKDIR}/npm"
+S = "${UNPACKDIR}/npm"
 
 RDEPENDS:${PN} = "nodejs-npm"
 
