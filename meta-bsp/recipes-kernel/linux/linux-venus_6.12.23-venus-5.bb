@@ -19,8 +19,10 @@ SRC_URI = " \
     git://github.com/victronenergy/linux.git;protocol=https;nobranch=1 \
     file://0001-ARM-dts-bbb-venus-disable-dma-on-uart2.patch \
 "
+BB_GIT_DEFAULT_DESTSUFFIX ?= "git"
+S = "${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX}"
+
 SRCREV = "a334bd8b1acab04eb85359b4c8a7735a6d60715b"
-S = "${WORKDIR}/git"
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 
 RDEPENDS:${KERNEL_PACKAGE_NAME}-base += "kernel-devicetree"
