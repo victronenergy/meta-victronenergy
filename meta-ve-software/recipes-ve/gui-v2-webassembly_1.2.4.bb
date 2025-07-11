@@ -2,10 +2,11 @@ include gui-v2.inc
 
 SRC_URI = " \
 	https://github.com/victronenergy/gui-v2/releases/download/v${PV}/venus-webassembly.zip;downloadfilename=venus-webassembly-${PV}.zip \
+	file://fix-makefile-to-copy-icons-to-the-correct-folder.patch \
 	file://calc-gui-v2-wasm-sha26.sh \
 	file://localsettings \
 "
-SRC_URI[sha256sum] = "0aecadc8d007ff10320cde90463c0e37349f69a3675993c9e296c8533151d4de"
+SRC_URI[sha256sum] = "be7533e56d1bf44612884fd0cfb6d5570d05c7b1024ad9ae3fb6f3da882b1042"
 S = "${WORKDIR}/wasm"
 
 inherit allarch localsettings www

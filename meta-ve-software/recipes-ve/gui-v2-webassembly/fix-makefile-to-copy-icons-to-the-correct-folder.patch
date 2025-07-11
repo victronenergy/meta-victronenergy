@@ -1,0 +1,34 @@
+From ee6cbd419ab2595cbd4cb1a4424e68999d4891f9 Mon Sep 17 00:00:00 2001
+From: Manuel <mr-manuel@outlook.it>
+Date: Thu, 10 Jul 2025 13:53:08 +0200
+Subject: [PATCH] Fix Makefile to copy icons to the correct folder
+
+---
+ .github/patches/Makefile | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/.github/patches/Makefile b/.github/patches/Makefile
+index a3fddcc24..1d0e609a2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,10 +1,11 @@
+ ifeq ($(PREFIX),)
+-	PREFIX := /var/www/venus/gui-beta
++	PREFIX := /var/www/venus/gui-v2
+ endif
+ 
+ FILES=index.html qtloader.js venus-gui-v2.js venus-gui-v2.wasm.gz venus-gui-v2.wasm.sha256 \
+-	victronenergy.svg victronenergy-light.svg mockup.svg LICENSE.txt \
+-	icons/android-chrome-192x192.png icons/android-chrome-512x512.png icons/apple-touch-icon.png \
++	victronenergy.svg victronenergy-light.svg mockup.svg LICENSE.txt
++
++ICONS=icons/android-chrome-192x192.png icons/android-chrome-512x512.png icons/apple-touch-icon.png \
+ 	icons/browserconfig.xml icons/favicon-16x16.png icons/favicon-32x32.png icons/favicon.ico icons/manifest.json \
+ 	icons/mstile-150x150.png icons/safari-pinned-tab.svg
+ 
+@@ -17,3 +18,5 @@ clean: ;
+ install:
+ 	install -d $(DESTDIR)$(PREFIX)/
+ 	install -m 644 $(FILES) $(DESTDIR)$(PREFIX)/
++	install -d $(DESTDIR)$(PREFIX)/icons/
++	install -m 644 $(ICONS) $(DESTDIR)$(PREFIX)/icons/
