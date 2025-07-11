@@ -9,7 +9,7 @@ SRC_URI = " \
 INSANE_SKIP += "src-uri-bad"
 
 # Careful! When updating the version, also npm-shrinkwrap.json must be updated
-SRC_URI[sha256sum] = "e9208d6fc9d485b0dac66104607fdf2901c84ba6d5a8315de449a30076ac92ed"
+SRC_URI[sha256sum] = "91672d94222b4775194e5d319612e182b6a4698d244d3f5a5174520f8d1ca9a6"
 
 inherit npm-online-install
 
