@@ -7,7 +7,7 @@ SRC_URI = " \
 	file://localsettings \
 "
 SRC_URI[sha256sum] = "be7533e56d1bf44612884fd0cfb6d5570d05c7b1024ad9ae3fb6f3da882b1042"
-S = "${WORKDIR}/wasm"
+S = "${UNPACKDIR}/wasm"
 
 inherit allarch localsettings www
 

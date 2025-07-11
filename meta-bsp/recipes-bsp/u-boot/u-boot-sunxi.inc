@@ -8,4 +8,4 @@ SRC_URI = "https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz"
 SRC_URI[sha256sum] = "1dab16ee22c40d543988e9645aeeb171b9b4fd029c43d0d656bea235fb159661"
 INSANE_SKIP += "src-uri-bad"
 
-S = "${WORKDIR}/u-boot-${PV}"
+S = "${UNPACKDIR}/u-boot-${PV}"
