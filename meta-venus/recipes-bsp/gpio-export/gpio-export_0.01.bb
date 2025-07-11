@@ -20,6 +20,7 @@ SRC_URI = " \
 SRC_URI:append:ccgx = "\
     file://mkx_pins.sh \
 "
+S = "${S_UNUSED}"
 
 INITSCRIPT_NAME = "gpio_pins.sh"
 INITSCRIPT_PARAMS = "start 90 S ."

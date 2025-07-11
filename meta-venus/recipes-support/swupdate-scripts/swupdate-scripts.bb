@@ -20,6 +20,7 @@ SRC_URI = " \
     file://set-version.sh \
     file://storage-size.sh \
 "
+S = "${S_UNUSED}"
 
 SCRIPTDIR = "/opt/victronenergy/swupdate-scripts"
 

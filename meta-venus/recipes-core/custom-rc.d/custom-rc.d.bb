@@ -8,6 +8,7 @@ SRC_URI = " \
     file://custom-rc-early.sh \
     file://custom-rc-late.sh \
 "
+S = "${S_UNUSED}"
 
 inherit allarch
 inherit update-rc.d

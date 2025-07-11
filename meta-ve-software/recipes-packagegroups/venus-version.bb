@@ -1,7 +1,5 @@
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
 
 # Not really machine specific actually, but the nostamp will cause the task to be
 # rerun per machine per build in a multiconfig setup instead of only once per build,
@@ -18,6 +16,8 @@ UNPACKDIR = "${S}"
 #
 # So just make it machine specific, despite the task being completely the same.
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+
+S = "${S_UNUSED}"
 
 inherit ve_package
 
