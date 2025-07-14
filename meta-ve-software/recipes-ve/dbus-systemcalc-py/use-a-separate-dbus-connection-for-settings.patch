@@ -1,0 +1,24 @@
+From e69f9dfd1ed06650172f48082be2c706f8aba12e Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Mon, 23 Jun 2025 15:47:43 +0200
+Subject: [PATCH] use a separate dbus connection for settings
+
+That way, filtering for changes on settings doesn't also get all
+the other traffic for other matches.
+---
+ dbus_systemcalc.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dbus_systemcalc.py b/dbus_systemcalc.py
+index 2cfb598..5becc0a 100755
+--- a/dbus_systemcalc.py
++++ b/dbus_systemcalc.py
+@@ -1251,7 +1251,7 @@ def _create_dbus_monitor(self, *args, **kwargs):
+ 		return DbusMonitor(*args, **kwargs)
+ 
+ 	def _create_settings(self, *args, **kwargs):
+-		bus = dbus.SessionBus() if 'DBUS_SESSION_BUS_ADDRESS' in os.environ else dbus.SystemBus()
++		bus = dbus.SessionBus(private=True) if 'DBUS_SESSION_BUS_ADDRESS' in os.environ else dbus.SystemBus(private=True)
+ 		return SettingsDevice(bus, *args, timeout=10, **kwargs)
+ 
+ 	def _create_dbus_service(self):

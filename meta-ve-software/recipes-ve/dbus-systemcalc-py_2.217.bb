@@ -13,8 +13,11 @@ SRC_URI = " \
     file://rewrite-settingsdeviceaddsettings.patch;patchdir=ext/velib_python \
     file://speed-improvement-on-addsettings.patch;patchdir=ext/velib_python \
     file://change-the-buzzer-path-to-devgpiobuzzer.patch \
+    file://use-a-separate-dbus-connection-for-settings.patch \
+    file://tab-battery-settings.patch \
+    file://settingsdevice-lighter-version-to-track-settings.patch;patchdir=ext/velib_python \
 "
-PR = "2"
+PR = "3"
 SRCREV = "371fe8688b5f364c5bf2070a220cd867c5169c4a"
 S = "${WORKDIR}/git"
 

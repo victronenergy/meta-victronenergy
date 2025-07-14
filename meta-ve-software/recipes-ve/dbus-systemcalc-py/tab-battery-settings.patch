@@ -1,0 +1,31 @@
+From 81903251198f86898c4dd1bfdcbb129ae1ffe78f Mon Sep 17 00:00:00 2001
+From: ReinvdZee <rvanderzee@victronenergy.com>
+Date: Wed, 18 Jun 2025 16:36:25 +0200
+Subject: [PATCH] TAB battery settings
+
+---
+ delegates/batterysettings.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/delegates/batterysettings.py b/delegates/batterysettings.py
+index ec0f88e..9a52b81 100644
+--- a/delegates/batterysettings.py
++++ b/delegates/batterysettings.py
+@@ -31,6 +31,7 @@
+ BATTERY_SUNWODA = 0xB01F
+ BATTERY_BATRIUM_D = 0xB038
+ BATTERY_SOLUNA = 0xB02F
++BATTERY_TAB = 0xB052
+ 
+ class BatterySettings(SystemCalcDelegate):
+ 	""" Manages battery settings for known batteries. At present
+@@ -50,7 +51,8 @@ def apply_battery_settings(self, service):
+ 		# for some batteries.
+ 		if pid in (BATTERY_PYLONTECH, BATTERY_BYD, BATTERY_BYD_L, BATTERY_BYD_PREMIUM,
+ 				BATTERY_DISCOVER_AES, BATTERY_PYTES, BATTERY_LEOCH, BATTERY_LBSA,
+-				BATTERY_BSLBATT, BATTERY_BMZ, BATTERY_CEGASA, BATTERY_PELIO_L, BATTERY_ZYC, BATTERY_SUNWODA):
++				BATTERY_BSLBATT, BATTERY_BMZ, BATTERY_CEGASA, BATTERY_PELIO_L, BATTERY_ZYC,
++				BATTERY_SUNWODA, BATTERY_TAB):
+ 			self._settings['vsense'] = 2 # Forced Off
+ 			self._settings['tsense'] = 2 # Forced Off
+ 			self._settings['bol'] = 3 # Forced on
