@@ -1,0 +1,27 @@
+From 3076e874b25049b31ddb01b65e4fee9b9f3a4e37 Mon Sep 17 00:00:00 2001
+From: ReinvdZee <rvanderzee@victronenergy.com>
+Date: Mon, 7 Jul 2025 15:49:08 +0200
+Subject: [PATCH] Fix link local address not being set
+
+QProcess no longer accepts the program and arguments in one string.
+So the entire command was seen as the program and fails, returning an empty string.
+Separating the program and the args solves the issue
+
+https://github.com/victronenergy/venus/issues/1498
+---
+ src/network_controller.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/network_controller.cpp b/src/network_controller.cpp
+index b42b509..352b4d2 100644
+--- a/src/network_controller.cpp
++++ b/src/network_controller.cpp
+@@ -236,7 +236,7 @@ QString NetworkController::getLinkLocalAddr()
+ {
+ 	QProcess proc;
+ 
+-	proc.start("ip -o -4 addr sh dev ll-eth0 scope link");
++	proc.start("ip", QStringList{"-o", "-4", "addr", "sh", "dev", "ll-eth0", "scope", "link"});
+ 	proc.waitForFinished();
+ 
+ 	QString out(proc.readAllStandardOutput());
