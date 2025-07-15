@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=dab31a1d28183826937f4b152143a33f"
 
 inherit pypi python_setuptools_build_meta ptest
 
-SRC_URI[sha256sum] = "347c1d5dc1c5f6d2d3f15d04cdad54209cb928251ba46ae4f3e173185f6a13b4"
+SRC_URI[sha256sum] = "024bd9a04d2bcfd13c444fe7b17798b532c8fbe1b8793b56395ecdb3fdf2890c"
 
 RDEPENDS:${PN} = " \
     python3-core \
