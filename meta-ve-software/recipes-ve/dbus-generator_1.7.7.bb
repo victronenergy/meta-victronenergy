@@ -10,7 +10,7 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/dbus_generator.git;branch=master;protocol=https \
     file://com.victronenergy.generator-starter.conf \
 "
-SRCREV = "06d5f7fc5cf3ca77f1f2939df40319b2e6fb71a1"
+SRCREV = "e92e637d0dac8a71371c2a2009273783f8b5495f"
 S = "${WORKDIR}/git"
 
 RDEPENDS:${PN} = " \
