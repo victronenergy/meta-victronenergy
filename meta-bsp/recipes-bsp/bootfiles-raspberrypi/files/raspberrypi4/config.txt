@@ -3,3 +3,6 @@ kernel=u-boot.bin
 
 [all]
 device_tree=broadcom/bcm2711-rpi-4-b.dtb
+
+# Enable VC4 Graphics
+dtoverlay=vc4-kms-v3d
