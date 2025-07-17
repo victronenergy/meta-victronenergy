@@ -73,3 +73,5 @@ do_image_wic[depends] += " \
 "
 
 do_image_wic[recrdeps] = "do_deploy"
+
+#VENUS_GPU = "1"
