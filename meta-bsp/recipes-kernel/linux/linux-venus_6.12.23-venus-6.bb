@@ -15,14 +15,11 @@ include recipes-kernel/linux/cve-exclusion.inc
 # still unknown cve statuses
 include linux-venus-cve-exclusion.inc
 
-SRC_URI = " \
-    git://github.com/victronenergy/linux.git;protocol=https;nobranch=1 \
-    file://0001-ARM-dts-bbb-venus-disable-dma-on-uart2.patch \
-"
+SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;nobranch=1"
 BB_GIT_DEFAULT_DESTSUFFIX ?= "git"
 S = "${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX}"
 
-SRCREV = "a334bd8b1acab04eb85359b4c8a7735a6d60715b"
+SRCREV = "c7ce7c2f9f81d5b467c1ccb07115cdc4d6e11b0f"
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 
 RDEPENDS:${KERNEL_PACKAGE_NAME}-base += "kernel-devicetree"
