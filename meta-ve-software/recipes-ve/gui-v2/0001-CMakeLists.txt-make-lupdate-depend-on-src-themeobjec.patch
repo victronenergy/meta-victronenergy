@@ -1,0 +1,34 @@
+From 5dce8e9829a8ff309dde53041060d06e163a187f Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Mon, 21 Jul 2025 15:51:25 +0200
+Subject: [PATCH] CMakeLists.txt: make lupdate depend on src/themeobjects.h
+
+---
+ CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bfafe25f..418ef47e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1226,7 +1226,7 @@ add_custom_command(
+     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/i18n/${PROJECT_NAME}_en.qm
+     COMMAND Qt6::lupdate -no-obsolete "@${CMAKE_CURRENT_BINARY_DIR}/i18n/translation_sources.txt" -ts "${CMAKE_CURRENT_BINARY_DIR}/i18n/${PROJECT_NAME}_en.ts"
+     COMMAND Qt6::lrelease -idbased "${CMAKE_CURRENT_BINARY_DIR}/i18n/${PROJECT_NAME}_en.ts" -qm "${CMAKE_CURRENT_BINARY_DIR}/i18n/${PROJECT_NAME}_en.qm"
+-    DEPENDS ${BUILD_DIR_TS_FILES}
++    DEPENDS ${BUILD_DIR_TS_FILES} "${PROJECT_SOURCE_DIR}/src/themeobjects.h"
+     COMMENT "Running lupdate and lrelease for ${PROJECT_NAME}_en.ts"
+ )
+ foreach(TsCode ${TS_CODES})
+@@ -1239,7 +1239,7 @@ foreach(TsCode ${TS_CODES})
+         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/i18n/${PROJECT_NAME}_${TsCode}.qm
+         COMMAND Qt6::lupdate -no-obsolete "@${CMAKE_CURRENT_BINARY_DIR}/i18n/translation_sources.txt" -ts "${CMAKE_CURRENT_BINARY_DIR}/i18n/${PROJECT_NAME}_${TsCode}.ts"
+         COMMAND Qt6::lrelease -idbased "${CMAKE_CURRENT_BINARY_DIR}/i18n/${PROJECT_NAME}_${TsCode}.ts" -qm "${CMAKE_CURRENT_BINARY_DIR}/i18n/${PROJECT_NAME}_${TsCode}.qm"
+-        DEPENDS ${BUILD_DIR_TS_FILES}
++        DEPENDS ${BUILD_DIR_TS_FILES} "${PROJECT_SOURCE_DIR}/src/themeobjects.h"
+         COMMENT "Running lupdate and lrelease for ${PROJECT_NAME}_${TsCode}.ts"
+     )
+ endforeach()
+-- 
+2.43.0
+

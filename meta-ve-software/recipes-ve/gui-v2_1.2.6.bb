@@ -33,6 +33,7 @@ DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec softlimit -d 768000000 -s 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/gui-v2.git;branch=main;protocol=ssh;user=git \
+    file://0001-CMakeLists.txt-make-lupdate-depend-on-src-themeobjec.patch \
 "
 SRCREV = "2c261f0c3cae01838ba42aee3d8aa64794e96241"
 S = "${WORKDIR}/git"
