@@ -1,12 +1,12 @@
 {
     "name": "@victronenergy/node-red-contrib-victron",
-    "version": "1.6.39",
+    "version": "1.6.40",
     "lockfileVersion": 3,
     "requires": true,
     "packages": {
         "": {
             "name": "@victronenergy/node-red-contrib-victron",
-            "version": "1.6.39",
+            "version": "1.6.40",
             "license": "MIT",
             "dependencies": {
                 "dbus-native-victron": "^0.4.4",
@@ -538,9 +538,9 @@
             }
         },
         "node_modules/@babel/types": {
-            "version": "7.28.0",
-            "resolved": "https://registry.npmjs.org/@babel/types/-/types-7.28.0.tgz",
-            "integrity": "sha512-jYnje+JyZG5YThjHiF28oT4SIZLnYOcSBb6+SDaFIyzDVSkXQmQQYclJ2R+YxcdmK0AX6x1E5OQNtuh3jHDrUg==",
+            "version": "7.28.1",
+            "resolved": "https://registry.npmjs.org/@babel/types/-/types-7.28.1.tgz",
+            "integrity": "sha512-x0LvFTekgSX+83TI28Y9wYPUfzrnl2aT5+5QLnO6v7mSJYtEEevuDRN0F0uSHRk1G1IWZC43o00Y0xDDrpBGPQ==",
             "dev": true,
             "license": "MIT",
             "dependencies": {
@@ -626,9 +626,9 @@
             }
         },
         "node_modules/@eslint/core": {
-            "version": "0.14.0",
-            "resolved": "https://registry.npmjs.org/@eslint/core/-/core-0.14.0.tgz",
-            "integrity": "sha512-qIbV0/JZr7iSDjqAc60IqbLdsj9GDt16xQtWD+B78d/HAlvysGdZZ6rpJHGAc2T0FQx1X6thsSPdnoiGKdNtdg==",
+            "version": "0.15.1",
+            "resolved": "https://registry.npmjs.org/@eslint/core/-/core-0.15.1.tgz",
+            "integrity": "sha512-bkOp+iumZCCbt1K1CmWf0R9pM5yKpDv+ZXtvSyQpudrI9kuFLp+bM2WOPXImuD/ceQuaa8f5pj93Y7zyECIGNA==",
             "dev": true,
             "license": "Apache-2.0",
             "dependencies": {
@@ -663,9 +663,9 @@
             }
         },
         "node_modules/@eslint/js": {
-            "version": "9.30.1",
-            "resolved": "https://registry.npmjs.org/@eslint/js/-/js-9.30.1.tgz",
-            "integrity": "sha512-zXhuECFlyep42KZUhWjfvsmXGX39W8K8LFb8AWXM9gSV9dQB+MrJGLKvW6Zw0Ggnbpw0VHTtrhFXYe3Gym18jg==",
+            "version": "9.31.0",
+            "resolved": "https://registry.npmjs.org/@eslint/js/-/js-9.31.0.tgz",
+            "integrity": "sha512-LOm5OVt7D4qiKCqoiPbA7LWmI+tbw1VbTUowBcUMgQSuM6poJufkFkYDcQpo5KfgD39TnNySV26QjOh7VFpSyw==",
             "dev": true,
             "license": "MIT",
             "engines": {
@@ -686,27 +686,14 @@
             }
         },
         "node_modules/@eslint/plugin-kit": {
-            "version": "0.3.3",
-            "resolved": "https://registry.npmjs.org/@eslint/plugin-kit/-/plugin-kit-0.3.3.tgz",
-            "integrity": "sha512-1+WqvgNMhmlAambTvT3KPtCl/Ibr68VldY2XY40SL1CE0ZXiakFR/cbTspaF5HsnpDMvcYYoJHfl4980NBjGag==",
+            "version": "0.3.4",
+            "resolved": "https://registry.npmjs.org/@eslint/plugin-kit/-/plugin-kit-0.3.4.tgz",
+            "integrity": "sha512-Ul5l+lHEcw3L5+k8POx6r74mxEYKG5kOb6Xpy2gCRW6zweT6TEhAf8vhxGgjhqrd/VO/Dirhsb+1hNpD1ue9hw==",
             "dev": true,
             "license": "Apache-2.0",
             "dependencies": {
                 "@eslint/core": "^0.15.1",
                 "levn": "^0.4.1"
-            },
-            "engines": {
-                "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
-            }
-        },
-        "node_modules/@eslint/plugin-kit/node_modules/@eslint/core": {
-            "version": "0.15.1",
-            "resolved": "https://registry.npmjs.org/@eslint/core/-/core-0.15.1.tgz",
-            "integrity": "sha512-bkOp+iumZCCbt1K1CmWf0R9pM5yKpDv+ZXtvSyQpudrI9kuFLp+bM2WOPXImuD/ceQuaa8f5pj93Y7zyECIGNA==",
-            "dev": true,
-            "license": "Apache-2.0",
-            "dependencies": {
-                "@types/json-schema": "^7.0.15"
             },
             "engines": {
                 "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
@@ -1436,9 +1423,9 @@
             "license": "MIT"
         },
         "node_modules/@types/node": {
-            "version": "24.0.13",
-            "resolved": "https://registry.npmjs.org/@types/node/-/node-24.0.13.tgz",
-            "integrity": "sha512-Qm9OYVOFHFYg3wJoTSrz80hoec5Lia/dPp84do3X7dZvLikQvM1YpmvTBEdIr/e+U8HTkFjLHLnl78K/qjf+jQ==",
+            "version": "24.1.0",
+            "resolved": "https://registry.npmjs.org/@types/node/-/node-24.1.0.tgz",
+            "integrity": "sha512-ut5FthK5moxFKH2T1CUOC6ctR67rQRvvHdFLCD2Ql6KXmMuCrjsSsRI9UsLCm9M18BMwClv4pn327UvB7eeO1w==",
             "dev": true,
             "license": "MIT",
             "dependencies": {
@@ -2487,9 +2474,9 @@
             "license": "MIT"
         },
         "node_modules/electron-to-chromium": {
-            "version": "1.5.182",
-            "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.182.tgz",
-            "integrity": "sha512-Lv65Btwv9W4J9pyODI6EWpdnhfvrve/us5h1WspW8B2Fb0366REPtY3hX7ounk1CkV/TBjWCEvCBBbYbmV0qCA==",
+            "version": "1.5.189",
+            "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.189.tgz",
+            "integrity": "sha512-y9D1ntS1ruO/pZ/V2FtLE+JXLQe28XoRpZ7QCCo0T8LdQladzdcOVQZH/IWLVJvCw12OGMb6hYOeOAjntCmJRQ==",
             "dev": true,
             "license": "ISC"
         },
@@ -2730,9 +2717,9 @@
             }
         },
         "node_modules/eslint": {
-            "version": "9.30.1",
-            "resolved": "https://registry.npmjs.org/eslint/-/eslint-9.30.1.tgz",
-            "integrity": "sha512-zmxXPNMOXmwm9E0yQLi5uqXHs7uq2UIiqEKo3Gq+3fwo1XrJ+hijAZImyF7hclW3E6oHz43Yk3RP8at6OTKflQ==",
+            "version": "9.31.0",
+            "resolved": "https://registry.npmjs.org/eslint/-/eslint-9.31.0.tgz",
+            "integrity": "sha512-QldCVh/ztyKJJZLr4jXNUByx3gR+TDYZCRXEktiZoUR3PGy4qCmSbkxcIle8GEwGpb5JBZazlaJ/CxLidXdEbQ==",
             "dev": true,
             "license": "MIT",
             "dependencies": {
@@ -2740,9 +2727,9 @@
                 "@eslint-community/regexpp": "^4.12.1",
                 "@eslint/config-array": "^0.21.0",
                 "@eslint/config-helpers": "^0.3.0",
-                "@eslint/core": "^0.14.0",
+                "@eslint/core": "^0.15.0",
                 "@eslint/eslintrc": "^3.3.1",
-                "@eslint/js": "9.30.1",
+                "@eslint/js": "9.31.0",
                 "@eslint/plugin-kit": "^0.3.1",
                 "@humanfs/node": "^0.16.6",
                 "@humanwhocodes/module-importer": "^1.0.1",
