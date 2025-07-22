@@ -37,6 +37,21 @@ EOF
     fi
 }
 
+init_default_flow() {
+    flows="$NODE_RED/flows.json"
+
+    # never overwrite an existing flow file. Note: it will only exists after a user
+    # deployed it.
+    if [ -e "$flows" ]; then
+        return
+    fi
+
+    cat > $flows << EOF
+[{"id":"victron-client-id","type":"victron-client","showValues":true,"contextStore":true,"enablePolling":false}]
+EOF
+
+}
+
 rename_flows() {
     flows="$NODE_RED/flows.json"
 
@@ -112,6 +127,8 @@ fi
 
 move_secret
 rename_flows
+
+init_default_flow
 
 export TZ=$(get_setting /Settings/System/TimeZone)
 
