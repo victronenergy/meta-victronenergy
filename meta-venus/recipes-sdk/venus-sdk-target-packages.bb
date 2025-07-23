@@ -14,6 +14,7 @@ RDEPENDS:${PN} += " \
     dbus-dev \
     eudev-dev \
     gupnp-dev \
+    libevdev-dev \
     libevent-dev \
     libusb1-dev \
     neatvnc-dev \
