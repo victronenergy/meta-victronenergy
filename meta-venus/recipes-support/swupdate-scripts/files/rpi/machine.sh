@@ -16,7 +16,7 @@ get_rootdev() {
 
 do_swupdate() {
     unlock_env
-    swupdate "$@"
+    nice -n5 swupdate "$@"
 }
 
 unlock_env() {

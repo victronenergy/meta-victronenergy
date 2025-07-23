@@ -13,7 +13,7 @@ get_rootdev() {
 do_swupdate() {
     blacklist=$(sed -n '/ubi/!s/^mtd\([0-9]*\):.*/\1/p' /proc/mtd)
     blacklist=$(echo $blacklist) # make space-separated list
-    swupdate -b "$blacklist" "$@"
+    nice -n5 swupdate -b "$blacklist" "$@"
 }
 
 unlock_env() {
