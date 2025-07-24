@@ -17,6 +17,7 @@ TOOLCHAIN_HOST_TASK += " \
     nativesdk-meson \
     nativesdk-ninja \
     nativesdk-pkgconfig \
+    nativesdk-perl-module-integer \
 "
 
 TOOLCHAIN_HOST_TASK += " \
