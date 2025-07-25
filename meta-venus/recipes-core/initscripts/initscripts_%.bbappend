@@ -11,6 +11,7 @@ SRC_URI += "\
     file://report-data-failure.sh \
     file://update-data.sh \
     file://clean-data.sh \
+    file://update-mmc-parts.sh \
     file://usb.rules \
 "
 
@@ -19,6 +20,7 @@ SRC_URI:append:ccgx = "\
 "
 
 RDEPENDS:${PN} += "curl is-ro-partition"
+RDEPENDS:${PN}:append:sunxi = " util-linux-sfdisk"
 
 do_install:append() {
     echo RANDOM_SEED_FILE=${permanentlocalstatedir}/lib/random-seed \
@@ -53,4 +55,9 @@ do_install:append() {
 do_install:append:ccgx() {
     install -m 0755 ${UNPACKDIR}/usbcheck.sh ${D}${sysconfdir}/init.d
     update-rc.d -r ${D} usbcheck.sh start 02 S .
+}
+
+do_install:append:sunxi() {
+    install -m 0755 ${UNPACKDIR}/update-mmc-parts.sh ${D}${sysconfdir}/init.d
+    update-rc.d -r ${D} update-mmc-parts.sh start 02 S .
 }
