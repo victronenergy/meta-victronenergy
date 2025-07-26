@@ -34,7 +34,7 @@ echo "Setting CPU quota to $CPU_QUOTA and period to $CPU_PERIOD"
 echo "${CPU_QUOTA} ${CPU_PERIOD}" > "${CGROUP_PATH}/cpu.max"
 
 # Start the process in background to fetch the PID
-exec /usr/sbin/tailscaled -no-logs-no-support -statedir /data/conf/tailscale &
+exec /usr/sbin/tailscaled -no-logs-no-support -statedir /data/conf/tailscale 
 TAILSCALED_PID=$!
 echo "Started tailscaled with PID $TAILSCALED_PID"
 
