@@ -16,8 +16,9 @@ SRC_URI = " \
     file://use-a-separate-dbus-connection-for-settings.patch \
     file://tab-battery-settings.patch \
     file://settingsdevice-lighter-version-to-track-settings.patch;patchdir=ext/velib_python \
+    file://fix-several-possible-races.patch \
 "
-PR = "3"
+PR = "4"
 SRCREV = "371fe8688b5f364c5bf2070a220cd867c5169c4a"
 S = "${WORKDIR}/git"
 

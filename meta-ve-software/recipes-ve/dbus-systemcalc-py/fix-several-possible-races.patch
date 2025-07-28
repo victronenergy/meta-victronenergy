@@ -1,0 +1,130 @@
+From ee1e53de86c3e7c18438a2f5d1c0de4450c44704 Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Mon, 21 Jul 2025 16:33:40 +0200
+Subject: [PATCH] fix several possible races
+
+When tracking a specific path and installing a handler for it,
+it is important to remember that changes that happens while
+installing the handler are not processed yet, so when you call
+your handler once (on startup) to handle those cases, it needs
+to be called at the end of the event loop (after all events/signals
+are processed), or it might miss some of it on that round.
+
+https://github.com/victronenergy/venus-private/issues/571
+https://github.com/victronenergy/venus-private/issues/565
+---
+ delegates/batterysense.py   | 4 ++--
+ delegates/batteryservice.py | 6 +++++-
+ delegates/dynamicess.py     | 4 ++--
+ delegates/gps.py            | 3 ++-
+ delegates/multi.py          | 3 ++-
+ tests/hub_test.py           | 2 ++
+ 6 files changed, 15 insertions(+), 7 deletions(-)
+
+diff --git a/delegates/batterysense.py b/delegates/batterysense.py
+index 9f20a6b..4d220ef 100644
+--- a/delegates/batterysense.py
++++ b/delegates/batterysense.py
+@@ -217,13 +217,13 @@ def device_added(self, service, instance, *args):
+ 				'/Dc/0/Temperature', instance,
+ 				lambda s=service: self._dbusmonitor.get_value(s, '/Dc/0/Temperature') is not None)
+ 			self._dbusmonitor.track_value(service, '/Dc/0/Temperature', self.update_temperature_sensors)
+-			self.update_temperature_sensors()
++			GLib.idle_add(self.update_temperature_sensors)
+ 		elif service.startswith('com.victronenergy.temperature.'):
+ 			self.temperaturesensors[service] = DedicatedSensor(service,
+ 				'/Temperature', instance,
+ 				lambda s=service: self._dbusmonitor.get_value(s, '/TemperatureType') == 0)
+ 			self._dbusmonitor.track_value(service, '/TemperatureType', self.update_temperature_sensors)
+-			self.update_temperature_sensors()
++			GLib.idle_add(self.update_temperature_sensors)
+ 
+ 	def device_removed(self, service, instance):
+ 		if service in self.temperaturesensors:
+diff --git a/delegates/batteryservice.py b/delegates/batteryservice.py
+index 7c82bd2..3c96b4f 100644
+--- a/delegates/batteryservice.py
++++ b/delegates/batteryservice.py
+@@ -1,3 +1,4 @@
++from gi.repository import GLib
+ from dbus.exceptions import DBusException
+ from delegates.base import SystemCalcDelegate
+ 
+@@ -128,7 +129,10 @@ def device_added(self, service, instance, *args):
+ 			self._batteries[instance] = Battery(self._dbusmonitor, service, instance)
+ 			self._dbusmonitor.track_value(service, "/Info/MaxChargeVoltage", self._set_bms)
+ 			self._dbusmonitor.track_value(service, "/CustomName", self._set_bms)
+-			self._set_bms()
++			# If you call _set_bms directly now, changes to MaxChargeVoltage
++			# that is still in the pipeline will not reflect yet. Instead
++			# schedule it for as soon as everything settles.
++			GLib.idle_add(self._set_bms)
+ 
+ 	def device_removed(self, service, instance):
+ 		if service.startswith('com.victronenergy.battery.') and instance in self._batteries:
+diff --git a/delegates/dynamicess.py b/delegates/dynamicess.py
+index a244c4e..a435eb1 100644
+--- a/delegates/dynamicess.py
++++ b/delegates/dynamicess.py
+@@ -762,10 +762,10 @@ def device_added(self, service, instance, *args):
+ 		if service.startswith('com.victronenergy.vebus.'):
+ 			self._devices[service] = VebusDevice(self, self._dbusmonitor, service)
+ 			self._dbusmonitor.track_value(service, "/Connected", self._set_device)
+-			self._set_device()
++			GLib.idle_add(self._set_device)
+ 		elif service.startswith('com.victronenergy.acsystem.'):
+ 			self._devices[service] = MultiRsDevice(self, self._dbusmonitor, service)
+-			self._set_device()
++			GLib.idle_add(self._set_device)
+ 
+ 	def device_removed(self, service, instance):
+ 		try:
+diff --git a/delegates/gps.py b/delegates/gps.py
+index 6289cf6..1078557 100644
+--- a/delegates/gps.py
++++ b/delegates/gps.py
+@@ -1,3 +1,4 @@
++from gi.repository import GLib
+ from delegates.base import SystemCalcDelegate
+ 
+ class Gps(SystemCalcDelegate):
+@@ -16,7 +17,7 @@ def device_added(self, service, instance, *args):
+ 		if service.startswith('com.victronenergy.gps.'):
+ 			self.gpses.add((instance, service))
+ 			self._dbusmonitor.track_value(service, "/Fix", self.update)
+-			self.update()
++			GLib.idle_add(self.update)
+ 
+ 	def device_removed(self, service, instance):
+ 		self.gpses.discard((instance, service))
+diff --git a/delegates/multi.py b/delegates/multi.py
+index 59baad2..3a5d1c9 100644
+--- a/delegates/multi.py
++++ b/delegates/multi.py
+@@ -1,3 +1,4 @@
++from gi.repository import GLib
+ import dbus
+ from ve_utils import get_product_id
+ from delegates.base import SystemCalcDelegate
+@@ -105,7 +106,7 @@ def device_added(self, service, instance, *args):
+ 		if service.startswith('com.victronenergy.vebus.'):
+ 			self.multis[service] = Service(self._dbusmonitor, service, instance)
+ 			self._dbusmonitor.track_value(service, "/Connected", self._set_multi)
+-			self._set_multi()
++			GLib.idle_add(self._set_multi)
+ 
+ 	def device_removed(self, service, instance):
+ 		if service in self.multis:
+diff --git a/tests/hub_test.py b/tests/hub_test.py
+index 016939c..53126f5 100644
+--- a/tests/hub_test.py
++++ b/tests/hub_test.py
+@@ -1367,6 +1367,8 @@ def test_bms_selection_lowest_deviceinstance(self):
+ 					'/Info/MaxChargeVoltage': 53.2,
+ 					'/Info/MaxDischargeCurrent': 25,
+ 					'/ProductId': 0xB009})
++
++		self._update_values()
+ 		self._check_values({'/ActiveBatteryService': None})
+ 		self.assertEqual(len(BatteryService.instance.bmses), 3)
+ 
