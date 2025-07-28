@@ -24,3 +24,10 @@ mkfs.ext4 -F /dev/mmcblk0p3
 mkfs.ext4 -F /dev/mmcblk0p4
 
 update-rc.d -f zzz-resize-sdcard remove
+
+# Create /data/venus/installer-version
+mkdir -p /data
+mount -t ext4 /dev/mmcblk0p4 /data
+mkdir -p /data/venus
+cp /opt/victronenergy/version /data/venus/installer-version
+
