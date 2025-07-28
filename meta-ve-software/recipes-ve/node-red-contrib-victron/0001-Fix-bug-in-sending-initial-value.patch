@@ -1,0 +1,25 @@
+From 5547a930b12a81af0163b289948881169d38b717 Mon Sep 17 00:00:00 2001
+From: Dirk-Jan Faber <dfaber@victronenergy.com>
+Date: Tue, 1 Jul 2025 10:17:35 +0200
+Subject: [PATCH] Fix bug in sending initial value
+
+---
+ src/nodes/victron-nodes.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/nodes/victron-nodes.js b/src/nodes/victron-nodes.js
+index 342da95..8bd28bf 100644
+--- a/src/nodes/victron-nodes.js
++++ b/src/nodes/victron-nodes.js
+@@ -83,7 +83,7 @@ module.exports = function (RED) {
+           if (this.node.name) {
+             topic = this.node.name
+           }
+-          if (this.node.onlyChanges && !msg.changed && this.sentInitialValue) {
++          if (this.node.onlyChanges && msg.changed === false && this.sentInitialValue) {
+             return
+           }
+           if ((Number(this.node.roundValues) >= 0) && (typeof (msg.value) === 'number')) {
+-- 
+2.43.0
+

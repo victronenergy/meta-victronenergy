@@ -1,0 +1,28 @@
+From 7721f65ab49ebafb29efbbee2b830cb1d9af234c Mon Sep 17 00:00:00 2001
+From: Dirk-Jan Faber <dfaber@victronenergy.com>
+Date: Tue, 1 Jul 2025 12:20:14 +0200
+Subject: [PATCH] fix: ensure initial value sent
+
+For both deploy and redeploy for onlyChanges nodes
+---
+ src/nodes/victron-nodes.js | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/nodes/victron-nodes.js b/src/nodes/victron-nodes.js
+index 8bd28bf..a74e091 100644
+--- a/src/nodes/victron-nodes.js
++++ b/src/nodes/victron-nodes.js
+@@ -124,6 +124,10 @@ module.exports = function (RED) {
+         }, { callbackPeriodically })
+       }
+ 
++      if (this.client && this.client.client && this.client.client.connected) {
++        this.client.client.getValue(this.service, this.path)
++      }
++
+       this.on('close', function (done) {
+         this.node.client.unsubscribe(this.node.subscription)
+         this.node.configNode.removeStatusListener(handlerId)
+-- 
+2.43.0
+
