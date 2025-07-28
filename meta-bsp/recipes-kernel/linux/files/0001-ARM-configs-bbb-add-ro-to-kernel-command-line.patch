@@ -1,0 +1,27 @@
+From e3ef374e952c9bce9edc16f11fbf583ea00689b3 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Mon, 7 Jul 2025 10:05:36 +0100
+Subject: [PATCH] ARM: configs: bbb: add ro to kernel command line
+
+The Venux GX boot loader passes an unwanted rw flag on the kernel
+command line.  Undo it here.
+---
+ arch/arm/configs/bbb_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/configs/bbb_defconfig b/arch/arm/configs/bbb_defconfig
+index b076a6dcc495..a82c922d27fc 100644
+--- a/arch/arm/configs/bbb_defconfig
++++ b/arch/arm/configs/bbb_defconfig
+@@ -12,6 +12,8 @@ CONFIG_SOC_AM33XX=y
+ # CONFIG_CACHE_L2X0 is not set
+ CONFIG_HAVE_ARM_ARCH_TIMER=y
+ # CONFIG_ATAGS is not set
++CONFIG_CMDLINE="ro"
++CONFIG_CMDLINE_EXTEND=y
+ # CONFIG_SUSPEND is not set
+ # CONFIG_MQ_IOSCHED_DEADLINE is not set
+ # CONFIG_MQ_IOSCHED_KYBER is not set
+-- 
+2.43.0
+
