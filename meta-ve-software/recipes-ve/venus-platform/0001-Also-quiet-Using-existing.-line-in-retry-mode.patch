@@ -1,0 +1,41 @@
+From 57909345a1394a7cc26bc7275a5bdc9b59511f58 Mon Sep 17 00:00:00 2001
+From: Wiebe Cazemier <wiebe@ytec.nl>
+Date: Fri, 18 Jul 2025 15:00:46 +0200
+Subject: [PATCH] Also quiet 'Using existing...' line in retry mode
+
+This fixes that line being logged every minute.
+---
+ src/mqtt_bridge_registrator.cpp | 3 ++-
+ src/mqtt_bridge_registrator.hpp | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/mqtt_bridge_registrator.cpp b/src/mqtt_bridge_registrator.cpp
+index 09a08d2..486b058 100644
+--- a/src/mqtt_bridge_registrator.cpp
++++ b/src/mqtt_bridge_registrator.cpp
+@@ -22,7 +22,8 @@ bool VrmTokenRegistrator::generateAndOrGetPassword(QString &output)
+ 	 * If the file is there, we use it at all costs, regardless of its contents. We should not overwrite it.
+ 	 */
+ 	if (QFile::exists(mqttPasswordFilePath)) {
+-		qDebug() << "Using existing" << mqttPasswordFilePath;
++		if (!quiet)
++			qDebug() << "Using existing" << mqttPasswordFilePath;
+ 		password = readFirstLineFromFile(mqttPasswordFilePath);
+ 
+ 		if (password.isNull()) {
+diff --git a/src/mqtt_bridge_registrator.hpp b/src/mqtt_bridge_registrator.hpp
+index 6f2d612..9a59bac 100644
+--- a/src/mqtt_bridge_registrator.hpp
++++ b/src/mqtt_bridge_registrator.hpp
+@@ -27,7 +27,7 @@ class VrmTokenRegistrator : public QObject
+ 	bool stopping = false;
+ 	bool quiet = false;
+ 
+-	static bool generateAndOrGetPassword(QString &output);
++	bool generateAndOrGetPassword(QString &output);
+ 	void setupSsl();
+ 	bool registerWithVrm();
+ 	void writeFlashMQConfig();
+-- 
+2.43.0
+
