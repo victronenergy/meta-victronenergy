@@ -6,6 +6,7 @@ SRC_URI = " \
     https://github.com/victronenergy/${BPN}/archive/refs/tags/v${PV}.tar.gz \
     file://0001-Fix-bug-in-sending-initial-value.patch \
     file://0001-fix-ensure-initial-value-sent.patch \
+    file://0001-Reconnect-to-the-dbus-quicker.patch \
     file://npm-shrinkwrap.json;subdir=${S} \
 "
 PR = "1"

@@ -1,0 +1,33 @@
+From 869361d48ca57c32b71b783b4beff67e8210ba2a Mon Sep 17 00:00:00 2001
+From: Dirk-Jan Faber <dfaber@victronenergy.com>
+Date: Wed, 6 Aug 2025 14:30:03 +0200
+Subject: [PATCH] Reconnect to the dbus quicker
+
+Backport-candidate for 3.6x
+- Change retry factor from 2.0 to 1.1 (gentler backoff)
+- Adjust timeouts min 5s -> 0.5s, max 60s -> 10s
+---
+ src/services/victron-client.js | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/services/victron-client.js b/src/services/victron-client.js
+index 3321b9f..8754778 100644
+--- a/src/services/victron-client.js
++++ b/src/services/victron-client.js
+@@ -134,10 +134,10 @@ class VictronClient {
+         .catch(retry)
+     },
+     {
+-      factor: 2,
++      factor: 1.1,
+       forever: true,
+-      minTimeout: 5 * 1000,
+-      maxTimeout: 60 * 1000
++      minTimeout: 1 * 500,
++      maxTimeout: 10 * 1000
+ 
+     })
+       .catch(() => console.error('Unable to connect to dbus.'))
+-- 
+2.39.5 (Apple Git-154)
+
