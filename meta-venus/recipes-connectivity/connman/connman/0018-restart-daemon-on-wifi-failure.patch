@@ -1,4 +1,4 @@
-From a6383e5a60a87490ebdc08d9675f04600422e652 Mon Sep 17 00:00:00 2001
+From 7058fa9b9bcb4cb1bb04fc50d4b1c5856aa89225 Mon Sep 17 00:00:00 2001
 From: Mans Rullgard <mans@mansr.com>
 Date: Wed, 18 Aug 2021 14:39:13 +0100
 Subject: [PATCH 18/18] restart daemon on wifi failure
@@ -13,8 +13,8 @@ Upstream-Status: Inappropriate [Venus specific]
 ---
  include/setting.h |  2 ++
  src/main.c        | 13 +++++++++++++
- src/service.c     | 15 +++++++++++++++
- 3 files changed, 30 insertions(+)
+ src/service.c     | 18 ++++++++++++++++++
+ 3 files changed, 33 insertions(+)
 
 diff --git a/include/setting.h b/include/setting.h
 index 3cb06101394a..e054ce43ec77 100644
@@ -61,7 +61,7 @@ index 0d1c8a056954..7a2b10f02b60 100644
  	context = g_option_context_new(NULL);
  	g_option_context_add_main_entries(context, options, NULL);
 diff --git a/src/service.c b/src/service.c
-index 60091f98312a..1e0e2ddfdc1d 100644
+index 60091f98312a..1acd689172b6 100644
 --- a/src/service.c
 +++ b/src/service.c
 @@ -38,6 +38,7 @@
@@ -72,7 +72,7 @@ index 60091f98312a..1e0e2ddfdc1d 100644
  
  static DBusConnection *connection = NULL;
  
-@@ -5343,6 +5344,16 @@ static const char *get_dbus_sender(struct connman_service *service)
+@@ -5343,6 +5344,19 @@ static const char *get_dbus_sender(struct connman_service *service)
  	return dbus_message_get_sender(service->pending);
  }
  
@@ -80,8 +80,11 @@ index 60091f98312a..1e0e2ddfdc1d 100644
 +{
 +	struct connman_service *service = user_data;
 +
-+	if (service->state == CONNMAN_SERVICE_STATE_FAILURE)
++	if (service->state == CONNMAN_SERVICE_STATE_FAILURE) {
++		connman_warn("service %s stuck in failed state, restarting",
++			     service->name);
 +		connman_restart();
++	}
 +
 +	return FALSE;
 +}
@@ -89,7 +92,7 @@ index 60091f98312a..1e0e2ddfdc1d 100644
  static int service_indicate_state(struct connman_service *service)
  {
  	enum connman_service_state old_state, new_state;
-@@ -5530,6 +5541,10 @@ static int service_indicate_state(struct connman_service *service)
+@@ -5530,6 +5544,10 @@ static int service_indicate_state(struct connman_service *service)
  			return 0;
  		service_complete(service);
  
@@ -101,5 +104,5 @@ index 60091f98312a..1e0e2ddfdc1d 100644
  	}
  
 -- 
-2.32.0
+2.50.1
 
