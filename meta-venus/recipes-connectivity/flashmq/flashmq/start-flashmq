@@ -23,7 +23,7 @@ EOF
 
 # FlashMQ actually creates an SSL context with key and cert, so it will detect
 # it if they are invalid.
-if ! /usr/bin/flashmq --test-config --config-file "$tempconf" ||
+if ! nohup /usr/bin/flashmq --test-config --config-file "$tempconf" >/dev/null 2>/dev/null ||
    ! openssl verify -CAfile $cert $cert ||
    ! openssl x509 -noout -checkend 31536000 -in $cert; then
     openssl req -subj /CN=venus.local -newkey rsa:2048 -nodes \
