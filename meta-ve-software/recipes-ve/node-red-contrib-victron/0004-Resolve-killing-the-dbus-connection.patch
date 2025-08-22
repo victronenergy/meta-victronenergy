@@ -1,0 +1,30 @@
+From f741ecc0a8d37f4901e10fdc537e6dccde9b2b0f Mon Sep 17 00:00:00 2001
+From: Dirk-Jan Faber <dfaber@victronenergy.com>
+Date: Tue, 19 Aug 2025 14:12:56 +0200
+Subject: [PATCH 4/5] Resolve killing the dbus connection
+
+By calling getValue wrongly, you can accidentally kill the dbus connection. If it is called with an interface name that does not exist, it terminates the dbus connection. This patch introduces searching in the known services list for the right destination when the getValue function is called with a `com.victronenergy.temperature/${deviceInstance}` way.
+
+(cherry picked from commit cae1b96d4a295c0f6e0d73ccc9f64ebcc29f93bc)
+---
+ src/services/dbus-listener.js | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/services/dbus-listener.js b/src/services/dbus-listener.js
+index 556e18e..3881718 100644
+--- a/src/services/dbus-listener.js
++++ b/src/services/dbus-listener.js
+@@ -350,6 +350,10 @@ class VictronDbusListener {
+   }
+ 
+   getValue (destination, path) {
++    if (destination.split('/').length === 2) {
++      const deviceInstance = destination.split('/')[1]
++      destination = searchHaystack(this.services, deviceInstance, destination.split('/')[0])
++    }
+     this.bus.invoke({
+       path,
+       destination,
+-- 
+2.34.1
+

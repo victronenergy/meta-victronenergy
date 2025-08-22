@@ -6,9 +6,13 @@ SRC_URI = " \
     https://github.com/victronenergy/${BPN}/archive/refs/tags/v${PV}.tar.gz \
     file://0001-Fix-bug-in-sending-initial-value.patch \
     file://0001-fix-ensure-initial-value-sent.patch \
+    file://0003-Reconnect-to-the-dbus-quicker.patch \
+    file://0004-Resolve-killing-the-dbus-connection.patch \
+    file://0005-fix-make-dbus-text-property-optional-WIP.patch \
+    file://0006-Fix-null-text-crashing-node-red-when-setting-status-.patch \
     file://npm-shrinkwrap.json;subdir=${S} \
 "
-PR = "1"
+PR = "2"
 INSANE_SKIP += "src-uri-bad"
 
 # Careful! When updating the version, also npm-shrinkwrap.json must be updated

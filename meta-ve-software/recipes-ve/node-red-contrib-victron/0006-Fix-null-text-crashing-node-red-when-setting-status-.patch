@@ -1,0 +1,33 @@
+From e8f49d267e0a7937e5dba2b5ed18da77d87367e6 Mon Sep 17 00:00:00 2001
+From: Chris Oloff <chris@uber5.com>
+Date: Tue, 29 Jul 2025 12:55:36 +0200
+Subject: [PATCH 6/6] Fix null text crashing node-red when setting status of a
+ node
+
+Includes a unit test that covers the scenario. The unit test is rather hacky,
+but can be refactored to be reusable for other scenarios.
+---
+ src/nodes/victron-nodes.js | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/nodes/victron-nodes.js b/src/nodes/victron-nodes.js
+index d0f3c94..b4cfe41 100644
+--- a/src/nodes/victron-nodes.js
++++ b/src/nodes/victron-nodes.js
+@@ -116,7 +116,12 @@ module.exports = function (RED) {
+           }
+           this.node.send(outmsg)
+           if (this.configNode.showValues !== false) {
+-            this.node.status({ fill: 'green', shape: 'dot', text })
++            // node-red will call toString(), without checking if it exists. If the value is null,
++            // node-red will crash trying to call toString(),
++            // see https://github.com/node-red/node-red/blob/9bf42037b5f68012a134810ea92ecfe9b6cef112/packages/node_modules/%40node-red/runtime/lib/flows/Flow.js#L512
++            // we therefore adjust the value, to ensure toString() is always available.
++            const textValue = text && text.toString ? text : text === null || text === undefined ? 'null' : `${text}`
++            this.node.status({ fill: 'green', shape: 'dot', text: textValue })
+           }
+           if (!this.sentInitialValue) {
+             this.sentInitialValue = true
+-- 
+2.34.1
+
