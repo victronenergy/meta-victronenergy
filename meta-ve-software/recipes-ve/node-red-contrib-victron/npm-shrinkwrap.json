@@ -1,12 +1,12 @@
 {
     "name": "@victronenergy/node-red-contrib-victron",
-    "version": "1.6.43",
+    "version": "1.6.44",
     "lockfileVersion": 3,
     "requires": true,
     "packages": {
         "": {
             "name": "@victronenergy/node-red-contrib-victron",
-            "version": "1.6.43",
+            "version": "1.6.44",
             "license": "MIT",
             "dependencies": {
                 "dbus-native-victron": "^0.4.5",
@@ -663,9 +663,9 @@
             }
         },
         "node_modules/@eslint/js": {
-            "version": "9.33.0",
-            "resolved": "https://registry.npmjs.org/@eslint/js/-/js-9.33.0.tgz",
-            "integrity": "sha512-5K1/mKhWaMfreBGJTwval43JJmkip0RmM+3+IuqupeSKNC/Th2Kc7ucaq5ovTSra/OOKB9c58CGSz3QMVbWt0A==",
+            "version": "9.34.0",
+            "resolved": "https://registry.npmjs.org/@eslint/js/-/js-9.34.0.tgz",
+            "integrity": "sha512-EoyvqQnBNsV1CWaEJ559rxXL4c8V92gxirbawSmVUOWXlsRxxQXl6LmCpdUblgxgSkDIqKnhzba2SjRTI/A5Rw==",
             "dev": true,
             "license": "MIT",
             "engines": {
@@ -2072,9 +2072,9 @@
             }
         },
         "node_modules/caniuse-lite": {
-            "version": "1.0.30001735",
-            "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001735.tgz",
-            "integrity": "sha512-EV/laoX7Wq2J9TQlyIXRxTJqIw4sxfXS4OYgudGxBYRuTv0q7AM6yMEpU/Vo1I94thg9U6EZ2NfZx9GJq83u7w==",
+            "version": "1.0.30001737",
+            "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001737.tgz",
+            "integrity": "sha512-BiloLiXtQNrY5UyF0+1nSJLXUENuhka2pzy2Fx5pGxqavdrxSCW4U6Pn/PoG3Efspi2frRbHpBV2XsrPE6EDlw==",
             "dev": true,
             "funding": [
                 {
@@ -2474,9 +2474,9 @@
             "license": "MIT"
         },
         "node_modules/electron-to-chromium": {
-            "version": "1.5.207",
-            "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.207.tgz",
-            "integrity": "sha512-mryFrrL/GXDTmAtIVMVf+eIXM09BBPlO5IQ7lUyKmK8d+A4VpRGG+M3ofoVef6qyF8s60rJei8ymlJxjUA8Faw==",
+            "version": "1.5.209",
+            "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.209.tgz",
+            "integrity": "sha512-Xoz0uMrim9ZETCQt8UgM5FxQF9+imA7PBpokoGcZloA1uw2LeHzTlip5cb5KOAsXZLjh/moN2vReN3ZjJmjI9A==",
             "dev": true,
             "license": "ISC"
         },
@@ -2717,9 +2717,9 @@
             }
         },
         "node_modules/eslint": {
-            "version": "9.33.0",
-            "resolved": "https://registry.npmjs.org/eslint/-/eslint-9.33.0.tgz",
-            "integrity": "sha512-TS9bTNIryDzStCpJN93aC5VRSW3uTx9sClUn4B87pwiCaJh220otoI0X8mJKr+VcPtniMdN8GKjlwgWGUv5ZKA==",
+            "version": "9.34.0",
+            "resolved": "https://registry.npmjs.org/eslint/-/eslint-9.34.0.tgz",
+            "integrity": "sha512-RNCHRX5EwdrESy3Jc9o8ie8Bog+PeYvvSR8sDGoZxNFTvZ4dlxUB3WzQ3bQMztFrSRODGrLLj8g6OFuGY/aiQg==",
             "dev": true,
             "license": "MIT",
             "dependencies": {
@@ -2729,7 +2729,7 @@
                 "@eslint/config-helpers": "^0.3.1",
                 "@eslint/core": "^0.15.2",
                 "@eslint/eslintrc": "^3.3.1",
-                "@eslint/js": "9.33.0",
+                "@eslint/js": "9.34.0",
                 "@eslint/plugin-kit": "^0.3.5",
                 "@humanfs/node": "^0.16.6",
                 "@humanwhocodes/module-importer": "^1.0.1",
