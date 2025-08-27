@@ -1,0 +1,44 @@
+From 1338e36090b8256d243798b1c888a2d9c91767a5 Mon Sep 17 00:00:00 2001
+From: Chris Oloff <chris@uber5.com>
+Date: Fri, 22 Aug 2025 19:59:59 +0200
+Subject: [PATCH 7/7] Fix: dbus-listener getValue, use original destination
+ when calling messageHandler
+
+When fixing how we determine the destination for dbus.invoke(), we accidentally
+changed the senderName, too. The senderName is used when calling the
+messageHandler.
+
+The effect of this was that the victron input nodes did not receive the initial
+value, because the response from getValue() did not reach them.
+
+We introduced this bug in commit cae1b96.
+
+(cherry picked from commit 667255a5862365134e1c42037eb864f89e7b41fd)
+---
+ src/services/dbus-listener.js | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/services/dbus-listener.js b/src/services/dbus-listener.js
+index 1646072..b1ba567 100644
+--- a/src/services/dbus-listener.js
++++ b/src/services/dbus-listener.js
+@@ -350,13 +350,14 @@ class VictronDbusListener {
+   }
+ 
+   getValue (destination, path) {
++    let invokeDestination = destination
+     if (destination.split('/').length === 2) {
+       const deviceInstance = destination.split('/')[1]
+-      destination = searchHaystack(this.services, deviceInstance, destination.split('/')[0])
++      invokeDestination = searchHaystack(this.services, deviceInstance, destination.split('/')[0])
+     }
+     this.bus.invoke({
+       path,
+-      destination,
++      destination: invokeDestination,
+       interface: 'com.victronenergy.BusItem',
+       member: 'GetValue'
+     },
+-- 
+2.34.1
+

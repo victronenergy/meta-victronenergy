@@ -11,8 +11,9 @@ SRC_URI = " \
     file://0005-fix-make-dbus-text-property-optional-WIP.patch \
     file://0006-Fix-null-text-crashing-node-red-when-setting-status-.patch \
     file://npm-shrinkwrap.json;subdir=${S} \
+    file://0007-Fix-dbus-listener-getValue-use-original-destination-.patch \
 "
-PR = "2"
+PR = "3"
 INSANE_SKIP += "src-uri-bad"
 
 # Careful! When updating the version, also npm-shrinkwrap.json must be updated
