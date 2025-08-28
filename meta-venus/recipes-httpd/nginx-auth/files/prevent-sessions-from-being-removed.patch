@@ -1,0 +1,25 @@
+From 7d40887dda48e81a452e692f3d0f46c8ea2bf58e Mon Sep 17 00:00:00 2001
+From: Wiebe Cazemier <wiebe@ytec.nl>
+Date: Thu, 21 Aug 2025 13:28:45 +0200
+Subject: [PATCH] Prevent sessions from being removed
+
+The value defaults to 24 minutes, meaning after 24 minutes of idle time,
+it MAY be removed upon next use (garbage collection run is probabilistic).
+
+This should fix reports of people's session being removed.
+---
+ auth/session.php | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/auth/session.php b/auth/session.php
+index 6af7612..079c837 100644
+--- a/auth/session.php
++++ b/auth/session.php
+@@ -24,6 +24,7 @@ function venus_session_start(bool $readonly = false)
+ {
+ 	session_start([
+ 		'cookie_lifetime' => 365 * 24 * 60 * 60,
++		'gc_maxlifetime' => 365 * 24 * 60 * 60,
+ 		'read_and_close'  => $readonly,
+ 		'name' => 'VENUS_SESSION_ID',
+ 		'save_path' => '/data/var/lib/venus-www-sessions'

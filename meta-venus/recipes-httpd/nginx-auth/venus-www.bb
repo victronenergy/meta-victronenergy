@@ -3,8 +3,14 @@ SUMMARY = "scripts to authenticate a user"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-SRC_URI = "git://github.com/victronenergy/venus-www.git;branch=master;protocol=https"
-SRC_URI += "file://create-venus-session-dir"
+SRC_URI = " \
+    git://github.com/victronenergy/venus-www.git;branch=master;protocol=https \
+    file://prevent-sessions-from-being-removed.patch \
+    file://create-venus-session-dir \
+"
+
+PR = "1"
+
 SRCREV = "f3918e820c70a66280b9b96acf5942240b5f778c"
 S = "${WORKDIR}/git"
 
