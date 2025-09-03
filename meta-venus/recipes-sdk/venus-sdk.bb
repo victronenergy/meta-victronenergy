@@ -47,3 +47,8 @@ TOOLCHAIN_HOST_TASK += " \
     nativesdk-ncurses-dev \
     nativesdk-openssl-dev \
 "
+
+# gdb depends on this.. "could not convert 'main' from the host encoding (UTF-8) to UTF-32."
+TOOLCHAIN_HOST_TASK += " \
+    nativesdk-glibc-gconv-utf-32 \
+"
