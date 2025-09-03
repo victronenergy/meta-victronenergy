@@ -22,6 +22,12 @@ RDEPENDS:${PN} += " \
     xorgproto-dev \
 "
 
+# compiler sanitizer plugins
+RDEPENDS:${PN} += " \
+    libasan-dev \
+    libubsan-dev \
+"
+
 # qt6
 RDEPENDS:${PN} += " \
     qt5compat-dev \

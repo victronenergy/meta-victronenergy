@@ -12,6 +12,7 @@ RDEPENDS:${PN} += "\
     gdb \
     dfu-util \
     file \
+    gcc-sanitizers \
     gpsd \
     git \
     htop \
