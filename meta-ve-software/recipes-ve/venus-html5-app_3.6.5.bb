@@ -11,7 +11,7 @@ SRC_URI = " \
     https://github.com/victronenergy/venus-html5-app/releases/download/${PV}/venus-html5-app.tar.gz;downloadfilename=venus-html5-app-${PV}.tar.gz;subdir=${S} \
     file://localsettings \
 "
-SRC_URI[sha256sum] = "9b620b6c2cdefcb054b18e080cd457ad0f397d269613af70adc268dca4301ff6"
+SRC_URI[sha256sum] = "26025d377f2f187c736a2884e38d11f53a7f67cff42eff7e4d5e42214e3753e4"
 S = "${UNPACKDIR}/www"
 
 BASE_DIR = "${WWW_ROOT}/default/app"
