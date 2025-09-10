@@ -2,7 +2,7 @@ SUMMARY = "A hw-accelerated, touch only UI for Venus devices."
 
 include gui-v2.inc
 
-inherit daemontools qt6-cmake start-gui ve_package
+inherit daemontools qt6-cmake start-gui ve_package dos2unix
 
 # the .rcc files contain references to buildir
 WARN_QA:remove = "buildpaths"
