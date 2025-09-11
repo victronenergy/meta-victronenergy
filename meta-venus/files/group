@@ -42,6 +42,7 @@ gpio:x:97
 php-fpm:x:98:
 vnctunnel:x:99:
 users:x:100:
+mqtt-integrations:x:983:
 shelly:x:984:
 ptest:x:985:
 render:x:986:
