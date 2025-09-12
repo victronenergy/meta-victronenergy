@@ -9,13 +9,13 @@ MACHINE_FEATURES += "headless"
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-raspberrypi"
 
 RPI_KERNEL_DEVICETREE_OVERLAYS = " \
+    overlays/overlay_map.dtb \
     overlays/ads7846.dtbo \
     overlays/disable-bt.dtbo \
     overlays/disable-wifi.dtbo \
     overlays/gpio-fan.dtbo \
     overlays/pitft28-capacitive.dtbo \
     overlays/pitft35-resistive.dtbo \
-    overlays/rpi-display.dtbo \
     overlays/mcp2515-can0.dtbo \
     overlays/mcp2515-can1.dtbo \
     overlays/mcp251xfd.dtbo \
@@ -25,6 +25,13 @@ RPI_KERNEL_DEVICETREE_OVERLAYS = " \
     overlays/spi1-3cs.dtbo \
     overlays/waveshare-can-fd-hat-mode-a.dtbo \
     overlays/waveshare-can-fd-hat-mode-b.dtbo \
+    overlays/vc4-fkms-v3d.dtbo \
+    overlays/vc4-fkms-v3d-pi4.dtbo \
+    overlays/vc4-kms-v3d.dtbo \
+    overlays/vc4-kms-v3d-pi4.dtbo \
+    overlays/vc4-kms-v3d-pi5.dtbo \
+    overlays/vc4-kms-dsi-7inch.dtbo \
+    overlays/vc4-kms-dsi-ili9881-7inch.dtbo \
 "
 
 KERNEL_PACKAGES ?= "kernel-image kernel-modules"
@@ -43,7 +50,7 @@ UBOOT_SRC_URI ?= "git://github.com/victronenergy/u-boot.git;branch=rpi_v2022.01;
 UBOOT_SUFFIX ?= "bin"
 UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
 
-IMAGE_FSTYPES ?= "wic ext4.gz"
+IMAGE_FSTYPES ?= "wic ext4.gz wic.bmap"
 
 MACHINE_FEATURES += "apm usbhost keyboard vfat ext2 screen touchscreen alsa bluetooth wifi sdio ${@bb.utils.contains('DISABLE_VC4GRAPHICS', '1', '', 'vc4graphics', d)}"
 
@@ -66,3 +73,5 @@ do_image_wic[depends] += " \
 "
 
 do_image_wic[recrdeps] = "do_deploy"
+
+#VENUS_GPU = "1"
