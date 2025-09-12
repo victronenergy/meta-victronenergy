@@ -1,0 +1,45 @@
+From 6422e961f0f228cdc412a483333de8c3c76ddcef Mon Sep 17 00:00:00 2001
+From: Wiebe Cazemier <wiebe@ytec.nl>
+Date: Fri, 5 Sep 2025 13:42:22 +0200
+Subject: [PATCH] Fix memory leak from not deleting wifi services
+
+It always deleted a nullptr, because `mServices.value(path)` only
+returned default constucted, null, pointers at that point, because it
+was already removed from the map.
+---
+ connman/cmmanager.cpp | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/connman/cmmanager.cpp b/connman/cmmanager.cpp
+index 3b2d0f2..d9f8694 100644
+--- a/connman/cmmanager.cpp
++++ b/connman/cmmanager.cpp
+@@ -300,21 +300,19 @@ void CmManager::servicesChanged(const ConnmanObjectList &changed, const QList<QD
+ 	// Removed services
+ 	foreach (const QDBusObjectPath &oPath, removed) {
+ 		const QString &path = oPath.path();
+-		bool delService = false;
+ 
+-		if (!mServices.contains(path)) {
++		auto pos = mServices.find(path);
++
++		if (pos == mServices.end()) {
+ 			qCritical() << "service " << path << " was removed but was not found in the services list";
+ 		} else {
+-			if (mServices.value(path) != mEthernetService)
+-				delService = true;
+-			mServices.remove(path);
++			if (pos.value() != mEthernetService) {
++				pos.value()->deleteLater();
++				mServices.erase(pos);
++			}
+ 		}
+ 
+ 		emit serviceRemoved(path);
+-
+-		// note: make sure the service is delete after above signal
+-		if (delService)
+-			delete mServices.value(path);
+ 	}
+ 
+ 	// Changed services
