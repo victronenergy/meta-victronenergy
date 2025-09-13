@@ -4,6 +4,7 @@ Date: Thu, 28 Nov 2024 20:14:04 +0100
 Subject: [PATCH] work around for too few arguments to function
  init_disassemble_info() error
 
+Upstream-Status: Backport
 ---
  tools/perf/util/annotate.c | 15 ++++++++++++++-
  1 file changed, 14 insertions(+), 1 deletion(-)

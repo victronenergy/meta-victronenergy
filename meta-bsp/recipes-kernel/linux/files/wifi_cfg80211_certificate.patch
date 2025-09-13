@@ -24,6 +24,8 @@ Acked-by: Seth Forshee <sforshee@kernel.org>
 Link: https://msgid.link/ZXHGsqs34qZyzZng@wens.tw
 Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Upstream-Status: Backport
 ---
  net/wireless/certs/wens.hex | 87 +++++++++++++++++++++++++++++++++++++++++++++
  1 file changed, 87 insertions(+)

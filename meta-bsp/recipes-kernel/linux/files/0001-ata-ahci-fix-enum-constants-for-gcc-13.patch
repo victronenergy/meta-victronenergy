@@ -34,6 +34,8 @@ Cc: Randy Dunlap <rdunlap@infradead.org>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Tested-by: Luis Machado <luis.machado@arm.com>
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+
+Upstream-Status: Backport
 ---
  drivers/ata/ahci.h | 242 +++++++++++++++++++++++----------------------
  1 file changed, 122 insertions(+), 120 deletions(-)
