@@ -17,6 +17,7 @@ inherit localsettings
 # instead of the processes causing the queues in it.
 do_install:append:venus() {
     install ${UNPACKDIR}/dbus-daemon-watch.sh ${D}${bindir}/dbus-daemon-watch.sh
+    install -m 0755 -d ${D}${sysconfdir}/dbus-1
     install -m 0644 ${UNPACKDIR}/system.conf ${D}${sysconfdir}/dbus-1/system.conf
 
     # NOTE: only for debugging / fun. This is really not secure!
