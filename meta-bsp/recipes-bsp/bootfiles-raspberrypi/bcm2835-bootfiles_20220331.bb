@@ -11,7 +11,7 @@ INSANE_SKIP += "src-uri-bad"
 
 COMPATIBLE_MACHINE = "raspberrypi"
 
-S = "${WORKDIR}/firmware-1.${PV}/boot"
+S = "${UNPACKDIR}/firmware-1.${PV}/boot"
 
 do_deploy() {
     install -d ${DEPLOYDIR}/${PN}
