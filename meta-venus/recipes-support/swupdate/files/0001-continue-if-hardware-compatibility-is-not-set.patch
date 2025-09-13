@@ -3,6 +3,7 @@ From: Jeroen Hofstee <jhofstee@victronenergy.com>
 Date: Tue, 13 Jun 2023 18:06:09 +0200
 Subject: [PATCH] continue if hardware-compatibility is not set
 
+Upstream-Status: Inappropriate [Venus specific]
 ---
  core/util.c | 4 ++++
  1 file changed, 4 insertions(+)
