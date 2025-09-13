@@ -38,10 +38,13 @@ kvm:x:47:
 staff:x:50:
 games:x:60:
 shutdown:x:70:
-gpio:x:97
+influxdb:x:96:
+gpio:x:97:
 php-fpm:x:98:
 vnctunnel:x:99:
 users:x:100:
+polkitd:x:981:
+seat:x:982:
 mqtt-integrations:x:983:
 shelly:x:984:
 ptest:x:985:
