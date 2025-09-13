@@ -18,3 +18,9 @@ RDEPENDS:${PN} += " \
     packagegroup-core-buildessential \
     python3-compile \
 "
+
+# for testing for now, install rcc, lupdate and lrelease
+RDEPENDS:${PN} += " \
+    qtbase-tools \
+    qttools-tools \
+"

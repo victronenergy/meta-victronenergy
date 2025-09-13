@@ -24,3 +24,6 @@ EXTRA_OECMAKE:append:arm = " ${EXTRA_OECMAKE_DISABLE_STACK_PROTECTOR}"
 EXTRA_OECMAKE:append:aarch64 = " ${EXTRA_OECMAKE_DISABLE_STACK_PROTECTOR}"
 
 # ommitted qtplatform as RDEPEND, since it is machine dependent
+
+# for rcc on a target
+QT_FORCE_BUILD_TOOLS:class-target = "1"
