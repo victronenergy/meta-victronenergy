@@ -1,0 +1,24 @@
+From 2ddb15254a7b48550dabca20fe77e11eea5809e6 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Fri, 12 Sep 2025 16:10:12 +0200
+Subject: [PATCH] qttools: disable qhelpgenerator, fails to install
+
+---
+ src/assistant/CMakeLists.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/assistant/CMakeLists.txt b/src/assistant/CMakeLists.txt
+index 3b339031f..dc6ba75db 100644
+--- a/src/assistant/CMakeLists.txt
++++ b/src/assistant/CMakeLists.txt
+@@ -18,7 +18,6 @@ if(NOT QT_FEATURE_assistant)
+ endif()
+ add_subdirectory(help)
+ add_subdirectory(assistant)
+-add_subdirectory(qhelpgenerator)
+ add_subdirectory(plugins)
+ 
+ set(QLITEHTML_BIN_PATH ${INSTALL_BINDIR})
+-- 
+2.43.0
+
