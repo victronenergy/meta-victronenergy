@@ -11,7 +11,7 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;branch=master;protocol=https \
     file://com.victronenergy.system.conf \
 "
-SRCREV = "6fa61dd210b708efcbb90916e2a54b48f6973413"
+SRCREV = "eac930e1e82b56fece1f3269d49f14682241dd4e"
 S = "${WORKDIR}/git"
 
 RDEPENDS:${PN} = " \
