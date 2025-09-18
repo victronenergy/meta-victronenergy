@@ -8,26 +8,7 @@ inherit deploy image-artifact-names nopackages
 INITRD_IMAGE = "venus-install-initramfs-${MACHINE}.cpio.gz.u-boot"
 SCR = "install.scr"
 
-BOARD_IDS = ""
-BOARD_IDS:beaglebone = "file://board_id_octogx"
-BOARD_IDS:einstein = "\
-    file://board_id_cerbogx \
-    file://board_id_cerbogx_b1 \
-    file://board_id_cerbogx_s \
-"
-BOARD_IDS:ekrano = "file://board_id_ekrano"
-BOARD_IDS:nanopi = "\
-    file://board_id_easysolar \
-    file://board_id_easysolar_a9 \
-    file://board_id_easysolar_a10 \
-    file://board_id_maxigx \
-    file://board_id_maxigx_a10 \
-    file://board_id_multiplus2 \
-    file://board_id_multiplus2_a10 \
-    file://board_id_paygo \
-"
-
-SRC_URI += "${BOARD_IDS}"
+BOARD_IDS ?= ""
 
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
 IMAGE_NAME[vardepsexclude] += "DATETIME"
@@ -58,25 +39,36 @@ do_deploy[depends] += " \
     zip-native:do_populate_sysroot \
 "
 
-do_deploy () {
-    SDCARD="${WORKDIR}/sdcard"
+SDCARD = "${WORKDIR}/sdcard"
 
-    if [ -d ${SDCARD} ]; then
-        rm -rf ${SDCARD}
-    fi
-
+do_prepare_sdcard() {
+    rm -rf ${SDCARD}
     mkdir ${SDCARD}
+}
 
+addtask do_prepare_sdcard before do_deploy
+
+python do_board_ids() {
+    import quopri
+
+    sdcard = d.getVar('SDCARD')
+    board_ids = d.getVar('BOARD_IDS').split()
+
+    for b in board_ids:
+        bn, bi = b.split(':')
+        bi = quopri.decodestring(bi)
+
+        with open(os.path.join(sdcard, 'board_id_' + bn), 'wb') as f:
+            f.write(bi)
+}
+
+addtask do_board_ids after do_prepare_sdcard before do_deploy
+
+do_deploy () {
     for file in ${INSTALL_FILES}; do
         src=${file%:*}
         dst=${file#*:}
         cp ${DEPLOY_DIR_IMAGE}/${src} ${SDCARD}/${dst}
-    done
-
-    for board_id in ${BOARD_IDS}
-    do
-        board_id="$(echo $board_id | sed 's,file://,,g')"
-        cp "${WORKDIR}/$board_id" ${SDCARD}
     done
 
     zip -rj ${DEPLOYDIR}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
