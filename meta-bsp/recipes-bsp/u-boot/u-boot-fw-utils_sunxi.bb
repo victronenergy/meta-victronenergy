@@ -4,6 +4,8 @@ require u-boot-sunxi.inc
 PROVIDES = ""
 SRC_URI += "file://fw_env.config"
 
+CVE_PRODUCT = "u-boot-fwutils"
+
 do_compile () {
     oe_runmake -C ${S} ${UBOOT_MACHINE}
     oe_runmake -C ${S} CC="${CC} ${CFLAGS} ${LDFLAGS}" STRIP="echo" envtools
