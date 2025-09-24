@@ -76,6 +76,9 @@ do_compile() {
         npm_cmd="clean-install"
     fi
 
+    # remove the workdir of quilt, otherwise the patches themselves will be installed as well.
+    rm -rf ${S}/.pc
+
     tar=$(npm pack ${S})
 
     # This used to install the tarball directly in the right place, but there is a bug
