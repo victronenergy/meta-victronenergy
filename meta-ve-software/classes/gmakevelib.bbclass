@@ -16,6 +16,8 @@ CFLAGS += "${TOOLCHAIN_OPTIONS} ${TARGET_CC_ARCH} ${LDFLAGS}"
 VE_PROJECT_DIR ?= "${S}"
 B = "${VE_PROJECT_DIR}"
 
+export CROSS_COMPILE = "${TARGET_PREFIX}"
+
 oe_runconf () {
     cfgscript="${VE_PROJECT_DIR}/configure"
     if [ -x "$cfgscript" ] ; then
