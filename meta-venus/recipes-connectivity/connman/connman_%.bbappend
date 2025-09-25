@@ -13,6 +13,8 @@ inherit ve_package
 # busybox version doesn't support --noadjfile though.
 RDEPENDS:${PN} += "util-linux-hwclock"
 
+RDEPENDS:${PN}:append:raspberrypi5 = " wlan"
+
 SRC_URI += "\
     file://0001-Set-hwclock-when-time-is-decoded.patch \
     file://0002-Increase-NTP-poll-interval.patch \
