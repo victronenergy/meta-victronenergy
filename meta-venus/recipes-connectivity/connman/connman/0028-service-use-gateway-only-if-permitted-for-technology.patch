@@ -1,0 +1,50 @@
+From 10a748e4878195c00c9cec152a37f530e5ad56d1 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Wed, 24 Sep 2025 14:40:14 +0100
+Subject: [PATCH 28/29] service: use gateway only if permitted for technology
+
+---
+ src/service.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
+
+diff --git a/src/service.c b/src/service.c
+index 80c3a6b4d059..3798099e2e1a 100644
+--- a/src/service.c
++++ b/src/service.c
+@@ -1431,17 +1431,25 @@ static void reset_stats(struct connman_service *service)
+ 	g_timer_reset(service->stats_roaming.timer);
+ }
+ 
++static void check_gateway(struct connman_service *service, void *data)
++{
++	struct connman_service **ret = data;
++
++	if (!__connman_technology_is_gateway_enabled(service->type))
++		return;
++
++	if (!is_connected(service))
++		return;
++
++	if (!*ret)
++		*ret = service;
++}
++
+ struct connman_service *__connman_service_get_default(void)
+ {
+-	struct connman_service *service;
++	struct connman_service *service = NULL;
+ 
+-	if (!service_list)
+-		return NULL;
+-
+-	service = service_list->data;
+-
+-	if (!is_connected(service))
+-		return NULL;
++	__connman_service_iterate_services(check_gateway, &service);
+ 
+ 	return service;
+ }
+-- 
+2.51.0
+
