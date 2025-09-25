@@ -38,6 +38,10 @@ SRC_URI += "\
     file://0023-add-has_ipv-46-_gateway-helpers.patch \
     file://0024-preserve-default-gateway-when-new-link-lacks-one.patch \
     file://0025-do-not-add-0.0.0.0-as-nameserver.patch \
+    file://0026-remove-special-route-setup-for-VPNs.patch \
+    file://0027-technology-add-GatewayEnabled-property.patch \
+    file://0028-service-use-gateway-only-if-permitted-for-technology.patch \
+    file://0029-connection-check-if-gateway-is-permitted-for-service.patch \
     file://main.conf \
     file://connmand-watch.sh \
 "

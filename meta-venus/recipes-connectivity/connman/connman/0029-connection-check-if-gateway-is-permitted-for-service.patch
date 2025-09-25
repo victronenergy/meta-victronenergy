@@ -1,0 +1,128 @@
+From 324353f405c6634e5640d0f90de01f2d9f82bcee Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Wed, 24 Sep 2025 15:01:42 +0100
+Subject: [PATCH 29/29] connection: check if gateway is permitted for service
+ technology
+
+---
+ src/connection.c | 48 +++++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 37 insertions(+), 11 deletions(-)
+
+diff --git a/src/connection.c b/src/connection.c
+index 2d99211f85d8..9d07f104676d 100644
+--- a/src/connection.c
++++ b/src/connection.c
+@@ -49,18 +49,32 @@ static GHashTable *gateway_hash = NULL;
+ 
+ static bool has_ipv4_gateway(struct gateway_data *data)
+ {
+-	if (!data->ipv4_gateway)
++	enum connman_service_type service_type;
++
++	if (!data || !data->ipv4_gateway)
++		return false;
++
++	if (!g_strcmp0(data->ipv4_gateway->gateway, "0.0.0.0"))
+ 		return false;
+ 
+-	return g_strcmp0(data->ipv4_gateway->gateway, "0.0.0.0") != 0;
++	service_type = connman_service_get_type(data->service);
++
++	return __connman_technology_is_gateway_enabled(service_type);
+ }
+ 
+ static bool has_ipv6_gateway(struct gateway_data *data)
+ {
+-	if (!data->ipv6_gateway)
++	enum connman_service_type service_type;
++
++	if (!data || !data->ipv6_gateway)
++		return false;
++
++	if (!g_strcmp0(data->ipv6_gateway->gateway, "::"))
+ 		return false;
+ 
+-	return g_strcmp0(data->ipv6_gateway->gateway, "::") != 0;
++	service_type = connman_service_get_type(data->service);
++
++	return __connman_technology_is_gateway_enabled(service_type);
+ }
+ 
+ static struct gateway_config *find_gateway(int index, const char *gateway)
+@@ -319,12 +333,10 @@ static void unset_default_gateway(struct gateway_data *data,
+ 
+ 	if (do_ipv4 && !has_ipv4_gateway(data)) {
+ 		connman_inet_clear_gateway_interface(index);
+-		return;
+ 	}
+ 
+ 	if (do_ipv6 && !has_ipv6_gateway(data)) {
+ 		connman_inet_clear_ipv6_gateway_interface(index);
+-		return;
+ 	}
+ 
+ 	if (do_ipv6 && data->ipv6_gateway)
+@@ -578,6 +590,9 @@ int __connman_connection_gateway_add(struct connman_service *service,
+ 					connman_service_get_type(service);
+ 	int index;
+ 
++	if (!__connman_technology_is_gateway_enabled(service_type))
++		return;
++
+ 	index = __connman_service_get_index(service);
+ 
+ 	/*
+@@ -706,8 +721,6 @@ bool __connman_connection_update_gateway(void)
+ 		return updated;
+ 
+ 	default_gateway = find_default_gateway();
+-	if (!default_gateway)
+-		return updated;
+ 
+ 	do_ipv4 = has_ipv4_gateway(default_gateway);
+ 	do_ipv6 = has_ipv6_gateway(default_gateway);
+@@ -722,10 +735,19 @@ bool __connman_connection_update_gateway(void)
+ 
+ 	while (g_hash_table_iter_next(&iter, &key, &value)) {
+ 		struct gateway_data *active_gateway = value;
++		enum connman_service_type service_type =
++			connman_service_get_type(active_gateway->service);
+ 
+ 		if (active_gateway == default_gateway)
+ 			continue;
+ 
++		if (!__connman_technology_is_gateway_enabled(service_type)) {
++			unset_default_gateway(active_gateway,
++						CONNMAN_IPCONFIG_TYPE_ALL);
++			updated = true;
++			continue;
++		}
++
+ 		if (do_ipv4 && active_gateway->ipv4_gateway &&
+ 				active_gateway->ipv4_gateway->active) {
+ 
+@@ -743,14 +765,18 @@ bool __connman_connection_update_gateway(void)
+ 		}
+ 	}
+ 
+-	if (updated && default_gateway) {
+-		if (do_ipv4)
++	if (default_gateway) {
++		if (do_ipv4 && !default_gateway->ipv4_gateway->active) {
+ 			set_default_gateway(default_gateway,
+ 					CONNMAN_IPCONFIG_TYPE_IPV4);
++			updated = true;
++		}
+ 
+-		if (do_ipv6)
++		if (do_ipv6 && !default_gateway->ipv6_gateway->active) {
+ 			set_default_gateway(default_gateway,
+ 					CONNMAN_IPCONFIG_TYPE_IPV6);
++			updated = true;
++		}
+ 	}
+ 
+ 	return updated;
+-- 
+2.51.0
+
