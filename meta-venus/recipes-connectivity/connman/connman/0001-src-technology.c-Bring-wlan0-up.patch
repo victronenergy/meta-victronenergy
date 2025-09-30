@@ -1,0 +1,98 @@
+From 5382dcb45d1a05eb5dfcd1dc90e81e872c083226 Mon Sep 17 00:00:00 2001
+From: Leon Anavi <leon.anavi@konsulko.com>
+Date: Tue, 30 Sep 2025 08:10:02 +0000
+Subject: [PATCH] src/technology.c: Bring wlan0 up
+
+Bring up wlan0 and enable the Wi-Fi interface, so it can be
+managed through the GUI.
+
+Upstream-Status: Inappropriate
+
+Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
+---
+ src/main.c       |  4 ++++
+ src/technology.c | 39 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 43 insertions(+)
+
+diff --git a/src/main.c b/src/main.c
+index 7a2b10f..00b5716 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -760,6 +760,10 @@ int main(int argc, char *argv[])
+ 	__connman_rfkill_init();
+ 	__connman_machine_init();
+ 
++	if (set_interface_up("wlan0") < 0) {
++		DBG("failed to bring wlan0 up initially: %s", strerror(errno));
++	}
++
+ 	g_free(option_config);
+ 	g_free(option_device);
+ 	g_free(option_plugin);
+diff --git a/src/technology.c b/src/technology.c
+index bc3d370..c8b41a1 100644
+--- a/src/technology.c
++++ b/src/technology.c
+@@ -28,6 +28,13 @@
+ 
+ #include <gdbus.h>
+ 
++#include <stdio.h>
++#include <unistd.h>
++#include <fcntl.h>
++#include <sys/ioctl.h>
++#include <sys/socket.h>
++#include <net/if.h>
++
+ #include "connman.h"
+ 
+ static DBusConnection *connection;
+@@ -1050,6 +1057,34 @@ void __connman_technology_notify_regdom_by_device(struct connman_device *device,
+ 	connman_technology_regdom_notify(technology, alpha2);
+ }
+ 
++int set_interface_up(const char *ifname)
++{
++	int s = socket(AF_INET, SOCK_DGRAM, 0);
++	if (s < 0)
++		return -1;
++
++	struct ifreq ifr;
++	memset(&ifr, 0, sizeof(ifr));
++	strncpy(ifr.ifr_name, ifname, IFNAMSIZ - 1);
++
++	/* Get current flags */
++	if (ioctl(s, SIOCGIFFLAGS, &ifr) < 0) {
++		close(s);
++		return -1;
++	}
++
++	/* Set IFF_UP */
++	ifr.ifr_flags |= IFF_UP;
++
++	if (ioctl(s, SIOCSIFFLAGS, &ifr) < 0) {
++		close(s);
++		return -1;
++	}
++
++	close(s);
++	return 0;
++}
++
+ static DBusMessage *scan(DBusConnection *conn, DBusMessage *msg, void *data)
+ {
+ 	struct connman_technology *technology = data;
+@@ -1058,6 +1093,10 @@ static DBusMessage *scan(DBusConnection *conn, DBusMessage *msg, void *data)
+ 	DBG("technology %p request from %s", technology,
+ 			dbus_message_get_sender(msg));
+ 
++	if (set_interface_up("wlan0") < 0) {
++		DBG("failed to bring wlan0 up: %s", strerror(errno));
++	}
++
+ 	dbus_message_ref(msg);
+ 	technology->scan_pending =
+ 		g_slist_prepend(technology->scan_pending, msg);
+-- 
+2.39.5
+

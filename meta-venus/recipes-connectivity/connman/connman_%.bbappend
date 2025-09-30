@@ -42,6 +42,8 @@ SRC_URI += "\
     file://connmand-watch.sh \
 "
 
+SRC_URI:append:raspberrypi5 = " file://0001-src-technology.c-Bring-wlan0-up.patch"
+
 do_configure:append() {
     sed -i -e 's:\$(localstatedir)/lib:${permanentlocalstatedir}/lib:' ${B}/Makefile
 }
