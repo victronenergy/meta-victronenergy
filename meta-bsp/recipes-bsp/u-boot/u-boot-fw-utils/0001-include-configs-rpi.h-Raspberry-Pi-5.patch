@@ -1,0 +1,32 @@
+From f509e1a53379c744e2841356960226b360d542cd Mon Sep 17 00:00:00 2001
+From: Leon Anavi <leon.anavi@konsulko.com>
+Date: Wed, 3 Sep 2025 07:33:59 +0000
+Subject: [PATCH] include/configs/rpi.h: Raspberry Pi 5
+
+Modify the load and do_boot commands for Raspberry Pi 5.
+
+Upstream-Status: Inappropriate [Venus specific]
+
+Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
+---
+ include/configs/rpi.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/configs/rpi.h b/include/configs/rpi.h
+index e4ee7dcfde..9f21d7f3be 100644
+--- a/include/configs/rpi.h
++++ b/include/configs/rpi.h
+@@ -125,8 +125,8 @@
+ 		"setenv bootargs \"${bootargs} root=${mmcroot} rootwait\"\0" \
+ 	"set_root=if test \"${version}\" = 2; then setenv bootpart 0:3; setenv mmcroot /dev/mmcblk0p3; " \
+ 		"else setenv bootpart 0:2; setenv mmcroot /dev/mmcblk0p2; fi\0" \
+-	"load=ext2load mmc ${bootpart} ${kernel_addr_r} /boot/zImage\0" \
+-	"do_boot=bootz ${kernel_addr_r} - ${fdt_addr}\0"
++	"load=ext2load mmc ${bootpart} ${kernel_addr_r} /boot/Image\0" \
++	"do_boot=booti ${kernel_addr_r} - ${fdt_addr}\0"
+ 
+ #define CONFIG_BOOTCOMMAND "run set_root set_args load do_boot"
+ 
+-- 
+2.43.0
+
