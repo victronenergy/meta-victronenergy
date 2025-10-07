@@ -22,7 +22,12 @@ passwd="$1"
 if [ "$passwd" = "" ]; then
     hash=""
 else
-    hash="$(ve-hash-passwd $unique_id $passwd)"
+    hash="$(ve-hash-passwd "$unique_id" "$passwd")"
+    if [ $? -ne 0 ]; then
+        echo "could not hash the password"
+        exit 1
+    fi
+
     if [ -z "$hash" ]; then
         echo "could not create password hash"
         exit 1
