@@ -1,0 +1,43 @@
+From 3442332f796162f8228bc10b7702f89db72c67e8 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 8 Oct 2025 08:26:13 +0000
+Subject: [PATCH] initscripts: always rerun chmod / chown
+
+Venus also uses populate-volatile.sh to populate /data. Since that
+is involatile users can change the permissions / owner of those
+directories. This make sure they are always restored after a reboot.
+
+Upstream-Status: Inappropriate [Venus specific]
+---
+ populate-volatile.sh | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/populate-volatile.sh b/populate-volatile.sh
+index bc630e8..c0c3549 100755
+--- a/populate-volatile.sh
++++ b/populate-volatile.sh
+@@ -68,16 +68,12 @@ mk_dir() {
+ 	chmod ${TMODE} $1 || echo \"Failed to set mode -${TMODE}- for -$1-.\" "
+ 
+ 	test "$VOLATILE_ENABLE_CACHE" = yes && echo "$EXEC" >> /etc/volatile.cache.build
+-	if [ -e "$1" ]; then
+-		[ "${VERBOSE}" != "no" ] && echo "Target already exists. Skipping."
++	if [ -z "$ROOT_DIR" ]; then
++		eval "$EXEC"
+ 	else
+-		if [ -z "$ROOT_DIR" ]; then
+-			eval "$EXEC"
+-		else
+-			# For the same reason with create_file(), failures should
+-			# not be logged.
+-			eval "$EXEC" > /dev/null 2>&1
+-		fi
++		# For the same reason with create_file(), failures should
++		# not be logged.
++		eval "$EXEC" > /dev/null 2>&1
+ 	fi
+ }
+ 
+-- 
+2.43.0
+

@@ -4,6 +4,7 @@ VELIB_DEFAULT_DIRS = "1"
 inherit ve_package
 
 SRC_URI += "\
+    file://0001-initscripts-always-rerun-chmod-chown.patch \
     file://overlays.sh \
     file://static-nodes.sh \
     file://test-data-partition.sh \
