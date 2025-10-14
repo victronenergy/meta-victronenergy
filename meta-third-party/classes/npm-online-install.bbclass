@@ -146,7 +146,7 @@ do_update_shrinkwrap() {
         cp ${NPM_SHRINKWRAP_SRC} ${S}/npm-shrinkwrap.json
     fi
 }
-addtask update_shrinkwrap after do_getname do_prepare_recipe_sysroot
+addtask update_shrinkwrap after do_getname do_patch do_prepare_recipe_sysroot
 do_update_shrinkwrap[cleandirs] += "${NPM_BUILD} ${NPM_TMP}"
 do_update_shrinkwrap[dirs] = "${NPM_TMP}"
 do_update_shrinkwrap[network] = "1"
