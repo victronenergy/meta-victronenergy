@@ -1,7 +1,7 @@
-From 3cbcae690a5cf6874b38bb223d9562829d2f50f1 Mon Sep 17 00:00:00 2001
+From 2b5f4fe7731e196d56064452dff7bc8433add4c9 Mon Sep 17 00:00:00 2001
 From: mpvader <mvader@victronenergy.com>
 Date: Sat, 5 Jul 2025 13:14:54 +0200
-Subject: [PATCH 3/3] remove signalk-server-setup script + its largest
+Subject: [PATCH 2/3] remove signalk-server-setup script + its largest
  dependencies
 
 The signalk-server-setup script is not used within Venus OS.
@@ -18,17 +18,17 @@ There are some more very small dependencies that could be removed as well,
 for example chalk and clear, but rather leave them in - less risk & maintenance
 going forward.
 ---
- bin/signalk-server-setup | 354 ---------------------------------------
+ bin/signalk-server-setup | 352 ---------------------------------------
  package.json             |   3 -
- 2 files changed, 357 deletions(-)
+ 2 files changed, 355 deletions(-)
  delete mode 100755 bin/signalk-server-setup
 
 diff --git a/bin/signalk-server-setup b/bin/signalk-server-setup
 deleted file mode 100755
-index 55679168..00000000
+index 0c13906d..00000000
 --- a/bin/signalk-server-setup
 +++ /dev/null
-@@ -1,354 +0,0 @@
+@@ -1,352 +0,0 @@
 -#!/usr/bin/env node
 -
 -const spawn = require('child_process').spawnSync
@@ -333,8 +333,6 @@ index 55679168..00000000
 -                let serverd = `[Service]
 -ExecStart=${startupLocation}
 -Restart=always
--StandardOutput=syslog
--StandardError=syslog
 -WorkingDirectory=${configDirectory}
 -User=${process.env.SUDO_USER}
 -Environment=EXTERNALPORT=${primaryPort}
@@ -384,18 +382,16 @@ index 55679168..00000000
 -    })
 -}
 diff --git a/package.json b/package.json
-index 64895544..b52e00bd 100644
+index b603b973..34e07233 100644
 --- a/package.json
 +++ b/package.json
-@@ -96,15 +96,12 @@
+@@ -96,13 +96,10 @@
      "express": "^4.10.4",
      "express-easy-zip": "^1.1.5",
      "express-namespace": "^0.1.1",
 -    "figlet": "^1.2.0",
      "file-timestamp-stream": "^2.1.2",
-     "flatmap": "0.0.3",
      "geolib": "3.2.2",
-     "get-installed-path": "^4.0.8",
 -    "inquirer": "^7.0.0",
      "json-patch": "^0.7.0",
      "jsonwebtoken": "^9.0.0",
