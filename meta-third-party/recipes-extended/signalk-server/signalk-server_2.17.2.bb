@@ -8,11 +8,9 @@ RDEPENDS:${PN} += "bash nodejs-npm util-linux-setpriv"
 
 SRC_URI = "\
     npm://registry.npmjs.org;package=${BPN};version=${PV} \
-    file://0001-Revert-feat-enable-node-source-map-support.patch \
-    file://0002-package.json-change-optional-to-mandatory-and-add-si.patch \
-    file://0003-remove-signalk-server-setup-script-its-largest-depen.patch \
-    file://0004-package.json-remove-typedoc-signalk-theme-devDepende.patch \
-    file://0005-package.json-add-socketcan-package.patch \
+    file://0001-package.json-change-optional-to-mandatory-and-add-si.patch \
+    file://0002-remove-signalk-server-setup-script-its-largest-depen.patch \
+    file://0003-package.json-add-socketcan-package.patch \
     file://npm-shrinkwrap.json;subdir=${S} \
     file://defaults.json \
     file://get-mfd-announce-address.sh \
@@ -25,7 +23,7 @@ SRC_URI = "\
     file://venus.json \
 "
 
-SRC_URI[sha256sum] = "67e10a0eddd600757144703f18e4a09f9bc5c5a2b725657732df8ad8eabcdc96"
+SRC_URI[sha256sum] = "61b78492afeace701f4b30ddd6d7a4f5871419d5bc86bb78c2a8d8ace9fb58f0"
 
 S = "${UNPACKDIR}/npm"
 
