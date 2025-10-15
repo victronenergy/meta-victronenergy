@@ -1,4 +1,4 @@
-From b4c62b910e4f437549e354f9ca9d483ba55e97ab Mon Sep 17 00:00:00 2001
+From 2b5f4fe7731e196d56064452dff7bc8433add4c9 Mon Sep 17 00:00:00 2001
 From: mpvader <mvader@victronenergy.com>
 Date: Sat, 5 Jul 2025 13:14:54 +0200
 Subject: [PATCH 2/3] remove signalk-server-setup script + its largest
@@ -382,7 +382,7 @@ index 0c13906d..00000000
 -    })
 -}
 diff --git a/package.json b/package.json
-index fd97b4e2..ab5c62b6 100644
+index b603b973..34e07233 100644
 --- a/package.json
 +++ b/package.json
 @@ -96,13 +96,10 @@

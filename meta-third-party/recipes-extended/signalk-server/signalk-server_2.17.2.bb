@@ -8,7 +8,7 @@ RDEPENDS:${PN} += "bash nodejs-npm util-linux-setpriv"
 
 SRC_URI = "\
     npm://registry.npmjs.org;package=${BPN};version=${PV} \
-    file://0001-package.json-change-optional-to-mandatory-and-add-si.patch \
+    file://0001-package.json-no-more-optional-packages-signalk-venus.patch \
     file://0002-remove-signalk-server-setup-script-its-largest-depen.patch \
     file://0003-package.json-add-socketcan-package.patch \
     file://npm-shrinkwrap.json;subdir=${S} \
