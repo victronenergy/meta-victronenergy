@@ -1,0 +1,7 @@
+# For some reason the networks on the raspberrypi5 cannot be brought
+# up successfully after being discovered. So they are upped late in
+# the boot.
+
+ip link set eth0 up
+ip link set wlan0 up
+
