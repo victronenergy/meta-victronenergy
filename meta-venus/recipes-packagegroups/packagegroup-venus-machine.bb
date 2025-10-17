@@ -95,6 +95,10 @@ RDEPENDS:${PN}:append:rpi = "\
     wireless-regdb-static \
 "
 
+RDEPENDS:${PN}:append:raspberrypi5 = " \
+    rpi5-network-workaround \
+"
+
 # netmon provides a workaround for an problem solved years ago
 # and it is a open issue if the package shouldn't be dropped.
 # Since it requires quite some resources with the scarthgap
