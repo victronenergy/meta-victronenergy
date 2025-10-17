@@ -3,6 +3,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += " \
     file://mount.sh \
+    file://mount.blacklist \
     file://mount.blacklist.machine \
     file://bluetooth.rules \
     file://bt-config \
@@ -36,6 +37,8 @@ do_install:append() {
     install -m 0755 ${UNPACKDIR}/mount.sh ${D}${sysconfdir}/udev/scripts
 
     install -d ${D}/${sysconfdir}/udev/mount.blacklist.d
+    install -m 0644 ${UNPACKDIR}/mount.blacklist \
+        ${D}/${sysconfdir}/udev/mount.blacklist
     install -m 0644 ${UNPACKDIR}/mount.blacklist.machine \
         ${D}/${sysconfdir}/udev/mount.blacklist.d/machine
 
