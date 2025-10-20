@@ -8,7 +8,7 @@ MACHINE_FEATURES += "headless"
 
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-raspberrypi"
 
-RPI_KERNEL_DEVICETREE_OVERLAYS = " \
+RPI_KERNEL_DEVICETREE_OVERLAYS ?= " \
     overlays/ads7846.dtbo \
     overlays/disable-bt.dtbo \
     overlays/disable-wifi.dtbo \
@@ -43,7 +43,7 @@ UBOOT_SRC_URI ?= "git://github.com/victronenergy/u-boot.git;branch=rpi_v2022.01;
 UBOOT_SUFFIX ?= "bin"
 UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
 
-IMAGE_FSTYPES ?= "wic ext4.gz"
+IMAGE_FSTYPES ?= "wic ext4.gz wic.bmap"
 
 MACHINE_FEATURES += "apm usbhost keyboard vfat ext2 screen touchscreen alsa bluetooth wifi sdio ${@bb.utils.contains('DISABLE_VC4GRAPHICS', '1', '', 'vc4graphics', d)}"
 
