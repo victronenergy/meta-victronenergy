@@ -8,10 +8,10 @@ inherit localsettings
 RDEPENDS:${PN} = "nginx venus-html5-logger"
 
 SRC_URI = " \
-    https://github.com/victronenergy/venus-html5-app/releases/download/${PV}/venus-html5-app.tar.gz;downloadfilename=venus-html5-app-${PV}.tar.gz;subdir=${S} \
+    https://github.com/victronenergy/venus-html5-app/releases/download/${PV}/venus-html5-app-${PV}.tar.gz;downloadfilename=venus-html5-app-${PV}.tar.gz;subdir=${S} \
     file://localsettings \
 "
-SRC_URI[sha256sum] = "26025d377f2f187c736a2884e38d11f53a7f67cff42eff7e4d5e42214e3753e4"
+SRC_URI[sha256sum] = "26cbd293f16ed162b51edcae07b9885ae1e387063a0aa6ffe72e8f9db78fc4cb"
 S = "${UNPACKDIR}/www"
 
 BASE_DIR = "${WWW_ROOT}/default/app"
