@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# raspbberypi's don't have a default password.
+exit 1
+
