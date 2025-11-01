@@ -500,6 +500,10 @@ module.exports = {
     //    *   - reason: if result is false, the HTTP reason string to return
     //    */
     //},
+
+    // Disable update checks
+    telemetryEnabled: false,
+
     victronVirtual: {
         persistLocation: '/data/home/nodered/.node-red/.victron'
     },

@@ -5,6 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=014f1a23c3da49aa929b21a96808ab22"
 
 SRC_URI = "\
     npm://registry.npmjs.org;package=${BPN};version=${PV} \
+	file://Disable-showing-update-notifaction-in-tour.patch;apply=no \
     file://npm-shrinkwrap.json;subdir=${S} \
 "
 SRC_URI[sha256sum] = "bf4e7a0ae54720f6c58580a0743dc6d456fcf7366c18e99feae397f566964381"
@@ -13,6 +14,12 @@ S = "${UNPACKDIR}/npm"
 RDEPENDS:${PN} = "nodejs-npm"
 
 inherit npm-online-install
+
+do_install:prepend() {
+    # Apply patch to remove update notification from tour
+    cd ${WORKDIR}
+    patch -p1 < ${UNPACKDIR}/Disable-showing-update-notifaction-in-tour.patch || bbfatal "Failed to apply tour patch"
+}
 
 do_install:append() {
     # Remove hardware specific files
