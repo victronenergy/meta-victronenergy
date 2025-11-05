@@ -31,6 +31,31 @@ python () {
     d.appendVar('FILES:' + pkg, ' ${DAEMONTOOLS_SERVICES_DIR} ${DAEMONTOOLS_SERVICE_DIR} ${DAEMONTOOLS_COMMON_TEMPLATES_DIR}')
 }
 
+# The processes's virtual address space is far larger on aarch64
+# than on arm. Which can trigger e.g. venus-platform to abort when
+# hit (it can also fallback it seems, likely handle if mmap failed
+# and use less virtual memory).
+#
+# This allows aarch64 to allocate more virtual memory then arm.
+# It is more interesting though to limit the actual memory used by
+# a program... but that doesn't seem to be trivial.
+SOFTLIMIT_ALL_FACTOR = "1"
+SOFTLIMIT_ALL_FACTOR:aarch64 = "4"
+
+# note: only numeric constants are supported.
+def softlimit(d, data=None, stack=None, all=None):
+    args = ""
+    if data is not None:
+        args += f" -d {data}"
+    if stack is not None:
+        args += f" -s {stack}"
+    if all is not None:
+        all_factor = int(d.getVar("SOFTLIMIT_ALL_FACTOR"))
+        args += f" -a {all * all_factor}"
+    if args == "":
+        bb.warn("softlimit called without any valid argument")
+    return "softlimit" + args
+
 DAEMONTOOLS_preinst() {
     if test "x$D" = "x"; then
         if [ -d ${DAEMONTOOLS_SERVICES_DIR}/${PN} ]; then
