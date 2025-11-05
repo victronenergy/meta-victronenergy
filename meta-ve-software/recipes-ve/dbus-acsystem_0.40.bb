@@ -11,7 +11,7 @@ UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "gitsm://github.com/victronenergy/${BPN}.git;protocol=https;branch=master"
 SRCREV = "04e000d1fe81e355b87d19c806f1df9f0d1bdf1b"
 S = "${WORKDIR}/git"
-DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/${PN}.py"
+DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/${PN}.py"
 
 inherit daemontools gmakevelib python-compile
 

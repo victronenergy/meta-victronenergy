@@ -14,7 +14,7 @@ SRC_URI = " \
 SRCREV = "d9c49e34ca008d824d03795d2ff136f395b4bc64"
 S = "${WORKDIR}/git"
 
-DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/${PN}.py --path=/data/conf"
+DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/${PN}.py --path=/data/conf"
 
 RDEPENDS:${PN} += " \
     python3-core \

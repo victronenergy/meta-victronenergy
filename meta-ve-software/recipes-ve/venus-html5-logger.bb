@@ -6,5 +6,5 @@ RDEPENDS:${PN} = "gwsocket"
 
 inherit daemontools
 
-DAEMONTOOLS_RUN = "setuidgid nobody softlimit -d 10000000 -s 1000000 -a 10000000 gwsocket --stdout"
+DAEMONTOOLS_RUN = "setuidgid nobody ${@softlimit(d, data=10000000, stack=1000000, all=100000000)} gwsocket --stdout"
 DAEMONTOOLS_DOWN = "1"

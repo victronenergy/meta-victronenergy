@@ -23,4 +23,4 @@ RDEPENDS:${PN} = " \
     python3-zeroconf \
 "
 
-DAEMONTOOLS_RUN = "setuidgid shelly softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_shelly.py"
+DAEMONTOOLS_RUN = "setuidgid shelly ${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/dbus_shelly.py"

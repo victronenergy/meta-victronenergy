@@ -22,7 +22,7 @@ RDEPENDS:${PN} = " \
     python3-pygobject \
 "
 
-DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_systemcalc.py"
+DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/dbus_systemcalc.py"
 
 do_install () {
     install -d ${D}${bindir}

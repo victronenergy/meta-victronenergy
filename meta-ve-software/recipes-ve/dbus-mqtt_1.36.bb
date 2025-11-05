@@ -20,4 +20,4 @@ SRC_URI = " \
 SRCREV = "00bbfd58d048b3ca805199955659f84f31754106"
 S = "${WORKDIR}/git"
 
-DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_mqtt.py --init-broker"
+DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/dbus_mqtt.py --init-broker"

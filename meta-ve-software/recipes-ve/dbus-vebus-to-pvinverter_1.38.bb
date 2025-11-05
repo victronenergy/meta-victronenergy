@@ -9,7 +9,7 @@ inherit python-compile
 UPSTREAM_CHECK_GITTAGREGEX = "(?P<pver>\S+)"
 SRC_URI = "gitsm://github.com/victronenergy/dbus_conversions.git;branch=master;protocol=https"
 SRCREV = "c40bed8a1b1f5f607f60ecb6ea4c32acf61767cd"
-DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_vebus_to_pvinverter.py"
+DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/dbus_vebus_to_pvinverter.py"
 S = "${WORKDIR}/git"
 RDEPENDS:${PN} = "python3-core python3-dbus python3-pygobject"
 

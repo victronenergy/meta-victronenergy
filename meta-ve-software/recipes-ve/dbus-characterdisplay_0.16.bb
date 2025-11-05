@@ -26,7 +26,7 @@ RDEPENDS:${PN} = " \
     python3-evdev \
 "
 
-DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/start-characterdisplay.sh"
+DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/start-characterdisplay.sh"
 
 do_install:append () {
     install -d ${D}${bindir}

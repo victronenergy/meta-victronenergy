@@ -15,7 +15,7 @@ SRC_URI = " \
 SRCREV = "377a287bd91a4d7f2ffba5254bd07f34858f86b3"
 S = "${WORKDIR}/git"
 
-DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/venus-platform"
+DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/venus-platform"
 
 inherit daemontools qmakeve
 
