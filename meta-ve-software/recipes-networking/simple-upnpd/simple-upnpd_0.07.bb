@@ -16,7 +16,7 @@ USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM:${PN} = "simple-upnpd"
 USERADD_PARAM:${PN} = "--no-create-home --shell /bin/false -g simple-upnpd simple-upnpd"
 
-DAEMONTOOLS_RUN = "${base_bindir}/start-simple-upnpd"
+DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${base_bindir}/start-simple-upnpd"
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
