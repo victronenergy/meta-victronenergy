@@ -10,7 +10,7 @@ USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM:${PN} = "flashmq"
 USERADD_PARAM:${PN} = "--no-create-home --shell /bin/false -g flashmq flashmq"
 
-DAEMONTOOLS_RUN = "${sbindir}/start-flashmq"
+DAEMONTOOLS_RUN = "softlimit -d 150000000 -s 10000000 -a 150000000 ${sbindir}/start-flashmq"
 
 RDEPENDS:${PN} += "dbus-flashmq mosquitto-clients"
 

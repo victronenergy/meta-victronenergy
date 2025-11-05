@@ -35,4 +35,4 @@ rm "$tempconf"
 chmod 400 $key
 chown flashmq $key
 
-exec softlimit -d 150000000 -s 10000000 -a 150000000 setuidgid flashmq /usr/bin/flashmq
+exec setuidgid flashmq /usr/bin/flashmq
