@@ -24,3 +24,6 @@ Gui2/OnBoarding 0 i 0 0
 Gui2/StartPage 0 i 0 0
 Gui2/StartPageName "" s
 Gui2/StartPageTimeout 0 i 0 0
+Gui2/Switchpane/Preset/RGB "" s
+Gui2/Switchpane/Preset/RGBW "" s
+Gui2/Switchpane/Preset/CCT "" s
