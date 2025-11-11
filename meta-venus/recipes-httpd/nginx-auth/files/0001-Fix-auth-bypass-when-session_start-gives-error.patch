@@ -1,0 +1,45 @@
+From 4174abca9cdc1af08d9499ff61b7ca091202ba6f Mon Sep 17 00:00:00 2001
+From: Wiebe Cazemier <wiebe@ytec.nl>
+Date: Tue, 7 Oct 2025 11:44:24 +0000
+Subject: [PATCH] Fix auth bypass when session_start gives error
+
+As example, when the data dir where sessions are saved is not writable.
+
+https://github.com/victronenergy/venus-private/issues/599
+---
+ auth/session.php | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/auth/session.php b/auth/session.php
+index 8fee6b5..3974887 100644
+--- a/auth/session.php
++++ b/auth/session.php
+@@ -1,14 +1,23 @@
+ <?php
+ 
++/*
++ * To avoid errors from breaking http_response_code(). This makes development harder, but there
++ * is no good way around this.
++ */
++error_reporting(0);
++
+ function venus_session_start($readonly = false)
+ {
+-	session_start([
++	if (session_start([
+ 		'cookie_lifetime' => 365 * 24 * 60 * 60,
+ 		'gc_maxlifetime' => 365 * 24 * 60 * 60,
+ 		'read_and_close'  => $readonly,
+ 		'name' => 'VENUS_SESSION_ID',
+ 		'save_path' => '/data/var/lib/venus-www-sessions'
+-	]);
++	]) === false) {
++			http_response_code(500); // Internal Server Error
++			exit();
++	}
+ }
+ 
+ ?>
+-- 
+2.43.0
+

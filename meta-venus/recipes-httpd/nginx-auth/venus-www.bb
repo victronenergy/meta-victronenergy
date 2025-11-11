@@ -6,10 +6,11 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 SRC_URI = " \
     git://github.com/victronenergy/venus-www.git;branch=master;protocol=https \
     file://prevent-sessions-from-being-removed.patch \
+    file://0001-Fix-auth-bypass-when-session_start-gives-error.patch \
     file://create-venus-session-dir \
 "
 
-PR = "1"
+PR = "2"
 
 SRCREV = "f3918e820c70a66280b9b96acf5942240b5f778c"
 S = "${WORKDIR}/git"
