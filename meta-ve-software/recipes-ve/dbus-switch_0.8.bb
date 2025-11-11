@@ -6,6 +6,8 @@ inherit daemontools-template gmakevelib python-compile ve_package
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "gitsm://github.com/victronenergy/dbus-switch.git;branch=main;protocol=https"
+SRC_URI += "file://fix-invalid-output-fault-on-io-extender-bistable-relays.patch"
+PR = "1"
 
 SRCREV = "a8de0da7841666837cc9c86681c053ab6593b4d7"
 S = "${WORKDIR}/git"

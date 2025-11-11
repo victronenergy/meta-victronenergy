@@ -1,0 +1,120 @@
+From 25132a360e83e19ce9511f636c3d5ef1858b60e4 Mon Sep 17 00:00:00 2001
+From: ReinvdZee <rvanderzee@victronenergy.com>
+Date: Mon, 15 Sep 2025 14:22:30 +0200
+Subject: [PATCH] Fix invalid output fault on IO extender bistable relays
+
+Relays 1 & 2 on the IO extender would give an output fault when
+the state changes rapidly (only relevent with type momentary)
+
+This was caused by the thread that is watching the feedback pin and the desired state.
+The desired state changed during waiting and differed from what the feedback pin read.
+
+The fix is to properly cancel the waiting thread and
+synchronize access to the shared resources.
+
+https://github.com/victronenergy/venus/issues/1529
+---
+ dbus-switch.py | 59 ++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 36 insertions(+), 23 deletions(-)
+
+diff --git a/dbus-switch.py b/dbus-switch.py
+index 24a1d02..a837547 100755
+--- a/dbus-switch.py
++++ b/dbus-switch.py
+@@ -6,6 +6,7 @@
+ from collections import namedtuple
+ from argparse import ArgumentParser
+ import traceback
++import threading
+ sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'ext', 'velib_python'))
+ 
+ from dbus.mainloop.glib import DBusGMainLoop
+@@ -171,53 +172,65 @@ def __init__(self, name=None, set=None, res=None, label=None, fb=None, status_cb
+ 		self.setpath = set
+ 		self.respath = res
+ 		self._state = self.fb_state
++		self._pins_lock = threading.Lock()	# Lock for accessing the HW pins
++		self._state_lock = threading.Lock()	# Lock for accessing _state
+ 		self.status = STATUS_ON if self._state else STATUS_OFF
+ 		self._clear_paths()
+ 
+ 	@Pin.state.setter
+ 	def state(self, state):
+-		try:
+-			with open((self.setpath if state else self.respath) + '/value', 'wt') as w:
+-				w.write('1')
+-		except IOError:
+-			traceback.print_exc()
+-			return
++		with self._pins_lock:
++			try:
++				with open((self.setpath if state else self.respath) + '/value', 'wt') as w:
++					w.write('1')
++			except IOError:
++				traceback.print_exc()
++				return
+ 
+-		if self._fb:
++		if self.has_feedback:
+ 			self.retries = 0
+ 			self.timer = GLib.timeout_add(self.CHECK_INT, self._waitForState, state)
+ 		else:
+-			print("No fb pin")
+ 			self.timer = GLib.timeout_add(self.PULSELEN, self.clear)
+ 			self.status = STATUS_ON if self._state else STATUS_OFF
+ 
+-		self._state = state
++		with self._state_lock:
++			self._state = state
+ 
+ 	def _waitForState(self, state):
++		with self._state_lock:
++			if self._state != state:
++				# State has changed while waiting.
++				# Only clear the path that was set to prevent breaking the next change.
++				with self._pins_lock:
++					with open((self.setpath if state else self.respath) + '/value', 'wt') as w:
++						w.write('0')
++				return False # Stop timer
+ 		self.retries += 1
+-		ret = self.state != state and self.retries < self.PULSELEN / self.CHECK_INT
++		ret = self.fb_state != state and self.retries < self.PULSELEN / self.CHECK_INT
+ 		if not ret:
+ 			self._clear()
+ 		return ret
+ 
+ 	def _clear(self):
+ 		if self.has_feedback:
+-			if self._state != self.fb_state:
+-				self.status = STATUS_OUTPUT_FAULT
+-			else:
+-				self.status = STATUS_ON if self._state else STATUS_OFF
+-
++			with self._state_lock:
++				if self._state != self.fb_state:
++					self.status = STATUS_OUTPUT_FAULT
++				else:
++					self.status = STATUS_ON if self._state else STATUS_OFF
+ 		self._clear_paths()
+ 
+ 	def _clear_paths(self):
+-		for path in [self.setpath, self.respath]:
+-			try:
+-				with open(path + '/value', 'wt') as w:
+-					w.write('0')
+-			except IOError:
+-				traceback.print_exc()
+-				return False
+-		return True
++		with self._pins_lock:
++			for path in [self.setpath, self.respath]:
++				try:
++					with open(path + '/value', 'wt') as w:
++						w.write('0')
++				except IOError:
++					traceback.print_exc()
++					return False
++			return True
+ 
+ # Base class for all switching devices.
+ class SwitchingDevice(object):
