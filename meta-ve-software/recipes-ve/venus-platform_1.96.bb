@@ -14,10 +14,11 @@ SRC_URI = " \
     file://can.inc \
     file://venus_dbus_bridge_template.conf \
     file://venus_rpc_bridge_template.conf \
+    file://notifications-initialize-macknowledged.patch \
 "
 SRCREV = "f4b9bb8969ba392a4073a99fb673834df2d73846"
 S = "${WORKDIR}/git"
-PR = "3"
+PR = "4"
 
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/venus-platform"
 

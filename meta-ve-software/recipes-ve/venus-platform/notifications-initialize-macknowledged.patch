@@ -1,0 +1,21 @@
+From 98ac1a86a31dd4aea2471b68e7af385dbcc2a225 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Mon, 29 Sep 2025 14:03:54 +0200
+Subject: [PATCH] notifications: initialize mAcknowledged
+
+Mans found this with valgrind.
+---
+ src/notification.hpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/notification.hpp b/src/notification.hpp
+index 69d387f..7ec4940 100644
+--- a/src/notification.hpp
++++ b/src/notification.hpp
+@@ -54,5 +54,5 @@ private slots:
+ 	VeQItem *mActiveItem;
+ 	VeQItem *mIndexItem;
+ 	VeQItem *mTypeItem;
+-	bool mAcknowledged;
++	bool mAcknowledged = false;
+ };
