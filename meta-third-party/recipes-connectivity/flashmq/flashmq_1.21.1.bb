@@ -8,7 +8,9 @@ inherit cmake
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "git://github.com/halfgaar/FlashMQ.git;branch=master;protocol=https"
+SRC_URI += "file://fix-circular-references-in-qos-packet-queue.patch"
 SRCREV = "5cb18eab8b33d3ee787e13f1904b5ec25a015a0e"
+PR = "1"
 
 S = "${WORKDIR}/git"
 EXTRA_OECMAKE = "-DCMAKE_BUILD_TYPE=Release"

@@ -1,0 +1,100 @@
+From e86c49360ef4387440c97f591770cdb9284b4ee9 Mon Sep 17 00:00:00 2001
+From: Wiebe Cazemier <wiebe@halfgaar.net>
+Date: Tue, 21 Oct 2025 20:10:14 +0200
+Subject: [PATCH] Fix circular references in QoS packet queue
+
+This fixes leaking memory on destroying sessions when there are QoS
+packets queued.
+
+Upstream-Status: Backport [https://github.com/halfgaar/FlashMQ/commit/e86c49360ef4387440c97f591770cdb9284b4ee9.patch]
+CVE: CVE-2025-62723
+---
+ qospacketqueue.cpp             | 16 ++++++++++------
+ qospacketqueue.h               |  8 ++++++--
+ session.cpp                    |  4 ++--
+ sessionsandsubscriptionsdb.cpp |  2 +-
+ 4 files changed, 19 insertions(+), 11 deletions(-)
+
+diff --git a/qospacketqueue.cpp b/qospacketqueue.cpp
+index 7824131a..4b108e22 100644
+--- a/qospacketqueue.cpp
++++ b/qospacketqueue.cpp
+@@ -87,17 +87,21 @@ void QoSPublishQueue::eraseFromMapAndRelinkList(std::unordered_map<uint16_t, std
+ {
+     std::shared_ptr<QueuedPublish> &qp = pos->second;
+ 
+-    if (qp->prev)
+-        qp->prev->next = qp->next;
++    auto _prev = qp->prev.lock();
++
++    if (_prev)
++        _prev->next = qp->next;
+ 
+     if (this->head == qp)
+-        this->head = qp->prev;
++        this->head = qp->prev.lock();
++
++    auto _next = qp->next.lock();
+ 
+-    if (qp->next)
+-        qp->next->prev = qp->prev;
++    if (_next)
++        _next->prev = qp->prev;
+ 
+     if (this->tail == qp)
+-        this->tail = qp->next;
++        this->tail = qp->next.lock();
+ 
+     this->queue.erase(pos);
+ }
+diff --git a/qospacketqueue.h b/qospacketqueue.h
+index 2b6a7a67..8b68dddf 100644
+--- a/qospacketqueue.h
++++ b/qospacketqueue.h
+@@ -32,9 +32,13 @@ class QueuedPublish
+ public:
+     QueuedPublish(Publish &&publish, uint16_t packet_id, const std::optional<std::string> &topic_override);
+     QueuedPublish(const QueuedPublish &other) = delete;
++    QueuedPublish(QueuedPublish &&other) = delete;
+ 
+-    std::shared_ptr<QueuedPublish> prev;
+-    std::shared_ptr<QueuedPublish> next;
++    QueuedPublish &operator=(const QueuedPublish&) = delete;
++    QueuedPublish &operator=(QueuedPublish&&) = delete;
++
++    std::weak_ptr<QueuedPublish> prev;
++    std::weak_ptr<QueuedPublish> next;
+ 
+     size_t getApproximateMemoryFootprint() const;
+     uint16_t getPacketId() const;
+diff --git a/session.cpp b/session.cpp
+index a8036b43..ea935488 100644
+--- a/session.cpp
++++ b/session.cpp
+@@ -271,11 +271,11 @@ void Session::sendAllPendingQosData()
+         {
+             MutexLocked<QoSData> qos_locked = qos.lock();
+ 
+-            std::shared_ptr<QueuedPublish> qp_ = qos_locked->qosPacketQueue.getTail();;
++            std::shared_ptr<QueuedPublish> qp_ = qos_locked->qosPacketQueue.getTail();
+             while (qp_)
+             {
+                 std::shared_ptr<QueuedPublish> qp = qp_;
+-                qp_ = qp_->next;
++                qp_ = qp_->next.lock();
+ 
+                 Publish &pub = qp->getPublish();
+ 
+diff --git a/sessionsandsubscriptionsdb.cpp b/sessionsandsubscriptionsdb.cpp
+index 532848ec..8d64005b 100644
+--- a/sessionsandsubscriptionsdb.cpp
++++ b/sessionsandsubscriptionsdb.cpp
+@@ -380,7 +380,7 @@ void SessionsAndSubscriptionsDB::saveData(const std::vector<std::shared_ptr<Sess
+ 
+                 writeCheck(cirbuf.tailPtr(), 1, cirbuf.usedBytes(), f);
+ 
+-                qp = qp->next;
++                qp = qp->next.lock();
+             }
+ 
+             assert(qosPacketsExpected == qosPacketsCounted);
