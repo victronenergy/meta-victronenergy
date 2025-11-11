@@ -1,0 +1,85 @@
+From 0e5a1f7c705171ef6074dfa729772118a29b6bb9 Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Thu, 25 Sep 2025 14:15:06 +0200
+Subject: [PATCH] avoid crash if alternator lacks maxcurrent setting
+
+---
+ delegates/dvcc.py |  7 ++++++-
+ tests/hub_test.py | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 52 insertions(+), 1 deletion(-)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index acc8fccf..6486f58d 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -547,7 +547,12 @@ def maximize_charge_current(self):
+ 	def shutdown_chargers(self):
+ 		""" Shut down all chargers. """
+ 		for charger in self:
+-			charger.maxchargecurrent = 0
++			try:
++				charger.maxchargecurrent = 0
++			except TypeError:
++				# happens if for some reason
++				# /Settings/ChargeCurrentLimit is not defined
++				pass
+ 
+ 	def set_networked(self, has_bms, bms_charge_voltage, charge_voltage, max_charge_current, feedback_allowed, stop_on_mcc0):
+ 		""" This is the main entry-point into the solar charger subsystem. This
+diff --git a/tests/hub_test.py b/tests/hub_test.py
+index 53126f5d..6e2a83d3 100644
+--- a/tests/hub_test.py
++++ b/tests/hub_test.py
+@@ -2214,6 +2214,52 @@ def test_dvcc_with_ess_no_battery_for_alternators(self):
+ 				'/Link/ChargeCurrent': 25 + 8}, # 25A limit, 8A VEBus
+ 		})
+ 
++	def test_dvcc_alternator_no_maxcurrent(self):
++		""" Don't crash when alternator has no /Settings/ChargeCurrentLimit. """
++		self._remove_device('com.victronenergy.vebus.ttyO1')
++		self._add_device('com.victronenergy.battery.ttyO2',
++			product_name='battery',
++			values={
++				'/Dc/0/Voltage': 14.0,
++				'/Dc/0/Current': 5.3,
++				'/Dc/0/Power': 56,
++				'/Soc': 15.3,
++				'/DeviceInstance': 0,
++				'/Info/BatteryLowVoltage': 11,
++				'/Info/MaxChargeCurrent': 0,
++				'/Info/MaxChargeVoltage': 14.2,
++				'/Info/MaxDischargeCurrent': 50,
++				'/ProductId': 0xA3E5 }) # Lynx
++		self._add_device('com.victronenergy.solarcharger.ttyUSB0', {
++			'/State': 3,
++			'/Link/NetworkMode': 0,
++			'/Link/ChargeVoltage': None,
++			'/Link/ChargeCurrent': None,
++			'/Link/VoltageSense': None,
++			'/Settings/ChargeCurrentLimit': 100,
++			'/Dc/0/Voltage': 14.0,
++			'/Dc/0/Current': 4.0,
++			'/FirmwareVersion': 0x0129},
++			connection='VE.Direct')
++		self._add_device('com.victronenergy.alternator.ttyO4', {
++			'/State': 3,
++			'/Link/NetworkMode': 0,
++			'/Link/ChargeVoltage': None,
++			'/Link/ChargeCurrent': None,
++			'/Settings/ChargeCurrentLimit': None,
++			'/Dc/0/Current': 33,
++			'/FirmwareVersion': 0 },
++			connection='VE.Direct')
++		self._update_values(interval=30000)
++		self._check_external_values({
++			'com.victronenergy.alternator.ttyO4': {
++				'/Link/ChargeVoltage': 14.2,
++				'/Link/ChargeCurrent': None },
++			'com.victronenergy.solarcharger.ttyUSB0': {
++				'/Link/ChargeVoltage': 14.2,
++				'/Link/ChargeCurrent': 0 },
++		})
++
+ 	def test_internal_maxchargecurrent(self):
+ 		""" The DVCC assistant allows other assistants to set an internal limit
+ 		    for the Multi. """
