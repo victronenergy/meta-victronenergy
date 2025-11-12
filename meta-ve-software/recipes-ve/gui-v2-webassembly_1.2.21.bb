@@ -8,7 +8,7 @@ SRC_URI = " \
 SRC_URI[sha256sum] = "7743c1cb0d198d3eea842a8c82bacaa2159112589b3d4b32c8a70d4d917bb690"
 S = "${UNPACKDIR}/wasm"
 
-inherit allarch localsettings www
+inherit localsettings www
 
 do_install() {
     make DESTDIR="${D}" PREFIX="${WWW_ROOT}/gui-v2" install
