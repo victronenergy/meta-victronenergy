@@ -16,6 +16,11 @@ include recipes-kernel/linux/cve-exclusion.inc
 include linux-venus-cve-exclusion.inc
 
 SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;nobranch=1"
+SRC_URI += "\
+    file://0001-usb-cdc-acm-support-assigning-port-ids-in-devicetree.patch \
+    file://0002-ARM-dts-add-Tigro-GX.patch \
+    file://0003-ARM-configs-sunxi_victron-update-for-tigro.patch \
+"
 BB_GIT_DEFAULT_DESTSUFFIX ?= "git"
 S = "${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX}"
 

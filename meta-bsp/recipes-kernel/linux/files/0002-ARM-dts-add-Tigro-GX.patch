@@ -1,0 +1,416 @@
+From 2d33cbff6c532bc3d2506475f462d150beb05854 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 12 Jul 2024 16:51:21 +0100
+Subject: [PATCH 2/3] ARM: dts: add Tigro GX
+
+---
+ .../dts/allwinner/sun8i-h3-sinh3-tigro.dts    | 397 ++++++++++++++++++
+ 1 file changed, 397 insertions(+)
+ create mode 100644 arch/arm/boot/dts/allwinner/sun8i-h3-sinh3-tigro.dts
+
+diff --git a/arch/arm/boot/dts/allwinner/sun8i-h3-sinh3-tigro.dts b/arch/arm/boot/dts/allwinner/sun8i-h3-sinh3-tigro.dts
+new file mode 100644
+index 000000000000..5c75849e8919
+--- /dev/null
++++ b/arch/arm/boot/dts/allwinner/sun8i-h3-sinh3-tigro.dts
+@@ -0,0 +1,397 @@
++// SPDX-License-Identifier: GPL-2.0 OR X11
++/*
++ * Copyright (C) 2024 Mans Rullgard <mans@mansr.com>
++ */
++
++/dts-v1/;
++
++#include "sun8i-h3-sinh3-core.dtsi"
++#include <dt-bindings/input/input.h>
++
++/ {
++	model = "Tigro GX";
++	compatible = "victronenergy,tigro-gx",
++		     "sinlinx,sinh3-core",
++		     "allwinner,sun8i-h3";
++
++	aliases {
++		cdc-acm0 = &cdc_acm0;
++		cdc-acm1 = &cdc_acm1;
++		cdc-acm2 = &cdc_acm2;
++		cdc-acm3 = &cdc_acm3;
++		ethernet0 = &emac;
++		hwmon0 = &cpu_thermal;
++		i2c0 = &i2c0;
++		i2c1 = &r_i2c;
++		mmc0 = &mmc0;
++		mmc1 = &mmc2;
++		nvmem0 = &board_id;
++		rtc0 = &ext_rtc;
++		rtc1 = &rtc;
++		serial0 = &uart0;
++		serial1 = &uart1;
++		serial2 = &r_uart;
++		watchdog0 = &ext_wdt;
++		watchdog1 = &wdt0;
++	};
++
++	hdmi-connector {
++		compatible = "hdmi-connector";
++		type = "a";
++		ddc-i2c-bus = <&r_i2c>;
++
++		port {
++			hdmi_con_in: endpoint {
++				remote-endpoint = <&hdmi_out_con>;
++			};
++		};
++	};
++
++	button {
++		compatible = "gpio-keys";
++
++		button {
++			linux,code = <KEY_CONFIG>;
++			gpios = <&r_pio 0 6 GPIO_ACTIVE_LOW>;	/* PL6 */
++		};
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		led-bluetooth {
++			label = "bluetooth";
++			gpios = <&pio 0 7 GPIO_ACTIVE_HIGH>;	/* PA7 */
++			default-state = "off";
++		};
++
++		led-status-orange {
++			label = "status-orange";
++			gpios = <&pio 4 0 GPIO_ACTIVE_HIGH>;	/* PE0 */
++			linux,default-trigger = "blink-slow";
++		};
++
++		led-status-green {
++			label = "status-green";
++			gpios = <&pio 4 3 GPIO_ACTIVE_HIGH>;	/* PE3 */
++			default-state = "off";
++		};
++	};
++
++	buzzer {
++		compatible = "pwm-beeper";
++		pwms = <&r_pwm 0 1000000 0>;
++	};
++
++	ext_wdt: watchdog {
++		compatible = "linux,wdt-gpio";
++		gpios = <&pio 3 17 GPIO_ACTIVE_HIGH>;		/* PD17 */
++		hw_algo = "toggle";
++		hw_margin_ms = <30000>;
++		always-running;
++	};
++
++	can_clk: can-clk {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <40000000>;
++	};
++
++	/* Wifi */
++	reg_usb0_vbus: usb0-vbus {
++		compatible = "regulator-fixed";
++		regulator-name = "usb0-vbus";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		enable-active-high;
++		gpio = <&pio 3 11 GPIO_ACTIVE_HIGH>;		/* PD11 */
++	};
++
++	/* Quad UART */
++	reg_usb1_vbus: usb1-vbus {
++		compatible = "regulator-fixed";
++		regulator-name = "usb1-vbus";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		enable-active-high;
++		gpio = <&r_pio 0 11 GPIO_ACTIVE_HIGH>;		/* PL11 */
++	};
++
++	/* External USB connectors */
++	reg_usb2_vbus: usb2-vbus {
++		compatible = "regulator-fixed";
++		regulator-name = "usb2-vbus";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		enable-active-high;
++		gpio = <&pio 6 13 GPIO_ACTIVE_HIGH>;		/* PG13 */
++	};
++};
++
++&de {
++	status = "okay";
++};
++
++&hdmi {
++	status = "okay";
++};
++
++&hdmi_out {
++	hdmi_out_con: endpoint {
++		remote-endpoint = <&hdmi_con_in>;
++	};
++};
++
++&emac {
++	phy-handle = <&int_mii_phy>;
++	phy-mode = "mii";
++	status = "okay";
++};
++
++&mmc0 {
++	vmmc-supply = <&reg_vcc_io>;
++	bus-width = <4>;
++	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;			/* PF6 */
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++
++	adc@48 {
++		compatible = "ti,tla2024";
++		reg = <0x48>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		channel@4 {
++			reg = <4>;
++		};
++
++		channel@5 {
++			reg = <5>;
++		};
++
++		channel@6 {
++			reg = <6>;
++		};
++
++		channel@7 {
++			reg = <7>;
++		};
++	};
++
++	board_id: eeprom@50 {
++		compatible = "atmel,24c02";
++		reg = <0x50>;
++		pagesize = <16>;
++		read-only;
++		vcc-supply = <&reg_vdd_3v3>;
++	};
++
++	ext_rtc: rtc@68 {
++		compatible = "ti,bq32000";
++		status = "okay";
++		reg = <0x68>;
++	};
++
++	imu@6a {
++		compatible = "st,lsm6ds3tr-c";
++		reg = <0x6a>;
++		interrupt-parent = <&pio>;
++		interrupts = <4 9 IRQ_TYPE_EDGE_RISING>,	/* PE9 */
++			     <4 11 IRQ_TYPE_EDGE_RISING>;	/* PE11 */
++	};
++};
++
++&r_i2c {
++	pinctrl-names = "default", "gpio";
++	pinctrl-0 = <&r_i2c_pins>;
++	pinctrl-1 = <&r_i2c_gpio_pins>;
++	scl-gpios = <&r_pio 0 0 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>; /* PL0 */
++	sda-gpios = <&r_pio 0 1 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>; /* PL1 */
++	status = "okay";
++
++	touchscreen@38 {
++		compatible = "edt,edt-ft5446", "edt,edt-ft5406";
++		reg = <0x38>;
++		interrupt-parent = <&pio>;
++		interrupts = <6 12 IRQ_TYPE_EDGE_FALLING>;	/* PG12 */
++		vcc-supply = <&reg_usb2_vbus>;
++		iovcc-supply = <&reg_usb2_vbus>;
++	};
++
++	edid: eeprom@50 {
++		compatible = "atmel,24c02";
++		reg = <0x50>;
++		pagesize = <16>;
++		read-only;
++		vcc-supply = <&reg_vdd_3v3>;
++	};
++
++	backlight@51 {
++		compatible = "victronenergy,gxdisp-backlight";
++		reg = <0x51>;
++		default-on;
++		default-brightness = <15>;
++		vcc-supply = <&reg_usb2_vbus>;
++	};
++};
++
++&r_pio {
++	r_i2c_gpio_pins: r_i2c-gpio-pins {
++		pins = "PL0", "PL1";
++		function = "gpio_out";
++	};
++};
++
++&r_pwm {
++	status = "okay";
++};
++
++&spi0 {
++	status = "okay";
++
++	assigned-clocks = <&ccu CLK_SPI0>;
++	assigned-clock-rates = <600000000>;
++	cs-gpios = <&pio 2 3 GPIO_ACTIVE_LOW>;			/* PC3 */
++
++	/* VE.CAN 1 */
++	can0: can@0 {
++		compatible = "microchip,mcp2518fd";
++		reg = <0>;
++		spi-max-frequency = <20000000>;
++		clocks = <&can_clk>;
++		interrupt-parent = <&pio>;
++		interrupts = <0 20 IRQ_TYPE_LEVEL_LOW>;		/* PA20 */
++		microchip,rx-int-gpios = <&pio 0 21 GPIO_ACTIVE_LOW>; /* PA21 */
++	};
++};
++
++&spi0_pins {
++	pins = "PC0", "PC1", "PC2";
++};
++
++&spi1 {
++	status = "okay";
++
++	assigned-clocks = <&ccu CLK_SPI1>;
++	assigned-clock-rates = <600000000>;
++	cs-gpios = <&pio 0 13 GPIO_ACTIVE_LOW>;
++
++	/* VE.CAN 2 */
++	can1: can@0 {
++		compatible = "microchip,mcp2518fd";
++		reg = <0>;
++		spi-max-frequency = <20000000>;
++		clocks = <&can_clk>;
++		interrupt-parent = <&pio>;
++		interrupts = <0 8 IRQ_TYPE_LEVEL_LOW>;		/* PA8 */
++		microchip,rx-int-gpios = <&pio 0 3 GPIO_ACTIVE_LOW>; /* PA3 */
++	};
++};
++
++&spi1_pins {
++	pins = "PA15", "PA16", "PA14";
++};
++
++/* Console */
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_pa_pins>;
++	status = "okay";
++};
++
++/* MK3 */
++&uart1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart1_pins>;
++	status = "okay";
++};
++
++/* VE.Direct 1 */
++&r_uart {
++	status = "okay";
++};
++
++&ehci0 {
++	status = "okay";
++
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	wireless-controller@1 {
++		compatible = "usbbda,d723";
++		reg = <1>;
++	};
++};
++
++&ohci1 {
++	status = "okay";
++
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	cdc-acm@1 {
++		compatible = "usb1a86,55d5";
++		reg = <1>;
++
++		#address-cells = <2>;
++		#size-cells = <0>;
++
++		/* VE.Direct 5 */
++		cdc_acm0: port@0 {
++			reg = <0 1>;
++		};
++
++		/* VE.Direct 2 */
++		cdc_acm1: port@2 {
++			reg = <2 1>;
++		};
++
++		/* VE.Direct 3 */
++		cdc_acm2: port@4 {
++			reg = <4 1>;
++		};
++
++		/* VE.Direct 4 */
++		cdc_acm3: port@6 {
++			reg = <6 1>;
++		};
++	};
++};
++
++&ehci2 {
++	status = "okay";
++};
++
++&ohci2 {
++	status = "okay";
++};
++
++&ehci3 {
++	status = "okay";
++};
++
++&ohci3 {
++	status = "okay";
++};
++
++&usbphy {
++	usb0_vbus-supply = <&reg_usb0_vbus>;
++	usb1_vbus-supply = <&reg_usb1_vbus>;
++	usb2_vbus-supply = <&reg_usb2_vbus>;
++	usb3_vbus-supply = <&reg_usb2_vbus>;
++	status = "okay";
++};
++
++&pio {
++	gpio-line-names =
++		"relay_1",
++		"mkx_rst",
++		"vebus_standby";
++	gpio-line-numbers =
++		<129>,		/* PE1 */
++		<142>,		/* PE14 */
++		<201>;		/* PG9 */
++};
+-- 
+2.51.0
+

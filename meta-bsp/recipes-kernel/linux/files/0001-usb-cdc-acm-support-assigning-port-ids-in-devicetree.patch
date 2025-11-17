@@ -1,0 +1,66 @@
+From 60529f7c41ece750efb609bbb6cbe83e4112bc05 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 14 Nov 2025 15:46:01 +0000
+Subject: [PATCH 1/3] usb: cdc-acm: support assigning port ids in devicetree
+
+---
+ drivers/usb/class/cdc-acm.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index c2ecfa3c8349..6c4a533578d4 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -38,6 +38,7 @@
+ #include <linux/unaligned.h>
+ #include <linux/idr.h>
+ #include <linux/list.h>
++#include <linux/of.h>
+ 
+ #include "cdc-acm.h"
+ 
+@@ -50,6 +51,7 @@ static struct tty_driver *acm_tty_driver;
+ 
+ static DEFINE_IDR(acm_minors);
+ static DEFINE_MUTEX(acm_minors_lock);
++static int nr_fixed_ports;
+ 
+ static void acm_tty_set_termios(struct tty_struct *tty,
+ 				const struct ktermios *termios_old);
+@@ -87,10 +89,13 @@ static struct acm *acm_get_by_minor(unsigned int minor)
+  */
+ static int acm_alloc_minor(struct acm *acm)
+ {
+-	int minor;
++	int minor = of_alias_get_id(acm->control->dev.of_node, "cdc-acm");
++
++	if (minor < 0)
++		minor = nr_fixed_ports;
+ 
+ 	mutex_lock(&acm_minors_lock);
+-	minor = idr_alloc(&acm_minors, acm, 0, ACM_TTY_MINORS, GFP_KERNEL);
++	minor = idr_alloc(&acm_minors, acm, minor, ACM_TTY_MINORS, GFP_KERNEL);
+ 	mutex_unlock(&acm_minors_lock);
+ 
+ 	return minor;
+@@ -2082,11 +2087,17 @@ static const struct tty_operations acm_ops = {
+ 
+ static int __init acm_init(void)
+ {
++	int max_alias;
+ 	int retval;
+ 	acm_tty_driver = tty_alloc_driver(ACM_TTY_MINORS, TTY_DRIVER_REAL_RAW |
+ 			TTY_DRIVER_DYNAMIC_DEV);
+ 	if (IS_ERR(acm_tty_driver))
+ 		return PTR_ERR(acm_tty_driver);
++
++	max_alias = of_alias_get_highest_id("cdc-acm");
++	if (max_alias >= 0)
++		nr_fixed_ports = max_alias + 1;
++
+ 	acm_tty_driver->driver_name = "acm",
+ 	acm_tty_driver->name = "ttyACM",
+ 	acm_tty_driver->major = ACM_TTY_MAJOR,
+-- 
+2.51.0
+

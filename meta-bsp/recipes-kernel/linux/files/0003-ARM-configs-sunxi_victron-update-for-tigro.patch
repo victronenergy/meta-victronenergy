@@ -1,0 +1,32 @@
+From fc3d98077a140aa02c11a694b3621ada1567b504 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Mon, 10 Nov 2025 16:49:31 +0000
+Subject: [PATCH 3/3] ARM: configs: sunxi_victron: update for tigro
+
+---
+ arch/arm/configs/sunxi_victron_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/configs/sunxi_victron_defconfig b/arch/arm/configs/sunxi_victron_defconfig
+index 830c6fc0083c..df69da79a895 100644
+--- a/arch/arm/configs/sunxi_victron_defconfig
++++ b/arch/arm/configs/sunxi_victron_defconfig
+@@ -174,6 +174,7 @@ CONFIG_RTC_CLASS=y
+ # CONFIG_RTC_NVMEM is not set
+ # CONFIG_RTC_INTF_PROC is not set
+ CONFIG_RTC_DRV_PCF8523=y
++CONFIG_RTC_DRV_BQ32K=y
+ CONFIG_RTC_DRV_SUNXI=y
+ CONFIG_DMADEVICES=y
+ CONFIG_DMA_SUN6I=y
+@@ -190,6 +191,7 @@ CONFIG_ARM_SMMU=y
+ CONFIG_IIO=y
+ CONFIG_AXP20X_ADC=y
+ CONFIG_VICTRON_CERBOGX_ADC=m
++CONFIG_IIO_ST_LSM6DSX=m
+ CONFIG_PWM=y
+ CONFIG_PWM_SUN4I=y
+ CONFIG_PHY_SUN4I_USB=y
+-- 
+2.51.0
+
