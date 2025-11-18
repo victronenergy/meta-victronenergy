@@ -1,0 +1,25 @@
+From ee818dea341db2a6fb45a1c4c71d10d3e5b61a73 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 12 Jul 2024 16:57:11 +0100
+Subject: [PATCH] nanopi-victron: add tigro board id
+
+---
+ include/configs/nanopi_victron.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/include/configs/nanopi_victron.h b/include/configs/nanopi_victron.h
+index 82227ca81356..313055ad4751 100644
+--- a/include/configs/nanopi_victron.h
++++ b/include/configs/nanopi_victron.h
+@@ -18,6 +18,7 @@
+ 	"board_47504556=setenv fdtfile sun8i-h3-nanopi-paygo.dtb\0" \
+ 	"board_3456584d=setenv fdtfile sun8i-h3-nanopi-v4-smart-hub.dtb\0" \
+ 	"board_524b4556=setenv fdtfile sun8i-h3-sinh3-ekrano.dtb\0" \
+-	"board_43554e56=setenv fdtfile sun8i-h3-sinh3-nucleo.dtb\0"
++	"board_43554e56=setenv fdtfile sun8i-h3-sinh3-nucleo.dtb\0" \
++	"board_52475456=setenv fdtfile sun8i-h3-sinh3-tigro.dtb\0"
+ 
+ #endif
+-- 
+2.51.0
+

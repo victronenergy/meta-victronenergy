@@ -5,6 +5,9 @@ COMPATIBLE_MACHINE = "sunxi"
 
 PV = "2018.05-sunxi-v18"
 SRC_URI = "https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz"
+SRC_URI += "\
+    file://0001-nanopi-victron-add-tigro-board-id.patch \
+"
 SRC_URI[sha256sum] = "9d218cba2279de0e569a4035fb899f268eb28ba8cef867fe093d2652ed46025e"
 INSANE_SKIP += "src-uri-bad"
 
