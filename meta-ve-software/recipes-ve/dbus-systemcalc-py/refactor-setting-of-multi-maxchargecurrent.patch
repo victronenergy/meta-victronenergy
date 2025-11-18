@@ -1,0 +1,116 @@
+From 0024c5e3b7559d81756f6ee4976aa15429a3c7d2 Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Fri, 14 Nov 2025 15:44:10 +0200
+Subject: [PATCH] refactor setting of multi maxchargecurrent
+
+The idea here is to ensure that in systems with no BMS,
+where a user current limit is specified, this is always
+written to the Multi, not only when it changes, which can
+cause issues if the Multi was off when the limit was changed.
+
+But at the same time, if there is no user current limit, we don't
+want to constantly max out the current, because that interferes
+with any code that wants to do its own thing with the maximum
+charge current, eg via Node Red.
+
+So, when the charge current is unset, write a large value to
+it once, then leave it alone. At all other times, just write
+the required limit.
+
+https://github.com/victronenergy/venus/issues/1496
+---
+ delegates/dvcc.py  | 10 ++++------
+ delegates/multi.py | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+), 6 deletions(-)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index 6486f58d..26313e52 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -799,12 +799,10 @@ def maxchargecurrent(self):
+ 
+ 	@maxchargecurrent.setter
+ 	def maxchargecurrent(self, v):
+-		# If the Multi is not ready, don't write to it just yet
+-		if self.active and self.maxchargecurrent is not None and v != self._v:
+-			# The maximum present charge current is 6-parallel 12V 5kva units, 6*220 = 1320A.
+-			# We will consider 10000A to be impossibly high.
+-			self.monitor.set_value_async(self.service, '/Dc/0/MaxChargeCurrent', 10000 if v is None else v)
+-			self._v = v
++		# If the Multi is not ready, or if the value is unchanged,
++		# this will return false. We don't care, as we are called
++		# periodically from _on_timer, so this will resolve later.
++		MultiService.instance.set_maxchargecurrent(v)
+ 
+ 	@property
+ 	def state(self):
+diff --git a/delegates/multi.py b/delegates/multi.py
+index 3a5d1c99..1a48fce5 100644
+--- a/delegates/multi.py
++++ b/delegates/multi.py
+@@ -3,6 +3,8 @@
+ from ve_utils import get_product_id
+ from delegates.base import SystemCalcDelegate
+ 
++notset = object()
++
+ class Service(object):
+ 	def __init__(self, monitor, service, instance):
+ 		self.monitor = monitor
+@@ -52,6 +54,14 @@ def feedback_enabled(self):
+ 		# return False
+ 		return self.monitor.get_value(self.service, '/Hub4/DoNotFeedInOvervoltage') == 0
+ 
++	@property
++	def maxchargecurrent(self):
++		return self.monitor.get_value(self.service, '/Dc/0/MaxChargeCurrent')
++
++	@maxchargecurrent.setter
++	def maxchargecurrent(self, v):
++		self.monitor.set_value_async(self.service, '/Dc/0/MaxChargeCurrent', v)
++
+ 	def set_ignore_ac(self, inp, ignore):
+ 		if inp not in (0, 1):
+ 			raise ValueError(inp)
+@@ -78,6 +88,7 @@ def __init__(self):
+ 		# and generic (Raspberry Pi) does not.
+ 		self.has_onboard_mkx = get_product_id() not in (
+ 			'C009', 'C00D', 'C010', 'C003')
++		self._cur_maxchargecurrent = notset
+ 
+ 	def set_sources(self, dbusmonitor, settings, dbusservice):
+ 		SystemCalcDelegate.set_sources(self, dbusmonitor, settings, dbusservice)
+@@ -113,6 +124,21 @@ def device_removed(self, service, instance):
+ 			del self.multis[service]
+ 			self._set_multi()
+ 
++	def set_maxchargecurrent(self, v):
++		if (self.multi is not None and self.multi.maxchargecurrent is not None):
++			if v is None:
++				if self._cur_maxchargecurrent is not None:
++					# Resetting to no limit
++					self.multi.maxchargecurrent = 10000 # max out
++					self._cur_maxchargecurrent = None
++					return True
++				#else: both are None, do nothing
++			else:
++				self.multi.maxchargecurrent = self._cur_maxchargecurrent = v
++				return True
++
++		return False
++
+ 	def _set_multi(self, *args, **kwargs):
+ 		# If platform has an onboard mkx, use only that as VE.Bus service.
+ 		# On other platforms, use the Multi with the lowest DeviceInstance.
+@@ -141,6 +167,11 @@ def _set_multi(self, *args, **kwargs):
+ 				self.vebus_service = main
+ 				self.othermultis = multis[1:]
+ 
++		# If we lose the Multi, remember that the current limit has to be
++		# set again when we get it back.
++		if self.multi is None:
++			self._cur_maxchargecurrent = notset
++
+ 	def update_values(self, newvalues):
+ 		# If there are multis connected, but for some reason none is selected
+ 		# or the current selected one is no longer connected, try to set

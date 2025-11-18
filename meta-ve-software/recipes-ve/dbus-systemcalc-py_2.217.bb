@@ -18,8 +18,9 @@ SRC_URI = " \
     file://settingsdevice-lighter-version-to-track-settings.patch;patchdir=ext/velib_python \
     file://fix-several-possible-races.patch \
     file://avoid-crash-if-alternator-lacks-maxcurrent-setting.patch \
+    file://refactor-setting-of-multi-maxchargecurrent.patch \
 "
-PR = "5"
+PR = "6"
 SRCREV = "371fe8688b5f364c5bf2070a220cd867c5169c4a"
 S = "${WORKDIR}/git"
 
