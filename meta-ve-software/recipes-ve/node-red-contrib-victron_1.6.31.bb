@@ -12,6 +12,7 @@ SRC_URI = " \
     file://0006-Fix-null-text-crashing-node-red-when-setting-status-.patch \
     file://npm-shrinkwrap.json;subdir=${S} \
     file://0007-Fix-dbus-listener-getValue-use-original-destination-.patch \
+    file://0008-fix-for-initial-value.patch \
 "
 PR = "3"
 INSANE_SKIP += "src-uri-bad"
