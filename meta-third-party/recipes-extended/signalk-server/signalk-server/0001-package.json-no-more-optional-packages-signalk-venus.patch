@@ -52,7 +52,7 @@ index 7bf5efd2..b603b973 100644
 -    "signalk-to-nmea2000": "^2.16.0"
 +    "signalk-n2kais-to-nmea0183": "^2.0.0",
 +    "signalk-to-nmea2000": "^2.16.0",
-+    "signalk-venus-plugin": "^2.0.0"
++    "signalk-venus-plugin": "^2.2.0"
    },
    "devDependencies": {
      "@eslint-react/eslint-plugin": "^1.45.1",

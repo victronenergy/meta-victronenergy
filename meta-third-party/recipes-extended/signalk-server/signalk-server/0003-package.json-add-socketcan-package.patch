@@ -23,8 +23,8 @@ index 34e07233..36983b5d 100644
      "serialport": "^11.0.0",
      "signalk-n2kais-to-nmea0183": "^2.0.0",
      "signalk-to-nmea2000": "^2.16.0",
--    "signalk-venus-plugin": "^2.0.0"
-+    "signalk-venus-plugin": "^2.0.0",
+-    "signalk-venus-plugin": "^2.2.0"
++    "signalk-venus-plugin": "^2.2.0",
 +    "socketcan": "^4.0.3"
    },
    "devDependencies": {
