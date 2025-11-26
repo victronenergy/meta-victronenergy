@@ -1,0 +1,27 @@
+From 2ece73216eb2b6f836d26f51a54919fe69e52625 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 26 Nov 2025 18:00:14 +0100
+Subject: [PATCH] fix license entry
+
+Upstream-Status: Inappropriate [older setuptools]
+---
+ pyproject.toml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index e546a09..1768911 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -10,8 +10,7 @@ authors = [
+ description = "S2 Protocol Python Wrapper"
+ dynamic = ["version"]
+ readme = "README.rst"
+-license = "Apache-2.0"
+-license-files = ["LICENSE"]
++license = {text = "Apache-2.0"}
+ requires-python = ">=3.9, < 3.14"
+ dependencies = [
+     "pydantic>=2.8.2",
+-- 
+2.43.0
+

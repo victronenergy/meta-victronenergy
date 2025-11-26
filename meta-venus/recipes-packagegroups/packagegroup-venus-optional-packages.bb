@@ -30,6 +30,7 @@ RDEPENDS:${PN} += "\
     python3-dbus-fast \
     python3-pip \
     python3-pylint \
+    python3-s2 \
     python3-spidev \
     qtmqtt \
     s6 \
