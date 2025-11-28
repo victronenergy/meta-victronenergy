@@ -60,10 +60,12 @@ server {
     location ~ /gui-v2/venus-gui-v2 {
         auth_request off;
 
+        # Still revalidates after 1s.
+        add_header Cache-Control "max-age=1s";
+
         # This is needed because the wasm is downloaded as XHR. The proxying system
         # VRM uses, which also ends up here, has stricter rules and doesn't just
         # return 'origin', so add them here.
-        add_header Cache-Control "no-cache";
         add_header Access-Control-Allow-Origin "$http_origin";
         add_header Access-Control-Allow-Credentials true;
         add_header Vary "Content-Encoding, Access-Control-Allow-Origin, Access-Control-Allow-Credentials";

@@ -13,16 +13,17 @@ server {
 
     # NOTE: VRM downloads the wasm over http, so it is also included here. It is
     # not intended for use over the LAN.
-    #
-    # This is needed because the wasm is downloaded as XHR. The proxying system
-    # VRM uses, which also ends up here, has stricter rules and doesn't just
-    # return 'origin', so add them here.
     location ~ /gui-v2/venus-gui-v2 {
         root /var/www/venus/;
 
+        # Still revalidates after 1s.
+        add_header Cache-Control "max-age=1s";
+
         gzip_static always;
 
-        add_header Cache-Control "no-cache";
+        # This is needed because the wasm is downloaded as XHR. The proxying system
+        # VRM uses, which also ends up here, has stricter rules and doesn't just
+        # return 'origin', so add them here.
         add_header Access-Control-Allow-Origin "$http_origin";
         add_header Access-Control-Allow-Credentials true;
         add_header Vary "Content-Encoding, Access-Control-Allow-Origin, Access-Control-Allow-Credentials";
