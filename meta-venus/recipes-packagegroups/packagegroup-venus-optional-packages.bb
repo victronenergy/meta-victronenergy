@@ -7,6 +7,7 @@ inherit packagegroup
 
 RDEPENDS:${PN} += "\
     bc \
+    cargo \
     chrony \
     devmem2 \
     gdb \
@@ -33,6 +34,7 @@ RDEPENDS:${PN} += "\
     python3-s2 \
     python3-spidev \
     qtmqtt \
+    rust \
     s6 \
     start-sway \
     strace \
