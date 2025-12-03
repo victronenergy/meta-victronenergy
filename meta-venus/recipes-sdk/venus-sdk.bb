@@ -2,12 +2,12 @@ SUMMARY = "Venus SDK"
 LICENSE = "MIT"
 
 # no magic please, the required packages will be mentioned explicitly.
-SDKIMAGE_FEATURES = ""
+SDKIMAGE_FEATURES = "dev-pkgs"
 
 inherit populate_sdk_qt6_base populate_sdk
 
 TOOLCHAIN_TARGET_TASK += "venus-sdk-target-packages"
-TOOLCHAIN_HOST_TASK = "packagegroup-cross-canadian-${MACHINE}"
+TOOLCHAIN_HOST_TASK:remove = "nativesdk-packagegroup-sdk-host"
 
 TOOLCHAIN_HOST_TASK += " \
     nativesdk-autoconf \
@@ -46,11 +46,6 @@ TOOLCHAIN_HOST_TASK += " \
     nativesdk-libmpc-dev \
     nativesdk-ncurses-dev \
     nativesdk-openssl-dev \
-"
-
-TOOLCHAIN_HOST_TASK += " \
-    nativesdk-cargo \
-    nativesdk-rust \
 "
 
 # gdb depends on this.. "could not convert 'main' from the host encoding (UTF-8) to UTF-32."
