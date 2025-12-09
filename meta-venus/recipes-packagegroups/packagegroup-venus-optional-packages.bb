@@ -46,7 +46,6 @@ RDEPENDS:${PN} += "\
     venus-socketcan-test \
     vim \
     wireguard-tools \
-    x11vnc \
 "
 
 RDEPENDS:${PN} += " \
