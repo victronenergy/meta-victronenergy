@@ -11,7 +11,7 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/localsettings.git;branch=master;protocol=https \
     file://com.victronenergy.settings.conf \
 "
-SRCREV = "d9c49e34ca008d824d03795d2ff136f395b4bc64"
+SRCREV = "434b9970d154eb2c3ebe611eea597eddf58d3cfe"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/${PN}.py --path=/data/conf"
