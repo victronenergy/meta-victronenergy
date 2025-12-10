@@ -76,7 +76,7 @@ do_install:append() {
 
     echo ${MACHINE} > $conf/machine
 
-    if [ -n "${@bb.utils.contains("MACHINE_FEATURES", "headless", "1", "", d)}" ]; then touch $conf/headless; fi
+    if [ -n "${@bb.utils.contains("MACHINE_FEATURES", "no-factory-password", "1", "", d)}" ]; then touch $conf/no-factory-password; fi
 
     for cf in ${CONF_FILES}; do
         name=${cf%:*}

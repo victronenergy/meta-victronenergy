@@ -3,9 +3,6 @@ include conf/machine/include/soc-family.inc
 
 WKS_FILE ?= "sdimage-raspberrypi.wks"
 
-# Inputs for machine-conf-runtime recipe
-MACHINE_FEATURES += "headless"
-
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-raspberrypi"
 
 RPI_KERNEL_DEVICETREE_OVERLAYS = " \
@@ -46,6 +43,7 @@ UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
 IMAGE_FSTYPES ?= "wic ext4.gz"
 
 MACHINE_FEATURES += "apm usbhost keyboard vfat ext2 screen touchscreen alsa bluetooth wifi sdio ${@bb.utils.contains('DISABLE_VC4GRAPHICS', '1', '', 'vc4graphics', d)}"
+MACHINE_FEATURES += "no-factory-password"
 
 # Raspberry Pi has no hardware clock
 MACHINE_FEATURES_BACKFILL_CONSIDERED = "rtc"
