@@ -5,6 +5,8 @@ to linux-firmware for general use."
 HOMEPAGE = "https://github.com/RPi-Distro/firmware-nonfree"
 SECTION = "kernel"
 
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
 LICENSE = "GPL-2.0-only & binary-redist-Cypress-rpidistro & Synaptics-rpidistro"
 LIC_FILES_CHKSUM = "\
     file://debian/copyright;md5=454e44c688dc909e16223e4aee63568c \
