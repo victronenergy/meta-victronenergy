@@ -26,7 +26,7 @@ RDEPENDS:${PN} += "qtvirtualkeyboard-plugin-qtvirtualkeyboardplugin"
 
 PACKAGES += "start-gui-v2"
 DAEMON_PN = "start-gui-v2"
-RDEPENDS_${DAEMON_PN} = "${PN}"
+RDEPENDS:${DAEMON_PN} = "${PN}"
 
 DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec ${@softlimit(d, data=768000000, stack=1000000, all=768000000)} ${bindir}/venus-gui-v2"
 
