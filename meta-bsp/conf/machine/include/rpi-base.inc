@@ -48,7 +48,7 @@ MACHINE_FEATURES += "no-factory-password"
 # Raspberry Pi has no hardware clock
 MACHINE_FEATURES_BACKFILL_CONSIDERED = "rtc"
 
-SWU_VERSION = "3"
+SWU_VERSION ?= "3"
 
 IMAGE_BOOT_FILES ?= " \
     bcm2835-bootfiles/* \
