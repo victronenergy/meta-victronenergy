@@ -35,7 +35,6 @@ RDEPENDS:${PN} += "\
     python3-spidev \
     qtmqtt \
     rust \
-    s6 \
     start-sway \
     strace \
     tcpdump \
