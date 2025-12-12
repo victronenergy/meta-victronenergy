@@ -30,8 +30,6 @@ SRCREV = "c9d3ae6584ab79d19a4f94ccf701e888f9f87a53"
 PV = "20240709-2~bpo12+1+rpt3"
 S = "${WORKDIR}/git"
 
-inherit allarch
-
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
