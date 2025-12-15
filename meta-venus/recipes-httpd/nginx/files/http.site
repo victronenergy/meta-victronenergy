@@ -69,6 +69,19 @@ server {
         add_header Vary "Content-Encoding, Access-Control-Allow-Origin, Access-Control-Allow-Credentials";
     }
 
+    location /ble-gw {
+        client_max_body_size 64k;
+        fastcgi_read_timeout 10s;
+        fastcgi_send_timeout 10s;
+
+        fastcgi_pass unix:/var/run/php5-fpm.socket;
+        include fastcgi.conf;
+        fastcgi_param SCRIPT_FILENAME /var/www/venus/ble-gw.php;
+        fastcgi_param REQUEST_METHOD $request_method;
+        fastcgi_param CONTENT_TYPE $content_type;
+        fastcgi_param CONTENT_LENGTH $content_length;
+    }
+
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_pass unix:/var/run/php5-fpm.socket;

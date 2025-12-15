@@ -10,6 +10,7 @@ DAEMONTOOLS_RUN = "${sbindir}/start-nginx.sh"
 SRC_URI += " \
     file://create-gui-redirect.sh \
     file://favicon.ico \
+    file://ble-gw.php \
     file://default_server.site \
     file://localsettings \
     file://gui-v1.php \
