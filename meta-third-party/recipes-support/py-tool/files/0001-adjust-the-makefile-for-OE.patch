@@ -1,0 +1,29 @@
+From a900b220fb5a898752a4213a2ae3ae4a1174ff28 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 18 Dec 2025 14:07:30 +0100
+Subject: [PATCH] adjust the makefile for OE
+
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 68027ee..8808024 100644
+--- a/Makefile
++++ b/Makefile
+@@ -8,10 +8,10 @@ TARGET = py-tool
+ VERSION = 1.0.0
+ 
+ # 编译选项
+-CFLAGS = -Wall -O2 -DPYLON_TOOL_VERSION=\"$(VERSION)\"
++override CFLAGS += -Wall -DPYLON_TOOL_VERSION=\"$(VERSION)\"
+ 
+ # 链接选项（如果需要额外的库，可以在这里添加）
+-LDFLAGS =
++# LDFLAGS =
+ 
+ # 默认目标
+ all: clean $(TARGET)
+-- 
+2.43.0
+
