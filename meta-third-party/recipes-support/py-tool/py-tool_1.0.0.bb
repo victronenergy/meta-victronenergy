@@ -1,11 +1,10 @@
 SUMMARY = "A tool for upgrading Pylontech batteries using victron inverters"
 
-# doesn't have a copyright / license file at the moment.
-LICENSE = "Proprietary"
-LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/Proprietary;md5=0557f9d92cf58f2ccdd50f62f8ac0b28"
+LICENSE = "BSD-3-Clause"
+LIC_FILES_CHKSUM = "file://License.txt;md5=8dedea07eb63579306bbbff4c5254cd3"
 SRC_URI = "git://github.com/pylontech-sw/py_tool.git;protocol=https;branch=master"
 SRC_URI += "file://0001-adjust-the-makefile-for-OE.patch"
-SRCREV = "1d565fa6228dcea930cd5e11d2285e993a29643a"
+SRCREV = "fcb471f4097080fa95f17a88f41fc3596531b7d2"
 
 S = "${WORKDIR}/git"
 
