@@ -8,7 +8,7 @@ inherit cmake pkgconfig
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "git://github.com/victronenergy/dbus-flashmq.git;branch=master;protocol=https"
-SRCREV = "46807c1d0bf465a2707b08d80170e5bd69b8305e"
+SRCREV = "a818515894aa864e03c9870f0347c3bbe904766c"
 S = "${WORKDIR}/git"
 EXTRA_OECMAKE = "-DCMAKE_BUILD_TYPE=Release"
 
