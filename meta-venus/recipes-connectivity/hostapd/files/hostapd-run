@@ -31,7 +31,7 @@ gen_config() {
 	# the "    variant     string  " and the opening en closing quotes, keeping quotes that are part of the psk.
 	# When the regex does not match 2 times (once for "   variant   string  "" and once for the closing ") or the result
 	# is shorter than 8 characters, it will return nothing.
-	psk=$(dbus-send --system --print-reply --dest=com.victronenergy.settings /Settings/Services/AccessPointPassword com.victronenergy.BusItem.GetValue 2>/dev/null | grep variant | awk '{ if (gsub(/^\s+variant\s+string\s+"|"$/, "", $0) == 2 && length($0) >= 8) print$0 }')
+	psk=$(dbus-send --system --print-reply --dest=com.victronenergy.settings /Settings/Services/AccessPointPassword com.victronenergy.BusItem.GetValue 2>/dev/null | grep variant | awk '{ if (gsub(/^\s+variant\s+string\s+"|"$/, "", $0) == 2 && length($0) >= 8 && length($0) <= 63) print$0 }')
 	if [ "$psk" = "" ]; then
 		# If the result is empty, we will use the psk from /data/venus/wpa-psk
 		psk=$(cat /data/venus/wpa-psk)
