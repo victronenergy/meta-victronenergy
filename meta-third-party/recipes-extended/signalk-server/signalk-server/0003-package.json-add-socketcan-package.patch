@@ -1,4 +1,4 @@
-From 689c9356af523d906bbf89082aa3c17b5b64e136 Mon Sep 17 00:00:00 2001
+From 672c2d71142382d75a922e4df1f20f1784787d31 Mon Sep 17 00:00:00 2001
 From: mpvader <mvader@victronenergy.com>
 Date: Sun, 6 Jul 2025 10:49:23 +0200
 Subject: [PATCH 3/3] package.json: add socketcan package
@@ -16,10 +16,10 @@ defined as an optional, hence add it here as needed.
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package.json b/package.json
-index 34e07233..36983b5d 100644
+index 25b61173..27584a40 100644
 --- a/package.json
 +++ b/package.json
-@@ -127,7 +127,8 @@
+@@ -130,7 +130,8 @@
      "serialport": "^11.0.0",
      "signalk-n2kais-to-nmea0183": "^2.0.0",
      "signalk-to-nmea2000": "^2.16.0",
@@ -30,5 +30,5 @@ index 34e07233..36983b5d 100644
    "devDependencies": {
      "@eslint-react/eslint-plugin": "^1.45.1",
 -- 
-2.34.1
+2.43.0
 

@@ -1,4 +1,4 @@
-From 2b5f4fe7731e196d56064452dff7bc8433add4c9 Mon Sep 17 00:00:00 2001
+From 85adaad8eaaa5bc140127607004fcd077cd923a1 Mon Sep 17 00:00:00 2001
 From: mpvader <mvader@victronenergy.com>
 Date: Sat, 5 Jul 2025 13:14:54 +0200
 Subject: [PATCH 2/3] remove signalk-server-setup script + its largest
@@ -382,16 +382,17 @@ index 0c13906d..00000000
 -    })
 -}
 diff --git a/package.json b/package.json
-index b603b973..34e07233 100644
+index 35080a4e..25b61173 100644
 --- a/package.json
 +++ b/package.json
-@@ -96,13 +96,10 @@
-     "express": "^4.10.4",
+@@ -98,14 +98,11 @@
      "express-easy-zip": "^1.1.5",
      "express-namespace": "^0.1.1",
+     "express-rate-limit": "^8.2.1",
 -    "figlet": "^1.2.0",
      "file-timestamp-stream": "^2.1.2",
      "geolib": "3.2.2",
+     "helmet": "^8.1.0",
 -    "inquirer": "^7.0.0",
      "json-patch": "^0.7.0",
      "jsonwebtoken": "^9.0.0",
@@ -400,5 +401,5 @@ index b603b973..34e07233 100644
      "mdns-js": "^1.0.3",
      "minimist": "^1.1.0",
 -- 
-2.34.1
+2.43.0
 
