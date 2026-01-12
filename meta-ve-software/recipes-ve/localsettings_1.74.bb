@@ -11,7 +11,7 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/localsettings.git;branch=master;protocol=https \
     file://com.victronenergy.settings.conf \
 "
-SRCREV = "434b9970d154eb2c3ebe611eea597eddf58d3cfe"
+SRCREV = "6f6d903771a5aa263fd9666774a8c97cad25f7c9"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/${PN}.py --path=/data/conf"
@@ -19,8 +19,9 @@ DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)
 RDEPENDS:${PN} += " \
     python3-core \
     python3-dbus \
-    python3-pygobject \
     python3-lxml \
+    python3-pygobject \
+    python3-psutil \
 "
 
 do_install () {
