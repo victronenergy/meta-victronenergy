@@ -14,10 +14,10 @@ RDEPENDS:${PN} = "\
 "
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
-SRC_URI = "\
+SRC_URI = " \
     gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https \
 "
-SRCREV = "d554ffdac914532517267e3eb968607446ca1640"
+SRCREV = "e34fe5195a11eac039e7fa84a3961cdc34d52d79"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${bindir}/${PN} -D"
