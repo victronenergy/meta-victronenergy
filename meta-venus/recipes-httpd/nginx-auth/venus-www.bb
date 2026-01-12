@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = "git://github.com/victronenergy/venus-www.git;branch=master;protocol=https"
 SRC_URI += "file://create-venus-session-dir"
-SRCREV = "7cb742c7552682df80fb1c1a1c6810ea90be4c71"
+SRCREV = "50db0e1b062220b74f7d9a7c9f9eb1f9efc8abb4"
 S = "${WORKDIR}/git"
 
 inherit www
