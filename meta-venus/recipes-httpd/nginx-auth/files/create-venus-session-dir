@@ -1,10 +1,25 @@
 #!/bin/sh
 
+while : ; do
+	secure="$(dbus-send --system --print-reply --dest=com.victronenergy.settings /Settings/System/SecurityProfile com.victronenergy.BusItem.GetValue 2>/dev/null | grep variant | awk '{print $3;}')"
+	if [ "$secure" != "" ]; then
+		break;
+	fi
+	sleep 1
+done
+
 dir="/data/var/lib/venus-www-sessions"
 if [ ! -d "$dir" ]; then
 	mkdir -p "$dir"
 fi
 chown -R php-fpm:php-fpm "$dir"
+
+# Many session files could be created by accident in v3.70-beta in insecure
+# mode. Remove all these sessions, since in insecure mode every request is
+# simply allowed and doesn't need a session at all.
+if [ "$secure" = "2" ]; then
+	rm "$dir"/*
+fi
 
 # allow tokens to be passed to venus-platform
 mkdir -p -m 700 /var/volatile/tokens
