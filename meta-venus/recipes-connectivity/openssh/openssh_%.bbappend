@@ -23,7 +23,7 @@ do_install:append() {
     rm ${D}${sysconfdir}/ssh/sshd_config_readonly
 }
 
-RDEPENDS:${PN} += "bash"
+RDEPENDS:${PN} += "bash jq"
 
 # disable the update-rc.d
 INITSCRIPT_PACKAGES = ""
