@@ -50,6 +50,47 @@ while read -r service; do
 done <<< "$(dbus-send --print-reply --system --dest=org.freedesktop.DBus \
   /org/freedesktop/DBus org.freedesktop.DBus.ListNames | grep -Eo 'com\.victronenergy\.evcharger.\w*')"
 
+
+get_wdu_settings_data_fake()
+{
+    cat << EOF
+[{"host":"10.230.1.82","path":"settings-web/#","port":80},{"host":"10.230.1.73","path":"settings-web/#","port":8888}]
+EOF
+}
+
+get_wdu_settings_data()
+{
+    if ! settingsurl_val=$(dbus-send --print-reply=literal --system \
+        --dest=com.victronenergy.platform \
+        '/EmpirBus/SettingsUrl' \
+        com.victronenergy.BusItem.GetValue)
+    then
+        return 1
+    fi
+
+    echo "$settingsurl_val" | sed -E -e 's/^ +variant +//'
+}
+
+extra_ip_ports=()
+
+if garmin_wdu_settings_dbus_output=$(get_wdu_settings_data); then
+    while read -r line; do
+        IFS=' ' read -r -a fields <<< "$line"
+
+        if [[ "${#fields[@]}" -ne 2 ]]; then
+            continue
+        fi
+
+        ip=${fields[0]}
+        port=${fields[1]}
+
+        if [[ "$ip" == *:* ]]; then
+            ip="[$ip]"
+        fi
+        extra_ip_ports+=("$ip:$port")
+    done < <(echo "$garmin_wdu_settings_dbus_output" | jq -r '.[] | "\(.host) \(.port)"' )
+fi
+
 permitopen=()
 
 # only allow access to these services if VRM Portal is set to full
@@ -64,6 +105,10 @@ if [ "$vrm_portal" = "2" ]; then
 
   for ip in "${extra_ips[@]}"; do
     permitopen+=("${ip}:80" "${ip}:443")
+  done
+
+  for ipport in "${extra_ip_ports[@]}"; do
+    permitopen+=("${ipport}")
   done
 fi
 
