@@ -18,7 +18,7 @@ chown -R php-fpm:php-fpm "$dir"
 # mode. Remove all these sessions, since in insecure mode every request is
 # simply allowed and doesn't need a session at all.
 if [ "$secure" = "2" ]; then
-	rm "$dir"/*
+	rm -f "$dir"/*
 fi
 
 # allow tokens to be passed to venus-platform
