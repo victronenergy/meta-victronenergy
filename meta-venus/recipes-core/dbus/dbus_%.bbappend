@@ -5,6 +5,7 @@ SRC_URI += " \
     file://localsettings \
     file://system.conf \
     file://system-insecure.conf \
+    file://0001-increase-the-default-dbus-timeout-to-2-minutes.patch \
 "
 
 RDEPENDS:${PN}:class-target += "inotify-tools xmlstarlet"
