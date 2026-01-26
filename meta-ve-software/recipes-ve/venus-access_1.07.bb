@@ -11,7 +11,7 @@ RDEPENDS:${PN} = " \
 "
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "gitsm://github.com/victronenergy/venus-access.git;branch=master;protocol=ssh;user=git"
-SRCREV = "2bb867efa449b692ab09e7a19e271ed47da9ede0"
+SRCREV = "488cc013cd803afe8b45f47a1cc3a4d22d8cbd4c"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/venus-access"
