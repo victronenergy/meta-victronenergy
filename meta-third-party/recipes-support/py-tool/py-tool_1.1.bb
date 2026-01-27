@@ -4,7 +4,7 @@ LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://License.txt;md5=8dedea07eb63579306bbbff4c5254cd3"
 SRC_URI = "git://github.com/pylontech-sw/py_tool.git;protocol=https;branch=master"
 SRC_URI += "file://0001-adjust-the-makefile-for-OE.patch"
-SRCREV = "fcb471f4097080fa95f17a88f41fc3596531b7d2"
+SRCREV = "656eee7f8e00bfc91e94dffd94b88b3c036abcf1"
 UPSTREAM_CHECK_GITTAGREGEX = "V(?P<pver>\S+)"
 
 S = "${WORKDIR}/git"
