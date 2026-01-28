@@ -40,8 +40,8 @@ addtask deploy before do_package after do_compile
 do_deploy () {
     install -d ${DEPLOYDIR}
     install ${S}/${UBOOT_IMAGE} ${DEPLOYDIR}/${UBOOT_IMAGE}
-    if [ -e ${S}/MLO ] ; then
-        install ${S}/MLO ${DEPLOYDIR}/MLO
+    if [ -n "${SPL_BINARY}" ]; then
+        install ${S}/${SPL_BINARY} ${DEPLOYDIR}/${SPL_BINARY}
     fi
 }
 
