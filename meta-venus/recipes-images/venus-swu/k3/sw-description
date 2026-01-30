@@ -1,0 +1,61 @@
+software =
+{
+	venus-version =~ "${VENUS_VERSION}";
+	hardware-compatibility:~ [ ${HARDWARE_COMPATIBLE} ];
+
+	version = "0.1.0";
+
+	stable: {
+		bootloader: {
+			images: (
+				{
+					filename = "tiboot3.bin";
+					device = "/dev/mmcblk0boot0";
+					offset = "0";
+				},
+				{
+					filename = "tispl.bin";
+					device = "/dev/mmcblk0boot0";
+					offset = "256k";
+				},
+				{
+					filename = "u-boot.img";
+					device = "/dev/mmcblk0boot0";
+					offset = "1280k";
+				}
+			);
+		};
+		copy1: {
+			images: (
+				{
+					filename =~ "${VENUS_IMAGE_FILE}";
+					device = "/dev/mmcblk0p2";
+					compressed = true;
+					installed-directly = true;
+				}
+			);
+			uboot: (
+				{
+					name = "version";
+					value = "1";
+				}
+			);
+		};
+		copy2: {
+			images: (
+				{
+					filename =~ "${VENUS_IMAGE_FILE}";
+					device = "/dev/mmcblk0p3";
+					compressed = true;
+					installed-directly = true;
+				}
+			);
+			uboot: (
+				{
+					name = "version";
+					value = "2";
+				}
+			);
+		};
+	};
+}
