@@ -19,8 +19,7 @@ python () {
 }
 
 INSTALL_FILES = "\
-    ${SPL_BINARY} \
-    ${UBOOT_IMAGE} \
+    ${IMAGE_BOOT_FILES} \
     ${SCR}:boot.scr \
     ${KERNEL_IMAGETYPE}-${MACHINE}.bin:${KERNEL_IMAGETYPE} \
     ${DTB} \
