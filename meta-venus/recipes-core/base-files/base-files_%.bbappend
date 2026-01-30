@@ -4,6 +4,7 @@ inherit ve_package
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI += "\
+    file://fstab.mmc0 \
     file://fstab.mmc1 \
     file://fstab.ubi \
 "
