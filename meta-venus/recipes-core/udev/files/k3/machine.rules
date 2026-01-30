@@ -1,0 +1,11 @@
+ACTION=="add", SUBSYSTEM=="nvmem", KERNEL=="1-0050*", RUN+="/bin/chmod a+r /sys/%p/nvmem"
+
+# Cerbo GX B10/B11
+ENV{BASE_COMPATIBLE}!="victronenergy,cerbo-gx-b1[01]", GOTO="end-cerbo-gx-b10"
+ACTION=="add", KERNEL=="ttyS[1-3]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
+ACTION=="add", KERNEL=="ttyS4", ENV{VE_PRODUCT}="builtin-mkx", ENV{VE_SERVICE}="mkx"
+ACTION=="add", SUBSYSTEM=="iio", KERNELS=="0-0048" SYMLINK+="adc/builtin-tank"
+ACTION=="add", SUBSYSTEM=="iio", KERNELS=="0-0049" SYMLINK+="adc/builtin-temp"
+ACTION=="add", SUBSYSTEM=="net", ATTR{type}=="280", KERNELS=="20701000.can", NAME="vecan0", ENV{VE_NAME}="VE.Can port 1"
+ACTION=="add", SUBSYSTEM=="net", ATTR{type}=="280", KERNELS=="20100000.spi", NAME="vecan1", ENV{VE_NAME}="VE.Can port 2", ENV{VE_CAN_CONFIG}="classic-and-hv"
+LABEL="end-cerbo-gx-b10"
