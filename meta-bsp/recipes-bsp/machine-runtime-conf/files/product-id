@@ -3,6 +3,7 @@
 case $(board-compat 2) in
     cubietech,einstein)          eeprom=1-00500 ;;
     friendlyarm,nanopi-neo-core) eeprom=0-00500 ;;
+    sancloud,am625-victron-*)    eeprom=1-00500 ;;
     sinlinx,sinh3-core)          eeprom=0-00500 ;;
 esac
 
@@ -13,6 +14,7 @@ if [ -n "$eeprom" ]; then
 	VECB) pid=C00A ;;       # Cerbo GX
 	VCB1) pid=C012 ;;       # Cerbo GX rev B1
 	VECS) pid=C014 ;;       # Cerbo-S GX
+	VCBB) pid=C016 ;;	# Cerbo GX rev B11
 	VEES) pid=C007 ;;       # EasySolar-II
 	VES9) pid=C00B ;;       # EasySolar-II rev A9
 	VESA) pid=C00E ;;       # EasySolar-II rev A10

@@ -23,6 +23,11 @@ SRC_URI += " \
     file://ve-set-passwd-to-pincode \
 "
 SRC_URI:append:ccgx = " file://get-unique-id.c"
+SRC_URI:append:k3 = "\
+    file://backlight_device.in \
+    file://blank_display_device.in \
+    file://pwm_buzzer.in \
+"
 SRC_URI:append:sunxi = "\
     file://backlight_device.in \
     file://blank_display_device.in \
