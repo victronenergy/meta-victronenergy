@@ -1,0 +1,5 @@
+setenv bootargs console=${console}
+run loadimage loadramfs loadfdt
+fdt addr ${fdtaddr}
+fdt rm nvmem0 read-only
+booti ${kerneladdr} ${ramfsaddr} ${fdtaddr}
