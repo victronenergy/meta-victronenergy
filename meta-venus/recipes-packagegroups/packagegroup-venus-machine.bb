@@ -63,6 +63,19 @@ RDEPENDS:${PN}:append:ekrano = "\
     edid-ekrano \
 "
 
+RDEPENDS:${PN}:append:k3 = "\
+    cpufrequtils \
+    gpio-export \
+    hostapd \
+    linux-firmware-powervr \
+    linux-firmware-rtl8723 \
+    mmc-utils \
+    read-edid \
+    swupdate \
+    swupdate-scripts \
+    venus-button-handler \
+"
+
 RDEPENDS:${PN}:append:nanopi = " \
     dbus-characterdisplay \
 "
