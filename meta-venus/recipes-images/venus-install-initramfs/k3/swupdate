@@ -1,0 +1,24 @@
+#!/bin/sh
+
+. /lib/venus/install.sh
+
+SWUDEV=mmcblk1p1
+MMCDEV=mmcblk0
+BOARD_ID_DEV=1-00500
+MODULES="display-connector sii902x tidss victron-gxdisp-bl"
+TTYS="$TTYS tty0"
+TESTMODE_TTYS="ttyS2"
+
+HOOK_postinst=postinst
+postinst() {
+    mmc extcsd write 162 1 /dev/$MMCDEV    # RST_n_FUNCTION
+    mmc extcsd write 177 2 /dev/$MMCDEV    # BOOT_BUS_WIDTH
+    mmc extcsd write 179 0x49 /dev/$MMCDEV # PARTITION_CONFIG
+}
+
+do_mounts
+waitdev $MMCDEV
+echo 0 >/sys/block/${MMCDEV}boot0/force_ro
+echo 0 >/sys/block/${MMCDEV}boot1/force_ro
+
+do_install
