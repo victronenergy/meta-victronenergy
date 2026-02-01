@@ -33,6 +33,7 @@ DEPENDS = "packagegroup-venus-optional-packages venus-swu"
 
 # large image
 DEPENDS:append:beaglebone = " venus-swu-large"
+DEPENDS:append:k3 = " venus-swu-large"
 DEPENDS:append:sunxi = " venus-swu-large"
 DEPENDS:append:raspberrypi2 = " venus-swu-large"
 DEPENDS:append:raspberrypi4 = " venus-swu-large"
@@ -42,6 +43,7 @@ DEPENDS:append:raspberrypi5 = " venus-swu-large"
 DEPENDS:append:beaglebone = " venus-install-sdcard"
 DEPENDS:append:ccgx = " venus-install-sdcard"
 DEPENDS:append:canvu500 = " venus-install-sdcard venus-swu-1"
+DEPENDS:append:k3 = " venus-install-sdcard"
 DEPENDS:append:sunxi = " venus-install-sdcard"
 
 # "live" initial image
