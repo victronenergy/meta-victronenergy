@@ -15,7 +15,7 @@ IMAGE_INSTALL = " \
     ${@bb.utils.contains('SWUPDATE_INIT', 'tiny', '', 'initscripts sysvinit tinylogin', d)} \
 "
 
-MMC_TOOLS = "e2fsprogs-mke2fs util-linux-sfdisk"
+MMC_TOOLS = "e2fsprogs-mke2fs mmc-utils util-linux-sfdisk"
 UBI_TOOLS = "mtd-utils-ubifs"
 
 python () {
