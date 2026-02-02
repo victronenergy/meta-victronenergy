@@ -33,6 +33,8 @@ DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec ${@softlimit(d, data=76800
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/gui-v2.git;branch=main;protocol=ssh;user=git \
+    file://0001-Revert-UI-Controls-auto-reject-modal-dialogs-on-rota.patch \
+    file://0002-Revert-Virtual-Keyboard-get-VKB-working-on-rotated-d.patch \
 "
 SRCREV = "102c551bdce4fd6daf8b81ca2ea99583a84752c2"
 S = "${WORKDIR}/git"

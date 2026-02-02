@@ -1,0 +1,54 @@
+From 0e1176abe3c39be8a6d335378d6d6876fb4f0ac4 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Mon, 2 Feb 2026 15:54:47 +0100
+Subject: [PATCH 1/2] Revert "UI Controls: auto reject modal dialogs on rotated
+ displays"
+
+This reverts commit 0b4df0d34333703c992c21b4b1753cc797e38e83.
+---
+ components/dialogs/ModalDialog.qml             | 10 ----------
+ components/dialogs/SolarDailyHistoryDialog.qml | 10 ----------
+ 2 files changed, 20 deletions(-)
+
+diff --git a/components/dialogs/ModalDialog.qml b/components/dialogs/ModalDialog.qml
+index b9703743..9abb3fd2 100644
+--- a/components/dialogs/ModalDialog.qml
++++ b/components/dialogs/ModalDialog.qml
+@@ -295,15 +295,5 @@ T.Dialog {
+ 		enabled: !!stateManager.inputItem
+ 		onClicked: focus = true
+ 	}
+-
+-	Component.onCompleted: {
+-		if (Global.main && Global.main.requiresRotation) {
+-			// we cannot manually position the header or footer.
+-			// just reject the dialog for now.
+-			// TODO: use eglfs and rotate the entire surface.
+-			// See: issue #2702.
+-			Qt.callLater(reject)
+-		}
+-	}
+ }
+ 
+diff --git a/components/dialogs/SolarDailyHistoryDialog.qml b/components/dialogs/SolarDailyHistoryDialog.qml
+index f57346d1..1579f13d 100644
+--- a/components/dialogs/SolarDailyHistoryDialog.qml
++++ b/components/dialogs/SolarDailyHistoryDialog.qml
+@@ -199,14 +199,4 @@ T.Dialog {
+ 			visible: enabled
+ 		}
+ 	}
+-
+-	Component.onCompleted: {
+-		if (Global.main && Global.main.requiresRotation) {
+-			// we cannot manually position the header or footer.
+-			// just reject the dialog for now.
+-			// TODO: use eglfs and rotate the entire surface.
+-			// See: issue #2702
+-			Qt.callLater(reject)
+-		}
+-	}
+ }
+-- 
+2.43.0
+
