@@ -7,7 +7,7 @@ SRC_URI[sha256sum] = "4c4e1158909be0a2b01f8f8c06eedecd1a3be10cd7279c5a73f87859b6
 S = "${WORKDIR}/u-boot-${PV}"
 INSANE_SKIP += "src-uri-bad"
 
-DEPENDS += "u-boot-mkimage-native"
+DEPENDS += "mtd-utils u-boot-mkimage-native"
 
 COMPATIBLE_MACHINE = "ccgx"
 

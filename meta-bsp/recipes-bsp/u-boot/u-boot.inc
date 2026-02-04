@@ -3,7 +3,6 @@ HOMEPAGE = "http://www.denx.de/wiki/U-Boot/WebHome"
 SECTION = "bootloaders"
 
 PROVIDES = "virtual/bootloader"
-DEPENDS = "mtd-utils"
 
 # just for parsing
 RPROVIDES:${PN} += "u-boot-default-env"
