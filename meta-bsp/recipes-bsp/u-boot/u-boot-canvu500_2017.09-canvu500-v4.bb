@@ -1,6 +1,6 @@
 require u-boot-canvu500.inc
 
-DEPENDS += "bc-native u-boot-mkimage-native"
+DEPENDS += "bc-native mtd-utils u-boot-mkimage-native"
 
 SRC_URI += "\
     file://install.cmds \
