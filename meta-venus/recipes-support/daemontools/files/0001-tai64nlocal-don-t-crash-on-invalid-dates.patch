@@ -1,0 +1,35 @@
+From 487d04a1746d6ce9a55952b16cf95bd6d73fb6b8 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Sat, 7 Feb 2026 14:18:09 +0100
+Subject: [PATCH] tai64nlocal: don't crash on invalid dates
+
+If out of range values are encountered tai64nlocal would crash, e.g.
+echo "@" | tai64nlocal is enough to crash it. Print the epoch instead
+of crashing.
+
+Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
+---
+ daemontools-0.76/src/tai64nlocal.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/daemontools-0.76/src/tai64nlocal.c b/daemontools-0.76/src/tai64nlocal.c
+index 2435737..1aeec64 100644
+--- a/src/tai64nlocal.c
++++ b/src/tai64nlocal.c
+@@ -53,6 +53,13 @@ int main(int argc, char *argv[])
+       }
+       secs -= 4611686018427387914ULL;
+       t = localtime(&secs);
++      // If the value doesn't fit in struct tm (as in corrupted input), print the
++      // epoch so at least the program won't crash and it is clear that the data
++      // could not be parsed properly.
++      if (t == NULL) {
++        time_t epoch = 0;
++        t = gmtime(&epoch);
++      }
+       out(num,fmt_ulong(num,1900 + t->tm_year));
+       out("-",1); out(num,fmt_uint0(num,1 + t->tm_mon,2));
+       out("-",1); out(num,fmt_uint0(num,t->tm_mday,2));
+-- 
+2.43.0
+
