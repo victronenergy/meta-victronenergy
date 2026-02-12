@@ -17,6 +17,7 @@ SRC_URI += " \
     file://rtl8192cu.rules \
     file://simcom.rules \
     file://wlan.rules \
+    file://wlan-init \
     file://wlan-rename \
     file://wlan-update \
 "
@@ -56,6 +57,7 @@ do_install:append() {
 
     if [ "${VENUS_WLAN_AP}" = 1 ]; then
         install -m 0644 ${UNPACKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
+        install -m 0755 ${UNPACKDIR}/wlan-init ${D}${base_libdir}/udev
         install -m 0755 ${UNPACKDIR}/wlan-rename ${D}${base_libdir}/udev
         install -m 0755 ${UNPACKDIR}/wlan-update ${D}${base_libdir}/udev
     fi
