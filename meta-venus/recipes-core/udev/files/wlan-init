@@ -1,0 +1,18 @@
+#! /bin/sh
+
+# Create a virtual interface for the access point with the locally
+# administered bit in the MAC address set.  If it is already set,
+# do nothing (it might be an interface we just created).
+
+addr=$(cat /sys/class/net/$INTERFACE/address)
+addr1=0x${addr%%:*}
+local=$((addr1 & 2))
+
+if [ $local -gt 0 ]; then
+    exit
+fi
+
+addr2=$(printf '%x' $((addr1 | 2)))
+addrl=${addr2}:${addr#*:}
+
+iw dev $INTERFACE interface add ap0 type __ap addr $addrl

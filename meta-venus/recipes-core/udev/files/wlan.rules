@@ -1,9 +1,20 @@
-# built-in wifi
-ACTION=="add", ENV{DEVTYPE}=="wlan", ENV{ID_BUS}=="usb", ATTRS{bDeviceClass}!="09", ATTRS{removable}=="fixed", PROGRAM="wlan-rename", NAME="%c", GOTO="end"
-ACTION=="add", ENV{DEVTYPE}=="wlan", SUBSYSTEMS=="sdio", PROGRAM="wlan-rename", NAME="%c", GOTO="end"
+# built-in usb
+ACTION=="add", ENV{DEVTYPE}=="wlan", ENV{ID_BUS}=="usb", ATTRS{bDeviceClass}!="09", ATTRS{removable}=="fixed", GOTO="wlan-built-in"
 
-# external wifi
-ACTION=="add", ENV{DEVTYPE}=="wlan", ENV{ID_BUS}=="usb", RUN+="wlan-update"
-ACTION=="remove", ENV{DEVTYPE}=="wlan", ENV{ID_BUS}=="usb", RUN+="wlan-update"
+# built-in sdio
+ACTION=="add", ENV{DEVTYPE}=="wlan", SUBSYSTEMS=="sdio", GOTO="wlan-built-in"
 
-LABEL="end"
+# none of the above => external usb
+GOTO="wlan-ext"
+
+LABEL="wlan-built-in"
+# if the new rtw driver is used, the init script needs to run
+DRIVERS=="rtw*", RUN+="wlan-init"
+PROGRAM="wlan-rename", NAME="%c"
+GOTO="wlan-end"
+
+# external wlan
+LABEL="wlan-ext"
+ACTION=="add|remove", ENV{DEVTYPE}=="wlan", ENV{ID_BUS}=="usb", RUN+="wlan-update"
+
+LABEL="wlan-end"
