@@ -3,7 +3,6 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 PACKAGECONFIG += "libdns_sd"
 
 SRC_URI += "\
-    file://avahi-autoipd \
     file://avahi-autoipd.action \
     file://avahi-daemon.conf \
     file://start-avahi-autoipd \

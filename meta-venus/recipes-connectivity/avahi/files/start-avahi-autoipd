@@ -1,0 +1,14 @@
+#!/bin/sh
+
+DEV=eth0
+if [ ! -e /sys/class/net/ll-eth0 ]; then
+	ip link add link $DEV name "ll-$DEV" type macvlan;
+fi
+
+finish() {
+	ip link delete "ll-$DEV" type macvlan
+}
+trap finish EXIT
+
+/usr/sbin/avahi-autoipd "ll-$DEV"
+
