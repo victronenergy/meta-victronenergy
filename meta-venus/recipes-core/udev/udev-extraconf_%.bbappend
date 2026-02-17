@@ -16,9 +16,6 @@ SRC_URI += " \
     file://rfkill.rules \
     file://rtl8192cu.rules \
     file://simcom.rules \
-"
-
-SRC_URI:append:beaglebone = "\
     file://wlan.rules \
     file://wlan-rename \
     file://wlan-update \
@@ -26,12 +23,6 @@ SRC_URI:append:beaglebone = "\
 
 SRC_URI:append:einstein = "\
     file://sunxi-losc-status \
-"
-
-SRC_URI:append:sunxi = "\
-    file://wlan.rules \
-    file://wlan-rename \
-    file://wlan-update \
 "
 
 do_install:append() {
