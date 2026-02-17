@@ -53,13 +53,12 @@ do_install:append() {
     # So just remove it.
     rm ${D}/${sysconfdir}/udev/rules.d/autonet.rules
     rm ${D}/${sysconfdir}/udev/scripts/network.sh
-}
 
-do_install:append:beaglebone() {
-    install -m 0644 ${UNPACKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
-
-    install -m 0755 ${UNPACKDIR}/wlan-rename ${D}${base_libdir}/udev
-    install -m 0755 ${UNPACKDIR}/wlan-update ${D}${base_libdir}/udev
+    if [ "${VENUS_WLAN_AP}" = 1 ]; then
+        install -m 0644 ${UNPACKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
+        install -m 0755 ${UNPACKDIR}/wlan-rename ${D}${base_libdir}/udev
+        install -m 0755 ${UNPACKDIR}/wlan-update ${D}${base_libdir}/udev
+    fi
 }
 
 do_install:append:ccgx() {
@@ -68,13 +67,6 @@ do_install:append:ccgx() {
 
 do_install:append:einstein() {
     install -m 0755 ${UNPACKDIR}/sunxi-losc-status ${D}${base_libdir}/udev
-}
-
-do_install:append:sunxi() {
-    install -m 0644 ${UNPACKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
-
-    install -m 0755 ${UNPACKDIR}/wlan-rename ${D}${base_libdir}/udev
-    install -m 0755 ${UNPACKDIR}/wlan-update ${D}${base_libdir}/udev
 }
 
 FILES:${PN} += "${base_libdir}"
