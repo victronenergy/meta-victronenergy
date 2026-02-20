@@ -1,0 +1,30 @@
+From 1b7e9d9ab0dff48ca4c7de1be8dad80cac3ef449 Mon Sep 17 00:00:00 2001
+From: Philipp Trenz <mail@philipptrenz.de>
+Date: Fri, 20 Feb 2026 17:07:50 +0100
+Subject: [PATCH] Catch exception in scan_dbus_service_legacy() to prevent
+ systemcalc crash
+
+---
+ dbusmonitor.py | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/dbusmonitor.py b/dbusmonitor.py
+index 92ee136..efe0800 100644
+--- a/dbusmonitor.py
++++ b/dbusmonitor.py
+@@ -564,9 +564,12 @@ def _async_scan_callback(self, startup, errors):
+ 		# Do a legacy scan on services that could not be scanned with GetItems
+ 		for name in errors:
+ 			logging.info(f"Doing legacy scan on {name}")
+-			if self.scan_dbus_service_legacy(name) and \
+-						  self.deviceAddedCallback is not None:
+-				self.deviceAddedCallback(name, self.get_device_instance(name))
++			try:
++				if self.scan_dbus_service_legacy(name) and \
++							self.deviceAddedCallback is not None:
++					self.deviceAddedCallback(name, self.get_device_instance(name))
++			except dbus.exceptions.DBusException:
++				logging.exception("scan_dbus_service_legacy")
+ 
+ 		if startup:
+ 			logger.info('===== Async scan complete =====')
