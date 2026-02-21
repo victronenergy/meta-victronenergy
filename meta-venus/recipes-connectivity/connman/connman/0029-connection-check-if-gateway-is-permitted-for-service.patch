@@ -1,4 +1,4 @@
-From 324353f405c6634e5640d0f90de01f2d9f82bcee Mon Sep 17 00:00:00 2001
+From 07c45da698ec66aa0f916143c11ef53317689846 Mon Sep 17 00:00:00 2001
 From: Mans Rullgard <mans@mansr.com>
 Date: Wed, 24 Sep 2025 15:01:42 +0100
 Subject: [PATCH 29/29] connection: check if gateway is permitted for service
@@ -9,7 +9,7 @@ Subject: [PATCH 29/29] connection: check if gateway is permitted for service
  1 file changed, 37 insertions(+), 11 deletions(-)
 
 diff --git a/src/connection.c b/src/connection.c
-index 2d99211f85d8..9d07f104676d 100644
+index 2d99211f85d8..0955ab3ce824 100644
 --- a/src/connection.c
 +++ b/src/connection.c
 @@ -49,18 +49,32 @@ static GHashTable *gateway_hash = NULL;
@@ -67,7 +67,7 @@ index 2d99211f85d8..9d07f104676d 100644
  	int index;
  
 +	if (!__connman_technology_is_gateway_enabled(service_type))
-+		return;
++		return 0;
 +
  	index = __connman_service_get_index(service);
  
@@ -124,5 +124,5 @@ index 2d99211f85d8..9d07f104676d 100644
  
  	return updated;
 -- 
-2.51.0
+2.52.0
 
