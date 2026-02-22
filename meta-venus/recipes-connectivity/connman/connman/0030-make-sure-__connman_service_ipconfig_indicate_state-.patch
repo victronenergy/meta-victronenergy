@@ -1,0 +1,35 @@
+From ede5fb3e49cd3ec426490221cfe7c55ea9a0c244 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Sun, 22 Feb 2026 13:54:24 +0000
+Subject: [PATCH] make sure __connman_service_ipconfig_indicate_state get
+ called
+
+When the ip configuration is set to manual and the default gateway is
+not allowed, the service would be stuck in the configuration state.
+---
+ src/connection.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/src/connection.c b/src/connection.c
+index 9d07f10..2ae0da8 100644
+--- a/src/connection.c
++++ b/src/connection.c
+@@ -590,8 +590,13 @@ int __connman_connection_gateway_add(struct connman_service *service,
+ 					connman_service_get_type(service);
+ 	int index;
+ 
+-	if (!__connman_technology_is_gateway_enabled(service_type))
+-		return;
++	if (!__connman_technology_is_gateway_enabled(service_type)) {
++		if (type == CONNMAN_IPCONFIG_TYPE_IPV4)
++			type4 = CONNMAN_IPCONFIG_TYPE_IPV4;
++		if (type == CONNMAN_IPCONFIG_TYPE_IPV6)
++			type6 = CONNMAN_IPCONFIG_TYPE_IPV6;
++		goto done;
++	}
+ 
+ 	index = __connman_service_get_index(service);
+ 
+-- 
+2.43.0
+

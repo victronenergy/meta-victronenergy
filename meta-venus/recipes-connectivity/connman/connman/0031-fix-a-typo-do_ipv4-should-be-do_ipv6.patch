@@ -1,0 +1,25 @@
+From 6f0c74f6c18fef92f41c3abfc42879939d557ff8 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Sun, 22 Feb 2026 14:19:40 +0000
+Subject: [PATCH] fix a typo, do_ipv4 should be do_ipv6
+
+---
+ src/connection.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/connection.c b/src/connection.c
+index 2ae0da8..cac7c72 100644
+--- a/src/connection.c
++++ b/src/connection.c
+@@ -761,7 +761,7 @@ bool __connman_connection_update_gateway(void)
+ 			updated = true;
+ 		}
+ 
+-		if (do_ipv4 && active_gateway->ipv6_gateway &&
++		if (do_ipv6 && active_gateway->ipv6_gateway &&
+ 				active_gateway->ipv6_gateway->active) {
+ 
+ 			unset_default_gateway(active_gateway,
+-- 
+2.43.0
+

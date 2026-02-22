@@ -42,6 +42,8 @@ SRC_URI += "\
     file://0027-technology-add-GatewayEnabled-property.patch \
     file://0028-service-use-gateway-only-if-permitted-for-technology.patch \
     file://0029-connection-check-if-gateway-is-permitted-for-service.patch \
+    file://0030-make-sure-__connman_service_ipconfig_indicate_state-.patch \
+    file://0031-fix-a-typo-do_ipv4-should-be-do_ipv6.patch \
     file://main.conf \
     file://connmand-watch.sh \
 "
