@@ -5,6 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=d7725b8b5e691085738d564afb312302"
 SRC_URI = " \
     https://github.com/victronenergy/${BPN}/archive/refs/tags/v${PV}.tar.gz \
 	file://remove-husky-for-venus.patch \
+    file://fix-swapped-labels.patch \
     file://npm-shrinkwrap.json;subdir=${S} \
 "
 INSANE_SKIP += "src-uri-bad"
