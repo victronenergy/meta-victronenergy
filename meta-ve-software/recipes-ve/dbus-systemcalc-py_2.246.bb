@@ -12,7 +12,7 @@ SRC_URI = " \
     file://com.victronenergy.system.conf \
     file://catch-exception-in-scan_dbus_service_legacy-to-prevent.patch;patchdir=ext/velib_python \
 "
-SRCREV = "a74292e5d3d8e0fb895aa2fa5d3bdf59b51f376e"
+SRCREV = "285e436bd425ab60c9eb25847a0a069ee3256b3f"
 S = "${WORKDIR}/git"
 PR = "1"
 
