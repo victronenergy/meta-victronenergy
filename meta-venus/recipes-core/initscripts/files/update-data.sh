@@ -1,7 +1,9 @@
 #! /bin/sh
 
+runtime=0
 if [ ! -z "$1" ] && [ $1 = "-r" ]; then
     ARCHIVE_NAME=venus-runtime
+    runtime=1
 else
     ARCHIVE_NAME=venus-data
 fi
@@ -94,4 +96,11 @@ delayed_update() {
 }
 
 update_data && exit 0
+
+# Don't do a delayed checked when being called from udev, as it was already mounted.
+# Forking in a udev program is not allowed!
+if [ $runtime = 1 ]; then
+    exit 0
+fi
+
 delayed_update &
