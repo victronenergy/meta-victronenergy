@@ -8,7 +8,7 @@ SRC_URI = "\
 	file://Disable-showing-update-notifaction-in-tour.patch;apply=no \
     file://npm-shrinkwrap.json;subdir=${S} \
 "
-SRC_URI[sha256sum] = "bf4e7a0ae54720f6c58580a0743dc6d456fcf7366c18e99feae397f566964381"
+SRC_URI[sha256sum] = "ed00d8333ecdb13df99dc37a1babc81c238ae3811edb7cdb2698beac3d1c6f4d"
 S = "${UNPACKDIR}/npm"
 
 RDEPENDS:${PN} = "nodejs-npm"
