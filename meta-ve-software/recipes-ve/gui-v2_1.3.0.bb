@@ -34,7 +34,7 @@ UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/gui-v2.git;branch=main;protocol=ssh;user=git \
 "
-SRCREV = "a22843a61b8857b3d9f69d06a25e8ad93d9446e5"
+SRCREV = "f6f3e55e2686ce6e477e45f47663e974660dfe83"
 S = "${WORKDIR}/git"
 
 do_install:append() {
