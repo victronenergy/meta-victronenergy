@@ -1,6 +1,6 @@
-From 85adaad8eaaa5bc140127607004fcd077cd923a1 Mon Sep 17 00:00:00 2001
-From: mpvader <mvader@victronenergy.com>
-Date: Sat, 5 Jul 2025 13:14:54 +0200
+From 54a8fe5ac9f3241bb46939d47e1f32db48e0e755 Mon Sep 17 00:00:00 2001
+From: Dirk-Jan Faber <dfaber@victronenergy.com>
+Date: Mon, 9 Mar 2026 21:33:18 +0100
 Subject: [PATCH 2/3] remove signalk-server-setup script + its largest
  dependencies
 
@@ -18,17 +18,17 @@ There are some more very small dependencies that could be removed as well,
 for example chalk and clear, but rather leave them in - less risk & maintenance
 going forward.
 ---
- bin/signalk-server-setup | 352 ---------------------------------------
+ bin/signalk-server-setup | 355 ---------------------------------------
  package.json             |   3 -
- 2 files changed, 355 deletions(-)
+ 2 files changed, 358 deletions(-)
  delete mode 100755 bin/signalk-server-setup
 
 diff --git a/bin/signalk-server-setup b/bin/signalk-server-setup
 deleted file mode 100755
-index 0c13906d..00000000
+index 5a1a78de..00000000
 --- a/bin/signalk-server-setup
 +++ /dev/null
-@@ -1,352 +0,0 @@
+@@ -1,355 +0,0 @@
 -#!/usr/bin/env node
 -
 -const spawn = require('child_process').spawnSync
@@ -255,7 +255,7 @@ index 0c13906d..00000000
 -                deltaEditor.removeSelfValue('uuid')
 -              }
 -              deltaEditor.setSelfValue('name', vesselName)
--              deltaEditor.save(defaultsLocation)
+-              return deltaEditor.save(defaultsLocation)
 -            }
 -          },
 -          {
@@ -300,6 +300,9 @@ index 0c13906d..00000000
 -                settingsLocation,
 -                configDirectory
 -              ].forEach((file) => {
+-                if (!fs.existsSync(file)) {
+-                  return
+-                }
 -                let stat = fs.statSync(file)
 -                let mode =
 -                  file === startupLocation || stat.isDirectory() ? '755' : '644'
@@ -382,24 +385,26 @@ index 0c13906d..00000000
 -    })
 -}
 diff --git a/package.json b/package.json
-index 35080a4e..25b61173 100644
+index 6e96cc65..97e43ce3 100644
 --- a/package.json
 +++ b/package.json
-@@ -98,14 +98,11 @@
+@@ -104,16 +104,13 @@
      "express-easy-zip": "^1.1.5",
      "express-namespace": "^0.1.1",
      "express-rate-limit": "^8.2.1",
 -    "figlet": "^1.2.0",
      "file-timestamp-stream": "^2.1.2",
+     "fix": "^0.0.6",
      "geolib": "3.2.2",
      "helmet": "^8.1.0",
 -    "inquirer": "^7.0.0",
+     "jose": "^6.1.0",
      "json-patch": "^0.7.0",
      "jsonwebtoken": "^9.0.0",
 -    "listr": "^0.14.1",
-     "lodash": "^4.17.4",
+     "lodash": "^4.17.21",
      "mdns-js": "^1.0.3",
-     "minimist": "^1.1.0",
+     "minimist": "^1.2.8",
 -- 
 2.43.0
 
