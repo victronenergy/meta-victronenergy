@@ -32,9 +32,9 @@ DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec ${@softlimit(d, data=76800
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/gui-v2.git;branch=main;protocol=ssh;user=git \
+    gitsm://github.com/victronenergy/gui-v2.git;branch=v3.70;protocol=ssh;user=git \
 "
-SRCREV = "a22843a61b8857b3d9f69d06a25e8ad93d9446e5"
+SRCREV = "7c8da8150356534e9ff54b99091c74ac8d13f3ae"
 S = "${WORKDIR}/git"
 
 do_install:append() {
