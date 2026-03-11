@@ -18,10 +18,9 @@ RDEPENDS:${PN} = "\
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https \
-    file://victron-em-fix-scaling-of-neutral-current.patch \
     file://start-serial.sh \
 "
-SRCREV = "9d69b4b010e2a316d88fe01b4333791bcf89e8fc"
+SRCREV = "54258692e680e8e8e6f6c5a1844567bd2ccf611f"
 S = "${WORKDIR}/git"
 PR = "1"
 
