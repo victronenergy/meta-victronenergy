@@ -1,0 +1,22 @@
+From 72136fa062cfa53c3c55e7957e09709f8b287357 Mon Sep 17 00:00:00 2001
+From: Martin Bosma <mbosma@victronenergy.com>
+Date: Fri, 6 Mar 2026 16:26:08 +0100
+Subject: [PATCH] victron-em: fix scaling of neutral current
+
+---
+ victron_em.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/victron_em.py b/victron_em.py
+index 4713aa0..42b63cb 100644
+--- a/victron_em.py
++++ b/victron_em.py
+@@ -137,7 +137,7 @@ def device_init(self):
+             return
+ 
+         self.data_regs += [
+-            Reg_s16(0x3039, '/Ac/N/Current', 100, '%.1f A'),
++            Reg_s16(0x3039, '/Ac/N/Current', 10, '%.1f A'),
+         ]
+ 
+         if self.fwver < (0, 1, 9, 0):

@@ -18,10 +18,12 @@ RDEPENDS:${PN} = "\
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/${BPN}.git;branch=master;protocol=https \
+    file://victron-em-fix-scaling-of-neutral-current.patch \
     file://start-serial.sh \
 "
 SRCREV = "9d69b4b010e2a316d88fe01b4333791bcf89e8fc"
 S = "${WORKDIR}/git"
+PR = "1"
 
 DAEMONTOOLS_RUN = "${bindir}/${PN}.py"
 DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/${PN}"
