@@ -10,11 +10,9 @@ UPSTREAM_CHECK_GITTAGREGEX = "(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;branch=master;protocol=https \
     file://com.victronenergy.system.conf \
-    file://catch-exception-in-scan_dbus_service_legacy-to-prevent.patch;patchdir=ext/velib_python \
 "
-SRCREV = "285e436bd425ab60c9eb25847a0a069ee3256b3f"
+SRCREV = "bd0648b1951b897046b4b89123bc9156e3a14018"
 S = "${WORKDIR}/git"
-PR = "1"
 
 RDEPENDS:${PN} = " \
     localsettings \
