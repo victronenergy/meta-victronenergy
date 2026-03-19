@@ -10,10 +10,11 @@ RDEPENDS:${PN} += "\
     cargo \
     chrony \
     devmem2 \
-    gdb \
+    dbus-heatpump-control \
     dfu-util \
     file \
     gcc-sanitizers \
+    gdb \
     gpsd \
     git \
     htop \
