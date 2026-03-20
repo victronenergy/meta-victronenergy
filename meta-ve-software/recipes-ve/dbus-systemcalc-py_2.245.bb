@@ -11,10 +11,11 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;branch=master;protocol=https \
     file://com.victronenergy.system.conf \
     file://catch-exception-in-scan_dbus_service_legacy-to-prevent.patch;patchdir=ext/velib_python \
+    file://avoid-startup-crash-if-system-voltage-unknown.patch \
 "
 SRCREV = "a74292e5d3d8e0fb895aa2fa5d3bdf59b51f376e"
 S = "${WORKDIR}/git"
-PR = "1"
+PR = "2"
 
 RDEPENDS:${PN} = " \
     localsettings \

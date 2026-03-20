@@ -1,0 +1,29 @@
+From aa1370f7eb7446bceaaa8fa95861c5a8b37b3040 Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Tue, 17 Mar 2026 12:35:50 +0200
+Subject: [PATCH] avoid startup crash if system voltage unknown
+
+During startup, if the system voltage is not known yet and you use
+the solar charger to measure DC loads, systemcalc might fail to
+start. The structure of the code is quite clear, that errors
+in this calculation due to unavailable data can be ignored, but
+we did not ignore TypeError.
+
+https://github.com/victronenergy/venus/issues/1608
+---
+ dbus_systemcalc.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dbus_systemcalc.py b/dbus_systemcalc.py
+index 12266bc..b557e27 100755
+--- a/dbus_systemcalc.py
++++ b/dbus_systemcalc.py
+@@ -846,7 +846,7 @@ def _updatevalues(self):
+ 			try:
+ 				newvalues['/Dc/System/Current'] = \
+ 					solarchargers_loadoutput_power / newvalues['/Dc/Battery/Voltage']
+-			except (KeyError, ZeroDivisionError):
++			except (KeyError, ZeroDivisionError, TypeError):
+ 				pass
+ 
+ 		# ===== AC IN SOURCE =====
