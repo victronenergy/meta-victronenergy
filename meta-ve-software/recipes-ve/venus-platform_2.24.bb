@@ -8,12 +8,14 @@ RDEPENDS:${PN} += "can-utils connman flashmq qtbase-plugin-qopensslbackend socke
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git \
+    file://0001-mqtt-registrator-delete-reply-object.patch \
     file://can.inc \
     file://venus_dbus_bridge_template.conf \
     file://venus_rpc_bridge_template.conf \
 "
 SRCREV = "55a885da9a0147e940683ab71a7c5a896b652fec"
 S = "${WORKDIR}/git"
+PR = "1"
 
 DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/venus-platform"
 

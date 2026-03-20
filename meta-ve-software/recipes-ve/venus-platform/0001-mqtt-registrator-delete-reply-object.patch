@@ -1,0 +1,28 @@
+From b86c29a711d2c04e52ea15000601035259514292 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Tue, 17 Mar 2026 13:14:49 +0000
+Subject: [PATCH] mqtt-registrator: delete reply object
+
+The QNetworkReply object produced by the registration request must be
+deleted using deleteLater(). This fixes a small memory leak with each
+registration attempt.
+---
+ src/mqtt_bridge_registrator.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/mqtt_bridge_registrator.cpp b/src/mqtt_bridge_registrator.cpp
+index 486b058..bd494a5 100644
+--- a/src/mqtt_bridge_registrator.cpp
++++ b/src/mqtt_bridge_registrator.cpp
+@@ -160,6 +160,8 @@ void VrmTokenRegistrator::onNetworkRequestFinished(QNetworkReply *reply)
+ 	if (!reply)
+ 		return;
+ 
++	reply->deleteLater();
++
+ 	const int httpCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+ 	if (!(reply->error() == QNetworkReply::NoError && httpCode == 200 && reply->readAll().startsWith("OK:"))) {
+ 		std::chrono::milliseconds retry(60000);
+-- 
+2.43.0
+
