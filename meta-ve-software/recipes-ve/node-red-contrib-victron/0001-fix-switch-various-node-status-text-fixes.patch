@@ -1,0 +1,118 @@
+From 2c4df60b43795ae2974384ddb569a9dee5ddca35 Mon Sep 17 00:00:00 2001
+From: Dirk-Jan Faber <dfaber@victronenergy.com>
+Date: Fri, 13 Mar 2026 19:43:36 +0100
+Subject: [PATCH 1/2] fix(switch): various node status text fixes
+
+- doc fix: a numeric input switch does not use "Value", only "Dimming"
+- refactor updateSwitchStatus() to encapsulate a temporary status message
+- updates to virtual switches' properties are not debounced any more. This simplifies the implementation of the previous item.
+- Do not output "nodeInstances" in case debug output is activated, this fixes excessively long debug output
+- virtual bilge pump, display state 0x00 as "Auto" instead of "Off"
+- virtual bilge pump, Status of 0x00 is "Not running", not "Off"
+- small formatting fixes in updateSwitchStatus(), e.g. don't display "Value" for a numeric input switch
+- define / move "stateKey" and "statusKey" to an outer scope to keep string constants a bit more DRY
+---
+ resources/victron-virtual-functions.js |  2 +-
+ src/nodes/victron-virtual-functions.js |  2 +-
+ src/nodes/victron-virtual-switch.js    | 11 ++++++-----
+ src/services/virtual-switch.js         | 22 ++++++++++++++++++++++
+ 4 files changed, 30 insertions(+), 7 deletions(-)
+
+diff --git a/resources/victron-virtual-functions.js b/resources/victron-virtual-functions.js
+index 9a84865..231dd7d 100644
+--- a/resources/victron-virtual-functions.js
++++ b/resources/victron-virtual-functions.js
+@@ -425,7 +425,7 @@
+       '/resources/@victronenergy/node-red-contrib-victron/docs/basic_slider.svg'
+     ),
+     [victronVirtualConstantsExports.SWITCH_TYPE_MAP.NUMERIC_INPUT]: createDocTemplate(
+-      '<div><strong>Most relevant path(s):</strong><ul><li><code>/SwitchableOutput/output_1/Value</code> &mdash; holds the current numeric value.</li><li><code>/SwitchableOutput/output_1/Settings/Min</code> &mdash; defines the minimum value. <tt>0</tt> will be used if omitted.</li><li><code>/SwitchableOutput/output_1/Settings/Max</code> &mdash; defines the maximum value. <tt>100</tt> will be used if omitted.</li><li><code>/SwitchableOutput/output_1/Settings/StepSize</code> &mdash; defines stepsize. Stepsize = <tt>1</tt> if omitted.</li></ul></div>',
++      `<div><strong>Most relevant path(s):</strong><ul><li><code>/SwitchableOutput/output_1/Dimming</code> &mdash; holds the current numeric value.</li><li><code>/SwitchableOutput/output_1/Settings/Min</code> &mdash; defines the minimum value. <tt>0</tt> will be used if omitted.</li><li><code>/SwitchableOutput/output_1/Settings/Max</code> &mdash; defines the maximum value. <tt>100</tt> will be used if omitted.</li><li><code>/SwitchableOutput/output_1/Settings/StepSize</code> &mdash; defines stepsize. Stepsize = <tt>1</tt> if omitted.</li></ul></div>`,
+       '<div><strong>Outputs:</strong><ol><li><code>Passthrough</code> &mdash; Outputs the original <tt>msg.payload</tt> without modification</li><li><code>State</code> &mdash; <tt>msg.payload</tt> contains a <tt>0</tt> or <tt>1</tt> representing the  on/off state of the switch</li><li><code>Value</code> &mdash; <tt>msg.payload</tt> contains the numeric value</li></ol></div>',
+       '/resources/@victronenergy/node-red-contrib-victron/docs/numeric_input.svg'
+     ),
+diff --git a/src/nodes/victron-virtual-functions.js b/src/nodes/victron-virtual-functions.js
+index e93e4c8..f6ea2d4 100644
+--- a/src/nodes/victron-virtual-functions.js
++++ b/src/nodes/victron-virtual-functions.js
+@@ -163,7 +163,7 @@ export const SWITCH_TYPE_DOCS = {
+     '/resources/@victronenergy/node-red-contrib-victron/docs/basic_slider.svg'
+   ),
+   [SWITCH_TYPE_MAP.NUMERIC_INPUT]: createDocTemplate(
+-    '<div><strong>Most relevant path(s):</strong><ul><li><code>/SwitchableOutput/output_1/Value</code> &mdash; holds the current numeric value.</li><li><code>/SwitchableOutput/output_1/Settings/Min</code> &mdash; defines the minimum value. <tt>0</tt> will be used if omitted.</li><li><code>/SwitchableOutput/output_1/Settings/Max</code> &mdash; defines the maximum value. <tt>100</tt> will be used if omitted.</li><li><code>/SwitchableOutput/output_1/Settings/StepSize</code> &mdash; defines stepsize. Stepsize = <tt>1</tt> if omitted.</li></ul></div>',
++    `<div><strong>Most relevant path(s):</strong><ul><li><code>/SwitchableOutput/output_1/Dimming</code> &mdash; holds the current numeric value.</li><li><code>/SwitchableOutput/output_1/Settings/Min</code> &mdash; defines the minimum value. <tt>0</tt> will be used if omitted.</li><li><code>/SwitchableOutput/output_1/Settings/Max</code> &mdash; defines the maximum value. <tt>100</tt> will be used if omitted.</li><li><code>/SwitchableOutput/output_1/Settings/StepSize</code> &mdash; defines stepsize. Stepsize = <tt>1</tt> if omitted.</li></ul></div>`,
+     '<div><strong>Outputs:</strong><ol><li><code>Passthrough</code> &mdash; Outputs the original <tt>msg.payload</tt> without modification</li><li><code>State</code> &mdash; <tt>msg.payload</tt> contains a <tt>0</tt> or <tt>1</tt> representing the  on/off state of the switch</li><li><code>Value</code> &mdash; <tt>msg.payload</tt> contains the numeric value</li></ol></div>',
+     '/resources/@victronenergy/node-red-contrib-victron/docs/numeric_input.svg'
+   ),
+diff --git a/src/nodes/victron-virtual-switch.js b/src/nodes/victron-virtual-switch.js
+index 7838ead..83bcf90 100644
+--- a/src/nodes/victron-virtual-switch.js
++++ b/src/nodes/victron-virtual-switch.js
+@@ -55,10 +55,11 @@ module.exports = function (RED) {
+     const debouncedSetters = new Map()
+ 
+     function shouldApplyImmediately (key) {
+-      if (node.ifaceDesc && node.ifaceDesc.properties && node.ifaceDesc.properties[key]) {
+-        return node.ifaceDesc.properties[key].immediate === true
+-      }
+-      return false
++      // if (node.ifaceDesc && node.ifaceDesc.properties && node.ifaceDesc.properties[key]) {
++      //   return node.ifaceDesc.properties[key].immediate === true
++      // }
++      // return false
++      return true
+     }
+ 
+     function getDebouncedSetter (key) {
+@@ -182,7 +183,7 @@ module.exports = function (RED) {
+     })
+ 
+     function instantiateDbus (self) {
+-      debug('instantiateDbus called for node', self.id, nodeInstances)
++      debug('instantiateDbus called for node:', self.id)
+       // Connect to the dbus
+       if (self.address) {
+         debug(`Connecting to TCP address ${self.address}.`)
+diff --git a/src/services/virtual-switch.js b/src/services/virtual-switch.js
+index 98f7fe6..f6ff6f1 100644
+--- a/src/services/virtual-switch.js
++++ b/src/services/virtual-switch.js
+@@ -18,6 +18,16 @@ const {
+ 
+ const { hsbToRgb } = require('./color-utils')
+ 
++const stateKey = 'SwitchableOutput/output_1/State'
++const statusKey = 'SwitchableOutput/output_1/Status'
++
++const STATUS_BIT_NAMES = ['Powered', 'Tripped', 'Over temperature', 'Output fault', 'Short fault', 'Disabled', 'Bypassed', 'Ext. control']
++function statusFormat (v) {
++  if (v == null || v === 0) return 'Off'
++  if (v === 0x09) return 'On'
++  return STATUS_BIT_NAMES.filter((_, i) => v & (1 << i)).join(', ') || String(v)
++}
++
+ /**
+  * Creates D-Bus interface properties for a virtual switch based on configuration.
+  *
+@@ -229,6 +239,18 @@ function createSwitchProperties (config, ifaceDesc, iface) {
+     iface[labelsKey] = labels
+   }
+ 
++  if (switchType === SWITCH_TYPE_MAP.NUMERIC_INPUT) {
++    // State is not used for numeric input, only 'Dimming'
++    delete ifaceDesc.properties[stateKey]
++  }
++
++  if (switchType === SWITCH_TYPE_MAP.BILGE_PUMP) {
++    // different format for status property
++    ifaceDesc.properties[stateKey].format = (v) => ({ 0: 'Auto', 1: 'On' }[v] || 'unknown')
++    // Status 0x00 is *not* off for a bilge pump, it is "Not running"
++    ifaceDesc.properties[statusKey].format = (v) => v === 0 ? 'Not running' : statusFormat(v)
++  }
++
+   if (switchType === SWITCH_TYPE_MAP.BASIC_SLIDER || switchType === SWITCH_TYPE_MAP.NUMERIC_INPUT) {
+     const dimmingKey = 'SwitchableOutput/output_1/Dimming'
+     ifaceDesc.properties[dimmingKey] = {
+-- 
+2.43.0
+
