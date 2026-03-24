@@ -4,6 +4,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=d7725b8b5e691085738d564afb312302"
 
 SRC_URI = " \
     https://github.com/victronenergy/${BPN}/archive/refs/tags/v${PV}.tar.gz \
+    file://fixvirtual-switch-allow-array-of-strings-for-dropdown.patch \
     file://remove-husky-for-venus.patch \
     file://0001-fix-switch-various-node-status-text-fixes.patch \
     file://0002-fix-services-restore-missing-mode-both-paths-from-v1.patch \
