@@ -85,3 +85,5 @@ do_install:append:sunxi() {
 }
 
 FILES:${PN} += "${base_libdir}"
+
+ALLOW_EMPTY:${PN}-autonet = "1"
