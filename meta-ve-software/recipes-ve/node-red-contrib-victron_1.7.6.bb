@@ -4,7 +4,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=d7725b8b5e691085738d564afb312302"
 
 SRC_URI = " \
     https://github.com/victronenergy/${BPN}/archive/refs/tags/v${PV}.tar.gz \
-    file://fixvirtual-switch-allow-array-of-strings-for-dropdown.patch \
     file://remove-husky-for-venus.patch \
     file://npm-shrinkwrap.json;subdir=${S} \
 "
@@ -12,7 +11,7 @@ INSANE_SKIP += "src-uri-bad"
 PR = "1"
 
 # Careful! When updating the version, also npm-shrinkwrap.json must be updated
-SRC_URI[sha256sum] = "eddac629bb663562450793d6a03d58fdbaf7a5397866308870e4747c342291c3"
+SRC_URI[sha256sum] = "d7c3aa68a4e89aed98f4e0490b9a7901a44122b1de924fd9ce49554e05bd0e9e"
 
 inherit npm-online-install
 
