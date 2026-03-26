@@ -1,14 +1,27 @@
+From 70e1d556cf57b108e8407cfbf469f70d123fe823 Mon Sep 17 00:00:00 2001
+From: Dirk-Jan Faber <dfaber@victronenergy.com>
+Date: Thu, 26 Mar 2026 22:10:22 +0100
+Subject: [PATCH 1/1] Remove husky
+
+For building for Venus
+---
+ package.json | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
 diff --git a/package.json b/package.json
-index 665af45..11a6eab 100644
+index 8d100a3..0ea95d5 100644
 --- a/package.json
 +++ b/package.json
-@@ -53,8 +53,7 @@
+@@ -54,8 +54,7 @@
      "prerelease": "npm run verify",
      "release": "git tag -d v$npm_package_version; git tag v$npm_package_version && git push --tags && git push && npm run create-release",
      "documentation": "bash -c '( sed \"/^<!--/q\" src/nodes/config-client.html && node scripts/service2doc.js -s src/services/services.json -r src/nodes/victron-nodes.html -o nodered ) | sponge src/nodes/config-client.html'",
--    "wiki": "bash -c 'node scripts/service2doc.js -s src/services/services.json -r src/nodes/victron-nodes.html -o md | sponge ../node-red-contrib-victron.wiki/Available-nodes.md'",
+-    "wiki": "bash -c 'S=\"src/services/services.json\" R=\"src/nodes/victron-nodes.html\"; node scripts/service2doc.js -s $S -r $R -o md --page index   | sponge ../node-red-contrib-victron.wiki/Available-nodes.md && node scripts/service2doc.js -s $S -r $R -o md --page input   | sponge ../node-red-contrib-victron.wiki/Input-nodes.md && node scripts/service2doc.js -s $S -r $R -o md --page output  | sponge ../node-red-contrib-victron.wiki/Output-nodes.md && node scripts/service2doc.js -s $S -r $R -o md --page virtual | sponge ../node-red-contrib-victron.wiki/Virtual-devices.md && node scripts/service2doc.js -s $S -r $R -o md --page sidebar | sponge ../node-red-contrib-victron.wiki/_Sidebar.md'",
 -    "prepare": "husky || echo \"WARNING: husky not available, proceeding\""
-+    "wiki": "bash -c 'node scripts/service2doc.js -s src/services/services.json -r src/nodes/victron-nodes.html -o md | sponge ../node-red-contrib-victron.wiki/Available-nodes.md'"
++    "wiki": "bash -c 'S=\"src/services/services.json\" R=\"src/nodes/victron-nodes.html\"; node scripts/service2doc.js -s $S -r $R -o md --page index   | sponge ../node-red-contrib-victron.wiki/Available-nodes.md && node scripts/service2doc.js -s $S -r $R -o md --page input   | sponge ../node-red-contrib-victron.wiki/Input-nodes.md && node scripts/service2doc.js -s $S -r $R -o md --page output  | sponge ../node-red-contrib-victron.wiki/Output-nodes.md && node scripts/service2doc.js -s $S -r $R -o md --page virtual | sponge ../node-red-contrib-victron.wiki/Virtual-devices.md && node scripts/service2doc.js -s $S -r $R -o md --page sidebar | sponge ../node-red-contrib-victron.wiki/_Sidebar.md'"
    },
    "repository": {
      "type": "git",
+-- 
+2.50.1 (Apple Git-155)
+
