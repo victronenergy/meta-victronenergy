@@ -33,11 +33,9 @@ DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec ${@softlimit(d, data=76800
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/gui-v2.git;branch=v3.70;protocol=ssh;user=git \
-    file://screenblanker-detect-unsuccessful-screen-blankunblank.patch \
 "
-SRCREV = "68dcfe670241be6c97bc44526f7f7ebba4929615"
+SRCREV = "0a1a33a1dd1b131d8b644a0e4a06e1522c8dd277"
 S = "${WORKDIR}/git"
-PR = "1"
 
 do_install:append() {
     rm -r ${D}/usr
