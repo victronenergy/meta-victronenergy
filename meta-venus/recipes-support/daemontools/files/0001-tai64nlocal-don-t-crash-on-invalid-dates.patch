@@ -8,6 +8,7 @@ echo "@" | tai64nlocal is enough to crash it. Print the epoch instead
 of crashing.
 
 Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
+Upstream-Status: Inappropriate [Unmaintained]
 ---
  daemontools-0.76/src/tai64nlocal.c | 7 +++++++
  1 file changed, 7 insertions(+)
