@@ -35,7 +35,7 @@ FILES:${PN}-completion += " \
 FILES:${PN} += "usr/share/wayland-sessions"
 
 do_install:append() {
-    install ${WORKDIR}/config ${D}${sysconfdir}/sway/config
+    install ${UNPACKDIR}/config ${D}${sysconfdir}/sway/config
 }
 
 

@@ -51,12 +51,12 @@ SRC_URI = "\
 
 do_add_files() {
     install -d ${IMAGE_ROOTFS}/${base_libdir}/venus
-    install ${WORKDIR}/install.sh ${IMAGE_ROOTFS}/${base_libdir}/venus
+    install ${UNPACKDIR}/install.sh ${IMAGE_ROOTFS}/${base_libdir}/venus
 
     if [ "${SWUPDATE_INIT}" = "tiny" ]; then
-        install ${WORKDIR}/swupdate ${IMAGE_ROOTFS}/${base_sbindir}/init
+        install ${UNPACKDIR}/swupdate ${IMAGE_ROOTFS}/${base_sbindir}/init
     else
-        cp ${WORKDIR}/swupdate ${IMAGE_ROOTFS}${sysconfdir}/init.d
+        cp ${UNPACKDIR}/swupdate ${IMAGE_ROOTFS}${sysconfdir}/init.d
     fi
 }
 

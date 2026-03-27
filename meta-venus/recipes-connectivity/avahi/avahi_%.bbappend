@@ -27,7 +27,7 @@ do_install:append() {
     # move the header file so other things can find it
     mv ${D}${includedir}/avahi-compat-libdns_sd/dns_sd.h ${D}${includedir}
 
-    install -m755 "${WORKDIR}/start-avahi-autoipd" ${D}${sbindir}
+    install -m755 "${UNPACKDIR}/start-avahi-autoipd" ${D}${sbindir}
 
     # make this the default as well.
     mkdir -p "${D}/${DAEMONTOOLS_TEMPLATE_CONF_DIR}"
