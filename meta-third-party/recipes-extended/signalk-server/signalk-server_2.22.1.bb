@@ -56,18 +56,18 @@ do_install:append() {
     # this directory keeps the default settings. start-signalk.sh copies them
     # to the data partition on first boot.
     install -d ${DEFAULTS}
-    install -m 0644 ${WORKDIR}/canbus.json ${DEFAULTS}
-    install -m 0644 ${WORKDIR}/defaults.json ${DEFAULTS}
-    install -m 0644 ${WORKDIR}/logo.svg ${DEFAULTS}
-    install -m 0644 ${WORKDIR}/settings.json ${DEFAULTS}
-    install -m 0644 ${WORKDIR}/signalk-n2kais-to-nmea0183.json ${DEFAULTS}
-    install -m 0644 ${WORKDIR}/sk-to-nmea0183.json ${DEFAULTS}
-    install -m 0644 ${WORKDIR}/venus.json ${DEFAULTS}
-    install -m 0755 ${WORKDIR}/get-mfd-announce-address.sh ${D}${nonarch_libdir}/node_modules/${PN}/
+    install -m 0644 ${UNPACKDIR}/canbus.json ${DEFAULTS}
+    install -m 0644 ${UNPACKDIR}/defaults.json ${DEFAULTS}
+    install -m 0644 ${UNPACKDIR}/logo.svg ${DEFAULTS}
+    install -m 0644 ${UNPACKDIR}/settings.json ${DEFAULTS}
+    install -m 0644 ${UNPACKDIR}/signalk-n2kais-to-nmea0183.json ${DEFAULTS}
+    install -m 0644 ${UNPACKDIR}/sk-to-nmea0183.json ${DEFAULTS}
+    install -m 0644 ${UNPACKDIR}/venus.json ${DEFAULTS}
+    install -m 0755 ${UNPACKDIR}/get-mfd-announce-address.sh ${D}${nonarch_libdir}/node_modules/${PN}/
 
     mkdir -p ${D}${bindir}
-    install -m 0755 ${WORKDIR}/prepare-signalk.sh ${D}${bindir}
-    install -m 0755 ${WORKDIR}/start-signalk.sh ${D}${bindir}
+    install -m 0755 ${UNPACKDIR}/prepare-signalk.sh ${D}${bindir}
+    install -m 0755 ${UNPACKDIR}/start-signalk.sh ${D}${bindir}
 
     rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/put/test
     rm -rf ${D}/usr/node_modules
