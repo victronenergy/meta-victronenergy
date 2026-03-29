@@ -1,0 +1,28 @@
+From 4f24dc77ceb1e7aedb9fca5c13b2cbab42a6c52a Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Sun, 29 Mar 2026 17:26:15 +0000
+Subject: [PATCH] fix a compile error with open
+
+error: call to '__open_missing_mode' declared with attribute
+error: open with O_CREAT or O_TMPFILE in second argument
+needs 3 arguments.
+---
+ src/ftdi-bitbang.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/ftdi-bitbang.c b/src/ftdi-bitbang.c
+index 093ac27..681c532 100755
+--- a/src/ftdi-bitbang.c
++++ b/src/ftdi-bitbang.c
+@@ -279,7 +279,7 @@ int ftdi_bitbang_save_state(struct ftdi_bitbang_context *dev)
+ 	if (!state_filename) {
+ 		return -1;
+ 	}
+-	fd = open(state_filename, O_WRONLY | O_CREAT);
++	fd = open(state_filename, O_WRONLY | O_CREAT, 0600);
+ 	if (fd < 0) {
+ 		free(state_filename);
+ 		return -1;
+-- 
+2.43.0
+
