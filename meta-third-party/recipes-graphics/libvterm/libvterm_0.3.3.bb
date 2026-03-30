@@ -3,7 +3,7 @@ DESCRIPTION = "An abstract library implementation of a VT220/xterm/ECMA-48 termi
 inherit cmake
 
 SRC_URI = "gitsm://github.com/jhofstee/libvterm-cmake;branch=master;protocol=https"
-SRCREV = "850f909efd6c8f6bd1cc2b789f48886c4608ac78"
+SRCREV = "7f0ed3711252ece4dbc81bd3b8aff4398dfc8652"
 S = "${WORKDIR}/git"
 
 LICENSE = "MIT"
