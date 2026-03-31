@@ -10,7 +10,6 @@ DESCRIPTION = " \
 RDEPENDS:${PN} += " \
     dbus-acsystem \
     dbus-generator \
-    dbus-mqtt \
     dbus-pump \
     dbus-recorder \
     dbus-systemcalc-py \
