@@ -106,3 +106,5 @@ RDEPENDS:${PN} += "\
     wireless-regdb-static \
     zip \
 "
+
+RDEPENDS:${PN} += "python3-s2"
