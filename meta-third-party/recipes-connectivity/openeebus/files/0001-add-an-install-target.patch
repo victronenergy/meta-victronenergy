@@ -1,0 +1,41 @@
+From 0bc9c5832c280c781c085190ae97da41a594ac7a Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 2 Apr 2026 21:12:07 +0200
+Subject: [PATCH 1/2] add an install target
+
+In a bit a fancy way, since the header use include path from src.
+---
+ CMakeLists.txt | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5631380..2e79dae 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -142,8 +142,22 @@ include(sources.cmake)
+ target_sources(
+   ${PROJECT_NAME}
+   PRIVATE
+-    ${SOURCES}
+     ${HEADERS}
++    ${SOURCES}
++)
++
++include(GNUInstallDirs)
++
++# There are include like src/ etc. which shouldn't actually be there.
++install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
++    FILES_MATCHING
++    PATTERN "*.h"
++    PATTERN "*/" EXCLUDE
++)
++
++install(TARGETS ${PROJECT_NAME}
++    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+ )
+ 
+ # Add Windows-specific applink.c to have the OPENSSL_Applink() available (required for OpenSSL on Windows)
+-- 
+2.43.0
+

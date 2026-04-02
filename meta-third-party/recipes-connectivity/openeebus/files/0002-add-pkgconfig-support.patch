@@ -1,0 +1,56 @@
+From 62273cc296c1ed05edc66571f6789944048cc817 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 2 Apr 2026 21:36:07 +0200
+Subject: [PATCH 2/2] add pkgconfig support
+
+---
+ CMakeLists.txt | 11 +++++++++++
+ libeebus.pc.in | 14 ++++++++++++++
+ 2 files changed, 25 insertions(+)
+ create mode 100644 libeebus.pc.in
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2e79dae..31975d2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -160,6 +160,17 @@ install(TARGETS ${PROJECT_NAME}
+     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+ )
+ 
++configure_file(
++    ${CMAKE_CURRENT_SOURCE_DIR}/libeebus.pc.in
++    ${CMAKE_CURRENT_BINARY_DIR}/libeebus.pc
++    @ONLY
++)
++
++install(
++    FILES ${CMAKE_CURRENT_BINARY_DIR}/libeebus.pc
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
++)
++
+ # Add Windows-specific applink.c to have the OPENSSL_Applink() available (required for OpenSSL on Windows)
+ if(WIN32)
+   target_sources(
+diff --git a/libeebus.pc.in b/libeebus.pc.in
+new file mode 100644
+index 0000000..cabf867
+--- /dev/null
++++ b/libeebus.pc.in
+@@ -0,0 +1,14 @@
++prefix=@CMAKE_INSTALL_PREFIX@
++exec_prefix=${prefix}
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++
++Name: OpenEEBUS by NIBE
++Description: OpenEEBUS by NIBE is a Apache 2.0 licensed software library that implements the EEBUS protocol for communication between devices in a home automation environment
++Version: @PROJECT_VERSION@
++
++Libs: -L${libdir} -leebus
++Libs.private: -ldns_sd -lcrypto
++Requires.private: libcjson libwebsockets
++Cflags: -I${includedir}/eebus -I${includedir}/eebus/src
++
+-- 
+2.43.0
+
