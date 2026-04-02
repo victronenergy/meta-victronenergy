@@ -18,6 +18,7 @@ RDEPENDS:${PN} += " \
     libevent-dev \
     libusb1-dev \
     neatvnc-dev \
+    openeebus-staticdev \
     iptables-dev \
     xorgproto-dev \
 "
