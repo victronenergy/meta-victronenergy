@@ -22,6 +22,7 @@ tape:x:26:
 sudo:x:27:
 audio:x:29:xuser
 dip:x:30:
+rpc:x:32:
 www-data:x:33:
 backup:x:34:
 operator:x:37:
