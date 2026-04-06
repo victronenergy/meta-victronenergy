@@ -20,6 +20,9 @@ BAD_RECOMMENDATIONS += "eudev-hwdb"
 # glib recommends shared-mime-info, but there is no known user of it...
 BAD_RECOMMENDATIONS += "shared-mime-info"
 
+# recommended by busybox, but not needed.
+BAD_RECOMMENDATIONS += "busybox-udhcpc"
+
 IMAGE_LINGUAS = "en-us"
 COPY_LIC_DIRS = "0"
 
