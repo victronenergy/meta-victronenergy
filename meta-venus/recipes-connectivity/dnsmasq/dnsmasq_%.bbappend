@@ -7,6 +7,7 @@ inherit localsettings
 SRC_URI += "\
     file://0001-Don-t-spam-syslog-on-reload-and-not-using-hosts-file.patch \
     file://0001-Log-only-changes-to-nameserver-list.patch \
+    file://dnsmasq.conf \
     file://dnsmasq.ap.conf \
     file://localsettings \
     file://resolv.conf \
@@ -25,6 +26,7 @@ do_install:append() {
     install -m 644 ${UNPACKDIR}/resolv.conf ${D}${sysconfdir}
 
     install -d ${D}${sbindir}
+    install -m 644 ${UNPACKDIR}/dnsmasq.conf ${D}${sysconfdir}/dnsmasq.conf
     install -m 755 ${UNPACKDIR}/resolv-watch ${D}${sbindir}
     install -m 755 ${UNPACKDIR}/rw-init ${D}${sysconfdir}/init.d/resolv-watch
     update-rc.d -r ${D} resolv-watch ${RW_INITSCRIPT_PARAMS}
