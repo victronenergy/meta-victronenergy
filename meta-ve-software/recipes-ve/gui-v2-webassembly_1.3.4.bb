@@ -5,7 +5,7 @@ SRC_URI = " \
 	file://calc-gui-v2-wasm-sha26.sh \
 	file://localsettings \
 "
-SRC_URI[sha256sum] = "391085b51cdaa27518190d1268dad6acd98c4f59b2bca595f4ff0bd46ef428c2"
+SRC_URI[sha256sum] = "e6c35d0e5db3bbc9915c9ec846056dcd1047c4d55852f537b0460e768181e9db"
 S = "${UNPACKDIR}/wasm"
 
 inherit localsettings www
