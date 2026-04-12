@@ -5,7 +5,6 @@ SUMMARY = "dbus debug tool"
 VELIB_DEFAULT_DIRS = "1"
 
 DEPENDS = "ncurses"
-QT6_DEPENDS = "qtbase"
 
 inherit pkgconfig qmakeve
 

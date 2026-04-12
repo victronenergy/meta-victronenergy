@@ -1,2 +1,2 @@
-inherit qt6venus ve_package
+inherit qt6-qmake ve_package
 
