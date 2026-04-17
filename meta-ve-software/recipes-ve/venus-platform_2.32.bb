@@ -2,7 +2,7 @@ DESCRIPTION = "Venus platform"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-DEPENDS = "dbus iptables qtbase udev"
+DEPENDS = "dbus libevdev iptables qtbase udev"
 RDEPENDS:${PN} += "can-utils connman flashmq qtbase-plugin-qopensslbackend socketcand"
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
@@ -12,12 +12,12 @@ SRC_URI = " \
     file://venus_dbus_bridge_template.conf \
     file://venus_rpc_bridge_template.conf \
 "
-SRCREV = "f6d73c989d1c2cb65715c9f57bba21d7454c243b"
+SRCREV = "77a2dda17601c631f46a839bc80f3a9fb423a8f1"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/venus-platform"
 
-inherit daemontools qmakeve
+inherit daemontools pkgconfig qmakeve
 
 do_install:append() {
     install -d ${D}/${DAEMONTOOLS_TEMPLATE_CONF_DIR}
