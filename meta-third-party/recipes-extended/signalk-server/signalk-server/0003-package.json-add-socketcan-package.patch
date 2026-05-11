@@ -1,6 +1,6 @@
-From 1c3c5bee7f6f75ea15f0f7fe0e72dc4e1478215a Mon Sep 17 00:00:00 2001
+From e61404dccf9044d315d7c5ad15072ef2ff0b232b Mon Sep 17 00:00:00 2001
 From: Dirk-Jan Faber <dfaber@victronenergy.com>
-Date: Mon, 9 Mar 2026 21:34:05 +0100
+Date: Mon, 11 May 2026 13:55:07 +0200
 Subject: [PATCH 3/3] package.json: add socketcan package
 
 Venus OS no longer installes packages listed as optional [1]. This also applies
@@ -16,15 +16,15 @@ defined as an optional, hence add it here as needed.
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package.json b/package.json
-index 97e43ce3..c45a77f6 100644
+index ea6e9807..e84b2998 100644
 --- a/package.json
 +++ b/package.json
-@@ -137,7 +137,8 @@
+@@ -140,7 +140,8 @@
      "serialport": "^11.0.0",
      "signalk-n2kais-to-nmea0183": "^2.0.0",
      "signalk-to-nmea2000": "^2.16.0",
--    "signalk-venus-plugin": "^2.2.0"
-+    "signalk-venus-plugin": "^2.2.0",
+-	"signalk-venus-plugin": "^2.3.0"
++	"signalk-venus-plugin": "^2.3.0",
 +	"socketcan": "^4.0.7"
    },
    "devDependencies": {

@@ -9,7 +9,7 @@ RDEPENDS:${PN} += "bash jq nodejs-npm util-linux-setpriv"
 SRC_URI = "\
     npm://registry.npmjs.org;package=${BPN};version=${PV} \
     file://0001-package.json-no-more-optional-packages-signalk-venus.patch \
-    file://0002-remove-signalk-server-setup-script-its-largest-depen.patch \
+    file://0002-remove-signalk-server-setup-script.patch \
     file://0003-package.json-add-socketcan-package.patch \
     file://npm-shrinkwrap.json;subdir=${S} \
     file://canbus.json \
@@ -24,7 +24,7 @@ SRC_URI = "\
     file://venus.json \
 "
 
-SRC_URI[sha256sum] = "fff4f7d86ab3a1e581d337af230648cbbcbd208fc08ef7665a8ff99a179face3"
+SRC_URI[sha256sum] = "bcce4914cc53039b579d5357d2f853920a2cbc29df18a66ffdf1701a96a4bdd3"
 
 S = "${UNPACKDIR}/npm"
 
@@ -52,6 +52,15 @@ do_install:append() {
     rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/linux-x64
     rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/win32-ia32
     rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/win32-x64
+	for i in fs url os
+	do
+		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/android-ia32/bare-${i}.bare
+		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/android-x64/bare-${i}.bare
+		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/android-arm64/bare-${i}.bare
+		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/android-arm/bare-${i}.bare
+		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/linux-arm64/bare-${i}.bare
+		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/linux-x64/bare-${i}.bare
+	done
 
     # this directory keeps the default settings. start-signalk.sh copies them
     # to the data partition on first boot.
