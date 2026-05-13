@@ -1,0 +1,25 @@
+From 63704435b5a659b03d6362f10a0463f11be1d4d1 Mon Sep 17 00:00:00 2001
+From: ReinvdZee <rvanderzee@victronenergy.com>
+Date: Wed, 15 Apr 2026 10:30:12 +0200
+Subject: [PATCH] Add `/Alarm/Audible` setting
+
+Which is used to enable/disable the buzzer.
+Before, this setting was added by gui-v1, but if that has never ran once, it'll be missing.
+
+https://github.com/victronenergy/venus-private/issues/654
+---
+ src/application.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/application.cpp b/src/application.cpp
+index 2c89521..081d184 100644
+--- a/src/application.cpp
++++ b/src/application.cpp
+@@ -316,6 +316,7 @@ class SettingsInfo : public VeQItemSettingsInfo
+ 				add("Gui/AutoBrightness", 0, 0, 0);
+ 		}
+ 
++		add("Alarm/Audible", 1, 0, 0);
+ 		add("Alarm/Vebus/HighDcCurrent", 1, 0, 2);
+ 		add("Alarm/Vebus/HighDcRipple", 1, 0, 2);
+ 		add("Alarm/Vebus/HighDcVoltage", 1, 0, 2);
