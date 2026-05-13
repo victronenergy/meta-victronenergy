@@ -12,10 +12,11 @@ SRC_URI = " \
     file://com.victronenergy.system.conf \
     file://catch-exception-in-scan_dbus_service_legacy-to-prevent.patch;patchdir=ext/velib_python \
     file://avoid-startup-crash-if-system-voltage-unknown.patch \
+    file://dess-fix-solarthrottlingissue-on-multirs-devices.patch \
 "
 SRCREV = "a74292e5d3d8e0fb895aa2fa5d3bdf59b51f376e"
 S = "${WORKDIR}/git"
-PR = "2"
+PR = "3"
 
 RDEPENDS:${PN} = " \
     localsettings \
