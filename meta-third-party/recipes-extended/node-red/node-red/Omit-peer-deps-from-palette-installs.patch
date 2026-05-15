@@ -1,0 +1,12 @@
+--- a/npm-build/lib/node_modules/node-red/node_modules/@node-red/registry/lib/installer.js
++++ b/npm-build/lib/node_modules/node-red/node_modules/@node-red/registry/lib/installer.js
+@@ -226,7 +226,7 @@
+             "url": url,
+             "dir": installDir,
+             "isExisting": isExisting,
+             "isUpgrade": isUpgrade,
+-            "args": ['--no-audit','--no-update-notifier','--no-fund','--save','--save-prefix=~','--omit=dev','--engine-strict']
++            "args": ['--no-audit','--no-update-notifier','--no-fund','--save','--save-prefix=~','--omit=dev','--omit=peer','--engine-strict']
+         }
+
+         return hooks.trigger("preInstall", triggerPayload).then((result) => {
