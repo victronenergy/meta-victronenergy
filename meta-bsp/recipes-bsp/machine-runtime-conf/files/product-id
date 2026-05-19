@@ -1,5 +1,38 @@
 #!/bin/sh
 
+case $(board-compat 2) in
+    cubietech,einstein)          eeprom=1-00500 ;;
+    friendlyarm,nanopi-neo-core) eeprom=0-00500 ;;
+    sinlinx,sinh3-core)          eeprom=0-00500 ;;
+esac
+
+if [ -n "$eeprom" ]; then
+    id=$(dd if=/sys/bus/nvmem/devices/$eeprom/nvmem bs=4 count=1 2>/dev/null)
+
+    case $id in
+	VECB) pid=C00A ;;       # Cerbo GX
+	VCB1) pid=C012 ;;       # Cerbo GX rev B1
+	VECS) pid=C014 ;;       # Cerbo-S GX
+	VEES) pid=C007 ;;       # EasySolar-II
+	VES9) pid=C00B ;;       # EasySolar-II rev A9
+	VESA) pid=C00E ;;       # EasySolar-II rev A10
+	VEMX) pid=C009 ;;       # Maxi GX
+	VMX9) pid=C00D ;;       # Maxi GX rev A9
+	VMXA) pid=C010 ;;       # Maxi GX rev A10
+	VEMP) pid=C008 ;;       # MultiPlus-II
+	VMP9) pid=C00C ;;       # MultiPlus-II rev A9
+	VMPA) pid=C00F ;;       # MultiPlus-II rev A10
+	VEPG) pid=C011 ;;       # PayGo
+	VEKR) pid=C013 ;;       # Ekrano GX
+	VNUC) pid=C015 ;;       # Nucleo GX
+    esac
+fi
+
+if [ -n "$pid" ]; then
+    echo $pid
+    exit
+fi
+
 case $(product-name) in
 "Color Control GX")
 	echo C001
@@ -13,4 +46,3 @@ case $(product-name) in
 *)
 	echo C003
 esac
-
