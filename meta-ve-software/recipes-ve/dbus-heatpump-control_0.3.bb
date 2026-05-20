@@ -1,7 +1,8 @@
 SRC_URI = "gitsm://github.com/victronenergy/dbus-heatpump-control;protocol=https;branch=main"
 DESCRIPTION = "Venus OS Heat Pump Control Service"
-SRCREV = "4048fcf1b0242acf4d4e006a8d4ca3f913993539"
+SRCREV = "5bab7ce5e118f9f80c43baccaefa125f4fa41b47"
 S = "${WORKDIR}/git"
+UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=876b44dded698736d08769eeb7c62258"
