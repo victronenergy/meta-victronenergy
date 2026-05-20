@@ -44,6 +44,7 @@ RDEPENDS:${PN} += "\
     tmux \
     valgrind \
     venus-socketcan-test \
+    venus-s2-tools \
     vim \
     wireguard-tools \
 "
