@@ -3,17 +3,17 @@
     "filterType": "language",
     "includeChildren": false,
     "includelist": [
-      "en_GB",
-      "en-US",
       "de_DE",
-      "es-ES",
+      "en_GB",
+      "en_US",
+      "es_ES",
       "fr_FR",
       "ja_JP",
       "ko_KR",
-      "pt-BR",
+      "pt_BR",
       "ru_RU",
-      "zh-CN",
-      "zh-TW"
+      "zh_CN",
+      "zh_TW"
     ]
   },
 
