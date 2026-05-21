@@ -84,4 +84,59 @@ do_install:append() {
     find "${D}${nonarch_libdir}" -depth -type d -name "examples" -exec rm -rf {} \;
     find "${D}${nonarch_libdir}" -depth -type d -name "samples" -exec rm -rf {} \;
     find "${D}${nonarch_libdir}" -depth -type d -name "__pycache__" -exec rm -rf {} \;
+
+	 # Remove source maps - only useful for development debugging
+    find "${D}${nonarch_libdir}" -name "*.map" -delete
+
+	# TypeScript declarations - not used by Node.js at runtime
+    find "${D}${nonarch_libdir}" -name "*.d.ts" -delete
+
+    # Binaryen bytecode
+    find "${D}${nonarch_libdir}" -name "*.bc.js" -delete
+
+    # Demo/example images
+    find "${D}${nonarch_libdir}" -name "*-demo.gif" -delete
+    find "${D}${nonarch_libdir}" -name "example.png" -delete
+
+    # Browser-only JS bundles
+    find "${D}${nonarch_libdir}" -name "ZSchema-browser*.js" -delete
+    find "${D}${nonarch_libdir}" -path "*/rxjs/dist/bundles/rxjs.umd*.js" -delete
+    find "${D}${nonarch_libdir}" -path "*/node-forge/dist/forge.all*.js" -delete
+    find "${D}${nonarch_libdir}" -path "*/mathjs/lib/browser" -type d -exec rm -rf {} +
+
+    # npm internal
+    find "${D}${nonarch_libdir}" -name ".package-lock.json" -delete
+
+    # Build tools - only used during development, not at runtime
+    rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/webpack
+    rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/terser
+
+    # Moment.js browser bundles - Node.js uses the package main entry, not min/
+    find "${D}${nonarch_libdir}" -path "*/moment/min/*" -delete
+
+    # MQTT browser bundles (Node.js uses lib/ entry, not dist/)
+    find "${D}${nonarch_libdir}" -path "*/mqtt/dist/mqtt.js" -delete
+    find "${D}${nonarch_libdir}" -path "*/mqtt/dist/mqtt.min.js" -delete
+
+    # Test directories (catches test fixtures missed by existing cleanup)
+    find "${D}${nonarch_libdir}" -depth -type d -name "test" -exec rm -rf {} \;
+    find "${D}${nonarch_libdir}" -depth -type d -name "__tests__" -exec rm -rf {} \;
+
+    # C++ header files - only needed for native module compilation, not runtime
+    find "${D}${nonarch_libdir}" -name "*.h" -path "*/node-addon-api/*" -delete
+
+    # More browser-only bundles
+    find "${D}${nonarch_libdir}" -name "ajv.bundle.js" -delete
+    find "${D}${nonarch_libdir}" -path "*/node-forge/dist/forge.min.js" -delete
+    find "${D}${nonarch_libdir}" -path "*/source-map/dist/source-map.debug.js" -delete
+    find "${D}${nonarch_libdir}" -path "*/@js-temporal/polyfill/dist/index.umd.js" -delete
+
+    # WebAssembly text format test files
+    find "${D}${nonarch_libdir}" -name "*.wat" -delete
+
+    # PDF documentation
+    find "${D}${nonarch_libdir}" -name "*.pdf" -delete
+
+    # Changelogs
+    find "${D}${nonarch_libdir}" -name "CHANGELOG*" -delete
 }
