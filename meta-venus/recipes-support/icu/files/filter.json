@@ -1,0 +1,34 @@
+{
+  "localeFilter": {
+    "filterType": "language",
+    "includeChildren": false,
+    "includelist": [
+      "en_GB",
+      "en-US",
+      "de_DE",
+      "es-ES",
+      "fr_FR",
+      "ja_JP",
+      "ko_KR",
+      "pt-BR",
+      "ru_RU",
+      "zh-CN",
+      "zh-TW"
+    ]
+  },
+
+  "featureFilters": {
+    "collation": "exclude",
+    "rbnf": "exclude",
+    "translit": "exclude",
+    "breakiterator": "exclude"
+  },
+
+  "converterFilter": {
+    "filterType": "includelist",
+    "includelist": [
+      "UTF-8",
+      "US-ASCII"
+    ]
+  }
+}
