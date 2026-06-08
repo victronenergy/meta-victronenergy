@@ -3,7 +3,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 DEPENDS = "dbus libevdev iptables qtbase udev"
-RDEPENDS:${PN} += "can-utils connman flashmq qtbase-plugin-qopensslbackend socketcand"
+RDEPENDS:${PN} += "can-utils connman flashmq mk2vsc qtbase-plugin-qopensslbackend socketcand"
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
