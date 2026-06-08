@@ -19,7 +19,7 @@ SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;nobranch=1"
 BB_GIT_DEFAULT_DESTSUFFIX ?= "git"
 S = "${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX}"
 
-SRCREV = "89fde47a1340c3f2d55d2c577f7414e218996af8"
+SRCREV = "2900e1a2fb37fdef9be87ca82b1e5b7cd5fc5ecb"
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 
 RDEPENDS:${KERNEL_PACKAGE_NAME}-base += "kernel-devicetree"
