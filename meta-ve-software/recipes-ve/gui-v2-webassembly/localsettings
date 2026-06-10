@@ -5,6 +5,7 @@ Gui/RemoteConsoleColorMode 1 i 0 1
 
 # 0 = Power, 1 = Current, 2 = Mixed (AC in Watts, DC in Amps)
 Gui/ElectricalPowerIndicator 0 i 0 2
+Gui/ElectricPropulsionUI/ShowTemperatures 0 i 0 1
 
 # Configures the central gauges on the Brief page.
 Gui2/BriefView/Level/0 "" s
