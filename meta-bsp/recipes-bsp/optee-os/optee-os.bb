@@ -8,7 +8,9 @@ SRCREV = "86660925433a8d4d1b19cfa5fe940081d77b34b4"
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
-inherit firmware
+inherit firmware python3native
+
+DEPENDS += "python3-cryptography-native python3-pyelftools-native"
 
 COMPATIBLE_MACHINE = "^am62xx$"
 
