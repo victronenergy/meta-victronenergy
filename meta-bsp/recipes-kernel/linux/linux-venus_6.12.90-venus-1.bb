@@ -15,7 +15,7 @@ include recipes-kernel/linux/cve-exclusion.inc
 # still unknown cve statuses
 include linux-venus-cve-exclusion.inc
 
-SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;nobranch=1"
+SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=venus-6.12.90"
 BB_GIT_DEFAULT_DESTSUFFIX ?= "git"
 S = "${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX}"
 
