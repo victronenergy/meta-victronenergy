@@ -1,0 +1,13 @@
+<?xml version="1.0" standalone='no'?>
+<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+  <name>venus-:::SERIAL:::</name>
+  <service>
+    <type>_victron-mqtt._tcp</type>
+    <port>1883</port>
+    <txt-record>txtvers=1</txt-record>
+    <txt-record>vendor=victron</txt-record>
+    <txt-record>product=gx</txt-record>
+    <txt-record>pairing=1</txt-record>
+  </service>
+</service-group>

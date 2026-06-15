@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Subject: [PATCH 3/3] Start venus-mdns-aliases alongside avahi-daemon
+
+Launches venus-mdns-aliases as a background process after avahi-daemon
+starts. It publishes venus-<portalid>.local and venus-<serial>.local as
+CNAME records pointing to venus.local, so clients can reliably find a
+specific GX device by name even when multiple devices share the same
+subnet. CNAMEs are used rather than A records so that IP changes are
+handled automatically via avahi's own per-interface hostname tracking.
+
+Upstream-Status: Inappropriate [Venus specific]
+---
+ initscript/debian/avahi-daemon.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/initscript/debian/avahi-daemon.in b/initscript/debian/avahi-daemon.in
+--- a/initscript/debian/avahi-daemon.in
++++ b/initscript/debian/avahi-daemon.in
+@@ -137,2 +137,3 @@ d_start() {
+     $DAEMON -D --no-chroot
++    venus-mdns-aliases &
+ }
+@@ -144,2 +145,3 @@ d_stop() {
+     $DAEMON -c && $DAEMON -k
++    pkill -f venus-mdns-aliases 2>/dev/null || true
+ }
