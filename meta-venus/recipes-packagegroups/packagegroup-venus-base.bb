@@ -101,6 +101,7 @@ RDEPENDS:${PN} += "\
     venus-dbus-tools \
     venus-feed-configs \
     venus-html5-app \
+    venus-mdns-aliases \
     watchdog \
     wget \
     wireless-regdb-static \
