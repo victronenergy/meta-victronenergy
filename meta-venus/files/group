@@ -3,7 +3,7 @@ daemon:x:1:
 bin:x:2:
 sys:x:3:
 adm:x:4:
-tty:x:5:xuser
+tty:x:5:xuser:
 disk:x:6:
 lp:x:7:
 mail:x:8:
@@ -20,7 +20,7 @@ cdrom:x:24:
 floppy:x:25:
 tape:x:26:
 sudo:x:27:
-audio:x:29:xuser
+audio:x:29:xuser:
 dip:x:30:
 rpc:x:32:
 www-data:x:33:
@@ -32,7 +32,7 @@ src:x:40:
 gnats:x:41:
 shadow:x:42:
 utmp:x:43:
-video:x:44:xuser
+video:x:44:xuser:
 sasl:x:45:
 plugdev:x:46:
 kvm:x:47:
@@ -44,6 +44,7 @@ gpio:x:97:
 php-fpm:x:98:
 vnctunnel:x:99:
 users:x:100:
+ble-sensors:x:979:
 eebus:x:980:
 polkitd:x:981:
 seat:x:982:
@@ -54,7 +55,7 @@ render:x:986:
 wayland:x:987:
 weston:x:988:
 flashmq:x:989:
-weston-launch:x:990
+weston-launch:x:990:
 ntp:x:991:
 signalk:x:992:
 nodered:x:993:
