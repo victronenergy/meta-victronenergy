@@ -11,6 +11,17 @@ server {
     index index.html index.php;
     error_page 401 403 =200 http://$host/auth/login.php?page=$request_uri;
 
+    location ~ ^/auth/generate-token {
+      return 403;
+      deny all;
+      error_page 403 = @generate_token_plain_custom_403;
+    }
+
+    location @generate_token_plain_custom_403 {
+        default_type text/plain;
+        return 403 "Access Denied";
+    }
+
     location ~ ^/auth/ {
         auth_request off;
 
