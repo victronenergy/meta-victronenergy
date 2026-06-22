@@ -71,6 +71,7 @@ RDEPENDS:${PN}:append:k3 = "\
     linux-firmware-rtl8723 \
     mmc-utils \
     read-edid \
+    rtl8723du \
     swupdate \
     swupdate-scripts \
     venus-button-handler \
