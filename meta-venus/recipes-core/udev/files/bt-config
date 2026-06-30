@@ -39,6 +39,9 @@ yes | btmgmt -i $HCI le on
 yes | btmgmt -i $HCI bredr off
 
 # start services, or restart them if already running
-services="/service/dbus-ble-sensors /service/vesmart-server"
-svc -t $services
-svc -u $services
+services_up="/service/vesmart-server"
+# only restart these
+services_restart="$services_up /service/dbus-ble-sensors"
+
+svc -t $services_restart
+svc -u $services_up
