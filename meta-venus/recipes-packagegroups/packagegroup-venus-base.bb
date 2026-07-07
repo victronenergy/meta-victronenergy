@@ -40,6 +40,7 @@ RDEPENDS:${PN} += "\
     can-utils \
     can-utils-access \
     can-utils-cantest \
+    ch343 \
     connman \
     connman-tools \
     crash-logger \
