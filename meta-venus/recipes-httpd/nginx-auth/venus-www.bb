@@ -5,7 +5,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = "git://github.com/victronenergy/venus-www.git;branch=master;protocol=https"
 SRC_URI += "file://create-venus-session-dir"
-SRCREV = "474314d18cfac29206d1cef89422f970930a6320"
+
+SRCREV = "18584ca9750b4024d133e17196dcc3c32d0daeac"
 S = "${WORKDIR}/git"
 
 inherit www
@@ -27,6 +28,9 @@ do_install() {
 
     install -d 755 "${D}${AUTHDIR}/generate-token"
     install -m 644 "${S}/auth/generate-token/index.php" "${D}${AUTHDIR}/generate-token"
+
+    install -d 755 "${D}${WWW_ROOT}/ble-gw"
+    install -m 644 "${S}/ble-gw/index.php" "${D}${WWW_ROOT}/ble-gw/index.php"
 
     install -d "${D}${WWW_RCD}"
     install -m 755 "${UNPACKDIR}/create-venus-session-dir" "${D}${WWW_RCD}"
