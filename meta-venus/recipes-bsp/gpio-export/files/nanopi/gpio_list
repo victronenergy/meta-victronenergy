@@ -20,3 +20,5 @@
 + in  digital_input_4
 + out relay_1
 + out relay_2
+
++ out tank_supply
