@@ -1,6 +1,6 @@
-From 2ff19194e25685c51b5fbee1ddb4f2d631dd1c72 Mon Sep 17 00:00:00 2001
+From 448e8533dd5f36f89f341a568473bd36dacbd9d8 Mon Sep 17 00:00:00 2001
 From: Dirk-Jan Faber <dfaber@victronenergy.com>
-Date: Mon, 11 May 2026 13:53:39 +0200
+Date: Mon, 3 Aug 2026 12:28:10 +0200
 Subject: [PATCH 2/3] remove signalk-server-setup script
 
 The signalk-server-setup script is not used within Venus OS.
