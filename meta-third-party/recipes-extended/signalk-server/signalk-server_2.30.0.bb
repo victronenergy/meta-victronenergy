@@ -24,7 +24,7 @@ SRC_URI = "\
     file://venus.json \
 "
 
-SRC_URI[sha256sum] = "bcce4914cc53039b579d5357d2f853920a2cbc29df18a66ffdf1701a96a4bdd3"
+SRC_URI[sha256sum] = "9cd9f6d9e4ebbdb81e6ee467108c5333b9d2380b636454adb8ee7987bda42fac"
 
 S = "${UNPACKDIR}/npm"
 
@@ -52,7 +52,7 @@ do_install:append() {
     rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/linux-x64
     rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/win32-ia32
     rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/win32-x64
-	for i in fs url os
+	for i in fs url os path
 	do
 		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/android-ia32/bare-${i}.bare
 		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/android-x64/bare-${i}.bare
