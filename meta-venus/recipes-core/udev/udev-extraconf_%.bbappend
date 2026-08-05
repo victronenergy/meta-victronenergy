@@ -22,8 +22,12 @@ SRC_URI += " \
     file://wlan-update \
 "
 
-SRC_URI:append:einstein = "\
+SRC_URI:append:einstein = " \
     file://sunxi-losc-status \
+"
+
+SRC_URI:append:sunxi = " \
+    file://lima-power.rules \
 "
 
 do_install:append() {
@@ -69,6 +73,10 @@ do_install:append:ccgx() {
 
 do_install:append:einstein() {
     install -m 0755 ${UNPACKDIR}/sunxi-losc-status ${D}${base_libdir}/udev
+}
+
+do_install:append:sunxi() {
+    install -m 0755 ${UNPACKDIR}/lima-power.rules ${D}${sysconfdir}/udev/rules.d/lima-power.rules
 }
 
 FILES:${PN} += "${base_libdir}"

@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="platform", KERNEL=="1c40000.gpu", ATTR{power/control}="on"
