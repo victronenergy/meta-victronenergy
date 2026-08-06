@@ -19,7 +19,7 @@ SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=venus-
 BB_GIT_DEFAULT_DESTSUFFIX ?= "git"
 S = "${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX}"
 
-SRCREV = "9a82b6411dc2529762364bf6116f016d2172feaa"
+SRCREV = "c104dd66120be4995cbe525dea7d0ccabf389851"
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 
 RDEPENDS:${KERNEL_PACKAGE_NAME}-base += "kernel-devicetree"
