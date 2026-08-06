@@ -12,7 +12,7 @@ DEPENDS += "\
 
 inherit python3native
 
-PV = "2025.01-k3-v2"
-SRC_URI = "git://github.com/victronenergy/u-boot.git;protocol=https;nobranch=1"
-SRCREV = "0aa4331f7ccdb0c0a72bb42891f9bfe79c3f750a"
+PV = "2025.01-k3-v3"
+SRC_URI = "git://github.com/victronenergy/u-boot.git;protocol=https;branch=k3"
+SRCREV = "61072c86fe93ea5371b13bbf219be55b2b6262d7"
 S = "${WORKDIR}/git"
