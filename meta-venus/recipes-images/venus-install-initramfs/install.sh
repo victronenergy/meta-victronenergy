@@ -270,7 +270,7 @@ setup_board_id() {
     board_id=$(read_board_id $BOARD_ID_FILE)
 
     # write to nvmem
-    printf '%s' "$board_id" >$board_id_mem
+    printf '%s' "$board_id" >$board_id_mem || true
 
     # read back and verify
     board_id_v=$(dd if=$board_id_mem bs=1 count=$BOARD_ID_SIZE)
