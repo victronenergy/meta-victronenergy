@@ -38,6 +38,9 @@ SRCREV = "e879c522a1cceb12b7e6e0b6a56ab1e28c1fdada"
 S = "${WORKDIR}/git"
 
 do_install:append() {
-    rm -r ${D}/usr
+    # Ensure the cleanup succeeds even when cross-compiling on an aarch64 host machine.
+    # On aarch64 build hosts, CMake may skip creating the target /usr directory structure, 
+    # causing a standard 'rm' command to fail with a "No such file or directory" error.
+    rm -rf ${D}/usr
 }
 
