@@ -29,6 +29,7 @@ if [ -n "$eeprom" ]; then
 	VEKR) pid=C013 ;;       # Ekrano GX
 	VKRA) pid=C013 ;;       # Ekrano GX rev A10
 	VNUC) pid=C015 ;;       # Nucleo GX
+	VTGR) pid=C017 ;;	# Tigro GX
     esac
 fi
 
