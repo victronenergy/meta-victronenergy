@@ -1,0 +1,23 @@
+enable_uart=1
+arm_64bit=1
+kernel=u-boot.bin
+
+# Suppress the rainbow/raspberry boot splash
+disable_splash=1
+
+# Optional CAN overlays (enable only what matches attached hardware)
+# dtoverlay=mcp2515-can0
+# dtoverlay=mcp2515-can1
+# dtoverlay=waveshare-can-fd-hat-mode-a
+# dtoverlay=waveshare-can-fd-hat-mode-b
+
+[all]
+device_tree=broadcom/bcm2711-rpi-4-b.dtb
+dtoverlay=vc4-kms-v3d
+display_auto_detect=1
+dtparam=spi=on
+
+# Exposes /sys/class/backlight/rpi_backlight for the official RPi touch
+# displays brightness/blanking control (see machine-runtime-conf
+# backlight_device.in / blank_display_device.in for this machine).
+dtoverlay=rpi-backlight

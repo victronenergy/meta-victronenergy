@@ -3,6 +3,7 @@ require u-boot-venus.inc
 
 # Sync the default environment with the newer U-Boot version used on Raspberry Pi 5
 SRC_URI:append:raspberrypi5 = " file://0001-include-configs-rpi.h-Raspberry-Pi-5.patch"
+SRC_URI:append:raspberrypi4-64 = " file://0001-include-configs-rpi.h-Raspberry-Pi-5.patch"
 
 SUMMARY = "U-Boot bootloader fw_printenv/setenv utilities"
 DEPENDS += "mtd-utils"

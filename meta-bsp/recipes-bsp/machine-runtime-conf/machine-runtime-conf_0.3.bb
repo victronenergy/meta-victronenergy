@@ -34,6 +34,11 @@ SRC_URI:append:sunxi = "\
     file://pwm_buzzer.in \
 "
 
+SRC_URI:append:raspberrypi4-64 = " \
+    file://backlight_device.in \
+    file://blank_display_device.in \
+"
+
 inherit update-rc.d
 
 DEPENDS = "virtual/crypt"
