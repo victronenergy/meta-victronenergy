@@ -1,0 +1,37 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Venus Build Fix <noreply@example.com>
+Date: Wed, 19 Aug 2026 12:35:00 +0000
+Subject: [PATCH] bcm2711_defconfig: select the Victron boot logo
+
+The kernel tree already carries a Victron-branded boot logo sized for
+this exact panel (drivers/video/logo/logo_victron_800_480_clut224.ppm,
+CONFIG_LOGO_VICTRON_800_480 in drivers/video/logo/Kconfig), but the
+defconfig never selects it. Unlike the other CONFIG_LOGO_* options it
+has no "default y", so it stays off unless explicitly enabled, and the
+default CONFIG_LOGO_LINUX_CLUT224 (Tux) gets shown instead since it is
+enabled by its own Kconfig default. Select the Victron logo instead and
+explicitly disable the Linux one so there is no ambiguity between two
+compiled-in 224-color logos.
+
+This is a Yocto-layer patch for now; it could be folded into the
+victronenergy/linux fork's defconfig directly at some point instead.
+
+Upstream-Status: Inappropriate [Venus specific]
+
+---
+ arch/arm64/configs/bcm2711_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+--- a/arch/arm64/configs/bcm2711_defconfig
++++ b/arch/arm64/configs/bcm2711_defconfig
+@@ -1095,6 +1095,8 @@
+ CONFIG_LOGO=y
+ # CONFIG_LOGO_LINUX_MONO is not set
+ # CONFIG_LOGO_LINUX_VGA16 is not set
++# CONFIG_LOGO_LINUX_CLUT224 is not set
++CONFIG_LOGO_VICTRON_800_480=y
+ CONFIG_SOUND=y
+ CONFIG_SND=m
+ CONFIG_SND_OSSEMUL=y
+-- 
+2.43.0
