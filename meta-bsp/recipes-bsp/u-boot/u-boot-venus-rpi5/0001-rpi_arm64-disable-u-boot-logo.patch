@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Venus Build Fix <noreply@example.com>
+Date: Wed, 19 Aug 2026 12:25:00 +0000
+Subject: [PATCH] rpi_arm64: disable the u-boot logo/animation
+
+CONFIG_VIDEO_LOGO defaults to y whenever CONFIG_SPLASH_SCREEN is unset
+(see drivers/video/Kconfig), which this defconfig never sets, so
+u-boot draws its logo on every boot. Stock VenusOS images on other
+machines do not show this - disable it explicitly to match.
+
+Upstream-Status: Inappropriate [Venus specific]
+
+---
+ configs/rpi_arm64_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/configs/rpi_arm64_defconfig
++++ b/configs/rpi_arm64_defconfig
+@@ -66,6 +66,7 @@
+ # CONFIG_VIDEO_BPP16 is not set
+ CONFIG_SYS_WHITE_ON_BLACK=y
+ CONFIG_VIDEO_BCM2835=y
++# CONFIG_VIDEO_LOGO is not set
+ CONFIG_CONSOLE_SCROLL_LINES=10
+ CONFIG_PHYS_TO_BUS=y
+ # CONFIG_HEXDUMP is not set
+-- 
+2.43.0
