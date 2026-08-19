@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Venus Build Fix <noreply@example.com>
+Date: Wed, 19 Aug 2026 13:00:00 +0000
+Subject: [PATCH] bcm2711_defconfig: disable the cpuset cgroup v1 legacy
+ interface
+
+Mainline Linux has no Kconfig option to remove core cgroup v1 mount
+support entirely (kernel/cgroup/cgroup-v1.o is built unconditionally,
+obj-y in kernel/cgroup/Makefile) - v1-vs-v2 is a runtime choice, made
+via the cgroup_no_v1= boot parameter, not a compile-time one. What
+Kconfig does offer is disabling the *legacy-only* per-controller
+interface where a controller has one. CONFIG_MEMCG_V1 is already off
+in this defconfig (by its own Kconfig default, nothing explicitly
+disabled it). CONFIG_CPUSETS_V1 is the only other such toggle in this
+kernel version and is currently on - disable it to match, for
+container workloads that only need the unified (v2) hierarchy.
+
+Upstream-Status: Inappropriate [Venus specific]
+
+---
+ arch/arm64/configs/bcm2711_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/arch/arm64/configs/bcm2711_defconfig
++++ b/arch/arm64/configs/bcm2711_defconfig
+@@ -24,7 +24,7 @@
+ CONFIG_CGROUP_PIDS=y
+ CONFIG_CGROUP_FREEZER=y
+ CONFIG_CPUSETS=y
+-CONFIG_CPUSETS_V1=y
++# CONFIG_CPUSETS_V1 is not set
+ CONFIG_CGROUP_DEVICE=y
+ CONFIG_CGROUP_CPUACCT=y
+ CONFIG_CGROUP_PERF=y
+-- 
+2.43.0

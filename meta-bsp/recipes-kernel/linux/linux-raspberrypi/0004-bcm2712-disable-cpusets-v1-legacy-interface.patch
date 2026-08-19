@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Venus Build Fix <noreply@example.com>
+Date: Sat, 22 Aug 2026 00:00:00 +0000
+Subject: [PATCH] bcm2712_defconfig: disable the cpuset cgroup v1 legacy
+ interface
+
+raspberrypi5 uses its own bcm2712_defconfig, separate from
+bcm2711_defconfig used by raspberrypi4-64 - the existing
+0002-bcm2711-disable-cpusets-v1-legacy-interface.patch only touches
+the latter, so raspberrypi5 never got the same fix despite sharing
+this recipe. Apply the identical change here for consistency: v1 vs
+v2 cgroup mounting is a runtime choice (cgroup_no_v1= boot param),
+but CONFIG_CPUSETS_V1 is the compile-time toggle for the legacy-only
+per-controller cpuset interface, and container workloads only need
+the unified (v2) hierarchy.
+
+Upstream-Status: Inappropriate [Venus specific]
+
+---
+ arch/arm64/configs/bcm2712_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/arch/arm64/configs/bcm2712_defconfig
++++ b/arch/arm64/configs/bcm2712_defconfig
+@@ -25,7 +25,7 @@
+ CONFIG_CGROUP_PIDS=y
+ CONFIG_CGROUP_FREEZER=y
+ CONFIG_CPUSETS=y
+-CONFIG_CPUSETS_V1=y
++# CONFIG_CPUSETS_V1 is not set
+ CONFIG_CGROUP_DEVICE=y
+ CONFIG_CGROUP_CPUACCT=y
+ CONFIG_CGROUP_PERF=y
+--
+2.43.0
