@@ -5,6 +5,7 @@ inherit packagegroup
 
 RDEPENDS:${PN} = " \
     podman \
+    podman-rootless \
     crun \
     iptables \
     slirp4netns \

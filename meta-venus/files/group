@@ -67,4 +67,5 @@ sshd:x:998:
 crontab:x:999:
 xuser:x:1000:
 simple-upnpd:x:1001:
+container:x:1002:
 nogroup:x:65534:
