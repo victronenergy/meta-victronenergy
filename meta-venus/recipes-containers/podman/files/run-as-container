@@ -1,0 +1,11 @@
+#!/bin/sh
+# Runs a command as the rootless "container" user with the environment
+# podman/crun expect, joined into the cgroup container-cgroup-delegation
+# set up at boot (see that script for why) so resource limits like
+# --memory/--cpus/--pids-limit on podman run actually take effect.
+echo $$ > /sys/fs/cgroup/container.slice/session/cgroup.procs
+exec setpriv --init-groups --reuid container --regid container \
+	env -i HOME=/data/home/container XDG_RUNTIME_DIR=/run/user/1002 \
+	USER=container LOGNAME=container \
+	PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+	"$@"
