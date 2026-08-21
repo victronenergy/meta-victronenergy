@@ -15,4 +15,5 @@ RDEPENDS:${PN} = " \
 RDEPENDS:${PN} += " \
     dbus \
     dbus-dev \
+    dbus-auth-proxy \
 "

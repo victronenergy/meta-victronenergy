@@ -44,6 +44,7 @@ gpio:x:97:
 php-fpm:x:98:
 vnctunnel:x:99:
 users:x:100:
+venus-dbus:x:978:container
 ble-sensors:x:979:
 eebus:x:980:
 polkitd:x:981:
