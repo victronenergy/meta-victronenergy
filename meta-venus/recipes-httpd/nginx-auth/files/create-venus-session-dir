@@ -24,3 +24,6 @@ fi
 # allow tokens to be passed to venus-platform
 mkdir -p -m 700 /var/volatile/tokens
 chown php-fpm:php-fpm /var/volatile/tokens
+
+mkdir -p -m 700 /var/volatile/bletokens
+chown php-fpm:php-fpm /var/volatile/bletokens

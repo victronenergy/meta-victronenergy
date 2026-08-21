@@ -17,6 +17,12 @@ server {
       error_page 403 = @generate_token_plain_custom_403;
     }
 
+    location ~ ^/ble-gw {
+      return 403;
+      deny all;
+      error_page 403 = @generate_token_plain_custom_403;
+    }
+
     location @generate_token_plain_custom_403 {
         default_type text/plain;
         return 403 "Access Denied";
