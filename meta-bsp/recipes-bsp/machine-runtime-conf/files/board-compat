@@ -1,7 +1,17 @@
 #!/bin/sh
-
 N=${1:-1}
-
 # return the Nth dtb compatible string. Since different products
 # can have the same board, use this for board configuration.
-cat /sys/firmware/devicetree/base/compatible | tr '\0' '\n' | sed -n "${N}p"
+#
+# On some units (e.g. 3 A+ rev 2) the firmware loads the wrong dtb,
+# so devicetree-based detection reports the wrong board. Check the
+# CPU revision code first, which is accurate independent of dtb.
+rev=$(sed -n 's/^Revision\s*: *//p' /proc/cpuinfo | tr -d '\r')
+case "$rev" in
+    9020e0|9020e1)
+        echo "raspberrypi,3-model-a-plus"
+        ;;
+    *)
+        cat /sys/firmware/devicetree/base/compatible | tr '\0' '\n' | sed -n "${N}p"
+        ;;
+esac
