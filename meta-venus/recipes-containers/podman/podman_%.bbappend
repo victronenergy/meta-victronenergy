@@ -19,6 +19,15 @@ do_install:append() {
 [engine]
 cgroup_manager = "cgroupfs"
 events_logger = "file"
+
+[containers]
+# venus-containers gives each managed container a canonical k8s-file under
+# /var/log/containers and rotates it at the same 25000-byte threshold used by
+# daemontools services, retaining four historic files. Keep this larger Podman
+# limit as an emergency backstop if the manager is unavailable: k8s-file has
+# no retained-history rotation of its own and otherwise grows without bound on
+# the /data partition.
+log_size_max = 100000
 EOF
     fi
 }
