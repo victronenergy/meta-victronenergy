@@ -24,3 +24,14 @@ d container container 0700 /data/home/container/data none
 d container container 0700 /data/home/container/.config none
 d container container 0700 /data/home/container/.config/containers none
 f container container 0644 /data/home/container/.config/containers/storage.conf /etc/podman-rootless/storage.conf
+
+# Base for distinct per-container log files, selected with --log-opt path at
+# podman create time. venus-containers creates private subdirectories here for
+# dedicated identities and owns rotation and retained history. Logs sit
+# alongside every other Venus service's logs
+# rather than buried inside podman's own storage. Use the public /var/log path
+# so this follows the platform's configured log storage instead of depending
+# on its current /data backing location. Named after the concept, not the
+# current runtime (podman is an implementation detail).
+# containers.conf's log_size_max remains an emergency upper bound.
+d container container 0755 /var/log/containers none
