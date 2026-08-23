@@ -10,6 +10,7 @@ SRC_URI = " \
     git://github.com/victronenergy/linux.git;name=machine;branch=rpi-venus-6.12.25;protocol=https \
     file://0001-bcm2711-select-the-Victron-boot-logo.patch \
     file://0003-bcm2711-select-CONFIG_VENUS.patch \
+    file://0006-add-venus-gpio-pullups-overlay.patch \
 "
 
 SRCREV = "5edffb068ed0e0fa6119107b2aef9f18fb5c553b"

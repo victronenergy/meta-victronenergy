@@ -1,5 +1,8 @@
 kernel=u-boot.bin
 
+# Onboard relay/digital-input GPIO pins - see gpio-export/files/raspberrypi5/gpio_list
+dtoverlay=venus-gpio-pullups
+
 [all]
 device_tree=broadcom/bcm2712-rpi-5-b.dtb
 

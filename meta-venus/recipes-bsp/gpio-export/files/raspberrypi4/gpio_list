@@ -1,0 +1,41 @@
+# This is a list of GPIO pins, set by the script /etc/init.d/gpio_pins.sh
+# They are documented at: https://github.com/victronenergy/venus/wiki/bbb-gpio
+# Format: <pin_number> <direction: in/out> <name>
+#
+# The <name> part is used to create a symlink in /dev/gpio.
+#
+# Pin choices avoid GPIO 16/17/18, which the spi1-3cs overlay (used for
+# a dual-channel CAN HAT in Dual SPI mode - standard on GX devices)
+# claims as dedicated chip-select lines. Digital input 4 and relay 1
+# use the alternate assignments from kwindrem/RpiGpioSetup's
+# gpio_listForCanHats for the same reason; relay 2 and the 5th digital
+# input from that reference list were dropped rather than reassigned
+# to keep this default minimal - edit this file directly for anything
+# else. Same pin policy as raspberrypi4-64/raspberrypi5 - see those
+# gpio_list files for the fuller rationale.
+#
+# NOT independently verified on real raspberrypi4 (32-bit) hardware -
+# ported from the raspberrypi4-64 baseline on the assumption that this
+# board's older 5.10 kernel uses the traditional base-0 gpiochip
+# numbering (like raspberrypi2's existing gpio_list, unlike
+# raspberrypi4-64/raspberrypi5's 6.12 kernel, which uses base 512 - see
+# those gpio_list files). Confirm against /sys/class/gpio/gpiochip0
+# before relying on this in the field.
+#
+# Digital inputs need a pull-up that isn't the chip default outside
+# GPIO 1-8 - see the paired venus-gpio-pullups-overlay.dts overlay.
+
+# relays are active HIGH
+# Relay 1   GPIO 2 / header pin 3 (alternate assignment, avoids i2c0/i2c1)
+2   out relay_1
+# Relay 2   GPIO 27 / header pin 13
+27  out relay_2
+
+# Digital input 1   GPIO 5 / header pin 29
+5   in digital_input_1
+# Digital input 2   GPIO 6 / header pin 31
+6   in digital_input_2
+# Digital input 3   GPIO 13 / header pin 33
+13  in digital_input_3
+# Digital input 4   GPIO 3 / header pin 5 (alternate assignment)
+3   in digital_input_4

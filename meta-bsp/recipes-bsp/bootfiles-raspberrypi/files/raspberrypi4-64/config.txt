@@ -5,6 +5,9 @@ kernel=u-boot.bin
 # Suppress the rainbow/raspberry boot splash
 disable_splash=1
 
+# Onboard relay/digital-input GPIO pins - see gpio-export/files/raspberrypi4-64/gpio_list
+dtoverlay=venus-gpio-pullups
+
 # Optional CAN overlays (enable only what matches attached hardware)
 # dtoverlay=mcp2515-can0
 # dtoverlay=mcp2515-can1
