@@ -35,4 +35,5 @@ RRECOMMENDS:${PN} += " \
     mk2-dbus \
     vecan-dbus \
     vedirect-interface \
+	venus-dynamicess \
 "
