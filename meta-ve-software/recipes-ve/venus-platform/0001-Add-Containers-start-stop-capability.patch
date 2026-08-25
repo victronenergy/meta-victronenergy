@@ -1,0 +1,45 @@
+From 011814e3bafe38b02196606b6527ecd66097b940 Mon Sep 17 00:00:00 2001
+From: Mark Bath <Mark@baggywrinkle.co.uk>
+Date: Mon, 24 Aug 2026 13:07:28 +0100
+Subject: [PATCH] Add Containers start/stop capability
+
+Wires venus-containers into venus-platform's normal service-management
+pattern, matching Services/SignalK: gated on
+serviceExists("venus-containers") so it's a no-op on images without the
+container packagegroup, and exposed as Services/Containers/Enabled so
+GUIv2 can offer an enable toggle without needing venus-containers itself
+to already be running.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+---
+ src/application.cpp | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/src/application.cpp b/src/application.cpp
+index c319833..7ec374c 100644
+--- a/src/application.cpp
++++ b/src/application.cpp
+@@ -343,6 +343,7 @@ public:
+ 			add("Services/AccessPoint", 1, 0, 1);
+ 		add("Services/BleSensors", 0, 0, 1);
+ 		add("Services/Bluetooth", 1, 0, 1);
++		add("Services/Containers", 0, 0, 1);
+ 		add("Services/Eebus", 0, 0, 1);
+ 		add("Services/EthernetLinkLocal", 1, 0, 1);
+ 		add("Services/Evcc", 1, 0, 1);
+@@ -679,6 +680,12 @@ void Application::manageDaemontoolsServices()
+ 							   mSettings->root()->itemGetOrCreate("Settings/Services/SignalK"));
+ 	}
+ 
++	if (serviceExists("venus-containers")) {
++		new DaemonToolsService(mSettings, "/service/venus-containers", "Settings/Services/Containers", this);
++		VeQItemProxy::addProxy(mService->itemGetOrCreate("Services/Containers"), "Enabled",
++							   mSettings->root()->itemGetOrCreate("Settings/Services/Containers"));
++	}
++
+ 	new DaemonToolsService(mSettings, "/service/vesmart-server", "Settings/Services/Bluetooth",
+ 						   this, QStringList() << "-s" << "vesmart-server");
+ 
+-- 
+2.50.1 (Apple Git-155)
+
