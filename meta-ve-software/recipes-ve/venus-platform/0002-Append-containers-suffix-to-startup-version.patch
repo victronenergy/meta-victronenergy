@@ -1,0 +1,28 @@
+From d6a00a80db479e1a1eb15b6047c793be7804ad71 Mon Sep 17 00:00:00 2001
+From: nmbath <mark@baggywrinkle.co.uk>
+Date: Wed, 26 Aug 2026 10:31:59 +0100
+Subject: [PATCH] Append -containers suffix to the printed startup version
+
+Build-specific packaging concern for the venus-containers image, not an upstream venus-platform feature - applied as a venus recipe patch (matching DISTRO_VERSION .= "-containers~2" in venus.conf and the same suffix applied to gui-v2 applicationVersion()) rather than a commit on victronenergy/venus-platform.
+
+Only the startup log line in main.cpp - this string is not exposed via D-Bus/GUI, just printed to stdout at daemon start (daemontools log), unlike gui-v2 which has a proper Settings/About display.
+---
+ src/main.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/main.cpp b/src/main.cpp
+index 83920f6..1b10294 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -1,7 +1,7 @@
+ #include <iostream>
+ #include <src/application.hpp>
+ 
+-static const char *version = "2.48";
++static const char *version = "2.48-containers";
+ 
+ int main(int argc, char *argv[])
+ {
+-- 
+2.43.0
+

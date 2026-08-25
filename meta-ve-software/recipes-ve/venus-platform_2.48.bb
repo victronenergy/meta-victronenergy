@@ -8,6 +8,9 @@ RDEPENDS:${PN} += "can-utils connman flashmq mk2vsc qtbase-plugin-qopensslbacken
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git \
+    file://0001-Add-Containers-start-stop-capability.patch \
+    file://0002-Append-containers-suffix-to-startup-version.patch \
+    file://0003-Allow-selecting-the-Containers-image-type.patch \
     file://can.inc \
     file://venus_dbus_bridge_template.conf \
     file://venus_rpc_bridge_template.conf \

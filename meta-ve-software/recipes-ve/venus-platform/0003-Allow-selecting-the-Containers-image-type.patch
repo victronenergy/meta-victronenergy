@@ -1,0 +1,25 @@
+From e7bdb196853488b12096bae2d66547985b6c5fe5 Mon Sep 17 00:00:00 2001
+From: Mark Bath <Mark@baggywrinkle.co.uk>
+Date: Wed, 26 Aug 2026 18:04:09 +0100
+Subject: [PATCH] Allow selecting the Containers image type
+
+---
+ src/application.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/application.cpp b/src/application.cpp
+index 7ec374c..78adff4 100644
+--- a/src/application.cpp
++++ b/src/application.cpp
+@@ -356,7 +356,7 @@ public:
+ 		add("Services/Socketcand", 0, 0, 1);
+ 		add("System/AccessLevel", 1, 0, 3);
+ 		add("System/AutoUpdate", 2, 0, 3);
+-		add("System/ImageType", 0, 0, 1);
++		add("System/ImageType", 0, 0, 2);
+ 		add("System/LogLevel", 2, 0, 0);
+ 		add("System/ReleaseType", 0, 0, 3);
+ 		add("System/TimeZone", "/UTC");
+-- 
+2.50.1 (Apple Git-155)
+
