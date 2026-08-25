@@ -10,7 +10,7 @@ UPSTREAM_CHECK_GITTAGREGEX = "(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/venus-dynamicess.git;branch=main;protocol=https \
 "
-SRCREV = "8e0996cd5cb293ed31db1c7f8bf603faa0ba3a69"
+SRCREV = "df9600887a3876b1903c7bbca1ce69af5214e2bf"
 S = "${WORKDIR}/git"
 
 RDEPENDS:${PN} = " \
@@ -24,10 +24,6 @@ RDEPENDS:${PN} = " \
     python3-s2 \
     python3-typing-extensions \
 "
-
-do_compile:prepend() {
-    sed -i '/solar_overhead.py/d' ${S}/Makefile
-}
 
 do_install:append() {
     oe_runmake install DESTDIR=${D} bindir=${bindir}
