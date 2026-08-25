@@ -9,6 +9,7 @@ RDEPENDS:${PN} = " \
     crun \
     iptables \
     slirp4netns \
+    passt \
 "
 
 # Rootless container networking (Podman 6's only supported backend)
