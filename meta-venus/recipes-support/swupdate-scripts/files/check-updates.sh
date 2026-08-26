@@ -283,6 +283,7 @@ else
     case $imgtype in
         0) imgtype=       ;;
         1) imgtype=large  ;;
+        2) imgtype=containers ;;
         *) echo "Invalid image type."
            exit 1
            ;;
