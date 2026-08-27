@@ -14,7 +14,9 @@ inherit daemontools useradd
 
 USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM:${PN} = "simple-upnpd"
-USERADD_PARAM:${PN} = "--no-create-home --shell /bin/false -g simple-upnpd simple-upnpd"
+# This is a system account so useradd must not allocate subordinate IDs. Its
+# static UID/GID 1001 is below the extension range reserved in venus.conf.
+USERADD_PARAM:${PN} = "--system --no-create-home --shell /bin/false -g simple-upnpd simple-upnpd"
 
 DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${base_bindir}/start-simple-upnpd"
 
