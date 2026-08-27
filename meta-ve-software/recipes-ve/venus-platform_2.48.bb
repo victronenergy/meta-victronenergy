@@ -12,7 +12,7 @@ SRC_URI = " \
     file://venus_dbus_bridge_template.conf \
     file://venus_rpc_bridge_template.conf \
 "
-SRCREV = "5cf58ea99fba624bfdf9df502e64affac0a72cca"
+SRCREV = "84c7ac22f4cd23b5c552a0890a1199c8652ffe43"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/venus-platform"
