@@ -46,9 +46,12 @@ INITSCRIPT_PARAMS = "start 70 5 2 3 . stop 22 0 1 6 ."
 
 # IMPORTANT: because xuser is shared with rootless X, please make sure the
 # USERADD_PARAM is in sync with the one in xserver-nodm-init.bb
+# Treat xuser as a system account so useradd does not allocate subordinate
+# IDs. Its static UID/GID 1000 is below the extension range in venus.conf.
 USERADD_PACKAGES = "${PN}"
 USERADD_PARAM:${PN} = "--create-home \
                        --groups video,tty,audio \
+                       --system \
                        --user-group xuser"
 
 inherit autotools pkgconfig update-rc.d useradd
