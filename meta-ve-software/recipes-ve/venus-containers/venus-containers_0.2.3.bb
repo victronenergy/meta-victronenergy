@@ -14,7 +14,7 @@ inherit python-compile
 # (~/.ssh/venus_containers_deploy) - it is NOT a real hostname, and this
 # recipe will not fetch on a machine without that config entry and key.
 #
-# PV comes from the filename (dbus-containers_0.2.0.bb), matching
+# PV comes from the filename (dbus-containers_0.2.3.bb), matching
 # dbus-systemcalc-py/dbus-generator/dbus-modem's own recipes exactly - none
 # of them set PV or use a "_git.bb"/"+git" floating-version naming either.
 # version.py (softwareversion) in the repo is the single source of truth
@@ -24,7 +24,7 @@ UPSTREAM_CHECK_GITTAGREGEX = "(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com-venus-containers/nmbath/venus-containers.git;branch=main;protocol=ssh;user=git \
 "
-SRCREV = "bbf5398c214522c4b8767911d173bae22453e460"
+SRCREV = "d78e002e53bca5745e353a849431ad105ffa1d64"
 S = "${WORKDIR}/git"
 # The on-disk product directory follows the repository/product name rather
 # than PN, which remains dbus-containers for the D-Bus service and package.
@@ -42,12 +42,14 @@ RDEPENDS:${PN} = " \
     dbus-auth-proxy \
 "
 
-# Verified on-device (Podman 5.0.3): resource limits/stats only work if the
-# process is joined to the delegated cgroup - plain setpriv/su is not
-# enough. run-as-container (podman-rootless_1.0.bb) does both the cgroup
-# join and the privilege drop; it's on PATH as a normal /usr/bin script
-# (podman-rootless doesn't inherit ve_package, so its bindir is the OE
-# default), unlike this package's own ${bindir}.
+# Runs as root, not wrapped in podman-rootless's run-as-container: this
+# daemon does its own per-operation identity switch to the rootless
+# "container" user for each podman invocation (backend/execution.py),
+# including joining the cgroup v2 leaf delegated to that identity so
+# --memory/--cpus/--pids-limit actually take effect (verified on-device,
+# Podman 5.0.3 - plain setpriv/su is not enough on its own). Wrapping the
+# whole daemon in run-as-container instead would drop its own privilege
+# before it can do that per-operation switch at all.
 #
 # No softlimit wrapper here (unlike dbus-systemcalc-py/dbus_generator):
 # this daemon shells out to podman as a subprocess, and daemontools'
@@ -55,7 +57,7 @@ RDEPENDS:${PN} = " \
 # limit sized for a small Python daemon could starve a podman invocation
 # in ways that are hard to predict without testing under real load. Worth
 # revisiting once there's a real device to load-test against.
-DAEMONTOOLS_RUN = "run-as-container ${bindir}/dbus-containers"
+DAEMONTOOLS_RUN = "${bindir}/dbus-containers"
 DAEMONTOOLS_DOWN = "1"
 
 do_install () {
