@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -eu
+
+PUBLISH=/opt/victronenergy/venus-identities/venus-identities-publish
+
+case "${1:-start}" in
+    start|restart|force-reload)
+        "$PUBLISH"
+        ;;
+    stop)
+        # Account files remain mounted until shutdown. Unmounting them while
+        # services still resolve users would expose a different account view.
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+        exit 2
+        ;;
+esac
+
+exit 0

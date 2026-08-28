@@ -1,0 +1,32 @@
+#!/bin/sh
+
+set -eu
+
+LIVE_DIR=/run/venus-identities
+
+is_mounted()
+{
+    target=$1
+    awk -v target="$target" '$5 == target { found = 1 } END { exit !found }' \
+        /proc/self/mountinfo
+}
+
+# Validate the entire candidate set before changing any mount.
+for name in passwd group subuid subgid; do
+    test -f "$LIVE_DIR/$name"
+    test -f "/etc/$name"
+done
+
+for name in passwd group subuid subgid; do
+    source_file="$LIVE_DIR/$name"
+    target_file="/etc/$name"
+
+    # A bind mount follows the source inode. The library atomically replaces
+    # each live source, so an existing mount must be rebound to the new inode.
+    # This short unmount/bind interval is serialized by the identity lock; a
+    # failure leaves the transaction journal for retry at the next call/boot.
+    if is_mounted "$target_file"; then
+        umount "$target_file"
+    fi
+    mount --bind "$source_file" "$target_file"
+done

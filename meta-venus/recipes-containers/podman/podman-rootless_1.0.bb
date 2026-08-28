@@ -15,6 +15,8 @@ inherit useradd update-rc.d
 RDEPENDS:${PN} = "shadow"
 
 USERADD_PACKAGES = "${PN}"
+# This static image account is deliberately below 2000. UIDs/GIDs 2000..2999
+# are reserved by venus.conf for persistent post-image extension identities.
 # -s /bin/sh (rather than the usual /bin/false for Venus service users):
 # there is deliberately no boot-time service starting containers yet, so
 # testing means an interactive shell as this user (su/sudo -u container).
