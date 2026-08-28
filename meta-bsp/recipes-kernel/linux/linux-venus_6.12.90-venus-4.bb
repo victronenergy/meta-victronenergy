@@ -15,11 +15,11 @@ include recipes-kernel/linux/cve-exclusion.inc
 # still unknown cve statuses
 include linux-venus-cve-exclusion.inc
 
-SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=venus-6.12.90"
+SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=mans/venus-6.12.90"
 BB_GIT_DEFAULT_DESTSUFFIX ?= "git"
 S = "${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX}"
 
-SRCREV = "b6ec45b86d0d9e11775362511e13955651fcacf0"
+SRCREV = "a93c43db1b573d615a4a72cf8832ed76a6206eea"
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 
 RDEPENDS:${KERNEL_PACKAGE_NAME}-base += "kernel-devicetree"
