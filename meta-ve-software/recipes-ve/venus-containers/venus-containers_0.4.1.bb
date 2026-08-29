@@ -14,7 +14,7 @@ inherit python-compile
 # (~/.ssh/venus_containers_deploy) - it is NOT a real hostname, and this
 # recipe will not fetch on a machine without that config entry and key.
 #
-# PV comes from the filename (dbus-containers_0.4.0.bb), matching
+# PV comes from the filename (dbus-containers_0.4.1.bb), matching
 # dbus-systemcalc-py/dbus-generator/dbus-modem's own recipes exactly - none
 # of them set PV or use a "_git.bb"/"+git" floating-version naming either.
 # version.py (softwareversion) in the repo is the single source of truth
@@ -24,7 +24,7 @@ UPSTREAM_CHECK_GITTAGREGEX = "(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com-venus-containers/nmbath/venus-containers.git;branch=main;protocol=ssh;user=git \
 "
-SRCREV = "a7c1b285be230871d61cefe79e86dd374850e0b8"
+SRCREV = "416de4169aa72c40d53991ac1c15dfc64c84b4cf"
 S = "${WORKDIR}/git"
 # The on-disk product directory follows the repository/product name rather
 # than PN, which remains dbus-containers for the D-Bus service and package.
