@@ -1,0 +1,31 @@
+From: Bruce Ashfield <bruce.ashfield@gmail.com>
+Date: Fri, 17 Oct 2025 12:00:00 -0400
+Subject: [PATCH] libocispec: fix array items parsing
+
+The `generate.py` script fails when an array's `items` property is an
+array of schemas, which is valid according to the JSON schema spec.
+This commit adds a check to handle this case by using the first schema
+in the array.
+
+Upstream-Status: Inappropriate [configuration specific]
+
+Signed-off-by: Bruce Ashfield <bruce.ashfield@gmail.com>
+
+---
+ src/ocispec/generate.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/ocispec/generate.py b/src/ocispec/generate.py
+--- a/src/ocispec/generate.py
++++ b/src/ocispec/generate.py
+@@ -423,6 +423,10 @@
+     History: 2019-06-17
+     """
+     cur = node_info.cur
++
++    if isinstance(cur["items"], list):
++        # If items is a list, use the first element as the item schema.
++        cur["items"] = cur["items"][0]
+
+     if 'allOf' in cur["items"]:
+         return gen_all_arr_typnode(node_info, src, typ, refname)

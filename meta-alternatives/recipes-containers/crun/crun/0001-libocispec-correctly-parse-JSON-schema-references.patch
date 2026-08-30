@@ -1,0 +1,43 @@
+From 30ff5f092bc9799b7037f94fe415ae98f447013a Mon Sep 17 00:00:00 2001
+From: Bruce Ashfield <bruce.ashfield@gmail.com>
+Date: Fri, 17 Oct 2025 11:03:41 -0400
+Subject: [PATCH] libocispec: correctly parse JSON schema references
+
+The `generate.py` script was failing to parse JSON schema references that
+use a `#` to separate the file path from the fragment. The script was
+incorrectly splitting the reference at `#/`, which caused `FileNotFoundError`
+for local references (e.g. `#definitions/uint32`) and for references
+to other files (e.g. `config-solaris.json#/solaris`).
+
+This commit fixes the `splite_ref_name` function to correctly split the
+reference at the `#` character, and handles both local and remote
+references properly.
+
+Upstream-Status: Inappropriate [configuration specific]
+
+Signed-off-by: Bruce Ashfield <bruce.ashfield@gmail.com>
+---
+ src/ocispec/generate.py | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/ocispec/generate.py b/src/ocispec/generate.py
+index 530d69d..75bed78 100755
+--- a/src/ocispec/generate.py
++++ b/src/ocispec/generate.py
+@@ -150,7 +150,12 @@ def splite_ref_name(ref):
+     Interface: None
+     History: 2019-06-17
+     """
+-    tmp_f, tmp_r = ref.split("#/") if '#/' in ref else (ref, "")
++    if '#' in ref:
++        parts = ref.split('#', 1)
++        tmp_f = parts[0]
++        tmp_r = parts[1].lstrip('/')
++    else:
++        tmp_f, tmp_r = ref, ""
+     return tmp_f, tmp_r
+
+
+--
+2.39.2
+
