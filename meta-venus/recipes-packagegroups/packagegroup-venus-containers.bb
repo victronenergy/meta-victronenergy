@@ -11,6 +11,12 @@ RDEPENDS:${PN} = " \
     slirp4netns \
 "
 
+# Rootless container networking (Podman 6's only supported backend)
+RDEPENDS:${PN} += " \
+    netavark \
+    aardvark-dns \
+"
+
 # D-Bus for Venus integration
 RDEPENDS:${PN} += " \
     dbus \
