@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jan Cermak <jan.cermak@nic.cz>
+Date: Wed, 30 Apr 2025 19:15:00 +0200
+Subject: [PATCH] configs: rpi: set NR_DRAM_BANKS to 8 to accommodate RAM on
+ 16GB models
+
+Raspberry Pi 5 can have up to 16 GiB of RAM, where memory spans eight
+DRAM banks. Increase the bank count so U-Boot passes the whole memory map
+to Linux instead of truncating it to the first four banks (8 GiB).
+
+Upstream-Status: Backport
+Signed-off-by: Jan Cermak <jan.cermak@nic.cz>
+---
+ configs/rpi_arm64_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/rpi_arm64_defconfig b/configs/rpi_arm64_defconfig
+index 9fe5d177943..69e8e72c5d7 100644
+--- a/configs/rpi_arm64_defconfig
++++ b/configs/rpi_arm64_defconfig
+@@ -2,6 +2,7 @@ CONFIG_ARM=y
+ CONFIG_POSITION_INDEPENDENT=y
+ CONFIG_ARCH_BCM283X=y
+ CONFIG_TARGET_RPI_ARM64=y
++CONFIG_NR_DRAM_BANKS=8
+ CONFIG_ENV_SIZE=0x4000
+ CONFIG_ENV_OFFSET=0x20000
+ CONFIG_ENV_OFFSET_REDUND=0x24000
+--

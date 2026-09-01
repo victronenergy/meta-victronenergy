@@ -21,6 +21,7 @@ SRC_URI = "git://github.com/victronenergy/u-boot;protocol=https;branch=rpi_v2025
     file://0001-rpi_arm64-disable-u-boot-logo.patch \
     file://0002-serial-pl01x-support-PL011-AXI-compatible.patch \
     file://0003-rpi-arm64-make-autoboot-uninterruptible.patch \
+    file://0004-configs-rpi-support-16gb-dram.patch \
 "
 
 S = "${WORKDIR}/git"
