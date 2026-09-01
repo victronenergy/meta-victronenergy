@@ -14,7 +14,7 @@ inherit python-compile
 # (~/.ssh/venus_containers_deploy) - it is NOT a real hostname, and this
 # recipe will not fetch on a machine without that config entry and key.
 #
-# PV comes from the filename (dbus-containers_0.5.0.bb), matching
+# PV comes from the filename (venus-containers_0.6.0.bb), matching
 # dbus-systemcalc-py/dbus-generator/dbus-modem's own recipes exactly - none
 # of them set PV or use a "_git.bb"/"+git" floating-version naming either.
 # version.py (softwareversion) in the repo is the single source of truth
@@ -24,11 +24,8 @@ UPSTREAM_CHECK_GITTAGREGEX = "(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com-venus-containers/nmbath/venus-containers.git;branch=main;protocol=ssh;user=git \
 "
-SRCREV = "7675fbbf1139aecb1b2e36ee73936bb89a3ad9a5"
+SRCREV = "374b658691ddc52e3622c3f0aa835666dc2ca4af"
 S = "${WORKDIR}/git"
-# The on-disk product directory follows the repository/product name rather
-# than PN, which remains dbus-containers for the D-Bus service and package.
-bindir = "${vedir}/venus-containers"
 CONTAINER_EXAMPLES_DIR = "${bindir}/examples"
 
 RDEPENDS:${PN} = " \
@@ -72,18 +69,19 @@ do_install () {
     install -m 0644 ${S}/docs/examples/*.json ${D}${CONTAINER_EXAMPLES_DIR}/
     install -m 0644 ${S}/docs/examples/README.md ${D}${CONTAINER_EXAMPLES_DIR}/
 
-    # venus-containers (the CLI) needs to be on PATH for users/scripts to
-    # call it by name; dbus-containers (the daemon) doesn't, since
-    # daemontools invokes it by full path via DAEMONTOOLS_RUN above.
-    # Confirmed on-device that ve_package's application bindir is never on PATH
+    # vcm (the CLI, renamed from venus-containers on 2026-08-31 for typing
+    # convenience) needs to be on PATH for users/scripts to call it by
+    # name; dbus-containers (the daemon) doesn't, since daemontools invokes
+    # it by full path via DAEMONTOOLS_RUN above. Confirmed on-device that
+    # ve_package's application bindir is never on PATH
     # (PATH=/usr/bin:/bin:/usr/sbin:/sbin only), so this symlink is
     # required, not cosmetic. Built at package time here rather than via
     # pkg_postinst_ontarget, per Victron convention.
     install -d ${D}/usr/bin
-    ln -sf ${bindir}/venus-containers ${D}/usr/bin/venus-containers
+    ln -sf ${bindir}/vcm ${D}/usr/bin/vcm
 }
 
 FILES:${PN} += " \
-    /usr/bin/venus-containers \
+    /usr/bin/vcm \
     ${CONTAINER_EXAMPLES_DIR} \
 "
