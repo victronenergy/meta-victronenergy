@@ -19,6 +19,8 @@ DEPENDS += "\
 SRCREV = "502120fe1cbadcb49dbafe15860ae14ce87287f0"
 SRC_URI = "git://github.com/victronenergy/u-boot;protocol=https;branch=rpi_v2025.04 \
     file://0001-rpi_arm64-disable-u-boot-logo.patch \
+    file://0002-serial-pl01x-support-PL011-AXI-compatible.patch \
+    file://0003-rpi-arm64-make-autoboot-uninterruptible.patch \
 "
 
 S = "${WORKDIR}/git"

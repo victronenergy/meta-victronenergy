@@ -3,9 +3,33 @@ kernel=u-boot.bin
 # Onboard relay/digital-input GPIO pins - see gpio-export/files/raspberrypi5/gpio_list
 dtoverlay=venus-gpio-pullups
 
-[all]
+[pi5]
 device_tree=broadcom/bcm2712-rpi-5-b.dtb
 
+# Compute Module 5 on a CM5 IO carrier (default).
+# Comment out this entire block and uncomment the following [cm5] block
+# when using a CM4 IO-compatible carrier.
+[cm5]
+device_tree=broadcom/bcm2712-rpi-cm5-cm5io.dtb
+enable_uart=1
+enable_rp1_uart=1
+pciex4_reset=0
+dtparam=sd_poll_once=on
+uart_2ndstage=1
+dtparam=uart0=on
+dtparam=uart0_console
+
+#[cm5]
+#device_tree=broadcom/bcm2712-rpi-cm5-cm4io.dtb
+#enable_uart=1
+#enable_rp1_uart=1
+#pciex4_reset=0
+#dtparam=sd_poll_once=on
+#uart_2ndstage=1
+#dtparam=uart0=on
+#dtparam=uart0_console
+
+[all]
 # Enable VC4 Graphics
 dtoverlay=vc4-kms-v3d
 

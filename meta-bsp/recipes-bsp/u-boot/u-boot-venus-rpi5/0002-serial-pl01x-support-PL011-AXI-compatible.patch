@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Venus Build Fix <noreply@example.com>
+Date: Sun, 31 Aug 2026 18:30:00 +0000
+Subject: [PATCH] serial: pl01x: support the PL011 AXI compatible
+
+Linux 6.12 Raspberry Pi device trees describe the BCM2712 PL011 using
+the arm,pl011-axi compatible. Recognise it as a standard PL011 so that
+U-Boot can continue to use the SoC debug UART on Raspberry Pi 5 and
+Compute Module 5.
+
+Upstream-Status: Pending
+
+---
+ drivers/serial/serial_pl01x.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/serial/serial_pl01x.c b/drivers/serial/serial_pl01x.c
+index 0389b26963..ed15efe226 100644
+--- a/drivers/serial/serial_pl01x.c
++++ b/drivers/serial/serial_pl01x.c
+@@ -369,6 +369,7 @@ static const struct dm_serial_ops pl01x_serial_ops = {
+ #if CONFIG_IS_ENABLED(OF_REAL)
+ static const struct udevice_id pl01x_serial_id[] ={
+ 	{.compatible = "arm,pl011", .data = TYPE_PL011},
++	{.compatible = "arm,pl011-axi", .data = TYPE_PL011},
+ 	{.compatible = "arm,pl010", .data = TYPE_PL010},
+ 	{}
+ };
+-- 
+2.43.0
