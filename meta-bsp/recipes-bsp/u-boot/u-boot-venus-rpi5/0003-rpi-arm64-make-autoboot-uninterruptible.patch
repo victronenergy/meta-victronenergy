@@ -1,33 +1,61 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 7a8a8e398d0a6aca7ff761b90e94226e3146a5d2 Mon Sep 17 00:00:00 2001
 From: Venus Build Fix <noreply@example.com>
-Date: Sun, 31 Aug 2026 21:30:00 +0000
-Subject: [PATCH] rpi_arm64: make autoboot uninterruptible
+Date: Tue, 1 Sep 2026 21:04:39 +0100
+Subject: [PATCH] rpi: select autoboot delay by board model
 
-On CM5 the only U-Boot-supported console is uart10. Carriers may leave
-that UART inaccessible or its RX input floating, allowing noise to abort
-the normal two-second autoboot countdown and strand the appliance at an
-invisible U-Boot prompt.
+Raspberry Pi 5 boards have an accessible debug UART, so retain the normal two-second autoboot delay there. On CM5 the U-Boot console may be inaccessible or its RX input may float, allowing noise to abort autoboot and strand the appliance at an invisible prompt.
 
-Venus devices boot unattended, so use bootdelay -2 to start bootcmd
-immediately without checking the serial input for an abort character.
+Mark CM5 models for uninterruptible autoboot and set bootdelay after the saved environment has been imported. This also prevents an environment written by SWUpdate from restoring an interruptible delay on CM5.
 
 Upstream-Status: Inappropriate [Venus specific]
-
 ---
- configs/rpi_arm64_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ board/raspberrypi/rpi/rpi.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/configs/rpi_arm64_defconfig b/configs/rpi_arm64_defconfig
-index 38af502940..f182f4d753 100644
---- a/configs/rpi_arm64_defconfig
-+++ b/configs/rpi_arm64_defconfig
-@@ -13,6 +13,7 @@ CONFIG_PCI=y
- CONFIG_EFI_RUNTIME_UPDATE_CAPSULE=y
- CONFIG_EFI_CAPSULE_FIRMWARE_RAW=y
- CONFIG_BOOTSTD_DEFAULTS=y
-+CONFIG_BOOTDELAY=-2
- CONFIG_OF_BOARD_SETUP=y
- # CONFIG_USE_BOOTCOMMAND is not set
- CONFIG_FDT_SIMPLEFB=y
+diff --git a/board/raspberrypi/rpi/rpi.c b/board/raspberrypi/rpi/rpi.c
+index 70d3c35499b..0888285e3bd 100644
+--- a/board/raspberrypi/rpi/rpi.c
++++ b/board/raspberrypi/rpi/rpi.c
+@@ -94,6 +94,7 @@ struct rpi_model {
+ 	const char *name;
+ 	const char *fdtfile;
+ 	bool has_onboard_eth;
++	bool uninterruptible_boot;
+ };
+ 
+ static const struct rpi_model rpi_model_unknown = {
+@@ -197,6 +198,7 @@ static const struct rpi_model rpi_models_new_scheme[] = {
+ 		"Compute Module 5",
+ 		DTB_DIR "bcm2712-rpi-cm5-cm5io.dtb",
+ 		true,
++		true,
+ 	},
+ 	[0x19] = {
+ 		"500",
+@@ -207,6 +209,7 @@ static const struct rpi_model rpi_models_new_scheme[] = {
+ 		"Compute Module 5 Lite",
+ 		DTB_DIR "bcm2712-rpi-cm5l-cm5io.dtb",
+ 		true,
++		true,
+ 	},
+ };
+ 
+@@ -447,8 +450,15 @@ static void set_serial_number(void)
+ 	env_set("serial#", serial_string);
+ }
+ 
++static void set_bootdelay(void)
++{
++	if (model->uninterruptible_boot)
++		env_set("bootdelay", "-2");
++}
++
+ int misc_init_r(void)
+ {
++	set_bootdelay();
+ 	set_fdt_addr();
+ 	set_fdtfile();
+ 	set_usbethaddr();
 -- 
 2.43.0
+
