@@ -23,3 +23,8 @@ RDEPENDS:${PN} += " \
     dbus-dev \
     dbus-auth-proxy \
 "
+
+# Drop 3: definition-driven container management service
+RDEPENDS:${PN} += " \
+    venus-containers \
+"
