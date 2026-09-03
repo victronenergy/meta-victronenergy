@@ -502,7 +502,7 @@ module.exports = {
     //},
 
     // Disable update checks
-    telemetryEnabled: false,
+    telemetry: { enabled: false },
 
     victronVirtual: {
         persistLocation: '/data/home/nodered/.node-red/.victron'
