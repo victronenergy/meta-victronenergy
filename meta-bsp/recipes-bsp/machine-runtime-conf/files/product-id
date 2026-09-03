@@ -19,12 +19,15 @@ if [ -n "$eeprom" ]; then
 	VEES) pid=C007 ;;       # EasySolar-II
 	VES9) pid=C00B ;;       # EasySolar-II rev A9
 	VESA) pid=C00E ;;       # EasySolar-II rev A10
+	VEEb) pid=C00E ;;	# EasySolar-II rev A14b
 	VEMX) pid=C009 ;;       # Maxi GX
 	VMX9) pid=C00D ;;       # Maxi GX rev A9
 	VMXA) pid=C010 ;;       # Maxi GX rev A10
+	VXEb) pid=C010 ;;	# Maxi GX rev A14b
 	VEMP) pid=C008 ;;       # MultiPlus-II
 	VMP9) pid=C00C ;;       # MultiPlus-II rev A9
 	VMPA) pid=C00F ;;       # MultiPlus-II rev A10
+	VMEb) pid=C00F ;;	# MultiPlus-II rev A14b
 	VEPG) pid=C011 ;;       # PayGo
 	VEKR) pid=C013 ;;       # Ekrano GX
 	VKRA) pid=C013 ;;       # Ekrano GX rev A10
