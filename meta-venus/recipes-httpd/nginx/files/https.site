@@ -44,6 +44,8 @@ server {
 
     auth_request @remoteconsole-authproxy;
 
+    include /etc/nginx/venus-import-location.conf;
+
     # Browsers still cache, but will always revalidate.
     add_header Cache-Control "no-cache";
 

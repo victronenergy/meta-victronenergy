@@ -18,4 +18,5 @@ RDEPENDS:${PN} += " \
     javascript-vnc-client \
     localsettings \
     venus-identities-runtime \
+    venus-import \
 "

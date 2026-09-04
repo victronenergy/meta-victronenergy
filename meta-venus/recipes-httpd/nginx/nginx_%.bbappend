@@ -19,8 +19,10 @@ SRC_URI += " \
     file://https.site \
     file://nginx-testmode.conf \
     file://start-nginx.sh \
+    file://venus-import-http.conf \
+    file://venus-import-location.conf \
 "
-PR = "3"
+PR = "4"
 
 inherit daemontools localsettings www
 
@@ -60,5 +62,6 @@ EOF
     install -m 644 ${UNPACKDIR}/http.site ${D}${sysconfdir}/nginx/sites-available
     install -m 644 ${UNPACKDIR}/http-explanation.site ${D}${sysconfdir}/nginx/sites-available
     install -m 644 ${UNPACKDIR}/https.site ${D}${sysconfdir}/nginx/sites-available
+    install -m 644 ${UNPACKDIR}/venus-import-http.conf ${D}${sysconfdir}/nginx/conf.d
+    install -m 644 ${UNPACKDIR}/venus-import-location.conf ${D}${sysconfdir}/nginx
 }
-
