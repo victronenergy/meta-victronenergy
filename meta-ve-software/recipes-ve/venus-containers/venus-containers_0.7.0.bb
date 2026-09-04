@@ -14,7 +14,7 @@ inherit python-compile
 # (~/.ssh/venus_containers_deploy) - it is NOT a real hostname, and this
 # recipe will not fetch on a machine without that config entry and key.
 #
-# PV comes from the filename (venus-containers_0.6.0.bb), matching
+# PV comes from the filename (venus-containers_0.7.0.bb), matching
 # dbus-systemcalc-py/dbus-generator/dbus-modem's own recipes exactly - none
 # of them set PV or use a "_git.bb"/"+git" floating-version naming either.
 # version.py (softwareversion) in the repo is the single source of truth
@@ -24,7 +24,13 @@ UPSTREAM_CHECK_GITTAGREGEX = "(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com-venus-containers/nmbath/venus-containers.git;branch=main;protocol=ssh;user=git \
 "
-SRCREV = "374b658691ddc52e3622c3f0aa835666dc2ca4af"
+
+# gitsm derives submodule fetch URLs directly from .gitmodules. Redirect the
+# private venus-identities HTTPS URL through its build-host SSH deploy-key
+# alias; the public velib_python submodule continues to use HTTPS.
+PREMIRRORS:prepend = "gitsm://github.com/nmbath/venus-identities.git gitsm://github.com-venus-identities/nmbath/venus-identities.git;protocol=ssh \n"
+
+SRCREV = "1811ce017f5195a9b7c4f5ca7bf16f8e78f2158a"
 S = "${WORKDIR}/git"
 CONTAINER_EXAMPLES_DIR = "${bindir}/examples"
 
