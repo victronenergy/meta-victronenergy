@@ -32,10 +32,11 @@ DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec ${@softlimit(d, data=76800
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/gui-v2.git;branch=main;protocol=ssh;user=git \
+    gitsm://github.com/nmbath/gui-v2.git;branch=mbath/containers;protocol=ssh;user=git \
     file://0001-cmake-use-CMAKE_CROSSCOMPILING-for-desktop-build-de.patch \
+    file://0002-Append-containers-suffix-to-displayed-app-version.patch \
 "
-SRCREV = "e879c522a1cceb12b7e6e0b6a56ab1e28c1fdada"
+SRCREV = "7c7948182247f003737bc87773b183c7217a6dcc"
 S = "${WORKDIR}/git"
 
 do_install:append() {

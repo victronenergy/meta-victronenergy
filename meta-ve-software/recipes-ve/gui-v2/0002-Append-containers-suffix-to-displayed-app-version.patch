@@ -1,0 +1,28 @@
+From 559045a5973dd5d1bd6ff64bfa2a38730b82c49f Mon Sep 17 00:00:00 2001
+From: nmbath <mark@baggywrinkle.co.uk>
+Date: Wed, 26 Aug 2026 10:27:00 +0100
+Subject: [PATCH] Append -containers suffix to the displayed application
+ version
+
+Build-specific packaging concern for the venus-containers image, not an upstream gui-v2 feature - applied as a venus recipe patch (matching DISTRO_VERSION .= "-containers~2" in venus.conf) rather than a commit on the container-management branch.
+
+Only touches the display string in Theme::applicationVersion() - PROJECT_VERSION_MAJOR/MINOR/PATCH themselves are left numeric since guiplugins.cpp:818 builds a QVersionNumber from them for plugin compatibility checks, which requires strictly numeric components.
+---
+ src/theme.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/theme.cpp b/src/theme.cpp
+index f4f570fa..ff58e4be 100644
+--- a/src/theme.cpp
++++ b/src/theme.cpp
+@@ -242,7 +242,7 @@ bool Theme::objectHasQObjectParent(QObject *obj) const
+
+ QString Theme::applicationVersion() const
+ {
+-	return QStringLiteral("v%1.%2.%3").arg(PROJECT_VERSION_MAJOR).arg(PROJECT_VERSION_MINOR).arg(PROJECT_VERSION_PATCH);
++	return QStringLiteral("v%1.%2.%3-containers").arg(PROJECT_VERSION_MAJOR).arg(PROJECT_VERSION_MINOR).arg(PROJECT_VERSION_PATCH);
+ }
+
+ bool Theme::virtualKeyboardOpened() const
+--
+2.43.0
