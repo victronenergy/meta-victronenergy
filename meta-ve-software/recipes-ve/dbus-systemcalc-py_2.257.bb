@@ -2,14 +2,13 @@ DESCRIPTION = "VE system calculations"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=9b0a9609befce3122afcc444da0fe825"
 
-inherit ve_package
-inherit daemontools
-inherit python-compile
+inherit daemontools localsettings python-compile ve_package
 
 UPSTREAM_CHECK_GITTAGREGEX = "(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;branch=master;protocol=https \
     file://com.victronenergy.system.conf \
+    file://localsettings \
 "
 SRCREV = "999bd6665e7e1299c58e461d6342f64f90b48e67"
 S = "${WORKDIR}/git"
