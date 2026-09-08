@@ -34,11 +34,7 @@ UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/gui-v2.git;branch=main;protocol=ssh;user=git \
 "
-<<<<<<<< HEAD:meta-ve-software/recipes-ve/gui-v2_1.3.17.bb
-SRCREV = "450e22d02c844ad01e21161008678b274c3f944f"
-========
 SRCREV = "de9cf08c0b9797a2242c06147a8c691e57ae5393"
->>>>>>>> master:meta-ve-software/recipes-ve/gui-v2_1.3.20.bb
 S = "${WORKDIR}/git"
 
 do_install:append() {

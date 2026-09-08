@@ -15,7 +15,7 @@ name="$(installation-name)"
 venusversion=$(head -n1 /opt/victronenergy/version)
 
 mqttonlan=""
-while [ "$mqttonlan" != "0" -a "$mqttonlan" != "1" ]; do
+while [ "$mqttonlan" != "0" -a "$mqttonlan" != "1" -a "$mqttonlan" != "2" ]; do
 	mqttonlan=$(get_setting /Settings/Services/MqttLocal)
 	sleep 1
 done

@@ -3,7 +3,7 @@
 set -e
 
 PART=$1
-: ${SERIAL:=${HID_UNIQ}}
+: ${SERIAL:=${HID_UNIQ:?}}      # exit if neither SERIAL nor HID_UNIQ defined
 DIR=/run/io-ext/$SERIAL
 CONF=$DIR/pins.conf
 

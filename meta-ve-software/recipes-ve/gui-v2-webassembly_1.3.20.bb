@@ -5,11 +5,8 @@ SRC_URI = " \
 	file://calc-gui-v2-wasm-sha26.sh \
 	file://localsettings \
 "
-<<<<<<<< HEAD:meta-ve-software/recipes-ve/gui-v2-webassembly_1.3.17.bb
 SRC_URI[sha256sum] = "ae4e71eb630d76e799ffeb8c8348c58d839a13db13b64617aeef8ec8af517d2d"
-========
 SRC_URI[sha256sum] = "6bf71753653136bcfe1d965332c26a796efbd6f51fead945f6c1c271da2ff809"
->>>>>>>> master:meta-ve-software/recipes-ve/gui-v2-webassembly_1.3.20.bb
 S = "${UNPACKDIR}/wasm"
 
 inherit localsettings www
