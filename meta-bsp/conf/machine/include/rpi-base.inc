@@ -43,6 +43,9 @@ UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
 IMAGE_FSTYPES ?= "wic ext4.gz"
 ROOT_FSTYPE = "ext4.gz"
 
+BOOT_FSTYPE = "vfat.gz"
+BOOT_IMAGE = "venus-boot-image"
+
 MACHINE_FEATURES += "apm usbhost keyboard vfat ext2 screen touchscreen alsa bluetooth wifi sdio ${@bb.utils.contains('DISABLE_VC4GRAPHICS', '1', '', 'vc4graphics', d)}"
 MACHINE_FEATURES += "no-factory-password"
 
@@ -52,7 +55,7 @@ MACHINE_FEATURES_BACKFILL_CONSIDERED = "rtc"
 SWU_VERSION ?= "3"
 
 IMAGE_BOOT_FILES ?= " \
-    bcm2835-bootfiles/* \
+    bcm2835-bootfiles/*;. \
     config.txt \
     cmdline.txt \
     ${RPI_KERNEL_DEVICETREE} \
