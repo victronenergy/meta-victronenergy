@@ -9,6 +9,7 @@ DEPENDS += "flex-native bison-native"
 LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/LGPL-2.1-or-later;md5=2a4f4fd2128ea2f65047ee63fbca9f68"
 
+FILESEXTRAPATHS:prepend := "${THISDIR}/u-boot-venus:"
 UBOOT_SRC_URI ?= ""
 SRC_URI = "${UBOOT_SRC_URI}"
 INSANE_SKIP += "src-uri-bad"
