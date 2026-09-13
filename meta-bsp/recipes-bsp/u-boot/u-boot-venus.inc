@@ -12,6 +12,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/LGPL-2.1-or-later;md5=2a4f4fd21
 FILESEXTRAPATHS:prepend := "${THISDIR}/u-boot-venus:"
 UBOOT_SRC_URI ?= ""
 SRC_URI = "${UBOOT_SRC_URI}"
+SRC_URI += "file://0001-rpi-switch-a-b-partitions-based-on-the-FAT-partition.patch"
 INSANE_SKIP += "src-uri-bad"
 
 S = "${WORKDIR}/git"

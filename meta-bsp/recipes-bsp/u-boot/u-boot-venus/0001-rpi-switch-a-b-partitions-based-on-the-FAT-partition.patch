@@ -1,0 +1,31 @@
+From 1c9fdebed9d7384a80e3ecb1d39bf26524546b0f Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jeroen@myspectrum.nl>
+Date: Sun, 13 Sep 2026 13:17:38 +0200
+Subject: [PATCH] rpi: switch a/b partitions based on the FAT partition
+
+This boots the rootfs corresponding to the FAT partition being booted.
+---
+ board/raspberrypi/rpi/rpi.env | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/board/raspberrypi/rpi/rpi.env b/board/raspberrypi/rpi/rpi.env
+index b1d84ec6081..fba26b56219 100644
+--- a/board/raspberrypi/rpi/rpi.env
++++ b/board/raspberrypi/rpi/rpi.env
+@@ -77,7 +77,12 @@ ramdisk_addr_r=0x02700000
+ boot_targets=mmc usb pxe dhcp
+ 
+ set_args=fdt addr ${fdt_addr} && fdt get value bootargs /chosen bootargs && setenv bootargs "${bootargs} root=${mmcroot} rootwait"
+-set_root=if test "${version}" = 2; then setenv bootpart 0:3; setenv mmcroot /dev/mmcblk0p3; else setenv bootpart 0:2; setenv mmcroot /dev/mmcblk0p2; fi
++set_root=fdt addr ${fdt_addr} && fdt get value partition /chosen/bootloader partition;
++        if test "$partition" = "0x00000002"; then
++            setenv bootpart 0:5; setenv mmcroot /dev/mmcblk0p5;
++        else
++            setenv bootpart 0:6; setenv mmcroot /dev/mmcblk0p6;
++        fi
+ load=ext2load mmc ${bootpart} ${kernel_addr_r} /boot/Image
+ do_boot=booti ${kernel_addr_r} - ${fdt_addr}
+ bootcmd=run set_root set_args load do_boot
+-- 
+2.43.0
+
