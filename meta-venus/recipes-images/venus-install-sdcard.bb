@@ -20,11 +20,11 @@ python () {
 
 INSTALL_FILES = "\
     ${IMAGE_BOOT_FILES} \
-    ${SCR}:boot.scr \
-    ${KERNEL_IMAGETYPE}-${MACHINE}.bin:${KERNEL_IMAGETYPE} \
+    ${SCR};boot.scr \
+    ${KERNEL_IMAGETYPE}-${MACHINE}.bin;${KERNEL_IMAGETYPE} \
     ${DTB} \
-    ${INITRD_IMAGE}:initramfs \
-    ${SWU}-${MACHINE}.swu:venus.swu \
+    ${INITRD_IMAGE};initramfs \
+    ${SWU}-${MACHINE}.swu;venus.swu \
 "
 
 do_deploy[depends] += " \
@@ -64,9 +64,10 @@ python do_board_ids() {
 addtask do_board_ids after do_prepare_sdcard before do_deploy
 
 do_deploy () {
-    for file in ${INSTALL_FILES}; do
-        src=${file%:*}
-        dst=${file#*:}
+    file="${INSTALL_FILES}"
+    for file in $files; do
+        src=${file%%l;*}
+        dst=${file#*;}
         cp ${DEPLOY_DIR_IMAGE}/${src} ${SDCARD}/${dst}
     done
 
