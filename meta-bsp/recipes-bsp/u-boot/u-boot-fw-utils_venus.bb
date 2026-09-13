@@ -1,9 +1,6 @@
 # note: swupdate wants to have the default env, so use the same source as u-boot itself!
 require u-boot-venus.inc
 
-# Sync the default environment with the newer U-Boot version used on Raspberry Pi 5
-SRC_URI:append:raspberrypi5 = " file://0001-include-configs-rpi.h-Raspberry-Pi-5.patch"
-
 SUMMARY = "U-Boot bootloader fw_printenv/setenv utilities"
 DEPENDS += "mtd-utils"
 
@@ -18,6 +15,9 @@ inherit uboot-config
 do_compile () {
     oe_runmake -C ${S} ${UBOOT_MACHINE}
     oe_runmake -C ${S} envtools
+    if [ ! -f ${S}/tools/env/libubootenv.a ]; then
+        ${AR} rcs ${S}/tools/env/libubootenv.a $(${AR} t ${S}/tools/env/lib.a)
+    fi
 }
 
 do_install () {
