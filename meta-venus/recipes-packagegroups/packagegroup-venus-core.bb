@@ -83,3 +83,6 @@ RDEPENDS:${PN}:remove:ccgx = "\
 "
 RDEPENDS:${PN}:remove:canvu500 = "netmon"
 RDEPENDS:${PN}:append:nanopi = " dbus-paygo"
+
+# hardware gets this from swupdate-scripts' scan-versions.sh
+RDEPENDS:${PN}:append:venus-container = " venus-container-versions"
