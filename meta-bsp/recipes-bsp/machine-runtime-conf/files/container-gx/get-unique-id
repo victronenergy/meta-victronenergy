@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# A container has no stable hardware MAC to derive this from - docker/podman
+# hand out a fresh virtual one on every recreation, which breaks VRM
+# registration each time. Generate one random id and persist it in /data
+# instead, so it survives container recreation as long as the volume does.
+
+id_file=/data/venus/unique-id
+
+if [ ! -s "$id_file" ]; then
+    mkdir -p "$(dirname "$id_file")"
+    dd if=/dev/urandom bs=16 count=1 2>/dev/null | md5sum | cut -c1-12 > "$id_file"
+fi
+
+cat "$id_file"
