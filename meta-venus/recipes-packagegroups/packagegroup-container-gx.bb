@@ -10,5 +10,6 @@ RDEPENDS:${PN} += "\
     packagegroup-core-boot \
     packagegroup-ve-console-apps \
     packagegroup-venus-base \
+    container-gx-versions \
     venus-version \
 "
