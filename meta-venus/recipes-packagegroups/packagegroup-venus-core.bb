@@ -83,3 +83,10 @@ RDEPENDS:${PN}:remove:ccgx = "\
 "
 RDEPENDS:${PN}:remove:canvu500 = "netmon"
 RDEPENDS:${PN}:append:nanopi = " dbus-paygo"
+
+# real hardware gets this from swupdate-scripts' scan-versions.sh instead
+RDEPENDS:${PN}:append:venus-container = " venus-container-versions"
+
+# real hardware sets this when the native gui-v2 Qt process starts; the
+# container never runs one (gui-v2 is served client-side, in the browser)
+RDEPENDS:${PN}:append:venus-container = " venus-container-gui-version"
