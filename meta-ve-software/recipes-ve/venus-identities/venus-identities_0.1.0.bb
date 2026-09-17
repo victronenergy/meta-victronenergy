@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=33303c0aa278f183b10d87e9a89b0b88"
 # builds on another host must provide an equivalent alias and credential.
 VENUS_IDENTITIES_SRC_URI ?= "gitsm://github.com-venus-identities/nmbath/venus-identities.git;branch=main;protocol=ssh;user=git"
 SRC_URI = "${VENUS_IDENTITIES_SRC_URI}"
-SRCREV = "96b93f9b321dd46a9a12aa0967e35f0b0bd5f687"
+SRCREV = "ea5189155f638076794d8427130c832528734e91"
 S = "${WORKDIR}/git"
 
 inherit python_setuptools_build_meta
