@@ -58,10 +58,6 @@ RDEPENDS:${PN}:append:einstein = "\
     venus-firmware-update \
 "
 
-RDEPENDS:${PN}:append:ekrano = "\
-    edid-ekrano \
-"
-
 RDEPENDS:${PN}:append:k3 = "\
     cpufrequtils \
     gpio-export \
@@ -78,6 +74,7 @@ RDEPENDS:${PN}:append:k3 = "\
 
 RDEPENDS:${PN}:append:nanopi = " \
     dbus-characterdisplay \
+    edid-ekrano \
 "
 
 RDEPENDS:${PN}:append:sunxi = "\
