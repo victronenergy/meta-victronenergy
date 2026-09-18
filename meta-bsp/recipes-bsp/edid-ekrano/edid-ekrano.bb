@@ -4,17 +4,12 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = "\
     file://EDID_Ekrano_GX_rev_A6_48M.bin \
-    file://ekrano-edid.conf \
 "
 
 do_install() {
     fwdir=${D}${nonarch_base_libdir}/firmware
     install -d ${fwdir}
     install -m 644 ${UNPACKDIR}/EDID_Ekrano_GX_rev_A6_48M.bin ${fwdir}
-
-    etcdir=${D}${sysconfdir}/modprobe.d
-    install -d ${etcdir}
-    install -m 644 ${UNPACKDIR}/ekrano-edid.conf ${etcdir}
 }
 
 FILES:${PN} = "${nonarch_base_libdir} ${sysconfdir}"
