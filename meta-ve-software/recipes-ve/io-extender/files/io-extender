@@ -91,6 +91,11 @@ setup_dio() {
     echo 0 >/sys/class/gpio/gpio$gpio/value
 }
 
+# the PWM chip (pca9632 at 0x62) on this IO-Extender's I2C bus has a driver
+pwm_bound() {
+    ls -d /sys/$DEVPATH/../../../../i2c-*/*-0062/driver >/dev/null 2>&1
+}
+
 setup_pwm() {
     for led in $(ls /sys/$DEVPATH/leds); do
         num=${led##*[!0-9]}
@@ -124,8 +129,9 @@ case $ACTION in
             pwm)  setup_pwm ;;
         esac
 
-        # Both parts have been configured, (re)start services
-        if [ -e $DIR/pwm0 -a -e $DIR/relay_1_in ]; then
+        # Both parts have been configured, (re)start services. Without a bound
+        # PWM driver its part never comes, so do not wait for it.
+        if [ -e $DIR/relay_1_in ] && { [ -e $DIR/pwm0 ] || ! pwm_bound; }; then
                 svc_update add
                 restart_digitalinputs=1
         fi
