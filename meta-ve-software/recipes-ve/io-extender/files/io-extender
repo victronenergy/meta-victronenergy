@@ -124,8 +124,12 @@ case $ACTION in
             pwm)  setup_pwm ;;
         esac
 
-        # Both parts have been configured, (re)start services
-        if [ -e $DIR/pwm0 -a -e $DIR/relay_1_in ]; then
+        # Relays/inputs/outputs only need the gpio part - start as soon as
+        # that is done, do not wait on pwm0. The PWM/LED dimmer chip is
+        # independent hardware on the same board; its kernel driver can fail
+        # to probe (e.g. no devicetree node for a runtime-created I2C bus)
+        # without that affecting relay/switch function at all.
+        if [ -e $DIR/relay_1_in ]; then
                 svc_update add
                 restart_digitalinputs=1
         fi
