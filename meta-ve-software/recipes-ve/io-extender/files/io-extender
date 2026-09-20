@@ -15,13 +15,30 @@ G0_PINS="9 0:1 1:2 2:3 3:4"
 G1_PINS="8 11:5 12:6 13:7 14:8"
 PWM_EN_PIN=15
 
+export_gpio() {
+    gpio=$1
+    dir=/sys/class/gpio/gpio$gpio
+
+    # GPIO exports belong to the host kernel and can outlive the container
+    # which created them.  Reusing an existing export is valid; writing the
+    # same number to export again fails with EBUSY and, because this script
+    # runs with set -e, used to abort all IO-Extender setup after a container
+    # restart.
+    if [ ! -d "$dir" ]; then
+        if ! echo "$gpio" >/sys/class/gpio/export 2>/dev/null; then
+            # Another udev worker may have exported it concurrently.
+            [ -d "$dir" ] || return 1
+        fi
+    fi
+}
+
 setup_group() (
     gpio_base=$1
     dirpin=$2
     shift 2
 
     dirgpio=$((gpio_base + dirpin))
-    echo $dirgpio >/sys/class/gpio/export
+    export_gpio $dirgpio
     dir=/sys/class/gpio/gpio$dirgpio
     echo in >$dir/direction
     dirval=$(cat $dir/value)
@@ -38,7 +55,7 @@ setup_group() (
         p=${pin%:*}
         n=${pin#*:}
         gpio=$((gpio_base + p))
-        echo $gpio >/sys/class/gpio/export
+        export_gpio $gpio
         echo $direction >/sys/class/gpio/gpio$gpio/direction
         link=$DIR/${label}_$n
         ln -s /sys/class/gpio/gpio$gpio $link
@@ -61,7 +78,7 @@ setup_relay() {
             *)  direction=low ;;
         esac
 
-        echo $gpio >/sys/class/gpio/export
+        export_gpio $gpio
         echo $direction >/sys/class/gpio/gpio$gpio/direction
         link=$DIR/$label${n:+_$n}
         ln -s /sys/class/gpio/gpio$gpio $link
@@ -85,7 +102,7 @@ setup_dio() {
 
     # PWN enable pin
     gpio=$((gpio_base_i2c + PWM_EN_PIN))
-    echo $gpio >/sys/class/gpio/export
+    export_gpio $gpio
     echo out >/sys/class/gpio/gpio$gpio/direction
     # Enable PWM by default
     echo 0 >/sys/class/gpio/gpio$gpio/value
