@@ -11,6 +11,7 @@ RDEPENDS:${PN} += "\
     packagegroup-ve-console-apps \
     packagegroup-venus-base \
     container-gx-gui-version \
+    container-gx-sysfs \
     container-gx-versions \
     container-gx-volatile \
     venus-version \
