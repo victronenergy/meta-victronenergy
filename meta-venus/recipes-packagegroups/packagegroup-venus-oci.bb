@@ -12,5 +12,6 @@ RDEPENDS:${PN} += "\
     packagegroup-venus-base \
     venus-oci-gui-version \
     venus-oci-versions \
+    venus-oci-volatile \
     venus-version \
 "
