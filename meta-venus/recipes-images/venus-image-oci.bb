@@ -7,6 +7,7 @@ IMAGE_INSTALL = "\
     packagegroup-core-boot \
     packagegroup-base \
     packagegroup-venus-core \
+    venus-container-sysfs \
     venus-container-volatile \
     venus-version \
 "
