@@ -5,7 +5,9 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-SRC_URI = "file://container-sysfs.sh"
+SRC_URI = "file://container-sysfs.sh \
+           file://container-hardware-coldplug.sh \
+"
 
 S = "${S_UNUSED}"
 
@@ -18,4 +20,12 @@ INITSCRIPT_PARAMS = "start 04 S ."
 do_install() {
     install -d ${D}${sysconfdir}/init.d
     install -m 0755 ${UNPACKDIR}/container-sysfs.sh ${D}${sysconfdir}/init.d/
+    install -m 0755 ${UNPACKDIR}/container-hardware-coldplug.sh ${D}${sysconfdir}/init.d/
+
+    # udev's first enumeration can create GPIO chips (for example through an
+    # IO-Extender I2C rule) after it has already enumerated the gpio subsystem.
+    # Replay those dynamically-created chips after the main udev pass.
+    install -d ${D}${sysconfdir}/rcS.d
+    ln -s ../init.d/container-hardware-coldplug.sh \
+        ${D}${sysconfdir}/rcS.d/S05container-hardware-coldplug.sh
 }
