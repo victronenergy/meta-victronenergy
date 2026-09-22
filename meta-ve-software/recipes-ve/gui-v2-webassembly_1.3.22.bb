@@ -1,7 +1,7 @@
 include gui-v2.inc
 
 SRC_URI = " \
-	https://github.com/nmbath/gui-v2/releases/download/v${PV}-web-pages/venus-webassembly.zip;downloadfilename=venus-webassembly-${PV}-web-pages.zip \
+	https://github.com/nmbath/gui-v2/releases/download/${PV}-containers/venus-webassembly.zip;downloadfilename=venus-webassembly-${PV}-containers.zip \
 	file://calc-gui-v2-wasm-sha26.sh \
 	file://localsettings \
 "

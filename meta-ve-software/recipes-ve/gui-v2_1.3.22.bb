@@ -37,7 +37,8 @@ DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && export QTWEBENGINE_DISABLE_SAND
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/nmbath/gui-v2.git;branch=mbath/web-pages;protocol=ssh;user=git \
+    gitsm://github.com/nmbath/gui-v2.git;branch=mbath/containers;protocol=ssh;user=git \
+    file://0001-cmake-use-CMAKE_CROSSCOMPILING-for-desktop-build-de.patch \
 "
 SRCREV = "f64bada2e5269a17d1bcd26e385d0d91be7fece6"
 S = "${WORKDIR}/git"
