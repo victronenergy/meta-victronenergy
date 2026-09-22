@@ -9,7 +9,7 @@ server {
     error_log /dev/null;
 
     # redirect to the explanation since the page is likely on https...
-    error_page 404 $scheme://$host/?page=$request_uri;
+    error_page 404 $scheme://$http_host/?page=$request_uri;
 
     # NOTE: VRM downloads the wasm over http, so it is also included here. It is
     # not intended for use over the LAN.

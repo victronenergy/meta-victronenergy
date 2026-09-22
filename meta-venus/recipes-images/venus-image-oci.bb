@@ -9,6 +9,7 @@ IMAGE_INSTALL = "\
     packagegroup-venus-core \
     venus-container-sysfs \
     venus-container-volatile \
+    venus-container-env \
     venus-version \
 "
 IMAGE_FEATURES += "package-management"

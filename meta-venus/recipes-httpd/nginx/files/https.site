@@ -11,7 +11,7 @@ server {
     gzip_static always;
 
     index index.html index.php;
-    error_page 401 403 =200 https://$host/auth/login.php?page=$request_uri;
+    error_page 401 403 =200 https://$http_host/auth/login.php?page=$request_uri;
 
     location ~ ^/auth/ {
         auth_request off;

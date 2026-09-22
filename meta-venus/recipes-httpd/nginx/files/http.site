@@ -9,7 +9,7 @@ server {
     gzip_static always;
 
     index index.html index.php;
-    error_page 401 403 =200 http://$host/auth/login.php?page=$request_uri;
+    error_page 401 403 =200 http://$http_host/auth/login.php?page=$request_uri;
 
     location ~ ^/auth/generate-token {
       return 403;
@@ -42,7 +42,7 @@ server {
         internal;
         auth_request off;
 
-        proxy_pass http://localhost/auth/test.php?user=remoteconsole;
+        proxy_pass http://127.0.0.1:$server_port/auth/test.php?user=remoteconsole;
         proxy_pass_request_body off;
         proxy_set_header Content-Length "";
     }
