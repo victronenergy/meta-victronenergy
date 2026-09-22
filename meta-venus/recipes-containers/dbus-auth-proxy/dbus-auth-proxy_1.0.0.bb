@@ -12,6 +12,8 @@ inherit daemontools useradd
 
 USERADD_PACKAGES = "${PN}"
 USERADD_DEPENDS = "podman-rootless"
+# venus-dbus has a static image GID below 2000. The 2000..2999 GID range is
+# reserved for persistent post-image extension primary groups.
 GROUPADD_PARAM:${PN} = "--system venus-dbus"
 GROUPMEMS_PARAM:${PN} = "--group venus-dbus --add container"
 
