@@ -9,12 +9,16 @@ fi
 
 # If a network is not connected, binding will fail. Lets not hog the
 # cpu and simply add a delay here.
-while true; do
-	def_interface=$(route | grep '^default' | grep -o '[^ ]*$')
-
-	if [ "$def_interface" != "" ]; then
-		socketcand -i $interfaces -l $def_interface -v
-	fi
-
+def_interface=$(route | grep '^default' | grep -o '[^ ]*$')
+while [ "$def_interface" = "" ]; do
 	sleep 60
+	def_interface=$(route | grep '^default' | grep -o '[^ ]*$')
 done
+
+# exec, not fork+loop -- daemontools supervises this script's own PID;
+# without exec, socketcand runs as an unsupervised child one level
+# removed from what `svc -d`/`svc -t` actually signals, so stopping the
+# service orphans the real daemon instead of stopping it (ec-socketcand
+# queue/W14). supervise's own respawn (on exit) replaces the old
+# hand-rolled while-loop.
+exec socketcand -i $interfaces -l $def_interface -v
