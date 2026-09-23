@@ -26,7 +26,7 @@ inherit daemontools localsettings www
 
 RDEPENDS:${PN} += "php-fpm venus-www venus-www-config"
 EXTRA_OECONF = "--error-log-path=/var/volatile/log/nginx/error.log"
-PACKAGECONFIG:append = " http-auth-request"
+PACKAGECONFIG:append = " http-auth-request http-sub-module"
 
 do_install:append() {
     # don't package the logdir, create it as volatile storage instead
