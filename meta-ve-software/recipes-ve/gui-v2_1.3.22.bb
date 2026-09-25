@@ -32,10 +32,10 @@ DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec ${@softlimit(d, data=76800
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/gui-v2.git;branch=main;protocol=ssh;user=git \
+    gitsm://github.com/nmbath/gui-v2.git;branch=mbath/branding;protocol=ssh;user=git \
     file://0001-cmake-use-CMAKE_CROSSCOMPILING-for-desktop-build-de.patch \
 "
-SRCREV = "d680c66e78d320901475ffde071a907e8a256b32"
+SRCREV = "06b80deb7242b3a532069dc9177bef1321f78aec"
 S = "${WORKDIR}/git"
 
 do_install:append() {

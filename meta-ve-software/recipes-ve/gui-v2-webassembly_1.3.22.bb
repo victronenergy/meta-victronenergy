@@ -1,11 +1,11 @@
 include gui-v2.inc
 
 SRC_URI = " \
-	https://github.com/victronenergy/gui-v2/releases/download/v${PV}/venus-webassembly.zip;downloadfilename=venus-webassembly-${PV}.zip \
+	https://github.com/nmbath/gui-v2/releases/download/v${PV}-branding/venus-webassembly.zip;downloadfilename=venus-webassembly-${PV}-branding.zip \
 	file://calc-gui-v2-wasm-sha26.sh \
 	file://localsettings \
 "
-SRC_URI[sha256sum] = "882da093e9a908daea2c415d9fbc126bb0d4bc4b991946149e821ba23542cd89"
+SRC_URI[sha256sum] = "5beda370f2bccc070f571bb7f0ef90e47c52705760e8a2cfc9cf3725af599ed4"
 S = "${UNPACKDIR}/wasm"
 
 inherit localsettings www
