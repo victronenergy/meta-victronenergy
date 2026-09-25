@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=e32777d272d59cf1a64aed9ee0ad1fc1"
 SRC_URI = " \
     gitsm://github.com/nmbath/venus-exchange.git;branch=main;protocol=ssh;user=git \
 "
-SRCREV = "1037d4808675dd9dc0c0a6fe77a51e29ab58e21b"
+SRCREV = "341cbeb2711345758a328f31ca640eaebfd84c98"
 S = "${WORKDIR}/git"
 
 inherit allarch daemontools python-compile useradd ve_package
