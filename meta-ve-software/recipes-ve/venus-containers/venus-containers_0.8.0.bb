@@ -25,7 +25,7 @@ SRC_URI = " \
 # public velib_python submodule continues to use HTTPS.
 PREMIRRORS:prepend = "gitsm://github.com/nmbath/venus-identities.git gitsm://github.com/nmbath/venus-identities.git;protocol=ssh;user=git \n"
 
-SRCREV = "8b46969f358e35edb86c61cf1202bf51c051305f"
+SRCREV = "ab74e511026f83a82e39245eea94c95f821a4d9c"
 S = "${WORKDIR}/git"
 CONTAINER_EXAMPLES_DIR = "${bindir}/examples"
 

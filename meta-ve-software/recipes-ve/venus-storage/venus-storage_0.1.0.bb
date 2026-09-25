@@ -7,7 +7,7 @@ inherit daemontools
 inherit python-compile
 
 SRC_URI = "gitsm://github.com/nmbath/venus-storage.git;branch=main;protocol=ssh;user=git"
-SRCREV = "308ed1157f937121945578faef2a1fb4ff3a6803"
+SRCREV = "ec40224402983ab7865e81d2879ea5a85331450b"
 S = "${WORKDIR}/git"
 
 RDEPENDS:${PN} = " \
