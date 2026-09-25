@@ -35,7 +35,7 @@ SRC_URI = " \
     gitsm://github.com/nmbath/gui-v2.git;branch=mbath/branding;protocol=ssh;user=git \
     file://0001-cmake-use-CMAKE_CROSSCOMPILING-for-desktop-build-de.patch \
 "
-SRCREV = "06b80deb7242b3a532069dc9177bef1321f78aec"
+SRCREV = "7b472d9a4a58960500cff1d64008d8a6c07d0c0b"
 S = "${WORKDIR}/git"
 
 do_install:append() {
