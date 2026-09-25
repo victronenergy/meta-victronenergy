@@ -81,6 +81,8 @@ server {
         add_header Vary "Content-Encoding, Access-Control-Allow-Origin, Access-Control-Allow-Credentials";
     }
 
+    include /etc/nginx/locations-enabled/*.conf;
+
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_pass unix:/var/run/php5-fpm.socket;

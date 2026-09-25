@@ -17,4 +17,6 @@ RDEPENDS:${PN} += " \
     dbus-vebus-to-pvinverter \
     javascript-vnc-client \
     localsettings \
+    venus-exchange \
+    venus-web-pages \
 "
