@@ -39,7 +39,7 @@ UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/nmbath/gui-v2.git;branch=mbath/web-pages;protocol=ssh;user=git \
 "
-SRCREV = "cf4c4c1c671f1a8eab1c64070e26b6313aa904b7"
+SRCREV = "f64bada2e5269a17d1bcd26e385d0d91be7fece6"
 S = "${WORKDIR}/git"
 
 do_install:append() {
