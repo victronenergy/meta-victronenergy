@@ -9,7 +9,7 @@ WARN_QA:remove = "buildpaths"
 ERROR_QA:remove = "buildpaths"
 
 DEPENDS += "qtdeclarative-native qttools-native"
-DEPENDS += "qt5compat qtbase qtdeclarative qtmqtt qtshadertools qtsvg qtvirtualkeyboard"
+DEPENDS += "qt5compat qtbase qtdeclarative qtmqtt qtshadertools qtsvg qtvirtualkeyboard qtwebchannel qtwebengine"
 RDEPENDS:${PN} = " \
     qt5compat-qmlplugins \
     qtbase-plugin-qeglfs \
@@ -19,6 +19,11 @@ RDEPENDS:${PN} = " \
     qtdeclarative-qmlplugins \
     qtsvg-plugin-qsvg \
     qtvirtualkeyboard-qmlplugins \
+    qtwebchannel-modules \
+    qtwebchannel-qmlplugins \
+    qtwebengine \
+    qtwebengine-modules \
+    qtwebengine-qmlplugins \
     venus-ui-themes \
 "
 # FIXME: should become an RDEPEND of qtvirtualkeyboard-qmlplugins
@@ -28,14 +33,13 @@ PACKAGES += "start-gui-v2"
 DAEMON_PN = "start-gui-v2"
 RDEPENDS:${DAEMON_PN} = "${PN}"
 
-DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec ${@softlimit(d, data=768000000, stack=1000000, all=768000000)} ${bindir}/venus-gui-v2"
+DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && export QTWEBENGINE_DISABLE_SANDBOX=1 && exec ${@softlimit(d, data=768000000, stack=1000000, all=768000000)} ${bindir}/venus-gui-v2"
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/gui-v2.git;branch=main;protocol=ssh;user=git \
-    file://0001-cmake-use-CMAKE_CROSSCOMPILING-for-desktop-build-de.patch \
+    gitsm://github.com/nmbath/gui-v2.git;branch=mbath/web-pages;protocol=ssh;user=git \
 "
-SRCREV = "d680c66e78d320901475ffde071a907e8a256b32"
+SRCREV = "cf4c4c1c671f1a8eab1c64070e26b6313aa904b7"
 S = "${WORKDIR}/git"
 
 do_install:append() {
@@ -44,4 +48,3 @@ do_install:append() {
     # causing a standard 'rm' command to fail with a "No such file or directory" error.
     rm -rf ${D}/usr
 }
-
