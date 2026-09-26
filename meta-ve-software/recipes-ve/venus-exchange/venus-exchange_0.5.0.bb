@@ -24,6 +24,7 @@ RDEPENDS:${PN} = " \
     python3-dbus \
     python3-pygobject \
     venus-web-pages \
+    venus-package-manager \
 "
 
 # The legacy compatibility service must not be supervised or installed
