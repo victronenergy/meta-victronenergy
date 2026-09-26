@@ -22,11 +22,11 @@ S = "${S_UNUSED}"
 inherit ve_package
 
 do_configure () {
-    printf "${DISTRO_VERSION}\n${DISTRO_NAME}\n${DATE}${TIME}\n" > version
+    printf "${DISTRO_VERSION}\n${DISTRO_NAME}\n${BUILDNAME}\n" > version
 }
 
 do_configure[nostamp] = "1"
-do_configure[vardepsexclude] = "DATE TIME"
+do_configure[vardepsexclude] = "BUILDNAME"
 
 do_install () {
     install -d ${D}${vedir}
