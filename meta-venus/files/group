@@ -45,6 +45,7 @@ php-fpm:x:98:
 vnctunnel:x:99:
 users:x:100:
 venus-exchange:x:976:
+venus-dbus:x:978:container
 ble-sensors:x:979:
 eebus:x:980:
 polkitd:x:981:
@@ -68,4 +69,5 @@ sshd:x:998:
 crontab:x:999:
 xuser:x:1000:
 simple-upnpd:x:1001:
+container:x:1002:
 nogroup:x:65534:
