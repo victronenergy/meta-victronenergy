@@ -17,7 +17,12 @@ DEPENDS += "\
 # We use the revision in order to avoid having to fetch it from the
 # repo during parse
 SRCREV = "502120fe1cbadcb49dbafe15860ae14ce87287f0"
-SRC_URI = "git://github.com/victronenergy/u-boot;protocol=https;branch=rpi_v2025.04"
+SRC_URI = "git://github.com/victronenergy/u-boot;protocol=https;branch=rpi_v2025.04 \
+    file://0001-rpi_arm64-disable-u-boot-logo.patch \
+    file://0002-serial-pl01x-support-PL011-AXI-compatible.patch \
+    file://0003-rpi-arm64-make-autoboot-uninterruptible.patch \
+    file://0004-configs-rpi-support-16gb-dram.patch \
+"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
