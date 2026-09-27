@@ -1,0 +1,56 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Venus Build Fix <noreply@example.com>
+Date: Wed, 19 Aug 2026 09:45:00 +0000
+Subject: [PATCH] cmake: detect desktop builds via CMAKE_CROSSCOMPILING, not
+ processor-name match
+
+The desktop-vs-GX build detection compares CMAKE_SYSTEM_PROCESSOR to
+CMAKE_HOST_SYSTEM_PROCESSOR. On an aarch64 build host this incorrectly
+classifies any aarch64 *cross*-compile (raspberrypi4-64, raspberrypi5,
+am62xx, ...) as a native desktop build, since the strings collide even
+though it is a real cross-compile with a different sysroot/toolchain.
+
+VENUS_GX_BUILD then never gets set, so the install(TARGETS ...) rules in
+cmake/GuiV2.cmake (guarded on VENUS_GX_BUILD) are silently skipped: the
+build succeeds but the venus-gui-v2 binary is never installed, producing
+an empty package with no build error.
+
+Use CMAKE_CROSSCOMPILING instead, which Yoctos toolchain file sets
+correctly regardless of whether host and target processor names happen
+to match.
+
+This is intentionally kept as a Yocto-recipe-local patch rather than a
+change to the upstream check: comparing processor names is a legitimate
+way to detect same-machine local/desktop builds outside of Yocto, and
+should not be changed there.
+
+Upstream-Status: Inappropriate [Yocto build-host specific workaround; the
+upstream check is intentional for non-Yocto local desktop builds]
+
+---
+ cmake/BuildDefines.cmake | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+--- a/cmake/BuildDefines.cmake
++++ b/cmake/BuildDefines.cmake
+@@ -8,7 +8,17 @@
+     include(GNUInstallDirs)
+ endif()
+ 
+-if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL ${CMAKE_HOST_SYSTEM_PROCESSOR})
++# Upstream detects a native "desktop" build by comparing the target processor
++# to the build hosts own processor. That heuristic breaks under Yocto when
++# cross-compiling for a target whose CMAKE_SYSTEM_PROCESSOR happens to match
++# the build hosts (e.g. building for aarch64 targets from an aarch64 build
++# host): it is misclassified as a desktop build, VENUS_GX_BUILD never gets
++# set, and the install() rules in cmake/GuiV2.cmake are silently skipped,
++# producing an empty package. CMAKE_CROSSCOMPILING is set correctly by
++# Yoctos toolchain file regardless of processor-name collisions, so use that
++# instead. This is a Yocto-recipe-local patch, not carried upstream, since
++# the original check is intentional/correct for real native desktop builds.
++if (NOT CMAKE_CROSSCOMPILING)
+     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+-- 
+2.43.0
