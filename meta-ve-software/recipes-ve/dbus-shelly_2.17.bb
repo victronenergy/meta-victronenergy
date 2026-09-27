@@ -2,8 +2,8 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=824610c0b9d5c83da2edb0fab490487f"
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
-SRC_URI = "gitsm://github.com/victronenergy/dbus-shelly;branch=master;protocol=https"
-SRCREV = "a9a39f3a7a53deb0a77a467a4aabfdf62ee081fc"
+SRC_URI = "gitsm://github.com/victronenergy/dbus-shelly;branch=mbath/web-pages;protocol=https"
+SRCREV = "13f4732970be9740c4b569109a13de596e283caa"
 S = "${WORKDIR}/git"
 
 inherit daemontools gmakevelib python-compile useradd ve_package
