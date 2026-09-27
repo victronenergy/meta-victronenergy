@@ -10,5 +10,10 @@ do_install:append() {
 
     mkdir ${D}/${sysconfdir}/profile.d
     install ${UNPACKDIR}/qt6.sh ${D}/${sysconfdir}/profile.d/qt6.sh
-}
 
+    # GUIv2 is intentionally launched as root on Venus OS. Chromium refuses
+    # to start its sandbox as root, so QtWebEngine must use its supported
+    # embedded/root mode regardless of which start-gui selector launches it.
+    echo 'export QTWEBENGINE_DISABLE_SANDBOX=1' >> \
+        ${D}/${sysconfdir}/profile.d/qt6.sh
+}
