@@ -1,5 +1,10 @@
 #! /bin/sh
 
+exec 2>> /tmp/io-extender.log  # Redirect stderr to a log file
+set -x                         # Print every command before executing it
+
+printf "[%s] Called as: %s %s\n" "$(date '+%Y-%m-%d %H:%M:%S')" "$0" "$*" >&2
+
 set -e
 
 PART=$1
@@ -83,7 +88,7 @@ setup_dio() {
     setup_relay $gpio_base $R1_PINS
     setup_relay $gpio_base $SSR_PINS
 
-    # PWN enable pin
+    # PWM enable pin
     gpio=$((gpio_base_i2c + PWM_EN_PIN))
     echo $gpio >/sys/class/gpio/export
     echo out >/sys/class/gpio/gpio$gpio/direction
@@ -92,11 +97,27 @@ setup_dio() {
 }
 
 setup_pwm() {
-    for led in $(ls /sys/$DEVPATH/leds); do
-        num=${led##*[!0-9]}
+    for ledpath in /sys/$DEVPATH/leds/*; do
+        [ -e "$ledpath" ] || continue
+
+        led=${ledpath##*/}
+
+        case "$led" in
+            led[0-9])
+                num=${led##*[!0-9]}
+                ;;
+            led[0-9]_1)
+                base=${led%_1}
+                num=${base##*[!0-9]}
+                ;;
+            *)
+                continue
+                ;;
+        esac
+
         link=$DIR/pwm$num
         ln -s /sys/class/leds/$led/brightness $link
-        echo "pwm	$link $((num+1))" >>$CONF
+        echo "pwm	$link $((num + 1))" >>$CONF
     done
 }
 
