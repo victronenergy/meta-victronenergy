@@ -25,7 +25,14 @@ get_addr() {
     echo $addr
 }
 
+init_wait=0
 while hciconfig $HCI | grep -qw INIT; do
+    if [ "$init_wait" -ge 50 ]; then
+        logger -t bt-config "$HCI remained in INIT state; skipping configuration"
+        exit 1
+    fi
+
+    init_wait=$((init_wait + 1))
     usleep 200000
 done
 
