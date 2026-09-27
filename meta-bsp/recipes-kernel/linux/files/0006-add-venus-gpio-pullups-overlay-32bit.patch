@@ -1,0 +1,62 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Venus Build Fix <noreply@example.com>
+Date: Sun, 23 Aug 2026 00:00:00 +0000
+Subject: [PATCH] overlays: add venus-gpio-pullups for onboard relay/digital
+ input pins
+
+Same overlay as the raspberrypi4-64/raspberrypi5 kernel tree (see
+meta-venus/recipes-bsp/gpio-export/files/raspberrypi4/gpio_list for
+the pin mapping this pairs with) - see that patch for the full
+rationale. Ported here so raspberrypi4 (32-bit) gets the same baseline
+relay/digital-input pin policy as the other RPi machines, not just
+raspberrypi4-64.
+
+Upstream-Status: Inappropriate [Venus specific]
+
+---
+ arch/arm/boot/dts/overlays/Makefile                       |  1 +
+ .../boot/dts/overlays/venus-gpio-pullups-overlay.dts       | 26 ++++++++++++++++++++++
+ 2 files changed, 27 insertions(+)
+ create mode 100644 arch/arm/boot/dts/overlays/venus-gpio-pullups-overlay.dts
+
+--- a/arch/arm/boot/dts/overlays/Makefile
++++ b/arch/arm/boot/dts/overlays/Makefile
+@@ -242,6 +242,7 @@
+ 	vc4-kms-v3d.dtbo \
+ 	vc4-kms-v3d-pi4.dtbo \
+ 	vc4-kms-vga666.dtbo \
++	venus-gpio-pullups.dtbo \
+ 	vga666.dtbo \
+ 	vl805.dtbo \
+ 	w1-gpio.dtbo \
+--- /dev/null
++++ b/arch/arm/boot/dts/overlays/venus-gpio-pullups-overlay.dts
+@@ -0,0 +1,26 @@
++/dts-v1/;
++/plugin/;
++
++/ {
++	compatible = "brcm,bcm2835,bcm2736,bcm2737,bcm2737A0,bcm2737B0,bcm2711";
++
++	/* Force pull-ups on the Venus relay/digital-input GPIO pins that
++	 * don't have one by chip default (only GPIO 1-8 do) - paired with
++	 * meta-venus/recipes-bsp/gpio-export/files/raspberrypi4/gpio_list.
++	 * Based on kwindrem/RpiGpioSetup's VenusGpioOverlayForCanHats.dts.
++	 */
++
++	fragment@0 {
++		target = <&gpio>;
++		__overlay__ {
++			pinctrl-names = "default";
++			pinctrl-0 = <&venus_gpio_pullups>;
++
++			venus_gpio_pullups: venus_gpio_pullups {
++				brcm,pins = <3 5 6 13>;
++				brcm,function = <0>; /* 0:in, 1:out */
++				brcm,pull = <2>;     /* 2:up 1:down 0:none */
++			};
++		};
++	};
++};
+--
+2.43.0

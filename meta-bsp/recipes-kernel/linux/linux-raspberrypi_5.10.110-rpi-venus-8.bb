@@ -15,6 +15,7 @@ SRC_URI = " \
     file://0001-work-around-for-too-few-arguments-to-function-init_d.patch \
     file://0001-ata-ahci-fix-enum-constants-for-gcc-13.patch \
     file://wifi_cfg80211_certificate.patch \
+    file://0006-add-venus-gpio-pullups-overlay-32bit.patch \
 "
 SRCREV = "3859262148951d08d011c96d637383883c451739"
 BB_GIT_DEFAULT_DESTSUFFIX ?= "git"
