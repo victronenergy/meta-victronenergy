@@ -1,0 +1,37 @@
+# Runtime directories for the rootless "container" user (UID/GID 1002).
+#
+# /run/user/1002 is XDG_RUNTIME_DIR: rootless podman puts its API socket
+# and per-user runroot there. /run is tmpfs, so this has to be recreated
+# on every boot rather than shipped in the image.
+#
+# The /data/home/container subdirectories live on the persistent /data
+# partition, which is not part of the built rootfs image (like the
+# existing /data/home/root, /data/home/vnctunnel entries in
+# permanent-storage's volatiles file), so they also need to be verified/
+# created here rather than via a normal do_install.
+d container container 0700 /run/user/1002 none
+d container container 0700 /data/home/container none
+d container container 0700 /data/home/container/storage none
+d container container 0700 /data/home/container/data none
+
+# Rootless podman does not use graphroot from the system-wide
+# /etc/containers/storage.conf - it only reads the per-user
+# $HOME/.config/containers/storage.conf override, silently falling back
+# to its own default ($HOME/.local/share/containers/storage) otherwise.
+# Seed the container user's copy from our template on first boot; "f"
+# with a linksource only copies if the target doesn't already exist, so
+# this won't clobber a live edit on a later boot.
+d container container 0700 /data/home/container/.config none
+d container container 0700 /data/home/container/.config/containers none
+f container container 0644 /data/home/container/.config/containers/storage.conf /etc/podman-rootless/storage.conf
+
+# Base for distinct per-container log files, selected with --log-opt path at
+# podman create time. venus-containers creates private subdirectories here for
+# dedicated identities and owns rotation and retained history. Logs sit
+# alongside every other Venus service's logs
+# rather than buried inside podman's own storage. Use the public /var/log path
+# so this follows the platform's configured log storage instead of depending
+# on its current /data backing location. Named after the concept, not the
+# current runtime (podman is an implementation detail).
+# containers.conf's log_size_max remains an emergency upper bound.
+d container container 0755 /var/log/containers none
