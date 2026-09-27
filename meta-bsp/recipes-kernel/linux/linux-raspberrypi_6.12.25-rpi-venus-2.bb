@@ -9,7 +9,10 @@ COMPATIBLE_MACHINE = "^rpi$"
 SRC_URI = " \
     git://github.com/victronenergy/linux.git;name=machine;branch=rpi-venus-6.12.25;protocol=https \
     file://0001-bcm2711-select-the-Victron-boot-logo.patch \
+    file://0002-bcm2711-disable-cpusets-v1-legacy-interface.patch \
     file://0003-bcm2711-select-CONFIG_VENUS.patch \
+    file://0004-bcm2712-disable-cpusets-v1-legacy-interface.patch \
+    file://0005-Kconfig.venus-select-remaining-cgroup-v2-controllers.patch \
     file://0006-add-venus-gpio-pullups-overlay.patch \
 "
 
@@ -41,4 +44,3 @@ do_deploy:append() {
         install -m 0644 "$src/${DTB}" "${DEPLOYDIR}/${DTB}"
     done
 }
-

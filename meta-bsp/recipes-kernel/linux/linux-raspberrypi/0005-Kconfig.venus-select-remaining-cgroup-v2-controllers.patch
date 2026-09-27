@@ -1,0 +1,37 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Venus Build Fix <noreply@example.com>
+Date: Sat, 22 Aug 2026 00:00:00 +0000
+Subject: [PATCH] Kconfig.venus: select the remaining container-required
+ cgroup v2 controllers
+
+The VENUS symbol's cgroups selects only cover CGROUPS, CGROUP_CPUACCT,
+CGROUP_SCHED and CFS_BANDWIDTH - enough for the cpu controller, but
+nothing for cpuset, memory, io or pids. On boards whose own defconfig
+happens to already set these (the rpi family), this is a no-op; on
+boards that don't (einstein, am62xx), containers get a cgroup.controllers
+of just "cpu" and podman's --memory/--cpuset-cpus/--pids-limit have
+nothing to attach to. Select them from Kconfig.venus so the full v2
+controller set is consistently available across every machine that can
+run containers, rather than depending on per-board defconfig defaults.
+
+Upstream-Status: Inappropriate [Venus specific]
+
+---
+ Kconfig.venus | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+--- a/Kconfig.venus
++++ b/Kconfig.venus
+@@ -45,6 +45,10 @@
+ 	select CGROUP_CPUACCT
+ 	select CGROUP_SCHED
+ 	select CFS_BANDWIDTH
++	select CPUSETS
++	select MEMCG
++	select BLK_CGROUP
++	select CGROUP_PIDS
+ 
+ 	# system options
+ 	select VDSO
+--
+2.43.0

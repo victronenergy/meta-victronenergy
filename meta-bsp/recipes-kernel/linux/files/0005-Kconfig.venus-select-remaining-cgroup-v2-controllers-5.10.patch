@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Venus Build Fix <noreply@example.com>
+Date: Sat, 22 Aug 2026 00:00:00 +0000
+Subject: [PATCH] Kconfig.venus: select the remaining container-required
+ cgroup v2 controllers
+
+The VENUS symbol's cgroups selects on this branch only cover CGROUPS,
+CGROUP_CPUACCT, CGROUP_SCHED and the tailscale-related NET_SCHED group -
+nothing for cpuset, memory, io or pids. This board's own defconfig
+already sets these explicitly, so this is a no-op here, but Kconfig.venus
+should still be the authoritative source so all container-capable
+machines are configured the same way rather than relying on per-board
+defconfig defaults that don't exist everywhere (einstein, am62xx).
+
+Upstream-Status: Inappropriate [Venus specific]
+
+---
+ Kconfig.venus | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+--- a/Kconfig.venus
++++ b/Kconfig.venus
+@@ -41,6 +41,10 @@
+ 	select CGROUPS
+ 	select CGROUP_CPUACCT
+ 	select CGROUP_SCHED
++	select CPUSETS
++	select MEMCG
++	select BLK_CGROUP
++	select CGROUP_PIDS
+ 	select NET_SCHED
+ 	select NET_CLS_ACT
+ 	select NET_SCH_HTB
+--
+2.43.0
