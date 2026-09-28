@@ -5,11 +5,10 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=014f1a23c3da49aa929b21a96808ab22"
 
 SRC_URI = "\
     npm://registry.npmjs.org;package=${BPN};version=${PV} \
-    file://Disable-showing-update-notifaction-in-tour.patch;apply=no \
     file://Omit-peer-deps-from-palette-installs.patch;apply=no \
     file://npm-shrinkwrap.json;subdir=${S} \
 "
-SRC_URI[sha256sum] = "3fe4c5de7c3bf90b8faeb7d4692b877f7d4515cd21a81cb0ce5a310e27afa6fa"
+SRC_URI[sha256sum] = "e701362fda8930bba62a138276f147c21fcbeb61fb9778d6d130467f6d02e753"
 S = "${UNPACKDIR}/npm"
 
 RDEPENDS:${PN} = "nodejs-npm"
@@ -19,7 +18,6 @@ inherit npm-online-install
 do_install:prepend() {
     # Apply patch to remove update notification from tour
     cd ${WORKDIR}
-    patch -p1 < ${UNPACKDIR}/Disable-showing-update-notifaction-in-tour.patch || bbfatal "Failed to apply tour patch"
     patch -p1 < ${UNPACKDIR}/Omit-peer-deps-from-palette-installs.patch || bbfatal "Failed to apply omit-peer patch"
 }
 
