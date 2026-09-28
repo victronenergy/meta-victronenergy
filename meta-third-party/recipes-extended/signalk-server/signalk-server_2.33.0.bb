@@ -10,7 +10,6 @@ SRC_URI = "\
     npm://registry.npmjs.org;package=${BPN};version=${PV} \
     file://0001-package.json-no-more-optional-packages-signalk-venus.patch \
     file://0002-remove-signalk-server-setup-script.patch \
-    file://0003-package.json-add-socketcan-package.patch \
     file://npm-shrinkwrap.json;subdir=${S} \
     file://canbus.json \
     file://defaults.json \
@@ -24,7 +23,7 @@ SRC_URI = "\
     file://venus.json \
 "
 
-SRC_URI[sha256sum] = "9cd9f6d9e4ebbdb81e6ee467108c5333b9d2380b636454adb8ee7987bda42fac"
+SRC_URI[sha256sum] = "293c38064fe473345d8ce171946a0c57707bc8eb73b6397af0279d6eab89fea5"
 
 S = "${UNPACKDIR}/npm"
 
@@ -139,4 +138,10 @@ do_install:append() {
 
     # Changelogs
     find "${D}${nonarch_libdir}" -name "CHANGELOG*" -delete
+
+    # Precompressed .br/.gz sidecars of web assets. Without them the server
+    # serves the plain file and compresses it at runtime. Only remove files
+    # whose uncompressed original exists, so standalone .gz data is kept.
+    find "${D}${nonarch_libdir}" -type f \( -name "*.br" -o -name "*.gz" \) \
+        -exec sh -c 'for f; do if [ -f "${f%.*}" ]; then rm -f "$f"; fi; done' sh {} +
 }
