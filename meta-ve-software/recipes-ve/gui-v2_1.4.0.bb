@@ -9,7 +9,7 @@ WARN_QA:remove = "buildpaths"
 ERROR_QA:remove = "buildpaths"
 
 DEPENDS += "qtdeclarative-native qttools-native"
-DEPENDS += "qt5compat qtbase qtdeclarative qtmqtt qtshadertools qtsvg qtvirtualkeyboard"
+DEPENDS += "qt5compat qtbase qtdeclarative qtmqtt qtshadertools qtsvg qtvirtualkeyboard qtwebchannel qtwebengine"
 RDEPENDS:${PN} = " \
     qt5compat-qmlplugins \
     qtbase-plugin-qeglfs \
@@ -19,6 +19,11 @@ RDEPENDS:${PN} = " \
     qtdeclarative-qmlplugins \
     qtsvg-plugin-qsvg \
     qtvirtualkeyboard-qmlplugins \
+    qtwebchannel-modules \
+    qtwebchannel-qmlplugins \
+    qtwebengine \
+    qtwebengine-modules \
+    qtwebengine-qmlplugins \
     venus-ui-themes \
 "
 # FIXME: should become an RDEPEND of qtvirtualkeyboard-qmlplugins
@@ -28,13 +33,13 @@ PACKAGES += "start-gui-v2"
 DAEMON_PN = "start-gui-v2"
 RDEPENDS:${DAEMON_PN} = "${PN}"
 
-DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec ${@softlimit(d, data=768000000, stack=1000000, all=768000000)} ${bindir}/venus-gui-v2"
+DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && export QTWEBENGINE_DISABLE_SANDBOX=1 && exec ${@softlimit(d, data=768000000, stack=1000000, all=768000000)} ${bindir}/venus-gui-v2"
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/nmbath/gui-v2.git;branch=mbath/exchange;protocol=ssh;user=git \
+    gitsm://github.com/nmbath/gui-v2.git;branch=mbath/web-pages;protocol=ssh;user=git \
 "
-SRCREV = "6844239a0a0d860cac2cdb6e01db00a2e1c215e5"
+SRCREV = "0d51ed845b54db5576bf6b8d1d0e69c4cb39b232"
 S = "${WORKDIR}/git"
 
 do_install:append() {
