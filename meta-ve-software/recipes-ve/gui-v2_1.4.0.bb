@@ -32,10 +32,9 @@ DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec ${@softlimit(d, data=76800
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/gui-v2.git;branch=main;protocol=ssh;user=git \
-    file://0001-cmake-use-CMAKE_CROSSCOMPILING-for-desktop-build-de.patch \
+    gitsm://github.com/nmbath/gui-v2.git;branch=mbath/exchange;protocol=ssh;user=git \
 "
-SRCREV = "d680c66e78d320901475ffde071a907e8a256b32"
+SRCREV = "6844239a0a0d860cac2cdb6e01db00a2e1c215e5"
 S = "${WORKDIR}/git"
 
 do_install:append() {
@@ -44,4 +43,3 @@ do_install:append() {
     # causing a standard 'rm' command to fail with a "No such file or directory" error.
     rm -rf ${D}/usr
 }
-
