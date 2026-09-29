@@ -32,9 +32,9 @@ DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && exec ${@softlimit(d, data=76800
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/nmbath/gui-v2.git;branch=mbath/exchange;protocol=ssh;user=git \
+    gitsm://github.com/nmbath/gui-v2.git;branch=mbath/branding;protocol=ssh;user=git \
 "
-SRCREV = "6844239a0a0d860cac2cdb6e01db00a2e1c215e5"
+SRCREV = "4bd16b05d2a72447d21c41f43b32402273cf76e8"
 S = "${WORKDIR}/git"
 
 do_install:append() {
