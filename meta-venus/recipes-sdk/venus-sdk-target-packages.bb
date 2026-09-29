@@ -39,4 +39,6 @@ RDEPENDS:${PN} += " \
     qtmqtt-dev \
     qtserialport-dev \
     qtsvg-dev \
+    qtwebengine-dev \
+    qtwebengine-qmlplugins \
 "
