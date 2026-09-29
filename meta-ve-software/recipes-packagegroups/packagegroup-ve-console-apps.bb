@@ -20,4 +20,5 @@ RDEPENDS:${PN} += " \
     venus-exchange \
     venus-web-pages \
     venus-identities-runtime \
+    venus-package-manager \
 "
