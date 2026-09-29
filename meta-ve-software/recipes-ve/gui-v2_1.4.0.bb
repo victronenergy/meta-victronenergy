@@ -37,9 +37,9 @@ DAEMONTOOLS_SCRIPT = ". /etc/profile.d/qt6.sh && export QTWEBENGINE_DISABLE_SAND
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/nmbath/gui-v2.git;branch=mbath/containers;protocol=ssh;user=git \
+    gitsm://github.com/nmbath/gui-v2.git;branch=mbath/special;protocol=ssh;user=git \
 "
-SRCREV = "c38bd7edcd759c1f06c2da4de53889f14af3afc0"
+SRCREV = "2c24a13a85e7202ea375504a6ab841aaff5e088d"
 S = "${WORKDIR}/git"
 
 do_install:append() {
