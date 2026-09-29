@@ -19,4 +19,5 @@ RDEPENDS:${PN} += " \
     localsettings \
     venus-exchange \
     venus-web-pages \
+    venus-identities-runtime \
 "
