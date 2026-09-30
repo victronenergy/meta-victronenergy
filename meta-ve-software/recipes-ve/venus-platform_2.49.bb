@@ -5,6 +5,16 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 DEPENDS = "dbus libevdev iptables qtbase udev"
 RDEPENDS:${PN} += "can-utils connman flashmq mk2vsc qtbase-plugin-qopensslbackend socketcand"
 
+# container has no macvlan/ipvlan-manageable interface for connman to work
+# with anyway (see meta-venus/recipes-packagegroups/packagegroup-venus-core.bb)
+RDEPENDS:${PN}:remove:venus-oci = "connman"
+
+# compiled-in Device/IsContainer flag other daemons/the GUI can key off
+EXTRA_QMAKEVARS_PRE:append:venus-oci = " DEFINES+=VENUS_CONTAINER"
+
+# OCI builds differ from hardware builds with the same tune.
+PACKAGE_ARCH:venus-oci = "${MACHINE_ARCH}"
+
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
     gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git \
