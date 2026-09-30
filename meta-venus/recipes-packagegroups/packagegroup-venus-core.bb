@@ -86,3 +86,6 @@ RDEPENDS:${PN}:append:nanopi = " dbus-paygo"
 
 # hardware gets this from swupdate-scripts' scan-versions.sh
 RDEPENDS:${PN}:append:venus-container = " venus-container-versions"
+
+# hardware sets this when the native display process starts
+RDEPENDS:${PN}:append:venus-container = " venus-container-gui-version"
