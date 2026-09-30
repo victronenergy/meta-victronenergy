@@ -14,12 +14,12 @@ EXTRA_QMAKEVARS_PRE:append:venus-container = " DEFINES+=VENUS_CONTAINER"
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = " \
-    gitsm://github.com/victronenergy/venus-platform.git;branch=master;protocol=ssh;user=git \
+    gitsm://github.com/victronenergy/venus-platform.git;branch=mbath/oci;protocol=ssh;user=git \
     file://can.inc \
     file://venus_dbus_bridge_template.conf \
     file://venus_rpc_bridge_template.conf \
 "
-SRCREV = "ea294f2d52eb7f2224beffb438e4d2f607ee1c20"
+SRCREV = "101bd0bfe876e7efd58ea00aeaf055922eac1117"
 S = "${WORKDIR}/git"
 
 DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/venus-platform"
