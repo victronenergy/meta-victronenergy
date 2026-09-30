@@ -7,5 +7,6 @@ inherit packagegroup
 
 RDEPENDS:${PN} += "\
     packagegroup-venus-core \
+    venus-oci-gui-version \
     venus-oci-versions \
 "
