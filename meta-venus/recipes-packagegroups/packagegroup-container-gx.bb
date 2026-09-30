@@ -10,6 +10,7 @@ RDEPENDS:${PN} += "\
     packagegroup-core-boot \
     packagegroup-ve-console-apps \
     packagegroup-venus-base \
+    container-gx-env \
     container-gx-gui-version \
     container-gx-sysfs \
     container-gx-versions \
