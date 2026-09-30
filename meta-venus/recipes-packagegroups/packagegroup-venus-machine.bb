@@ -11,7 +11,6 @@ include qt6-packages.inc
 # themselves causes the task signatures to change and that propagates to all dependent
 # tasks.
 RDEPENDS:${PN} += "\
-    machine-runtime-conf \
     qtplatform \
     simple-upnpd \
 "
@@ -112,16 +111,3 @@ RDEPENDS:${PN}:append:rpi = "\
 RDEPENDS:${PN}:append:raspberrypi5 = " \
     rpi5-network-workaround \
 "
-
-# netmon provides a workaround for an problem solved years ago
-# and it is a open issue if the package shouldn't be dropped.
-# Since it requires quite some resources with the scarthgap
-# python version, drop it for the devices with little memory.
-NETMON = " netmon"
-NETMON:ccgx = ""
-NETMON:canvu500 = ""
-RDEPENDS:${PN}:append = "${NETMON}"
-
-DBUS_SHELLY = " dbus-shelly"
-DBUS_SHELLY:ccgx = ""
-RDEPENDS:${PN}:append = "${DBUS_SHELLY}"
