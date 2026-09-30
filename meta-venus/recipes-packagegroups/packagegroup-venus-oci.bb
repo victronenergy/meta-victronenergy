@@ -10,6 +10,7 @@ RDEPENDS:${PN} += "\
     packagegroup-core-boot \
     packagegroup-ve-console-apps \
     packagegroup-venus-base \
+    venus-oci-env \
     venus-oci-gui-version \
     venus-oci-sysfs \
     venus-oci-versions \
