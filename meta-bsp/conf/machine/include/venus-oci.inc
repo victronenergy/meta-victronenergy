@@ -7,3 +7,7 @@ PREFERRED_PROVIDER_kernel-image ?= "linux-dummy"
 
 MACHINE_FEATURES = "ext2"
 
+# No Classic UI, VNC display or VE.Smart server in the OCI image
+RDEPENDS:packagegroup-ve-addons:remove = "gui vesmart-server"
+RDEPENDS:packagegroup-ve-console-apps:remove = "javascript-vnc-client"
+START_GUI = ""
