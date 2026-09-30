@@ -20,11 +20,15 @@ SRC_URI += " \
     file://nginx-testmode.conf \
     file://start-nginx.sh \
 "
+
+SRC_URI:append:venus-container = " file://start-nginx-container.sh"
+
 PR = "3"
 
 inherit daemontools localsettings www
 
 RDEPENDS:${PN} += "php-fpm venus-www venus-www-config"
+RDEPENDS:${PN}:append:venus-container = " venus-container-env"
 EXTRA_OECONF = "--error-log-path=/var/volatile/log/nginx/error.log"
 PACKAGECONFIG:append = " http-auth-request"
 
@@ -60,5 +64,10 @@ EOF
     install -m 644 ${UNPACKDIR}/http.site ${D}${sysconfdir}/nginx/sites-available
     install -m 644 ${UNPACKDIR}/http-explanation.site ${D}${sysconfdir}/nginx/sites-available
     install -m 644 ${UNPACKDIR}/https.site ${D}${sysconfdir}/nginx/sites-available
+}
+
+do_install:append:venus-container() {
+    install -m 755 ${UNPACKDIR}/start-nginx-container.sh \
+        ${D}${sbindir}/start-nginx.sh
 }
 
