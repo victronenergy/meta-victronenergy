@@ -1,4 +1,6 @@
 #!/bin/sh
 
-cat /sys/firmware/devicetree/base/model | tr '\0' '\n'
+f=/sys/firmware/devicetree/base/model
+[ -f "$f" ] || exit 1
+tr '\0' '\n' < "$f"
 
