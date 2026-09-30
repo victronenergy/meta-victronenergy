@@ -4,7 +4,7 @@ ARM, MIPS and several other processors, which can be installed in a boot \
 ROM and used to initialize and test the hardware or to download and run \
 application code."
 SECTION = "bootloaders"
-DEPENDS += "flex-native bison-native"
+DEPENDS += "flex-native bison-native gnutls-native"
 
 LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/LGPL-2.1-or-later;md5=2a4f4fd2128ea2f65047ee63fbca9f68"
