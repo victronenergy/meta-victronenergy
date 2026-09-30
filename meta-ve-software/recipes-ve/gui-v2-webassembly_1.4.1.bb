@@ -1,11 +1,13 @@
 include gui-v2.inc
 
+# Container support is not yet available in an official GUIv2 release.
 SRC_URI = " \
-	https://github.com/victronenergy/gui-v2/releases/download/v${PV}/venus-webassembly.zip;downloadfilename=venus-webassembly-${PV}.zip \
+	https://github.com/nmbath/gui-v2/releases/download/v1.4.1-container-gx1/venus-webassembly.zip;downloadfilename=venus-webassembly-v1.4.1-container-gx1.zip \
 	file://calc-gui-v2-wasm-sha26.sh \
 	file://localsettings \
 "
-SRC_URI[sha256sum] = "882da093e9a908daea2c415d9fbc126bb0d4bc4b991946149e821ba23542cd89"
+SRC_URI[sha256sum] = "b28e149d4b0286aa7c5b6121f464715b449c4e3b5f590786aafb09f1fbf21b00"
+
 S = "${UNPACKDIR}/wasm"
 
 inherit localsettings www
