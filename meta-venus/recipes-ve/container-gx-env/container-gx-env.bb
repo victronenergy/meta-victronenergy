@@ -7,7 +7,10 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-SRC_URI = "file://container-env.sh"
+SRC_URI = " \
+    file://container-env.sh \
+    file://container-http-ports.sh \
+"
 
 S = "${S_UNUSED}"
 
@@ -21,4 +24,8 @@ INITSCRIPT_PARAMS = "start 06 S ."
 do_install() {
     install -d ${D}${sysconfdir}/init.d
     install -m 0755 ${UNPACKDIR}/container-env.sh ${D}${sysconfdir}/init.d/
+
+    # run by start-nginx.sh before it starts nginx
+    install -d ${D}${sysconfdir}/venus/www.d
+    install -m 0755 ${UNPACKDIR}/container-http-ports.sh ${D}${sysconfdir}/venus/www.d/
 }
