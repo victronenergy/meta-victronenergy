@@ -43,7 +43,12 @@ if [ -n "$pid" ]; then
     exit
 fi
 
-case $(product-name) in
+name=$(product-name)
+if [ -z "$name" ] && [ -f /etc/venus/machine ]; then
+	name=$(cat /etc/venus/machine)
+fi
+
+case "$name" in
 "Color Control GX")
 	echo C001
 	;;
@@ -52,6 +57,9 @@ case $(product-name) in
 	;;
 "Octo GX")
 	echo C006
+	;;
+arm64|armv7|amd64)
+	echo C018
 	;;
 *)
 	echo C003
