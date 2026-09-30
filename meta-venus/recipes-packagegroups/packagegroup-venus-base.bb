@@ -12,16 +12,9 @@ DESCRIPTION = " \
     image would ship venus-base + ve-*, but shipping a angstrom-base + \
     ve-*-apps should work as well (at least in theory) \
     \
-    note: machine specific venus base recipes are in packagegroup-venus-machine \
-    (yes the base is missing, but it is already a long enough name. It is just \
-    to make this packagegroup not machine specific, so bitbake doesn't \
-    deinstall and reinstall everything when switching MACHINE's, but can just leave \
-    or use the sstate package) \
-    \
-    note: For machines without any display or monitor simple-upnp / \
-    javascript-vnc-client suddenly become base packages, since it is the / \
-    only way to connect with them easily. I guess those should be moved to \
-    packagegroup-venus-machine and depend on a MACHINE feature. \
+    note: hardware support, such as networking, wireless firmware, \
+    a local display and the watchdog, and other machine specific \
+    packages are in packagegroup-venus-machine. \
 "
 
 # See commit 5bf3e447, packagegroups with dynamic package, like dbus, should be
@@ -31,18 +24,12 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 
 RDEPENDS:${PN} += "\
-    avahi-autoipd \
     bash \
-    bluez5 \
-    bluez5-noinst-tools \
     bzip2 \
     ca-certificates \
     can-utils \
     can-utils-access \
     can-utils-cantest \
-    ch343 \
-    connman \
-    connman-tools \
     crash-logger \
     cronie \
     curl \
@@ -51,7 +38,6 @@ RDEPENDS:${PN} += "\
     dbus-common \
     dbus-tools \
     default-locale \
-    dnsmasq \
     dpkg-start-stop \
     e2fsprogs \
     eglibc-utils \
@@ -59,15 +45,8 @@ RDEPENDS:${PN} += "\
     gdbserver \
     io-extender \
     iproute2 \
-    javascript-vnc-client \
     ldd \
     less \
-    linux-firmware-mt7601u \
-    linux-firmware-mt7662 \
-    linux-firmware-rt2800 \
-    linux-firmware-rt73 \
-    linux-firmware-rtl8192cu \
-    linux-firmware-rtl-bt \
     llmnrd \
     localedef \
     logo \
@@ -77,11 +56,8 @@ RDEPENDS:${PN} += "\
     openssh-sftp-server \
     opkg \
     permanent-storage \
-    pointercal \
-    ppp \
     python-symlink \
     rsync \
-    rtl8192eu \
     screen \
     socat \
     sysctl-conf \
@@ -103,10 +79,21 @@ RDEPENDS:${PN} += "\
     venus-feed-configs \
     venus-html5-app \
     venus-mdns-aliases \
-    watchdog \
     wget \
-    wireless-regdb-static \
     zip \
 "
 
 RDEPENDS:${PN} += "python3-s2"
+
+# netmon provides a workaround for an problem solved years ago
+# and it is a open issue if the package shouldn't be dropped.
+# Since it requires quite some resources with the scarthgap
+# python version, drop it for the devices with little memory.
+NETMON = " netmon"
+NETMON:ccgx = ""
+NETMON:canvu500 = ""
+RDEPENDS:${PN}:append = "${NETMON}"
+
+DBUS_SHELLY = " dbus-shelly"
+DBUS_SHELLY:ccgx = ""
+RDEPENDS:${PN}:append = "${DBUS_SHELLY}"
