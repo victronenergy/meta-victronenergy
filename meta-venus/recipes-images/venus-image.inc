@@ -1,6 +1,7 @@
 IMAGE_INSTALL = "\
     packagegroup-core-boot \
     packagegroup-base \
+    packagegroup-venus-core \
     packagegroup-venus-base \
     packagegroup-venus-machine \
     venus-version \
