@@ -11,3 +11,7 @@ MACHINE_FEATURES = "ext2"
 RDEPENDS:packagegroup-ve-addons:remove = "gui vesmart-server"
 RDEPENDS:packagegroup-ve-console-apps:remove = "javascript-vnc-client"
 START_GUI = ""
+
+# An OCI target can have the SDK architecture; keep their toolchain prefixes
+# apart. Native SDK recipes ignore machine overrides, so append instead.
+SDK_VENDOR:append = "sdk"
