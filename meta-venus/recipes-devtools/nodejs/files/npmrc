@@ -1,0 +1,12 @@
+# npm's builtin configuration, used by the Node-RED Palette Manager and the
+# Signal K App Store. Settings in /usr/etc/npmrc and ~/.npmrc take precedence.
+
+# npm uses up to 15 concurrent registry connections by default, which raises
+# its peak memory use. One connection saved about 20 MB when installing
+# @flowfuse/node-red-dashboard on a Cerbo GX MK3, without slowing it down.
+maxsockets=1
+
+fund=false
+audit=false
+update-notifier=false
+progress=false
