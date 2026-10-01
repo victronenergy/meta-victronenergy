@@ -132,4 +132,9 @@ init_default_flow
 
 export TZ=$(get_setting /Settings/System/TimeZone)
 
+# Limit the young generation of the V8 heap. It reduces the peak memory use
+# of Node-RED at startup and of npm during palette installs, which inherits
+# this environment.
+export NODE_OPTIONS="--max-semi-space-size=2${NODE_OPTIONS:+ $NODE_OPTIONS}"
+
 exec /usr/bin/node-red $safe --userDir "${NODE_RED}" --settings /usr/lib/node_modules/node-red/venus-settings.js "$@"
