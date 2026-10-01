@@ -5,7 +5,7 @@
 SWUDEV=mmcblk1p1
 MMCDEV=mmcblk0
 BOARD_ID_DEV=1-00500
-MODULES="display-connector sii902x tidss victron-gxdisp-bl"
+MODULES="display-connector sii902x ti-tfp410 tidss victron-gxdisp-bl"
 TTYS="$TTYS tty0"
 TESTMODE_TTYS="ttyS2"
 
