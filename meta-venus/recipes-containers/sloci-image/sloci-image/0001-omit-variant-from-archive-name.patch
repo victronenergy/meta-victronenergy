@@ -1,0 +1,20 @@
+From 3fa6c1ca8c9863671c07a8b8ed1d99b3c0554344 Mon Sep 17 00:00:00 2001
+From: nmbath <bathnm@icloud.com>
+Date: Thu, 1 Oct 2026 16:00:00 +0100
+Subject: [PATCH] sloci-image: omit variant from archive name
+
+meta-virtualization reconstructs the sloci archive name without the
+architecture variant. ARMv7 image creation consequently fails after sloci
+has successfully produced the archive.
+
+Upstream-Status: Inappropriate [meta-virtualization compatibility]
+Signed-off-by: nmbath <bathnm@icloud.com>
+---
+ sloci-image | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/sloci-image
++++ b/sloci-image
+@@ -428 +428 @@
+-	file_name="$file_name${CFG_ARCH_VARIANT:+"-$CFG_ARCH_VARIANT"}-$CFG_OS.oci-image"
++	file_name="$file_name-$CFG_OS.oci-image"
