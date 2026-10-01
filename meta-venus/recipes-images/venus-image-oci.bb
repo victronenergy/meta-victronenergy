@@ -16,7 +16,10 @@ IMAGE_FEATURES += "package-management"
 IMAGE_LINGUAS = "en-us"
 COPY_LIC_DIRS = "0"
 
+IMGCLASSES:remove = "populate_sdk_ext"
 inherit core-image
+
+deltask populate_sdk
 
 IMAGE_BASENAME = "venus-oci"
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
