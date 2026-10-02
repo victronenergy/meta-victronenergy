@@ -1,0 +1,49 @@
+From 3fbdb975bff44951e3d9de806c222c5f87f404a1 Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Tue, 8 Sep 2026 13:35:10 +0200
+Subject: [PATCH] batterysettings: Don't force SVS for Pytes
+
+https://github.com/victronenergy/venus/issues/1677
+---
+ delegates/batterysettings.py | 8 ++++----
+ tests/batterysense_test.py   | 5 +++--
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/delegates/batterysettings.py b/delegates/batterysettings.py
+index e9510f90..50aa6a48 100644
+--- a/delegates/batterysettings.py
++++ b/delegates/batterysettings.py
+@@ -51,13 +51,13 @@ def apply_battery_settings(self, service):
+ 		# Set good settings for known batteries. Force SVS off and DVCC on
+ 		# for some batteries.
+ 		if pid in (BATTERY_PYLONTECH, BATTERY_BYD, BATTERY_BYD_L, BATTERY_BYD_PREMIUM,
+-				BATTERY_DISCOVER_AES, BATTERY_PYTES, BATTERY_LEOCH, BATTERY_LBSA,
+-				BATTERY_BSLBATT, BATTERY_BMZ, BATTERY_CEGASA, BATTERY_PELIO_L, BATTERY_ZYC,
+-				BATTERY_SUNWODA, BATTERY_TAB):
++				BATTERY_DISCOVER_AES, BATTERY_LEOCH, BATTERY_LBSA,
++				BATTERY_BSLBATT, BATTERY_BMZ, BATTERY_CEGASA, BATTERY_PELIO_L,
++				BATTERY_ZYC, BATTERY_SUNWODA, BATTERY_TAB):
+ 			self._settings['vsense'] = 2 # Forced Off
+ 			self._settings['tsense'] = 2 # Forced Off
+ 			self._settings['bol'] = 3 # Forced on
+-		elif pid in (BATTERY_FREEDOMWON, BATTERY_ETOWER, BATTERY_HUBBLE, BATTERY_FINDREAMS, BATTERY_WECO, BATTERY_BLUENOVA):
++		elif pid in (BATTERY_FREEDOMWON, BATTERY_ETOWER, BATTERY_HUBBLE, BATTERY_FINDREAMS, BATTERY_WECO, BATTERY_BLUENOVA, BATTERY_PYTES):
+ 			if self._settings['vsense'] & 2:
+ 				self._settings['vsense'] &= 1 # Remove setting if it was forced
+ 			self._settings['tsense'] = 2 # Forced Off
+diff --git a/tests/batterysense_test.py b/tests/batterysense_test.py
+index a9caa944..284199d1 100644
+--- a/tests/batterysense_test.py
++++ b/tests/batterysense_test.py
+@@ -680,8 +680,9 @@ def test_forced_settings(self):
+ 			self.assertTrue(Dvcc.instance.has_dvcc)
+ 			self._remove_device('com.victronenergy.battery.ttyO2')
+ 
+-		# FreedomWON, BlueNova, Hubble and FD forces bol, but not SVS
+-		for product_id in (0xB014, 0xB020, 0xB024, 0xB051, 0xB02A, 0xB02B):
++		# FreedomWON, BlueNova, Hubble, FD, Weco, BlueNova and Pytes forces
++		# bol, but not SVS
++		for product_id in (0xB014, 0xB020, 0xB024, 0xB051, 0xB02A, 0xB01B, 0xB02B):
+ 			self._add_device('com.victronenergy.battery.ttyO2',
+ 				product_name='battery',
+ 				values={

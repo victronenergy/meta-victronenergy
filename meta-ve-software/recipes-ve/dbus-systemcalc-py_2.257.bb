@@ -9,9 +9,11 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-systemcalc-py.git;branch=master;protocol=https \
     file://com.victronenergy.system.conf \
     file://localsettings \
+    file://batterysettings-dont-force-svs-for-pytes.patch \
 "
 SRCREV = "999bd6665e7e1299c58e461d6342f64f90b48e67"
 S = "${WORKDIR}/git"
+PR = "1"
 
 RDEPENDS:${PN} = " \
     localsettings \
