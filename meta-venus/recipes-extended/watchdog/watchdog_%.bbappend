@@ -14,6 +14,7 @@ SRC_URI += "\
     file://vrm-online.sh \
     file://0001-Use-MemAvailable-instead-of-MemFree.patch \
     file://0002-add-test-prescaler-to-run-test-less-often.patch \
+    file://0003-memory-hardcode-the-pagesize-to-4k.patch \
 "
 
 INITSCRIPT_PACKAGES = "${PN}"

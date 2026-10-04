@@ -1,0 +1,57 @@
+From b79903b3140667b0804b32093a5f849e2a2160c9 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Sun, 4 Oct 2026 16:15:31 +0000
+Subject: [PATCH] memory: hardcode the pagesize to 4k
+
+There is probably some logic behind this, but for Venus there is no
+interest in the amount of pages being left. The idea is to start a
+proper reboot before the OOM-killer kicks in. The reboot process itself
+takes some memory, and some margin should be reserved. (It is 10MB at
+the moment).
+
+It should not depend on the page-size (since that would reserve more if
+pagesize are larger).
+
+For what it is worth:
+  - EXEC_PAGESIZE is the max.
+  - getpagesize() is what it actual is.
+  - and 4k is what we would expect.
+
+Upstream-Status: Inappropriate [Venus specific]
+---
+ src/memory.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/src/memory.c b/src/memory.c
+index d380637..0c79c62 100644
+--- a/src/memory.c
++++ b/src/memory.c
+@@ -34,6 +34,16 @@
+ #define USED_BUFFER	"Buffers:"
+ #define USED_CACHE	"Cached:"
+ 
++/*
++ * NOTE: linux reports the memory sizes in kB, this make the page size
++ * fixed to 4k, instead of trying to figure out how many pages that are.
++ * (since that makes it arch / config dependend) it just limits it to
++ * the size in bytes (indirectly).
++ *
++ * A more proper solution would be to add a config for kB instead of pages.
++ */
++#define HARDCODED_PAGESIZE 4096
++
+ static int mem_fd = -1;
+ static const char mem_name[] = "/proc/meminfo";
+ 
+@@ -70,7 +80,7 @@ static long read_svalue(const char *buf, const char *var)
+ 
+ static long kb_per_page(int pages)
+ {
+-	return pages * (long)(EXEC_PAGESIZE / 1024);
++	return pages * (long)(HARDCODED_PAGESIZE / 1024);
+ }
+ 
+ /*
+-- 
+2.43.0
+
