@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# sysvinit re-execs /sbin/init with --init when asked by container-stop.sh.
+# Exit then, ending the container, as halt and reboot are not permitted.
+if [ "$1" = "--init" ]; then
+    case "$(runlevel)" in
+    *" 0") exit 0 ;;
+    *" 6") exit 129 ;;
+    esac
+fi
+
+exec /sbin/init.sysvinit "$@"
