@@ -1,0 +1,54 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: nmbath <bathnm@icloud.com>
+Date: Mon, 5 Oct 2026 18:00:00 +0100
+Subject: [PATCH] sloci-image: add stop signal option
+
+Venus' sysvinit ignores the signals Docker and Podman send by default, so
+containers are killed after the stop timeout instead of shutting down.
+
+image-oci-sloci-image.inc does not pass OCI_IMAGE_STOPSIGNAL, so take the
+default from the environment.
+
+Upstream-Status: Inappropriate [meta-virtualization compatibility]
+Signed-off-by: nmbath <bathnm@icloud.com>
+---
+ sloci-image | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/sloci-image b/sloci-image
+index 3496cf0..e1a0619 100644
+--- a/sloci-image
++++ b/sloci-image
+@@ -42,6 +42,8 @@
+ #                          format: <port>/tcp, <port>/udp, or <port> (same as <port>/tcp).
+ #                          Aliases: --expose.
+ #
++#   -s --stop-signal SIG   Signal that stops the container. Defaults to $OCI_IMAGE_STOPSIGNAL.
++#
+ #   -t --tar               Pack image in a TAR archive.
+ #
+ #   -u --user USER         The username or UID of user the process run as.
+@@ -274,6 +276,7 @@ oci_image_config() {
+ 	    "Env": $(json_string_array "$CFG_ENV"),
+ 	    "Entrypoint": $(json_string_array "$CFG_ENTRYPOINT"),
+ 	    "Cmd": $(json_string_array "$CFG_CMD"),
++	    ${CFG_STOP_SIGNAL:+"\"StopSignal\": $(json_string "$CFG_STOP_SIGNAL"),"}
+ 	    "Volumes": $(json_pseudoarray "$CFG_VOLUMES"),
+ 	    ${CFG_WORKING_DIR:+"\"WorkingDir\": $(json_string "$CFG_WORKING_DIR"),"}
+ 	    "Labels": $(json_string_map "$CFG_LABELS")
+@@ -329,6 +332,7 @@ CFG_ARCH= CFG_ARCH_VARIANT= CFG_AUTHOR= CFG_ENTRYPOINT= CFG_CMD= CFG_ENV=
+ CFG_LABELS= CFG_OS= CFG_PORTS= CFG_USER= CFG_VOLUMES= CFG_WORKING_DIR=
+ 
+ CFG_OS='linux'
++CFG_STOP_SIGNAL="${OCI_IMAGE_STOPSIGNAL:-}"
+ OUT_TYPE='dir'
+ 
+ while [ $# -gt 0 ]; do
+@@ -347,6 +351,7 @@ while [ $# -gt 0 ]; do
+ 		              CFG_LABELS="${CFG_LABELS}${LIST_SEP}$(prefix_label "$2")";;
+ 		     --os) CFG_OS="$2";;
+ 		-p | --port | --expose) CFG_PORTS="${CFG_PORTS}${LIST_SEP}$2";;
++		-s | --stop-signal) CFG_STOP_SIGNAL="$2";;
+ 		-t | --tar) OUT_TYPE='tar'; n=1;;
+ 		-u | --user) CFG_USER="$2";;
+ 		-V | --version) echo "$PROGNAME $VERSION"; exit 0;;
