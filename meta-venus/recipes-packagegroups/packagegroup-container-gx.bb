@@ -12,6 +12,7 @@ RDEPENDS:${PN} += "\
     packagegroup-venus-base \
     container-gx-env \
     container-gx-gui-version \
+    container-gx-init \
     container-gx-sysfs \
     container-gx-versions \
     container-gx-volatile \
