@@ -16,4 +16,9 @@ do_install:append () {
     IFS="${ORIG_IFS}"
 }
 
+# Container runtimes stop the container with SIGPWR.
+do_install:append:venus-oci () {
+    echo "pf::powerfail:/sbin/shutdown -h now" >> ${D}${sysconfdir}/inittab
+}
+
 FILES:${PN} += "${base_sbindir}"

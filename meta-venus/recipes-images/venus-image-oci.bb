@@ -46,4 +46,8 @@ OCI_IMAGE_SUBARCH:armv7 = "v7"
 OCI_IMAGE_TAG = "${@d.getVar('DISTRO_VERSION').replace('~', '-')}"
 
 OCI_IMAGE_ENTRYPOINT = "/sbin/init"
+# sysvinit ignores SIGTERM and SIGRTMIN+3, the Docker and Podman defaults,
+# and SIGINT reboots.
+OCI_IMAGE_STOPSIGNAL = "SIGPWR"
+export OCI_IMAGE_STOPSIGNAL
 OCI_IMAGE_PORTS = "80/tcp 443/tcp 1883/tcp 8883/tcp 9001/tcp"
