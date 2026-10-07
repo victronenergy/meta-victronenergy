@@ -2,6 +2,8 @@
 
 dev=$1
 rate=$2
+# optional, enables CAN-fd when set
+drate=${3:-0}
 
 bitrate_easysolar() {
     case $dev:$1 in
@@ -41,7 +43,15 @@ up() {
 
     # note: this is not done at once on purpose; some drivers don't support some
     # properties, e.g. the vcan will bail out when trying to set the bitrate.
-    ip link set $dev type can $(bitrate $rate)
+    if [ $drate -gt 0 ]; then
+        # the kernel requires bitrate, dbitrate and fd on in a single request
+        ip link set $dev type can $(bitrate $rate) dbitrate $drate fd on
+    else
+        ip link set $dev type can $(bitrate $rate)
+        # Turn fd off in case it was enabled before; controllers without
+        # CAN-fd support reject even this, so ignore the error.
+        ip link set $dev type can fd off 2>/dev/null
+    fi
     ip link set $dev type can restart-ms 1000
     ip link set $dev up txqueuelen 100
 }
