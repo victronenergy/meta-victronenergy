@@ -1,0 +1,88 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Rein van der Zee <rvanderzee@victronenergy.com>
+Date: Wed, 7 Oct 2026 00:00:00 +0000
+Subject: [PATCH] i2c: omap: don't write beyond the end of the rx buffer
+
+omap_i2c_receive_data() copies num_bytes from the RX FIFO into the
+message buffer without checking buf_len. For RRDY, num_bytes is the
+FIFO threshold, not the number of bytes still expected, so an RRDY
+interrupt arriving when the message is already complete writes a full
+threshold worth of bytes past the end of the buffer and underflows
+buf_len. A following RDR then uses the truncated, underflowed buf_len
+as byte count and overwrites even more memory.
+
+On an am62xx Cerbo GX this happens during heavy touch use on 33-byte
+touch reads (FIFO threshold 16) and eventually corrupts the stack of
+the edt-ft5x06 interrupt thread:
+
+  Kernel panic - not syncing: stack-protector: Kernel stack is
+  corrupted in: edt_ft5x06_ts_isr+0x1d8/0x1d8 [edt_ft5x06]
+
+Drain and drop the unexpected bytes instead and warn about it. The
+transfer itself is left to complete as before, so the requested data
+is still delivered; resetting the controller mid-transfer can leave
+other devices on the bus in an undefined state.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ drivers/i2c/busses/i2c-omap.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
+index 0bdee43dc134..15d9a1931dab 100644
+--- a/drivers/i2c/busses/i2c-omap.c
++++ b/drivers/i2c/busses/i2c-omap.c
+@@ -193,6 +193,7 @@ struct omap_i2c_dev {
+ 	u8			*buf;
+ 	u8			*regs;
+ 	size_t			buf_len;
++	u16			addr;		/* target of current msg */
+ 	struct i2c_adapter	adapter;
+ 	u8			threshold;
+ 	u8			fifo_size;	/* use as flag and value
+@@ -677,6 +678,7 @@ static int omap_i2c_xfer_msg(struct i2c_adapter *adap,
+ 	/* REVISIT: Could the STB bit of I2C_CON be used with probing? */
+ 	omap->buf = msg->buf;
+ 	omap->buf_len = msg->len;
++	omap->addr = msg->addr;
+ 
+ 	/* make sure writes to omap->buf_len are ordered */
+ 	barrier();
+@@ -1000,10 +1002,18 @@ static int errata_omap3_i462(struct omap_i2c_dev *omap)
+ static void omap_i2c_receive_data(struct omap_i2c_dev *omap, u8 num_bytes,
+ 		bool is_rdr)
+ {
++	unsigned int	dropped = 0;
+ 	u16		w;
+ 
+ 	while (num_bytes--) {
+ 		w = omap_i2c_read_reg(omap, OMAP_I2C_DATA_REG);
++
++		/* Never write beyond the end of the message buffer */
++		if (!omap->buf_len) {
++			dropped++;
++			continue;
++		}
++
+ 		*omap->buf++ = w;
+ 		omap->buf_len--;
+ 
+@@ -1011,11 +1021,17 @@ static void omap_i2c_receive_data(struct omap_i2c_dev *omap, u8 num_bytes,
+ 		 * Data reg in 2430, omap3 and
+ 		 * omap4 is 8 bit wide
+ 		 */
+-		if (omap->flags & OMAP_I2C_FLAG_16BIT_DATA_REG) {
++		if ((omap->flags & OMAP_I2C_FLAG_16BIT_DATA_REG) &&
++		    omap->buf_len) {
+ 			*omap->buf++ = w >> 8;
+ 			omap->buf_len--;
+ 		}
+ 	}
++
++	if (dropped)
++		dev_warn_ratelimited(omap->dev,
++			"%s: dropped %u unexpected RX bytes for addr 0x%02x\n",
++			is_rdr ? "RDR" : "RRDY", dropped, omap->addr);
+ }
+ 
+ static int omap_i2c_transmit_data(struct omap_i2c_dev *omap, u8 num_bytes,

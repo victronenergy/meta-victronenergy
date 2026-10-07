@@ -15,7 +15,10 @@ include recipes-kernel/linux/cve-exclusion.inc
 # still unknown cve statuses
 include linux-venus-cve-exclusion.inc
 
-SRC_URI = "git://github.com/victronenergy/linux.git;protocol=https;branch=venus-6.12.90"
+SRC_URI = " \
+    git://github.com/victronenergy/linux.git;protocol=https;branch=venus-6.12.90 \
+    file://0001-i2c-omap-don-t-write-beyond-the-end-of-the-rx-buffer.patch \
+"
 BB_GIT_DEFAULT_DESTSUFFIX ?= "git"
 S = "${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX}"
 
