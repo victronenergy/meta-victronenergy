@@ -1,0 +1,18 @@
+Upstream-Status: Inappropriate [Venus specific]
+
+A container runtime sets up /dev for the container, and mounting
+devtmpfs over it replaces that setup.
+
+--- a/init
++++ b/init
+@@ -73,8 +73,8 @@
+         echo "Halting..."
+         halt
+     fi
+-    # mount the devtmpfs on /dev, if not already done
+-    LANG=C awk '$2 == "/dev" && ($3 == "devtmpfs") { exit 1 }' /proc/mounts && {
++    # mount the devtmpfs on /dev, unless something is mounted there already
++    LANG=C awk '$2 == "/dev" { exit 1 }' /proc/mounts && {
+             mount -n -o mode=0755 -t devtmpfs none "/dev"
+     }
+     [ -e /dev/pts ] || mkdir -m 0755 /dev/pts
