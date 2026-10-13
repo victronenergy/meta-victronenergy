@@ -4,6 +4,9 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 DISTRO_FEED_ARCHS = "all ${TUNE_PKGARCH} ${MACHINE_ARCH}"
+# No feeds are published for the Container GX machines, nor for the amd64 CPU type.
+DISTRO_FEED_ARCHS:container-gx = "all ${TUNE_PKGARCH}"
+DISTRO_FEED_ARCHS:container-gx-amd64 = "all"
 FEEDS = "develop testing candidate release"
 
 do_compile() {
