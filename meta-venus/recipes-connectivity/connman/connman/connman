@@ -36,7 +36,8 @@ do_start() {
         fi
 
 	# note: the connmand-watch script restarts the process if if crashes
-	if test $nfsroot -eq 0 ; then
+	# in a Container GX image the container runtime owns the network
+	if test $nfsroot -eq 0 && ! test -e /etc/venus/container ; then
 		/usr/sbin/connmand-watch.sh $EXTRA_PARAM
 	fi
 }
