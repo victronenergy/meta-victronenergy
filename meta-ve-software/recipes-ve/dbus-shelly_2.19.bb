@@ -6,7 +6,7 @@ SRC_URI = "gitsm://github.com/victronenergy/dbus-shelly;branch=master;protocol=h
 SRCREV = "16e6bdad69a0029fd747ec468206025576589f24"
 S = "${WORKDIR}/git"
 
-inherit daemontools gmakevelib python-compile useradd ve_package
+inherit daemontools-template gmakevelib python-compile useradd ve_package
 
 USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM:${PN} = "shelly"
