@@ -16,7 +16,7 @@ if [ -n "$eeprom" ]; then
 	VCB4) pid=C012 ;;       # Cerbo GX rev B4
 	VECS) pid=C014 ;;       # Cerbo-S GX
 	VCBB) pid=C016 ;;       # Cerbo GX rev B11 + I/O B3
-	VCB4) pid=C016 ;;       # Cerbo GX rev B11 + I/O B4
+	CB04) pid=C016 ;;       # Cerbo GX rev B11 + I/O B4
 	CCa3) pid=C016 ;;       # Cerbo GX rev B12a + I/O B3
 	CCa4) pid=C016 ;;       # Cerbo GX rev B12a + I/O B4
 	VEES) pid=C007 ;;       # EasySolar-II
