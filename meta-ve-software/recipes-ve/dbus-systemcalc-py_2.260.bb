@@ -10,7 +10,7 @@ SRC_URI = " \
     file://com.victronenergy.system.conf \
     file://localsettings \
 "
-SRCREV = "176fbbb86972a9ca84aa295da4cf16e2d69e9357"
+SRCREV = "c4e6fb9ece0f8e0be090296424fef9785591644c"
 S = "${WORKDIR}/git"
 
 RDEPENDS:${PN} = " \
