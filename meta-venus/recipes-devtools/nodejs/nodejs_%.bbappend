@@ -10,6 +10,12 @@ PACKAGECONFIG[node-only] = "--root-target=node,,"
 # the nodejs ptest needs cctest
 PACKAGECONFIG:append = "${@bb.utils.contains('PTEST_ENABLED', '1', '', ' node-only', d)}"
 
+# A compile job takes about 1.7 GB on average; the link of node about
+# 10 GB on its own. Run one make job per 2.5 GB of RAM, which leaves room
+# for whatever else runs on the host, and at most one per core.
+# Set PARALLEL_MAKE:pn-nodejs in local.conf to override.
+PARALLEL_MAKE = "-j ${@max(1, min(oe.utils.cpu_count(), int(open('/proc/meminfo').readline().split()[1]) * 2 // (5 * 1024 * 1024)))} -l ${@oe.utils.cpu_count()}"
+
 # npm reads its builtin configuration from <npm>/npmrc, below the global
 # (/usr/etc/npmrc) and user (~/.npmrc) configuration.
 do_install:append:class-target() {
