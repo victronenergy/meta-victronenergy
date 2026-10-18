@@ -16,6 +16,10 @@ PACKAGECONFIG:append = "${@bb.utils.contains('PTEST_ENABLED', '1', '', ' node-on
 # Set PARALLEL_MAKE:pn-nodejs in local.conf to override.
 PARALLEL_MAKE = "-j ${@max(1, min(oe.utils.cpu_count(), int(open('/proc/meminfo').readline().split()[1]) * 2 // (5 * 1024 * 1024)))} -l ${@oe.utils.cpu_count()}"
 
+# Unless DEBUG_BUILD is enabled, pass -g1: debug info without local
+# variables and types, which makes the build faster and use less memory.
+DEBUG_FLAGS:append = "${@oe.utils.vartrue('DEBUG_BUILD', '', ' -g1', d)}"
+
 # npm reads its builtin configuration from <npm>/npmrc, below the global
 # (/usr/etc/npmrc) and user (~/.npmrc) configuration.
 do_install:append:class-target() {
