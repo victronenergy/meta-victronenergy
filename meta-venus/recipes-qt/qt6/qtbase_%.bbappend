@@ -27,3 +27,7 @@ EXTRA_OECMAKE:append:aarch64 = " ${EXTRA_OECMAKE_DISABLE_STACK_PROTECTOR}"
 
 # for rcc on a target
 QT_FORCE_BUILD_TOOLS:class-target = "1"
+
+# Unless DEBUG_BUILD is enabled, pass -g1: debug info without local
+# variables and types, which makes the build faster and use less memory.
+DEBUG_FLAGS:append = "${@oe.utils.vartrue('DEBUG_BUILD', '', ' -g1', d)}"
