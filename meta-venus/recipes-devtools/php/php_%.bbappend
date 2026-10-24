@@ -6,3 +6,6 @@ inherit useradd
 
 USERADD_PACKAGES = "${PN}-fpm"
 USERADD_PARAM:${PN}-fpm = "--system --no-create-home --shell /bin/false --user-group php-fpm"
+
+# not-applicable-platform: Issue only applies on Windows (BatBadBut command injection via cmd.exe)
+CVE_CHECK_WHITELIST += "CVE-2024-3566"
