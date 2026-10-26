@@ -1,0 +1,55 @@
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Mon, 26 Oct 2026 13:30:00 +0000
+Subject: [PATCH] Remove the emSign ECC Root CA - G3 certificate
+
+Remove "emSign ECC Root CA - G3" from the bundled cacert.pem, in
+response to the eMudhra intermediate CA compromise. This is the net
+effect of two upstream commits:
+
+  5cb238c Remove emsign (#437)
+          removes all four emSign roots
+  662df63 Restore unaffected emSign roots (#439) (#440)
+          restores G1, C1 and C3, as only ECC G3 is affected
+
+[dunfell backport: the upstream commits do not apply to 2019.11.28, so
+this patch was made by hand: it removes the same "emSign ECC Root CA -
+G3" block (identical serial and fingerprints) from the 2019.11.28
+cacert.pem. The version bumps in certifi/__init__.py are not included.]
+
+Upstream-Status: Backport [https://github.com/certifi/python-certifi/commit/5cb238caeeb6c30ec1a7309ad3e16a5aa7b10ce8 https://github.com/certifi/python-certifi/commit/662df63d7906df66f1f07c0751a3dfe9da14d914]
+---
+ certifi/cacert.pem | 23 -----------------------
+ 1 file changed, 23 deletions(-)
+
+--- a/certifi/cacert.pem
++++ b/certifi/cacert.pem
+@@ -4441,29 +4441,6 @@
+ iN66zB+Afko=
+ -----END CERTIFICATE-----
+ 
+-# Issuer: CN=emSign ECC Root CA - G3 O=eMudhra Technologies Limited OU=emSign PKI
+-# Subject: CN=emSign ECC Root CA - G3 O=eMudhra Technologies Limited OU=emSign PKI
+-# Label: "emSign ECC Root CA - G3"
+-# Serial: 287880440101571086945156
+-# MD5 Fingerprint: ce:0b:72:d1:9f:88:8e:d0:50:03:e8:e3:b8:8b:67:40
+-# SHA1 Fingerprint: 30:43:fa:4f:f2:57:dc:a0:c3:80:ee:2e:58:ea:78:b2:3f:e6:bb:c1
+-# SHA256 Fingerprint: 86:a1:ec:ba:08:9c:4a:8d:3b:be:27:34:c6:12:ba:34:1d:81:3e:04:3c:f9:e8:a8:62:cd:5c:57:a3:6b:be:6b
+------BEGIN CERTIFICATE-----
+-MIICTjCCAdOgAwIBAgIKPPYHqWhwDtqLhDAKBggqhkjOPQQDAzBrMQswCQYDVQQG
+-EwJJTjETMBEGA1UECxMKZW1TaWduIFBLSTElMCMGA1UEChMcZU11ZGhyYSBUZWNo
+-bm9sb2dpZXMgTGltaXRlZDEgMB4GA1UEAxMXZW1TaWduIEVDQyBSb290IENBIC0g
+-RzMwHhcNMTgwMjE4MTgzMDAwWhcNNDMwMjE4MTgzMDAwWjBrMQswCQYDVQQGEwJJ
+-TjETMBEGA1UECxMKZW1TaWduIFBLSTElMCMGA1UEChMcZU11ZGhyYSBUZWNobm9s
+-b2dpZXMgTGltaXRlZDEgMB4GA1UEAxMXZW1TaWduIEVDQyBSb290IENBIC0gRzMw
+-djAQBgcqhkjOPQIBBgUrgQQAIgNiAAQjpQy4LRL1KPOxst3iAhKAnjlfSU2fySU0
+-WXTsuwYc58Byr+iuL+FBVIcUqEqy6HyC5ltqtdyzdc6LBtCGI79G1Y4PPwT01xyS
+-fvalY8L1X44uT6EYGQIrMgqCZH0Wk9GjQjBAMB0GA1UdDgQWBBR8XQKEE9TMipuB
+-zhccLikenEhjQjAOBgNVHQ8BAf8EBAMCAQYwDwYDVR0TAQH/BAUwAwEB/zAKBggq
+-hkjOPQQDAwNpADBmAjEAvvNhzwIQHWSVB7gYboiFBS+DCBeQyh+KTOgNG3qxrdWB
+-CUfvO6wIBHxcmbHtRwfSAjEAnbpV/KlK6O3t5nYBQnvI+GDZjVGLVTv7jHvrZQnD
+-+JbNR6iC8hZVdyR+EhCVBCyj
+------END CERTIFICATE-----
+-
+ # Issuer: CN=emSign Root CA - C1 O=eMudhra Inc OU=emSign PKI
+ # Subject: CN=emSign Root CA - C1 O=eMudhra Inc OU=emSign PKI
+ # Label: "emSign Root CA - C1"
