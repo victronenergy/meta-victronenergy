@@ -50,7 +50,7 @@ LABEL="end-maxi-gx-a10"
 ENV{BASE_COMPATIBLE}!="victronenergy,nucleo-gx", GOTO="end-nucleo-gx"
 ACTION=="add", KERNEL=="ttyS[12]", ENV{VE_PRODUCT}="builtin-vedirect", ENV{VE_SERVICE}="vedirect"
 ACTION=="add", SUBSYSTEM=="net", ATTR{type}=="280", KERNELS=="1c69000.spi", NAME="vecan0", ENV{VE_NAME}="VE.Can port 1"
-ACTION=="add", SUBSYSTEM=="net", ATTR{type}=="280", KERNELS=="1c68000.spi", NAME="vecan1", ENV{VE_NAME}="VE.Can port 2"
+ACTION=="add", SUBSYSTEM=="net", ATTR{type}=="280", KERNELS=="1c68000.spi", NAME="vecan1", ENV{VE_NAME}="VE.Can port 2", ENV{VE_CAN_CONFIG}="classic-and-hv"
 LABEL="end-nucleo-gx"
 
 # PayGo devices
