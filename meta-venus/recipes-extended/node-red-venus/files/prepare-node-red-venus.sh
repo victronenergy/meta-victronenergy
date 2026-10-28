@@ -22,3 +22,10 @@ if [ -d "$STALE_PKG" ]; then
 	echo "Removing stale local victron-vrm-api installation (version $STALE_VERSION)..."
 	rm -rf "$STALE_PKG"
 fi
+
+STALE_PKG="$NODE_RED/node_modules/node-red-contrib-s2"
+if [ -d "$STALE_PKG" ]; then
+	STALE_VERSION=$(node -e "console.log(require('$STALE_PKG/package.json').version)" 2>/dev/null || echo "unknown")
+	echo "Removing stale local node-red-contrib-s2 installation (version $STALE_VERSION)..."
+	rm -rf "$STALE_PKG"
+fi
