@@ -1,0 +1,20 @@
+From: Dirk-Jan Faber <dfaber@victronenergy.com>
+Subject: [PATCH] Remove prepack script
+
+For building for Venus: npm prints the lifecycle script banner to stdout,
+which npm-online-install takes as the name of the packed tarball. The
+registry tarball already contains the built dist/, so prepack has nothing
+to do here.
+---
+--- a/package.json
++++ b/package.json
+@@ -44,8 +44,7 @@
+     "test": "npm run lint && npm run test:unit",
+     "test:unit": "jest",
+     "test:watch": "jest --watch",
+-    "lint": "eslint src/ test/",
+-    "prepack": "node scripts/prepack.js"
++    "lint": "eslint src/ test/"
+   },
+   "keywords": [
+     "node-red",
