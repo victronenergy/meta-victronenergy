@@ -1,5 +1,22 @@
 *filter
 :new-conn -
+:mobile-in -
+:mobile-out -
 -A INPUT -i lo -j ACCEPT
+# On mobile internet (GX LTE 4G, GX GSM) the GX device can have a public
+# address, with no router or firewall in between. Accept only replies to
+# connections it opened itself, and ping. On IPv6 accept all ICMPv6: IPv6
+# needs it, e.g. for router advertisements. Lines starting with -4 or -6
+# are only loaded by iptables-restore or ip6tables-restore.
+-A mobile-in -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+-4 -A mobile-in -p icmp --icmp-type echo-request -j ACCEPT
+-6 -A mobile-in -p ipv6-icmp -j ACCEPT
+-A mobile-in -j DROP
+-A INPUT -i ppp+ -j mobile-in
 -A INPUT -m conntrack --ctstate NEW -j new-conn
+# Don't send mDNS or UPnP (SSDP) on the mobile network: they announce the
+# GX device.
+-A OUTPUT -o ppp+ -j mobile-out
+-A mobile-out -p udp --dport 1900 -j DROP
+-A mobile-out -p udp --dport 5353 -j DROP
 COMMIT
