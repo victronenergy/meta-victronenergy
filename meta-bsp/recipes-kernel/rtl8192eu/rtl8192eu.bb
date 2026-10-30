@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://hal/hal_com_c2h.h;md5=d1415c223f48d77507154f01e7fa002
 SRC_URI = " \
     git://github.com/Mange/rtl8192eu-linux-driver.git;protocol=https;branch=realtek-4.4.x \
 "
-SRCREV = "a5ac6789a78a4f5ca0bf157a0f62385ea034cb9c"
+SRCREV = "c629cc972a0d878c930d19c4a9309c27c1e61f92"
 
 S = "${WORKDIR}/git"
 EXTRA_OEMAKE += "KSRC=${STAGING_KERNEL_DIR}"
