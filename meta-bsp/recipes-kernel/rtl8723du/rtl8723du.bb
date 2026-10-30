@@ -6,7 +6,7 @@ SRC_URI = " \
     git://github.com/mansr/rtl8723du.git;protocol=https;branch=v5.13.4 \
     file://${BPN}.conf \
 "
-SRCREV = "99b21a8c3eda2551535ecea8eaff3c70e1708df8"
+SRCREV = "f90ae4675c3e559219602b3a3d10d3d93a6ab13d"
 
 S = "${WORKDIR}/git"
 
