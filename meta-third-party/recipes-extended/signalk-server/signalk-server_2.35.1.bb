@@ -23,7 +23,7 @@ SRC_URI = "\
     file://venus.json \
 "
 
-SRC_URI[sha256sum] = "293c38064fe473345d8ce171946a0c57707bc8eb73b6397af0279d6eab89fea5"
+SRC_URI[sha256sum] = "5ea7420eec79ea83f60a513c84a0fcae3a5c9ebb1e49c2d26b078585ed02f129"
 
 S = "${UNPACKDIR}/npm"
 
