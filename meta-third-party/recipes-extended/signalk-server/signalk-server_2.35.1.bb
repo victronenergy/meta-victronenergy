@@ -51,15 +51,10 @@ do_install:append() {
     rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/linux-x64
     rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/win32-ia32
     rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/@serialport/bindings-cpp/prebuilds/win32-x64
-	for i in fs url os path
-	do
-		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/android-ia32/bare-${i}.bare
-		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/android-x64/bare-${i}.bare
-		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/android-arm64/bare-${i}.bare
-		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/android-arm/bare-${i}.bare
-		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/linux-arm64/bare-${i}.bare
-		rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-${i}/prebuilds/linux-x64/bare-${i}.bare
-	done
+    # The prebuilds of bare-fs, bare-path and bare-url are addons for the
+    # Bare runtime; Node.js never loads them (tar-stream uses bare-fs only
+    # under Bare).
+    rm -rf ${D}${nonarch_libdir}/node_modules/${PN}/node_modules/bare-*/prebuilds
 
     # this directory keeps the default settings. start-signalk.sh copies them
     # to the data partition on first boot.
