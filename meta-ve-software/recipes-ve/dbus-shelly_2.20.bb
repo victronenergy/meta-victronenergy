@@ -3,7 +3,7 @@ LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=824610c0b9d5c83da2edb0fab490487f"
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "gitsm://github.com/victronenergy/dbus-shelly;branch=master;protocol=https"
-SRCREV = "16e6bdad69a0029fd747ec468206025576589f24"
+SRCREV = "a5b61cf04ff176a222f8dc261b481f9e464b1f66"
 S = "${WORKDIR}/git"
 
 inherit daemontools-template gmakevelib python-compile useradd ve_package
