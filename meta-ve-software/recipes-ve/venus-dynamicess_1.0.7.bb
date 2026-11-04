@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=5d5b72f0438f97f350694bf9e756ffdf"
 
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 SRC_URI = "gitsm://github.com/victronenergy/venus-dynamicess.git;branch=main;protocol=https"
-SRCREV = "290eab110e3ac08bc6a226d051932165aba3cb8f"
+SRCREV = "be0a9db0e7bc88c133f1fdb75e5e0d655188b67f"
 S = "${WORKDIR}/git"
 
 inherit daemontools-template python-compile ve_package
