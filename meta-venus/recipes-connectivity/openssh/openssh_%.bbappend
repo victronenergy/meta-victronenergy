@@ -6,6 +6,8 @@ DAEMON_PN = "${PN}-sshd"
 DAEMONTOOLS_RUN = "${bindir}/start-sshd.sh"
 DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/sshd"
 
+PACKAGECONFIG:append = " fido2"
+
 SRC_URI += " \
     file://start-sshd.sh \
     file://generate_authorized_keys.sh \
