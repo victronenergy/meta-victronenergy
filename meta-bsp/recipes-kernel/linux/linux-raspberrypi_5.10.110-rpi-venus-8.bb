@@ -16,7 +16,7 @@ SRC_URI = " \
     file://0001-ata-ahci-fix-enum-constants-for-gcc-13.patch \
     file://wifi_cfg80211_certificate.patch \
 "
-SRCREV = "3859262148951d08d011c96d637383883c451739"
+SRCREV = "a06a165c8a5bde74a8c5dae94313b83e44746c03"
 BB_GIT_DEFAULT_DESTSUFFIX ?= "git"
 S = "${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX}"
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
