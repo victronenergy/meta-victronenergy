@@ -25,6 +25,14 @@ gen_config() (
             check_compat $compat || continue
         fi
 
+        case ${val} in
+        *\**)
+            set -- ${val}
+            [ -e "$1" ] || continue
+            val="$1"
+            ;;
+        esac
+
         echo ${val}
     done <${conf}.in >/run/venus/$(basename ${conf})
 )
