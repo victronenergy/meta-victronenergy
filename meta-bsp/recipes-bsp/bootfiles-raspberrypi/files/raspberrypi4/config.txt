@@ -3,3 +3,8 @@ kernel=u-boot.bin
 
 [all]
 device_tree=bcm2711-rpi-4-b.dtb
+
+# Full KMS is required for the GX Touch. Enabling it changes the display
+# stack for every Pi 4, so it is left opt-in.
+#dtoverlay=vc4-kms-v3d-pi4
+#dtoverlay=gx-touch,hdmi0
