@@ -11,7 +11,7 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/dbus-digitalinputs.git;branch=master;protocol=https \
     file://start-digitalinputs.sh \
 "
-SRCREV = "3f899952294f5b5da0baac0b34e5b006fcdf0734"
+SRCREV = "dcead603ce521c9bb8e31e7535a7987230ea2be6"
 S = "${WORKDIR}/git"
 
 RDEPENDS:${PN} = " \
