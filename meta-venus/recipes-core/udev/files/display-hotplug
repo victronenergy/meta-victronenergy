@@ -3,7 +3,14 @@
 dev=/sys/$1
 
 card=$(basename $dev)
-disp=$(ls -d $dev/$card-*) || exit
+
+# A card can have multiple connectors, e.g. vc4 on the Raspberry Pi also has
+# a Writeback and DSI connector. Use the (first) one which has a ddc bus.
+for disp in $dev/$card-*; do
+    [ -e $disp/ddc ] && break
+done
+[ -e "$disp/ddc" ] || exit
+
 bus=$(basename $(realpath $disp/ddc))
 fb=/dev/$(basename $dev/device/graphics/*)
 stat=$(cat $disp/status)
