@@ -23,3 +23,10 @@ core_freq_min=400
 
 [all]
 dtparam=spi=on
+
+# Enable VC4 Graphics, needed for the hw accelerated gui-v2
+dtoverlay=vc4-kms-v3d
+
+# Automatically load overlays for detected DSI displays, e.g. vc4-kms-dsi-7inch
+# for the official 7" touchscreen, which is no longer driven by the firmware.
+display_auto_detect=1
