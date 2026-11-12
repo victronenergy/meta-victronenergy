@@ -7,6 +7,7 @@ inherit packagegroup
 
 RDEPENDS:${PN} += "\
     bc \
+    bind-utils \
     cargo \
     chrony \
     devmem2 \
