@@ -33,6 +33,10 @@ SRC_URI:append:sunxi = "\
     file://blank_display_device.in \
     file://pwm_buzzer.in \
 "
+SRC_URI:append:rpi = "\
+    file://backlight_device.in \
+    file://blank_display_device.in \
+"
 
 inherit update-rc.d
 
