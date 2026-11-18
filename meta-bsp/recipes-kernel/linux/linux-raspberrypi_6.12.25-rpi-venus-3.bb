@@ -10,7 +10,7 @@ SRC_URI = " \
     git://github.com/victronenergy/linux.git;name=machine;branch=rpi-venus-6.12.25;protocol=https \
 "
 
-SRCREV = "5edffb068ed0e0fa6119107b2aef9f18fb5c553b"
+SRCREV = "1a1b92b869509b33478537d88f0752ed98574908"
 S = "${WORKDIR}/git"
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\S+)"
 

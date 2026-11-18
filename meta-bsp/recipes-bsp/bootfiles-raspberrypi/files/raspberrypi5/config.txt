@@ -8,3 +8,6 @@ dtoverlay=vc4-kms-v3d
 
 # Automatically load overlays for detected DSI displays
 display_auto_detect=1
+
+# Victron GX Touch on HDMI0; use hdmi1 for the second HDMI port
+dtoverlay=gx-touch,hdmi0
