@@ -1,0 +1,33 @@
+From 17bbcd4c632d3eda484cde611dc78bf8c2ba469f Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Sat, 20 Jun 2026 16:15:51 +0200
+Subject: [PATCH] vedbus: don't lose match on root on owner change
+
+Whenever a VeDbusItemImport is created, it also creates a shared
+object that tracks ItemsChanged on the root, and passes that to
+items deeper in the tree. This shared object would bind to the
+unique service name and lose track of changes if the service
+ever died and came back under a different unique name.
+
+https://github.com/victronenergy/venus-private/issues/560
+---
+ vedbus.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/vedbus.py b/vedbus.py
+index 995cdc3..0a83c68 100644
+--- a/vedbus.py
++++ b/vedbus.py
+@@ -247,7 +247,8 @@ class VeDbusRootTracker(object):
+ 	def __init__(self, bus, serviceName):
+ 		self.importers = defaultdict(weakref.WeakSet)
+ 		self.serviceName = serviceName
+-		self._match = bus.get_object(serviceName, '/', introspect=False).connect_to_signal(
++		self._match = bus.get_object(serviceName, '/',
++			introspect=False, follow_name_owner_changes=True).connect_to_signal(
+ 			"ItemsChanged", weak_functor(self._items_changed_handler))
+ 
+ 	def __del__(self):
+-- 
+2.43.0
+
