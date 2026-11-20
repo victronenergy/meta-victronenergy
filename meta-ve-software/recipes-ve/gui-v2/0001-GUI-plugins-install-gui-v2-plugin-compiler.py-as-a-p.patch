@@ -1,0 +1,42 @@
+From 547dbe264dfbf98cf9b698ce6fde88b09fc80ac1 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Thu, 19 Nov 2026 17:48:31 +0100
+Subject: [PATCH] GUI plugins: install gui-v2-plugin-compiler.py as a program
+
+This gives it permission to execute in the python interpreter.
+---
+ cmake/ModuleVenus.cmake         | 6 +++++-
+ tools/gui-v2-plugin-compiler.py | 2 ++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/cmake/ModuleVenus.cmake b/cmake/ModuleVenus.cmake
+index 755eec9f..3c48c46a 100644
+--- a/cmake/ModuleVenus.cmake
++++ b/cmake/ModuleVenus.cmake
+@@ -63,8 +63,12 @@ install(
+         pages
+     DESTINATION ${VENUS_QML_INSTALL_DIR}/Victron/VenusOS)
+ install(
+-    FILES
++    PROGRAMS
+         ${PROJECT_SOURCE_DIR}/tools/gui-v2-plugin-compiler.py
++    DESTINATION ${VENUS_QML_INSTALL_DIR}
++)
++install(
++    FILES
+         ${PROJECT_SOURCE_DIR}/tools/guiplugins-api.json
+         ${PROJECT_SOURCE_DIR}/tools/branding-properties.json
+     DESTINATION ${VENUS_QML_INSTALL_DIR})
+diff --git a/tools/gui-v2-plugin-compiler.py b/tools/gui-v2-plugin-compiler.py
+index 14f09d3d..af3f63e6 100644
+--- a/tools/gui-v2-plugin-compiler.py
++++ b/tools/gui-v2-plugin-compiler.py
+@@ -1,3 +1,5 @@
++#!/usr/bin/python3
++
+ import bisect
+ import json
+ import os
+-- 
+2.53.0
+
