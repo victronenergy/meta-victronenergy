@@ -10,10 +10,13 @@ SRC_URI = " \
     file://com.victronenergy.system.conf \
     file://localsettings \
     file://batterysettings-dont-force-svs-for-pytes.patch \
+    file://dbusmonitor-skip-GetNameOwner-on-NameOwnerChanged.patch;patchdir=ext/velib_python \
+    file://dbusmonitor-don-t-scan-a-service-twice-at-startup.patch;patchdir=ext/velib_python \
+    file://dbusmonitor-handle-a-name-changing-hands-directly.patch;patchdir=ext/velib_python \
 "
 SRCREV = "999bd6665e7e1299c58e461d6342f64f90b48e67"
 S = "${WORKDIR}/git"
-PR = "1"
+PR = "2"
 
 RDEPENDS:${PN} = " \
     localsettings \

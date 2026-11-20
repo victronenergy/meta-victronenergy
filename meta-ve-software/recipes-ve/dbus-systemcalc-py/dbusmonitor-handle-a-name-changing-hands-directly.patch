@@ -1,0 +1,108 @@
+From 3368c073d92a7fd9d715228ee22ce1e72edeaa90 Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Tue, 22 Sep 2026 17:47:53 +0200
+Subject: [PATCH] dbusmonitor: handle a name changing hands directly
+
+A well-known name can be taken over with REPLACE_EXISTING, which makes the
+bus send a NameOwnerChanged with both an old and a new owner. We only
+removed a service when the new owner was blank, so on a direct hand-over
+the old service was left behind: no deviceRemovedCallback, a stale entry in
+servicesById that kept delivering PropertiesChanged from the old owner, a
+second entry in servicesByClass that is never cleaned up, and the watches
+of track_value left in place.
+
+Move the removal into _process_oldowner, and call it before scanning the
+new owner if we still have a service for that name.
+
+The async monitor can also be busy scanning the old owner at that point,
+with nothing in servicesByName to remove yet. Both scans would then store
+a service, so let the reply handlers check that the scan they belong to is
+still the one in pendingScans, and drop it otherwise.
+---
+ dbusmonitor.py | 45 ++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 32 insertions(+), 13 deletions(-)
+
+diff --git a/dbusmonitor.py b/dbusmonitor.py
+index c2ab445..a018168 100644
+--- a/dbusmonitor.py
++++ b/dbusmonitor.py
+@@ -181,6 +181,19 @@ class DbusMonitor(object):
+ 		service = self.servicesByName.get(serviceName)
+ 		return None if service is None else service.id
+ 
++	def _process_oldowner(self, name):
++		# it disappeared, we need to remove it.
++		logger.info("%s disappeared from the dbus. Removing it from our lists" % name)
++		service = self.servicesByName[name]
++		del self.servicesById[service.id]
++		del self.servicesByName[name]
++		for watch in self.serviceWatches[name]:
++			watch.remove()
++		del self.serviceWatches[name]
++		self.servicesByClass[service.service_class].remove(service)
++		if self.deviceRemovedCallback is not None:
++			self.deviceRemovedCallback(name, service.deviceInstance)
++
+ 	def _process_newowner(self, name, owner):
+ 		# Do a sync scan, and call deviceAddedCallback if we have it
+ 		if self.scan_dbus_service(name, owner) and self.deviceAddedCallback is not None:
+@@ -197,21 +210,17 @@ class DbusMonitor(object):
+ 			if self.scanned_owner(name) == newowner:
+ 				return
+ 
++			# The name may have been taken over without being released
++			# first, in which case we never saw the old owner go. Drop
++			# what we have for it before scanning the new one.
++			if name in self.servicesByName:
++				self._process_oldowner(name)
++
+ 			# so we found some new service. Check if we can do something with it.
+ 			self._process_newowner(name, newowner)
+ 
+ 		elif name in self.servicesByName:
+-			# it disappeared, we need to remove it.
+-			logger.info("%s disappeared from the dbus. Removing it from our lists" % name)
+-			service = self.servicesByName[name]
+-			del self.servicesById[service.id]
+-			del self.servicesByName[name]
+-			for watch in self.serviceWatches[name]:
+-				watch.remove()
+-			del self.serviceWatches[name]
+-			self.servicesByClass[service.service_class].remove(service)
+-			if self.deviceRemovedCallback is not None:
+-				self.deviceRemovedCallback(name, service.deviceInstance)
++			self._process_oldowner(name)
+ 
+ 	def service_wanted(self, serviceName):
+ 		return not any(
+@@ -651,7 +660,12 @@ class AsyncDbusMonitor(DbusMonitor):
+ 			partial(self.get_items_async_error, progress, serviceName, owner))
+ 
+ 	def get_items_async_done(self, progress, serviceName, owner, values):
+-		self.pendingScans.pop(serviceName, None)
++		if self.pendingScans.get(serviceName) != owner:
++			# Superseded by a scan of a newer owner, drop this one
++			progress.complete(serviceName)
++			return
++
++		del self.pendingScans[serviceName]
+ 		di = self.scan_dbus_service_getitems_done(serviceName, owner, values)
+ 		if di is not None:
+ 			if self.deviceAddedCallback is not None:
+@@ -663,7 +677,12 @@ class AsyncDbusMonitor(DbusMonitor):
+ 	def get_items_async_error(self, progress, serviceName, owner, exc):
+ 		# Fall back to fetching deviceinstance, and GetValue/GetText
+ 		# Store item, so it can be scanned later
+-		self.pendingScans.pop(serviceName, None)
++		if self.pendingScans.get(serviceName) != owner:
++			# Superseded by a scan of a newer owner, drop this one
++			progress.complete(serviceName)
++			return
++
++		del self.pendingScans[serviceName]
+ 		progress.error(serviceName)
+ 
+ 
+-- 
+2.43.0
+
