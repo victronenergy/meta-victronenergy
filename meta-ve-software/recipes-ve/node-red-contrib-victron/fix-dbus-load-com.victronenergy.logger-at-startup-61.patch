@@ -1,0 +1,82 @@
+From 3c5463904ae9f4479ad03034f877189b00b0878e Mon Sep 17 00:00:00 2001
+From: Dirk-Jan Faber <dfaber@victronenergy.com>
+Date: Wed, 28 Oct 2026 14:53:53 +0100
+Subject: [PATCH] fix(dbus): load com.victronenergy.logger at startup (#610)
+
+The logger service was on initServiceDenylist, so listNames skipped it
+and it only reached the cache if the logger restarted after Node-RED
+connected. After a reboot, custom nodes reading /Vrm/TimeLastContact
+showed it as disconnected and it was missing from the dropdown.
+
+The logger has no /DeviceInstance, but GetValue on it fails fast, so
+it initializes with a null device instance and the plain service name,
+as it did before the denylist was introduced.
+---
+ src/services/dbus-listener.js |  3 +--
+ test/dbus-listener.test.js    | 35 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/src/services/dbus-listener.js b/src/services/dbus-listener.js
+index d88edb3..5373137 100644
+--- a/src/services/dbus-listener.js
++++ b/src/services/dbus-listener.js
+@@ -86,8 +86,7 @@ const initServiceDenylist = [
+   'com.victronenergy.digitalinputs',
+   'com.victronenergy.fronius',
+   'com.victronenergy.modbusclient.tcp',
+-  'com.victronenergy.modbustcp',
+-  'com.victronenergy.logger'
++  'com.victronenergy.modbustcp'
+ ]
+ 
+ const initServiceAllowlistRegexes = [
+diff --git a/test/dbus-listener.test.js b/test/dbus-listener.test.js
+index 440b3ac..67bb0e2 100644
+--- a/test/dbus-listener.test.js
++++ b/test/dbus-listener.test.js
+@@ -1,3 +1,5 @@
++const EventEmitter = require('events')
++const dbus = require('dbus-native-victron')
+ const VictronDbusListener = require('../src/services/dbus-listener')
+ 
+ describe('VictronDbusListener', () => {
+@@ -15,6 +17,39 @@ describe('VictronDbusListener', () => {
+     expect(VictronDbusListener.initServiceDenylist).not.toContain('com.victronenergy.shelly')
+   })
+ 
++  test('initializes com.victronenergy.logger found by listNames on connect (regression)', async () => {
++    const connection = new EventEmitter()
++    const fakeBus = {
++      connection,
++      listNames: (cb) => cb(null, ['com.victronenergy.logger', 'com.victronenergy.ble']),
++      getNameOwner: (name, cb) => cb(null, `owner-of-${name}`),
++      addMatch: () => {}
++    }
++    const createClientSpy = jest.spyOn(dbus, 'createClient').mockReturnValue(fakeBus)
++    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
++    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
++    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
++    try {
++      listener._initService = jest.fn()
++      listener._requestAllRoots = jest.fn().mockResolvedValue()
++      const connected = listener.connect().catch(() => {})
++
++      connection.emit('connect')
++
++      expect(listener._initService).toHaveBeenCalledWith('owner-of-com.victronenergy.logger', 'com.victronenergy.logger')
++      expect(listener._initService).not.toHaveBeenCalledWith(expect.anything(), 'com.victronenergy.ble')
++
++      // ending the connection settles connect()'s promise
++      connection.emit('end')
++      await connected
++    } finally {
++      createClientSpy.mockRestore()
++      logSpy.mockRestore()
++      warnSpy.mockRestore()
++      errorSpy.mockRestore()
++    }
++  })
++
+   describe('_initService', () => {
+     beforeEach(() => {
+       listener.bus = {
