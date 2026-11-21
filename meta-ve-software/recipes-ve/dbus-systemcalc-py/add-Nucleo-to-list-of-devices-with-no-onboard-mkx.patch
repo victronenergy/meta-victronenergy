@@ -1,0 +1,25 @@
+From 982a138516da4121c0d6b040bde043edec1f7916 Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Fri, 6 Nov 2026 15:31:46 +0200
+Subject: [PATCH] add Nucleo to list of devices with no onboard mkx
+
+ESS only works on the onboard VE.Bus port. If the system thinks
+it has an onboard mk3 chip, but does not, it will incorrectly
+assume that what is plugged in via USB cannot be used for ESS.
+---
+ delegates/multi.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/delegates/multi.py b/delegates/multi.py
+index 4d140ef..e0e647d 100644
+--- a/delegates/multi.py
++++ b/delegates/multi.py
+@@ -119,7 +119,7 @@ class Multi(SystemCalcDelegate):
+ 		# Determine if this platform has a built-in MK2/3. Maxi-GX
+ 		# and generic (Raspberry Pi) does not.
+ 		self.has_onboard_mkx = get_product_id() not in (
+-			'C009', 'C00D', 'C010', 'C003')
++			'C009', 'C00D', 'C010', 'C003', 'C015')
+ 
+ 	def get_input(self):
+ 		return [('com.victronenergy.vebus', [

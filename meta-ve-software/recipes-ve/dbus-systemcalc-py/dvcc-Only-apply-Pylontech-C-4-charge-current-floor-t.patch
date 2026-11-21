@@ -1,0 +1,64 @@
+From bf364c1303c65ab60e6434c0823c10873cadb85c Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Mon, 5 Oct 2026 17:39:10 +0200
+Subject: [PATCH] dvcc: Only apply Pylontech C/4 charge current floor to 8-cell
+
+Commit ad1e5c4e accidentally applied the capacity/4 minimum charge
+current to 15-cell Pylontech batteries as well. Previously the charge
+current limit from 15-cell batteries was used as is. Restore that.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ delegates/dvcc.py | 16 +++++-----------
+ tests/hub_test.py |  9 +++++++++
+ 2 files changed, 14 insertions(+), 11 deletions(-)
+
+diff --git a/delegates/dvcc.py b/delegates/dvcc.py
+index 1da278b..2c82202 100644
+--- a/delegates/dvcc.py
++++ b/delegates/dvcc.py
+@@ -138,19 +138,13 @@ class _pylontech_quirk(BatteryBehaviour):
+ 		cv = bms.chargevoltage
+ 		mcc = bms.maxchargecurrent
+ 
+-		if bms.has_charge_voltage_control or cv > 55 or cv <= 20:
++		if bms.has_charge_voltage_control or not (20 < cv < 30):
+ 			return mcc
+ 
+-		# 48V battery (15 cells) or 24V battery (8 cells). We want to halve
+-		# the charge current limit when CCL=0 is sent. Normally the limit is
+-		# C/2, so limit to C/4, or assume a single module (25Ah/55Ah) if not
+-		# known.
+-		if cv < 30:
+-			# 24V
+-			capacity = bms.capacity or 55
+-		else:
+-			# 48V
+-			capacity = bms.capacity or 25.0
++		# 24V battery (8 cells). We want to halve the charge current limit
++		# when CCL=0 is sent. Normally the limit is C/2, so limit to C/4, or
++		# assume a single module (55Ah) if not known.
++		capacity = bms.capacity or 55
+ 		return max(mcc, round(capacity/4.0))
+ 
+ class _pylontech_pelio_quirk(BatteryBehaviour):
+diff --git a/tests/hub_test.py b/tests/hub_test.py
+index e4681f7..e318186 100644
+--- a/tests/hub_test.py
++++ b/tests/hub_test.py
+@@ -1302,6 +1302,15 @@ class TestHubSystem(TestSystemCalcBase):
+ 		})
+ 		self._check_values({ '/Control/EffectiveChargeVoltage': 52.4 })
+ 
++		# 15-cell battery passes CCL=0 through as is
++		self._monitor.set_value('com.victronenergy.battery.ttyO2', '/Info/MaxChargeCurrent', 0)
++		self._update_values(interval=3000)
++		self._check_external_values({
++			'com.victronenergy.vebus.ttyO1': {
++				'/BatteryOperationalLimits/MaxChargeCurrent': 0
++			}
++		})
++
+ 		# 24V battery is scaled accordingly
+ 		self._monitor.set_value('com.victronenergy.battery.ttyO2', '/Info/MaxChargeVoltage', 28.4)
+ 		self._monitor.set_value('com.victronenergy.battery.ttyO2', '/Info/MaxChargeCurrent', 55)

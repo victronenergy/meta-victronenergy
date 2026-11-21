@@ -10,6 +10,9 @@ SRC_URI = " \
     file://com.victronenergy.system.conf \
     file://localsettings \
     file://batterysettings-dont-force-svs-for-pytes.patch \
+    file://DESS-Replaced-bail-with-deactivate-call-instead-of-c.patch \
+    file://dvcc-Only-apply-Pylontech-C-4-charge-current-floor-t.patch \
+    file://add-Nucleo-to-list-of-devices-with-no-onboard-mkx.patch \
     file://vedbus-don-t-lose-match-on-root-on-owner-change.patch;patchdir=ext/velib_python \
     file://dbusmonitor-skip-GetNameOwner-on-NameOwnerChanged.patch;patchdir=ext/velib_python \
     file://dbusmonitor-don-t-scan-a-service-twice-at-startup.patch;patchdir=ext/velib_python \
@@ -17,7 +20,7 @@ SRC_URI = " \
 "
 SRCREV = "999bd6665e7e1299c58e461d6342f64f90b48e67"
 S = "${WORKDIR}/git"
-PR = "3"
+PR = "4"
 
 RDEPENDS:${PN} = " \
     localsettings \
