@@ -46,7 +46,7 @@ python do_getname() {
             f.write(package["version"])
 }
 
-addtask getname after do_unpack before do_compile
+addtask getname after do_patch before do_compile
 
 B = "${WORKDIR}/npm-pack"
 NPM_TMP = "${WORKDIR}/npm-tmp"
