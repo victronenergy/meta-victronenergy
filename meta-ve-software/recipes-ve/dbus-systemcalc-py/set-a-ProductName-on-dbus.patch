@@ -1,0 +1,27 @@
+From cce26e954c6d39a2f8ebed146ca414bc642c42ae Mon Sep 17 00:00:00 2001
+From: Izak Burger <iburger@victronenergy.com>
+Date: Tue, 27 Oct 2026 16:44:42 +0200
+Subject: [PATCH] set a ProductName on dbus
+
+This is so that venus-platform can identify where alarms are
+coming from, among others.
+---
+ dbus_systemcalc.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dbus_systemcalc.py b/dbus_systemcalc.py
+index 5aa3ca4..35f9469 100755
+--- a/dbus_systemcalc.py
++++ b/dbus_systemcalc.py
+@@ -1343,7 +1343,7 @@ class DbusSystemCalc(SystemCalc):
+ 			connection='data from other dbus processes',
+ 			deviceinstance=0,
+ 			productid=None,
+-			productname=None,
++			productname='System',
+ 			firmwareversion=venusversion,
+ 			hardwareversion=None,
+ 			connected=1)
+-- 
+2.43.0
+
