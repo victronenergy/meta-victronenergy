@@ -11,7 +11,7 @@ USERADD_PARAM:${PN}-fpm = "--system --no-create-home --shell /bin/false --user-g
 
 do_install:append:class-target() {
     sed -e 's/^pm = dynamic$/pm = ondemand/g' -i "${D}${sysconfdir}/php-fpm.conf"
-    sed -e 's/@NGINX_USER@/${NGINX_USER}/g' -i "${D}${sysconfdir}/php-fpm.conf"
+    sed -e 's/@NGINX_USER@/${NGINX_USER}/g' -e 's,@PHP_FPM_SOCKET@,${PHP_FPM_SOCKET},g' -i "${D}${sysconfdir}/php-fpm.conf"
 
     install -d ${D}${sysconfdir}/php-fpm
     install -m 644 ${S}/php.ini-production ${D}${sysconfdir}/php-fpm

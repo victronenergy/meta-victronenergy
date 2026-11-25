@@ -59,5 +59,6 @@ EOF
     install -m 644 ${UNPACKDIR}/http.site ${D}${sysconfdir}/nginx/sites-available
     install -m 644 ${UNPACKDIR}/http-explanation.site ${D}${sysconfdir}/nginx/sites-available
     install -m 644 ${UNPACKDIR}/https.site ${D}${sysconfdir}/nginx/sites-available
+    sed -i 's,@PHP_FPM_SOCKET@,${PHP_FPM_SOCKET},g' ${D}${sysconfdir}/nginx/sites-available/http.site ${D}${sysconfdir}/nginx/sites-available/https.site
 }
 

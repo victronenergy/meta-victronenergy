@@ -33,7 +33,7 @@ server {
 
         location ~ \.php$ {
             try_files $uri =404;
-            fastcgi_pass unix:/var/run/php5-fpm.socket;
+            fastcgi_pass unix:@PHP_FPM_SOCKET@;
             include fastcgi.conf;
         }
     }
@@ -88,7 +88,7 @@ server {
 
     location ~ \.php$ {
         try_files $uri =404;
-        fastcgi_pass unix:/var/run/php5-fpm.socket;
+        fastcgi_pass unix:@PHP_FPM_SOCKET@;
         include fastcgi.conf;
     }
 }
