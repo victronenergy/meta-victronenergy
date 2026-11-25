@@ -1,0 +1,95 @@
+From 155011eacdde822a8666523e1937a62a653d1cc6 Mon Sep 17 00:00:00 2001
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
+Date: Wed, 25 Nov 2026 17:44:11 +0100
+Subject: [PATCH] php.ini: add php.ini-production for Venus OS
+
+---
+ php.ini-production | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/php.ini-production b/php.ini-production
+index 4fcd47bf..ee01897a 100644
+--- a/php.ini-production
++++ b/php.ini-production
+@@ -397,7 +397,7 @@ zend.exception_string_param_max_len = 0
+ ; threat in any way, but it makes it possible to determine whether you use PHP
+ ; on your server or not.
+ ; https://php.net/expose-php
+-expose_php = On
++expose_php = Off
+ 
+ ;;;;;;;;;;;;;;;;;;;
+ ; Resource Limits ;
+@@ -432,7 +432,7 @@ max_input_time = 60
+ 
+ ; Maximum amount of memory a script may consume
+ ; https://php.net/memory-limit
+-memory_limit = 128M
++memory_limit = 32M
+ 
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ; Error handling and logging ;
+@@ -524,7 +524,7 @@ display_startup_errors = Off
+ ; Development Value: On
+ ; Production Value: On
+ ; https://php.net/log-errors
+-log_errors = On
++log_errors = Off
+ 
+ ; Do not log repeated messages. Repeated errors must occur in same file on same
+ ; line unless ignore_repeated_source is set true.
+@@ -843,7 +843,7 @@ enable_dl = Off
+ 
+ ; Whether to allow HTTP file uploads.
+ ; https://php.net/file-uploads
+-file_uploads = On
++file_uploads = Off
+ 
+ ; Temporary directory for HTTP uploaded files (will use system default if not
+ ; specified).
+@@ -863,7 +863,7 @@ max_file_uploads = 20
+ 
+ ; Whether to allow the treatment of URLs (like http:// or ftp://) as files.
+ ; https://php.net/allow-url-fopen
+-allow_url_fopen = On
++allow_url_fopen = Off
+ 
+ ; Whether to allow include/require to open URLs (like https:// or ftp://) as files.
+ ; https://php.net/allow-url-include
+@@ -1380,7 +1380,7 @@ session.save_handler = files
+ ; vulnerability. It is disabled by default for maximum compatibility, but
+ ; enabling it is encouraged.
+ ; https://wiki.php.net/rfc/strict_sessions
+-session.use_strict_mode = 0
++session.use_strict_mode = 1
+ 
+ ; Whether to use cookies.
+ ; https://php.net/session.use-cookies
+@@ -1419,13 +1419,13 @@ session.cookie_domain =
+ ; Whether or not to add the httpOnly flag to the cookie, which makes it
+ ; inaccessible to browser scripting languages such as JavaScript.
+ ; https://php.net/session.cookie-httponly
+-session.cookie_httponly =
++session.cookie_httponly = On
+ 
+ ; Add SameSite attribute to cookie to help mitigate Cross-Site Request Forgery (CSRF/XSRF)
+ ; Current valid values are "Strict", "Lax" or "None". When using "None",
+ ; make sure to include the quotes, as `none` is interpreted like `false` in ini files.
+ ; https://tools.ietf.org/html/draft-west-first-party-cookies-07
+-session.cookie_samesite =
++session.cookie_samesite = "Strict"
+ 
+ ; Handler used to serialize data. php is the standard serializer of PHP.
+ ; https://php.net/session.serialize-handler
+@@ -1541,7 +1541,7 @@ session.sid_bits_per_character = 5
+ ; Development Value: On
+ ; Production Value: On
+ ; https://php.net/session.upload-progress.enabled
+-;session.upload_progress.enabled = On
++session.upload_progress.enabled = Off
+ 
+ ; Cleanup the progress information as soon as all POST data has been read
+ ; (i.e. upload completed).
+-- 
+2.53.0
+

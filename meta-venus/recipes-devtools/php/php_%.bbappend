@@ -4,12 +4,19 @@ PACKAGECONFIG = ""
 
 inherit useradd www
 
+SRC_URI += "file://0001-php.ini-add-php.ini-production-for-Venus-OS.patch"
+
 USERADD_PACKAGES = "${PN}-fpm"
 USERADD_PARAM:${PN}-fpm = "--system --no-create-home --shell /bin/false --user-group php-fpm"
 
 do_install:append:class-target() {
     sed -e 's/^pm = dynamic$/pm = ondemand/g' -i "${D}${sysconfdir}/php-fpm.conf"
     sed -e 's/@NGINX_USER@/${NGINX_USER}/g' -i "${D}${sysconfdir}/php-fpm.conf"
+
+    install -d ${D}${sysconfdir}/php-fpm
+    install -m 644 ${S}/php.ini-production ${D}${sysconfdir}/php-fpm
+    install -m 644 ${S}/php.ini-development ${D}${sysconfdir}/php-fpm
+    ln -sfr ${D}${sysconfdir}/php-fpm/php.ini-production ${D}${sysconfdir}/php-fpm/php.ini
 }
 
 # Common EXTRA_OECONF
@@ -21,7 +28,7 @@ COMMON_EXTRA_OECONF = " \
 "
 EXTRA_OECONF = "--enable-fpm \
                 --with-libdir=${baselib} \
-                --with-config-file-path=${sysconfdir}/php/apache2-php${PHP_MAJOR_VERSION} \
+                --with-config-file-path=${sysconfdir}/php-fpm \
                 ${@oe.utils.conditional('SITEINFO_ENDIANNESS', 'le', 'ac_cv_c_bigendian_php=no', 'ac_cv_c_bigendian_php=yes', d)} \
                 ${@bb.utils.contains('PACKAGECONFIG', 'pam', '', 'ac_cv_lib_pam_pam_start=no', d)} \
                 ${COMMON_EXTRA_OECONF} \
@@ -41,3 +48,5 @@ PACKAGECONFIG[phar] = ",--disable-phar"
 PACKAGECONFIG[filter] = ",--disable-filter"
 PACKAGECONFIG[posix] = ",--disable-posix"
 PACKAGECONFIG[tokenizer] = ",--disable-tokenizer"
+
+FILES:${PN}-fpm += "${sysconfdir}/php-fpm"
