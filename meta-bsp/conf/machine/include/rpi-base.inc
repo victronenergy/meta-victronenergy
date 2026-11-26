@@ -20,6 +20,7 @@ RPI_KERNEL_DEVICETREE_OVERLAYS ?= " \
     overlays/rpi-ft5406.dtbo \
     overlays/sc16is752-spi1.dtbo \
     overlays/spi1-3cs.dtbo \
+    overlays/vc4-kms-v3d.dtbo \
     overlays/waveshare-can-fd-hat-mode-a.dtbo \
     overlays/waveshare-can-fd-hat-mode-b.dtbo \
 "
