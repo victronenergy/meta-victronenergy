@@ -1,6 +1,5 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-NGINX_USER = "www-data"
 SYSTEMD_SERVICE:${PN} = ""
 # only start nginx from init.d in testmode (no https, php etc)
 INITSCRIPT_PARAMS = "start 99 4 . stop 20 0 1 6 ."
