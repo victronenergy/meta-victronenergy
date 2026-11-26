@@ -28,3 +28,6 @@ chown php-fpm:php-fpm /var/volatile/tokens
 
 mkdir -p -m 700 /var/volatile/bletokens
 chown php-fpm:php-fpm /var/volatile/bletokens
+
+mkdir -p -m 700 /run/php-fpm
+chown php-fpm:php-fpm /run/php-fpm
