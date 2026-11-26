@@ -44,7 +44,7 @@ SRC_URI = " \
     gitsm://github.com/victronenergy/gui-v2.git;branch=main;protocol=ssh;user=git \
     file://0001-GUI-plugins-install-gui-v2-plugin-compiler.py-as-a-p.patch \
 "
-SRCREV = "8e7132e6fd94f22aaa218672594cb3494212ea2a"
+SRCREV = "85cba0205aa65f46fc5e72462446e52118a01466"
 S = "${WORKDIR}/git"
 
 do_install:append() {
