@@ -2,13 +2,14 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 PACKAGECONFIG = ""
 
-inherit useradd
+inherit useradd www
 
 USERADD_PACKAGES = "${PN}-fpm"
 USERADD_PARAM:${PN}-fpm = "--system --no-create-home --shell /bin/false --user-group php-fpm"
 
 do_install:append:class-target() {
     sed -e 's/^pm = dynamic$/pm = ondemand/g' -i "${D}${sysconfdir}/php-fpm.conf"
+    sed -e 's/@NGINX_USER@/${NGINX_USER}/g' -i "${D}${sysconfdir}/php-fpm.conf"
 }
 
 # Common EXTRA_OECONF
