@@ -10,8 +10,9 @@ done
 
 dir="/data/var/lib/venus-www-sessions"
 if [ ! -d "$dir" ]; then
-	mkdir -p "$dir"
+	mkdir -p -m 700 "$dir"
 fi
+chmod 700 "$dir"
 chown -R php-fpm:php-fpm "$dir"
 
 # Many session files could be created by accident in v3.70-beta in insecure
