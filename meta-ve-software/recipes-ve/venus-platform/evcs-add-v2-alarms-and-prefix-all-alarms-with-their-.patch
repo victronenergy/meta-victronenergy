@@ -1,0 +1,62 @@
+From a1111a7e78493dae842297b4d22c8a635695a509 Mon Sep 17 00:00:00 2001
+From: ReinvdZee <rvanderzee@victronenergy.com>
+Date: Mon, 23 Nov 2026 14:50:52 +0100
+Subject: [PATCH] evcs: add v2 alarms and prefix all alarms with their code
+
+Add the alarms of the EVCS v2 from the EVCS warning, alarm and error
+code list, and put the GX code from that list (#31, #101, ...) in front
+of every alarm, as #01 to #07 already had.
+
+Assisted-by: Claude:claude-opus-5-5
+---
+ src/alarm_item.cpp | 34 ++++++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 12 deletions(-)
+
+diff --git a/src/alarm_item.cpp b/src/alarm_item.cpp
+index e4e6266..9485ad6 100644
+--- a/src/alarm_item.cpp
++++ b/src/alarm_item.cpp
+@@ -246,18 +246,28 @@ DeviceAlarms *DeviceAlarms::createEvChargerAlarms(VenusService *service, Notific
+ 	alarms->addTripplet(tr("#05 Over temperature"),						"/Alarms/OverTemperature",				nullptr, nullptr);
+ 	alarms->addTripplet(tr("#06 Light sensor IC fault"),				"/Alarms/LightSensorICFault",			nullptr, nullptr);
+ 	alarms->addTripplet(tr("#07 Tamper detected"),						"/Alarms/TamperDetected",				nullptr, nullptr);
+-	alarms->addTripplet(tr("Initial setup not completed"),												"/Alarms/SetupNeeded",				nullptr, nullptr);
+-	alarms->addTripplet(tr("EVCS externally blocked by grid operator"),									"/Alarms/BlockedWarning",			nullptr, nullptr);
+-	alarms->addTripplet(tr("EVCS high temperature detected"),											"/Alarms/HighTempWarning",			nullptr, nullptr);
+-	alarms->addTripplet(tr("GX communication warning"),													"/Alarms/GxCommWarning",			nullptr, nullptr);
+-	alarms->addTripplet(tr("Overload detected"),														"/Alarms/OverloadDetected",			nullptr, nullptr);
+-	alarms->addTripplet(tr("Overload active"),															"/Alarms/OverloadActive",			nullptr, nullptr);
+-	alarms->addTripplet(tr("Scheduled mode failed - time sync issue"),									"/Alarms/TimeSyncIssue",			nullptr, nullptr);
+-	alarms->addTripplet(tr("The charging current is limited by an external switch"),					"/Alarms/ExternalCurrentLimit",		nullptr, nullptr);
+-	alarms->addTripplet(tr("The charging current is limited due to inverter overtemperature"),			"/Alarms/SystemCausedCurrentLimit",	nullptr, nullptr);
+-	alarms->addTripplet(tr("Can't update display FW due to broken file. Please perform update again"),	"/Alarms/DisplayFWUpdateFailure1",	nullptr, nullptr);
+-	alarms->addTripplet(tr("Can't update display FW due to communication issues"),						"/Alarms/DisplayFWUpdateFailure2",	nullptr, nullptr);
+-	alarms->addTripplet(tr("Updating display FW. EV charging will be available after a while"),			"/Alarms/DisplayFWUpdateInProgress",nullptr, nullptr);
++	alarms->addTripplet(tr("#31 Welded contacts L1"),					"/Alarms/WeldedContactsL1",				nullptr, nullptr);
++	alarms->addTripplet(tr("#32 Welded contacts L2"),					"/Alarms/WeldedContactsL2",				nullptr, nullptr);
++	alarms->addTripplet(tr("#33 Welded contacts L3"),					"/Alarms/WeldedContactsL3",				nullptr, nullptr);
++	alarms->addTripplet(tr("#34 Welded contacts neutral line"),			"/Alarms/WeldedContactsN",				nullptr, nullptr);
++	alarms->addTripplet(tr("#35 L1-N reversed"),						"/Alarms/L1NReversed",					nullptr, nullptr);
++	alarms->addTripplet(tr("#36 L1-N reversed and/or no GND"),			"/Alarms/L1NReversedAndOrNoGND",		nullptr, nullptr);
++	alarms->addTripplet(tr("#37 RCD IC fault"),							"/Alarms/RCDICFault",					nullptr, nullptr);
++	alarms->addTripplet(tr("#38 EV cable fault"),						"/Alarms/EVCableFault",					nullptr, nullptr);
++	alarms->addTripplet(tr("#101 Initial setup not completed"),													"/Alarms/SetupNeeded",								nullptr, nullptr);
++	alarms->addTripplet(tr("#102 EVCS externally blocked by grid operator"),									"/Alarms/BlockedWarning",							nullptr, nullptr);
++	alarms->addTripplet(tr("#103 EVCS high temperature detected"),												"/Alarms/HighTempWarning",							nullptr, nullptr);
++	alarms->addTripplet(tr("#104 GX communication warning"),													"/Alarms/GxCommWarning",							nullptr, nullptr);
++	alarms->addTripplet(tr("#105 Overload detected"),															"/Alarms/OverloadDetected",							nullptr, nullptr);
++	alarms->addTripplet(tr("#106 Overload active"),																"/Alarms/OverloadActive",							nullptr, nullptr);
++	alarms->addTripplet(tr("#107 Scheduled mode failed - time sync issue"),										"/Alarms/TimeSyncIssue",							nullptr, nullptr);
++	alarms->addTripplet(tr("#108 The charging current is limited by an external switch"),						"/Alarms/ExternalCurrentLimit",						nullptr, nullptr);
++	alarms->addTripplet(tr("#109 The charging current is limited due to inverter overtemperature"),				"/Alarms/SystemCausedCurrentLimit",					nullptr, nullptr);
++	alarms->addTripplet(tr("#110 Can't update display FW due to broken file. Please perform update again"),		"/Alarms/DisplayFWUpdateFailure1",					nullptr, nullptr);
++	alarms->addTripplet(tr("#111 Can't update display FW due to communication issues"),							"/Alarms/DisplayFWUpdateFailure2",					nullptr, nullptr);
++	alarms->addTripplet(tr("#112 Updating display FW. EV charging will be available after a while"),			"/Alarms/DisplayFWUpdateInProgress",				nullptr, nullptr);
++	alarms->addTripplet(tr("#113 GX device certificate mismatch. Please repeat the pairing process"),			"/Alarms/GxDeviceCertMismatch",						nullptr, nullptr);
++	alarms->addTripplet(tr("#131 Charging current limited by EV cable rating"),									"/Alarms/ChargingCurrentLimitedByEVCableRating",	nullptr, nullptr);
+ 	return alarms;
+ }
+ 
+-- 
+2.43.0
+
