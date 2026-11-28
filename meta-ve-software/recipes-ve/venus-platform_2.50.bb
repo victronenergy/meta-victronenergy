@@ -12,10 +12,14 @@ SRC_URI = " \
     file://venus_dbus_bridge_template.conf \
     file://venus_rpc_bridge_template.conf \
     file://evcs-add-v2-alarms-and-prefix-all-alarms-with-their-.patch \
+    file://update-the-translations.patch \
 "
 SRCREV = "658b79e84d61aaf7f082d649edc813c73fb4dbdb"
 S = "${WORKDIR}/git"
-PR = "1"
+PR = "2"
+
+# the translations patch changes the binary .qm files, which quilt cannot apply
+PATCHTOOL = "git"
 
 DAEMONTOOLS_RUN = "${@softlimit(d, data=100000000, stack=1000000, all=100000000)} ${bindir}/venus-platform"
 
